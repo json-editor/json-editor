@@ -6,11 +6,11 @@ JSONEditor.AbstractEditor = Class.extend({
     this.onChange(true);
   },
   notify: function() {
-    this.jsoneditor.notifyWatchers(this.path);
+    if(this.path) this.jsoneditor.notifyWatchers(this.path);
   },
   change: function() {
     if(this.parent) this.parent.onChildEditorChange(this);
-    else this.jsoneditor.onChange();
+    else if(this.jsoneditor) this.jsoneditor.onChange();
   },
   onChange: function(bubble) {
     this.notify();
