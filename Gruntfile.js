@@ -84,6 +84,7 @@ module.exports = function(grunt) {
       options: {
         browser: true,
         indent: 2,
+        devel:true,
         nonbsp: true,
         nonew: true,
         immed: true,
@@ -129,6 +130,18 @@ module.exports = function(grunt) {
           src: ['dist/jsoneditor.js']
         }
       }
+    },
+
+    connect: {
+        test: {
+            options: {
+                port: 9000,
+                hostname: 'localhost',
+                //directory: './tests/',
+                debug: true,
+                keepalive: true
+            }
+        }
     }
   });
 
@@ -137,6 +150,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-connect');
+
+  // Serve files for testing
+  grunt.registerTask('test', 'connect:test');
 
   // Default task.
   grunt.registerTask('default', ['jshint:beforeconcat','concat','jshint:afterconcat','uglify']);
