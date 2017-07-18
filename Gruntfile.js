@@ -131,13 +131,11 @@ module.exports = function(grunt) {
         }
       }
     },
-
     connect: {
-        test: {
+        default: {
             options: {
                 port: 9000,
                 hostname: 'localhost',
-                //directory: './tests/',
                 debug: true,
                 keepalive: true
             }
@@ -153,7 +151,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
 
   // Serve files for testing
-  grunt.registerTask('test', 'connect:test');
+  grunt.registerTask('serve', 'connect:default');
 
   // Default task.
   grunt.registerTask('default', ['jshint:beforeconcat','concat','jshint:afterconcat','uglify']);
