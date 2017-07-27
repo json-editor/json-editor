@@ -51,6 +51,9 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     }
   },
   getValue: function() {
+    if (!this.dependenciesFulfilled) {
+      return undefined;
+    }
     return this.typecast(this.value);
   },
   preBuild: function() {
@@ -335,6 +338,7 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
       this.input.disabled = false;
       if(this.select2) this.select2.select2("enable",true);
     }
+    this._super();
   },
   disable: function(always_disabled) {
     if(always_disabled) this.always_disabled = true;
