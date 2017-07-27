@@ -51,7 +51,7 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     }
   },
   getValue: function() {
-    return this.value;
+    return this.typecast(this.value);
   },
   preBuild: function() {
     var self = this;
@@ -180,7 +180,7 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     this.value = this.enum_values[0];
   },
   onInputChange: function() {
-    var val = this.input.value;
+    var val = this.typecast(this.input.value);
 
     var new_val;
     // Invalid option, use first option instead
@@ -319,7 +319,7 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
       // Otherwise, set the value to the first select option
       else {
         this.input.value = select_options[0];
-        this.value = select_options[0] || "";
+        this.value = this.typecast(select_options[0] || "");  
         if(this.parent) this.parent.onChildEditorChange(this);
         else this.jsoneditor.onChange();
         this.jsoneditor.notifyWatchers(this.path);
@@ -334,7 +334,6 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     if(!this.always_disabled) {
       this.input.disabled = false;
       if(this.select2) this.select2.select2("enable",true);
-      this._super();
     }
   },
   disable: function(always_disabled) {
