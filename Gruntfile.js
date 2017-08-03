@@ -141,6 +141,25 @@ module.exports = function(grunt) {
                 debug: true,
                 keepalive: true
             }
+        },
+        testing: {
+            options: {
+                port: 9001,
+                hostname: 'localhost',
+                debug: true
+            }
+        }
+    },
+    run: {
+        options: {
+            // Task-specific options
+        },
+        mocha: {
+            cmd: 'mocha',
+            args: [
+                'tests/selenium/*.js',
+                '--reporter=nyan'
+            ]
         }
     }
   });
@@ -151,11 +170,15 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-run');
 
   // Serve files for testing
   grunt.registerTask('serve', 'connect:default');
 
-  // Default task.
+  // Run mocha tests
+  grunt.registerTask('test', ['connect:testing', 'run:mocha']);
+
+    // Default task.
   grunt.registerTask('default', ['jshint:beforeconcat','concat','jshint:afterconcat','uglify']);
 
 };
