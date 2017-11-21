@@ -18,10 +18,16 @@ JSONEditor.defaults.themes.foundation = JSONEditor.AbstractTheme.extend({
     return el;
   },
   afterInputReady: function(input) {
+    if(input.group) return;
     if(this.closest(input,'.compact')) {
       input.style.marginBottom = 0;
     }
     input.group = this.closest(input,'.form-control');
+    if (this.queuedInputErrorText) {
+        var text = this.queuedInputErrorText;
+        delete this.queuedInputErrorText;
+        this.addInputError(input,text);
+    }
   },
   getFormInputLabel: function(text) {
     var el = this._super(text);
@@ -65,7 +71,10 @@ JSONEditor.defaults.themes.foundation = JSONEditor.AbstractTheme.extend({
     return el;
   },
   addInputError: function(input,text) {
-    if(!input.group) return;
+    if(!input.group) {
+        this.queuedInputErrorText = text;
+        return;
+    }
     input.group.className += ' error';
 
     if(!input.errmsg) {
@@ -79,6 +88,9 @@ JSONEditor.defaults.themes.foundation = JSONEditor.AbstractTheme.extend({
     input.errmsg.textContent = text;
   },
   removeInputError: function(input) {
+    if(!input.group) {
+        delete this.queuedInputErrorText;
+    }
     if(!input.errmsg) return;
     input.group.className = input.group.className.replace(/ error/g,'');
     input.errmsg.style.display = 'none';
@@ -240,7 +252,7 @@ JSONEditor.defaults.themes.foundation6 = JSONEditor.defaults.themes.foundation5.
     el.style.display = 'block';
     return el;
   },
-  getFormControl: function(label, input, description) {
+  getFormControl: function(label, input, description, infoText) {
     var el = document.createElement('div');
     el.className = 'form-control';
     if(label) el.appendChild(label);
@@ -248,8 +260,10 @@ JSONEditor.defaults.themes.foundation6 = JSONEditor.defaults.themes.foundation5.
       label.insertBefore(input,label.firstChild);
     }
     else if (label) {
+      if(infoText) label.appendChild(infoText);
       label.appendChild(input);
     } else {
+      if(infoText) el.appendChild(infoText);
       el.appendChild(input);
     }
 

@@ -29,13 +29,20 @@
   "devDependencies": {
     "grunt": "~1.0.1",
     "grunt-contrib-concat": "~1.0.0",
+    "grunt-contrib-connect": "~1.0.0",
     "grunt-contrib-jshint": "~1.0.0",
     "grunt-contrib-uglify": "~1.0.0",
-    "grunt-contrib-watch": "~1.0.0"
+    "grunt-contrib-watch": "~1.0.0",
+    "grunt-run": "^0.7.0"
   },
   "scripts": {
     "build": "npm install && grunt",
     "start": "grunt watch",
-    "test": "grunt"
+    "test": "grunt test"
+  },
+  "dependencies": {
+    "chromedriver": "^2.12.0",
+    "mocha": "^2.0.1",
+    "selenium-webdriver": "^2.44.0"
   }
 }

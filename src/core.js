@@ -15,6 +15,7 @@ JSONEditor.prototype = {
     var self = this;
     
     this.ready = false;
+    this.copyClipboard = null;
 
     var theme_class = JSONEditor.defaults.themes[this.options.theme || JSONEditor.defaults.theme];
     if(!theme_class) throw "Unknown theme " + (this.options.theme || JSONEditor.defaults.theme);
@@ -46,10 +47,11 @@ JSONEditor.prototype = {
       self.validator = new JSONEditor.Validator(self,null,validator_options);
       
       // Create the root editor
-      var editor_class = self.getEditorClass(self.schema);
+      var schema = self.expandRefs(self.schema);
+      var editor_class = self.getEditorClass(schema);
       self.root = self.createEditor(editor_class, {
         jsoneditor: self,
-        schema: self.schema,
+        schema: schema,
         required: true,
         container: self.root_container
       });
@@ -59,7 +61,7 @@ JSONEditor.prototype = {
       self.root.postBuild();
 
       // Starting data
-      if(self.options.startval) self.root.setValue(self.options.startval);
+      if(self.options.hasOwnProperty('startval')) self.root.setValue(self.options.startval);
 
       self.validation_results = self.validator.validate(self.root.getValue());
       self.root.showValidationErrors(self.validation_results);
@@ -348,7 +350,7 @@ JSONEditor.prototype = {
       if(!schema.hasOwnProperty(i)) continue;
       if(schema[i] && typeof schema[i] === "object" && Array.isArray(schema[i])) {
         for(var j=0; j<schema[i].length; j++) {
-          if(typeof schema[i][j]==="object") {
+          if(schema[i][j] && typeof schema[i][j]==="object") {
             merge_refs(this._getExternalRefs(schema[i][j]));
           }
         }
@@ -372,8 +374,12 @@ JSONEditor.prototype = {
       self.refs[url] = 'loading';
       waiting++;
 
+      var fetchUrl=url;
+      if( self.options.ajaxBase && self.options.ajaxBase!=url.substr(0,self.options.ajaxBase.length) && "http"!=url.substr(0,4)) fetchUrl=self.options.ajaxBase+url;
+
       var r = new XMLHttpRequest(); 
-      r.open("GET", url, true);
+      r.open("GET", fetchUrl, true);
+      if(self.options.ajaxCredentials) r.withCredentials=self.options.ajaxCredentials;
       r.onreadystatechange = function () {
         if (r.readyState != 4) return; 
         // Request succeeded
@@ -384,9 +390,9 @@ JSONEditor.prototype = {
           }
           catch(e) {
             window.console.log(e);
-            throw "Failed to parse external ref "+url;
+            throw "Failed to parse external ref "+fetchUrl;
           }
-          if(!response || typeof response !== "object") throw "External ref does not contain a valid schema - "+url;
+          if(!response || typeof response !== "object") throw "External ref does not contain a valid schema - "+fetchUrl;
           
           self.refs[url] = response;
           self._loadExternalRefs(response,function() {
@@ -582,6 +588,12 @@ JSONEditor.prototype = {
     });
 
     return extended;
+  },
+  setCopyClipboardContents: function(value) {
+    this.copyClipboard = value;
+  },
+  getCopyClipboardContents: function() {
+    return this.copyClipboard;
   }
 };
 
