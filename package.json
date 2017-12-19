@@ -10,11 +10,11 @@
     "url": "http://jeremydorn.com"
   },
   "bugs": {
-    "url": "https://github.com/jdorn/json-editor/issues"
+    "url": "https://github.com/json-editor/json-editor/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jdorn/json-editor.git"
+    "url": "https://github.com/json-editor/json-editor.git"
   },
   "keywords": [
     "json",
@@ -33,7 +33,10 @@
     "grunt-contrib-jshint": "~1.0.0",
     "grunt-contrib-uglify": "~1.0.0",
     "grunt-contrib-watch": "~1.0.0",
-    "grunt-run": "^0.7.0"
+    "grunt-run": "^0.7.0",
+    "chromedriver": "^2.12.0",
+    "mocha": "^2.0.1",
+    "selenium-webdriver": "^2.44.0"
   },
   "scripts": {
     "build": "npm install && grunt",
@@ -41,8 +44,5 @@
     "test": "grunt test"
   },
   "dependencies": {
-    "chromedriver": "^2.12.0",
-    "mocha": "^2.0.1",
-    "selenium-webdriver": "^2.44.0"
   }
 }
