@@ -1,8 +1,8 @@
 {
-  "name": "json-editor",
+  "name": "@json-editor/json-editor",
   "title": "JSONEditor",
   "description": "JSON Schema based editor",
-  "version": "0.7.28",
+  "version": "1.0.0-alpha1",
   "main": "dist/jsoneditor.js",
   "author": {
     "name": "Jeremy Dorn",
@@ -22,6 +22,11 @@
     "jsonschema",
     "editor"
   ],
+  "scripts":{
+    "build": "grunt",
+    "serve": "grunt serve",
+    "test": "grunt test"
+  },
   "license": "MIT",
   "engines": {
     "node": ">= 0.8.0"
