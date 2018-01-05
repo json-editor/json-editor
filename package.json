@@ -22,9 +22,10 @@
     "jsonschema",
     "editor"
   ],
-  "scripts":{
+  "scripts": {
     "build": "grunt",
-    "serve": "grunt serve",
+    "rawbuild": "grunt rawbuild",
+    "start": "grunt watch",
     "test": "grunt test"
   },
   "license": "MIT",
@@ -32,6 +33,7 @@
     "node": ">= 0.8.0"
   },
   "devDependencies": {
+    "chromedriver": "^2.12.0",
     "grunt": "~1.0.1",
     "grunt-contrib-concat": "~1.0.0",
     "grunt-contrib-connect": "~1.0.0",
@@ -39,15 +41,9 @@
     "grunt-contrib-uglify": "~1.0.0",
     "grunt-contrib-watch": "~1.0.0",
     "grunt-run": "^0.7.0",
-    "chromedriver": "^2.12.0",
     "mocha": "^2.0.1",
+    "np": "^2.18.3",
     "selenium-webdriver": "^2.44.0"
   },
-  "scripts": {
-    "build": "npm install && grunt",
-    "start": "grunt watch",
-    "test": "grunt test"
-  },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
