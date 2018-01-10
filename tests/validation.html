@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title>JSON Editor Validation Example</title>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src='../dist/jsoneditor.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjs/2.7.0/math.min.js'></script>
 </head>
@@ -556,7 +556,7 @@
                         pattern: "^/dev/[^/]+(/[^/]+)*$"
                     },
                     external: {
-                        "$ref": "http://localhost/json-editor/tests/string.json"
+                        "$ref": "string.json"
                     }
                 }
             },
@@ -629,7 +629,7 @@
             schema: {
                 type: "object",
                 properties: {
-                    "/": { $ref: 'http://localhost/json-editor/tests/string.json' }
+                    "/": { $ref: 'string.json' }
                 }
             },
             valid: [
@@ -647,9 +647,9 @@
             schema: {
                 type: "object",
                 properties: {
-                    "recursive": { $ref: 'http://localhost/json-editor/tests/recursive.json' },
+                    "recursive": { $ref: 'recursive.json' },
                     "string": {
-                        $ref: "http://localhost/json-editor/tests/string.json"
+                        $ref: "string.json"
                     }
                 }
             },

@@ -1,6 +1,8 @@
 JSON Editor
 ===========
 
+Fork of the inactive https://github.com/jdorn/json-editor/ using the updated fork https://github.com/dmstr-forks/jdorn-json-editor. Some pull requests added from the original repo.
+
 ![JSON Schema -> HTML Editor -> JSON](https://raw.github.com/jdorn/json-editor/master/jsoneditor.png)
 
 JSON Editor takes a JSON Schema and uses it to generate an HTML form.  
@@ -26,7 +28,7 @@ The following are not required, but can improve the style and usability of JSON 
 *  A compatible CSS framework for styling (bootstrap 2/3, foundation 3/4/5, or jqueryui)
 *  A compatible icon library (bootstrap 2/3 glyphicons, foundation icons 2/3, jqueryui, or font awesome 3/4)
 *  [SCEditor](http://www.sceditor.com/) for WYSIWYG editing of HTML or BBCode content
-*  [EpicEditor](http://epiceditor.com/) for editing of Markdown content
+*  [SimpleMDE](https://simplemde.com/) for editing of Markdown content
 *  [Ace Editor](http://ace.c9.io/) for editing code
 *  [Select2](http://ivaynberg.github.io/select2/) for nicer Select boxes
 *  [Selectize](http://brianreavis.github.io/selectize.js/) for nicer Select & Array boxes
@@ -307,6 +309,7 @@ The currently supported themes are:
 *  html (the default)
 *  bootstrap2
 *  bootstrap3
+*  bootstrap4
 *  foundation3
 *  foundation4
 *  foundation5

@@ -35,8 +35,8 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
     if(this.sceditor_instance) {
       this.sceditor_instance.val(sanitized);
     }
-    else if(this.epiceditor) {
-      this.epiceditor.importFile(null,sanitized);
+    else if(this.SimpleMDE) {
+      this.SimpleMDE.value(sanitized);
     }
     else if(this.ace_editor) {
       this.ace_editor.setValue(sanitized);
@@ -278,10 +278,11 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
     if(!this.always_disabled) {
       this.input.disabled = false;
       // TODO: WYSIWYG and Markdown editors
+      this._super();
     }
-    this._super();
   },
-  disable: function() {
+  disable: function(always_disabled) {
+    if(always_disabled) this.always_disabled = true;
     this.input.disabled = true;
     // TODO: WYSIWYG and Markdown editors
     this._super();
@@ -319,25 +320,16 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
           self.onChange(true);
         });
       }
-      // EpicEditor for markdown (if it's loaded)
-      else if (this.input_type === 'markdown' && window.EpicEditor) {
-        this.epiceditor_container = document.createElement('div');
-        this.input.parentNode.insertBefore(this.epiceditor_container,this.input);
-        this.input.style.display = 'none';
-        
-        options = $extend({},JSONEditor.plugins.epiceditor,{
-          container: this.epiceditor_container,
-          clientSideStorage: false
+      // SimpleMDE for markdown (if it's loaded)
+      else if (this.input_type === 'markdown' && window.SimpleMDE) {
+        options = $extend({},JSONEditor.plugins.SimpleMDE,{
+          element: this.input
         });
-        
-        this.epiceditor = new window.EpicEditor(options).load();
-        
-        this.epiceditor.importFile(null,this.getValue());
-      
-        this.epiceditor.on('update',function() {
-          var val = self.epiceditor.exportFile();
-          self.input.value = val;
-          self.value = val;
+
+        this.SimpleMDE = new window.SimpleMDE((options));
+
+        this.SimpleMDE.codemirror.on("change",function() {
+          self.value = self.SimpleMDE.value();
           self.is_dirty = true;
           self.onChange(true);
         });
@@ -389,8 +381,8 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
     if(this.sceditor_instance) {
       this.sceditor_instance.destroy();
     }
-    else if(this.epiceditor) {
-      this.epiceditor.unload();
+    else if(this.SimpleMDE) {
+      this.SimpleMDE.destroy();
     }
     else if(this.ace_editor) {
       this.ace_editor.destroy();
