@@ -336,14 +336,14 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
   enable: function() {
     if(!this.always_disabled) {
       this.input.disabled = false;
-      if(this.select2) this.select2.select2("enable",true);
+      if(this.select2) this.select2.prop("disabled",false);
     }
     this._super();
   },
   disable: function(always_disabled) {
     if(always_disabled) this.always_disabled = true;
     this.input.disabled = true;
-    if(this.select2) this.select2.select2("enable",false);
+    if(this.select2) this.select2.prop("disabled",true);
     this._super();
   },
   destroy: function() {
