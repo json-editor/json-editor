@@ -690,6 +690,7 @@ The `table` format works great when every array element has the same schema and 
 
 The `tabs` format can handle any array, but only shows one array element at a time. It has tabs on the left for switching between items.
 
+The `tabs-top` format place tabs on the top.
 
 Here's an example of the `table` format:
 

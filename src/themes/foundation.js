@@ -133,11 +133,25 @@ JSONEditor.defaults.themes.foundation3 = JSONEditor.defaults.themes.foundation.e
     el.innerHTML = "<dl class='tabs vertical two columns'></dl><div class='tabs-content ten columns'></div>";
     return el;
   },
+  getTopTabHolder: function() { 
+    var el = document.createElement('div'); 
+    el.className = 'row'; 
+    el.innerHTML = "<dl class='tabs horizontal' style='padding-left: 10px; margin-left: 10px;'></dl><div class='tabs-content ten columns'></div>"; 
+    return el; 
+  }, 
   setGridColumnSize: function(el,size) {
     var sizes = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve'];
     el.className = 'columns '+sizes[size];
   },
   getTab: function(text) {
+    var el = document.createElement('dd');
+    var a = document.createElement('a');
+    a.setAttribute('href','#');
+    a.appendChild(text);
+    el.appendChild(a);
+    return el;
+  },
+  getTopTab: function(text) {
     var el = document.createElement('dd');
     var a = document.createElement('a');
     a.setAttribute('href','#');
@@ -155,11 +169,11 @@ JSONEditor.defaults.themes.foundation3 = JSONEditor.defaults.themes.foundation.e
     return el;
   },
   markTabActive: function(tab) {
-    tab.className = tab.className.replace(/\s*active/g,'');
+    tab.className = tab.className.replace(/\s?active/g,'');
     tab.className += ' active';
   },
   markTabInactive: function(tab) {
-    tab.className = tab.className.replace(/\s*active/g,'');
+    tab.className = tab.className.replace(/\s?active/g,'');
   },
   addTab: function(holder, tab) {
     holder.children[0].appendChild(tab);
@@ -208,7 +222,21 @@ JSONEditor.defaults.themes.foundation5 = JSONEditor.defaults.themes.foundation.e
     el.innerHTML = "<dl class='tabs vertical'></dl><div class='tabs-content vertical'></div>";
     return el;
   },
+  getTopTabHolder: function() { 
+    var el = document.createElement('div'); 
+    el.className = 'row'; 
+    el.innerHTML = "<dl class='tabs horizontal' style='padding-left: 10px; margin-left: 10px;'></dl><div class='tabs-content horizontal'></div>"; 
+    return el; 
+  }, 
   getTab: function(text) {
+    var el = document.createElement('dd');
+    var a = document.createElement('a');
+    a.setAttribute('href','#');
+    a.appendChild(text);
+    el.appendChild(a);
+    return el;
+  },
+  getTopTab: function(text) {
     var el = document.createElement('dd');
     var a = document.createElement('a');
     a.setAttribute('href','#');
@@ -226,11 +254,11 @@ JSONEditor.defaults.themes.foundation5 = JSONEditor.defaults.themes.foundation.e
     return el;
   },
   markTabActive: function(tab) {
-    tab.className = tab.className.replace(/\s*active/g,'');
+    tab.className = tab.className.replace(/\s?active/g,'');
     tab.className += ' active';
   },
   markTabInactive: function(tab) {
-    tab.className = tab.className.replace(/\s*active/g,'');
+    tab.className = tab.className.replace(/\s?active/g,'');
   },
   addTab: function(holder, tab) {
     holder.children[0].appendChild(tab);
