@@ -392,7 +392,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
         } else {
           self.rows[idx].tab_text.textContent = self.rows[idx].getHeaderText();
         }
-        self.rows[idx].tab = self.theme.getTabTop(self.rows[idx].tab_text);
+        self.rows[idx].tab = self.theme.getTopTab(self.rows[idx].tab_text);
         self.rows[idx].tab.addEventListener('click', function(e) {
           self.active_tab = self.rows[idx].tab;
           self.refreshTabs();
@@ -441,20 +441,21 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
   //Mark the active tab and make visible the corresponding pane, hide others
   refreshTabs: function(refresh_headers) {
     var self = this;
+    var basicTabPresent = typeof self.basicTab !== 'undefined';
     var basicTabRefreshed = false;
 
     $each(this.rows, function(i,row) {
       //If it's an orphan row (some property which has been deleted), return
       if(!row.tab || !row.rowPane || !row.rowPane.parentNode) return;
 
-      if(row.tab == self.rows[self.basicTab].tab && basicTabRefreshed) return;
+      if(basicTabPresent && row.tab == self.rows[self.basicTab].tab && basicTabRefreshed) return;
 
       if(refresh_headers) {
         row.tab_text.textContent = row.getHeaderText();
       }
       else {
-        //All rows of simple porperties point to the same tab, so refresh just once
-        if(row.tab == self.rows[self.basicTab].tab) basicTabRefreshed = true;
+        //All rows of simple properties point to the same tab, so refresh just once
+        if(basicTabPresent && row.tab == self.rows[self.basicTab].tab) basicTabRefreshed = true;
 
         if(row.tab === self.active_tab) {
           self.theme.markTabActive(row.tab);
