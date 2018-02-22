@@ -155,6 +155,7 @@ JSONEditor.defaults.themes.foundation3 = JSONEditor.defaults.themes.foundation.e
     return el;
   },
   markTabActive: function(tab) {
+    tab.className = tab.className.replace(/\s*active/g,'');
     tab.className += ' active';
   },
   markTabInactive: function(tab) {
@@ -225,6 +226,7 @@ JSONEditor.defaults.themes.foundation5 = JSONEditor.defaults.themes.foundation.e
     return el;
   },
   markTabActive: function(tab) {
+    tab.className = tab.className.replace(/\s*active/g,'');
     tab.className += ' active';
   },
   markTabInactive: function(tab) {
