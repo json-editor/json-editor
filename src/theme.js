@@ -223,6 +223,13 @@ JSONEditor.AbstractTheme = Class.extend({
     el.style.borderLeft = '1px solid #ccc';
     return el;
   },
+  getTopIndentedPanel: function() {
+    var el = document.createElement('div');
+    el.style = el.style || {};
+    el.style.paddingLeft = '10px';
+    el.style.marginLeft = '10px';
+    return el;
+  },
   getChildEditorHolder: function() {
     return document.createElement('div');
   },
@@ -296,7 +303,12 @@ JSONEditor.AbstractTheme = Class.extend({
   },
   getTabHolder: function() {
     var el = document.createElement('div');
-    el.innerHTML = "<div style='float: left; width: 130px;' class='tabs'></div><div class='content' style='margin-left: 130px;'></div><div style='clear:both;'></div>";
+    el.innerHTML = "<div style='float: left; width: 130px;' class='tabs'></div><div class='content' style='margin-left: 120px;'></div><div style='clear:both;'></div>";
+    return el;
+  },
+  getTopTabHolder: function() {
+    var el = document.createElement('div');
+    el.innerHTML = "<div class='tabs' style='margin-left: 10px;'></div><div style='clear:both;'></div><div class='content'></div>";
     return el;
   },
   applyStyles: function(el,styles) {
@@ -337,11 +349,34 @@ JSONEditor.AbstractTheme = Class.extend({
     });
     return el;
   },
+  getTopTab: function(span) {
+    var el = document.createElement('div');
+    el.appendChild(span);
+    el.style = el.style || {};
+    this.applyStyles(el,{
+      float: 'left',
+      border: '1px solid #ccc',
+      borderWidth: '1px 1px 0px 1px',
+      textAlign: 'center',
+      lineHeight: '30px',
+      borderRadius: '5px',
+      paddingLeft:'5px',
+      paddingRight:'5px',
+      borderBottomRightRadius: 0,
+      borderBottomLeftRadius: 0,
+      fontWeight: 'bold',
+      cursor: 'pointer'
+    });
+    return el;
+  },
   getTabContentHolder: function(tab_holder) {
     return tab_holder.children[1];
   },
   getTabContent: function() {
     return this.getIndentedPanel();
+  },
+  getTopTabContent: function() {
+    return this.getTopIndentedPanel();
   },
   markTabActive: function(tab) {
     this.applyStyles(tab,{

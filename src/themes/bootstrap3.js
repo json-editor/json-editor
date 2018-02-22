@@ -162,11 +162,25 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
     el.className = 'rows';
     return el;
   },
+  getTopTabHolder: function() { 
+    var el = document.createElement('div'); 
+    el.className = 'rows'; 
+    el.innerHTML = "<ul class='nav nav-tabs' style='padding-left: 10px; margin-left: 10px;'></ul><div class='tab-content' style='overflow:visible;'></div>"; 
+    return el; 
+  }, 
   getTab: function(text) {
     var el = document.createElement('a');
     el.className = 'list-group-item';
     el.setAttribute('href','#');
     el.appendChild(text);
+    return el;
+  },
+  getTopTab: function(text) {
+    var el = document.createElement('li');
+    var a = document.createElement('a');
+    a.setAttribute('href','#');
+    a.appendChild(text);
+    el.appendChild(a);
     return el;
   },
   markTabActive: function(tab) {
