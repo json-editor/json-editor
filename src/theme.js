@@ -300,7 +300,6 @@ JSONEditor.AbstractTheme = Class.extend({
     return el;
   },
   applyStyles: function(el,styles) {
-    el.style = el.style || {};
     for(var i in styles) {
       if(!styles.hasOwnProperty(i)) continue;
       el.style[i] = styles[i];
