@@ -43,6 +43,5 @@
     "start": "grunt watch",
     "test": "grunt test"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
