@@ -752,6 +752,25 @@ This can make the editor much more compact, but at a cost of not guaranteeing ch
   "format": "grid"
 }
 ```
+The `categories` format groups properties in top-tabbed panels, one for each object or array property plus one that groups all added or other types of properties.  
+Panel tabs titles came from object or array titles and for the grouping panel it defaults to "Basic", unless  `basicCategoryTitle` is defined.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" }
+  },
+  "format": "categories",
+  "basicCategoryTitle": "Main"
+}
+```
+
+Demo page will look like this:
+
+![Categories format](https://raw.github.com/pmadril/json-editor/master/categoriesDemo.png)
+
+
 
 
 Editor Options

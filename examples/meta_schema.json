@@ -615,7 +615,8 @@
             "tabs",
             "tabs-top",
             "checkbox",
-            "select"
+            "select",
+            "categories"
           ]
         }
       }
