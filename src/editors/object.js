@@ -412,7 +412,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
 
       // Show/Hide button
       this.collapsed = false;
-      this.toggle_button = this.getButton('','collapse',this.translate('button_collapse'));
+      this.toggle_button = this.getButton('', 'collapse', this.translate('button_collapse'));
       this.title_controls.appendChild(this.toggle_button);
       this.toggle_button.addEventListener('click',function(e) {
         e.preventDefault();
@@ -709,7 +709,9 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
           if(typeof result[i] === 'undefined' || result[i] === '' || Object.keys(result[i]).length == 0 && result[i].constructor == Object) delete result[i];
         }
       }
-      return result;
+    }
+
+    return result;
   },
   refreshValue: function() {
     this.value = {};
