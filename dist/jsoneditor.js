@@ -2001,8 +2001,8 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
     if(this.sceditor_instance) {
       this.sceditor_instance.val(sanitized);
     }
-    else if(this.epiceditor) {
-      this.epiceditor.importFile(null,sanitized);
+    else if(this.SimpleMDE) {
+      this.SimpleMDE.value(sanitized);
     }
     else if(this.ace_editor) {
       this.ace_editor.setValue(sanitized);
@@ -2286,25 +2286,16 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
           self.onChange(true);
         });
       }
-      // EpicEditor for markdown (if it's loaded)
-      else if (this.input_type === 'markdown' && window.EpicEditor) {
-        this.epiceditor_container = document.createElement('div');
-        this.input.parentNode.insertBefore(this.epiceditor_container,this.input);
-        this.input.style.display = 'none';
-        
-        options = $extend({},JSONEditor.plugins.epiceditor,{
-          container: this.epiceditor_container,
-          clientSideStorage: false
+      // SimpleMDE for markdown (if it's loaded)
+      else if (this.input_type === 'markdown' && window.SimpleMDE) {
+        options = $extend({},JSONEditor.plugins.SimpleMDE,{
+          element: this.input
         });
-        
-        this.epiceditor = new window.EpicEditor(options).load();
-        
-        this.epiceditor.importFile(null,this.getValue());
-      
-        this.epiceditor.on('update',function() {
-          var val = self.epiceditor.exportFile();
-          self.input.value = val;
-          self.value = val;
+
+        this.SimpleMDE = new window.SimpleMDE((options));
+
+        this.SimpleMDE.codemirror.on("change",function() {
+          self.value = self.SimpleMDE.value();
           self.is_dirty = true;
           self.onChange(true);
         });
@@ -2356,8 +2347,8 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
     if(this.sceditor_instance) {
       this.sceditor_instance.destroy();
     }
-    else if(this.epiceditor) {
-      this.epiceditor.unload();
+    else if(this.SimpleMDE) {
+      this.SimpleMDE.destroy();
     }
     else if(this.ace_editor) {
       this.ace_editor.destroy();
@@ -7411,6 +7402,180 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
   }
 });
 
+JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
+  getSelectInput: function(options) {
+    var el = this._super(options);
+    el.className += "form-control";
+    //el.style.width = 'auto';
+    return el;
+  },
+  setGridColumnSize: function(el, size) {
+    el.className = "col-md-" + size;
+  },
+  afterInputReady: function(input) {
+    if (input.controlgroup) return;
+    input.controlgroup = this.closest(input, ".form-group");
+    if (this.closest(input, ".compact")) {
+      input.controlgroup.style.marginBottom = 0;
+    }
+
+    // TODO: use bootstrap slider
+  },
+  getTextareaInput: function() {
+    var el = document.createElement("textarea");
+    el.className = "form-control";
+    return el;
+  },
+  getRangeInput: function(min, max, step) {
+    // TODO: use better slider
+    return this._super(min, max, step);
+  },
+  getFormInputField: function(type) {
+    var el = this._super(type);
+    if (type !== "checkbox") {
+      el.className += "form-control";
+    }
+    return el;
+  },
+  getFormControl: function(label, input, description) {
+    var group = document.createElement("div");
+
+    if (label && input.type === "checkbox") {
+      group.className += " checkbox";
+      label.appendChild(input);
+      label.style.fontSize = "14px";
+      group.style.marginTop = "0";
+      group.appendChild(label);
+      input.style.position = "relative";
+      input.style.cssFloat = "left";
+    } else {
+      group.className += " form-group";
+      if (label) {
+        label.className += " form-control-label";
+        group.appendChild(label);
+      }
+      group.appendChild(input);
+    }
+
+    if (description) group.appendChild(description);
+
+    return group;
+  },
+  getIndentedPanel: function() {
+    var el = document.createElement("div");
+    el.className = "card card-block bg-faded";
+    el.style.paddingBottom = 0;
+    return el;
+  },
+  getFormInputDescription: function(text) {
+    var el = document.createElement("p");
+    el.className = "form-text";
+    el.innerHTML = text;
+    return el;
+  },
+  getHeaderButtonHolder: function() {
+    var el = this.getButtonHolder();
+    el.style.marginLeft = "10px";
+    return el;
+  },
+  getButtonHolder: function() {
+    var el = document.createElement("div");
+    el.className = "btn-group";
+    return el;
+  },
+  getButton: function(text, icon, title) {
+    var el = this._super(text, icon, title);
+    el.className += "btn btn-secondary";
+    return el;
+  },
+  getTable: function() {
+    var el = document.createElement("table");
+    el.className = "table-bordered table-sm";
+    el.style.width = "auto";
+    el.style.maxWidth = "none";
+    return el;
+  },
+
+  addInputError: function(input, text) {
+    if (!input.controlgroup) return;
+    input.controlgroup.className += " has-error";
+    if (!input.errmsg) {
+      input.errmsg = document.createElement("p");
+      input.errmsg.className = "form-text errormsg";
+      input.controlgroup.appendChild(input.errmsg);
+    } else {
+      input.errmsg.style.display = "";
+    }
+
+    input.errmsg.textContent = text;
+  },
+  removeInputError: function(input) {
+    if (!input.errmsg) return;
+    input.errmsg.style.display = "none";
+    input.controlgroup.className = input.controlgroup.className.replace(
+      /\s?has-error/g,
+      ""
+    );
+  },
+  getTabHolder: function() {
+    var el = document.createElement("div");
+    el.innerHTML =
+      "<div class='tabs list-group col-md-2'></div><div class='col-md-10'></div>";
+    el.className = "rows";
+    return el;
+  },
+  getTab: function(text) {
+    var el = document.createElement("a");
+    el.className = "list-group-item-action";
+    el.setAttribute("href", "#");
+    el.appendChild(text);
+    return el;
+  },
+  markTabActive: function(tab) {
+    tab.className += " active";
+  },
+  markTabInactive: function(tab) {
+    tab.className = tab.className.replace(/\s?active/g, "");
+  },
+  getProgressBar: function() {
+    var min = 0,
+      max = 100,
+      start = 0;
+
+    var container = document.createElement("div");
+    container.className = "progress";
+
+    var bar = document.createElement("div");
+    bar.className = "progress-bar";
+    bar.setAttribute("role", "progressbar");
+    bar.setAttribute("aria-valuenow", start);
+    bar.setAttribute("aria-valuemin", min);
+    bar.setAttribute("aria-valuenax", max);
+    bar.innerHTML = start + "%";
+    container.appendChild(bar);
+
+    return container;
+  },
+  updateProgressBar: function(progressBar, progress) {
+    if (!progressBar) return;
+
+    var bar = progressBar.firstChild;
+    var percentage = progress + "%";
+    bar.setAttribute("aria-valuenow", progress);
+    bar.style.width = percentage;
+    bar.innerHTML = percentage;
+  },
+  updateProgressBarUnknown: function(progressBar) {
+    if (!progressBar) return;
+
+    var bar = progressBar.firstChild;
+    progressBar.className = "progress progress-striped active";
+    bar.removeAttribute("aria-valuenow");
+    bar.style.width = "100%";
+    bar.innerHTML = "";
+  }
+});
+
 // Base Foundation theme
 JSONEditor.defaults.themes.foundation = JSONEditor.AbstractTheme.extend({
   getChildEditorHolder: function() {
@@ -8029,7 +8194,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
     /**
      * Applies grid size to specified element.
      * 
-     * @param {object} el The DOM element to have specified size applied.
+     * @param {HTMLElement} el The DOM element to have specified size applied.
      * @param {int} size The grid column size.
      * @see http://materializecss.com/grid.html
      */
@@ -8042,7 +8207,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
     /**
      * Gets a wrapped button element for a header.
      * 
-     * @returns {object} The wrapped button element.
+     * @returns {HTMLElement} The wrapped button element.
      */
     getHeaderButtonHolder: function() {
         return this.getButtonHolder();
@@ -8051,7 +8216,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
     /**
      * Gets a wrapped button element.
      * 
-     * @returns {object} The wrapped button element.
+     * @returns {HTMLElement} The wrapped button element.
      */
     getButtonHolder: function() {
         return document.createElement('span');
@@ -8061,9 +8226,9 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
      * Gets a single button element.
      * 
      * @param {string} text The button text.
-     * @param {object} icon The icon object.
+     * @param {HTMLElement} icon The icon object.
      * @param {string} title The button title.
-     * @returns {object} The button object.
+     * @returns {HTMLElement} The button object.
      * @see http://materializecss.com/buttons.html
      */
     getButton: function(text, icon, title) {
@@ -8089,11 +8254,11 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
     /**
      * Gets a form control object consisiting of several sub objects.
      * 
-     * @param {object} label The label element.
-     * @param {object} input The input element.
+     * @param {HTMLElement} label The label element.
+     * @param {HTMLElement} input The input element.
      * @param {string} description The element description.
      * @param {string} infoText The element information text.
-     * @returns {object} The assembled DOM element.
+     * @returns {HTMLElement} The assembled DOM element.
      * @see http://materializecss.com/forms.html
      */
     getFormControl: function(label, input, description, infoText) {
@@ -8104,13 +8269,10 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
         // Checkboxes get wrapped in p elements.
         if (type && type === 'checkbox') {
 
-            var id = this.createUuid();
-            input.id = id;
-
             ctrl = document.createElement('p');
             ctrl.appendChild(input);
             if (label) {
-                label.setAttribute('for', id);
+                label.setAttribute('for', input.id);
                 ctrl.appendChild(label);
             }
             return ctrl;
@@ -8128,10 +8290,19 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
 
     },
 
+    getDescription: function(text) {
+        var el = document.createElement('div');
+        el.className = 'grey-text';
+        el.style.marginTop = '-15px';
+        el.innerHTML = text;
+        return el;
+    },
+
     /**
      * Gets a header element.
      * 
-     * @param {string|object} text The header text or element.
+     * @param {string|HTMLElement} text The header text or element.
+     * @returns {HTMLElement} The header element.
      */
     getHeader: function(text) {
 
@@ -8147,11 +8318,112 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
 
     },
 
+    getChildEditorHolder: function() {
+
+        var el = document.createElement('div');
+        el.marginBottom = '10px';
+        return el;
+
+    },
+
+    getIndentedPanel: function() {
+        var el = document.createElement("div");
+        el.className = "card-panel";
+        return el;
+    },
+
+    getTable: function() {
+
+        var el = document.createElement('table');
+        el.className = 'striped bordered';
+        el.style.marginBottom = '10px';
+        return el;
+
+    },
+
+    getTableRow: function() {
+        return document.createElement('tr');
+    },
+
+    getTableHead: function() {
+        return document.createElement('thead');
+    },
+
+    getTableBody: function() {
+        return document.createElement('tbody');
+    },
+
+    getTableHeaderCell: function(text) {
+
+        var el = document.createElement('th');
+        el.textContent = text;
+        return el;
+
+    },
+
+    getTableCell: function() {
+
+        var el = document.createElement('td');
+        return el;
+
+    },
+
+    /**
+     * Adds an error message to the specified input element.
+     * 
+     * @param {HTMLElement} input The input element that caused the error.
+     * @param {string} text The error message.
+     */
+    addInputError: function(input, text) {
+
+        // Get the parent element. Should most likely be a <div class="input-field" ... />.
+        var parent = input.parentNode,
+            el;
+
+        if (!parent) return;
+
+        // Remove any previous error.
+        this.removeInputError(input);
+
+        // Append an error message div.
+        el = document.createElement('div');
+        el.className = 'error-text red-text';
+        el.textContent = text;
+        parent.appendChild(el);
+
+    },
+
+    /**
+     * Removes any error message from the specified input element.
+     * 
+     * @param {HTMLElement} input The input element that previously caused the error.
+     */
+    removeInputError: function(input) {
+
+        // Get the parent element. Should most likely be a <div class="input-field" ... />.
+        var parent = input.parentElement,
+            els;
+
+        if (!parent) return;
+
+        // Remove all elements having class .error-text.
+        els = parent.getElementsByClassName('error-text');
+        for (var i = 0; i < els.length; i++)
+            parent.removeChild(els[i]);
+
+    },
+
+    addTableRowError: function(row) {
+    },
+
+    removeTableRowError: function(row) {
+    },
+
     /**
      * Gets a select DOM element.
      * 
      * @param {object} options The option values.
-     * @return {object} The DOM element.
+     * @return {HTMLElement} The DOM element.
      * @see http://materializecss.com/forms.html#select
      */
     getSelectInput: function(options) {
@@ -8165,7 +8437,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
     /**
      * Gets a textarea DOM element.
      * 
-     * @returns {object} The DOM element.
+     * @returns {HTMLElement} The DOM element.
      * @see http://materializecss.com/forms.html#textarea
      */
     getTextareaInput: function() {
@@ -8176,10 +8448,18 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
         return el;
     },
 
+    getCheckbox: function() {
+
+        var el = this.getFormInputField('checkbox');
+        el.id = this.createUuid();
+        return el;
+
+    },
+
     /**
      * Gets the modal element for displaying Edit JSON and Properties dialogs.
      * 
-     * @returns {object} The modal DOM element.
+     * @returns {HTMLElement} The modal DOM element.
      * @see http://materializecss.com/cards.html
      */
     getModal: function() {
@@ -8740,7 +9020,7 @@ JSONEditor.plugins = {
   ace: {
     theme: ''
   },
-  epiceditor: {
+  SimpleMDE: {
 
   },
   sceditor: {

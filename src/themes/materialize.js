@@ -3,7 +3,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
     /**
      * Applies grid size to specified element.
      * 
-     * @param {object} el The DOM element to have specified size applied.
+     * @param {HTMLElement} el The DOM element to have specified size applied.
      * @param {int} size The grid column size.
      * @see http://materializecss.com/grid.html
      */
@@ -16,7 +16,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
     /**
      * Gets a wrapped button element for a header.
      * 
-     * @returns {object} The wrapped button element.
+     * @returns {HTMLElement} The wrapped button element.
      */
     getHeaderButtonHolder: function() {
         return this.getButtonHolder();
@@ -25,7 +25,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
     /**
      * Gets a wrapped button element.
      * 
-     * @returns {object} The wrapped button element.
+     * @returns {HTMLElement} The wrapped button element.
      */
     getButtonHolder: function() {
         return document.createElement('span');
@@ -35,9 +35,9 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
      * Gets a single button element.
      * 
      * @param {string} text The button text.
-     * @param {object} icon The icon object.
+     * @param {HTMLElement} icon The icon object.
      * @param {string} title The button title.
-     * @returns {object} The button object.
+     * @returns {HTMLElement} The button object.
      * @see http://materializecss.com/buttons.html
      */
     getButton: function(text, icon, title) {
@@ -63,11 +63,11 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
     /**
      * Gets a form control object consisiting of several sub objects.
      * 
-     * @param {object} label The label element.
-     * @param {object} input The input element.
+     * @param {HTMLElement} label The label element.
+     * @param {HTMLElement} input The input element.
      * @param {string} description The element description.
      * @param {string} infoText The element information text.
-     * @returns {object} The assembled DOM element.
+     * @returns {HTMLElement} The assembled DOM element.
      * @see http://materializecss.com/forms.html
      */
     getFormControl: function(label, input, description, infoText) {
@@ -78,13 +78,10 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
         // Checkboxes get wrapped in p elements.
         if (type && type === 'checkbox') {
 
-            var id = this.createUuid();
-            input.id = id;
-
             ctrl = document.createElement('p');
             ctrl.appendChild(input);
             if (label) {
-                label.setAttribute('for', id);
+                label.setAttribute('for', input.id);
                 ctrl.appendChild(label);
             }
             return ctrl;
@@ -102,10 +99,19 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
 
     },
 
+    getDescription: function(text) {
+        var el = document.createElement('div');
+        el.className = 'grey-text';
+        el.style.marginTop = '-15px';
+        el.innerHTML = text;
+        return el;
+    },
+
     /**
      * Gets a header element.
      * 
-     * @param {string|object} text The header text or element.
+     * @param {string|HTMLElement} text The header text or element.
+     * @returns {HTMLElement} The header element.
      */
     getHeader: function(text) {
 
@@ -121,11 +127,112 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
 
     },
 
+    getChildEditorHolder: function() {
+
+        var el = document.createElement('div');
+        el.marginBottom = '10px';
+        return el;
+
+    },
+
+    getIndentedPanel: function() {
+        var el = document.createElement("div");
+        el.className = "card-panel";
+        return el;
+    },
+
+    getTable: function() {
+
+        var el = document.createElement('table');
+        el.className = 'striped bordered';
+        el.style.marginBottom = '10px';
+        return el;
+
+    },
+
+    getTableRow: function() {
+        return document.createElement('tr');
+    },
+
+    getTableHead: function() {
+        return document.createElement('thead');
+    },
+
+    getTableBody: function() {
+        return document.createElement('tbody');
+    },
+
+    getTableHeaderCell: function(text) {
+
+        var el = document.createElement('th');
+        el.textContent = text;
+        return el;
+
+    },
+
+    getTableCell: function() {
+
+        var el = document.createElement('td');
+        return el;
+
+    },
+
+    /**
+     * Adds an error message to the specified input element.
+     * 
+     * @param {HTMLElement} input The input element that caused the error.
+     * @param {string} text The error message.
+     */
+    addInputError: function(input, text) {
+
+        // Get the parent element. Should most likely be a <div class="input-field" ... />.
+        var parent = input.parentNode,
+            el;
+
+        if (!parent) return;
+
+        // Remove any previous error.
+        this.removeInputError(input);
+
+        // Append an error message div.
+        el = document.createElement('div');
+        el.className = 'error-text red-text';
+        el.textContent = text;
+        parent.appendChild(el);
+
+    },
+
+    /**
+     * Removes any error message from the specified input element.
+     * 
+     * @param {HTMLElement} input The input element that previously caused the error.
+     */
+    removeInputError: function(input) {
+
+        // Get the parent element. Should most likely be a <div class="input-field" ... />.
+        var parent = input.parentElement,
+            els;
+
+        if (!parent) return;
+
+        // Remove all elements having class .error-text.
+        els = parent.getElementsByClassName('error-text');
+        for (var i = 0; i < els.length; i++)
+            parent.removeChild(els[i]);
+
+    },
+
+    addTableRowError: function(row) {
+    },
+
+    removeTableRowError: function(row) {
+    },
+
     /**
      * Gets a select DOM element.
      * 
      * @param {object} options The option values.
-     * @return {object} The DOM element.
+     * @return {HTMLElement} The DOM element.
      * @see http://materializecss.com/forms.html#select
      */
     getSelectInput: function(options) {
@@ -139,7 +246,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
     /**
      * Gets a textarea DOM element.
      * 
-     * @returns {object} The DOM element.
+     * @returns {HTMLElement} The DOM element.
      * @see http://materializecss.com/forms.html#textarea
      */
     getTextareaInput: function() {
@@ -150,10 +257,18 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
         return el;
     },
 
+    getCheckbox: function() {
+
+        var el = this.getFormInputField('checkbox');
+        el.id = this.createUuid();
+        return el;
+
+    },
+
     /**
      * Gets the modal element for displaying Edit JSON and Properties dialogs.
      * 
-     * @returns {object} The modal DOM element.
+     * @returns {HTMLElement} The modal DOM element.
      * @see http://materializecss.com/cards.html
      */
     getModal: function() {
