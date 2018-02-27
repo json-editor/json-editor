@@ -8199,9 +8199,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
      * @see http://materializecss.com/grid.html
      */
     setGridColumnSize: function(el, size) {
-
         el.className = 'col s' + size;
-
     },
 
     /**
@@ -8366,6 +8364,124 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
         var el = document.createElement('td');
         return el;
 
+    },
+
+    /**
+     * Gets the tab holder element.
+     * 
+     * @returns {HTMLElement} The tab holder component.
+     * @see https://github.com/Dogfalo/materialize/issues/2542#issuecomment-233458602
+     */
+    getTabHolder: function() {
+
+        var html = [
+            '<div class="col s2">',
+            '   <ul class="tabs" style="height: auto; margin-top: 0.82rem; -ms-flex-direction: column; -webkit-flex-direction: column; flex-direction: column; display: -webkit-flex; display: flex;">',
+            '   </ul>',
+            '</div>',
+            '<div class="col s10">',
+            '<div>'
+        ].join("\n");
+
+        var el = document.createElement('div');
+        el.className = 'row card-panel';
+        el.innerHTML = html;
+        return el;
+
+    },
+
+    /**
+     * Add specified tab to specified holder element.
+     * 
+     * @param {HTMLElement} holder The tab holder element.
+     * @param {HTMLElement} tab The tab to add.
+     */
+    addTab: function(holder, tab) {
+        holder.children[0].children[0].appendChild(tab);
+    },
+
+    /**
+     * Gets a single tab element.
+     * 
+     * @param {HTMLElement} span The tab's content.
+     * @returns {HTMLElement} The tab element.
+     * @see https://github.com/Dogfalo/materialize/issues/2542#issuecomment-233458602
+     */
+    getTab: function(span) {
+
+        var el = document.createElement('li');
+        el.className = 'tab';
+        this.applyStyles(el, {
+            width: '100%',
+            textAlign: 'left',
+            lineHeight: '24px',
+            height: '24px',
+            fontSize: '14px',
+            cursor: 'pointer'
+        });
+        el.appendChild(span);
+        return el;
+    },
+
+    /**
+     * Marks specified tab as active.
+     * 
+     * @returns {HTMLElement} The tab element.
+     * @see https://github.com/Dogfalo/materialize/issues/2542#issuecomment-233458602
+     */
+    markTabActive: function(tab) {
+
+        this.applyStyles(tab, {
+            width: '100%',
+            textAlign: 'left',
+            lineHeight: '24px',
+            height: '24px',
+            fontSize: '14px',
+            cursor: 'pointer',
+            color: 'rgba(238,110,115,1)',
+            transition: 'border-color .5s ease',
+            borderRight: '3px solid #424242'
+        });
+
+    },
+
+    /**
+     * Marks specified tab as inactive.
+     * 
+     * @returns {HTMLElement} The tab element.
+     * @see https://github.com/Dogfalo/materialize/issues/2542#issuecomment-233458602
+     */
+    markTabInactive: function(tab) {
+
+        this.applyStyles(tab, {
+            width: '100%',
+            textAlign: 'left',
+            lineHeight: '24px',
+            height: '24px',
+            fontSize: '14px',
+            cursor: 'pointer',
+            color: 'rgba(238,110,115,0.7)'
+        });
+
+    },
+
+    /**
+     * Returns the element that holds the tab contents.
+     * 
+     * @param {HTMLElement} tabHolder The full tab holder element.
+     * @returns {HTMLElement} The content element inside specified tab holder.
+     */
+    getTabContentHolder: function(tabHolder) {
+        return tabHolder.children[1];
+    },
+
+    /**
+     * Creates and returns a tab content element.
+     * 
+     * @returns {HTMLElement} The new tab content element.
+     */
+    getTabContent: function() {
+        return document.createElement('div');
     },
 
     /**
