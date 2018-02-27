@@ -21,7 +21,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
   getNumColumns: function() {
     var info = this.getItemInfo(0);
     // Tabs require extra horizontal space
-    if(this.tabs_holder) {
+    if(this.tabs_holder && this.schema.format !== 'tabs-top') {
       return Math.max(Math.min(12,info.width+2),4);
     }
     else {
@@ -93,22 +93,33 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
       this.error_holder = document.createElement('div');
       this.container.appendChild(this.error_holder);
 
-      if(this.schema.format === 'tabs') {
-        this.controls = this.theme.getHeaderButtonHolder();
-        this.title.appendChild(this.controls);
-        this.tabs_holder = this.theme.getTabHolder();
-        this.container.appendChild(this.tabs_holder);
-        this.row_holder = this.theme.getTabContentHolder(this.tabs_holder);
-
-        this.active_tab = null;
+      if(this.schema.format === 'tabs-top') { 
+        this.controls = this.theme.getHeaderButtonHolder(); 
+        this.title.appendChild(this.controls); 
+        this.tabs_holder = this.theme.getTopTabHolder(); 
+        this.container.appendChild(this.tabs_holder); 
+        this.row_holder = this.theme.getTabContentHolder(this.tabs_holder); 
+ 
+        this.active_tab = null; 
       }
       else {
-        this.panel = this.theme.getIndentedPanel();
-        this.container.appendChild(this.panel);
-        this.row_holder = document.createElement('div');
-        this.panel.appendChild(this.row_holder);
-        this.controls = this.theme.getButtonHolder();
-        this.panel.appendChild(this.controls);
+        if(this.schema.format === 'tabs') {
+          this.controls = this.theme.getHeaderButtonHolder();
+          this.title.appendChild(this.controls);
+          this.tabs_holder = this.theme.getTabHolder();
+          this.container.appendChild(this.tabs_holder);
+          this.row_holder = this.theme.getTabContentHolder(this.tabs_holder);
+
+          this.active_tab = null;
+        }
+        else {
+          this.panel = this.theme.getIndentedPanel();
+          this.container.appendChild(this.panel);
+          this.row_holder = document.createElement('div');
+          this.panel.appendChild(this.row_holder);
+          this.controls = this.theme.getButtonHolder();
+          this.panel.appendChild(this.controls);
+        }
       }
     }
     else {
@@ -191,7 +202,12 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
 
     var holder;
     if(this.tabs_holder) {
-      holder = this.theme.getTabContent();
+      if(this.schema.format === 'tabs-top') {
+        holder = this.theme.getTopTabContent();
+      }
+      else {
+        holder = this.theme.getTabContent();
+      }
     }
     else if(item_info.child_editors) {
       holder = this.theme.getChildEditorHolder();
@@ -453,7 +469,12 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
     if(self.tabs_holder) {
       self.rows[i].tab_text = document.createElement('span');
       self.rows[i].tab_text.textContent = self.rows[i].getHeaderText();
-      self.rows[i].tab = self.theme.getTab(self.rows[i].tab_text);
+      if(self.schema.format === 'tabs-top'){
+        self.rows[i].tab = self.theme.getTopTab(self.rows[i].tab_text);
+      }
+      else {
+        self.rows[i].tab = self.theme.getTab(self.rows[i].tab_text);
+      }
       self.rows[i].tab.addEventListener('click', function(e) {
         self.active_tab = self.rows[i].tab;
         self.refreshTabs();

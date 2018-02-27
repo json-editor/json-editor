@@ -175,7 +175,21 @@ JSONEditor.defaults.themes.bootstrap2 = JSONEditor.AbstractTheme.extend({
     el.innerHTML = "<ul class='nav nav-tabs span2' style='margin-right: 0;'></ul><div class='tab-content span10' style='overflow:visible;'></div>";
     return el;
   },
+  getTopTabHolder: function() { 
+    var el = document.createElement('div'); 
+    el.className = 'tabbable tabs-over'; 
+    el.innerHTML = "<ul class='nav nav-tabs' style='margin-right: 0;'></ul><div class='tab-content' style='overflow:visible;'></div>"; 
+    return el; 
+  }, 
   getTab: function(text) {
+    var el = document.createElement('li');
+    var a = document.createElement('a');
+    a.setAttribute('href','#');
+    a.appendChild(text);
+    el.appendChild(a);
+    return el;
+  },
+  getTopTab: function(text) {
     var el = document.createElement('li');
     var a = document.createElement('a');
     a.setAttribute('href','#');
