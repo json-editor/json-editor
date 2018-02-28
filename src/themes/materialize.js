@@ -93,6 +93,21 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
         if (!type || !type.startsWith('select'))
             ctrl.className = 'input-field';
 
+        // Color needs special attention.
+        if (type && type === 'color') {
+            input.style.height = '3rem';
+            input.style.width = '100%';
+            input.style.margin = '5px 0 20px 0';
+            input.style.padding = '3px';
+
+            if (label) {
+                label.style['-webkit-transform'] = 'translateY(-14px) scale(0.8)';
+                label.style['transform'] = 'translateY(-14px) scale(0.8)';
+                label.style['-webkit-transform-origin'] = '0 0';
+                label.style['transform-origin'] = '0 0';
+            }
+        }
+
         return ctrl;
 
     },
