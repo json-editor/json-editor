@@ -101,8 +101,8 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend({
             input.style.padding = '3px';
 
             if (label) {
+                label.style.transform = 'translateY(-14px) scale(0.8)';
                 label.style['-webkit-transform'] = 'translateY(-14px) scale(0.8)';
-                label.style['transform'] = 'translateY(-14px) scale(0.8)';
                 label.style['-webkit-transform-origin'] = '0 0';
                 label.style['transform-origin'] = '0 0';
             }
