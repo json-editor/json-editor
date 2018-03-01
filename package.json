@@ -41,7 +41,8 @@
   "scripts": {
     "build": "npm install && grunt",
     "start": "grunt watch",
-    "test": "grunt test"
+    "test": "grunt test",
+    "serve-test": "grunt serve-test"
   },
   "dependencies": {
   }

@@ -6,9 +6,10 @@ test.describe('Check json-editor functionality', function() {
     this.timeout(10000);
     test.it('validation works', function() {
         var driver = new webdriver.Builder().
-        withCapabilities(webdriver.Capabilities.chrome()).
+        forBrowser('firefox').
+        usingServer('http://firefox:4444/wd/hub').
         build();
-        driver.get('http://localhost:9001/tests/selenium/tests.html');
+        driver.get('http://node:9001/tests/selenium/tests.html');
 
         var cityInput = driver.findElement(webdriver.By.name('root[0][location][city]'));
         cityInput.clear();
