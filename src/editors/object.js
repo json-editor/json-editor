@@ -163,9 +163,9 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
         var containerSimple = document.createElement('div');
         //This will be the place to (re)build tabs and panes
         //tabs_holder has 2 childs, [0]: ul.nav.nav-tabs and [1]: div.tab-content 
-        var newTabs_holder = this.theme.getTopTabHolder();
+        var newTabs_holder = this.theme.getTopTabHolder(this.schema.title);
         //child [1] of previous, stores panes
-        var newTabPanesContainer = this.theme.getTabContentHolder(newTabs_holder);
+        var newTabPanesContainer = this.theme.getTopTabContentHolder(newTabs_holder);
                   
         $each(this.property_order, function(i,key){
           var editor = self.editors[key];
@@ -188,6 +188,8 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
             }
           }
 
+          aPane.id = editor.tab_text.textContent;
+
           //For simple properties, add them on the same panel (Basic)
           if(!isObjOrArray){
             containerSimple.appendChild(gridRow);
@@ -199,7 +201,8 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
                 aPane.appendChild(containerSimple);
                 newTabPanesContainer.insertBefore(aPane,newTabPanesContainer.firstChild);
                 //Add "Basic" tab
-                newTabs_holder.firstChild.insertBefore(editor.tab,newTabs_holder.firstChild.firstChild);
+                self.theme.insertBasicTopTab(editor.tab,newTabs_holder);
+                //newTabs_holder.firstChild.insertBefore(editor.tab,newTabs_holder.firstChild.firstChild);
                 //Update the basicPane
                 editor.basicPane = aPane;
               }
@@ -214,7 +217,8 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
               aPane.appendChild(containerSimple);
               newTabPanesContainer.appendChild(aPane);
               //Add "Basic" tab
-              newTabs_holder.firstChild.appendChild(editor.tab);
+              //newTabs_holder.firstChild.appendChild(editor.tab);
+              self.theme.addTopTab(newTabs_holder,editor.tab);
               //Update the basicPane
               editor.basicPane = aPane;
             }
@@ -223,7 +227,8 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
           else {
             aPane.appendChild(gridRow);
             newTabPanesContainer.appendChild(aPane);
-            newTabs_holder.firstChild.appendChild(editor.tab);
+            //newTabs_holder.firstChild.appendChild(editor.tab);
+            self.theme.addTopTab(newTabs_holder,editor.tab);
           }
   
           if(editor.options.hidden) editor.container.style.display = 'none';
@@ -249,8 +254,9 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
         this.tabs_holder = newTabs_holder;
 
         //Activate the first tab
-        if(this.tabs_holder.firstChild.firstChild){
-          $trigger(this.tabs_holder.firstChild.firstChild,'click');
+        var firstTab = this.theme.getFirstTab(this.tabs_holder);
+        if(firstTab){
+          $trigger(firstTab,'click');
         }
         return;
       }
@@ -392,7 +398,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
         } else {
           self.rows[idx].tab_text.textContent = self.rows[idx].getHeaderText();
         }
-        self.rows[idx].tab = self.theme.getTopTab(self.rows[idx].tab_text);
+        self.rows[idx].tab = self.theme.getTopTab(self.rows[idx].tab_text,self.rows[idx].tab_text.textContent);
         self.rows[idx].tab.addEventListener('click', function(e) {
           self.active_tab = self.rows[idx].tab;
           self.refreshTabs();
@@ -422,7 +428,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
         //Store the index row of the first simple property added
         self.basicTab = rowsLen;
         self.basicPane = aPane;
-        self.theme.addTab(tabHolder, self.rows[rowsLen].tab);
+        self.theme.addTopTab(tabHolder, self.rows[rowsLen].tab);
       }
 
       else {
@@ -435,7 +441,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
     }
     else {
       self.addTab(rowsLen);
-      self.theme.addTab(tabHolder, self.rows[rowsLen].tab);
+      self.theme.addTopTab(tabHolder, self.rows[rowsLen].tab);
     }
   },
   //Mark the active tab and make visible the corresponding pane, hide others
@@ -458,12 +464,10 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
         if(basicTabPresent && row.tab == self.rows[self.basicTab].tab) basicTabRefreshed = true;
 
         if(row.tab === self.active_tab) {
-          self.theme.markTabActive(row.tab);
-          row.rowPane.style.display = '';
+          self.theme.markTabActive(row);
         }
         else {
-          self.theme.markTabInactive(row.tab);
-          row.rowPane.style.display = 'none';
+          self.theme.markTabInactive(row);
         }
       }
     });
@@ -586,13 +590,14 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       // Container for rows of child editors
       this.row_container = this.theme.getGridContainer();
 
-      this.tabs_holder = this.theme.getTopTabHolder(); 
-      this.tabPanesContainer = this.theme.getTabContentHolder(this.tabs_holder);
-
       if(isCategoriesFormat) {
+        this.tabs_holder = this.theme.getTopTabHolder(this.schema.title); 
+        this.tabPanesContainer = this.theme.getTopTabContentHolder(this.tabs_holder);
         this.editor_holder.appendChild(this.tabs_holder);
       }
       else {
+        this.tabs_holder = this.theme.getTabHolder(this.schema.title); 
+        this.tabPanesContainer = this.theme.getTabContentHolder(this.tabs_holder);
         this.editor_holder.appendChild(this.row_container);
       }
 
@@ -625,6 +630,9 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
           }
 
           self.addRow(editor,self.tabs_holder,aPane);
+
+          aPane.id = editor.schema.title; //editor.schema.path//tab_text.textContent
+
         }
         else {
           self.row_container.appendChild(holder);

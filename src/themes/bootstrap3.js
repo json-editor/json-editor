@@ -156,39 +156,51 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
     input.errmsg.style.display = 'none';
     input.controlgroup.className = input.controlgroup.className.replace(/\s?has-error/g,'');
   },
-  getTabHolder: function() {
+  getTabHolder: function(propertyName) {
+    var pName = (typeof propertyName === 'undefined')? "" : propertyName;
     var el = document.createElement('div');
-    el.innerHTML = "<div class='tabs list-group col-md-2'></div><div class='col-md-10'></div>";
-    el.className = 'rows';
+    el.innerHTML = "<div class='list-group pull-left' id='" + pName + "'></div><div class='col-sm-10 pull-left' id='" + pName + "'></div>";
     return el;
   },
-  getTopTabHolder: function() { 
+  getTopTabHolder: function(propertyName) { 
+    var pName = (typeof propertyName === 'undefined')? "" : propertyName;
     var el = document.createElement('div'); 
-    el.className = 'rows'; 
-    el.innerHTML = "<ul class='nav nav-tabs' style='padding-left: 10px; margin-left: 10px;'></ul><div class='tab-content' style='overflow:visible;'></div>"; 
+    el.innerHTML = "<ul class='nav nav-tabs' style='padding-left: 10px; margin-left: 10px;' id='" + pName + "'></ul><div class='tab-content' style='overflow:visible;' id='" + pName + "'></div>"; 
     return el; 
   }, 
-  getTab: function(text) {
+  getTab: function(text, tabId) {
     var el = document.createElement('a');
     el.className = 'list-group-item';
-    el.setAttribute('href','#');
+    el.setAttribute('href','#'+tabId);
     el.appendChild(text);
     return el;
   },
-  getTopTab: function(text) {
+  getTopTab: function(text, tabId) {
     var el = document.createElement('li');
     var a = document.createElement('a');
-    a.setAttribute('href','#');
+    a.setAttribute('href','#'+tabId);
     a.appendChild(text);
     el.appendChild(a);
     return el;
   },
-  markTabActive: function(tab) {
-    tab.className = tab.className.replace(/\s?active/g,'');
-    tab.className += ' active';
+  markTabActive: function(row) {
+    row.tab.className = row.tab.className.replace(/\s?active/g,'');
+    row.tab.className += ' active';
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.style.display = '';
+    }
+    else {
+      row.container.style.display = '';
+    }
   },
-  markTabInactive: function(tab) {
-    tab.className = tab.className.replace(/\s?active/g,'');
+  markTabInactive: function(row) {
+    row.tab.className = row.tab.className.replace(/\s?active/g,'');
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.style.display = 'none';
+    }
+    else {
+      row.container.style.display = 'none';
+    }
   },
   getProgressBar: function() {
     var min = 0, max = 100, start = 0;
