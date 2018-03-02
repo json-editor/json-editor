@@ -101,9 +101,14 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
         this.select2 = window.jQuery(this.input).select2(options);
         var self = this;
         this.select2.on('select2-blur',function() {
-            var val =self.select2.select2('val');
-            self.value = val;
-            self.onChange(true);
+          var val =self.select2.select2('val');
+          self.value = val;
+          self.onChange(true);
+        });
+        this.select2.on('change',function() {
+          var val =self.select2.select2('val');
+          self.value = val;
+          self.onChange(true);
         });
     }
     else {
