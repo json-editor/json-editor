@@ -1,7 +1,7 @@
 JSON Editor
 ===========
 
-Fork of the inactive https://github.com/jdorn/json-editor/ using the updated fork https://github.com/dmstr-forks/jdorn-json-editor. Some pull requests added from the original repo.
+Fork of the inactive [jdorn/json-editor](https://github.com/jdorn/json-editor) using the updated fork [json-editor/json-editor](https://github.com/json-editor/json-editor). Some pull requests added from the original repo.
 
 ![JSON Schema -> HTML Editor -> JSON](https://raw.github.com/jdorn/json-editor/master/jsoneditor.png)
 
