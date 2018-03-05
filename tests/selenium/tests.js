@@ -11,6 +11,11 @@ test.describe('Check json-editor functionality', function() {
         build();
         driver.get('http://node:9001/tests/selenium/tests.html');
 
+        var indicator = driver.findElement(webdriver.By.id('valid_indicator'));
+        indicator.getAttribute('textContent').then(function(value) {
+            assert.equal(value, 'valid');
+        });
+
         var cityInput = driver.findElement(webdriver.By.name('root[0][location][city]'));
         cityInput.clear();
         cityInput.sendKeys('Stuttgart');
