@@ -101,12 +101,12 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
         this.select2 = window.jQuery(this.input).select2(options);
         var self = this;
         this.select2.on('select2-blur',function() {
-          var val =self.select2.select2('val');
+          var val = self.select2.val();
           self.value = val;
           self.onChange(true);
         });
         this.select2.on('change',function() {
-          var val =self.select2.select2('val');
+          var val = self.select2.val();
           self.value = val;
           self.onChange(true);
         });
@@ -155,7 +155,11 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
       if(sanitized !== value[i]) changed = true;
     }
     this.value = new_value;
-    if(this.select2) this.select2.select2('val',this.value);
+    
+    if(this.select2) {
+      this.select2.val(this.value).trigger('change');
+    }
+
     return changed;
   },
   sanitize: function(value) {
