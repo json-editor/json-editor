@@ -5267,7 +5267,11 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     }
 
     this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)];
-    if(this.select2) this.select2.select2('val',this.input.value);
+
+    if(this.select2) {
+      this.select2.val(this.input.value).trigger('change');
+    }
+
     this.value = sanitized;
     this.onChange();
     this.change();
@@ -5463,11 +5467,11 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
       this.select2 = window.jQuery(this.input).select2(options);
       var self = this;
       this.select2.on('select2-blur',function() {
-        self.input.value = self.select2.select2('val');
+        self.input.value = self.select2.val();
         self.onInputChange();
       });
       this.select2.on('change',function() {
-        self.input.value = self.select2.select2('val');
+        self.input.value = self.select2.val();
         self.onInputChange();
       });
     }
@@ -6080,12 +6084,12 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
         this.select2 = window.jQuery(this.input).select2(options);
         var self = this;
         this.select2.on('select2-blur',function() {
-          var val =self.select2.select2('val');
+          var val = self.select2.val();
           self.value = val;
           self.onChange(true);
         });
         this.select2.on('change',function() {
-          var val =self.select2.select2('val');
+          var val = self.select2.val();
           self.value = val;
           self.onChange(true);
         });
@@ -6134,7 +6138,11 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
       if(sanitized !== value[i]) changed = true;
     }
     this.value = new_value;
-    if(this.select2) this.select2.select2('val',this.value);
+    
+    if(this.select2) {
+      this.select2.val(this.value).trigger('change');
+    }
+
     return changed;
   },
   sanitize: function(value) {
