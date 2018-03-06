@@ -13,7 +13,11 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     }
 
     this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)];
-    if(this.select2) this.select2.select2('val',this.input.value);
+
+    if(this.select2) {
+      this.select2.val(this.input.value).trigger('change');
+    }
+
     this.value = sanitized;
     this.onChange();
     this.change();
@@ -209,11 +213,11 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
       this.select2 = window.jQuery(this.input).select2(options);
       var self = this;
       this.select2.on('select2-blur',function() {
-        self.input.value = self.select2.select2('val');
+        self.input.value = self.select2.val();
         self.onInputChange();
       });
       this.select2.on('change',function() {
-        self.input.value = self.select2.select2('val');
+        self.input.value = self.select2.val();
         self.onInputChange();
       });
     }
