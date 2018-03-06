@@ -23,10 +23,10 @@
     "editor"
   ],
   "scripts": {
-    "build": "grunt",
-    "rawbuild": "grunt rawbuild",
+    "build": "npm install && grunt",
     "start": "grunt watch",
-    "test": "grunt test"
+    "test": "grunt test",
+    "serve-test": "grunt serve-test"
   },
   "license": "MIT",
   "engines": {
@@ -45,11 +45,5 @@
     "np": "^2.18.3",
     "selenium-webdriver": "^2.44.0"
   },
-  "scripts": {
-    "build": "npm install && grunt",
-    "start": "grunt watch",
-    "test": "grunt test"
-  },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
