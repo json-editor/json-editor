@@ -6,6 +6,7 @@ services:
   - docker
 
 before_script:
+  - cd tests
   - docker-compose up -d
   - docker-compose run --rm node npm run build
 
