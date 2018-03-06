@@ -1,1 +1,13 @@
-language: node_js
+sudo: required
+
+language: generic
+
+services:
+  - docker
+
+before_script:
+  - docker-compose up -d
+  - docker-compose run --rm node npm run build
+
+script:
+  - docker-compose exec node npm test

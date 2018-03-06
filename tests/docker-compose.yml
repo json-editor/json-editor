@@ -9,6 +9,8 @@ services:
     ports:
       - '9000:9000'
       - '9001:9001'
+    depends_on:
+      - firefox
   firefox:
     image: selenium/standalone-firefox-debug:2.53.1
     ports:
