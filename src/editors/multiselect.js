@@ -99,7 +99,8 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
         var options = window.jQuery.extend({},JSONEditor.plugins.select2);
         if(this.schema.options && this.schema.options.select2_options) options = $extend(options,this.schema.options.select2_options);
         this.select2 = window.jQuery(this.input).select2(options);
-        this.select2v4 = this.select2.hasOwnProperty("amd");
+        this.select2v4 = this.select2.select2.hasOwnProperty("amd");
+
         var self = this;
         this.select2.on('select2-blur',function() {
           if(self.select2v4)
