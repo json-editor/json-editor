@@ -213,13 +213,23 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
       if(this.schema.options && this.schema.options.select2_options) options = $extend(options,this.schema.options.select2_options);
       this.select2 = window.jQuery(this.input).select2(options);
       this.select2v4 = this.select2.select2.hasOwnProperty("amd");
+
       var self = this;
       this.select2.on('select2-blur',function() {
-        self.input.value = self.select2.val();
+        if(self.select2v4)
+          self.input.value = self.select2.val();
+        else
+          self.input.value = self.select2.select2('val');
+
         self.onInputChange();
       });
+
       this.select2.on('change',function() {
-        self.input.value = self.select2.val();
+        if(self.select2v4)
+          self.input.value = self.select2.val();
+        else
+          self.input.value = self.select2.select2('val');
+
         self.onInputChange();
       });
     }
