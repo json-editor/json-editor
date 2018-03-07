@@ -102,13 +102,20 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
         this.select2v4 = this.select2.hasOwnProperty("amd");
         var self = this;
         this.select2.on('select2-blur',function() {
-          var val = self.select2.val();
-          self.value = val;
+          if(self.select2v4)
+            self.value = self.select2.val();
+          else
+            self.value = self.select2.select2('val');
+
           self.onChange(true);
         });
+
         this.select2.on('change',function() {
-          var val = self.select2.val();
-          self.value = val;
+          if(self.select2v4)
+            self.value = self.select2.val();
+          else
+            self.value = self.select2.select2('val');
+
           self.onChange(true);
         });
     }
@@ -156,12 +163,14 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
       if(sanitized !== value[i]) changed = true;
     }
     this.value = new_value;
+
     if(this.select2) {
       if(this.select2v4)
         this.select2.val(this.value).trigger("change"); 
       else
         this.select2.select2('val',this.value);
     }
+
     return changed;
   },
   sanitize: function(value) {
