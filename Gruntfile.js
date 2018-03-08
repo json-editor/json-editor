@@ -137,7 +137,7 @@ module.exports = function(grunt) {
         default: {
             options: {
                 port: 9000,
-                hostname: 'localhost',
+                hostname: '0.0.0.0',
                 debug: true,
                 keepalive: true
             }
@@ -145,8 +145,9 @@ module.exports = function(grunt) {
         testing: {
             options: {
                 port: 9001,
-                hostname: 'localhost',
-                debug: true
+                hostname: '0.0.0.0',
+                debug: true,
+                keepalive: true
             }
         }
     },
@@ -172,13 +173,16 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-run');
 
-  // Serve files for testing
+  // Serve files
   grunt.registerTask('serve', 'connect:default');
+  grunt.registerTask('serve-test', 'connect:testing');
 
   // Run mocha tests
-  grunt.registerTask('test', ['connect:testing', 'run:mocha']);
+  grunt.registerTask('test', ['run:mocha']);
 
     // Default task.
   grunt.registerTask('default', ['jshint:beforeconcat','concat','jshint:afterconcat','uglify']);
-
+  
+  grunt.registerTask('rawbuild', ['concat','uglify']);
+  
 };
