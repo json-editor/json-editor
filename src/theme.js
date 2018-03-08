@@ -301,14 +301,16 @@ JSONEditor.AbstractTheme = Class.extend({
   },
   removeTableRowError: function(row) {
   },
-  getTabHolder: function() {
+  getTabHolder: function(propertyName) {
+    var pName = (typeof propertyName === 'undefined')? "" : propertyName;
     var el = document.createElement('div');
-    el.innerHTML = "<div style='float: left; width: 130px;' class='tabs'></div><div class='content' style='margin-left: 120px;'></div><div style='clear:both;'></div>";
+    el.innerHTML = "<div style='float: left; width: 130px;' class='tabs' id='" + pName + "'></div><div class='content' style='margin-left: 120px;' id='" + pName + "'></div><div style='clear:both;'></div>";
     return el;
   },
-  getTopTabHolder: function() {
+  getTopTabHolder: function(propertyName) {
+    var pName = (typeof propertyName === 'undefined')? "" : propertyName;
     var el = document.createElement('div');
-    el.innerHTML = "<div class='tabs' style='margin-left: 10px;'></div><div style='clear:both;'></div><div class='content'></div>";
+    el.innerHTML = "<div class='tabs' style='margin-left: 10px;' id='" + pName + "'></div><div style='clear:both;'></div><div class='content' id='" + pName + "'></div>";
     return el;
   },
   applyStyles: function(el,styles) {
@@ -332,9 +334,13 @@ JSONEditor.AbstractTheme = Class.extend({
     }
     return false;
   },
-  getTab: function(span) {
+  insertBasicTopTab: function(tab, newTabs_holder ) {
+    newTabs_holder.firstChild.insertBefore(tab,newTabs_holder.firstChild.firstChild);
+  },
+  getTab: function(span, tabId) {
     var el = document.createElement('div');
     el.appendChild(span);
+    el.id = tabId;
     el.style = el.style || {};
     this.applyStyles(el,{
       border: '1px solid #ccc',
@@ -349,8 +355,9 @@ JSONEditor.AbstractTheme = Class.extend({
     });
     return el;
   },
-  getTopTab: function(span) {
+  getTopTab: function(span, tabId) {
     var el = document.createElement('div');
+    el.id = tabId;
     el.appendChild(span);
     el.style = el.style || {};
     this.applyStyles(el,{
@@ -372,25 +379,43 @@ JSONEditor.AbstractTheme = Class.extend({
   getTabContentHolder: function(tab_holder) {
     return tab_holder.children[1];
   },
+  getTopTabContentHolder: function(tab_holder) {
+    return tab_holder.children[1];
+  },
   getTabContent: function() {
     return this.getIndentedPanel();
   },
   getTopTabContent: function() {
     return this.getTopIndentedPanel();
   },
-  markTabActive: function(tab) {
-    this.applyStyles(tab,{
+  markTabActive: function(row) {
+    this.applyStyles(row.tab,{
       opacity: 1,
       background: 'white'
     });
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.style.display = '';
+    }
+    else {
+      row.container.style.display = '';
+    }
   },
-  markTabInactive: function(tab) {
-    this.applyStyles(tab,{
+  markTabInactive: function(row) {
+    this.applyStyles(row.tab,{
       opacity:0.5,
       background: ''
     });
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.style.display = 'none';
+    }
+    else {
+      row.container.style.display = 'none';
+    }
   },
   addTab: function(holder, tab) {
+    holder.children[0].appendChild(tab);
+  },
+  addTopTab: function(holder, tab) {
     holder.children[0].appendChild(tab);
   },
   getBlockLink: function() {
@@ -414,5 +439,8 @@ JSONEditor.AbstractTheme = Class.extend({
   createImageLink: function(holder,link,image) {
     holder.appendChild(link);
     link.appendChild(image);
+  },
+  getFirstTab: function(holder){
+    return holder.firstChild.firstChild;
   }
 });

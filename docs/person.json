@@ -50,6 +50,24 @@
           }
         }
       }
+    },
+    "cars": {
+        "type": "array",
+        "format": "tabs",
+        "title": "Cars",
+        "uniqueItems": false,
+        "items":{
+            "type": "object",
+            "title": "Car",
+            "properties": {
+                "manufacturer": {
+                    "type": "string"
+                },
+                "model": {
+                    "type": "string"
+                }
+            }
+        }
     }
   }
 }

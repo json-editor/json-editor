@@ -9,7 +9,7 @@
     <link rel='stylesheet' id='icon_stylesheet'>
 
     <style>[class*="foundicon-"] {font-family: GeneralFoundicons;font-style: normal;}</style>
-    <script src='dist/jsoneditor.js'></script>
+    <script src='//unpkg.com/json-editor'></script>
 
     <script>
     /**
@@ -24,13 +24,13 @@
 <body>
 <div class='container'>
     <div class='row'>
-        <div class='span8 col-md-8 columns eight large-8'>
+        <div class='span8 col-sm-8 columns eight small-8'>
             <h2>Editor</h2>
             <p>Below is the editor generated from the JSON Schema.</p>
 
             <div id='editor'></div>
         </div>
-        <div class='span4 col-md-4 columns four large-4'>
+        <div class='span4 col-sm-4 columns four small-4'>
             <div>
                 <a href='#' id='direct_link'>Direct Link</a> (preserves schema, value, and options)
             </div>
@@ -108,6 +108,8 @@
             <p>This will update whenever the form changes to show validation errors if there are any.</p>
             <textarea id='validate' style='width: 100%; height: 100px; font-family: monospace;' readonly disabled class='form-control'></textarea>
         </div>
+    </div>
+    <div class='row'>
         <div class='row'>
             <div class='span12 col-md-12 columns twelve large-12'>
                 <h2>Schema</h2>
@@ -345,7 +347,7 @@ editor.on("change",  function() {
             foundation3: '//cdnjs.cloudflare.com/ajax/libs/foundation/3.2.5/stylesheets/foundation.css',
             foundation4: '//cdnjs.cloudflare.com/ajax/libs/foundation/4.3.2/css/foundation.min.css',
             foundation5: '//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/css/foundation.min.css',
-            foundation6: '//cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css',
+            foundation6: '//cdnjs.cloudflare.com/ajax/libs/foundation/6.2.4/foundation.min.css',
             jqueryui: '//code.jquery.com/ui/1.10.3/themes/south-street/jquery-ui.css'
         };
 
