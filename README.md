@@ -4,17 +4,17 @@ JSON Editor
 [![Build Status](https://travis-ci.org/json-editor/json-editor.svg?branch=v1.0.0)](https://travis-ci.org/json-editor/json-editor)
 Fork of the inactive [jdorn/json-editor](https://github.com/jdorn/json-editor) using the updated fork [json-editor/json-editor](https://github.com/json-editor/json-editor). Some pull requests added from the original repo.
 
-![JSON Schema -> HTML Editor -> JSON](https://raw.github.com/jdorn/json-editor/master/jsoneditor.png)
+![JSON Schema -> HTML Editor -> JSON](https://raw.github.com/json-editor/json-editor/master/jsoneditor.png)
 
 JSON Editor takes a JSON Schema and uses it to generate an HTML form.  
 It has full support for JSON Schema version 3 and 4 and can integrate with several popular CSS frameworks (bootstrap, foundation, and jQueryUI).
 
-Check out an interactive demo (demo.html): http://jeremydorn.com/json-editor/
+Check out an interactive demo (demo.html): https://json-editor.github.io/json-editor/
 
-Download the [production version][min] (22K when gzipped) or the [development version][max].
+Install
+-----------------
 
-[min]: https://raw.github.com/jdorn/json-editor/master/dist/jsoneditor.min.js
-[max]: https://raw.github.com/jdorn/json-editor/master/dist/jsoneditor.js
+For the time being, please use the original jdorn fork of this project https://github.com/jdorn/json-editor until this fork has released a new version. For progress, see: https://github.com/json-editor/json-editor/projects/1
 
 Requirements
 -----------------
