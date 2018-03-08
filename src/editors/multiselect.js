@@ -99,11 +99,25 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
         var options = window.jQuery.extend({},JSONEditor.plugins.select2);
         if(this.schema.options && this.schema.options.select2_options) options = $extend(options,this.schema.options.select2_options);
         this.select2 = window.jQuery(this.input).select2(options);
+        this.select2v4 = this.select2.select2.hasOwnProperty("amd");
+
         var self = this;
         this.select2.on('select2-blur',function() {
-            var val =self.select2.select2('val');
-            self.value = val;
-            self.onChange(true);
+          if(self.select2v4)
+            self.value = self.select2.val();
+          else
+            self.value = self.select2.select2('val');
+
+          self.onChange(true);
+        });
+
+        this.select2.on('change',function() {
+          if(self.select2v4)
+            self.value = self.select2.val();
+          else
+            self.value = self.select2.select2('val');
+
+          self.onChange(true);
         });
     }
     else {
@@ -150,7 +164,14 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
       if(sanitized !== value[i]) changed = true;
     }
     this.value = new_value;
-    if(this.select2) this.select2.select2('val',this.value);
+
+    if(this.select2) {
+      if(this.select2v4)
+        this.select2.val(this.value).trigger("change"); 
+      else
+        this.select2.select2('val',this.value);
+    }
+
     return changed;
   },
   sanitize: function(value) {
@@ -175,7 +196,12 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
           this.inputs[i].disabled = false;
         }
       }
-      if(this.select2) this.select2.select2("enable",true);
+      if(this.select2) {
+        if(this.select2v4)
+          this.select2.prop("disabled",false);
+        else
+          this.select2.select2("enable",true);
+      }
       this._super();
     }
   },
@@ -190,7 +216,12 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
         this.inputs[i].disabled = true;
       }
     }
-    if(this.select2) this.select2.select2("enable",false);
+    if(this.select2) {
+      if(this.select2v4)
+        this.select2.prop("disabled",true);
+      else
+        this.select2.select2("enable",false);
+    }
     this._super();
   },
   destroy: function() {
