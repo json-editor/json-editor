@@ -32,7 +32,7 @@ The following are not required, but can improve the style and usability of JSON 
 *  [SimpleMDE](https://simplemde.com/) for editing of Markdown content
 *  [Ace Editor](http://ace.c9.io/) for editing code
 *  [Select2](http://ivaynberg.github.io/select2/) for nicer Select boxes
-*  [Selectize](http://brianreavis.github.io/selectize.js/) for nicer Select & Array boxes
+*  [Selectize](https://selectize.github.io/selectize.js/) for nicer Select & Array boxes
 *  [math.js](http://mathjs.org/) for more accurate floating point math (multipleOf, divisibleBy, etc.)
 
 Usage
