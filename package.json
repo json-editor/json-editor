@@ -33,17 +33,17 @@
     "node": ">= 0.8.0"
   },
   "devDependencies": {
-    "chromedriver": "^2.12.0",
-    "grunt": "~1.0.1",
+    "chromedriver": "^2.36.0",
+    "grunt": "^1.0.2",
     "grunt-contrib-concat": "~1.0.0",
     "grunt-contrib-connect": "~1.0.0",
     "grunt-contrib-jshint": "~1.0.0",
     "grunt-contrib-uglify": "~1.0.0",
     "grunt-contrib-watch": "~1.0.0",
     "grunt-run": "^0.7.0",
-    "mocha": "^2.0.1",
+    "mocha": "^2.5.3",
     "np": "^2.18.3",
-    "selenium-webdriver": "^2.44.0"
+    "selenium-webdriver": "^2.53.3"
   },
   "dependencies": {}
 }
