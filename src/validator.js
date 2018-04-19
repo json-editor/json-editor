@@ -442,9 +442,10 @@ JSONEditor.Validator = Class.extend({
       var validated_properties = {};
       if(schema.properties) {
         if(typeof schema.required !== "undefined" && Array.isArray(schema.required)) {
-          for(i of schema.required) {
-            validated_properties[i] = true;
-            errors = errors.concat(this._validateSchema(schema.properties[i],value[i],path+'.'+i));
+          for(i=0; i<schema.required.length; i++) {
+            prop = schema.required[i];
+            validated_properties[prop] = true;
+            errors = errors.concat(this._validateSchema(schema.properties[prop],value[prop],path+'.'+prop));
           }
         } else {
           for(i in schema.properties) {
