@@ -107,6 +107,11 @@ JSONEditor.defaults.editors.upload = JSONEditor.AbstractEditor.extend({
         }
       });
     });
+
+    if(this.jsoneditor.options.auto_upload || this.schema.options.auto_upload) {
+      uploadButton.dispatchEvent(new MouseEvent('click'));
+      this.preview.removeChild(uploadButton);
+    }
   },
   enable: function() {
     if(!this.always_disabled) {
