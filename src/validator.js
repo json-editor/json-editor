@@ -51,6 +51,23 @@ JSONEditor.Validator = Class.extend({
       }
     }
 
+		// 'required boolean'
+	  if (schema.type === 'boolean' && schema.required === true) {
+		  valid = false;
+
+		  if (value === true) {
+			  valid = schema.required;
+		  }
+
+		  if (!valid) {
+			  errors.push({
+				  path: path,
+				  property: 'required',
+				  message: this.translate("error_required")
+			  });
+		  }
+	  }
+
     // `extends` (version 3)
     if(schema["extends"]) {
       for(i=0; i<schema["extends"].length; i++) {
