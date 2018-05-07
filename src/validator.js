@@ -50,7 +50,7 @@ JSONEditor.Validator = Class.extend({
         });
       }
     }
-
+	  
     // `extends` (version 3)
     if(schema["extends"]) {
       for(i=0; i<schema["extends"].length; i++) {
