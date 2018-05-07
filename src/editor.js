@@ -442,23 +442,26 @@ JSONEditor.AbstractEditor = Class.extend({
     this.parent = null;
   },
   getDefault: function() {
-    if(this.schema["default"]) return this.schema["default"];
+	  requestAnimationFrame(function () {
+		  if(this.schema["default"]) return this.schema["default"];
+		  if(this.schema["enum"]) return this.schema["enum"][0];
 
-    var type = this.schema.type || this.schema.oneOf;
-    if(type && Array.isArray(type)) type = type[0];
-    if(type && typeof type === "object") type = type.type;
-    if(type && Array.isArray(type)) type = type[0];
-    
-    if(typeof type === "string") {
-      if(type === "number") return 0.0;
-      if(type === "boolean") return false;
-      if(type === "integer") return 0;
-      if(type === "string") return "";
-      if(type === "object") return {};
-      if(type === "array") return [];
-    }
-    
-    return null;
+		  var type = this.schema.type || this.schema.oneOf;
+		  if(type && Array.isArray(type)) type = type[0];
+		  if(type && typeof type === "object") type = type.type;
+		  if(type && Array.isArray(type)) type = type[0];
+
+		  if(typeof type === "string") {
+			  if(type === "number") return 0.0;
+			  if(type === "boolean") return false;
+			  if(type === "integer") return 0;
+			  if(type === "string") return "";
+			  if(type === "object") return {};
+			  if(type === "array") return [];
+		  }
+
+		  return null;
+	  });
   },
   getTitle: function() {
     return this.schema.title || this.key;
