@@ -442,9 +442,14 @@ JSONEditor.AbstractEditor = Class.extend({
     this.parent = null;
   },
   getDefault: function() {
-	  requestAnimationFrame(function () {
-		  if(this.schema["default"]) return this.schema["default"];
-		  if(this.schema["enum"]) return this.schema["enum"][0];
+
+	    if (typeof this.schema["default"] !== 'undefined') {
+		    return this.schema["default"];
+	    }
+
+	    if (typeof this.schema["enum"] !== 'undefined') {
+		    return this.schema["enum"][0];
+	    }
 
 		  var type = this.schema.type || this.schema.oneOf;
 		  if(type && Array.isArray(type)) type = type[0];
@@ -461,7 +466,6 @@ JSONEditor.AbstractEditor = Class.extend({
 		  }
 
 		  return null;
-	  });
   },
   getTitle: function() {
     return this.schema.title || this.key;
