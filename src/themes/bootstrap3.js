@@ -136,6 +136,7 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
         this.queuedInputErrorText = text;
         return; 
     }
+    input.controlgroup.className = input.controlgroup.className.replace(/\s?has-error/g,'');
     input.controlgroup.className += ' has-error';
     if(!input.errmsg) {
       input.errmsg = document.createElement('p');
