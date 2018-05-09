@@ -3,7 +3,7 @@ services:
   node:
     image: node
     volumes:
-      - ../:/repo
+      - ../:/repo:delegated
     working_dir: /repo
     command: npm run serve-test
     ports:
