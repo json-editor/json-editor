@@ -2,7 +2,7 @@
   "name": "@json-editor/json-editor",
   "title": "JSONEditor",
   "description": "JSON Schema based editor",
-  "version": "1.0.0-alpha1",
+  "version": "1.0.0",
   "main": "dist/jsoneditor.js",
   "author": {
     "name": "Jeremy Dorn",
@@ -26,7 +26,11 @@
     "build": "npm install && grunt",
     "start": "grunt watch",
     "test": "grunt test",
-    "serve-test": "grunt serve-test"
+    "serve-test": "grunt serve-test",
+    "docker-test": "cd tests && docker-compose run --rm node npm run build && docker-compose up -d && docker-compose ps && docker-compose exec node npm test",
+    "preversion": "npm run docker-test",
+    "version": "",
+    "postversion": "git push && git push --tags && npm publish ./ --access public"
   },
   "license": "MIT",
   "engines": {
@@ -42,7 +46,6 @@
     "grunt-contrib-watch": "~1.0.0",
     "grunt-run": "^0.7.0",
     "mocha": "^2.5.3",
-    "np": "^2.18.3",
     "selenium-webdriver": "^2.53.3"
   },
   "dependencies": {}
