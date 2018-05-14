@@ -59,5 +59,32 @@ JSONEditor.defaults.editors.checkbox = JSONEditor.AbstractEditor.extend({
     if(this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description);
     if(this.input && this.input.parentNode) this.input.parentNode.removeChild(this.input);
     this._super();
+  },
+  showValidationErrors: function (errors) {
+    var self = this;
+
+    if (this.jsoneditor.options.show_errors === "always") {}
+
+    else if (!this.is_dirty && this.previous_error_setting === this.jsoneditor.options.show_errors) {
+      return;
+    }
+
+    this.previous_error_setting = this.jsoneditor.options.show_errors;
+
+    var messages = [];
+    $each(errors, function (i, error) {
+      if (error.path === self.path) {
+        messages.push(error.message);
+      }
+    });
+
+    this.input.controlgroup = this.control;
+
+    if (messages.length) {
+      this.theme.addInputError(this.input, messages.join('. ') + '.');
+    }
+    else {
+      this.theme.removeInputError(this.input);
+    }
   }
 });
