@@ -14,7 +14,7 @@ Check out an interactive demo (demo.html): https://json-editor.github.io/json-ed
 Install
 -----------------
 
-For the time being, please use the original jdorn fork of this project https://github.com/jdorn/json-editor until this fork has released a new version. For progress, see: https://github.com/json-editor/json-editor/projects/1
+    npm install @json-editor/json-editor
 
 Requirements
 -----------------
