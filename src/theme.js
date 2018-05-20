@@ -191,6 +191,13 @@ JSONEditor.AbstractTheme = Class.extend({
     el.setAttribute('step',step);
     return el;
   },
+  getNumberInput: function(min,max,step) {
+    var el = this.getFormInputField('number');
+    el.setAttribute('min',min);
+    el.setAttribute('max',max);
+    el.setAttribute('step',step);
+    return el;
+  },
   getFormInputField: function(type) {
     var el = document.createElement('input');
     el.setAttribute('type',type);
