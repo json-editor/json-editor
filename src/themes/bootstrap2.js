@@ -146,7 +146,7 @@ JSONEditor.defaults.themes.bootstrap2 = JSONEditor.AbstractTheme.extend({
   addInputError: function(input,text) {
     if(!input.controlgroup) {
         this.queuedInputErrorText = text;
-        return; 
+        return;
     }
     if(!input.controlgroup || !input.controls) return;
     input.controlgroup.className += ' error';
@@ -176,13 +176,13 @@ JSONEditor.defaults.themes.bootstrap2 = JSONEditor.AbstractTheme.extend({
     el.innerHTML = "<ul class='nav nav-tabs'  id='" + pName + "'></ul><div class='tab-content well well-small' id='" + pName + "'></div>";
     return el;
   },
-  getTopTabHolder: function(propertyName) { 
+  getTopTabHolder: function(propertyName) {
     var pName = (typeof propertyName === 'undefined')? "" : propertyName;
-    var el = document.createElement('div'); 
-    el.className = 'tabbable tabs-over'; 
-    el.innerHTML = "<ul class='nav nav-tabs' id='" + pName + "'></ul><div class='tab-content well well-small'  id='" + pName + "'></div>"; 
-    return el; 
-  }, 
+    var el = document.createElement('div');
+    el.className = 'tabbable tabs-over';
+    el.innerHTML = "<ul class='nav nav-tabs' id='" + pName + "'></ul><div class='tab-content well well-small'  id='" + pName + "'></div>";
+    return el;
+  },
   getTab: function(text,tabId) {
     var el = document.createElement('li');
     el.className = 'nav-item';
@@ -220,24 +220,12 @@ JSONEditor.defaults.themes.bootstrap2 = JSONEditor.AbstractTheme.extend({
   markTabActive: function(row) {
     row.tab.className = row.tab.className.replace(/\s?active/g,'');
     row.tab.className += ' active';
-
-    if(typeof row.rowPane !== 'undefined'){
-      row.rowPane.className = row.rowPane.className.replace(/\s?active/g,'');
-      row.rowPane.className += ' active';
-    }
-    else {
-      row.container.className = row.container.className.replace(/\s?active/g,'');
-      row.container.className += ' active';
-    }
+    row.container.className = row.container.className.replace(/\s?active/g,'');
+    row.container.className += ' active';
   },
   markTabInactive: function(row) {
     row.tab.className = row.tab.className.replace(/\s?active/g,'');
-    if(typeof row.rowPane !== 'undefined'){
-      row.rowPane.className = row.rowPane.className.replace(/\s?active/g,'');
-    }
-    else {
-      row.container.className = row.container.className.replace(/\s?active/g,'');
-    }
+    row.container.className = row.container.className.replace(/\s?active/g,'');
   },
   addTab: function(holder, tab) {
     holder.children[0].appendChild(tab);

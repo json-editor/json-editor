@@ -393,24 +393,14 @@ JSONEditor.AbstractTheme = Class.extend({
       opacity: 1,
       background: 'white'
     });
-    if(typeof row.rowPane !== 'undefined'){
-      row.rowPane.style.display = '';
-    }
-    else {
-      row.container.style.display = '';
-    }
+    row.container.style.display = '';
   },
   markTabInactive: function(row) {
     this.applyStyles(row.tab,{
       opacity:0.5,
       background: ''
     });
-    if(typeof row.rowPane !== 'undefined'){
-      row.rowPane.style.display = 'none';
-    }
-    else {
-      row.container.style.display = 'none';
-    }
+    row.container.style.display = 'none';
   },
   addTab: function(holder, tab) {
     holder.children[0].appendChild(tab);

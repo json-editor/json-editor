@@ -231,8 +231,8 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
         else self.theme.setGridColumnSize(editor.container,12);
         //Now, add the property editor to the row
         gridRow.appendChild(editor.container);
-        //Update the rowPane (same as self.rows[x].rowPane)
-        editor.rowPane = aPane;
+        //Update the container (same as self.rows[x].container)
+        editor.container = aPane;
 
       });
 
@@ -404,15 +404,15 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       }
 
     },
-  addRow: function(editor, tabHolder, aPane) {
+  addRow: function(editor, tabHolder, holder) {
     var self = this;
     var rowsLen = this.rows.length;
     var isObjOrArray = editor.schema.type === "object" || editor.schema.type === "array";
 
     //Add a row
     self.rows[rowsLen] = editor;
-    //rowPane stores the editor corresponding pane to set the display style when refreshing Tabs
-    self.rows[rowsLen].rowPane = aPane;
+    //container stores the editor corresponding pane to set the display style when refreshing Tabs
+    self.rows[rowsLen].container = holder;
 
     if(!isObjOrArray){
 
@@ -431,7 +431,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
         //so, when 'click' event is fired from a row, it gets the correct ("Basic") tab
         self.rows[rowsLen].tab = self.rows[self.basicTab].tab;
         self.rows[rowsLen].tab_text = self.rows[self.basicTab].tab_text;
-        self.rows[rowsLen].rowPane = self.rows[self.basicTab].rowPane;
+        self.rows[rowsLen].container = self.rows[self.basicTab].container;
       }
     }
     else {
@@ -447,7 +447,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
 
     $each(this.rows, function(i,row) {
       //If it's an orphan row (some property which has been deleted), return
-      if(!row.tab || !row.rowPane || !row.rowPane.parentNode) return;
+      if(!row.tab || !row.container || !row.container.parentNode) return;
 
       if(basicTabPresent && row.tab == self.rows[self.basicTab].tab && basicTabRefreshed) return;
 

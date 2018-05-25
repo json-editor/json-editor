@@ -134,13 +134,13 @@ JSONEditor.defaults.themes.foundation3 = JSONEditor.defaults.themes.foundation.e
     el.innerHTML = '<dl class="tabs vertical two columns" id="' + pName + '"></dl><div class="tabs-content ten columns" id="' + pName + '"></div>';
     return el;
   },
-  getTopTabHolder: function(propertyName) { 
+  getTopTabHolder: function(propertyName) {
     var pName = (typeof propertyName === 'undefined')? "" : propertyName;
-    var el = document.createElement('div'); 
-    el.className = 'row'; 
-    el.innerHTML = '<dl class="tabs horizontal" style="padding-left: 10px; margin-left: 10px;" id="' + pName + '"></dl><div class="tabs-content twelve columns" style="padding: 10px; margin-left: 10px;" id="' + pName + '"></div>'; 
-    return el; 
-  }, 
+    var el = document.createElement('div');
+    el.className = 'row';
+    el.innerHTML = '<dl class="tabs horizontal" style="padding-left: 10px; margin-left: 10px;" id="' + pName + '"></dl><div class="tabs-content twelve columns" style="padding: 10px; margin-left: 10px;" id="' + pName + '"></div>';
+    return el;
+  },
   setGridColumnSize: function(el,size) {
     var sizes = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve'];
     el.className = 'columns '+sizes[size];
@@ -182,21 +182,11 @@ JSONEditor.defaults.themes.foundation3 = JSONEditor.defaults.themes.foundation.e
   markTabActive: function(row) {
     row.tab.className = row.tab.className.replace(/\s?active/g,'');
     row.tab.className += ' active';
-    if(typeof row.rowPane !== 'undefined'){
-      row.rowPane.style.display = '';
-    }
-    else {
-      row.container.style.display = '';
-    }
+    row.container.style.display = '';
   },
   markTabInactive: function(row) {
     row.tab.className = row.tab.className.replace(/\s?active/g,'');
-    if(typeof row.rowPane !== 'undefined'){
-      row.rowPane.style.display = 'none';
-    }
-    else {
-      row.container.style.display = 'none';
-    }
+    row.container.style.display = 'none';
   },
   addTab: function(holder, tab) {
     holder.children[0].appendChild(tab);
@@ -249,13 +239,13 @@ JSONEditor.defaults.themes.foundation5 = JSONEditor.defaults.themes.foundation.e
     el.innerHTML = '<dl class="tabs vertical" id="' + pName + '"></dl><div class="tabs-content vertical" id="' + pName + '"></div>';
     return el;
   },
-  getTopTabHolder: function(propertyName) { 
+  getTopTabHolder: function(propertyName) {
     var pName = (typeof propertyName === 'undefined')? "" : propertyName;
-    var el = document.createElement('div'); 
-    el.className = 'row'; 
-    el.innerHTML = '<dl class="tabs horizontal" style="padding-left: 10px;" id="' + pName + '"></dl><div class="tabs-content horizontal" style="padding: 10px;" id="' + pName + '"></div>'; 
-    return el; 
-  }, 
+    var el = document.createElement('div');
+    el.className = 'row';
+    el.innerHTML = '<dl class="tabs horizontal" style="padding-left: 10px;" id="' + pName + '"></dl><div class="tabs-content horizontal" style="padding: 10px;" id="' + pName + '"></div>';
+    return el;
+  },
   getTab: function(text, tabId) {
     var el = document.createElement('dd');
     var a = document.createElement('a');
@@ -293,21 +283,11 @@ JSONEditor.defaults.themes.foundation5 = JSONEditor.defaults.themes.foundation.e
   markTabActive: function(row) {
     row.tab.className = row.tab.className.replace(/\s?active/g,'');
     row.tab.className += ' active';
-    if(typeof row.rowPane !== 'undefined'){
-      row.rowPane.style.display = '';
-    }
-    else {
-      row.container.style.display = '';
-    }
+    row.container.style.display = '';
   },
   markTabInactive: function(row) {
     row.tab.className = row.tab.className.replace(/\s?active/g,'');
-    if(typeof row.rowPane !== 'undefined'){
-      row.rowPane.style.display = 'none';
-    }
-    else {
-      row.container.style.display = 'none';
-    }
+    row.container.style.display = 'none';
   },
   addTab: function(holder, tab) {
     holder.children[0].appendChild(tab);
@@ -384,19 +364,19 @@ JSONEditor.defaults.themes.foundation6 = JSONEditor.defaults.themes.foundation5.
   getTabHolder: function(propertyName) {
     var pName = (typeof propertyName === 'undefined')? "" : propertyName;
     var el = document.createElement('div');
-    el.className = 'grid-x'; 
+    el.className = 'grid-x';
     el.innerHTML = '<div class="medium-2 cell" style="float: left;"><ul class="vertical tabs" data-tabs id="' + pName + '"></ul></div><div class="medium-10 cell" style="float: left;"><div class="tabs-content" data-tabs-content="'+pName+'"></div></div>';
-    return el; 
+    return el;
   },
-  getTopTabHolder: function(propertyName) { 
+  getTopTabHolder: function(propertyName) {
     var pName = (typeof propertyName === 'undefined')? "" : propertyName;
-    var el = document.createElement('div'); 
-    el.className = 'grid-y'; 
-    el.innerHTML = '<div className="cell"><ul class="tabs" data-tabs id="' + pName + '"></ul><div class="tabs-content" data-tabs-content="' + pName + '"></div></div>'; 
-    return el;    
+    var el = document.createElement('div');
+    el.className = 'grid-y';
+    el.innerHTML = '<div className="cell"><ul class="tabs" data-tabs id="' + pName + '"></ul><div class="tabs-content" data-tabs-content="' + pName + '"></div></div>';
+    return el;
 
 
-  }, 
+  },
   insertBasicTopTab: function(tab, newTabs_holder ) {
     newTabs_holder.firstChild.firstChild.insertBefore(tab,newTabs_holder.firstChild.firstChild.firstChild);
   },
@@ -441,29 +421,16 @@ JSONEditor.defaults.themes.foundation6 = JSONEditor.defaults.themes.foundation5.
     row.tab.className += ' is-active';
     row.tab.firstChild.setAttribute('aria-selected', 'true');
 
-    if (typeof row.rowPane !== 'undefined'){
-      row.rowPane.className  = row.rowPane.className.replace(/\s?is-active/g,'');
-      row.rowPane.className += ' is-active';
-      row.rowPane.setAttribute('aria-selected', 'true');
-    }
-    else {
-      row.container.className  = row.container.className.replace(/\s?is-active/g,'');
-      row.container.className += ' is-active';
-      row.container.setAttribute('aria-selected', 'true');
-      }
+    row.container.className  = row.container.className.replace(/\s?is-active/g,'');
+    row.container.className += ' is-active';
+    row.container.setAttribute('aria-selected', 'true');
   },
   markTabInactive: function(row) {
     row.tab.className = row.tab.className.replace(/\s?is-active/g,'');
     row.tab.firstChild.removeAttribute('aria-selected');
 
-    if(typeof row.rowPane !== 'undefined'){
-      row.rowPane.className = row.rowPane.className.replace(/\s?is-active/g,'');
-      row.rowPane.removeAttribute('aria-selected');
-    }
-    else {
-      row.container.className = row.container.className.replace(/\s?is-active/g,'');
-      row.container.removeAttribute('aria-selected');
-      }
+    row.container.className = row.container.className.replace(/\s?is-active/g,'');
+    row.container.removeAttribute('aria-selected');
   },
   addTab: function(holder, tab) {
     holder.children[0].firstChild.appendChild(tab);
