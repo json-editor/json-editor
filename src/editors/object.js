@@ -422,7 +422,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
         self.addTab(rowsLen);
         //Store the index row of the first simple property added
         self.basicTab = rowsLen;
-        self.basicPane = aPane;
+        self.basicPane = holder;
         self.theme.addTopTab(tabHolder, self.rows[rowsLen].tab);
       }
 
