@@ -23,6 +23,7 @@
     "editor"
   ],
   "scripts": {
+    "prepare": "grunt",
     "build": "npm install && grunt",
     "start": "grunt watch",
     "test": "grunt test",
