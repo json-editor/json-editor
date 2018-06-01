@@ -158,10 +158,22 @@ JSONEditor.defaults.themes.jqueryui = JSONEditor.AbstractTheme.extend({
     if(!input.errmsg) return;
     input.errmsg.style.display = 'none';
   },
-  markTabActive: function(tab) {
-    tab.className = tab.className.replace(/\s*ui-widget-header/g,'')+' ui-state-active';
+  markTabActive: function(row) {
+    row.tab.className = row.tab.className.replace(/\s?ui-widget-header/g,'').replace(/\s?ui-state-active/g,'')+' ui-state-active';
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.style.display = '';
+    }
+    else {
+      row.container.style.display = '';
+    }
   },
-  markTabInactive: function(tab) {
-    tab.className = tab.className.replace(/\s*ui-state-active/g,'')+' ui-widget-header';
+  markTabInactive: function(row) {
+    row.tab.className = row.tab.className.replace(/\s?ui-state-active/g,'').replace(/\s?ui-widget-header/g,'')+' ui-widget-header';
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.style.display = 'none';
+    }
+    else {
+      row.container.style.display = 'none';
+    }
   }
 });

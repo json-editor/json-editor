@@ -18,9 +18,12 @@ JSONEditor.defaults.themes.html = JSONEditor.AbstractTheme.extend({
     var el = this._super();
     el.style.border = '1px solid #ddd';
     el.style.padding = '5px';
-    el.style.margin = '5px';
+    el.style.margin = '10px';
     el.style.borderRadius = '3px';
     return el;
+  },
+  getTopIndentedPanel: function() {
+    return this.getIndentedPanel();
   },
   getChildEditorHolder: function() {
     var el = this._super();
