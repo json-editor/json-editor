@@ -154,7 +154,7 @@ JSONEditor.prototype = {
   trigger: function(event) {
     if(this.callbacks && this.callbacks[event] && this.callbacks[event].length) {
       for(var i=0; i<this.callbacks[event].length; i++) {
-        this.callbacks[event][i]();
+        this.callbacks[event][i].apply(this, []);
       }
     }
     
