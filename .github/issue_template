@@ -1,0 +1,19 @@
+### Expected behavior
+
+### Actual behavior
+
+### Steps to reproduce the behavior
+
+```javascript
+{
+  "title": "json schema example",
+  "type": "object",
+  "properties": {
+    "example": {
+      "type": "string",
+      "description": "This is an example schema.",
+      "default": "Please edit me."
+    }
+  }
+}
+```
