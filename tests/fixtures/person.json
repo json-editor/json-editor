@@ -1,5 +1,5 @@
 {
-  "$ref": "basic_person.json",
+  "$ref": "../fixtures/basic_person.json",
   "properties": {
     "location": {
       "type": "object",

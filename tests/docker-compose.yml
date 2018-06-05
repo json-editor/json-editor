@@ -19,3 +19,9 @@ services:
     volumes:
       # Mount shm also for firefox, see https://github.com/SeleniumHQ/docker-selenium#running-the-images
       - /dev/shm:/dev/shm
+
+  codeceptjs:
+    image: codeception/codeceptjs
+    working_dir: /repo/tests/codeceptjs
+    volumes:
+      - ../:/repo:delegated
