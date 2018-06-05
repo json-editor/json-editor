@@ -33,7 +33,7 @@ JSONEditor.defaults.themes.jqueryui = JSONEditor.AbstractTheme.extend({
     var el = this._super(label,input,description, infoText);
     if(input.type === 'checkbox') {
       el.style.lineHeight = '25px';
-      
+
       el.style.padding = '3px 0';
     }
     else {
@@ -88,7 +88,7 @@ JSONEditor.defaults.themes.jqueryui = JSONEditor.AbstractTheme.extend({
     button.appendChild(el);
 
     button.setAttribute('title',title);
-    
+
     return button;
   },
   setButtonText: function(button,text, icon, title) {
@@ -158,10 +158,12 @@ JSONEditor.defaults.themes.jqueryui = JSONEditor.AbstractTheme.extend({
     if(!input.errmsg) return;
     input.errmsg.style.display = 'none';
   },
-  markTabActive: function(tab) {
-    tab.className = tab.className.replace(/\s*ui-widget-header/g,'')+' ui-state-active';
+  markTabActive: function(row) {
+    row.tab.className = row.tab.className.replace(/\s?ui-widget-header/g,'').replace(/\s?ui-state-active/g,'')+' ui-state-active';
+    row.container.style.display = '';
   },
-  markTabInactive: function(tab) {
-    tab.className = tab.className.replace(/\s*ui-state-active/g,'')+' ui-widget-header';
+  markTabInactive: function(row) {
+    row.tab.className = row.tab.className.replace(/\s?ui-state-active/g,'').replace(/\s?ui-widget-header/g,'')+' ui-widget-header';
+    row.container.style.display = 'none';
   }
 });

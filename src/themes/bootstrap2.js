@@ -146,7 +146,7 @@ JSONEditor.defaults.themes.bootstrap2 = JSONEditor.AbstractTheme.extend({
   addInputError: function(input,text) {
     if(!input.controlgroup) {
         this.queuedInputErrorText = text;
-        return; 
+        return;
     }
     if(!input.controlgroup || !input.controls) return;
     input.controlgroup.className += ' error';
@@ -169,16 +169,34 @@ JSONEditor.defaults.themes.bootstrap2 = JSONEditor.AbstractTheme.extend({
     input.errmsg.style.display = 'none';
     input.controlgroup.className = input.controlgroup.className.replace(/\s?error/g,'');
   },
-  getTabHolder: function() {
+  getTabHolder: function(propertyName) {
+    var pName = (typeof propertyName === 'undefined')? "" : propertyName;
     var el = document.createElement('div');
     el.className = 'tabbable tabs-left';
-    el.innerHTML = "<ul class='nav nav-tabs span2' style='margin-right: 0;'></ul><div class='tab-content span10' style='overflow:visible;'></div>";
+    el.innerHTML = "<ul class='nav nav-tabs'  id='" + pName + "'></ul><div class='tab-content well well-small' id='" + pName + "'></div>";
     return el;
   },
-  getTab: function(text) {
+  getTopTabHolder: function(propertyName) {
+    var pName = (typeof propertyName === 'undefined')? "" : propertyName;
+    var el = document.createElement('div');
+    el.className = 'tabbable tabs-over';
+    el.innerHTML = "<ul class='nav nav-tabs' id='" + pName + "'></ul><div class='tab-content well well-small'  id='" + pName + "'></div>";
+    return el;
+  },
+  getTab: function(text,tabId) {
     var el = document.createElement('li');
+    el.className = 'nav-item';
     var a = document.createElement('a');
-    a.setAttribute('href','#');
+    a.setAttribute('href','#' + tabId);
+    a.appendChild(text);
+    el.appendChild(a);
+    return el;
+  },
+  getTopTab: function(text,tabId) {
+    var el = document.createElement('li');
+    el.className = 'nav-item';
+    var a = document.createElement('a');
+    a.setAttribute('href','#' + tabId);
     a.appendChild(text);
     el.appendChild(a);
     return el;
@@ -186,18 +204,33 @@ JSONEditor.defaults.themes.bootstrap2 = JSONEditor.AbstractTheme.extend({
   getTabContentHolder: function(tab_holder) {
     return tab_holder.children[1];
   },
+  getTopTabContentHolder: function(tab_holder) {
+    return tab_holder.children[1];
+  },
   getTabContent: function() {
     var el = document.createElement('div');
-    el.className = 'tab-pane active';
+    el.className = 'tab-pane';
     return el;
   },
-  markTabActive: function(tab) {
-    tab.className += ' active';
+  getTopTabContent: function() {
+    var el = document.createElement('div');
+    el.className = 'tab-pane';
+    return el;
   },
-  markTabInactive: function(tab) {
-    tab.className = tab.className.replace(/\s?active/g,'');
+  markTabActive: function(row) {
+    row.tab.className = row.tab.className.replace(/\s?active/g,'');
+    row.tab.className += ' active';
+    row.container.className = row.container.className.replace(/\s?active/g,'');
+    row.container.className += ' active';
+  },
+  markTabInactive: function(row) {
+    row.tab.className = row.tab.className.replace(/\s?active/g,'');
+    row.container.className = row.container.className.replace(/\s?active/g,'');
   },
   addTab: function(holder, tab) {
+    holder.children[0].appendChild(tab);
+  },
+  addTopTab: function(holder, tab) {
     holder.children[0].appendChild(tab);
   },
   getProgressBar: function() {

@@ -59,8 +59,7 @@ JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
   },
   getIndentedPanel: function() {
     var el = document.createElement("div");
-    el.className = "card card-block bg-faded";
-    el.style.paddingBottom = 0;
+    el.className = "card card-body bg-light";
     return el;
   },
   getFormInputDescription: function(text) {
@@ -113,25 +112,51 @@ JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
       ""
     );
   },
-  getTabHolder: function() {
+  getTabHolder: function(propertyName) {
     var el = document.createElement("div");
+    var pName = (typeof propertyName === 'undefined')? "" : propertyName;
     el.innerHTML =
-      "<div class='tabs list-group col-md-2'></div><div class='col-md-10'></div>";
-    el.className = "rows";
+      "<ul class='nav flex-column nav-pills col-md-2' style='padding: 0px;' id='" + pName + "'></ul><div class='tab-content col-md-10' style='padding:5px;' id='" + pName + "'></div>";
+el.className = "row";
     return el;
   },
-  getTab: function(text) {
-    var el = document.createElement("a");
-    el.className = "list-group-item-action";
-    el.setAttribute("href", "#");
-    el.appendChild(text);
+  getTopTabHolder: function(propertyName) {
+    var pName = (typeof propertyName === 'undefined')? "" : propertyName;
+    var el = document.createElement('div');
+    el.innerHTML = "<ul class='nav nav-tabs' id='" + pName + "'></ul><div class='card-body' id='" + pName + "'></div>";
     return el;
   },
-  markTabActive: function(tab) {
-    tab.className += " active";
+  getTab: function(text,tabId) {
+    var liel = document.createElement('li');
+    liel.className = 'nav-item';
+    var ael = document.createElement("a");
+    ael.className = "nav-link";
+    ael.setAttribute("style",'padding:10px;');
+    ael.setAttribute("href", "#" + tabId);
+    ael.appendChild(text);
+    liel.appendChild(ael);
+    return liel;
   },
-  markTabInactive: function(tab) {
-    tab.className = tab.className.replace(/\s?active/g, "");
+  getTopTab: function(text, tabId) {
+    var el = document.createElement('li');
+    el.className = 'nav-item';
+    var a = document.createElement('a');
+    a.className = 'nav-link';
+    a.setAttribute('href','#'+tabId);
+    a.appendChild(text);
+    el.appendChild(a);
+    return el;
+  },
+  markTabActive: function(row) {
+    var el = row.tab.firstChild;
+    el.className = el.className.replace(/\s?active/g,'');
+    el.className += " active";
+    row.container.style.display = '';
+  },
+  markTabInactive: function(row) {
+    var el = row.tab.firstChild;
+    el.className = el.className.replace(/\s?active/g,'');
+    row.container.style.display = 'none';
   },
   getProgressBar: function() {
     var min = 0,

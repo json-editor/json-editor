@@ -70,7 +70,8 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       return ordera - orderb;
     });
 
-    var container;
+    var container = document.createElement('div');
+    var isCategoriesFormat = (this.format === 'categories');
 
     if(this.format === 'grid') {
       var rows = [];
@@ -139,7 +140,6 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       this.layout = JSON.stringify(rows);
 
       // Layout the form
-      container = document.createElement('div');
       for(i=0; i<rows.length; i++) {
         var row = this.theme.getGridRow();
         container.appendChild(row);
@@ -154,8 +154,110 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       }
     }
     // Normal layout
+    else if(isCategoriesFormat) {
+      //A container for properties not object nor arrays
+      var containerSimple = document.createElement('div');
+      //This will be the place to (re)build tabs and panes
+      //tabs_holder has 2 childs, [0]: ul.nav.nav-tabs and [1]: div.tab-content
+      var newTabs_holder = this.theme.getTopTabHolder(this.schema.title);
+      //child [1] of previous, stores panes
+      var newTabPanesContainer = this.theme.getTopTabContentHolder(newTabs_holder);
+
+      $each(this.property_order, function(i,key){
+        var editor = self.editors[key];
+        if(editor.property_removed) return;
+        var aPane = self.theme.getTabContent();
+        var isObjOrArray = editor.schema && (editor.schema.type === "object" || editor.schema.type === "array");
+        //mark the pane
+        aPane.isObjOrArray = isObjOrArray;
+        var gridRow = self.theme.getGridRow();
+
+        //this happens with added properties, they don't have a tab
+        if(!editor.tab){
+          //Pass the pane which holds the editor
+          if(typeof self.basicPane === 'undefined'){
+            //There is no basicPane yet, so aPane will be it
+            self.addRow(editor,newTabs_holder, aPane);
+          }
+          else {
+            self.addRow(editor,newTabs_holder, self.basicPane);
+          }
+        }
+
+        aPane.id = editor.tab_text.textContent;
+
+        //For simple properties, add them on the same panel (Basic)
+        if(!isObjOrArray){
+          containerSimple.appendChild(gridRow);
+          //There is already some panes
+          if(newTabPanesContainer.childElementCount > 0){
+            //If first pane is object or array, insert before a simple pane
+            if(newTabPanesContainer.firstChild.isObjOrArray){
+              //Append pane for simple properties
+              aPane.appendChild(containerSimple);
+              newTabPanesContainer.insertBefore(aPane,newTabPanesContainer.firstChild);
+              //Add "Basic" tab
+              self.theme.insertBasicTopTab(editor.tab,newTabs_holder);
+              //newTabs_holder.firstChild.insertBefore(editor.tab,newTabs_holder.firstChild.firstChild);
+              //Update the basicPane
+              editor.basicPane = aPane;
+            }
+            else {
+              //We already have a first "Basic" pane, just add the new property to it, so
+              //do nothing;
+            }
+          }
+          //There is no pane, so add the first (simple) pane
+          else {
+            //Append pane for simple properties
+            aPane.appendChild(containerSimple);
+            newTabPanesContainer.appendChild(aPane);
+            //Add "Basic" tab
+            //newTabs_holder.firstChild.appendChild(editor.tab);
+            self.theme.addTopTab(newTabs_holder,editor.tab);
+            //Update the basicPane
+            editor.basicPane = aPane;
+          }
+        }
+        //Objects and arrays earn it's own panes
+        else {
+          aPane.appendChild(gridRow);
+          newTabPanesContainer.appendChild(aPane);
+          //newTabs_holder.firstChild.appendChild(editor.tab);
+          self.theme.addTopTab(newTabs_holder,editor.tab);
+        }
+
+        if(editor.options.hidden) editor.container.style.display = 'none';
+        else self.theme.setGridColumnSize(editor.container,12);
+        //Now, add the property editor to the row
+        gridRow.appendChild(editor.container);
+        //Update the container (same as self.rows[x].container)
+        editor.container = aPane;
+
+      });
+
+      //Erase old panes
+      while (this.tabPanesContainer.firstChild) {
+        this.tabPanesContainer.removeChild(this.tabPanesContainer.firstChild);
+      }
+
+      //Erase old tabs and set the new ones
+      var parentTabs_holder = this.tabs_holder.parentNode;
+      parentTabs_holder.removeChild(parentTabs_holder.firstChild);
+      parentTabs_holder.appendChild(newTabs_holder);
+
+      this.tabPanesContainer = newTabPanesContainer;
+      this.tabs_holder = newTabs_holder;
+
+      //Activate the first tab
+      var firstTab = this.theme.getFirstTab(this.tabs_holder);
+      if(firstTab){
+        $trigger(firstTab,'click');
+      }
+      return;
+    }
+    // !isCategoriesFormat
     else {
-      container = document.createElement('div');
       $each(this.property_order, function(i,key) {
         var editor = self.editors[key];
         if(editor.property_removed) return;
@@ -167,6 +269,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
         row.appendChild(editor.container);
       });
     }
+    //for grid and normal layout
     while (this.row_container.firstChild) {
       this.row_container.removeChild(this.row_container.firstChild);
     }
@@ -278,8 +381,98 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       return ordera - orderb;
     });
   },
+  //"Borrow" from arrays code
+  addTab: function(idx){
+      var self = this;
+      var isObjOrArray = self.rows[idx].schema && (self.rows[idx].schema.type === "object" || self.rows[idx].schema.type === "array");
+      if(self.tabs_holder) {
+        self.rows[idx].tab_text = document.createElement('span');
+
+        if(!isObjOrArray){
+          self.rows[idx].tab_text.textContent = (typeof self.schema.basicCategoryTitle === 'undefined') ? "Basic" : self.schema.basicCategoryTitle;
+        } else {
+          self.rows[idx].tab_text.textContent = self.rows[idx].getHeaderText();
+        }
+        self.rows[idx].tab = self.theme.getTopTab(self.rows[idx].tab_text,self.rows[idx].tab_text.textContent);
+        self.rows[idx].tab.addEventListener('click', function(e) {
+          self.active_tab = self.rows[idx].tab;
+          self.refreshTabs();
+          e.preventDefault();
+          e.stopPropagation();
+        });
+
+      }
+
+    },
+  addRow: function(editor, tabHolder, holder) {
+    var self = this;
+    var rowsLen = this.rows.length;
+    var isObjOrArray = editor.schema.type === "object" || editor.schema.type === "array";
+
+    //Add a row
+    self.rows[rowsLen] = editor;
+    //container stores the editor corresponding pane to set the display style when refreshing Tabs
+    self.rows[rowsLen].container = holder;
+
+    if(!isObjOrArray){
+
+      //This is the first simple property to be added,
+      //add a ("Basic") tab for it and save it's row number
+      if(typeof self.basicTab === "undefined"){
+        self.addTab(rowsLen);
+        //Store the index row of the first simple property added
+        self.basicTab = rowsLen;
+        self.basicPane = holder;
+        self.theme.addTopTab(tabHolder, self.rows[rowsLen].tab);
+      }
+
+      else {
+        //Any other simple property gets the same tab (and the same pane) as the first one,
+        //so, when 'click' event is fired from a row, it gets the correct ("Basic") tab
+        self.rows[rowsLen].tab = self.rows[self.basicTab].tab;
+        self.rows[rowsLen].tab_text = self.rows[self.basicTab].tab_text;
+        self.rows[rowsLen].container = self.rows[self.basicTab].container;
+      }
+    }
+    else {
+      self.addTab(rowsLen);
+      self.theme.addTopTab(tabHolder, self.rows[rowsLen].tab);
+    }
+  },
+  //Mark the active tab and make visible the corresponding pane, hide others
+  refreshTabs: function(refresh_headers) {
+    var self = this;
+    var basicTabPresent = typeof self.basicTab !== 'undefined';
+    var basicTabRefreshed = false;
+
+    $each(this.rows, function(i,row) {
+      //If it's an orphan row (some property which has been deleted), return
+      if(!row.tab || !row.container || !row.container.parentNode) return;
+
+      if(basicTabPresent && row.tab == self.rows[self.basicTab].tab && basicTabRefreshed) return;
+
+      if(refresh_headers) {
+        row.tab_text.textContent = row.getHeaderText();
+      }
+      else {
+        //All rows of simple properties point to the same tab, so refresh just once
+        if(basicTabPresent && row.tab == self.rows[self.basicTab].tab) basicTabRefreshed = true;
+
+        if(row.tab === self.active_tab) {
+          self.theme.markTabActive(row);
+        }
+        else {
+          self.theme.markTabInactive(row);
+        }
+      }
+    });
+  },
   build: function() {
     var self = this;
+
+    var isCategoriesFormat = (this.format === 'categories');
+    this.rows=[];
+    this.active_tab = null;
 
     // If the object should be rendered as a table row
     if(this.options.table_row) {
@@ -391,16 +584,63 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
 
       // Container for rows of child editors
       this.row_container = this.theme.getGridContainer();
-      this.editor_holder.appendChild(this.row_container);
+
+      if(isCategoriesFormat) {
+        this.tabs_holder = this.theme.getTopTabHolder(this.schema.title);
+        this.tabPanesContainer = this.theme.getTopTabContentHolder(this.tabs_holder);
+        this.editor_holder.appendChild(this.tabs_holder);
+      }
+      else {
+        this.tabs_holder = this.theme.getTabHolder(this.schema.title);
+        this.tabPanesContainer = this.theme.getTabContentHolder(this.tabs_holder);
+        this.editor_holder.appendChild(this.row_container);
+      }
 
       $each(this.editors, function(key,editor) {
+        var aPane = self.theme.getTabContent();
         var holder = self.theme.getGridColumn();
-        self.row_container.appendChild(holder);
+        var isObjOrArray = (editor.schema && (editor.schema.type === 'object' || editor.schema.type === 'array')) ? true : false;
+        aPane.isObjOrArray = isObjOrArray;
+
+        if(isCategoriesFormat){
+          if(isObjOrArray) {
+            var single_row_container = self.theme.getGridContainer();
+            single_row_container.appendChild(holder);
+            aPane.appendChild(single_row_container);
+            self.tabPanesContainer.appendChild(aPane);
+            self.row_container = single_row_container;
+          }
+          else {
+            if(typeof self.row_container_basic === 'undefined'){
+              self.row_container_basic = self.theme.getGridContainer();
+              aPane.appendChild(self.row_container_basic);
+              if(self.tabPanesContainer.childElementCount == 0){
+                self.tabPanesContainer.appendChild(aPane);
+              }
+              else {
+                self.tabPanesContainer.insertBefore(aPane,self.tabPanesContainer.childNodes[1]);
+              }
+            }
+            self.row_container_basic.appendChild(holder);
+          }
+
+          self.addRow(editor,self.tabs_holder,aPane);
+
+          aPane.id = editor.schema.title; //editor.schema.path//tab_text.textContent
+
+        }
+        else {
+          self.row_container.appendChild(holder);
+        }
 
         editor.setContainer(holder);
         editor.build();
         editor.postBuild();
       });
+
+      if(this.rows[0]){
+        $trigger(this.rows[0].tab,'click');
+      }
 
       // Control buttons
       this.title_controls = this.theme.getHeaderButtonHolder();
@@ -643,6 +883,10 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       }
 
       var schema = self.getPropertySchema(name);
+      if(typeof schema.propertyOrder !== 'number'){
+        // if the propertyOrder undefined, then set a smart default value.
+        schema.propertyOrder = Object.keys(self.editors).length + 1000;
+      }
 
 
       // Add the property
