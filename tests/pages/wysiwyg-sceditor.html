@@ -8,12 +8,12 @@
   <script src="../../dist/jsoneditor.js"></script>
 
   <!-- jquery -->
-  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="./../../node_modules/jquery/dist/jquery.min.js"></script>
 
   <!-- sceditor -->
-  <script src="//cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.bbcode.min.js"></script>
-  <script src="//cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.xhtml.min.js"></script>
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/sceditor/1.4.3/themes/default.min.css">
+  <script src="./../../node_modules/sceditor/minified/jquery.sceditor.bbcode.min.js"></script>
+  <script src="./../../node_modules/sceditor/minified/jquery.sceditor.xhtml.min.js"></script>
+  <link rel="stylesheet" href="./../../node_modules/sceditor/minified/themes/default.min.css">
 </head>
 <body>
 
@@ -44,7 +44,9 @@
 
   // sceditor quirk. Styles must be specified in the options at creation
   // if you want to be able to focus on the iframes he creates.
-  JSONEditor.plugins.sceditor.style = '//cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.default.min.css';
+
+  //JSONEditor.plugins.sceditor.style = '//cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.default.min.css';
+  JSONEditor.plugins.sceditor.style = '';
 
   var editor = new JSONEditor(container, {
     schema: schema

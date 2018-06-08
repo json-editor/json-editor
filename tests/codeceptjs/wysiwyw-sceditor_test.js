@@ -24,7 +24,7 @@ Scenario('editor value and String editor should have coerent values', async (I) 
 
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
-  assert.equal(value, JSON.stringify([{"editor": "<p>\n\t__YELLOW__<br>\n</p>"}]));
+  assert.equal(value, JSON.stringify([{"editor":"<p>__YELLOW__<br></p>"}]));
 });
 
 Scenario('Should have values ordered in the same order as the array ', async (I) => {
@@ -50,11 +50,11 @@ Scenario('Should have values ordered in the same order as the array ', async (I)
 
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
-  assert.equal(value, JSON.stringify([{"editor": "<p>\n\t__YELLOW__<br>\n</p>"}, {"editor": "<p>\n\t__BLUE__<br>\n</p>"}]));
+  assert.equal(value, JSON.stringify([{"editor":"<p>__YELLOW__<br></p>"},{"editor":"<p>__BLUE__<br></p>"}]));
 
   I.click('.json-editor-btn-movedown');
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
-  assert.equal(value, JSON.stringify([{"editor": "<p>\n\t__BLUE__<br>\n</p>"}, {"editor": "<p>\n\t__YELLOW__<br>\n</p>"}]));
+  assert.equal(value, JSON.stringify([{"editor":"<p>__BLUE__<br></p>"},{"editor":"<p>__YELLOW__<br></p>"}]));
 
 });
