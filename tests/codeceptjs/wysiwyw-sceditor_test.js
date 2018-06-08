@@ -1,7 +1,7 @@
 var assert = require('assert');
 var value = '';
 
-Feature('wysiwyg');
+Feature('wysiwyg-sceditor');
 
 Scenario('should have correct initial value', async (I) => {
   I.amOnPage('wysiwyg-sceditor.html');
