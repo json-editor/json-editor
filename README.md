@@ -15,7 +15,15 @@ Check out an interactive demo (demo.html): https://json-editor.github.io/json-ed
 Install
 -----------------
 
+Install package
+
     npm install @json-editor/json-editor
+
+Using a CDN
+
+    <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor/dist/jsoneditor.min.js"></script>
+
+For local usage download the [production version](https://cdn.jsdelivr.net/npm/@json-editor/json-editor/dist/jsoneditor.min.js) or the [development version](https://cdn.jsdelivr.net/npm/@json-editor/json-editor/dist/jsoneditor.js)
 
 Requirements
 -----------------
