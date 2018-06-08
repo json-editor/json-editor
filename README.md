@@ -5,7 +5,7 @@ JSON Editor
 Fork of the inactive [jdorn/json-editor](https://github.com/jdorn/json-editor) using the updated fork [json-editor/json-editor](https://github.com/json-editor/json-editor).  
 Some pull requests added from the original repo.
 
-![JSON Schema -> HTML Editor -> JSON](https://raw.github.com/json-editor/json-editor/master/jsoneditor.png)
+![JSON Schema -> HTML Editor -> JSON](./docs/images/jsoneditor.png)
 
 JSON Editor takes a JSON Schema and uses it to generate an HTML form.  
 It has full support for JSON Schema version 3 and 4 and can integrate with several popular CSS frameworks (bootstrap, foundation, and jQueryUI).
@@ -15,7 +15,15 @@ Check out an interactive demo (demo.html): https://json-editor.github.io/json-ed
 Install
 -----------------
 
+Install package
+
     npm install @json-editor/json-editor
+
+Using a CDN
+
+    <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor/dist/jsoneditor.min.js"></script>
+
+For local usage download the [production version](https://cdn.jsdelivr.net/npm/@json-editor/json-editor/dist/jsoneditor.min.js) or the [development version](https://cdn.jsdelivr.net/npm/@json-editor/json-editor/dist/jsoneditor.js)
 
 Requirements
 -----------------
@@ -771,10 +779,7 @@ Panel tabs titles came from object or array titles and for the grouping panel it
 
 Demo page will look like this:
 
-![Categories format](https://raw.github.com/pmadril/json-editor/master/categoriesDemo.png)
-
-
-
+![Categories format](./docs/images/categoriesDemo.png)
 
 Editor Options
 ----------------
