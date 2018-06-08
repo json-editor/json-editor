@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>string-ace-editor</title>
+
+  <!-- json editor -->
+  <script src="../../dist/jsoneditor.js"></script>
+
+  <!-- ace-editor -->
+  <script src="./../../node_modules/ace-builds/src-noconflict/ace.js"></script>
+</head>
+<body>
+
+<textarea class="debug" cols="30" rows="10"></textarea>
+<button class='get-value'>Get Value</button>
+<div class='container'></div>
+
+<script>
+  var container = document.querySelector('.container');
+  var debug = document.querySelector('.debug');
+
+  var schema = {
+    "type": "array",
+    "title": "string-ace-editor",
+    "items": {
+      "type": "object",
+      "properties": {
+        "editor": {
+          "type": "string",
+          "format": "yaml"
+        }
+      }
+    }
+  };
+
+  JSONEditor.plugins.ace.theme = 'twilight';
+
+  var editor = new JSONEditor(container, {
+    schema: schema
+  });
+
+  document.querySelector('.get-value').addEventListener('click', function () {
+    debug.value = JSON.stringify(editor.getValue());
+  });
+
+</script>
+
+</body>
+</html>
