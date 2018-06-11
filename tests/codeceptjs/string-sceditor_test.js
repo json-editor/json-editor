@@ -1,17 +1,17 @@
 var assert = require('assert');
 var value = '';
 
-Feature('wysiwyg');
+Feature('string-sceditor');
 
 Scenario('should have correct initial value', async (I) => {
-  I.amOnPage('wysiwyg-sceditor.html');
+  I.amOnPage('string-sceditor.html');
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
   assert.equal(value, '[]');
 });
 
 Scenario('editor value and String editor should have coerent values', async (I) => {
-  I.amOnPage('wysiwyg-sceditor.html');
+  I.amOnPage('string-sceditor.html');
   I.click('Add item');
   I.see('item 1');
 
@@ -28,7 +28,7 @@ Scenario('editor value and String editor should have coerent values', async (I) 
 });
 
 Scenario('Should have values ordered in the same order as the array ', async (I) => {
-  I.amOnPage('wysiwyg-sceditor.html');
+  I.amOnPage('string-sceditor.html');
   I.click('Add item');
   I.click('Add item');
   I.see('item 1');
