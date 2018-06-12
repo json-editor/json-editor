@@ -2,6 +2,20 @@
 
 module.exports = function(grunt) {
   grunt.initConfig({
+    'string-replace': {
+      version: {
+        files: {
+          'dist/': 'dist/**',
+        },
+        options: {
+          replacements: [{
+            pattern: /{{ VERSION }}/g,
+            replacement: '<%= pkg.version %>'
+          }]
+        }
+      }
+    },
+    pkg: grunt.file.readJSON('package.json'),
     concat: {
       options: {
         sourceMap: true
@@ -166,6 +180,7 @@ module.exports = function(grunt) {
   });
 
   // These plugins provide necessary tasks.
+  grunt.loadNpmTasks('grunt-string-replace')
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jshint');
