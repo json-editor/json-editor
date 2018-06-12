@@ -10,7 +10,7 @@ docker-compose run --rm node npm install
 docker-compose up -d
 ```
 
-- Webserve URL: http://127.0.0.1:9001/
+- Webserver URL: http://127.0.0.1:9001/
 - Browser URL: vnc://127.0.0.1:9059/
 
 ```
