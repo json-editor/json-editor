@@ -21,6 +21,12 @@ JSONEditor.defaults.editors.number = JSONEditor.defaults.editors.string.extend({
 
       this.input.setAttribute("max", maximum);
     }
+
+    if (typeof this.schema.step !== "undefined") {
+      var step = this.schema.step || 1;
+      this.input.setAttribute("step", step);
+    }
+
   },
   sanitize: function(value) {
     return (value+"").replace(/[^0-9\.\-eE]/g,'');
