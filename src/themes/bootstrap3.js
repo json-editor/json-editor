@@ -160,8 +160,7 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
   getTabHolder: function(propertyName) {
     var pName = (typeof propertyName === 'undefined')? "" : propertyName;
     var el = document.createElement('div');
-    el.innerHTML = "<ul class='nav nav-tabs'  id='" + pName + "' role='tablist'></ul>" +
-      "<div class='tab-content well well-small' id='" + pName + "'></div>";
+    el.innerHTML = "<div class='list-group pull-left' id='" + pName + "'></div><div class='col-sm-10 pull-left' id='" + pName + "'></div>";
     return el;
   },
   getTopTabHolder: function(propertyName) {
@@ -172,16 +171,11 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
     return el;
   },
   getTab: function(text, tabId) {
-    var li = document.createElement('li');
-    li.setAttribute('role', 'presentation');
-    var a = document.createElement('a');
-    a.setAttribute('href','#'+tabId);
-    a.appendChild(text);
-    a.setAttribute('aria-controls', tabId);
-    a.setAttribute('role', 'tab');
-    a.setAttribute('data-toggle', 'tab');
-    li.appendChild(a);
-    return li;
+    var el = document.createElement('a');
+    el.className = 'list-group-item';
+    el.setAttribute('href','#'+tabId);
+    el.appendChild(text);
+    return el;
   },
   getTopTab: function(text, tabId) {
     var li = document.createElement('li');
