@@ -12,4 +12,5 @@ before_script:
 
 script:
   - docker-compose ps
-  - docker-compose run --rm codeceptjs codeceptjs run
+  # exclude optional tests
+  - docker-compose run --rm codeceptjs codeceptjs run --grep '(?=.*)^(?!.*@optional)'
