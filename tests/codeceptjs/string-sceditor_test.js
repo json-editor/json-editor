@@ -27,7 +27,7 @@ Scenario('editor value and String editor should have coerent values', async (I) 
   assert.equal(value, JSON.stringify([{"editor":"<p>__YELLOW__<br></p>"}]));
 });
 
-Scenario('Should work correctly in arrays', async (I) => {
+Scenario('Should work correctly in arrays @optional', async (I) => {
   I.amOnPage('string-sceditor.html');
   I.click('Add item');
   I.click('Add item');
