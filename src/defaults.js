@@ -7,6 +7,8 @@ JSONEditor.defaults.template = 'default';
 // Default options when initializing JSON Editor
 JSONEditor.defaults.options = {};
 
+JSONEditor.defaults.options.prompt_before_delete = true;
+
 // String translate function
 JSONEditor.defaults.translate = function(key, variables) {
   var lang = JSONEditor.defaults.languages[JSONEditor.defaults.language];
