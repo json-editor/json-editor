@@ -184,6 +184,11 @@ Here are all the available options:
     <td>If <code>true</code>, only required properties will be included by default.</td>
     <td><code>false</code></td>
   </tr>
+  <tr>
+    <td>prompt_before_delete</td>
+    <td>If <code>true</code>, displays a dialog box with a confirmation message before node deletion.</td>
+    <td><code>true</code></td>
+  </tr>
   </tbody>
 </table>
 

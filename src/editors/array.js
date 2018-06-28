@@ -493,6 +493,13 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
       self.rows[i].delete_button.addEventListener('click',function(e) {
         e.preventDefault();
         e.stopPropagation();
+
+        if (self.jsoneditor.options.prompt_before_delete === true) {
+          if (confirm("Confirm to remove.") === false) {
+            return false;
+          }
+        }
+
         var i = this.getAttribute('data-i')*1;
 
         var value = self.getValue();
@@ -682,6 +689,13 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
     this.delete_last_row_button.addEventListener('click',function(e) {
       e.preventDefault();
       e.stopPropagation();
+
+      if (self.jsoneditor.options.prompt_before_delete === true) {
+        if (confirm("Confirm to remove.") === false) {
+          return false;
+        }
+      }
+
       var rows = self.getValue();
 
       var new_active_tab = null;
@@ -701,6 +715,13 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
     this.remove_all_rows_button.addEventListener('click',function(e) {
       e.preventDefault();
       e.stopPropagation();
+
+      if (self.jsoneditor.options.prompt_before_delete === true) {
+        if (confirm("Confirm to remove.") === false) {
+          return false;
+        }
+      }
+
       self.setValue([]);
       self.onChange(true);
     });
