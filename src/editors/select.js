@@ -192,11 +192,11 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
 
     var new_val;
     // Invalid option, use first option instead
-    if(this.enum_options.indexOf(val) === -1) {
+    if(this.enum_values.indexOf(val) === -1) {
       new_val = this.enum_values[0];
     }
     else {
-      new_val = this.enum_values[this.enum_options.indexOf(val)];
+      new_val = this.enum_values[this.enum_values.indexOf(val)];
     }
 
     // If valid hasn't changed
