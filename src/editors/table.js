@@ -330,10 +330,8 @@ JSONEditor.defaults.editors.table = JSONEditor.defaults.editors.array.extend({
         e.preventDefault();
         e.stopPropagation();
 
-        if (self.jsoneditor.options.prompt_before_delete === true) {
-          if (confirm("Are you sure you want to remove this node?") === false) {
-            return false;
-          }
+        if (!self.askConfirmation()) {
+          return false;
         }
 
         var i = this.getAttribute('data-i')*1;
@@ -450,10 +448,8 @@ JSONEditor.defaults.editors.table = JSONEditor.defaults.editors.array.extend({
       e.preventDefault();
       e.stopPropagation();
 
-      if (self.jsoneditor.options.prompt_before_delete === true) {
-        if (confirm("Are you sure you want to remove this node?") === false) {
-          return false;
-        }
+      if (!self.askConfirmation()) {
+        return false;
       }
 
       var rows = self.getValue();
@@ -468,10 +464,8 @@ JSONEditor.defaults.editors.table = JSONEditor.defaults.editors.array.extend({
       e.preventDefault();
       e.stopPropagation();
 
-      if (self.jsoneditor.options.prompt_before_delete === true) {
-        if (confirm("Are you sure you want to remove this node?") === false) {
-          return false;
-        }
+      if (!self.askConfirmation()) {
+        return false;
       }
 
       self.setValue([]);
