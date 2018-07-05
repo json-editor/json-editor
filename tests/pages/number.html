@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Number</title>
+  <script src="../../dist/jsoneditor.js"></script>
+</head>
+<body>
+
+<textarea class="value" cols="30" rows="10"></textarea>
+<button class='get-value'>Get Value</button>
+<div class='container'></div>
+
+<script>
+  var container = document.querySelector('.container');
+  var value = document.querySelector('.value');
+
+  var schema = {
+    "type": "object",
+    "title": "range",
+    "properties": {
+      "number": {
+        "title": "number",
+        "type": "number",
+        "default": 5.75,
+        "minimum": 1,
+        "maximum": 10
+      },
+      "number_number": {
+        "title": "number number",
+        "type": "number",
+        "format": "number",
+        "default": 5.75,
+        "minimum": 1,
+        "maximum": 10,
+        "step": 0.25
+      },
+      "number_range": {
+        "title": "number range",
+        "type": "number",
+        "format": "range",
+        "default": 5.75,
+        "minimum": 1,
+        "maximum": 10,
+        "step": 0.25
+      }
+    }
+  };
+
+  var editor = new JSONEditor(container, {
+    schema: schema
+  });
+
+  document.querySelector('.get-value').addEventListener('click', function () {
+    value.value = JSON.stringify(editor.getValue());
+    console.log(editor.getValue());
+  });
+
+</script>
+
+</body>
+</html>
