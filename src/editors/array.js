@@ -1,4 +1,13 @@
 JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
+  askConfirmation: function() {
+    console.log('banana');
+    if (this.jsoneditor.options.prompt_before_delete === true) {
+      if (confirm("Are you sure you want to remove this node?") === false) {
+        return false;
+      }
+    }
+    return true;
+  },
   getDefault: function() {
     return this.schema["default"] || [];
   },
@@ -493,6 +502,11 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
       self.rows[i].delete_button.addEventListener('click',function(e) {
         e.preventDefault();
         e.stopPropagation();
+
+        if (!self.askConfirmation()) {
+          return false;
+        }
+
         var i = this.getAttribute('data-i')*1;
 
         var value = self.getValue();
@@ -682,6 +696,11 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
     this.delete_last_row_button.addEventListener('click',function(e) {
       e.preventDefault();
       e.stopPropagation();
+
+      if (!self.askConfirmation()) {
+        return false;
+      }
+
       var rows = self.getValue();
 
       var new_active_tab = null;
@@ -701,6 +720,11 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
     this.remove_all_rows_button.addEventListener('click',function(e) {
       e.preventDefault();
       e.stopPropagation();
+
+      if (!self.askConfirmation()) {
+        return false;
+      }
+
       self.setValue([]);
       self.onChange(true);
     });

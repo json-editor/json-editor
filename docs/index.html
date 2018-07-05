@@ -9,7 +9,7 @@
     <link rel='stylesheet' id='icon_stylesheet'>
     <style>[class*="foundicon-"] {font-family: GeneralFoundicons;font-style: normal;}</style>
 
-    <script src='//unpkg.com/json-editor'></script>
+  <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor/dist/jsoneditor.min.js"></script>
 
     <script>
         /**
@@ -177,6 +177,14 @@ editor.on("change",  function() {
         schema = {
             title: "Person",
             type: "object",
+            "required": [
+              'name',
+              'age',
+              'favorite_color',
+              'gender',
+              'location',
+              'pets'
+            ],
             properties: {
                 name: {
                     type: "string",
