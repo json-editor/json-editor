@@ -1,16 +1,16 @@
 var assert = require('assert');
 
-Feature('table confirm delete');
+Feature('table');
 
 Scenario('should have correct initial value', async (I) => {
-  I.amOnPage('table-confirm-delete.html');
+  I.amOnPage('table.html');
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
   assert.equal(value, '[]');
 });
 
 Scenario('should ask for confirmation on node delete', async (I) => {
-  I.amOnPage('table-confirm-delete.html');
+  I.amOnPage('table.html');
   I.click('Add Node');
   I.seeElement('[data-schemapath="root.0"] .json-editor-btn-delete');
   I.click('[data-schemapath="root.0"] .json-editor-btn-delete');
@@ -24,7 +24,7 @@ Scenario('should ask for confirmation on node delete', async (I) => {
 });
 
 Scenario('should ask for confirmation on node delete last', async (I) => {
-  I.amOnPage('table-confirm-delete.html');
+  I.amOnPage('table.html');
   I.click('Add Node');
   I.click('Add Node');
   I.seeElement('[data-schemapath="root.0"] .json-editor-btn-delete');
@@ -42,7 +42,7 @@ Scenario('should ask for confirmation on node delete last', async (I) => {
 });
 
 Scenario('should ask for confirmation on node delete all', async (I) => {
-  I.amOnPage('table-confirm-delete.html');
+  I.amOnPage('table.html');
   I.click('Add Node');
   I.click('Add Node');
   I.seeElement('[data-schemapath="root.0"] .json-editor-btn-delete');
