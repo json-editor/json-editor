@@ -387,7 +387,7 @@ JSONEditor.prototype = {
       waiting++;
 
       var fetchUrl=url;
-      if( fileBase!=url.substr(0,fileBase.length) && "http"!=url.substr(0,4)) fetchUrl=fileBase+url;
+      if( fileBase!=url.substr(0,fileBase.length) && "http"!=url.substr(0,4) && "/"!=url.substr(0,1)) fetchUrl=fileBase+url;
 
       var r = new XMLHttpRequest();
       r.open("GET", fetchUrl, true);
