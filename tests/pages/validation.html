@@ -556,7 +556,7 @@
                         pattern: "^/dev/[^/]+(/[^/]+)*$"
                     },
                     external: {
-                        "$ref": "string.json"
+                        "$ref": "../fixtures/string.json"
                     }
                 }
             },
@@ -629,7 +629,7 @@
             schema: {
                 type: "object",
                 properties: {
-                    "/": { $ref: 'string.json' }
+                    "/": { $ref: '../fixtures/string.json' }
                 }
             },
             valid: [
@@ -647,9 +647,9 @@
             schema: {
                 type: "object",
                 properties: {
-                    "recursive": { $ref: 'recursive.json' },
+                    "recursive": { $ref: '../fixtures/recursive.json' },
                     "string": {
-                        $ref: "string.json"
+                        $ref: "../fixtures/string.json"
                     }
                 }
             },
@@ -766,9 +766,10 @@
                   var result = editor.validate(value);
                   if(result.length) {
                       console.error(num,'valid',j,JSON.stringify(result,null,2));
-                      $("#output").append("<div><strong>"+i+" test "+j+"</strong>:: Expected: [], Actual: "+JSON.stringify(result)+"</div>");
+                      $("#output").append("<div><strong>"+i+" test "+j+"</strong>: Fail. Expected: [], Actual: "+JSON.stringify(result)+"</div>");
                   }
                   else {
+                      $("#output").append("<div><strong>"+i+" test "+j+"</strong>: Test for valid is success</div>");
                       console.log(num,'valid',j);
                   }
                 }
@@ -783,8 +784,7 @@
                   var result = editor.validate(value);
                   if(!result.length) {
                       console.error(num,'invalid',j,JSON.stringify(result,null,2));
-                      $("#output").append("<div><strong>"+i+" test "+j+"</strong>:: Expected: errors, Actual: []</div>");
-
+                      $("#output").append("<div><strong>"+i+" test "+j+"</strong>: Fail. Expected: errors, Actual: []</div>");
                   }
                   else {
                       var errors = [];
@@ -792,7 +792,7 @@
                           errors.push(error.path+": "+error.message);
                       });
                       if(errors.length === 1) errors = errors[0];
-
+                      $("#output").append("<div><strong>"+i+" test "+j+"</strong>: Test for invalid is success</div>");
                       console.log(num,'invalid',j,JSON.stringify(errors,null,2));
                   }
                 }

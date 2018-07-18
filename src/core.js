@@ -359,15 +359,27 @@ JSONEditor.prototype = {
         merge_refs(this._getExternalRefs(schema[i]));
       }
     }
-    
+
     return refs;
   },
-  _loadExternalRefs: function(schema, callback) {
+  _getFileBase: function() {
+    var fileBase = this.options.ajaxBase;
+    if (typeof fileBase === 'undefined') {
+      fileBase = this._getFileBaseFromFileLocation(document.location.toString());
+    }
+    return fileBase;
+  },
+  _getFileBaseFromFileLocation: function(fileLocationString) {
+    var pathItems = fileLocationString.split("/");
+    pathItems.pop();
+    return pathItems.join("/")+"/";
+  },
+  _loadExternalRefs: function(schema, callback, fileBase) {
+    fileBase = fileBase || this._getFileBase();
     var self = this;
     var refs = this._getExternalRefs(schema);
-    
     var done = 0, waiting = 0, callback_fired = false;
-    
+
     $each(refs,function(url) {
       if(self.refs[url]) return;
       if(!self.options.ajax) throw "Must set ajax option to true to load external ref "+url;
@@ -375,13 +387,13 @@ JSONEditor.prototype = {
       waiting++;
 
       var fetchUrl=url;
-      if( self.options.ajaxBase && self.options.ajaxBase!=url.substr(0,self.options.ajaxBase.length) && "http"!=url.substr(0,4)) fetchUrl=self.options.ajaxBase+url;
+      if( fileBase!=url.substr(0,fileBase.length) && "http"!=url.substr(0,4) && "/"!=url.substr(0,1)) fetchUrl=fileBase+url;
 
-      var r = new XMLHttpRequest(); 
+      var r = new XMLHttpRequest();
       r.open("GET", fetchUrl, true);
       if(self.options.ajaxCredentials) r.withCredentials=self.options.ajaxCredentials;
       r.onreadystatechange = function () {
-        if (r.readyState != 4) return; 
+        if (r.readyState != 4) return;
         // Request succeeded
         if(r.status === 200) {
           var response;
@@ -401,7 +413,7 @@ JSONEditor.prototype = {
               callback_fired = true;
               callback();
             }
-          });
+          }, self._getFileBaseFromFileLocation(fetchUrl));
         }
         // Request failed
         else {
