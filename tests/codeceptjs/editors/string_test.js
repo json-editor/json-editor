@@ -102,3 +102,10 @@ Scenario('Should work correctly in arrays @optional', async (I) => {
   I.switchTo();
 
 });
+
+Scenario('should be readonly if specified and not disabled', async (I) => {
+  I.amOnPage('read-only.html');
+  I.seeElement('[name="root[string]"]');
+  value = await I.grabAttributeFrom('[name="root[string]"]', 'readonly');
+  assert.equal(value, 'true');
+});
