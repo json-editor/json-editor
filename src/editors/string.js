@@ -187,7 +187,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
 
     if(this.schema.readOnly || this.schema.readonly || this.schema.template) {
       this.always_disabled = true;
-      this.input.disabled = true;
+      this.input.setAttribute('readonly', 'true');
     }
 
     this.input

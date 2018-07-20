@@ -1,6 +1,5 @@
 JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
   askConfirmation: function() {
-    console.log('banana');
     if (this.jsoneditor.options.prompt_before_delete === true) {
       if (confirm("Are you sure you want to remove this node?") === false) {
         return false;

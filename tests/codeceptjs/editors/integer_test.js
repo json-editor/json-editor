@@ -67,3 +67,10 @@ Scenario('should respect step by incrementing and decrementing the value of a ra
   value = await I.grabValueFrom('.value');
   assert.equal(value, '{"integer":5,"integer_number":5,"integer_range":5}');
 });
+
+Scenario('should be readonly if specified and not disabled', async (I) => {
+  I.amOnPage('read-only.html');
+  I.seeElement('[name="root[integer]"]');
+  value = await I.grabAttributeFrom('[name="root[integer]"]', 'readonly');
+  assert.equal(value, 'true');
+});
