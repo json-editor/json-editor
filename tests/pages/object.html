@@ -18,10 +18,14 @@
   var schema = {
     "title": "Person",
     "type": "object",
+    "required": [
+      "zodiac"
+    ],
     "properties": {
       "zodiac": {
         "title": "Zodiac",
-        "type": "string"
+        "type": "string",
+        "minLength": 3
       },
       "values": {
         "title": "Values",
@@ -52,15 +56,16 @@
         "propertyOrder": 1,
         "type": "number",
         "format": "number",
-        "default": 18,
-        "minimum": 0,
+        "default": 10,
+        "minimum": 18,
         "maximum": 80
       }
     }
   };
 
   var editor = new JSONEditor(container, {
-    schema: schema
+    schema: schema,
+    show_errors: 'always'
   });
 
   getValue.addEventListener('click', function () {
