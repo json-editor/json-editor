@@ -160,38 +160,64 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
   getTabHolder: function(propertyName) {
     var pName = (typeof propertyName === 'undefined')? "" : propertyName;
     var el = document.createElement('div');
-    el.innerHTML = "<div class='list-group pull-left' id='" + pName + "'></div><div class='col-sm-10 pull-left' id='" + pName + "'></div>";
+    el.innerHTML = "<ul class='col-md-2 nav nav-pills nav-stacked' id='" + pName + "' role='tablist'></ul>" +
+      "<div class='col-md-10 tab-content well well-small'  id='" + pName + "'></div>";
     return el;
   },
   getTopTabHolder: function(propertyName) {
     var pName = (typeof propertyName === 'undefined')? "" : propertyName;
     var el = document.createElement('div');
-    el.innerHTML = "<ul class='nav nav-tabs' style='padding-left: 10px; margin-left: 10px;' id='" + pName + "'></ul><div class='tab-content' style='overflow:visible;' id='" + pName + "'></div>";
+    el.innerHTML = "<ul class='nav nav-tabs' id='" + pName + "' role='tablist'></ul>" +
+      "<div class='tab-content well well-small'  id='" + pName + "'></div>";
     return el;
   },
   getTab: function(text, tabId) {
-    var el = document.createElement('a');
-    el.className = 'list-group-item';
-    el.setAttribute('href','#'+tabId);
-    el.appendChild(text);
-    return el;
-  },
-  getTopTab: function(text, tabId) {
-    var el = document.createElement('li');
+    var li = document.createElement('li');
+    li.setAttribute('role', 'presentation');
     var a = document.createElement('a');
     a.setAttribute('href','#'+tabId);
     a.appendChild(text);
-    el.appendChild(a);
+    a.setAttribute('aria-controls', tabId);
+    a.setAttribute('role', 'tab');
+    a.setAttribute('data-toggle', 'tab');
+    li.appendChild(a);
+    return li;
+  },
+  getTopTab: function(text, tabId) {
+    var li = document.createElement('li');
+    li.setAttribute('role', 'presentation');
+    var a = document.createElement('a');
+    a.setAttribute('href','#'+tabId);
+    a.appendChild(text);
+    a.setAttribute('aria-controls', tabId);
+    a.setAttribute('role', 'tab');
+    a.setAttribute('data-toggle', 'tab');
+    li.appendChild(a);
+    return li;
+  },
+  getTabContent: function() {
+    var el = document.createElement('div');
+    el.className = 'tab-pane';
+    el.setAttribute('role', 'tabpanel');
+    return el;
+  },
+  getTopTabContent: function() {
+    var el = document.createElement('div');
+    el.className = 'tab-pane';
+    el.setAttribute('role', 'tabpanel');
     return el;
   },
   markTabActive: function(row) {
     row.tab.className = row.tab.className.replace(/\s?active/g,'');
     row.tab.className += ' active';
-    row.container.style.display = '';
+    row.container.className = row.container.className.replace(/\s?active/g,'');
+    row.container.className += ' active';
+    // row.container.style.display = '';
   },
   markTabInactive: function(row) {
     row.tab.className = row.tab.className.replace(/\s?active/g,'');
-    row.container.style.display = 'none';
+    row.container.className = row.container.className.replace(/\s?active/g,'');
+    // row.container.style.display = 'none';
   },
   getProgressBar: function() {
     var min = 0, max = 100, start = 0;
