@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <script src="../../dist/jsoneditor.js"></script>
+</head>
+<body>
+
+<textarea class="debug" cols="30" rows="10"></textarea>
+<button class='get-value'>Get Value</button>
+<div class='container'></div>
+
+<script>
+  var container = document.querySelector('.container');
+  var debug = document.querySelector('.debug');
+  var schema = {
+    "type": "array",
+    "title": "Numbers",
+    "items": {
+      "type": "number",
+      "format": "number",
+      "title": "Number"
+    }
+  };
+
+  var editor = new JSONEditor(container, {
+    schema: schema
+  });
+
+  document.querySelector('.get-value').addEventListener('click', function () {
+    debug.value = JSON.stringify(editor.getValue());
+  });
+
+</script>
+
+</body>
+</html>
