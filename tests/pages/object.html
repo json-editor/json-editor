@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <script src="../../dist/jsoneditor.js"></script>
+</head>
+<body>
+
+<textarea class="value" cols="30" rows="10"></textarea>
+<button class='get-value'>get value</button>
+<div class='container'></div>
+
+<script>
+  var container = document.querySelector('.container');
+  var value = document.querySelector('.value');
+  var getValue = document.querySelector('.get-value');
+
+  var schema = {
+    "title": "Person",
+    "type": "object",
+    "required": [
+      "zodiac"
+    ],
+    "properties": {
+      "zodiac": {
+        "title": "Zodiac",
+        "type": "string",
+        "minLength": 3
+      },
+      "values": {
+        "title": "Values",
+        "propertyOrder": 4,
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "type": "string",
+          "enum": [
+            "value A",
+            "value B"
+          ]
+        }
+      },
+      "single": {
+        "title": "Single",
+        "propertyOrder": 3,
+        "type": "boolean"
+      },
+      "name": {
+        "title": "Name",
+        "propertyOrder": 2,
+        "type": "string",
+        "default": "Francesco Avizzano"
+      },
+      "age": {
+        "title": "Age",
+        "propertyOrder": 1,
+        "type": "number",
+        "format": "number",
+        "default": 10,
+        "minimum": 18,
+        "maximum": 80
+      }
+    }
+  };
+
+  var editor = new JSONEditor(container, {
+    schema: schema,
+    show_errors: 'always'
+  });
+
+  getValue.addEventListener('click', function () {
+    value.value = JSON.stringify(editor.getValue());
+    console.log(editor.getValue());
+  });
+
+</script>
+
+</body>
+</html>

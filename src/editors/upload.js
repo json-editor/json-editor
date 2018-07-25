@@ -43,6 +43,22 @@ JSONEditor.defaults.editors.upload = JSONEditor.AbstractEditor.extend({
 
     this.control = this.theme.getFormControl(this.label, this.uploader||this.input, this.preview);
     this.container.appendChild(this.control);
+
+    window.requestAnimationFrame(function() {
+      if (self.value) {
+        var pathParts = self.schema.links[0].href.split('{{self}}');
+        pathParts.pop();
+        var path = pathParts.join() + self.value;
+        var img = document.createElement('img');
+        img.style.maxWidth = '100%';
+        img.style.maxHeight = '100px';
+        img.onload = function (event) {
+          self.preview.appendChild(img);
+        };
+        img.src = path;
+      }
+    });
+
   },
   refreshPreview: function() {
     if(this.last_preview === this.preview_value) return;

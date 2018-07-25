@@ -1,7 +1,29 @@
 var assert = require('assert');
 var value = '';
 
-Feature('string-sceditor');
+Feature('string');
+
+Scenario('should have correct initial value', async (I) => {
+  I.amOnPage('string-ace-editor.html');
+  I.click('.get-value');
+  value = await I.grabValueFrom('.debug');
+  assert.equal(value, '[]');
+});
+
+Scenario('should have coerent values', async (I) => {
+  I.amOnPage('string-ace-editor.html');
+  I.click('Add item');
+  I.see('item 1');
+  I.seeElement('.ace_editor');
+
+  I.click('.ace_editor');
+  I.pressKey('__YELLOW__');
+  I.see('__YELLOW__');
+
+  I.click('.get-value');
+  value = await I.grabValueFrom('.debug');
+  assert.equal(value, JSON.stringify([{"editor":"__YELLOW__"}]));
+});
 
 Scenario('should have correct initial value', async (I) => {
   I.amOnPage('string-sceditor.html');
@@ -79,4 +101,11 @@ Scenario('Should work correctly in arrays @optional', async (I) => {
   I.see('__YELLOW__');
   I.switchTo();
 
+});
+
+Scenario('should be readonly if specified and not disabled', async (I) => {
+  I.amOnPage('read-only.html');
+  I.seeElement('[name="root[string]"]');
+  value = await I.grabAttributeFrom('[name="root[string]"]', 'readonly');
+  assert.equal(value, 'true');
 });
