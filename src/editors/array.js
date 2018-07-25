@@ -527,6 +527,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
           }
           newval.push(row);
         });
+        self.empty(true);
         self.setValue(newval);
         if(new_active_tab) {
           self.active_tab = new_active_tab;
@@ -706,6 +707,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
       if(self.rows.length > 1 && self.rows[self.rows.length-1].tab === self.active_tab) new_active_tab = self.rows[self.rows.length-2].tab;
 
       rows.pop();
+      self.empty(true);
       self.setValue(rows);
       if(new_active_tab) {
         self.active_tab = new_active_tab;
@@ -724,6 +726,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
         return false;
       }
 
+      self.empty(true);
       self.setValue([]);
       self.onChange(true);
     });
