@@ -46,16 +46,16 @@ JSONEditor.defaults.editors.upload = JSONEditor.AbstractEditor.extend({
 
     window.requestAnimationFrame(function() {
       if (self.value) {
-        var pathParts = self.schema.links[0].href.split('{{self}}');
-        pathParts.pop();
-        var path = pathParts.join() + self.value;
         var img = document.createElement('img');
         img.style.maxWidth = '100%';
         img.style.maxHeight = '100px';
         img.onload = function (event) {
           self.preview.appendChild(img);
         };
-        img.src = path;
+        img.onerror = function(error) {
+          console.error('upload error', error);
+        };
+        img.src = self.container.querySelector('a').href;
       }
     });
 
