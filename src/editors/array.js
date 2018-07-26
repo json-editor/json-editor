@@ -507,28 +507,25 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
         }
 
         var i = this.getAttribute('data-i')*1;
-
         var value = self.getValue();
-
         var newval = [];
         var new_active_tab = null;
-        $each(value,function(j,row) {
-          if(j===i) {
-            // If the one we're deleting is the active tab
-            if(self.rows[j].tab === self.active_tab) {
-              // Make the next tab active if there is one
-              // Note: the next tab is going to be the current tab after deletion
-              if(self.rows[j+1]) new_active_tab = self.rows[j].tab;
-              // Otherwise, make the previous tab active if there is one
-              else if(j) new_active_tab = self.rows[j-1].tab;
-            }
 
-            return; // If this is the one we're deleting
+        $each(value,function(j,row) {
+          if(j !== i) {
+            newval.push(row);
           }
-          newval.push(row);
         });
+
         self.empty(true);
         self.setValue(newval);
+
+        if (self.rows[i]) {
+          new_active_tab = self.rows[i].tab;
+        } else if (self.rows[i-1]) {
+          new_active_tab = self.rows[i-1].tab;
+        }
+
         if(new_active_tab) {
           self.active_tab = new_active_tab;
           self.refreshTabs();
@@ -556,7 +553,6 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
             $each(value,function(j,row) {
               if(j===i) {
                 value.push(row);
-                return;
               }
             });
 
@@ -702,17 +698,21 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
       }
 
       var rows = self.getValue();
-
       var new_active_tab = null;
-      if(self.rows.length > 1 && self.rows[self.rows.length-1].tab === self.active_tab) new_active_tab = self.rows[self.rows.length-2].tab;
 
       rows.pop();
       self.empty(true);
       self.setValue(rows);
+
+      if (self.rows[self.rows.length-1]) {
+        new_active_tab = self.rows[self.rows.length-1].tab;
+      }
+
       if(new_active_tab) {
         self.active_tab = new_active_tab;
         self.refreshTabs();
       }
+
       self.onChange(true);
     });
     self.controls.appendChild(this.delete_last_row_button);
