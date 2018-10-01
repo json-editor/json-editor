@@ -54,6 +54,7 @@ module.exports = function(grunt) {
           'src/editors/enum.js',
           'src/editors/select.js',
           'src/editors/selectize.js',
+          'src/editors/starrating.js',
           'src/editors/multiselect.js',
           'src/editors/base64.js',
           'src/editors/upload.js',
@@ -147,6 +148,18 @@ module.exports = function(grunt) {
         }
       }
     },
+    cssmin: {
+      options: {
+        shorthandCompacting: false,
+        roundingPrecision: -1
+      },
+      combine: {
+        files: {
+          // Combine and minify CSS files
+          "dist/css/jsoneditor.min.css": ["src/styles/*.css"]
+        }
+      }
+    },
     connect: {
         default: {
             options: {
@@ -186,6 +199,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-run');
 
   // Serve files
@@ -196,8 +210,8 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['run:mocha']);
 
     // Default task.
-  grunt.registerTask('default', ['jshint:beforeconcat','concat','jshint:afterconcat','uglify']);
+  grunt.registerTask('default', ['jshint:beforeconcat','concat','jshint:afterconcat','uglify','cssmin']);
   
-  grunt.registerTask('rawbuild', ['concat','uglify']);
+  grunt.registerTask('rawbuild', ['concat','uglify','cssmin']);
   
 };

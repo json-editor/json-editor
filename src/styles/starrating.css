@@ -1,0 +1,56 @@
+@font-face {
+  font-family: "Glyphicons Halflings";
+  src: url("//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/fonts/glyphicons-halflings-regular.eot");
+  src: url("//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/fonts/glyphicons-halflings-regular.eot?#iefix")
+      format("embedded-opentype"),
+    url("//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/fonts/glyphicons-halflings-regular.woff2")
+      format("woff2"),
+    url("//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/fonts/glyphicons-halflings-regular.woff")
+      format("woff"),
+    url("//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/fonts/glyphicons-halflings-regular.ttf")
+      format("truetype"),
+    url("//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular")
+      format("svg");
+}
+.starrating {
+  direction: rtl;
+  display: inline-block;
+  white-space:nowrap;
+}
+.starrating > input {
+  display: none;
+}  /* Remove radio buttons */
+.starrating > label:before {
+  content: '\e007'; /* Empty Star */
+  margin: 1px;
+  font-size: 18px;
+  font-style:normal;
+  font-weight:400;
+  line-height:1;
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+}
+.starrating > label {
+  color: #888; /* Start color when not clicked */
+  cursor: pointer;
+  margin: 0;
+  margin: 8px 0 2px 0;
+}
+.starrating > label.starrating-display-enabled {
+  margin: 1px 0 0 0;
+}
+.starrating > input:checked ~ label,
+.starrating:not(.readonly) > input:hover ~ label {
+  color: #ffca08; /* Set yellow color when star checked/hover */
+}
+.starrating > input:checked ~ label:before,
+.starrating:not(.readonly) > input:hover ~ label:before {
+  content: '\e006'; /* Filled Star when star checked/hover */
+  text-shadow: 0 0 1px rgba(0,20,20,1);
+}
+.starrating .starrating-display {
+  position: relative;
+  text-align: center;
+  font-size: 10px;
+  line-height: 0px;
+}
