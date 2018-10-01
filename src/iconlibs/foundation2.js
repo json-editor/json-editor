@@ -8,7 +8,9 @@ JSONEditor.defaults.iconlibs.foundation2 = JSONEditor.AbstractIconLib.extend({
     cancel: 'error',
     save: 'checkmark',
     moveup: 'up-arrow',
-    movedown: 'down-arrow'
+    movedown: 'down-arrow',
+    time: 'time',
+    calendar: 'calendar'
   },
   icon_prefix: 'foundicon-'
 });

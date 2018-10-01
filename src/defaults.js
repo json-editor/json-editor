@@ -157,6 +157,21 @@ JSONEditor.defaults.languages.en = {
    */
   error_dependency: "Must have property {{0}}",
   /**
+   * When a date is in incorrect format
+   * @variables This key takes one variable: The valid format
+   */
+  error_date: 'Date must be in the format {{0}}',
+  /**
+   * When a time is in incorrect format
+   * @variables This key takes one variable: The valid format
+   */
+  error_time: 'Time must be in the format {{0}}',
+  /**
+   * When a datetime-local is in incorrect format
+   * @variables This key takes one variable: The valid format
+   */
+  error_datetime_local: 'Datetime must be in the format {{0}}',
+  /**
    * Text on Delete All buttons
    */
   button_delete_all: "All",
@@ -316,4 +331,11 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
 JSONEditor.defaults.resolvers.unshift(function(schema) {
   // If this schema uses `oneOf` or `anyOf`
   if(schema.oneOf || schema.anyOf) return "multiple";
+});
+
+// Specialized editor for date, time and datetime-local formats
+JSONEditor.defaults.resolvers.unshift(function(schema) {
+  if (['string', 'integer'].indexOf(schema.type) != -1 && ['date', 'time', 'datetime-local'].indexOf(schema.format) != -1) {
+    return "datetime";
+  }
 });
