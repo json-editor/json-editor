@@ -59,6 +59,7 @@ module.exports = function(grunt) {
           'src/editors/upload.js',
           'src/editors/checkbox.js',
           'src/editors/array/selectize.js',
+          'src/editors/datetime.js', 
 
           // All the themes and iconlibs
           'src/theme.js',

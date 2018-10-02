@@ -218,7 +218,15 @@ JSONEditor.defaults.languages.en = {
   /**
     * Title on Expand buttons
     */
-  button_expand: "Expand"
+  button_expand: "Expand",
+  /**
+    * Title on Flatpickr toggle buttons
+    */
+  flatpickr_toggle_button: "Toggle",
+  /**
+    * Title on Flatpickr clear buttons
+    */
+  flatpickr_clear_button: "Clear"
 };
 
 // Miscellaneous Plugin Settings

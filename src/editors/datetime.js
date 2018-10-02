@@ -43,14 +43,21 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
         // Create button group and button
         var buttonGroup = document.createElement('div');
         buttonGroup.className = 'input-group-btn';
-        var button = this.getButton('',this.schema.format == 'time' ? 'time' :'calendar', this.translate('flatpickr_button'));
 
-        // Attribute for flatpicker
-        button.setAttribute('data-toggle','');
+        if (this.options.flatpickr.showToggleButton !== false) {
+          var toggleButton = this.getButton('',this.schema.format == 'time' ? 'time' :'calendar', this.translate('flatpickr_toggle_button'));
+          // Attribute for flatpicker
+          toggleButton.setAttribute('data-toggle','');
+          buttonGroup.appendChild(toggleButton);
+        }
+        if (this.options.flatpickr.showClearButton !== false) {
+          var clearButton = this.getButton('','delete', this.translate('flatpickr_clear_button'));
+          // Attribute for flatpicker
+          clearButton.setAttribute('data-clear','');
+          buttonGroup.appendChild(clearButton);
+        }
 
-        buttonGroup.appendChild(button);
         buttonContainer.appendChild(buttonGroup);
-
         input = buttonContainer;
       }
 
