@@ -13,4 +13,14 @@
  * @example see README.md and docs/ for requirements, examples and usage info
  */
 
-(function() {
+;(function (global, factory) {
+	"use strict";
+	var JSONEditor = factory(global);
+	if (typeof module === "object" && module != null && module.exports) {
+		module.exports = JSONEditor;
+	} else if (typeof define === "function" && define.amd) {
+		define(function () { return JSONEditor; });
+	} else {
+		global.JSONEditor = JSONEditor;
+	}
+})(typeof window !== "undefined" ? window : this, function (global, undefined) {
