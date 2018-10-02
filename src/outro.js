@@ -1,2 +1,2 @@
-  window.JSONEditor = JSONEditor;
-})();
+	return JSONEditor;
+});

@@ -59,6 +59,7 @@ module.exports = function(grunt) {
           'src/editors/upload.js',
           'src/editors/checkbox.js',
           'src/editors/array/selectize.js',
+          'src/editors/starrating.js',
 
           // All the themes and iconlibs
           'src/theme.js',
@@ -90,6 +91,17 @@ module.exports = function(grunt) {
         sourceMap: true
       }
     },
+    cssmin: {
+      options: {
+        shorthandCompacting: false,
+        roundingPrecision: -1
+      },
+      combine: {
+        files: {
+          'dist/css/jsoneditor.min.css': ['src/styles/*.css']
+        }
+      }
+    },
     watch: {
       scripts: {
         files: ["src/**/*.js"],
@@ -104,7 +116,11 @@ module.exports = function(grunt) {
         nonbsp: true,
         nonew: true,
         immed: true,
-        latedef: true
+        latedef: true,
+        globals: {
+            "module": true,
+            "define": true,
+        }
       },
       beforeconcat: [
         'src/class.js',
@@ -186,6 +202,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-run');
 
   // Serve files
@@ -196,8 +213,8 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['run:mocha']);
 
     // Default task.
-  grunt.registerTask('default', ['jshint:beforeconcat','concat','jshint:afterconcat','uglify']);
+  grunt.registerTask('default', ['jshint:beforeconcat','concat','jshint:afterconcat','uglify','cssmin']);
   
-  grunt.registerTask('rawbuild', ['concat','uglify']);
-  
+  grunt.registerTask('rawbuild', ['concat','uglify','cssmin']);
+
 };
