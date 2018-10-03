@@ -342,7 +342,7 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
 });
 // Specialized editor for date, time and datetime-local formats
 JSONEditor.defaults.resolvers.unshift(function(schema) {
-  if (['string', 'integer'].indexOf(schema.type) != -1 && ['date', 'time', 'datetime-local'].indexOf(schema.format) != -1) {
+  if (['string', 'integer'].indexOf(schema.type) !== -1 && ['date', 'time', 'datetime-local'].indexOf(schema.format) !== -1) {
     return "datetime";
   }
 });
