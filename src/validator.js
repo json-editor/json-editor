@@ -142,7 +142,18 @@ JSONEditor.Validator = Class.extend({
       }
       // Simple type
       else {
-        if(!this._checkType(schema.type, value)) {
+        if(['date', 'time', 'datetime-local'].indexOf(schema.format) != -1 && schema.type == 'integer') {
+          // Hack to get validator to validate as string even if value is integer
+          // As validation of 'date', 'time', 'datetime-local' is done in separate validator
+          if(!this._checkType('string', ""+value)) {
+            errors.push({
+              path: path,
+              property: 'type',
+              message: this.translate('error_type', [schema.format])
+            });
+          }
+        }
+        else if(!this._checkType(schema.type, value)) {
           errors.push({
             path: path,
             property: 'type',

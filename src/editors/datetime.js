@@ -28,11 +28,11 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
     this._super();
     if(!this.input) return;
 
-    // Add placeholder text if available
+    // Add required and placeholder text if available
     if (this.options.placeholder !== undefined) this.input.setAttribute('placeholder', this.options.placeholder);
     if (this.options.required !== undefined) this.input.setAttribute('required', this.options.required);
 
-    // helper functions
+    // helper function
     this.zeroPad = function(value) {
       return ('0' + value).slice(-2);
     };
@@ -43,7 +43,7 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
       this.options.flatpickr.enableTime = this.schema.format == 'date' ? false : true;
       this.options.flatpickr.noCalendar = this.schema.format == 'time' ? true : false;
 
-      // only string can contain range or multiple values
+      // Curently only string can contain range or multiple values
       if (this.schema.type == 'integer') this.options.flatpickr.mode = 'single';
 
       var input = this.input;
