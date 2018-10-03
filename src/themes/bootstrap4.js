@@ -115,10 +115,12 @@ JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
   getTabHolder: function(propertyName) {
     var el = document.createElement("div");
     var pName = (typeof propertyName === 'undefined')? "" : propertyName;
-    el.innerHTML =
-      "<ul class='nav flex-column nav-pills col-md-2' style='padding: 0px;' id='" + pName + "'></ul><div class='tab-content col-md-10' style='padding:5px;' id='" + pName + "'></div>";
-el.className = "row";
+    el.innerHTML = "<div class='col-md-2' id='" + pName + "'><ul class='nav flex-column nav-pills'></ul></div><div class='tab-content col-md-10' id='" + pName + "'></div>";
+    el.className = "row";
     return el;
+  },  
+  addTab: function(holder, tab) {
+    holder.children[0].children[0].appendChild(tab);
   },
   getTopTabHolder: function(propertyName) {
     var pName = (typeof propertyName === 'undefined')? "" : propertyName;

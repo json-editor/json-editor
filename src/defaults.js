@@ -340,10 +340,13 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
   // If this schema uses `oneOf` or `anyOf`
   if(schema.oneOf || schema.anyOf) return "multiple";
 });
-
 // Specialized editor for date, time and datetime-local formats
 JSONEditor.defaults.resolvers.unshift(function(schema) {
   if (['string', 'integer'].indexOf(schema.type) != -1 && ['date', 'time', 'datetime-local'].indexOf(schema.format) != -1) {
     return "datetime";
   }
+});
+// Use a specialized editor for starratings
+JSONEditor.defaults.resolvers.unshift(function(schema) {
+  if (schema.type === "string" && schema.format === "starrating") return "starrating";
 });
