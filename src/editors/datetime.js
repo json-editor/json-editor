@@ -1,10 +1,36 @@
+/*
+
+Edtended handling of date, time and datetime-local type fields.
+
+Works with both string and integer data types. (default only support string type)
+Adds support for setting "placeholder" through options.
+Has optional support for using flatpickr datepicker.
+All flatpickr options is supported with a few minor differences.
+- "enableTime" and "noCalendar" are set automatically, based on the data type.
+- It is not possible to use "inline" and "wrap" options together.
+- When using the "wrap" option, "toggle" and "clear" buttons are automatically added to markup. 2 extra boolean options ("showToggleButton" and "showClearButton") are available to control which buttons to display. Note: not all frameworks supports this. (Plain HTML and jQueryUI doesn't)
+- When using the "inline" option, an extra boolean option ("inlineHideInput") is available to hide the original input field.
+- If "mode" is set to either "multiple" or "range", only string data type is supported. Also the result from these is returned as a string not an array.
+
+ToDo:
+ - Improve Handling of flatpicker "multiple" and "range" modes. (Currently the values are just added as string values, but the optimal scenario would be to save those as array if possible)
+- Supress the "Value must be of type integer." error message when using "integer" type. As this doesn't make sense, since the input is string. (Probably will need to hack into the default "integer" validation and skip if schema format is "datetime")
+- Test if validation works with "required" fields. (Not sure if I have to put this into custom validator, or if it's handled elsewhere. Update: required is not supported at all!)
+- Convert flatpickr date tokens into human readable format (HRF). (ie. "Y-m-d H:i" to "YYYY-MM-DD HH:MM") But Im not sure if this is possible, as date tokens also support textual values. And how do you display those in HRF??
+- Add support for "required" attribute. (Maybe this should be done on a general scale, as support for other input attributes are also missing, such as "placeholder")
+- Test with different frameworks, as the "input-group-btn" is probably Bootstrap specific.
+  Foundation 6: https://foundation.zurb.com/sites/docs/forms.html#inline-labels-and-buttons
+  Materialize: (Icon Prefixes) https://materializecss.com/text-inputs.html
+
+*/
 JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend({
   build: function () {
     this._super();
     if(!this.input) return;
 
     // Add placeholder text if available
-    if (this.options.placeholder) this.input.setAttribute('placeholder', this.options.placeholder);
+    if (this.options.placeholder !== undefined) this.input.setAttribute('placeholder', this.options.placeholder);
+    if (this.options.required !== undefined) this.input.setAttribute('required', this.options.required);
 
     // helper functions
     this.zeroPad = function(value) {
@@ -42,7 +68,7 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
 
         // Create button group and button
         var buttonGroup = document.createElement('div');
-        buttonGroup.className = 'input-group-btn';
+        buttonGroup.className = 'input-group-btn'; // Bootstrap specific, so need to test with other frameworks
 
         if (this.options.flatpickr.showToggleButton !== false) {
           var toggleButton = this.getButton('',this.schema.format == 'time' ? 'time' :'calendar', this.translate('flatpickr_toggle_button'));
