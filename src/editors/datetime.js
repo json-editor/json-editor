@@ -9,7 +9,7 @@ All flatpickr options is supported with a few minor differences.
 - "enableTime" and "noCalendar" are set automatically, based on the data type.
 - Extra config option "errorDateFormat". If this is set, it will replace the format displayed in error messages.
 - It is not possible to use "inline" and "wrap" options together.
-- When using the "wrap" option, "toggle" and "clear" buttons are automatically added to markup. 2 extra boolean options ("showToggleButton" and "showClearButton") are available to control which buttons to display. Note: not all frameworks supports this. (Plain HTML and jQueryUI doesn't)
+- When using the "wrap" option, "toggle" and "clear" buttons are automatically added to markup. 2 extra boolean options ("showToggleButton" and "showClearButton") are available to control which buttons to display. Note: not all frameworks supports this. (Works in: Bootstrap and Foundation)
 - When using the "inline" option, an extra boolean option ("inlineHideInput") is available to hide the original input field.
 - If "mode" is set to either "multiple" or "range", only string data type is supported. Also the result from these is returned as a string not an array.
 
@@ -19,14 +19,15 @@ ToDo:
 - Convert flatpickr date tokens into human readable format (HRF). (ie. "Y-m-d H:i" to "YYYY-MM-DD HH:MM") But Im not sure if this is possible, as date tokens also support textual values. And how do you display those in HRF?? - DONE - Added an extra config options (errorDateFormat) instead .
 
 - Add support for "required" attribute. (Maybe this should be done on a general scale, as support for other input attributes are also missing, such as "placeholder")
-- Test with different frameworks, as the "input-group-btn" is probably Bootstrap specific.
-  Foundation 6: https://foundation.zurb.com/sites/docs/forms.html#inline-labels-and-buttons
-  Materialize: (Icon Prefixes) https://materializecss.com/text-inputs.html
-  Working: foundation,bootstrap3
+- Test with different frameworks, as the "input-group-btn" is probably Bootstrap specific. DONE
 
 - Test if validation works with "required" fields. (Not sure if I have to put this into custom validator, or if it's handled elsewhere. UPDATE required is not supported at all!)
 
  - Improve Handling of flatpicker "multiple" and "range" modes. (Currently the values are just added as string values, but the optimal scenario would be to save those as array if possible)
+
+- Set limit on integer input
+min: = 00:00:00 UTC Thursday, 1 January 1970
+max =  3:14:08 on 19 January 2038 UTC
 
 */
 JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend({
@@ -160,12 +161,20 @@ JSONEditor.defaults.custom_validators.push(function(schema, value, path) {
     };
 
     var ed = this.jsoneditor.getEditor(path);
+    var dateFormat = ed.flatpickr ? ed.flatpickr.config.dateFormat : format[ed.format];
 
     if (schema.type == 'integer') {
       // The value is a timestamp
-      // not much to check for, so we assume value is ok if it's a positive number
-      if (value != Math.abs(parseInt(value))) {
-        var dateFormat = ed.flatpickr ? ed.flatpickr.config.dateFormat : format[ed.format];
+      if (value * 1 < 1) {
+        // If value is less than 1, then it's an invalid epoch date before 00:00:00 UTC Thursday, 1 January 1970
+        errors.push({
+          path: path,
+          property: 'format',
+          message: this.translate('error_invalid_epoch')
+        });
+      }
+      else if (value != Math.abs(parseInt(value))) {
+        // not much to check for, so we assume value is ok if it's a positive number
         errors.push({
           path: path,
           property: 'format',

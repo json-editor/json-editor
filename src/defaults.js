@@ -172,6 +172,11 @@ JSONEditor.defaults.languages.en = {
    */
   error_datetime_local: 'Datetime must be in the format {{0}}',
   /**
+   * When a integer date is less than 1 January 1970
+   */
+  error_invalid_epoch: 'Date must be greater than 1 January 1970',
+
+  /**
    * Text on Delete All buttons
    */
   button_delete_all: "All",

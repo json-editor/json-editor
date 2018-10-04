@@ -259,15 +259,12 @@ JSONEditor.defaults.themes.bootstrap2 = JSONEditor.AbstractTheme.extend({
     if (!input) return;
 
     var inputGroupContainer = document.createElement('div');
-    inputGroupContainer.className = 'input-group';
+    inputGroupContainer.className = 'input-append';
     inputGroupContainer.appendChild(input);
 
-    var inputGroup = document.createElement('div');
-    inputGroup.className = 'input-group-btn';
-    inputGroupContainer.appendChild(inputGroup);
-
     for(var i=0;i<buttons.length;i++) {
-      inputGroup.appendChild(buttons[i]);
+      buttons[i].classList.add('btn');
+      inputGroupContainer.appendChild(buttons[i]);
     }
 
     return inputGroupContainer;
