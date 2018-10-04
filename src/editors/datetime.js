@@ -28,7 +28,6 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
 
     // Add required and placeholder text if available
     if (this.options.placeholder !== undefined) this.input.setAttribute('placeholder', this.options.placeholder);
-    //if (this.options.required !== undefined) this.input.setAttribute('required', this.options.required);
 
     if(window.flatpickr && typeof this.options.flatpickr == 'object') {
 
@@ -198,8 +197,7 @@ JSONEditor.defaults.custom_validators.push(function(schema, value, path) {
         try {
           if (compareValue) {
             // Not the best validation method, but range and multiple mode are special
-            // Optimal solution would be if it is possible to change the field format from string/integer to array
-            // in these 2 special cases.
+            // Optimal solution would be if it is possible to change the return format from string/integer to array
             if (compareValue != value) throw ed.flatpickr.config.mode + ' mismatch';
           }
           else if (ed.flatpickr.formatDate(ed.flatpickr.parseDate(value, ed.flatpickr.config.dateFormat), ed.flatpickr.config.dateFormat) != value) throw 'mismatch';
