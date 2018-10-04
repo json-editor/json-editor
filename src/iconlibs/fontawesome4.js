@@ -10,6 +10,7 @@ JSONEditor.defaults.iconlibs.fontawesome4 = JSONEditor.AbstractIconLib.extend({
     moveup: 'arrow-up',
     movedown: 'arrow-down',
     copy: 'files-o',
+    clear: 'times-circle-o',
     time: 'clock-o',
     calendar: 'calendar'
   },

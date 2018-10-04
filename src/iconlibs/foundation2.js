@@ -9,6 +9,7 @@ JSONEditor.defaults.iconlibs.foundation2 = JSONEditor.AbstractIconLib.extend({
     save: 'checkmark',
     moveup: 'up-arrow',
     movedown: 'down-arrow',
+    clear: 'remove',
     time: 'clock',
     calendar: 'calendar'
   },

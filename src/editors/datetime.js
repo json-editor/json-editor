@@ -14,20 +14,11 @@ All flatpickr options is supported with a few minor differences.
 - If "mode" is set to either "multiple" or "range", only string data type is supported. Also the result from these is returned as a string not an array.
 
 ToDo:
-- Supress the "Value must be of type integer." error message when using "integer" type. As this doesn't make sense, since the input is string. (Probably will need to hack into the default "integer" validation and skip if schema format is "datetime") - DONE
-
-- Convert flatpickr date tokens into human readable format (HRF). (ie. "Y-m-d H:i" to "YYYY-MM-DD HH:MM") But Im not sure if this is possible, as date tokens also support textual values. And how do you display those in HRF?? - DONE - Added an extra config options (errorDateFormat) instead .
-
 - Add support for "required" attribute. (Maybe this should be done on a general scale, as support for other input attributes are also missing, such as "placeholder")
-- Test with different frameworks, as the "input-group-btn" is probably Bootstrap specific. DONE
 
-- Test if validation works with "required" fields. (Not sure if I have to put this into custom validator, or if it's handled elsewhere. UPDATE required is not supported at all!)
+- Test if validation works with "required" fields. (Not sure if I have to put this into custom validator, or if it's handled elsewhere. UPDATE required attribute is currently not supported at ALL!)
 
  - Improve Handling of flatpicker "multiple" and "range" modes. (Currently the values are just added as string values, but the optimal scenario would be to save those as array if possible)
-
-- Set limit on integer input
-min: = 00:00:00 UTC Thursday, 1 January 1970
-max =  3:14:08 on 19 January 2038 UTC
 
 */
 JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend({
@@ -37,12 +28,7 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
 
     // Add required and placeholder text if available
     if (this.options.placeholder !== undefined) this.input.setAttribute('placeholder', this.options.placeholder);
-    if (this.options.required !== undefined) this.input.setAttribute('required', this.options.required);
-
-    // helper function
-    this.zeroPad = function(value) {
-      return ('0' + value).slice(-2);
-    };
+    //if (this.options.required !== undefined) this.input.setAttribute('required', this.options.required);
 
     if(window.flatpickr && typeof this.options.flatpickr == 'object') {
 
@@ -60,9 +46,6 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
 
       if (this.options.flatpickr.wrap === true) {
 
-        // Make sure "inline" option is turned off
-        this.options.flatpickr.inline = false;
-
         // Create buttons for input group
         var buttons = [];
         if (this.options.flatpickr.showToggleButton !== false) {
@@ -72,7 +55,7 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
           buttons.push(toggleButton);
         }
         if (this.options.flatpickr.showClearButton !== false) {
-          var clearButton = this.getButton('','delete', this.translate('flatpickr_clear_button'));
+          var clearButton = this.getButton('','clear', this.translate('flatpickr_clear_button'));
           // Attribute for flatpicker
           clearButton.setAttribute('data-clear','');
           buttons.push(clearButton);
@@ -83,6 +66,9 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
 
         var buttonContainer = this.theme.getInputGroup(this.input, buttons);
         if (buttonContainer !== undefined) {
+          // Make sure "inline" option is turned off
+          this.options.flatpickr.inline = false;
+
           // Insert container at same position as input field
           parentNode.insertBefore(buttonContainer, nextSibling);
 
@@ -141,6 +127,10 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
     if (this.flatpickr) this.flatpickr.destroy();
     this.flatpickr = null;
     this._super();
+  },
+  // helper function
+  zeroPad: function(value) {
+    return ('0' + value).slice(-2);
   }
 });
 

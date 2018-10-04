@@ -11,6 +11,7 @@ JSONEditor.defaults.iconlibs.materialicons = JSONEditor.AbstractIconLib.extend({
       moveup: 'arrow_upward',
       movedown: 'arrow_downward',
       copy: 'content_copy',
+      clear: 'highlight_off',
       time: 'access_time',
       calendar: 'calendar_today'
     },

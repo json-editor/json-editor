@@ -9,6 +9,7 @@ JSONEditor.defaults.iconlibs.jqueryui = JSONEditor.AbstractIconLib.extend({
     save: 'disk',
     moveup: 'arrowthick-1-n',
     movedown: 'arrowthick-1-s',
+    clear: 'circle-close',
     time: 'time',
     calendar: 'calendar'
   },
