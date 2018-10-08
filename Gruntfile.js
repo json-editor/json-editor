@@ -60,6 +60,7 @@ module.exports = function(grunt) {
           'src/editors/checkbox.js',
           'src/editors/array/selectize.js',
           'src/editors/starrating.js',
+          'src/editors/datetime.js',
 
           // All the themes and iconlibs
           'src/theme.js',

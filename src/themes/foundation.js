@@ -112,6 +112,25 @@ JSONEditor.defaults.themes.foundation = JSONEditor.AbstractTheme.extend({
   updateProgressBarUnknown: function(progressBar) {
     if (!progressBar) return;
     progressBar.firstChild.style.width = '100%';
+  },
+  getInputGroup: function(input, buttons) {
+    if (!input) return undefined;
+
+    var inputGroupContainer = document.createElement('div');
+    inputGroupContainer.className = 'input-group';
+    input.classList.add('input-group-field');
+    inputGroupContainer.appendChild(input);
+
+    for(var i=0;i<buttons.length;i++) {
+      var inputGroup = document.createElement('div');
+      inputGroup.className = 'input-group-button';
+      inputGroup.style.verticalAlign = 'top';
+      buttons[i].classList.remove('small');   
+      inputGroup.appendChild(buttons[i]);
+      inputGroupContainer.appendChild(inputGroup);
+    }
+
+    return inputGroupContainer;
   }
 });
 

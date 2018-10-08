@@ -8,7 +8,10 @@ JSONEditor.defaults.iconlibs.bootstrap3 = JSONEditor.AbstractIconLib.extend({
     cancel: 'floppy-remove',
     save: 'floppy-saved',
     moveup: 'arrow-up',
-    movedown: 'arrow-down'
+    movedown: 'arrow-down',
+    clear: 'remove-circle',
+    time: 'time',
+    calendar: 'calendar'
   },
   icon_prefix: 'glyphicon glyphicon-'
 });

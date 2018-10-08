@@ -8,7 +8,10 @@ JSONEditor.defaults.iconlibs.fontawesome3 = JSONEditor.AbstractIconLib.extend({
     cancel: 'ban-circle',
     save: 'save',
     moveup: 'arrow-up',
-    movedown: 'arrow-down'
+    movedown: 'arrow-down',
+    clear: 'remove-circle',
+    time: 'time',
+    calendar: 'calendar'
   },
   icon_prefix: 'icon-'
 });
