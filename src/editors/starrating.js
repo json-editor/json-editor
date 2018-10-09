@@ -63,6 +63,8 @@ JSONEditor.defaults.editors.starrating = JSONEditor.defaults.editors.string.exte
     var ratingsContainerWrapper = this.theme.getContainer();
     ratingsContainerWrapper.appendChild(this.ratingContainer);
 
+    this.input = ratingsContainerWrapper;
+    
     this.control = this.theme.getFormControl(this.label, ratingsContainerWrapper, this.description, this.infoButton);
     this.container.appendChild(this.control);
   },

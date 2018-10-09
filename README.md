@@ -34,14 +34,15 @@ JSON Editor has no dependencies. It only needs a modern browser (tested in Chrom
 
 The following are not required, but can improve the style and usability of JSON Editor when present.
 
-*  A compatible JS template engine (Mustache, Underscore, Hogan, Handlebars, Swig, Markup, or EJS)
-*  A compatible CSS framework for styling (bootstrap 2/3, foundation 3/4/5, or jqueryui)
-*  A compatible icon library (bootstrap 2/3 glyphicons, foundation icons 2/3, jqueryui, or font awesome 3/4)
+*  A compatible JS template engine (Mustache, Underscore, Hogan, Handlebars, Lodash, Swig, Markup, or EJS)
+*  A compatible CSS framework for styling (bootstrap 2/3/4, foundation 3/4/5/6, materialize or jqueryui)
+*  A compatible icon library (bootstrap 2/3 glyphicons, foundation icons 2/3, jqueryui, materialicons or font awesome 3/4)
 *  [SCEditor](http://www.sceditor.com/) for WYSIWYG editing of HTML or BBCode content
 *  [SimpleMDE](https://simplemde.com/) for editing of Markdown content
 *  [Ace Editor](http://ace.c9.io/) for editing code
 *  [Select2](http://ivaynberg.github.io/select2/) for nicer Select boxes
 *  [Selectize](https://selectize.github.io/selectize.js/) for nicer Select & Array boxes
+*  [Flatpickr](https://flatpickr.js.org/) lightweight and powerful datetime picker
 *  [math.js](http://mathjs.org/) for more accurate floating point math (multipleOf, divisibleBy, etc.)
 
 Usage
@@ -285,6 +286,20 @@ editor.watch('path.to.field',function() {
 editor.unwatch('path.to.field',function_reference);
 ```
 
+Or watch all fields (Similar to the "onchange" event, but tracks the field changed)
+
+```javascript
+var watcherCallback = function(path) {
+  console.log("field with path: [" + path + "] changed to [" + this.getEditor(path).getValue() + "]");
+  // Do something
+}
+for (var key in editor.editors) {
+  if (editor.editors.hasOwnProperty(key) && key !== 'root') {
+    editor.watch(key, watcherCallback.bind(editor, key));
+  }
+}
+```
+
 ### Enable and Disable the Editor
 
 This lets you disable editing for the entire form or part of the form.
@@ -330,6 +345,7 @@ The currently supported themes are:
 *  foundation5
 *  foundation6
 *  jqueryui
+*  materialize
 
 The default theme is `html`, which does not rely on an external framework.
 This default can be changed by setting the `JSONEditor.defaults.options.theme` variable.
@@ -362,6 +378,7 @@ The supported icon libs are:
 *  jqueryui
 *  fontawesome3
 *  fontawesome4
+*  materialicons
 
 By default, no icons are used. Just like the CSS theme, you can set the icon lib globally or when initializing:
 
