@@ -80,11 +80,8 @@ JSONEditor.defaults.editors.signature = JSONEditor.defaults.editors.string.exten
 
       // signature canvas will stretch to signatureContainer width
       canvas.width = signatureContainer.offsetWidth;
-      if (self.options && self.options.canvas_height) {
-        canvas.height = self.options.canvas_height;
-      } else {
-        canvas.height = "300"; // Set to default height of 300px;
-      }
+      canvas.height = self.options.canvas_height;
+
     } else {
       var message = document.createElement('p');
       message.innerHTML='Signature pad is not available, please include SignaturePad from https://github.com/szimek/signature_pad';
