@@ -2,7 +2,32 @@ JSONEditor.defaults.editors.base64 = JSONEditor.AbstractEditor.extend({
   getNumColumns: function() {
     return 4;
   },
-  build: function() {    
+  setFileReaderListener: function (fr_multiple) {
+    var self = this;
+    fr_multiple.addEventListener("load", function(event) {
+      if (self.count == self.current_item_index) {
+        // Overwrite existing file by default, leave other properties unchanged
+        self.value[self.count][self.schema.title] = event.target.result;
+      } else {
+        var temp_object = {};
+        // Create empty object
+        for (var key in self.parent.schema.properties) {
+          temp_object[key] = "";
+        }
+        // Set object media file
+        temp_object[self.schema.title] = event.target.result;
+        self.value.splice(self.count, 0, temp_object); // insert new file object
+      }
+
+      // Increment using the listener and not the 'for' loop as the listener will be processed asynchronously
+      self.count += 1;
+      // When all files have been processed, update the value of the editor
+      if (self.count == (self.total+self.current_item_index)) {
+        self.arrayEditor.setValue(self.value);
+      }
+    });
+  },
+  build: function() {
     var self = this;
     this.title = this.header = this.label = this.theme.getFormInputLabel(this.getTitle());
     if(this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText);
@@ -10,27 +35,57 @@ JSONEditor.defaults.editors.base64 = JSONEditor.AbstractEditor.extend({
     // Input that holds the base64 string
     this.input = this.theme.getFormInputField('hidden');
     this.container.appendChild(this.input);
-    
+
     // Don't show uploader if this is readonly
     if(!this.schema.readOnly && !this.schema.readonly) {
       if(!window.FileReader) throw "FileReader required for base64 editor";
-      
+
       // File uploader
       this.uploader = this.theme.getFormInputField('file');
-      
+
+      // Set attribute of file input field to 'multiple' if:
+      // 'multiple' key has been set to 'true' in the schema
+      // and the parent object is of type 'object'
+      // and the parent of the parent type has been set to 'array'
+      if (self.schema.multiple && self.schema.multiple == true && self.parent && self.parent.schema.type == 'object' && self.parent.parent && self.parent.parent.schema.type == 'array') {
+        this.uploader.setAttribute('multiple', '');
+      }
+
       this.uploader.addEventListener('change',function(e) {
         e.preventDefault();
         e.stopPropagation();
-        
+
         if(this.files && this.files.length) {
-          var fr = new FileReader();
-          fr.onload = function(evt) {
-            self.value = evt.target.result;
-            self.refreshPreview();
-            self.onChange(true);
-            fr = null;
-          };
-          fr.readAsDataURL(this.files[0]);
+
+          // Check the amount of files uploaded.
+          // If 1, use the regular upload, otherwise use the multiple upload method
+          if (this.files.length>1 && self.schema.multiple && self.schema.multiple == true && self.parent && self.parent.schema.type == 'object' && self.parent.parent && self.parent.parent.schema.type == 'array') {
+
+            // Load editor of parent.parent to get the array
+            self.arrayEditor = self.jsoneditor.getEditor(self.parent.parent.path);
+            // Check the current value of this editor
+            self.value = self.arrayEditor.getValue();
+            // Set variables for amount of files, index of current array item and
+            // count value containing current status of processed files
+            self.total = this.files.length;
+            self.current_item_index = parseInt(self.parent.key);
+            self.count = self.current_item_index;
+
+            for (var i = 0; i < self.total; i++) {
+              var fr_multiple = new FileReader();
+              self.setFileReaderListener(fr_multiple);
+              fr_multiple.readAsDataURL(this.files[i]);
+            }
+          } else {
+            var fr = new FileReader();
+            fr.onload = function(evt) {
+              self.value = evt.target.result;
+              self.refreshPreview();
+              self.onChange(true);
+              fr = null;
+            };
+            fr.readAsDataURL(this.files[0]);
+          }
         }
       });
     }
@@ -44,14 +99,14 @@ JSONEditor.defaults.editors.base64 = JSONEditor.AbstractEditor.extend({
   refreshPreview: function() {
     if(this.last_preview === this.value) return;
     this.last_preview = this.value;
-    
+
     this.preview.innerHTML = '';
-    
+
     if(!this.value) return;
-    
+
     var mime = this.value.match(/^data:([^;,]+)[;,]/);
     if(mime) mime = mime[1];
-    
+
     if(!mime) {
       this.preview.innerHTML = '<em>Invalid data URI</em>';
     }
