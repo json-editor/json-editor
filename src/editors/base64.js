@@ -47,7 +47,7 @@ JSONEditor.defaults.editors.base64 = JSONEditor.AbstractEditor.extend({
       // 'multiple' key has been set to 'true' in the schema
       // and the parent object is of type 'object'
       // and the parent of the parent type has been set to 'array'
-      if (self.schema.options.multiple && self.schema.options.multiple == true && self.parent && self.parent.schema.type == 'object' && self.parent.parent && self.parent.parent.schema.type == 'array') {
+      if (self.schema.multiple && self.schema.multiple == true && self.parent && self.parent.schema.type == 'object' && self.parent.parent && self.parent.parent.schema.type == 'array') {
         this.uploader.setAttribute('multiple', '');
       }
 
@@ -59,7 +59,7 @@ JSONEditor.defaults.editors.base64 = JSONEditor.AbstractEditor.extend({
 
           // Check the amount of files uploaded.
           // If 1, use the regular upload, otherwise use the multiple upload method
-          if (this.files.length>1 && self.schema.options.multiple && self.schema.options.multiple == true && self.parent && self.parent.schema.type == 'object' && self.parent.parent && self.parent.parent.schema.type == 'array') {
+          if (this.files.length>1 && self.schema.multiple && self.schema.multiple == true && self.parent && self.parent.schema.type == 'object' && self.parent.parent && self.parent.parent.schema.type == 'array') {
 
             // Load editor of parent.parent to get the array
             self.arrayEditor = self.jsoneditor.getEditor(self.parent.parent.path);
