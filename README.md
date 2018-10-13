@@ -126,6 +126,12 @@ Here are all the available options:
     <td><code>false</code></td>
   </tr>
   <tr>
+  <tr>
+    <td>array_controls_top</td>
+    <td>If <code>true</code>, array controls (add, delete etc) will be displayed at top of list.</td>
+    <td><code>false</code></td>
+  </tr>
+  <tr>
     <td>form_name_root</td>
     <td>The first part of the `name` attribute of form inputs in the editor.  An full example name is `root[person][name]` where "root" is the form_name_root.</td>
     <td>root</td>
@@ -290,7 +296,7 @@ Or watch all fields (Similar to the "onchange" event, but tracks the field chang
 
 ```javascript
 var watcherCallback = function(path) {
-  console.log("field with path: [" + path + "] changed to [" + this.getEditor(path).getValue() + "]");
+  console.log("field with path: [" + path + "] changed to [" + JSON.stringify(this.getEditor(path).getValue()) + "]");
   // Do something
 }
 for (var key in editor.editors) {
@@ -817,6 +823,7 @@ Editors can accept options which alter the behavior in some way.
 *  `disable_collapse` - If set to true, the collapse button will be hidden (works for objects and arrays)
 *  `disable_edit_json` - If set to true, the Edit JSON button will be hidden (works for objects)
 *  `disable_properties` - If set to true, the Edit Properties button will be hidden (works for objects)
+*  `array_controls_top` - If set to true, array controls (add, delete etc) will be displayed at top of list (works for arrays)
 *  `enum_titles` - An array of display values to use for select box options in the same order as defined with the `enum` keyword. Works with schema using enum values.
 *  `expand_height` - If set to true, the input will auto expand/contract to fit the content.  Works best with textareas.
 *  `grid_columns` - Explicitly set the number of grid columns (1-12) for the editor if it's within an object using a grid layout.
