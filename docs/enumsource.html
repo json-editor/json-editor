@@ -2,24 +2,24 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>JSON Editor Select2 Integration Example</title>
+    <title>JSON Editor enumSource Integration Example</title>
     <script src="../dist/jsoneditor.min.js"></script>
     <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
-    <!-- <script src="//cdn.jsdelivr.net/select2/3.4.8/select2.min.js"></script>
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/select2/3.4.8/select2.css"> -->
 </head>
 
 <body>
   <h1>Enum source sort example</h1>
 
-  <p style='margin-bottom:20px;'>Enum source where1 and where2</p>
+  <p style='margin-bottom:20px;'>
+    This example lets you edit a selection of values from an editable enumSource.
+    The selection must have unique items, which is useful to showcase an issue
+    where any changes to ordering of the enumSource array reset selections to a start value.
+  </p>
 
   <div id='editor_holder'></div>
   <button id='submit'>Submit (console.log)</button>
 
   <script>
-    // Global Select2 options
-    // JSONEditor.plugins.select2.width = "300px";
 
     // Initialize the editor with a JSON schema
     var editor = new JSONEditor(document.getElementById('editor_holder'), {
