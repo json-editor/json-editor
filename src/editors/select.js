@@ -331,7 +331,8 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
       }
 
       // If the previous value is still in the new select options, stick with it
-      if(select_options.indexOf(prev_value) !== -1) {
+      // We have not found a case where else is preferable since it breakes when you reorder the enum source
+      if(true) {
         this.input.value = prev_value;
         this.value = prev_value;
       }
