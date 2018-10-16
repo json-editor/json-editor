@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>JSON Editor enumSource Integration Example</title>
+    <script src="../dist/jsoneditor.min.js"></script>
+    <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
+</head>
+
+<body>
+  <h1>Enum source sort example</h1>
+
+  <p style='margin-bottom:20px;'>
+    This example lets you edit a selection of values from an editable enumSource.
+    The selection must have unique items, which is useful to showcase an issue
+    where any changes to ordering of the enumSource array reset selections to a start value.
+  </p>
+
+  <div id='editor_holder'></div>
+  <button id='submit'>Submit (console.log)</button>
+
+  <script>
+
+    // Initialize the editor with a JSON schema
+    var editor = new JSONEditor(document.getElementById('editor_holder'), {
+      schema: {
+        type: "object",
+        title: "Text",
+        required: ["selectedFonts", "possibleFonts"],
+        properties: {
+          selectedFonts: {
+            type: "array",
+            format: "table",
+            uniqueItems: true,
+            items: {
+              type: "string",
+              enumSource: "possible_fonts",
+              watch: {
+                "possible_fonts": "root.possibleFonts"
+              }
+            },
+            default: ["Arial", "Times"]
+          },
+          possibleFonts: {
+            type: "array",
+            format: 'table',
+            items: {
+              type: "string"
+            },
+            default: ["Arial", "Times", "Helvetica", "Comic Sans"],
+            options: {
+              collapsed: false
+            }
+          }
+        }
+      }
+    });
+
+    // Hook up the submit button to log to the console
+    document.getElementById('submit').addEventListener('click', function () {
+      // Get the value from the editor
+      console.log(editor.getValue());
+    });
+  </script>
+</body>
+
+</html>
