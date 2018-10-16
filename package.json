@@ -26,6 +26,7 @@
     "prepare": "./node_modules/.bin/grunt",
     "build": "npm install && ./node_modules/.bin/grunt",
     "start": "./node_modules/.bin/grunt watch",
+    "serve": "./node_modules/.bin/grunt serve",
     "test": "./node_modules/.bin/grunt test",
     "serve-test": "./node_modules/.bin/grunt serve-test",
     "docker-test": "cd tests && docker-compose run --rm node npm run build && docker-compose up -d && docker-compose ps && docker-compose run --rm codeceptjs codeceptjs run --grep '(?=.*)^(?!.*@optional)'",
