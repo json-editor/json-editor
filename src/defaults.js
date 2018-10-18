@@ -272,6 +272,10 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
   // If the schema is a simple type
   if(typeof schema.type === "string") return schema.type;
 });
+// Use specialized editor for signatures
+JSONEditor.defaults.resolvers.unshift(function(schema) {
+  if(schema.type === "string" && schema.format === "signature") return "signature";
+});
 // Use a specialized editor for ratings
 JSONEditor.defaults.resolvers.unshift(function(schema) {
   if(schema.type === "integer" && schema.format === "rating") return "rating";
