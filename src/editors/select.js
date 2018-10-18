@@ -12,6 +12,9 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
       return;
     }
 
+    if(initial) this.is_dirty = false;
+    else if(this.jsoneditor.options.show_errors === "change") this.is_dirty = true;
+
     this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)];
     if(this.select2) {
       if(this.select2v4)
@@ -202,6 +205,8 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     // If valid hasn't changed
     if(new_val === this.value) return;
 
+    this.is_dirty = true;
+
     // Store new value and propogate change event
     this.value = new_val;
     this.onChange(true);
@@ -382,5 +387,27 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     }
 
     this._super();
+  },
+  showValidationErrors: function (errors) {
+    var self = this;
+
+    if (this.jsoneditor.options.show_errors === "always") {}
+    else if(!this.is_dirty && this.previous_error_setting===this.jsoneditor.options.show_errors) return;
+
+    this.previous_error_setting = this.jsoneditor.options.show_errors;
+
+    var messages = [];
+    $each(errors, function (i, error) {
+      if (error.path === self.path) {
+        messages.push(error.message);
+      }
+    });
+
+    if (messages.length) {
+      this.theme.addInputError(this.input, messages.join('. ') + '.');
+    }
+    else {
+      this.theme.removeInputError(this.input);
+    }
   }
 });
