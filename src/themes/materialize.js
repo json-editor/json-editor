@@ -78,11 +78,19 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
       if (type && type === 'checkbox') {
 
         ctrl = document.createElement('p');
-        ctrl.appendChild(input);
         if (label) {
+          var span = document.createElement('span');
+          span.innerHTML = label.innerHTML;
+          label.innerHTML = '';
           label.setAttribute('for', input.id);
           ctrl.appendChild(label);
+          label.appendChild(input);
+          label.appendChild(span);
         }
+        else {
+          ctrl.appendChild(input);
+        }
+
         return ctrl;
 
       }
