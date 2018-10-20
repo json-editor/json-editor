@@ -17,7 +17,7 @@ JSONEditor.defaults.translate = function(key, variables) {
   var string = lang[key] || JSONEditor.defaults.languages[JSONEditor.defaults.default_language][key];
   
   if(typeof string === "undefined") throw "Unknown translate string "+key;
-
+  
   if(variables) {
     for(var i=0; i<variables.length; i++) {
       string = string.replace(new RegExp('\\{\\{'+i+'}}','g'),variables[i]);
@@ -246,7 +246,7 @@ JSONEditor.plugins = {
 
   },
   select2: {
-  
+    
   },
   selectize: {
   }
