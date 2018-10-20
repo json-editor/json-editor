@@ -61,7 +61,6 @@ module.exports = function(grunt) {
           'src/editors/array/selectize.js',
           'src/editors/starrating.js',
           'src/editors/datetime.js',
-          'src/editors/signature.js',
 
           // All the themes and iconlibs
           'src/theme.js',
@@ -216,7 +215,7 @@ module.exports = function(grunt) {
 
     // Default task.
   grunt.registerTask('default', ['jshint:beforeconcat','concat','jshint:afterconcat','uglify','cssmin']);
-
+  
   grunt.registerTask('rawbuild', ['concat','uglify','cssmin']);
 
 };
