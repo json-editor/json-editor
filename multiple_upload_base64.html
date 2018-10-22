@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>JSON Editor multiple file upload (base64)</title>
+    <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor/dist/jsoneditor.min.js"></script>
+  </head>
+  <body>
+    <h1>JSON Editor multiple file upload (base64)</h1>
+
+    <div>Upload multiple files simultaneously. Add multiple files in the upload dialog and new rows in the picture array will automatically be added. Description will not be overwritten for the current selected element.
+    </div>
+    
+    <div id='editor_holder'></div>
+    <button id='submit'>Submit (console.log)</button>
+    
+    <script>
+      // Initialize the editor with a JSON schema
+      var editor = new JSONEditor(document.getElementById('editor_holder'),{
+        "schema": {
+          "type": "object",
+          "title": "Car",
+          "properties": {
+              "pictures": {
+                  "type": "array",
+                  "title": "Pictures",
+                  "items": {
+                      "type": "object",
+                      "title": "Image",
+                      "format": "grid",
+                      "properties": {
+                          "file": {
+                              "type": "string",
+                              "title": "file",
+                              "media": {
+                                  "binaryEncoding": "base64",
+                                  "type": "img/png"
+                              },
+                              "options": {
+                                  "grid_columns": 6,
+                                  "multiple": true,
+                              }
+                          },
+                          "description": {
+                              "type": "string",
+                              "title": "Description",
+                              "options": {
+                                  "grid_columns": 6
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+        }
+      });
+
+      // Hook up the submit button to log to the console
+      document.getElementById('submit').addEventListener('click',function() {
+        // Get the value from the editor
+        console.log(editor.getValue());
+      });
+    </script>
+  </body>
+</html>
