@@ -82,7 +82,8 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
     this.hide_delete_last_row_buttons = this.hide_delete_buttons || this.options.disable_array_delete_last_row || this.jsoneditor.options.disable_array_delete_last_row;
     this.hide_move_buttons = this.options.disable_array_reorder || this.jsoneditor.options.disable_array_reorder;
     this.hide_add_button = this.options.disable_array_add || this.jsoneditor.options.disable_array_add;
-	this.show_copy_button = this.options.enable_array_copy || this.jsoneditor.options.enable_array_copy;
+    this.show_copy_button = this.options.enable_array_copy || this.jsoneditor.options.enable_array_copy;
+    this.array_controls_top = this.options.array_controls_top || this.jsoneditor.options.array_controls_top;
   },
   build: function() {
     var self = this;
@@ -125,12 +126,19 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
         this.row_holder = document.createElement('div');
         this.panel.appendChild(this.row_holder);
         this.controls = this.theme.getButtonHolder();
-        this.panel.appendChild(this.controls);
+        if (this.array_controls_top) {
+          this.title.appendChild(this.controls);
+        }
+        else {
+          this.panel.appendChild(this.controls);
+        }
       }
     }
     else {
         this.panel = this.theme.getIndentedPanel();
         this.container.appendChild(this.panel);
+        this.title_controls = this.theme.getHeaderButtonHolder();
+        this.panel.appendChild(this.title_controls);
         this.controls = this.theme.getButtonHolder();
         this.panel.appendChild(this.controls);
         this.row_holder = document.createElement('div');
