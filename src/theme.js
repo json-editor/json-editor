@@ -432,5 +432,8 @@ JSONEditor.AbstractTheme = Class.extend({
   },
   getFirstTab: function(holder){
     return holder.firstChild.firstChild;
+  },
+  getInputGroup: function(input, buttons) {
+    return undefined;
   }
 });

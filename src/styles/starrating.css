@@ -7,7 +7,7 @@
   display: none;
 }  /* Remove radio buttons */
 .starrating > label:before {
-  content: '\2605'; /* Empty Star */
+  content: '\2606'; /* Empty Star */
   margin: 1px;
   font-size: 18px;
   font-style:normal;
@@ -31,11 +31,12 @@
 }
 .starrating > input:checked ~ label:before,
 .starrating:not(.readonly) > input:hover ~ label:before {
-  content: '\2606'; /* Filled Star when star checked/hover */
+  content: '\2605'; /* Filled Star when star checked/hover */
   text-shadow: 0 0 1px rgba(0,20,20,1);
 }
 .starrating .starrating-display {
   position: relative;
+  direction: rtl;     
   text-align: center;
   font-size: 10px;
   line-height: 0px;

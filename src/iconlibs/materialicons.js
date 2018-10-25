@@ -1,16 +1,19 @@
 JSONEditor.defaults.iconlibs.materialicons = JSONEditor.AbstractIconLib.extend({
 
     mapping: {
-        collapse: 'arrow_drop_up',
-        expand: 'arrow_drop_down',
-        "delete": 'delete',
-        edit: 'edit',
-        add: 'add',
-        cancel: 'cancel',
-        save: 'save',
-        moveup: 'arrow_upward',
-        movedown: 'arrow_downward',
-        copy: 'content_copy'
+      collapse: 'arrow_drop_up',
+      expand: 'arrow_drop_down',
+      "delete": 'delete',
+      edit: 'edit',
+      add: 'add',
+      cancel: 'cancel',
+      save: 'save',
+      moveup: 'arrow_upward',
+      movedown: 'arrow_downward',
+      copy: 'content_copy',
+      clear: 'highlight_off',
+      time: 'access_time',
+      calendar: 'calendar_today'
     },
 
     icon_class: 'material-icons',

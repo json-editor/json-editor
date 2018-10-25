@@ -8,7 +8,10 @@ JSONEditor.defaults.iconlibs.foundation3 = JSONEditor.AbstractIconLib.extend({
     cancel: 'x-circle',
     save: 'save',
     moveup: 'arrow-up',
-    movedown: 'arrow-down'
+    movedown: 'arrow-down',
+    clear: 'x-circle',
+    time: 'clock',
+    calendar: 'calendar'
   },
   icon_prefix: 'fi-'
 });
