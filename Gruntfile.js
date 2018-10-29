@@ -28,8 +28,10 @@ module.exports = function(grunt) {
 
           // Simple inheritance
           'src/class.js',
+
           // IE9 polyfills
           'src/ie9.js',
+
           // Utils like extend, each, and trigger
           'src/utilities.js',
 
@@ -61,6 +63,7 @@ module.exports = function(grunt) {
           'src/editors/array/selectize.js',
           'src/editors/starrating.js',
           'src/editors/datetime.js',
+          'src/editors/signature.js',
 
           // All the themes and iconlibs
           'src/theme.js',
@@ -197,7 +200,7 @@ module.exports = function(grunt) {
   });
 
   // These plugins provide necessary tasks.
-  grunt.loadNpmTasks('grunt-string-replace')
+  grunt.loadNpmTasks('grunt-string-replace');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jshint');
