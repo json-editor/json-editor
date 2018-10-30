@@ -218,7 +218,7 @@ module.exports = function(grunt) {
 
     // Default task.
   grunt.registerTask('default', ['jshint:beforeconcat','concat','jshint:afterconcat','uglify','cssmin']);
-
+  
   grunt.registerTask('rawbuild', ['concat','uglify','cssmin']);
 
 };

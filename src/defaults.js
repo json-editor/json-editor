@@ -13,17 +13,17 @@ JSONEditor.defaults.options.prompt_before_delete = true;
 JSONEditor.defaults.translate = function(key, variables) {
   var lang = JSONEditor.defaults.languages[JSONEditor.defaults.language];
   if(!lang) throw "Unknown language "+JSONEditor.defaults.language;
-
+  
   var string = lang[key] || JSONEditor.defaults.languages[JSONEditor.defaults.default_language][key];
-
+  
   if(typeof string === "undefined") throw "Unknown translate string "+key;
-
+  
   if(variables) {
     for(var i=0; i<variables.length; i++) {
       string = string.replace(new RegExp('\\{\\{'+i+'}}','g'),variables[i]);
     }
   }
-
+  
   return string;
 };
 
@@ -246,7 +246,7 @@ JSONEditor.plugins = {
 
   },
   select2: {
-
+    
   },
   selectize: {
   }
@@ -359,4 +359,3 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
 JSONEditor.defaults.resolvers.unshift(function(schema) {
   if (schema.type === "string" && schema.format === "starrating") return "starrating";
 });
-
