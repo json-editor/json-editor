@@ -109,3 +109,10 @@ Scenario('should be readonly if specified and not disabled', async (I) => {
   value = await I.grabAttributeFrom('[name="root[string]"]', 'readonly');
   assert.equal(value, 'true');
 });
+
+Scenario('should have a custom attribute with custom value', async (I) => {
+  I.amOnPage('string-custom-attributes.html');
+  I.seeElement('[name="root[custom_attributes]"]');
+  value = await I.grabAttributeFrom('[name="root[custom_attributes]"]', 'custom-attribute');
+  assert.equal(value, 'custom-value');
+});
