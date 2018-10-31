@@ -7,7 +7,7 @@ JSONEditor.defaults.editors.base64 = JSONEditor.AbstractEditor.extend({
     fr_multiple.addEventListener("load", function(event) {
       if (self.count == self.current_item_index) {
         // Overwrite existing file by default, leave other properties unchanged
-        self.value[self.count][self.schema.title] = event.target.result;
+        self.value[self.count][self.key] = event.target.result;
       } else {
         var temp_object = {};
         // Create empty object
@@ -15,7 +15,7 @@ JSONEditor.defaults.editors.base64 = JSONEditor.AbstractEditor.extend({
           temp_object[key] = "";
         }
         // Set object media file
-        temp_object[self.schema.title] = event.target.result;
+        temp_object[self.key] = event.target.result;
         self.value.splice(self.count, 0, temp_object); // insert new file object
       }
 
