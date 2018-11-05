@@ -483,7 +483,7 @@ JSONEditor.AbstractEditor = Class.extend({
     else if(this.parent && this.parent.schema && Array.isArray(this.parent.schema.required)) return this.parent.schema.required.indexOf(this.key) > -1;
     else if(this.jsoneditor.options.required_by_default) return true;
     else return false;
-  },  
+  },
   getDisplayText: function(arr) {
     var disp = [];
     var used = {};
@@ -524,7 +524,7 @@ JSONEditor.AbstractEditor = Class.extend({
       else if(el.format) name = el.format;
       else if(el.type) name = el.type;
       else if(el.description) name = el.description;
-      else if(JSON.stringify(el).length < 50) name = JSON.stringify(el);
+      else if(JSON.stringify(el).length < 500) name = JSON.stringify(el);
       else name = "type";
       
       disp.push(name);
