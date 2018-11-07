@@ -179,7 +179,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
     else if(typeof this.schema.minLength !== "undefined") this.input.setAttribute('pattern','.{'+this.schema.minLength+',}');
 
     if(this.options.compact) {
-      this.container.className += ' compact';
+      this.container.classList.add('compact');
     }
     else {
       if(this.options.input_width) this.input.style.width = this.options.input_width;

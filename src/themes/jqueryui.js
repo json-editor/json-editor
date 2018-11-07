@@ -7,13 +7,13 @@ JSONEditor.defaults.themes.jqueryui = JSONEditor.AbstractTheme.extend({
   },
   getTableHeaderCell: function(text) {
     var el = this._super(text);
-    el.className = 'ui-state-active';
+    el.classList.add('ui-state-active');
     el.style.fontWeight = 'bold';
     return el;
   },
   getTableCell: function() {
     var el = this._super();
-    el.className = 'ui-widget-content';
+    el.classList.add('ui-widget-content');
     return el;
   },
   getHeaderButtonHolder: function() {
@@ -50,7 +50,7 @@ JSONEditor.defaults.themes.jqueryui = JSONEditor.AbstractTheme.extend({
   },
   getButtonHolder: function() {
     var el = document.createElement('div');
-    el.className = 'ui-buttonset';
+    el.classList.add('ui-buttonset');
     el.style.fontSize = '.7em';
     return el;
   },
@@ -63,27 +63,27 @@ JSONEditor.defaults.themes.jqueryui = JSONEditor.AbstractTheme.extend({
   },
   getButton: function(text, icon, title) {
     var button = document.createElement("button");
-    button.className = 'ui-button ui-widget ui-state-default ui-corner-all';
+    button.classList.add('ui-button', 'ui-widget', 'ui-state-default', 'ui-corner-all');
 
     // Icon only
     if(icon && !text) {
-      button.className += ' ui-button-icon-only';
-      icon.className += ' ui-button-icon-primary ui-icon-primary';
+      button.classList.add('ui-button-icon-only');
+      icon.classList.add('ui-button-icon-primary', 'ui-icon-primary');
       button.appendChild(icon);
     }
     // Icon and Text
     else if(icon) {
-      button.className += ' ui-button-text-icon-primary';
-      icon.className += ' ui-button-icon-primary ui-icon-primary';
+      button.classList.add('ui-button-text-icon-primary');
+      icon.classList.add('ui-button-icon-primary', 'ui-icon-primary');
       button.appendChild(icon);
     }
     // Text only
     else {
-      button.className += ' ui-button-text-only';
+      button.classList.add('ui-button-text-only');
     }
 
     var el = document.createElement('span');
-    el.className = 'ui-button-text';
+    el.classList.add('ui-button-text');
     el.textContent = text||title||".";
     button.appendChild(el);
 
@@ -93,27 +93,27 @@ JSONEditor.defaults.themes.jqueryui = JSONEditor.AbstractTheme.extend({
   },
   setButtonText: function(button,text, icon, title) {
     button.innerHTML = '';
-    button.className = 'ui-button ui-widget ui-state-default ui-corner-all';
+    button.classList.add('ui-button', 'ui-widget', 'ui-state-default', 'ui-corner-all');
 
     // Icon only
     if(icon && !text) {
-      button.className += ' ui-button-icon-only';
-      icon.className += ' ui-button-icon-primary ui-icon-primary';
+      button.classList.add('ui-button-icon-only');
+      icon.classList.add('ui-button-icon-primary', 'ui-icon-primary');
       button.appendChild(icon);
     }
     // Icon and Text
     else if(icon) {
-      button.className += ' ui-button-text-icon-primary';
-      icon.className += ' ui-button-icon-primary ui-icon-primary';
+      button.classList.add('ui-button-text-icon-primary');
+      icon.classList.add('ui-button-icon-primary', 'ui-icon-primary');
       button.appendChild(icon);
     }
     // Text only
     else {
-      button.className += ' ui-button-text-only';
+      button.classList.add('ui-button-text-only');
     }
 
     var el = document.createElement('span');
-    el.className = 'ui-button-text';
+    el.classList.add('ui-button-text');
     el.textContent = text||title||".";
     button.appendChild(el);
 
@@ -121,7 +121,7 @@ JSONEditor.defaults.themes.jqueryui = JSONEditor.AbstractTheme.extend({
   },
   getIndentedPanel: function() {
     var el = document.createElement('div');
-    el.className = 'ui-widget-content ui-corner-all';
+    el.classList.add('ui-widget-content', 'ui-corner-all');
     el.style.padding = '1em 1.4em';
     el.style.marginBottom = '20px';
     return el;
@@ -142,7 +142,7 @@ JSONEditor.defaults.themes.jqueryui = JSONEditor.AbstractTheme.extend({
     }
     if(!input.errmsg) {
       input.errmsg = document.createElement('div');
-      input.errmsg.className = 'ui-state-error';
+      input.errmsg.classList.add('ui-state-error');
       input.controls.appendChild(input.errmsg);
     }
     else {
@@ -159,11 +159,13 @@ JSONEditor.defaults.themes.jqueryui = JSONEditor.AbstractTheme.extend({
     input.errmsg.style.display = 'none';
   },
   markTabActive: function(row) {
-    row.tab.className = row.tab.className.replace(/\s?ui-widget-header/g,'').replace(/\s?ui-state-active/g,'')+' ui-state-active';
+    row.tab.classList.remove('ui-widget-header');
+    row.tab.classList.add('ui-state-active');
     row.container.style.display = '';
   },
   markTabInactive: function(row) {
-    row.tab.className = row.tab.className.replace(/\s?ui-state-active/g,'').replace(/\s?ui-widget-header/g,'')+' ui-widget-header';
+    row.tab.classList.add('ui-widget-header');
+    row.tab.classList.remove('ui-state-active');
     row.container.style.display = 'none';
   }
 });

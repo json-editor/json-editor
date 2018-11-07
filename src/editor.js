@@ -226,7 +226,7 @@ JSONEditor.AbstractEditor = Class.extend({
     }
     
     var btn = this.theme.getButton(text, icon, title);
-    btn.className += ' ' + btnClass + ' ';
+    btn.classList.add(btnClass);
     return btn;
   },
   setButtonText: function(button, text, icon, title) {
@@ -327,7 +327,7 @@ JSONEditor.AbstractEditor = Class.extend({
       }
     }
     
-    if(data.class) link.className = link.className + ' ' + data.class;
+    if(data.class) link.classList.add(data.class);
 
     return holder;
   },

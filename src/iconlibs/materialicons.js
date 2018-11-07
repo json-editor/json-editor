@@ -34,7 +34,7 @@ JSONEditor.defaults.iconlibs.materialicons = JSONEditor.AbstractIconLib.extend({
 
         // @see http://materializecss.com/icons.html
         var i = document.createElement('i');
-        i.className = this.icon_class;
+        i.classList.add(this.icon_class);
         var t = document.createTextNode(mapping);
         i.appendChild(t);
         return i;
