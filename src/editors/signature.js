@@ -51,7 +51,7 @@ JSONEditor.defaults.editors.signature = JSONEditor.defaults.editors.string.exten
       // create button containers and add clear signature button
       var buttons = document.createElement('div');
       var clearButton = document.createElement('button');
-      clearButton.classList.add('tiny button');
+      clearButton.classList.add('tiny', 'button');
       clearButton.innerHTML='Clear signature';
       buttons.appendChild(clearButton);
       signatureContainer.appendChild(buttons);
