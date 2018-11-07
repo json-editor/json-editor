@@ -5,7 +5,7 @@ JSONEditor.defaults.editors.starrating = JSONEditor.defaults.editors.string.exte
     if(!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle());
     if(this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description);
     if(this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText);
-    if(this.options.compact) this.container.className += ' compact';
+    if(this.options.compact) this.container.classList.add('compact');
 
     this.ratingContainer = document.createElement('div');
     this.ratingContainer.classList.add('starrating');

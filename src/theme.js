@@ -35,7 +35,7 @@ JSONEditor.AbstractTheme = Class.extend({
   },
   getGridRow: function() {
     var el = document.createElement('div');
-    el.className = 'row';
+    el.classList.add('row');
     return el;
   },
   getGridColumn: function() {
@@ -201,7 +201,7 @@ JSONEditor.AbstractTheme = Class.extend({
   },
   getFormControl: function(label, input, description, infoText) {
     var el = document.createElement('div');
-    el.className = 'form-control';
+    el.classList.add('form-control');
     if(label) el.appendChild(label);
     if(input.type === 'checkbox' && label) {
       label.insertBefore(input,label.firstChild);

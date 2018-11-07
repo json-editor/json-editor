@@ -21,7 +21,7 @@ JSONEditor.AbstractIconLib = Class.extend({
     if(!iconclass) return null;
     
     var i = document.createElement('i');
-    i.className = iconclass;
+    i.classList.add(iconclass);
     return i;
   }
 });

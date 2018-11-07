@@ -9,7 +9,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    * @see http://materializecss.com/grid.html
    */
   setGridColumnSize: function(el, size) {
-      el.className = 'col s' + size;
+      el.classList.add('col s' + size);
     },
 
     /**
@@ -43,13 +43,13 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
 
       // Prepare icon.
       if (text) {
-        icon.className += ' left';
+        icon.classList.add('left');
         icon.style.marginRight = '5px';
       }
 
       // Create and return button.
       var el = this._super(text, icon, title);
-      el.className = 'waves-effect waves-light btn';
+      el.classList.add('waves-effect', 'waves-light', 'btn');
       el.style.fontSize = '0.75rem';
       el.style.height = '24px';
       el.style.lineHeight = '24px';
@@ -100,7 +100,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
 
       // Not .input-field for select wrappers.
       if (!type || !type.startsWith('select'))
-        ctrl.className = 'input-field';
+        ctrl.classList.add('input-field');
 
       // Color needs special attention.
       if (type && type === 'color') {
@@ -123,7 +123,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
 
   getDescription: function(text) {
       var el = document.createElement('div');
-      el.className = 'grey-text';
+      el.classList.add('grey-text');
       el.style.marginTop = '-15px';
       el.innerHTML = text;
       return el;
@@ -159,14 +159,14 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
 
   getIndentedPanel: function() {
       var el = document.createElement("div");
-      el.className = "card-panel";
+      el.classList.add("card-panel");
       return el;
     },
 
   getTable: function() {
 
       var el = document.createElement('table');
-      el.className = 'striped bordered';
+      el.classList.add('striped', 'bordered');
       el.style.marginBottom = '10px';
       return el;
 
@@ -217,7 +217,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
       ].join("\n");
 
       var el = document.createElement('div');
-      el.className = 'row card-panel';
+      el.classList.add('row', 'card-panel');
       el.innerHTML = html;
       return el;
 
@@ -243,7 +243,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
   getTab: function(span) {
 
       var el = document.createElement('li');
-      el.className = 'tab';
+      el.classList.add('tab');
       this.applyStyles(el,
         {
         width: '100%',
@@ -342,7 +342,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
 
       // Append an error message div.
       el = document.createElement('div');
-      el.className = 'error-text red-text';
+      el.classList.add('error-text', 'red-text');
       el.textContent = text;
       parent.appendChild(el);
 
@@ -384,7 +384,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
   getSelectInput: function(options) {
 
       var select = this._super(options);
-      select.className = 'browser-default';
+      select.classList.add('browser-default');
       return select;
 
     },
@@ -420,7 +420,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
   getModal: function() {
 
       var el = document.createElement('div');
-      el.className = 'card-panel z-depth-3';
+      el.classList.add('card-panel', 'z-depth-3');
       el.style.padding = '5px';
       el.style.position = 'absolute';
       el.style.zIndex = '10';

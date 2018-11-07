@@ -1,12 +1,12 @@
 JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
   getSelectInput: function(options) {
     var el = this._super(options);
-    el.className += 'form-control';
+    el.classList.add('form-control');
     //el.style.width = 'auto';
     return el;
   },
   setGridColumnSize: function(el,size) {
-    el.className = 'col-md-'+size;
+    el.classList.add('col-md-'+size);
   },
   afterInputReady: function(input) {
     if(input.controlgroup) return;
@@ -24,7 +24,7 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
   },
   getTextareaInput: function() {
     var el = document.createElement('textarea');
-    el.className = 'form-control';
+    el.classList.add('form-control');
     return el;
   },
   getRangeInput: function(min, max, step) {
@@ -34,7 +34,7 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
   getFormInputField: function(type) {
     var el = this._super(type);
     if(type !== 'checkbox') {
-      el.className += 'form-control';
+      el.classList.add('form-control');
     }
     return el;
   },
@@ -42,7 +42,7 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
     var group = document.createElement('div');
 
     if(label && input.type === 'checkbox') {
-      group.className += ' checkbox';
+      group.classList.add('checkbox');
       label.appendChild(input);
       label.style.fontSize = '14px';
       group.style.marginTop = '0';
@@ -52,9 +52,9 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
       input.style.cssFloat = 'left';
     }
     else {
-      group.className += ' form-group';
+      group.classList.add('form-group');
       if(label) {
-        label.className += ' control-label';
+        label.classList.add('control-label');
         group.appendChild(label);
       }
 
@@ -68,13 +68,13 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
   },
   getIndentedPanel: function() {
     var el = document.createElement('div');
-    el.className = 'well well-sm';
+    el.classList.add('well', 'well-sm');
     el.style.paddingBottom = 0;
     return el;
   },
   getInfoButton: function(text) {
     var icon = document.createElement('span');
-    icon.className = "glyphicon glyphicon-info-sign pull-right";
+    icon.classList.add('glyphicon', 'glyphicon-info-sign', 'pull-right');
     icon.style.padding = ".25rem";
     icon.style.position = "relative";
     icon.style.display = "inline-block";
@@ -104,7 +104,7 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
   },
   getFormInputDescription: function(text) {
     var el = document.createElement('p');
-    el.className = 'help-block';
+    el.classList.add('help-block');
     el.innerHTML = text;
     return el;
   },
@@ -115,17 +115,17 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
   },
   getButtonHolder: function() {
     var el = document.createElement('div');
-    el.className = 'btn-group';
+    el.classList.add('btn-group');
     return el;
   },
   getButton: function(text, icon, title) {
     var el = this._super(text, icon, title);
-    el.className += 'btn btn-default';
+    el.classList.add('btn', 'btn-default');
     return el;
   },
   getTable: function() {
     var el = document.createElement('table');
-    el.className = 'table table-bordered';
+    el.classList.add('table', 'table-bordered');
     el.style.width = 'auto';
     el.style.maxWidth = 'none';
     return el;
@@ -136,11 +136,10 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
         this.queuedInputErrorText = text;
         return;
     }
-    input.controlgroup.className = input.controlgroup.className.replace(/\s?has-error/g,'');
-    input.controlgroup.className += ' has-error';
+    input.controlgroup.classList.add('has-error');
     if(!input.errmsg) {
       input.errmsg = document.createElement('p');
-      input.errmsg.className = 'help-block errormsg';
+      input.errmsg.classList.add('help-block', 'errormsg');
       input.controlgroup.appendChild(input.errmsg);
     }
     else {
@@ -155,7 +154,7 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
     }
     if(!input.errmsg) return;
     input.errmsg.style.display = 'none';
-    input.controlgroup.className = input.controlgroup.className.replace(/\s?has-error/g,'');
+    input.controlgroup.classList.remove('has-error');
   },
   getTabHolder: function(propertyName) {
     var pName = (typeof propertyName === 'undefined')? "" : propertyName;
@@ -197,36 +196,34 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
   },
   getTabContent: function() {
     var el = document.createElement('div');
-    el.className = 'tab-pane';
+    el.classList.add('tab-pane');
     el.setAttribute('role', 'tabpanel');
     return el;
   },
   getTopTabContent: function() {
     var el = document.createElement('div');
-    el.className = 'tab-pane';
+    el.classList.add('tab-pane');
     el.setAttribute('role', 'tabpanel');
     return el;
   },
   markTabActive: function(row) {
-    row.tab.className = row.tab.className.replace(/\s?active/g,'');
-    row.tab.className += ' active';
-    row.container.className = row.container.className.replace(/\s?active/g,'');
-    row.container.className += ' active';
+    row.tab.classList.add('active');
+    row.container.classList.add('active');
     // row.container.style.display = '';
   },
   markTabInactive: function(row) {
-    row.tab.className = row.tab.className.replace(/\s?active/g,'');
-    row.container.className = row.container.className.replace(/\s?active/g,'');
+    row.tab.classList.remove('active');
+    row.container.classList.remove('active');
     // row.container.style.display = 'none';
   },
   getProgressBar: function() {
     var min = 0, max = 100, start = 0;
 
     var container = document.createElement('div');
-    container.className = 'progress';
+    container.classList.add('progress');
 
     var bar = document.createElement('div');
-    bar.className = 'progress-bar';
+    bar.classList.add('progress-bar');
     bar.setAttribute('role', 'progressbar');
     bar.setAttribute('aria-valuenow', start);
     bar.setAttribute('aria-valuemin', min);
@@ -249,7 +246,7 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
     if (!progressBar) return;
 
     var bar = progressBar.firstChild;
-    progressBar.className = 'progress progress-striped active';
+    progressBar.classList.add('progress', 'progress-striped', 'active');
     bar.removeAttribute('aria-valuenow');
     bar.style.width = '100%';
     bar.innerHTML = '';
@@ -258,11 +255,11 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
     if (!input) return;
 
     var inputGroupContainer = document.createElement('div');
-    inputGroupContainer.className = 'input-group';
+    inputGroupContainer.classList.add('input-group');
     inputGroupContainer.appendChild(input);
 
     var inputGroup = document.createElement('div');
-    inputGroup.className = 'input-group-btn';
+    inputGroup.classList.add('input-group-btn');
     inputGroupContainer.appendChild(inputGroup);
 
     for(var i=0;i<buttons.length;i++) {

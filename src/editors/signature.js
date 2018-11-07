@@ -19,12 +19,12 @@ JSONEditor.defaults.editors.signature = JSONEditor.defaults.editors.string.exten
 
       // Required to keep height
       var signatureContainer = document.createElement('div');
-      signatureContainer.className = 'signature-container';
+      signatureContainer.classList.add('signature-container');
 
       // Create canvas for signature pad
       var canvas = document.createElement('canvas');
       canvas.setAttribute('name', formname);
-      canvas.className = 'signature';
+      canvas.classList.add('signature');
       signatureContainer.appendChild(canvas);
 
 
@@ -51,7 +51,7 @@ JSONEditor.defaults.editors.signature = JSONEditor.defaults.editors.string.exten
       // create button containers and add clear signature button
       var buttons = document.createElement('div');
       var clearButton = document.createElement('button');
-      clearButton.className='tiny button';
+      clearButton.classList.add('tiny', 'button');
       clearButton.innerHTML='Clear signature';
       buttons.appendChild(clearButton);
       signatureContainer.appendChild(buttons);

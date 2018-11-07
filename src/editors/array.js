@@ -504,7 +504,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
     // Buttons to delete row, move row up, and move row down
     if(!self.hide_delete_buttons) {
       self.rows[i].delete_button = this.getButton(self.getItemTitle(),'delete',this.translate('button_delete_row_title',[self.getItemTitle()]));
-      self.rows[i].delete_button.className += ' delete';
+      self.rows[i].delete_button.classList.add('delete');
       self.rows[i].delete_button.setAttribute('data-i',i);
       self.rows[i].delete_button.addEventListener('click',function(e) {
         e.preventDefault();
@@ -550,7 +550,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
 	//Button to copy an array element and add it as last element
 	if(self.show_copy_button){
         self.rows[i].copy_button = this.getButton(self.getItemTitle(),'copy','Copy '+self.getItemTitle());
-        self.rows[i].copy_button.className += ' copy';
+        self.rows[i].copy_button.classList.add('copy');
         self.rows[i].copy_button.setAttribute('data-i',i);
         self.rows[i].copy_button.addEventListener('click',function(e) {
             var value = self.getValue();
@@ -576,7 +576,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
 
     if(i && !self.hide_move_buttons) {
       self.rows[i].moveup_button = this.getButton('','moveup',this.translate('button_move_up_title'));
-      self.rows[i].moveup_button.className += ' moveup';
+      self.rows[i].moveup_button.classList.add('moveup');
       self.rows[i].moveup_button.setAttribute('data-i',i);
       self.rows[i].moveup_button.addEventListener('click',function(e) {
         e.preventDefault();
@@ -603,7 +603,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
 
     if(!self.hide_move_buttons) {
       self.rows[i].movedown_button = this.getButton('','movedown',this.translate('button_move_down_title'));
-      self.rows[i].movedown_button.className += ' movedown';
+      self.rows[i].movedown_button.classList.add('movedown');
       self.rows[i].movedown_button.setAttribute('data-i',i);
       self.rows[i].movedown_button.addEventListener('click',function(e) {
         e.preventDefault();
