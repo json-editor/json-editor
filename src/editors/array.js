@@ -105,7 +105,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
       if(this.schema.format === 'tabs-top') {
         this.controls = this.theme.getHeaderButtonHolder();
         this.title.appendChild(this.controls);
-        this.tabs_holder = this.theme.getTopTabHolder(this.getItemTitle());
+        this.tabs_holder = this.theme.getTopTabHolder(this.getValidId(this.getItemTitle()));
         this.container.appendChild(this.tabs_holder);
         this.row_holder = this.theme.getTopTabContentHolder(this.tabs_holder);
 
@@ -114,7 +114,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
       else if(this.schema.format === 'tabs') {
         this.controls = this.theme.getHeaderButtonHolder();
         this.title.appendChild(this.controls);
-        this.tabs_holder = this.theme.getTabHolder(this.getItemTitle());
+        this.tabs_holder = this.theme.getTabHolder(this.getValidId(this.getItemTitle()));
         this.container.appendChild(this.tabs_holder);
         this.row_holder = this.theme.getTabContentHolder(this.tabs_holder);
 
@@ -483,11 +483,11 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
       self.rows[i].tab_text = document.createElement('span');
       self.rows[i].tab_text.textContent = self.rows[i].getHeaderText();
       if(self.schema.format === 'tabs-top'){
-        self.rows[i].tab = self.theme.getTopTab(self.rows[i].tab_text,self.rows[i].path);
+        self.rows[i].tab = self.theme.getTopTab(self.rows[i].tab_text,this.getValidId(self.rows[i].path));
         self.theme.addTopTab(self.tabs_holder, self.rows[i].tab);
       }
       else {
-        self.rows[i].tab = self.theme.getTab(self.rows[i].tab_text,self.rows[i].path);
+        self.rows[i].tab = self.theme.getTab(self.rows[i].tab_text,this.getValidId(self.rows[i].path));
         self.theme.addTab(self.tabs_holder, self.rows[i].tab);
       }
       self.rows[i].tab.addEventListener('click', function(e) {

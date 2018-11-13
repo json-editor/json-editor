@@ -184,7 +184,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
           }
         }
 
-        aPane.id = editor.tab_text.textContent;
+        aPane.id = self.getValidId(editor.tab_text.textContent);
 
         //For simple properties, add them on the same panel (Basic)
         if(!isObjOrArray){
@@ -393,7 +393,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
         } else {
           self.rows[idx].tab_text.textContent = self.rows[idx].getHeaderText();
         }
-        self.rows[idx].tab = self.theme.getTopTab(self.rows[idx].tab_text,self.rows[idx].tab_text.textContent);
+        self.rows[idx].tab = self.theme.getTopTab(self.rows[idx].tab_text,this.getValidId(self.rows[idx].tab_text.textContent));
         self.rows[idx].tab.addEventListener('click', function(e) {
           self.active_tab = self.rows[idx].tab;
           self.refreshTabs();
@@ -586,12 +586,12 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       this.row_container = this.theme.getGridContainer();
 
       if(isCategoriesFormat) {
-        this.tabs_holder = this.theme.getTopTabHolder(this.schema.title);
+        this.tabs_holder = this.theme.getTopTabHolder(this.getValidId(this.schema.title));
         this.tabPanesContainer = this.theme.getTopTabContentHolder(this.tabs_holder);
         this.editor_holder.appendChild(this.tabs_holder);
       }
       else {
-        this.tabs_holder = this.theme.getTabHolder(this.schema.title);
+        this.tabs_holder = this.theme.getTabHolder(this.getValidId(this.schema.title));
         this.tabPanesContainer = this.theme.getTabContentHolder(this.tabs_holder);
         this.editor_holder.appendChild(this.row_container);
       }
@@ -626,7 +626,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
 
           self.addRow(editor,self.tabs_holder,aPane);
 
-          aPane.id = editor.schema.title; //editor.schema.path//tab_text.textContent
+          aPane.id = self.getValidId(editor.schema.title); //editor.schema.path//tab_text.textContent
 
         }
         else {

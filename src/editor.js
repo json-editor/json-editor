@@ -541,6 +541,12 @@ JSONEditor.AbstractEditor = Class.extend({
     
     return disp;
   },
+
+  // Replace space(s) with "-" to create valid id value
+  getValidId: function(id) {
+    id = id === undefined ? "" : id.toString();
+    return id.replace(/\s+/g, "-");
+  },
   getOption: function(key) {
     try {
       throw "getOption is deprecated";
