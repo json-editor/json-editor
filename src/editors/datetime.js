@@ -102,7 +102,7 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
   },
   setValue: function(value, initial, from_template) {
     if (this.schema.type == 'string') {
-      this._super();
+      this._super(value, initial, from_template);
     }
     else {
       var dateValue, dateObj = new Date(value * 1000),
@@ -119,7 +119,7 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
       else if (this.schema.format == 'time') dateValue = time;
       else dateValue = date + ' ' + time;
 
-      this.value = dateValue;
+      this.input.value = dateValue;
     }
   },
   destroy: function() {
