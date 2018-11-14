@@ -442,7 +442,7 @@ JSONEditor.defaults.themes.foundation6 = JSONEditor.defaults.themes.foundation5.
   markTabInactive: function(row) {
     row.tab.classList.remove('is-active');
     row.tab.firstChild.removeAttribute('aria-selected');
-    row.container.classList.add('is-active');
+    row.container.classList.remove('is-active');
     row.container.removeAttribute('aria-selected');
   },
   addTab: function(holder, tab) {
