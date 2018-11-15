@@ -122,7 +122,7 @@ JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
   getTopTabHolder: function(propertyName) {
     var pName = (typeof propertyName === 'undefined')? "" : propertyName;
     var el = document.createElement('div');
-    el.innerHTML = "<ul class='nav nav-tabs' id='" + pName + "'></ul><div class='card-body' id='" + pName + "'></div>";
+    el.innerHTML = "<ul class='nav nav-tabs' id='" + pName + "'></ul><div class='card-body tab-content' id='" + pName + "'></div>";
     return el;
   },
   getTab: function(text,tabId) {
@@ -132,6 +132,7 @@ JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
     ael.classList.add("nav-link");
     ael.setAttribute("style",'padding:10px;');
     ael.setAttribute("href", "#" + tabId);
+    ael.setAttribute('data-toggle', 'tab');
     ael.appendChild(text);
     liel.appendChild(ael);
     return liel;
@@ -142,19 +143,30 @@ JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
     var a = document.createElement('a');
     a.classList.add('nav-link');
     a.setAttribute('href','#'+tabId);
+    a.setAttribute('data-toggle', 'tab');
     a.appendChild(text);
     el.appendChild(a);
     return el;
   },
+  getTabContent: function() {
+    var el = document.createElement('div');
+    el.classList.add('tab-pane');
+    el.setAttribute('role', 'tabpanel');
+    return el;
+  },
+  getTopTabContent: function() {
+    var el = document.createElement('div');
+    el.classList.add('tab-pane');
+    el.setAttribute('role', 'tabpanel');
+    return el;
+  },
   markTabActive: function(row) {
-    var el = row.tab.firstChild;
-    el.classList.add("active");
-    row.container.style.display = '';
+    row.tab.classList.add('active');
+    row.container.classList.add('active');
   },
   markTabInactive: function(row) {
-    var el = row.tab.firstChild;
-    el.classList.remove('active');
-    row.container.style.display = 'none';
+    row.tab.classList.remove('active');
+    row.container.classList.remove('active');
   },
   getProgressBar: function() {
     var min = 0,
