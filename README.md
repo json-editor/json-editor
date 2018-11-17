@@ -96,6 +96,11 @@ Here are all the available options:
     <td><code>false</code></td>
   </tr>
   <tr>
+    <td>compact</td>
+    <td>If <code>true</code>, the label will not be displayed/added.</td>
+    <td><code>false</code></td>
+  </tr>
+  <tr>
     <td>disable_array_add</td>
     <td>If <code>true</code>, remove all "add row" buttons from arrays.</td>
     <td><code>false</code></td>
