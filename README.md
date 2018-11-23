@@ -116,6 +116,11 @@ Here are all the available options:
     <td><code>false</code></td>
   </tr>
   <tr>
+    <td>enable_array_copy</td>
+    <td>If <code>true</code>, add copy buttons to arrays.</td>
+    <td><code>false</code></td>
+  </tr>
+  <tr>
     <td>disable_collapse</td>
     <td>If <code>true</code>, remove all collapse buttons from objects and arrays.</td>
     <td><code>false</code></td>
