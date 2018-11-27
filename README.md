@@ -43,6 +43,7 @@ The following are not required, but can improve the style and usability of JSON 
 *  [Select2](http://ivaynberg.github.io/select2/) for nicer Select boxes
 *  [Selectize](https://selectize.github.io/selectize.js/) for nicer Select & Array boxes
 *  [Flatpickr](https://flatpickr.js.org/) lightweight and powerful datetime picker
+*  [Signature Pad](https://github.com/szimek/signature_pad) HTML5 canvas based smooth signature drawing 
 *  [math.js](http://mathjs.org/) for more accurate floating point math (multipleOf, divisibleBy, etc.)
 
 Usage
@@ -50,9 +51,9 @@ Usage
 
 If you learn best by example, check these out:
 
-*  Basic Usage Example - http://rawgithub.com/jdorn/json-editor/master/examples/basic.html
-*  Advanced Usage Example - http://rawgithub.com/jdorn/json-editor/master/examples/advanced.html
-*  CSS Integration Example - http://rawgithub.com/jdorn/json-editor/master/examples/css_integration.html
+*  Basic Usage Example - http://rawgithub.com/json-editor/json-editor/master/docs/basic.html
+*  Advanced Usage Example - http://rawgithub.com/json-editor/json-editor/master/docs/advanced.html
+*  CSS Integration Example - http://rawgithub.com/json-editor/json-editor/master/docs/css_integration.html
 
 The rest of this README contains detailed documentation about every aspect of JSON Editor.  For more [under-the-hood documentation](https://github.com/json-editor/json-editor/wiki), check the wiki.
 
