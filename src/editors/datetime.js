@@ -104,7 +104,7 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
     if (this.schema.type == 'string') {
       this._super(value, initial, from_template);
     }
-    else {
+    else if (value > 0) { 
       var dateValue, dateObj = new Date(value * 1000),
           year = dateObj.getFullYear(),
           month = this.zeroPad(dateObj.getMonth() + 1),
