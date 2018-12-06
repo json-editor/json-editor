@@ -10,7 +10,7 @@ Some pull requests added from the original repo.
 JSON Editor takes a JSON Schema and uses it to generate an HTML form.  
 It has full support for JSON Schema version 3 and 4 and can integrate with several popular CSS frameworks (bootstrap, foundation, and jQueryUI).
 
-Check out an interactive demo (demo.html): https://json-editor.github.io/json-editor/
+Check out an interactive demo (demo.html): http://rawgithub.com/json-editor/json-editor/master/docs/demo.html
 
 Install
 -----------------
@@ -640,19 +640,13 @@ You can configure SCEditor by setting configuration options in `JSONEditor.plugi
 JSONEditor.plugins.sceditor.emoticonsEnabled = false;
 ```
 
-__EpicEditor__ is a simple Markdown editor with live preview.  To use it, set the format to `markdown`:
+__SimpleMDE__ is a simple Markdown editor with live preview.  To use it, set the format to `markdown`:
 
 ```json
 {
   "type": "string",
   "format": "markdown"
 }
-```
-
-You can configure EpicEditor by setting configuration options in `JSONEditor.plugins.epiceditor`.  Here's an example:
-
-```js
-JSONEditor.plugins.epiceditor.basePath = 'epiceditor';
 ```
 
 __Ace Editor__ is a syntax highlighting source code editor. You can use it by setting the format to any of the following:
