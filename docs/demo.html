@@ -107,8 +107,8 @@
                     </select>
                 </div>
                 <div>
-                    <label>Include External Library</label>
-                    <select multiple size="8" id='lib_switcher' style="width: 100%; height: inherit;" class='form-control browser-default'>
+                    <label title="It's reccomended that you click the Direct Link after changing these options">Include External Library</label>
+                    <select multiple size="8" id='lib_switcher' style="width: 100%; height: inherit;" class='form-control browser-default' title="It's reccomended that you click the Direct Link after changing these options">
                         <option value='ace_editor'>Ace Editor</option>
                         <option value='sceditor'>SCEditor</option>
                         <option value='simplemde'>SimpleMDE</option>
@@ -298,29 +298,19 @@ editor.on("change",  function() {
 
     var jsoneditor;
 
-    // Test if src or href matches string
-    var isPresent = function(tags, match) {
-      var res = false;
-      for (var i=0;i<tags.length;i++) {
-        if ((tags[i].src || tags[i].href) == match) {
-          res = true;
-          break;
-        }
-      }
-      return res;
-    }
-
     // Function for loading external javascript(s) during runtime
     var loadScripts = function(urls, lib) {
 
-      var head = document.getElementsByTagName('head')[0];
+      var head = document.getElementsByTagName('head')[0],
+          scripts = Array.prototype.slice.call(head.getElementsByTagName('script')).map(function(key) {return key.src.toLowerCase();})
+
       if (typeof urls == 'string') urls = [urls];
 
       return new Promise(
         function(resolve, reject) {
           for (var i=0;i<urls.length;i++) {
 
-            if (!isPresent(head.getElementsByTagName('script'), urls[i])) {
+            if (scripts.indexOf(urls[i].toLowerCase()) == -1) {
               var script = document.createElement('script');
               script.classList.add('external_' + lib)
               script.type = 'text/javascript';
@@ -589,11 +579,13 @@ editor.on("change",  function() {
       for (var i=0;i<unselected.length;i++) {
         var els = document.getElementsByTagName('head')[0].getElementsByClassName('external_' + unselected[i].value);
         for (var j=els.length-1;j>=0;j--) {
+          if (unselected[i].value == 'selectize') JSONEditor.plugins.selectize.enable = false;
           els[j].parentNode.removeChild(els[j]);
         }
       }
 
       for (var i=0;i<selected.length;i++) {
+        if (selected[i].value == 'selectize') JSONEditor.plugins.selectize.enable = true;
         setExternalLib(selected[i].value);
       }
     });
