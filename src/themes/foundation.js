@@ -200,11 +200,23 @@ JSONEditor.defaults.themes.foundation3 = JSONEditor.defaults.themes.foundation.e
   },
   markTabActive: function(row) {
     row.tab.classList.add('active');
-    row.container.style.display = '';
+
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.style.display = '';
+    }
+    else {
+      row.container.style.display = '';
+    }
   },
   markTabInactive: function(row) {
     row.tab.classList.remove('active');
-    row.container.style.display = 'none';
+
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.style.display = 'none';
+    }
+    else {
+      row.container.style.display = 'none';
+    }
   },
   addTab: function(holder, tab) {
     holder.children[0].appendChild(tab);
@@ -300,11 +312,23 @@ JSONEditor.defaults.themes.foundation5 = JSONEditor.defaults.themes.foundation.e
   },
   markTabActive: function(row) {
     row.tab.classList.add('active');
-    row.container.style.display = '';
+
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.style.display = '';
+    }
+    else {
+      row.container.style.display = '';
+    }
   },
   markTabInactive: function(row) {
     row.tab.classList.remove('active');
-    row.container.style.display = 'none';
+
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.style.display = 'none';
+    }
+    else {
+      row.container.style.display = 'none';
+    }
   },
   addTab: function(holder, tab) {
     holder.children[0].appendChild(tab);
@@ -436,14 +460,28 @@ JSONEditor.defaults.themes.foundation6 = JSONEditor.defaults.themes.foundation5.
   markTabActive: function(row) {
     row.tab.classList.add('is-active');
     row.tab.firstChild.setAttribute('aria-selected', 'true');
-    row.container.classList.add('is-active');
-    row.container.setAttribute('aria-selected', 'true');
+
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.classList.add('is-active');
+      row.rowPane.setAttribute('aria-selected', 'true');
+    }
+    else {
+      row.container.classList.add('is-active');
+      row.container.setAttribute('aria-selected', 'true');
+      }
   },
   markTabInactive: function(row) {
     row.tab.classList.remove('is-active');
     row.tab.firstChild.removeAttribute('aria-selected');
-    row.container.classList.remove('is-active');
-    row.container.removeAttribute('aria-selected');
+
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.classList.remove('is-active');
+      row.rowPane.removeAttribute('aria-selected');
+    }
+    else {
+      row.container.classList.remove('is-active');
+      row.container.removeAttribute('aria-selected');
+      }
   },
   addTab: function(holder, tab) {
     holder.children[0].firstChild.appendChild(tab);

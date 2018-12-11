@@ -9,7 +9,8 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    * @see http://materializecss.com/grid.html
    */
   setGridColumnSize: function(el, size) {
-      el.classList.add('col s' + size);
+      el.classList.add('col');
+      el.classList.add('s' + size);
     },
 
     /**
@@ -244,6 +245,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
 
       var el = document.createElement('li');
       el.classList.add('tab');
+      el.style = el.style || {};
       this.applyStyles(el,
         {
         width: '100%',
@@ -266,6 +268,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    */
   markTabActive: function(tab) {
 
+      tab.style = tab.style || {};
       this.applyStyles(tab,
         {
         width: '100%',
@@ -290,6 +293,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    */
   markTabInactive: function(tab) {
 
+      tab.style = tab.style || {};
       this.applyStyles(tab,
         {
         width: '100%',

@@ -161,11 +161,23 @@ JSONEditor.defaults.themes.jqueryui = JSONEditor.AbstractTheme.extend({
   markTabActive: function(row) {
     row.tab.classList.remove('ui-widget-header');
     row.tab.classList.add('ui-state-active');
-    row.container.style.display = '';
+
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.style.display = '';
+    }
+    else {
+      row.container.style.display = '';
+    }
   },
   markTabInactive: function(row) {
     row.tab.classList.add('ui-widget-header');
     row.tab.classList.remove('ui-state-active');
-    row.container.style.display = 'none';
+
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.style.display = 'none';
+    }
+    else {
+      row.container.style.display = 'none';
+    }
   }
 });

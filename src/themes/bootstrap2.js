@@ -219,11 +219,22 @@ JSONEditor.defaults.themes.bootstrap2 = JSONEditor.AbstractTheme.extend({
   },
   markTabActive: function(row) {
     row.tab.classList.add('active');
-    row.container.classList.add('active');
+
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.classList.add('active');
+    }
+    else {
+      row.container.classList.add('active');
+    }
   },
   markTabInactive: function(row) {
     row.tab.classList.remove('active');
-    row.container.classList.remove('active');
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.classList.remove('active');
+    }
+    else {
+      row.container.classList.remove('active');
+    }
   },
   addTab: function(holder, tab) {
     holder.children[0].appendChild(tab);

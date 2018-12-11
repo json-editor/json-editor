@@ -208,13 +208,23 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
   },
   markTabActive: function(row) {
     row.tab.classList.add('active');
-    row.container.classList.add('active');
-    // row.container.style.display = '';
+
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.classList.add('active');
+    }
+    else {
+      row.container.classList.add('active');
+    }
   },
   markTabInactive: function(row) {
     row.tab.classList.remove('active');
-    row.container.classList.remove('active');
-    // row.container.style.display = 'none';
+
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.classList.remove('active');
+    }
+    else {
+      row.container.classList.remove('active');
+    }
   },
   getProgressBar: function() {
     var min = 0, max = 100, start = 0;
