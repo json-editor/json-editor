@@ -1,10 +1,7 @@
 /**
  * @name JSON Editor
  * @description JSON Schema Based Editor
- * Deprecation notice
- * This repo is no longer maintained (see also https://github.com/jdorn/json-editor/issues/800)
- * Development is continued at https://github.com/json-editor/json-editor
- * For details please visit https://github.com/json-editor/json-editor/issues/5
+ * This library is the continuation of jdorn's great work (see also https://github.com/jdorn/json-editor/issues/800)
  * @version {{ VERSION }}
  * @author Jeremy Dorn
  * @see https://github.com/jdorn/json-editor/
