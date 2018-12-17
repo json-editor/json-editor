@@ -370,7 +370,7 @@ JSONEditor.prototype = {
     return fileBase;
   },
   _getFileBaseFromFileLocation: function(fileLocationString) {
-    var pathItems = fileLocationString.split("/");
+    var pathItems = fileLocationString.split("?")[0].split("/");
     pathItems.pop();
     return pathItems.join("/")+"/";
   },
