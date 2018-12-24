@@ -56,9 +56,7 @@ JSONEditor.defaults.themes.barebones = JSONEditor.AbstractTheme.extend({
 
     var tooltip = document.createElement('div');
     tooltip.setAttribute("role", "tooltip");
-    tooltip.classList.add('tooltip');
-    tooltip.classList.add('info');
-    tooltip.classList.add('disabled');
+    tooltip.classList.add('tooltip', 'info', 'disabled');
     tooltip.innerText = text;
 
     icon.onmouseover = function() {
@@ -303,8 +301,7 @@ JSONEditor.defaults.themes.barebones = JSONEditor.AbstractTheme.extend({
     var el = document.createElement('div');
     el.id = tabId;
     el.appendChild(span);
-    el.classList.add('toptab');
-    el.classList.add('inactive');
+    el.classList.add('toptab', 'inactive');
     return el;
   },
   getTabContentHolder: function(tab_holder) {
