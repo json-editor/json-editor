@@ -207,7 +207,7 @@ JSONEditor.defaults.themes.barebones = JSONEditor.AbstractTheme.extend({
   },
   getButtonHolder: function() {
     var el = document.createElement('div');
-    el.classList.add("buttonholder")
+    el.classList.add("buttonholder");
     return el;
   },
   getButton: function(text, icon, title) {
