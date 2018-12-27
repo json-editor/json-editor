@@ -627,7 +627,7 @@ You can set custom attributes such as placeholder, classname and data- on the in
   "properties": {
     "name": {
       "title": "Full Name",
-      "options" {
+      "options": {
         "inputAttributes": {
           "placeholder":  "your name here...",
           "class": "myclass"
