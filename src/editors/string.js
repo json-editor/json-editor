@@ -190,7 +190,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
       this.input.setAttribute('readonly', 'true');
     }
 
-    if (this.schema.options && this.schema.options.inputAttributes && this.schema.options.inputAttributes.length > 0) {
+    if (this.schema.options && this.schema.options.inputAttributes) {
       var inputAttributes = this.schema.options.inputAttributes;
       for (var key in inputAttributes) {
         if (inputAttributes.hasOwnProperty(key)) {
