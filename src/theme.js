@@ -257,10 +257,13 @@ JSONEditor.AbstractTheme = Class.extend({
     return el;
   },
   setButtonText: function(button, text, icon, title) {
-    button.innerHTML = '';
+    // Clear previous contents. https://jsperf.com/innerhtml-vs-removechild/37
+    while (button.firstChild) {
+      button.removeChild(button.firstChild);
+    }
     if(icon) {
       button.appendChild(icon);
-      button.innerHTML += ' ';
+      text = ' ' + text;
     }
     button.appendChild(document.createTextNode(text));
     if(title) button.setAttribute('title',title);
