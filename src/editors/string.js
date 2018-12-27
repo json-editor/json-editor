@@ -191,10 +191,12 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
     }
 
     if (this.schema.options && this.schema.options.inputAttributes && this.schema.options.inputAttributes.length > 0) {
-      var input = this.input;
-      this.schema.options.inputAttributes.forEach(function (inputAttribute) {
-        input.setAttribute(inputAttribute.name, inputAttribute.value);
-      });
+      var inputAttributes = this.schema.options.inputAttributes;
+      for (var key in inputAttributes) {
+        if (inputAttributes.hasOwnProperty(key)) {
+          this.input.setAttribute(key, inputAttributes[key]);
+        }
+      }
     }
 
     this.input
