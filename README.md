@@ -618,6 +618,26 @@ Here is an example that will show a color picker in browsers that support it:
 }
 ```
 
+### String Editors Input Attributes
+You can set custom attributes such as placeholder, classname and data- on the input field using the special options keyword `inputAttributes`. Like this:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "title": "Full Name",
+      "options": {
+        "inputAttributes": {
+          "placeholder":  "your name here...",
+          "class": "myclass"
+        }
+      }
+    }
+  }
+}
+```
+
 #### Specialized String Editors
 
 In addition to the standard HTML input formats, JSON Editor can also integrate with several 3rd party specialized editors.  These libraries are not included in JSON Editor and you must load them on the page yourself.
