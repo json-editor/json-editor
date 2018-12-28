@@ -298,6 +298,13 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
       this.refreshValue();
     }
   },
+  postBuild: function() {
+    this._super();
+    // Enable cleave.js support if library is loaded and config is available
+    if (window.Cleave && this.schema.options && typeof this.schema.options.cleave == 'object') {
+      var cleave = new window.Cleave(this.input, this.schema.options.cleave);
+    }
+  },
   enable: function() {
     if(!this.always_disabled) {
       this.input.disabled = false;
