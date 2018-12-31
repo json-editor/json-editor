@@ -405,6 +405,7 @@ The supported icon libs are:
 *  jqueryui
 *  fontawesome3
 *  fontawesome4
+*  fontawesome5
 *  materialicons
 
 By default, no icons are used. Just like the CSS theme, you can set the icon lib globally or when initializing:
