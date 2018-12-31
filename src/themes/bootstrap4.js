@@ -161,12 +161,24 @@ JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
     return el;
   },
   markTabActive: function(row) {
-    row.tab.classList.add('active');
-    row.container.classList.add('active');
+    row.tab.firstChild.classList.add('active');
+
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.classList.add('active');
+    }
+    else {
+      row.container.classList.add('active');
+    }
   },
   markTabInactive: function(row) {
-    row.tab.classList.remove('active');
-    row.container.classList.remove('active');
+    row.tab.firstChild.classList.remove('active');
+
+    if(typeof row.rowPane !== 'undefined'){
+      row.rowPane.classList.remove('active');
+    }
+    else {
+      row.container.classList.remove('active');
+    }
   },
   getProgressBar: function() {
     var min = 0,
