@@ -190,14 +190,8 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
       this.input.setAttribute('readonly', 'true');
     }
 
-    if (this.schema.options && this.schema.options.inputAttributes) {
-      var inputAttributes = this.schema.options.inputAttributes;
-      for (var key in inputAttributes) {
-        if (inputAttributes.hasOwnProperty(key)) {
-          this.input.setAttribute(key, inputAttributes[key]);
-        }
-      }
-    }
+    // Set custom attributes on input element. Parameter is array of protected keys. Empty array if none.
+    this.setInputAttributes(['maxlength', 'pattern', 'readonly', 'min', 'max', 'step']);
 
     this.input
       .addEventListener('change',function(e) {        

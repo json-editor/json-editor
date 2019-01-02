@@ -27,6 +27,9 @@ JSONEditor.defaults.editors.number = JSONEditor.defaults.editors.string.extend({
       this.input.setAttribute("step", step);
     }
 
+    // Set custom attributes on input element. Parameter is array of protected keys. Empty array if none.
+    this.setInputAttributes(['maxlength', 'pattern', 'readonly', 'min', 'max', 'step']);
+
   },
   sanitize: function(value) {
     return (value+"").replace(/[^0-9\.\-eE]/g,'');
