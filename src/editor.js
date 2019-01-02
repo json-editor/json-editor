@@ -547,6 +547,17 @@ JSONEditor.AbstractEditor = Class.extend({
     id = id === undefined ? "" : id.toString();
     return id.replace(/\s+/g, "-");
   },
+  setInputAttributes: function(protected) {
+    if (this.schema.options && this.schema.options.inputAttributes) {
+      var inputAttributes = this.schema.options.inputAttributes;
+      protected = ['name', 'type'].concat(protected);
+      for (var key in inputAttributes) {
+        if (inputAttributes.hasOwnProperty(key) && protected.indexOf(key.toLowerCase()) == -1) {
+          this.input.setAttribute(key, inputAttributes[key]);
+        }
+      }
+    }
+  },
   getOption: function(key) {
     try {
       throw "getOption is deprecated";

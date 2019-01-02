@@ -179,6 +179,9 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
       this.input.disabled = true;
     }
 
+    // Set custom attributes on input element. Parameter is array of protected keys. Empty array if none.
+    this.setInputAttributes([]);
+
     this.input.addEventListener('change',function(e) {
       e.preventDefault();
       e.stopPropagation();
