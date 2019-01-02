@@ -44,7 +44,7 @@ The following are not required, but can improve the style and usability of JSON 
 *  [Selectize](https://selectize.github.io/selectize.js/) for nicer Select & Array boxes
 *  [Flatpickr](https://flatpickr.js.org/) lightweight and powerful datetime picker
 *  [Signature Pad](https://github.com/szimek/signature_pad) HTML5 canvas based smooth signature drawing
-*  [Cleave.js](https://github.com/nosir/cleave.js) Format your **&lt;input/&gt;** content when you are typing
+*  [Cleave.js](https://github.com/nosir/cleave.js) for formatting your **&lt;input/&gt;** content while you are typing
 *  [math.js](http://mathjs.org/) for more accurate floating point math (multipleOf, divisibleBy, etc.)
 
 Usage
@@ -56,7 +56,7 @@ If you learn best by example, check these out:
 *  Advanced Usage Example - http://rawgithub.com/json-editor/json-editor/master/docs/advanced.html
 *  CSS Integration Example - http://rawgithub.com/json-editor/json-editor/master/docs/css_integration.html
 *  Base64 Editor Example (Muiltple Upload) - http://rawgithub.com/json-editor/json-editor/master/docs/multiple_upload_base64.html
-*  Cleave.js Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/cleave.html  
+*  Cleave.js Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/cleave.html
 *  Datetime Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/datetime.html
 *  Recursive JSON Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/recursive.html
 *  Select2 Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/select2.html
