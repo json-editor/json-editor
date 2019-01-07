@@ -31,7 +31,8 @@
     "docker-test": "cd tests && docker-compose run --rm node npm run build && docker-compose up -d && docker-compose ps && docker-compose run --rm codeceptjs codeceptjs run --grep '(?=.*)^(?!.*@optional)'",
     "preversion": "npm run docker-test",
     "version": "grunt string-replace",
-    "postversion": ""
+    "prepublishOnly": "grunt string-replace",
+    "postversion": "git push && git push --tags && npm publish ./ --access public"
   },
   "license": "MIT",
   "engines": {
