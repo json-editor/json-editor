@@ -2,7 +2,7 @@
   "name": "@json-editor/json-editor",
   "title": "JSONEditor",
   "description": "JSON Schema based editor",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "main": "dist/jsoneditor.js",
   "author": {
     "name": "Jeremy Dorn",
@@ -31,7 +31,7 @@
     "docker-test": "cd tests && docker-compose run --rm node npm run build && docker-compose up -d && docker-compose ps && docker-compose run --rm codeceptjs codeceptjs run --grep '(?=.*)^(?!.*@optional)'",
     "preversion": "npm run docker-test",
     "version": "grunt string-replace",
-    "postversion": "git push && git push --tags && npm publish ./ --access public"
+    "postversion": ""
   },
   "license": "MIT",
   "engines": {
