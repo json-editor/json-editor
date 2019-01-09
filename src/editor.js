@@ -547,12 +547,12 @@ JSONEditor.AbstractEditor = Class.extend({
     id = id === undefined ? "" : id.toString();
     return id.replace(/\s+/g, "-");
   },
-  setInputAttributes: function(protected) {
+  setInputAttributes: function(inputAttribute) {
     if (this.schema.options && this.schema.options.inputAttributes) {
       var inputAttributes = this.schema.options.inputAttributes;
-      protected = ['name', 'type'].concat(protected);
+      var protectedAttributes = ['name', 'type'].concat(inputAttribute);
       for (var key in inputAttributes) {
-        if (inputAttributes.hasOwnProperty(key) && protected.indexOf(key.toLowerCase()) == -1) {
+        if (inputAttributes.hasOwnProperty(key) && protectedAttributes.indexOf(key.toLowerCase()) == -1) {
           this.input.setAttribute(key, inputAttributes[key]);
         }
       }
