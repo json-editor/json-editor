@@ -13,7 +13,8 @@ JSONEditor.defaults.iconlibs.materialicons = JSONEditor.AbstractIconLib.extend({
       copy: 'content_copy',
       clear: 'highlight_off',
       time: 'access_time',
-      calendar: 'calendar_today'
+      calendar: 'calendar_today',
+      upload: 'cloud_upload',
     },
 
     icon_class: 'material-icons',
