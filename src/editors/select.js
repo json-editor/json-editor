@@ -18,7 +18,7 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)];
     if(this.select2) {
       if(this.select2v4)
-        this.select2.val(this.input.value).trigger("change"); 
+        this.select2.val(this.input.value).trigger("change");
       else
         this.select2.select2('val',this.input.value);
     }
@@ -198,11 +198,11 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
 
     var new_val;
     // Invalid option, use first option instead
-    if(this.enum_values.indexOf(val) === -1) {
+    if(this.enum_values.indexOf(String(val)) === -1) {
       new_val = this.enum_values[0];
     }
     else {
-      new_val = this.enum_values[this.enum_values.indexOf(val)];
+      new_val = this.enum_values[this.enum_values.indexOf(String(val))];
     }
 
     // If valid hasn't changed
