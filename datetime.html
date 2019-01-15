@@ -48,7 +48,7 @@
   <h2>Extended handling of date, time and datetime-local type fields.</h2>
 
   <p>Works with both string and integer data types. (If integer is used, the date will be returned in epoch format)</p>
-  <p>Adds support for setting "placeholder" through options.</p>
+
   <p>Has optional support for using <a href="https://flatpickr.js.org/" target="_blank" title="Flatpickr datepicker">flatpickr datepicker</a>.</p>
   <p>All flatpickr options is supported with a few minor differences.
   <ul>
@@ -88,7 +88,9 @@
           "description": "Standard date field",
           "options": {
             "grid_columns": 4,
-            "placeholder": "Enter date"
+            "inputAttributes": {
+              "placeholder": "Enter date"
+            }
           }
         },
         "stime": {
@@ -98,7 +100,9 @@
           "description": "Standard time field",
           "options": {
             "grid_columns": 4,
-            "placeholder": "Enter time"
+            "inputAttributes": {
+              "placeholder": "Enter time"
+            }
           }
         },
         "sdatetime": {
@@ -108,7 +112,9 @@
           "description": "Standard datetime-local field",
           "options": {
             "grid_columns": 4,
-            "placeholder": "YYYY-MM-DD HH:SS"
+            "inputAttributes": {
+              "placeholder": "YYYY-MM-DD HH:SS"
+            }
           }
         },
 
@@ -119,7 +125,9 @@
           "description": "Standard date field with flatpickr",
           "options": {
             "grid_columns": 4,
-            "placeholder": "Enter date",
+            "inputAttributes": {
+              "placeholder": "Enter date"
+            },
             "flatpickr": {
               "inlineHideInput": true,
               "wrap": true,
@@ -134,7 +142,9 @@
           "description": "Standard time field with flatpickr",
           "options": {
             "grid_columns": 4,
-            "placeholder": "Enter time",
+            "inputAttributes": {
+              "placeholder": "Enter time"
+            },
             "flatpickr": {
               "wrap": true,
               "showClearButton": false,
@@ -156,7 +166,9 @@
           "description": "Standard datetime-local field with flatpickr",
           "options": {
             "grid_columns": 4,
-            "placeholder": "Enter datetime",
+            "inputAttributes": {
+              "placeholder": "Enter datetime"
+            },
             "flatpickr": {
               "wrap": true,
               "time_24hr": true,
@@ -172,7 +184,9 @@
           "description": "Integer date field",
           "options": {
             "grid_columns": 4,
-            "placeholder": "Enter date"
+            "inputAttributes": {
+              "placeholder": "Enter date"
+            }
           }
         },
         "itime": {
@@ -182,7 +196,9 @@
           "description": "Integer time field",
           "options": {
             "grid_columns": 4,
-            "placeholder": "Enter time"
+            "inputAttributes": {
+              "placeholder": "Enter time"
+            }
           }
         },
         "idatetime": {
@@ -192,7 +208,9 @@
           "description": "Integer datetime-local field",
           "options": {
             "grid_columns": 4,
-            "placeholder": "Enter datetime"
+            "inputAttributes": {
+              "placeholder": "Enter datetime"
+            }
           }
         },
 
@@ -203,7 +221,9 @@
           "description": "Integer date field with flatpickr",
           "options": {
             "grid_columns": 4,
-            "placeholder": "Enter date",
+            "inputAttributes": {
+              "placeholder": "Enter date"
+            },
             "flatpickr": {
               "wrap": true,
               "time_24hr": true,
@@ -218,7 +238,9 @@
           "description": "Integer time field with flatpickr",
           "options": {
             "grid_columns": 4,
-            "placeholder": "Enter time",
+            "inputAttributes": {
+              "placeholder": "Enter time"
+            },
             "flatpickr": {
               "wrap": true,
               "time_24hr": true,
@@ -233,7 +255,9 @@
           "description": "Integer datetime-local field with flatpickr",
           "options": {
             "grid_columns": 4,
-            "placeholder": "Enter datetime",
+            "inputAttributes": {
+              "placeholder": "Enter datetime"
+            },
             "flatpickr": {
               "wrap": true,
               "time_24hr": true,
@@ -249,7 +273,9 @@
           "description": "Standard datetime-local field with inline flatpickr",
           "options": {
             "grid_columns": 4,
-            "placeholder": "Enter datetime",
+            "inputAttributes": {
+              "placeholder": "Enter datetime"
+            },
             "flatpickr": {
               "inline": true,
               "time_24hr": true
@@ -263,7 +289,9 @@
           "description": "Standard date field with inline flatpickr and hidden input",
           "options": {
             "grid_columns": 4,
-            "placeholder": "Enter datetime",
+            "inputAttributes": {
+              "placeholder": "Enter datetime"
+            },
             "flatpickr": {
               "inlineHideInput": true,
               "inline": true,
