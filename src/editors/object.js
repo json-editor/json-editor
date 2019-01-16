@@ -518,12 +518,14 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       this.editjson_textarea.style.width = '300px';
       this.editjson_textarea.style.display = 'block';
       this.editjson_save = this.getButton('Save','save','Save');
+      this.editjson_save.classList.add('json-editor-btntype-save');
       this.editjson_save.addEventListener('click',function(e) {
         e.preventDefault();
         e.stopPropagation();
         self.saveJSON();
       });
       this.editjson_cancel = this.getButton('Cancel','cancel','Cancel');
+      this.editjson_cancel.classList.add('json-editor-btntype-cancel');
       this.editjson_cancel.addEventListener('click',function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -544,6 +546,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       this.addproperty_list.style.paddingLeft = '5px';
       this.addproperty_list.setAttribute('class', 'property-selector');
       this.addproperty_add = this.getButton('add','add','add');
+      this.addproperty_add.classList.add('json-editor-btntype-add');
       this.addproperty_input = this.theme.getFormInputField('text');
       this.addproperty_input.setAttribute('placeholder','Property name...');
       this.addproperty_input.style.width = '220px';
@@ -658,6 +661,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       // Show/Hide button
       this.collapsed = false;
       this.toggle_button = this.getButton('', 'collapse', this.translate('button_collapse'));
+      this.toggle_button.classList.add('json-editor-btntype-toggle');
       this.title_controls.appendChild(this.toggle_button);
       this.toggle_button.addEventListener('click',function(e) {
         e.preventDefault();
@@ -689,6 +693,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
 
       // Edit JSON Button
       this.editjson_button = this.getButton('JSON','edit','Edit JSON');
+      this.editjson_button.classList.add('json-editor-btntype-editjson');
       this.editjson_button.addEventListener('click',function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -707,6 +712,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
 
       // Object Properties Button
       this.addproperty_button = this.getButton('Properties','edit','Object Properties');
+      this.addproperty_button.classList.add('json-editor-btntype-properties');
       this.addproperty_button.addEventListener('click',function(e) {
         e.preventDefault();
         e.stopPropagation();
