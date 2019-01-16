@@ -504,7 +504,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
     // Buttons to delete row, move row up, and move row down
     if(!self.hide_delete_buttons) {
       self.rows[i].delete_button = this.getButton(self.getItemTitle(),'delete',this.translate('button_delete_row_title',[self.getItemTitle()]));
-      self.rows[i].delete_button.classList.add('delete');
+      self.rows[i].delete_button.classList.add('delete', 'json-editor-btntype-delete');
       self.rows[i].delete_button.setAttribute('data-i',i);
       self.rows[i].delete_button.addEventListener('click',function(e) {
         e.preventDefault();
@@ -550,7 +550,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
 	//Button to copy an array element and add it as last element
 	if(self.show_copy_button){
         self.rows[i].copy_button = this.getButton(self.getItemTitle(),'copy','Copy '+self.getItemTitle());
-        self.rows[i].copy_button.classList.add('copy');
+        self.rows[i].copy_button.classList.add('copy', 'json-editor-btntype-copy');
         self.rows[i].copy_button.setAttribute('data-i',i);
         self.rows[i].copy_button.addEventListener('click',function(e) {
             var value = self.getValue();
@@ -576,7 +576,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
 
     if(i && !self.hide_move_buttons) {
       self.rows[i].moveup_button = this.getButton('','moveup',this.translate('button_move_up_title'));
-      self.rows[i].moveup_button.classList.add('moveup');
+      self.rows[i].moveup_button.classList.add('moveup', 'json-editor-btntype-move');
       self.rows[i].moveup_button.setAttribute('data-i',i);
       self.rows[i].moveup_button.addEventListener('click',function(e) {
         e.preventDefault();
@@ -603,7 +603,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
 
     if(!self.hide_move_buttons) {
       self.rows[i].movedown_button = this.getButton('','movedown',this.translate('button_move_down_title'));
-      self.rows[i].movedown_button.classList.add('movedown');
+      self.rows[i].movedown_button.classList.add('movedown', 'json-editor-btntype-move');
       self.rows[i].movedown_button.setAttribute('data-i',i);
       self.rows[i].movedown_button.addEventListener('click',function(e) {
         e.preventDefault();
@@ -635,6 +635,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
 
     this.collapsed = false;
     this.toggle_button = this.getButton('','collapse',this.translate('button_collapse'));
+    this.toggle_button.classList.add('json-editor-btntype-toggle');
     this.title_controls.appendChild(this.toggle_button);
     var row_holder_display = self.row_holder.style.display;
     var controls_display = self.controls.style.display;
@@ -674,7 +675,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
 
     // Add "new row" and "delete last" buttons below editor
     this.add_row_button = this.getButton(this.getItemTitle(),'add',this.translate('button_add_row_title',[this.getItemTitle()]));
-
+    this.add_row_button.classList.add('json-editor-btntype-add');
     this.add_row_button.addEventListener('click',function(e) {
       e.preventDefault();
       e.stopPropagation();
@@ -697,6 +698,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
     self.controls.appendChild(this.add_row_button);
 
     this.delete_last_row_button = this.getButton(this.translate('button_delete_last',[this.getItemTitle()]),'delete',this.translate('button_delete_last_title',[this.getItemTitle()]));
+    this.delete_last_row_button.classList.add('json-editor-btntype-deletelast');
     this.delete_last_row_button.addEventListener('click',function(e) {
       e.preventDefault();
       e.stopPropagation();
@@ -726,6 +728,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
     self.controls.appendChild(this.delete_last_row_button);
 
     this.remove_all_rows_button = this.getButton(this.translate('button_delete_all'),'delete',this.translate('button_delete_all_title'));
+    this.remove_all_rows_button.classList.add('json-editor-btntype-deleteall');
     this.remove_all_rows_button.addEventListener('click',function(e) {
       e.preventDefault();
       e.stopPropagation();

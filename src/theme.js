@@ -265,7 +265,9 @@ JSONEditor.AbstractTheme = Class.extend({
       button.appendChild(icon);
       text = ' ' + text;
     }
-    button.appendChild(document.createTextNode(text));
+    var spanEl = document.createElement('span');
+    spanEl.appendChild(document.createTextNode(text));
+    button.appendChild(spanEl);
     if(title) button.setAttribute('title',title);
   },
   getTable: function() {

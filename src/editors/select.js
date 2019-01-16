@@ -18,7 +18,7 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)];
     if(this.select2) {
       if(this.select2v4)
-        this.select2.val(this.input.value).trigger("change"); 
+        this.select2.val(this.input.value).trigger("change");
       else
         this.select2.select2('val',this.input.value);
     }

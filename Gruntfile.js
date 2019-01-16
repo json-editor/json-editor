@@ -91,7 +91,9 @@ module.exports = function(grunt) {
         dest: 'dist/jsoneditor.min.js'
       },
       options: {
-        preserveComments: 'some',
+        preserveComments: function(node, comment) {
+          return /^!|@preserve|@license|@cc_on/i.test(comment.value)
+        },
         sourceMap: true
       }
     },
