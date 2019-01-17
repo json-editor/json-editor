@@ -722,7 +722,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       this.addproperty_controls.appendChild(this.addproperty_holder);
       this.refreshAddProperties();
     }
-
+            
     // Fix table cell ordering
     if(this.options.table_row) {
       this.editor_holder = this.container;
@@ -772,6 +772,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       var json = JSON.parse(this.editjson_textarea.value);
       this.setValue(json);
       this.hideEditJSON();
+      this.onChange(true); 
     }
     catch(e) {
       window.alert('invalid JSON');
