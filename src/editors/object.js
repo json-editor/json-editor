@@ -575,6 +575,14 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       spacer.style.clear = 'both';
       this.addproperty_holder.appendChild(spacer);
 
+      // Close properties modal if clicked outside modal
+      document.addEventListener('click', function(e) {
+          if (!this.addproperty_holder.contains(e.target) && this.adding_property) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.toggleAddProperty();
+          }
+      }.bind(this));
 
       // Description
       if(this.schema.description) {
