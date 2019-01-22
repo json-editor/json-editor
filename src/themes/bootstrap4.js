@@ -96,7 +96,7 @@ JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
     input.controlgroup.classList.add("has-error");
     if (!input.errmsg) {
       input.errmsg = document.createElement("p");
-      input.errmsg.classList.add("form-text", "errormsg");
+      input.errmsg.classList.add("form-text", "invalid-feedback");
       input.controlgroup.appendChild(input.errmsg);
     } else {
       input.errmsg.style.display = "";
