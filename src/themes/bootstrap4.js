@@ -91,7 +91,7 @@ JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
     return el;
   },
 
-   addInputError: function(input, text) {
+  addInputError: function(input, text) {
     if (!input.controlgroup) return;
     input.controlgroup.classList.add('has-danger');
     input.classList.add('is-invalid');
