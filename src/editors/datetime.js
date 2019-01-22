@@ -96,9 +96,10 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
   setValue: function(value, initial, from_template) {
     if (this.schema.type == 'string') {
       this._super(value, initial, from_template);
+      if (this.flatpickr) this.flatpickr.setDate(value);
     }
-    else if (value > 0) { 
-      var dateValue, dateObj = new Date(value * 1000),
+    else if (value > 0) {
+      var dateObj = new Date(value * 1000),
           year = dateObj.getFullYear(),
           month = this.zeroPad(dateObj.getMonth() + 1),
           day = this.zeroPad(dateObj.getDate()),
@@ -106,13 +107,14 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
           min = this.zeroPad(dateObj.getMinutes()),
           sec = this.zeroPad(dateObj.getSeconds()),
           date = [year, month, day].join('-'),
-          time = [hour, min, sec].join(':');
+          time = [hour, min, sec].join(':'),
+          dateValue = date + ' ' + time;
 
       if (this.schema.format == 'date') dateValue = date;
       else if (this.schema.format == 'time') dateValue = time;
-      else dateValue = date + ' ' + time;
 
       this.input.value = dateValue;
+      if (this.flatpickr) this.flatpickr.setDate(dateValue);
     }
   },
   destroy: function() {
