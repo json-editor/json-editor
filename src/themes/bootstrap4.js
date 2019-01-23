@@ -93,8 +93,7 @@ JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
 
   addInputError: function(input, text) {
     if (!input.controlgroup) return;
-    input.controlgroup.classList.add('has-danger');
-    input.classList.add('is-invalid');
+    input.controlgroup.classList.add("has-error");
     if (!input.errmsg) {
       input.errmsg = document.createElement("p");
       input.errmsg.classList.add("form-text", "invalid-feedback");
@@ -108,8 +107,7 @@ JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
   removeInputError: function(input) {
     if (!input.errmsg) return;
     input.errmsg.style.display = "none";
-    input.classList.remove('is-invalid');
-    input.controlgroup.classList.remove('has-danger');
+    input.controlgroup.classList.remove('has-error');
   },
   getTabHolder: function(propertyName) {
     var el = document.createElement("div");
