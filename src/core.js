@@ -404,8 +404,8 @@ JSONEditor.prototype = {
             window.console.log(e);
             throw "Failed to parse external ref "+fetchUrl;
           }
-          if(!response || typeof response !== "object") throw "External ref does not contain a valid schema - "+fetchUrl;
-          
+          if (!(typeof response === "boolean" || typeof response === "object") || response === null || Array.isArray(response)) throw "External ref does not contain a valid schema - "+fetchUrl;  
+
           self.refs[url] = response;
           self._loadExternalRefs(response,function() {
             done++;
