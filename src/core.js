@@ -16,6 +16,10 @@ JSONEditor.prototype = {
     
     this.ready = false;
     this.copyClipboard = null;
+    // full references info
+    this.refs_with_info = {};
+    this.refs_prefix = "#/counter/";
+    this.refs_counter = 1;
 
     var theme_class = JSONEditor.defaults.themes[this.options.theme || JSONEditor.defaults.theme];
     if(!theme_class) throw "Unknown theme " + (this.options.theme || JSONEditor.defaults.theme);
@@ -36,8 +40,10 @@ JSONEditor.prototype = {
     this.translate = this.options.translate || JSONEditor.defaults.translate;
 
     // Fetch all external refs via ajax
+    var fetchUrl = document.location.toString();
+    var fileBase = this._getFileBase();
     this._loadExternalRefs(this.schema, function() {
-      self._getDefinitions(self.schema);
+      self._getDefinitions(self.schema, fetchUrl + '#/definitions/');
       
       // Validator options
       var validator_options = {};
@@ -75,7 +81,7 @@ JSONEditor.prototype = {
         self.trigger('ready');
         self.trigger('change');
       });
-    });
+    }, fetchUrl, fileBase);
   },
   getValue: function() {
     if(!this.ready) throw "JSON Editor not ready yet.  Listen for 'ready' event before getting the value";
@@ -321,7 +327,6 @@ JSONEditor.prototype = {
     this.root.disable();
   },
   _getDefinitions: function(schema,path) {
-    path = path || '#/definitions/';
     if(schema.definitions) {
       for(var i in schema.definitions) {
         if(!schema.definitions.hasOwnProperty(i)) continue;
@@ -332,7 +337,7 @@ JSONEditor.prototype = {
       }
     }
   },
-  _getExternalRefs: function(schema) {
+  _getExternalRefs: function(schema, fetchUrl) {
     var refs = {};
     var merge_refs = function(newrefs) {
       for(var i in newrefs) {
@@ -342,24 +347,29 @@ JSONEditor.prototype = {
       }
     };
     
-    if(schema.$ref && typeof schema.$ref !== "object" && schema.$ref.substr(0,1) !== "#" && !this.refs[schema.$ref]) {
-      refs[schema.$ref] = true;
+    if(schema.$ref && typeof schema.$ref !== "object") {
+      var ref_counter = this.refs_prefix + this.refs_counter++;
+      if(schema.$ref.substr(0,1) !== "#" && !this.refs[schema.$ref]) {
+        refs[schema.$ref] = true;
+      }
+      this.refs_with_info[ref_counter] = { fetchUrl: fetchUrl, "$ref": schema.$ref };
+      schema.$ref = ref_counter;
     }
     
     for(var i in schema) {
       if(!schema.hasOwnProperty(i)) continue;
-      if(schema[i] && typeof schema[i] === "object" && Array.isArray(schema[i])) {
+      if (!schema[i] || typeof schema[i] !== "object") continue;
+      if(Array.isArray(schema[i])) {
         for(var j=0; j<schema[i].length; j++) {
           if(schema[i][j] && typeof schema[i][j]==="object") {
-            merge_refs(this._getExternalRefs(schema[i][j]));
+            merge_refs(this._getExternalRefs(schema[i][j], fetchUrl));
           }
         }
       }
-      else if(schema[i] && typeof schema[i] === "object") {
-        merge_refs(this._getExternalRefs(schema[i]));
+      else {
+        merge_refs(this._getExternalRefs(schema[i], fetchUrl));
       }
     }
-
     return refs;
   },
   _getFileBase: function() {
@@ -374,10 +384,9 @@ JSONEditor.prototype = {
     pathItems.pop();
     return pathItems.join("/")+"/";
   },
-  _loadExternalRefs: function(schema, callback, fileBase) {
-    fileBase = fileBase || this._getFileBase();
+  _loadExternalRefs: function(schema, callback, fetchUrl, fileBase) {
     var self = this;
-    var refs = this._getExternalRefs(schema);
+    var refs = this._getExternalRefs(schema, fetchUrl);
     var done = 0, waiting = 0, callback_fired = false;
 
     $each(refs,function(url) {
@@ -407,13 +416,15 @@ JSONEditor.prototype = {
           if (!(typeof response === "boolean" || typeof response === "object") || response === null || Array.isArray(response)) throw "External ref does not contain a valid schema - "+fetchUrl;  
 
           self.refs[url] = response;
+          var fileBase = self._getFileBaseFromFileLocation(fetchUrl);
+          self._getDefinitions(response, fetchUrl + "#/definitions/");
           self._loadExternalRefs(response,function() {
             done++;
             if(done >= waiting && !callback_fired) {
               callback_fired = true;
               callback();
             }
-          }, self._getFileBaseFromFileLocation(fetchUrl));
+          }, fetchUrl, fileBase);
         }
         // Request failed
         else {
@@ -432,16 +443,19 @@ JSONEditor.prototype = {
     schema = $extend({},schema);
     
     while (schema.$ref) {
-      var ref = schema.$ref;
+      var refObj = this.refs_with_info[schema.$ref];
       delete schema.$ref;
-      
-      if(!this.refs[ref]) ref = decodeURIComponent(ref);
-      
-      schema = this.extendSchemas(schema,this.refs[ref]);
+      var fetchUrl = "";
+      if (refObj.$ref.startsWith("#")) {
+        fetchUrl = refObj.fetchUrl;
+      }
+      var ref = fetchUrl + refObj.$ref;
+      if(!this.refs[ref]) ref = fetchUrl + decodeURIComponent(refObj.$ref);
+      schema = this.extendSchemas(schema, $extend({},this.refs[ref]));
     }
     return schema;
   },
-  expandSchema: function(schema) {
+  expandSchema: function(schema, fileBase) {
     var self = this;
     var extended = $extend({},schema);
     var i;
