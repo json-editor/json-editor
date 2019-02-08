@@ -4,6 +4,8 @@
 
 ### Steps to reproduce the behavior
 
+Direct link to example: https://json-editor.github.io/json-editor/
+
 ```javascript
 {
   "title": "json schema example",
