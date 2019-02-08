@@ -524,6 +524,13 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
         e.stopPropagation();
         self.saveJSON();
       });
+      this.editjson_copy = this.getButton('Copy','copy','Copy');
+      this.editjson_copy.classList.add('json-editor-btntype-copy');
+      this.editjson_copy.addEventListener('click',function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        self.copyJSON();
+      });
       this.editjson_cancel = this.getButton('Cancel','cancel','Cancel');
       this.editjson_cancel.classList.add('json-editor-btntype-cancel');
       this.editjson_cancel.addEventListener('click',function(e) {
@@ -533,6 +540,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       });
       this.editjson_holder.appendChild(this.editjson_textarea);
       this.editjson_holder.appendChild(this.editjson_save);
+      this.editjson_holder.appendChild(this.editjson_copy);
       this.editjson_holder.appendChild(this.editjson_cancel);
 
       // Manage Properties modal
@@ -772,6 +780,18 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
     this.editjson_holder.style.display = 'none';
     this.enable();
     this.editing_json = false;
+  },
+  copyJSON: function() {
+    if(!this.editjson_holder) return;
+    var ta = document.createElement('textarea');
+    ta.value = this.editjson_textarea.value;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'absolute';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
   },
   saveJSON: function() {
     if(!this.editjson_holder) return;
