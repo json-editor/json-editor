@@ -296,7 +296,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
     this._super();
     // Enable cleave.js support if library is loaded and config is available
     if (window.Cleave && this.schema.options && typeof this.schema.options.cleave == 'object') {
-      var cleave = new window.Cleave(this.input, this.schema.options.cleave);
+      this.cleave = new window.Cleave(this.input, this.schema.options.cleave);
     }
   },
   enable: function() {
@@ -406,13 +406,16 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
       this.sceditor_instance.destroy();
     }
     else if(this.SimpleMDE) {
-      this.SimpleMDE.destroy();
+      this.SimpleMDE.toTextArea();
+      this.SimpleMDE = null;
     }
     else if(this.ace_editor) {
       this.ace_editor.destroy();
     }
-    
-    
+    if (this.cleave) {
+      this.cleave.destroy();
+    }
+
     this.template = null;
     if(this.input && this.input.parentNode) this.input.parentNode.removeChild(this.input);
     if(this.label && this.label.parentNode) this.label.parentNode.removeChild(this.label);
