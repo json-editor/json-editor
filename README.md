@@ -753,6 +753,21 @@ You can override the default Ace theme by setting the `JSONEditor.plugins.ace.th
 JSONEditor.plugins.ace.theme = 'twilight';
 ```
 
+You can enable [Ace editor options](https://github.com/ajaxorg/ace/wiki/Configuring-Ace) individually by setting the `options.ace` in schema.
+
+```json
+{
+  "type": "string",
+  "format": "sql",
+  "options": {
+    "ace": {
+      "enableBasicAutocompletion": true,
+      "enableLiveAutocompletion": true
+    }
+  }
+}
+```
+
 #### Booleans
 
 The default boolean editor is a select box with options "true" and "false".  To use a checkbox instead, set the format to `checkbox`.
