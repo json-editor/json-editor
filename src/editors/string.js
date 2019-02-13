@@ -148,6 +148,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
           'scss',
           'smarty',
           'sql',
+          'sqlserver',
           'stylus',
           'svg',
           'twig',
