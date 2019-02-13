@@ -375,6 +375,11 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
         this.input.style.display = 'none';
         this.ace_editor = window.ace.edit(this.ace_container);
         
+        var aceOptions = this.schema.options && this.schema.options.ace;
+        if (aceOptions) {
+          this.ace_editor.setOptions(aceOptions);
+        }
+
         this.ace_editor.setValue(this.getValue());
 
         // The theme
