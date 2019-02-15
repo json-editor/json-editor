@@ -9,14 +9,16 @@
       }
     },
     "null":{
-      "type":{
-        "enum":[
-          "null"
-        ]
-      },
-      "enum":{
-        "items":{
-          "type":"null"
+      "properties":{
+        "type":{
+          "enum":[
+            "null"
+          ]
+        },
+        "enum":{
+          "items":{
+            "type":"null"
+          }
         }
       }
     },
