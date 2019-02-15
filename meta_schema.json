@@ -409,37 +409,8 @@
         "title",
         "type"
       ],
-      "options":{
-        "type":"object",
-        "options":{
-          "keep_oneof_values":false
-        },
-        "default":{
+      "required": ["type"],
 
-        },
-        "properties":{
-          "enum_titles":{
-            "type":"array",
-            "uniqueItems":true,
-            "format":"table",
-            "items":{
-              "type":"string",
-              "tilte":"title"
-            }
-          },
-          "grid_columns":{
-            "type":"integer",
-            "minimum":1,
-            "maximum":12
-          },
-          "hidden":{
-            "type":"boolean"
-          },
-          "keep_oneof_values":{
-            "type":"boolean"
-          }
-        }
-      },
       "properties":{
         "type":{
           "propertyOrder":1,
@@ -620,6 +591,35 @@
         },
         "headerTemplate":{
           "type":"string"
+        },
+        "options":{
+          "type":"object",
+          "options":{
+            "keep_oneof_values":false
+          },
+          "default":{ },
+          "properties":{
+            "enum_titles":{
+              "type":"array",
+              "uniqueItems":true,
+              "format":"table",
+              "items":{
+                "type":"string",
+                "tilte":"title"
+              }
+            },
+            "grid_columns":{
+              "type":"integer",
+              "minimum":1,
+              "maximum":12
+            },
+            "hidden":{
+              "type":"boolean"
+            },
+            "keep_oneof_values":{
+              "type":"boolean"
+            }
+          }
         }
       }
     },
