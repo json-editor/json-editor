@@ -646,6 +646,14 @@
       },
       "oneOf":[
         {
+          "title":"Object",
+          "$ref":"#/definitions/object"
+        },
+        {
+          "title":"Array",
+          "$ref":"#/definitions/array"
+        },
+        {
           "title":"String",
           "$ref":"#/definitions/string"
         },
@@ -660,14 +668,6 @@
         {
           "title":"Boolean",
           "$ref":"#/definitions/boolean"
-        },
-        {
-          "title":"Object",
-          "$ref":"#/definitions/object"
-        },
-        {
-          "title":"Array",
-          "$ref":"#/definitions/array"
         },
         {
           "title":"Null",
