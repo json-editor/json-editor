@@ -672,10 +672,6 @@
         {
           "title":"Null",
           "$ref":"#/definitions/null"
-        },
-        {
-          "title":"No Type",
-          "$ref":"#/definitions/schemaBase"
         }
       ]
     }
