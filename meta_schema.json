@@ -19,6 +19,10 @@
           "items":{
             "type":"null"
           }
+        },
+        "default":{
+          "type": "null",
+          "propertyOrder":10
         }
       }
     },
@@ -43,6 +47,10 @@
             "select",
             "checkbox"
           ]
+        },
+        "default":{
+          "type": "boolean",
+          "propertyOrder":10
         }
       }
     },
@@ -160,6 +168,10 @@
           "items":{
             "type":"string"
           }
+        },
+        "default":{
+          "type": "string",
+          "propertyOrder":10
         },
         "media":{
           "type":"object",
@@ -437,9 +449,7 @@
           "type":"string",
           "propertyOrder":4
         },
-        "default":{
-          "propertyOrder":10
-        },
+
         "enum":{
           "type":"array",
           "minItems":1,
