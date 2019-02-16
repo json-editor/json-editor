@@ -382,14 +382,12 @@
         "items":{
           "oneOf":[
             {
-              "title": "Schema",
               "$ref":"#/definitions/schema"
             },
             {
-              "title": "Array of schemas",
               "type": "array",
               "$ref": "#/definitions/schemaArray",
-              "format": "table"
+              "format": "tabs"
             }
           ]
         },
