@@ -376,7 +376,8 @@
           ]
         },
         "default":{
-          "type":"array"
+          "type":"array",
+          "format": "table"
         },
         "items":{
           "oneOf":[
@@ -459,7 +460,8 @@
           "type":"array",
           "minItems":1,
           "uniqueItems":true,
-          "propertyOrder":50
+          "propertyOrder":50,
+          "format": "table"
         },
         "enumSource":{
           "oneOf":[
@@ -567,6 +569,7 @@
         },
         "links":{
           "type":"array",
+          "format":"table",
           "items":{
             "type":"object",
             "title":"link",
