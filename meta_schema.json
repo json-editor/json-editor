@@ -28,9 +28,6 @@
     },
     "boolean":{
       "properties":{
-        "default":{
-          "type":"boolean"
-        },
         "type":{
           "enum":[
             "boolean"
@@ -140,9 +137,6 @@
             "xml",
             "yaml"
           ]
-        },
-        "default":{
-          "type":"string"
         },
         "minLength":{
           "type":"integer",
