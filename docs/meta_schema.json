@@ -422,7 +422,6 @@
 
     "schemaBase":{
       "type":"object",
-      "additionalProperties":false,
       "defaultProperties":[
         "title",
         "type"
@@ -655,30 +654,37 @@
       "oneOf":[
         {
           "title":"Object",
+          "additionalProperties":false,
           "$ref":"#/definitions/object"
         },
         {
           "title":"Array",
+          "additionalProperties":false,
           "$ref":"#/definitions/array"
         },
         {
           "title":"String",
+          "additionalProperties":false,
           "$ref":"#/definitions/string"
         },
         {
           "title":"Number",
+          "additionalProperties":false,
           "$ref":"#/definitions/number"
         },
         {
           "title":"Integer",
+          "additionalProperties":false,
           "$ref":"#/definitions/integer"
         },
         {
           "title":"Boolean",
+          "additionalProperties":false,
           "$ref":"#/definitions/boolean"
         },
         {
           "title":"Null",
+          "additionalProperties":false,
           "$ref":"#/definitions/null"
         }
       ]
