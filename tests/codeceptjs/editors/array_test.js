@@ -10,6 +10,29 @@ Scenario('should have correct initial value', async (I) => {
   assert.equal(value, '[]');
 });
 
+Scenario('should move events when array elements are moved au or down', async (I) => {
+  I.amOnPage('array-move-events.html');
+  I.seeElement('[data-schemapath="root.0"]');
+  I.seeElement('[data-schemapath="root.1"]');
+  I.click('.get-value');
+  value = await I.grabValueFrom('.debug');
+  assert.equal(value, '["A","B"]');
+
+  I.click('.json-editor-btn-moveup');
+  I.seeInPopup('item array moved');
+  I.acceptPopup();
+  I.click('.get-value');
+  value = await I.grabValueFrom('.debug');
+  assert.equal(value, '["B","A"]');
+
+  I.click('.json-editor-btn-movedown');
+  I.seeInPopup('item array moved');
+  I.acceptPopup();
+  I.click('.get-value');
+  value = await I.grabValueFrom('.debug');
+  assert.equal(value, '["A","B"]');
+});
+
 Scenario('should work well with string editors', async (I) => {
   I.amOnPage('array-strings.html');
   I.click('Add String');
@@ -727,3 +750,4 @@ Scenario('should work well with nested array editors', async (I) => {
   assert.equal(value, '[[],[],[],[],[]]');
 
 });
+
