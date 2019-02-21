@@ -21,7 +21,7 @@
           }
         },
         "default":{
-          "type": "null",
+          "type":"null",
           "propertyOrder":10
         }
       }
@@ -46,7 +46,7 @@
           ]
         },
         "default":{
-          "type": "boolean",
+          "type":"boolean",
           "propertyOrder":10
         }
       }
@@ -377,7 +377,7 @@
         },
         "default":{
           "type":"array",
-          "format": "table"
+          "format":"table"
         },
         "items":{
           "oneOf":[
@@ -385,9 +385,9 @@
               "$ref":"#/definitions/schema"
             },
             {
-              "type": "array",
-              "$ref": "#/definitions/schemaArray",
-              "format": "tabs"
+              "type":"array",
+              "$ref":"#/definitions/schemaArray",
+              "format":"tabs"
             }
           ]
         },
@@ -458,7 +458,7 @@
           "minItems":1,
           "uniqueItems":true,
           "propertyOrder":50,
-          "format": "table"
+          "format":"table"
         },
         "enumSource":{
           "oneOf":[
