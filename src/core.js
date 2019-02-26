@@ -399,6 +399,7 @@ JSONEditor.prototype = {
       if( fileBase!=url.substr(0,fileBase.length) && "http"!=url.substr(0,4) && "/"!=url.substr(0,1)) fetchUrl=fileBase+url;
 
       var r = new XMLHttpRequest();
+      r.overrideMimeType('application/json');
       r.open("GET", fetchUrl, true);
       if(self.options.ajaxCredentials) r.withCredentials=self.options.ajaxCredentials;
       r.onreadystatechange = function () {
