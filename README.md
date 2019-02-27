@@ -55,6 +55,7 @@ Usage
 If you learn best by example, check these out:
 
 *  Basic Usage Example - http://rawgithub.com/json-editor/json-editor/master/docs/basic.html
+*  ACE Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/ace_editor.html
 *  Advanced Usage Example - http://rawgithub.com/json-editor/json-editor/master/docs/advanced.html
 *  CSS Integration Example - http://rawgithub.com/json-editor/json-editor/master/docs/css_integration.html
 *  Base64 Editor Example (Muiltple Upload) - http://rawgithub.com/json-editor/json-editor/master/docs/multiple_upload_base64.html
@@ -761,8 +762,10 @@ You can enable [Ace editor options](https://github.com/ajaxorg/ace/wiki/Configur
   "format": "sql",
   "options": {
     "ace": {
-      "enableBasicAutocompletion": true,
-      "enableLiveAutocompletion": true
+      "theme": "ace/theme/vibrant_ink",
+      "tabSize": 2,
+      "useSoftTabs": true,
+      "wrap": true
     }
   }
 }
