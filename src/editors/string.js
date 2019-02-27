@@ -40,6 +40,8 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
     }
     else if(this.ace_editor) {
       this.ace_editor.setValue(sanitized);
+      this.ace_editor.session.getSelection().clearSelection();
+      this.ace_editor.resize();
     }
     
     var changed = from_template || this.getValue() !== value;
@@ -48,7 +50,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
     
     if(initial) this.is_dirty = false;
     else if(this.jsoneditor.options.show_errors === "change") this.is_dirty = true;
-    
+
     if(this.adjust_height) this.adjust_height(this.input);
 
     // Bubble this setValue to parents if the value changed
@@ -382,6 +384,8 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
         }
 
         this.ace_editor.setValue(this.getValue());
+        this.ace_editor.session.getSelection().clearSelection();
+        this.ace_editor.resize();
 
         // The theme
         if(JSONEditor.plugins.ace.theme) this.ace_editor.setTheme('ace/theme/'+JSONEditor.plugins.ace.theme);
