@@ -594,9 +594,14 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
         self.refreshTabs();
 
         self.onChange(true);
+
+        self.jsoneditor.trigger('move');
+
+        // TODO we can remove this eventually
         self.rows.forEach(function (row) {
           row.onMove();
         });
+
       });
 
       if(controls_holder) {
@@ -623,6 +628,10 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
         self.active_tab = self.rows[i+1].tab;
         self.refreshTabs();
         self.onChange(true);
+
+        self.jsoneditor.trigger('move');
+
+        // TODO we can remove this eventually
         self.rows.forEach(function (row) {
           row.onMove();
         });
