@@ -32,10 +32,10 @@
 
   editor.setValue(["A","B"]);
 
-  editor.getEditor('root.0').onMove = function () {
+  editor.on('move', function () {
     alert('item array moved')
     console.log('moved')
-  }
+  });
 
 
 </script>
