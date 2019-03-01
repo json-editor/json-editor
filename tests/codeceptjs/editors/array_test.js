@@ -25,12 +25,14 @@ Scenario('should array editing triggers', async (I) => {
   I.seeInPopup('moveRow');
   I.acceptPopup();
   I.click('.get-value');
+
   assert.equal(await I.grabValueFrom('.debug'), '["A","B"]');
 
   I.click('.json-editor-btntype-add');
   I.seeInPopup('addRow');
   I.acceptPopup();
   I.click('.get-value');
+
   assert.equal(await I.grabValueFrom('.debug'), '["A","B",""]');
 
   I.click('.json-editor-btntype-deletelast');
@@ -39,6 +41,7 @@ Scenario('should array editing triggers', async (I) => {
   I.seeInPopup('deleteRow');
   I.acceptPopup();
   I.click('.get-value');
+
   assert.equal(await I.grabValueFrom('.debug'), '["A","B"]');
 
   I.click('.json-editor-btntype-deleteall');
@@ -47,7 +50,9 @@ Scenario('should array editing triggers', async (I) => {
   I.seeInPopup('deleteAllRows');
   I.acceptPopup();
   I.click('.get-value');
+
   assert.equal(await I.grabValueFrom('.debug'), '[]');
+
 });
 
 Scenario('should work well with string editors', async (I) => {
