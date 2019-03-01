@@ -32,9 +32,24 @@
 
   editor.setValue(["A","B"]);
 
-  editor.on('move', function () {
-    alert('item array moved')
-    console.log('moved')
+  editor.on('moveRow', function () {
+    alert('moveRow')
+    console.log('moveRow')
+  });
+
+  editor.on('addRow', function () {
+    alert('addRow')
+    console.log('addRow')
+  });
+
+  editor.on('deleteRow', function () {
+    alert('deleteRow')
+    console.log('deleteRow')
+  });
+
+  editor.on('deleteAllRows', function () {
+    alert('deleteAllRows')
+    console.log('deleteAllRows')
   });
 
 
