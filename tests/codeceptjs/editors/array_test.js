@@ -10,7 +10,55 @@ Scenario('should have correct initial value', async (I) => {
   assert.equal(value, '[]');
 });
 
-Scenario('should array editing triggers', async (I) => {
+Scenario('should trigger array (table) editing triggers', async (I) => {
+  I.amOnPage('table-move-events.html');
+  I.seeElement('[data-schemapath="root.0"]');
+  I.seeElement('[data-schemapath="root.1"]');
+  I.click('.get-value');
+  value = await I.grabValueFrom('.debug');
+  assert.equal(value, '["A","B"]');
+
+  I.click('.json-editor-btn-moveup');
+  I.seeInPopup('moveRow');
+  I.acceptPopup();
+  I.click('.get-value');
+  value = await I.grabValueFrom('.debug');
+  assert.equal(value, '["B","A"]');
+
+  I.click('.json-editor-btn-movedown');
+  I.seeInPopup('moveRow');
+  I.acceptPopup();
+  I.click('.get-value');
+  value = await I.grabValueFrom('.debug');
+  assert.equal(value, '["A","B"]');
+
+  I.click('.json-editor-btntype-add');
+  I.seeInPopup('addRow');
+  I.acceptPopup();
+  I.click('.get-value');
+  value = await I.grabValueFrom('.debug');
+  assert.equal(value, '["A","B",""]');
+
+  I.click('.json-editor-btntype-deletelast');
+  I.seeInPopup('Are you sure you want to remove this node?');
+  I.acceptPopup();
+  I.seeInPopup('deleteRow');
+  I.acceptPopup();
+  I.click('.get-value');
+  value = await I.grabValueFrom('.debug');
+  assert.equal(value, '["A","B"]');
+
+  I.click('.json-editor-btntype-deleteall');
+  I.seeInPopup('Are you sure you want to remove this node?');
+  I.acceptPopup();
+  I.seeInPopup('deleteAllRows');
+  I.acceptPopup();
+  I.click('.get-value');
+  value = await I.grabValueFrom('.debug');
+  assert.equal(value, '[]');
+});
+
+Scenario('should trigger array editing triggers', async (I) => {
   I.amOnPage('array-move-events.html');
   I.seeElement('[data-schemapath="root.0"]');
   I.seeElement('[data-schemapath="root.1"]');

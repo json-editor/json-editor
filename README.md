@@ -838,6 +838,28 @@ You can override this default by passing in a format:
 }
 ```
 
+#### Array events
+
+When an array item is added, removed, moved up, moved or removed the json editor will trigger a relative event.
+
+```javascript
+editor.on('moveRow', function () {
+  console.log('moveRow')
+});
+
+editor.on('addRow', function () {
+  console.log('addRow')
+});
+
+editor.on('deleteRow', function () {
+  console.log('deleteRow')
+});
+
+editor.on('deleteAllRows', function () {
+  console.log('deleteAllRows')
+});
+```
+
 #### Objects
 
 The default object layout is one child editor per row.  The `grid` format will instead put multiple child editors per row.
