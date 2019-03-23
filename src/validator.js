@@ -538,14 +538,14 @@ JSONEditor.Validator = Class.extend({
     if(['date', 'time', 'datetime-local'].indexOf(schema.format) != -1) {
 
       var validator = {
-          'date': /^(\d{4}\D\d{2}\D\d{2})?$/,
-          'time': /^(\d{2}:\d{2}(?::\d{2})?)?$/,
-          'datetime-local': /^(\d{4}\D\d{2}\D\d{2} \d{2}:\d{2}(?::\d{2})?)?$/
+        'date': /^(\d{4}\D\d{2}\D\d{2})?$/,
+        'time': /^(\d{2}:\d{2}(?::\d{2})?)?$/,
+        'datetime-local': /^(\d{4}\D\d{2}\D\d{2}[ T]\d{2}:\d{2}(?::\d{2})?)?$/
       };
       var format = {
-          'date': '"YYYY-MM-DD"',
-          'time': '"HH:MM"',
-          'datetime-local': '"YYYY-MM-DD HH:MM"'
+        'date': '"YYYY-MM-DD"',
+        'time': '"HH:MM"',
+        'datetime-local': '"YYYY-MM-DD HH:MM"'
       };
 
       var ed = this.jsoneditor.getEditor(path);
