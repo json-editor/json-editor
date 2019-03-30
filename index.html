@@ -2,27 +2,26 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>JSON Editor Example</title>
+    <title>JSON Editor Interactive Example</title>
+
+    <!-- Favicon -->
+    <link href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACbElEQVQ4jbWTz0sqcRTFT/WGFj6KguohuolWqVSEhI5IDTkh4kA/XH0dGCHMTdhPqJ1gRFjBrEyIQohAaNEioloE/QFBtMnd6x+IkCAiks5bZDH0erR6B87m3ns+cOFe4D+oHYAAsAFgv+aNWq39u7AiSdK+w+G49vl89+Pj4y+Li4svpmneJ5PJ65aWln0Ayj/DjY2Nx263uyLLMgcHB6mqKjVNoxCCW1tbLJVKFYfDcfwVpEOSpJLH46nIssyhoSGGQiH29vbS6/UyHo8zlUqxWCyyUChUmpqaSgA6rADD6XTeBINBhkIhJhIJGoZR7u7udvX09Lg0TSsvLCwwm81yZ2eHkUjkBoBhBeR9Pl8lHA5zcnKSZ2dnnJmZCb83VVUNZzIZrq2tcWVlhfPz8xUAeSvgaHR0tBqLxVgsFnl6espYLNb63hwZGWldX1+naZqcnp7m3NxcFcCRFXCi63o1kUjw8PCQBwcHfwHy+TxzuRyFENR1vQrgxArYjcfjD+l0mnt7e9ze3ubExMTHCkKIcKFQoGEYjEQiDAaDDwB2rYCU3++/zWQyNE2TuVyOuq6XvV6vKxqNupLJZFkIQUVRKMsy7Xb7LYCUFWC32WznS0tLj5ubm1xeXubU1BT9fj/7+/s5PDzMQCDAvr4+dnZ2PjY0NJwDsH++hWhbW9tVNpt9Wl1dpa7r1DSNiqJwYGCAbrebTqfzSZKkKwDRz+F3jdlstktN0+5mZ2efhRCvgUDgtaur67m5ufmurq7uEsDYV8EfeLssFwAVb89zAeB3zRe1mgrAA+BXLfOhegA/8fZt9m/cUZutB4A/Qyb7hzbvy7sAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
 
     <!-- placeholders for the theme switcher -->
     <link rel='stylesheet' id='theme_stylesheet'>
     <link rel='stylesheet' id='icon_stylesheet'>
     <style>[class*="foundicon-"] {font-family: GeneralFoundicons;font-style: normal;}</style>
 
-  <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+    <!-- JSON Editor -->
+    <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
 
-    <script>
-        /**
-         * LZString compression library
-         * Used to create direct links to the demo.
-         * NOT REQUIRED for JSON Editor.
-         * https://github.com/pieroxy/lz-string
-         */
-        var LZString={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",_f:String.fromCharCode,compressToBase64:function(e){if(e==null)return"";var t="";var n,r,i,s,o,u,a;var f=0;e=LZString.compress(e);while(f<e.length*2){if(f%2==0){n=e.charCodeAt(f/2)>>8;r=e.charCodeAt(f/2)&255;if(f/2+1<e.length)i=e.charCodeAt(f/2+1)>>8;else i=NaN}else{n=e.charCodeAt((f-1)/2)&255;if((f+1)/2<e.length){r=e.charCodeAt((f+1)/2)>>8;i=e.charCodeAt((f+1)/2)&255}else r=i=NaN}f+=3;s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+LZString._keyStr.charAt(s)+LZString._keyStr.charAt(o)+LZString._keyStr.charAt(u)+LZString._keyStr.charAt(a)}return t},decompressFromBase64:function(e){if(e==null)return"";var t="",n=0,r,i,s,o,u,a,f,l,c=0,h=LZString._f;e=e.replace(/[^A-Za-z0-9\+\/\=]/g,"");while(c<e.length){u=LZString._keyStr.indexOf(e.charAt(c++));a=LZString._keyStr.indexOf(e.charAt(c++));f=LZString._keyStr.indexOf(e.charAt(c++));l=LZString._keyStr.indexOf(e.charAt(c++));i=u<<2|a>>4;s=(a&15)<<4|f>>2;o=(f&3)<<6|l;if(n%2==0){r=i<<8;if(f!=64){t+=h(r|s)}if(l!=64){r=o<<8}}else{t=t+h(r|i);if(f!=64){r=s<<8}if(l!=64){t+=h(r|o)}}n+=3}return LZString.decompress(t)},compressToUTF16:function(e){if(e==null)return"";var t="",n,r,i,s=0,o=LZString._f;e=LZString.compress(e);for(n=0;n<e.length;n++){r=e.charCodeAt(n);switch(s++){case 0:t+=o((r>>1)+32);i=(r&1)<<14;break;case 1:t+=o(i+(r>>2)+32);i=(r&3)<<13;break;case 2:t+=o(i+(r>>3)+32);i=(r&7)<<12;break;case 3:t+=o(i+(r>>4)+32);i=(r&15)<<11;break;case 4:t+=o(i+(r>>5)+32);i=(r&31)<<10;break;case 5:t+=o(i+(r>>6)+32);i=(r&63)<<9;break;case 6:t+=o(i+(r>>7)+32);i=(r&127)<<8;break;case 7:t+=o(i+(r>>8)+32);i=(r&255)<<7;break;case 8:t+=o(i+(r>>9)+32);i=(r&511)<<6;break;case 9:t+=o(i+(r>>10)+32);i=(r&1023)<<5;break;case 10:t+=o(i+(r>>11)+32);i=(r&2047)<<4;break;case 11:t+=o(i+(r>>12)+32);i=(r&4095)<<3;break;case 12:t+=o(i+(r>>13)+32);i=(r&8191)<<2;break;case 13:t+=o(i+(r>>14)+32);i=(r&16383)<<1;break;case 14:t+=o(i+(r>>15)+32,(r&32767)+32);s=0;break}}return t+o(i+32)},decompressFromUTF16:function(e){if(e==null)return"";var t="",n,r,i=0,s=0,o=LZString._f;while(s<e.length){r=e.charCodeAt(s)-32;switch(i++){case 0:n=r<<1;break;case 1:t+=o(n|r>>14);n=(r&16383)<<2;break;case 2:t+=o(n|r>>13);n=(r&8191)<<3;break;case 3:t+=o(n|r>>12);n=(r&4095)<<4;break;case 4:t+=o(n|r>>11);n=(r&2047)<<5;break;case 5:t+=o(n|r>>10);n=(r&1023)<<6;break;case 6:t+=o(n|r>>9);n=(r&511)<<7;break;case 7:t+=o(n|r>>8);n=(r&255)<<8;break;case 8:t+=o(n|r>>7);n=(r&127)<<9;break;case 9:t+=o(n|r>>6);n=(r&63)<<10;break;case 10:t+=o(n|r>>5);n=(r&31)<<11;break;case 11:t+=o(n|r>>4);n=(r&15)<<12;break;case 12:t+=o(n|r>>3);n=(r&7)<<13;break;case 13:t+=o(n|r>>2);n=(r&3)<<14;break;case 14:t+=o(n|r>>1);n=(r&1)<<15;break;case 15:t+=o(n|r);i=0;break}s++}return LZString.decompress(t)},compressToUint8Array:function(e){var t=LZString.compress(e);var n=new Uint8Array(t.length*2);for(var r=0,i=t.length;r<i;r++){var s=t.charCodeAt(r);n[r*2]=s>>>8;n[r*2+1]=s%256}return n},decompressFromUint8Array:function(e){if(e===null||e===undefined){return LZString.decompress(e)}else{var t=new Array(e.length/2);for(var n=0,r=t.length;n<r;n++){t[n]=e[n*2]*256+e[n*2+1]}return LZString.decompress(String.fromCharCode.apply(null,t))}},compressToEncodedURIComponent:function(e){return LZString.compressToBase64(e).replace(/=/g,"$").replace(/\//g,"-")},decompressFromEncodedURIComponent:function(e){if(e)e=e.replace(/$/g,"=").replace(/-/g,"/");return LZString.decompressFromBase64(e)},compress:function(e){if(e==null)return"";var t,n,r={},i={},s="",o="",u="",a=2,f=3,l=2,c="",h=0,p=0,d,v=LZString._f;for(d=0;d<e.length;d+=1){s=e.charAt(d);if(!Object.prototype.hasOwnProperty.call(r,s)){r[s]=f++;i[s]=true}o=u+s;if(Object.prototype.hasOwnProperty.call(r,o)){u=o}else{if(Object.prototype.hasOwnProperty.call(i,u)){if(u.charCodeAt(0)<256){for(t=0;t<l;t++){h=h<<1;if(p==15){p=0;c+=v(h);h=0}else{p++}}n=u.charCodeAt(0);for(t=0;t<8;t++){h=h<<1|n&1;if(p==15){p=0;c+=v(h);h=0}else{p++}n=n>>1}}else{n=1;for(t=0;t<l;t++){h=h<<1|n;if(p==15){p=0;c+=v(h);h=0}else{p++}n=0}n=u.charCodeAt(0);for(t=0;t<16;t++){h=h<<1|n&1;if(p==15){p=0;c+=v(h);h=0}else{p++}n=n>>1}}a--;if(a==0){a=Math.pow(2,l);l++}delete i[u]}else{n=r[u];for(t=0;t<l;t++){h=h<<1|n&1;if(p==15){p=0;c+=v(h);h=0}else{p++}n=n>>1}}a--;if(a==0){a=Math.pow(2,l);l++}r[o]=f++;u=String(s)}}if(u!==""){if(Object.prototype.hasOwnProperty.call(i,u)){if(u.charCodeAt(0)<256){for(t=0;t<l;t++){h=h<<1;if(p==15){p=0;c+=v(h);h=0}else{p++}}n=u.charCodeAt(0);for(t=0;t<8;t++){h=h<<1|n&1;if(p==15){p=0;c+=v(h);h=0}else{p++}n=n>>1}}else{n=1;for(t=0;t<l;t++){h=h<<1|n;if(p==15){p=0;c+=v(h);h=0}else{p++}n=0}n=u.charCodeAt(0);for(t=0;t<16;t++){h=h<<1|n&1;if(p==15){p=0;c+=v(h);h=0}else{p++}n=n>>1}}a--;if(a==0){a=Math.pow(2,l);l++}delete i[u]}else{n=r[u];for(t=0;t<l;t++){h=h<<1|n&1;if(p==15){p=0;c+=v(h);h=0}else{p++}n=n>>1}}a--;if(a==0){a=Math.pow(2,l);l++}}n=2;for(t=0;t<l;t++){h=h<<1|n&1;if(p==15){p=0;c+=v(h);h=0}else{p++}n=n>>1}while(true){h=h<<1;if(p==15){c+=v(h);break}else p++}return c},decompress:function(e){if(e==null)return"";if(e=="")return null;var t=[],n,r=4,i=4,s=3,o="",u="",a,f,l,c,h,p,d,v=LZString._f,m={string:e,val:e.charCodeAt(0),position:32768,index:1};for(a=0;a<3;a+=1){t[a]=a}l=0;h=Math.pow(2,2);p=1;while(p!=h){c=m.val&m.position;m.position>>=1;if(m.position==0){m.position=32768;m.val=m.string.charCodeAt(m.index++)}l|=(c>0?1:0)*p;p<<=1}switch(n=l){case 0:l=0;h=Math.pow(2,8);p=1;while(p!=h){c=m.val&m.position;m.position>>=1;if(m.position==0){m.position=32768;m.val=m.string.charCodeAt(m.index++)}l|=(c>0?1:0)*p;p<<=1}d=v(l);break;case 1:l=0;h=Math.pow(2,16);p=1;while(p!=h){c=m.val&m.position;m.position>>=1;if(m.position==0){m.position=32768;m.val=m.string.charCodeAt(m.index++)}l|=(c>0?1:0)*p;p<<=1}d=v(l);break;case 2:return""}t[3]=d;f=u=d;while(true){if(m.index>m.string.length){return""}l=0;h=Math.pow(2,s);p=1;while(p!=h){c=m.val&m.position;m.position>>=1;if(m.position==0){m.position=32768;m.val=m.string.charCodeAt(m.index++)}l|=(c>0?1:0)*p;p<<=1}switch(d=l){case 0:l=0;h=Math.pow(2,8);p=1;while(p!=h){c=m.val&m.position;m.position>>=1;if(m.position==0){m.position=32768;m.val=m.string.charCodeAt(m.index++)}l|=(c>0?1:0)*p;p<<=1}t[i++]=v(l);d=i-1;r--;break;case 1:l=0;h=Math.pow(2,16);p=1;while(p!=h){c=m.val&m.position;m.position>>=1;if(m.position==0){m.position=32768;m.val=m.string.charCodeAt(m.index++)}l|=(c>0?1:0)*p;p<<=1}t[i++]=v(l);d=i-1;r--;break;case 2:return u}if(r==0){r=Math.pow(2,s);s++}if(t[d]){o=t[d]}else{if(d===i){o=f+f.charAt(0)}else{return null}}u+=o;t[i++]=f+o.charAt(0);r--;f=o;if(r==0){r=Math.pow(2,s);s++}}}};if(typeof module!=="undefined"&&module!=null){module.exports=LZString}
-    </script>
+    <!-- LZString compression library - Used to create direct links to the demo - NOT REQUIRED for JSON Editor -->
+    <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
+
 </head>
 
 <body>
+<p>&nbsp;</p>
 <div class='container'>
     <div class='row'>
         <div class='span8 col-md-8 columns eight large-8 col s8'>
@@ -102,8 +101,24 @@
                         <option value='disable_array_add'>Disable array add buttons</option>
                         <option value='disable_array_reorder'>Disable array move buttons</option>
                         <option value='disable_array_delete'>Disable array delete buttons</option>
+                        <option value='enable_array_copy'>Add copy buttons to arrays</option>
+                        <option value='array_controls_top'>Array controls will be displayed at top of list</option>
                         <option value='disable_array_delete_all_rows'>Disable array delete all rows buttons</option>
                         <option value='disable_array_delete_last_row'>Disable array delete last row buttons</option>
+                    </select>
+                </div>
+                <div>
+                    <label title="It's reccomended that you click the Direct Link after changing these options">Include External Library</label>
+                    <select multiple size="8" id='lib_switcher' style="width: 100%; height: inherit;" class='form-control browser-default' title="It's reccomended that you click the Direct Link after changing these options">
+                        <option value='ace_editor'>Ace Editor</option>
+                        <option value='sceditor'>SCEditor</option>
+                        <option value='simplemde'>SimpleMDE</option>
+                        <option value='select2'>Select2</option>
+                        <option value='selectize'>Selectize</option>
+                        <option value='flatpickr'>Flatpickr</option>
+                        <option value='signature_pad'>Signature Pad</option>
+                        <option value='mathjs'>Math.js</option>
+                        <option value='cleavejs'>Cleave.js</option>
                     </select>
                 </div>
             </div>
@@ -122,7 +137,7 @@
                 <textarea id='schema' style='width: 100%; height: 450px; font-family: monospace;' class='form-control'></textarea>
             </div>
         </div>
-        <div class='row'>
+        <div class='row' style='display:none'>
             <div class='span12 col-md-12 columns twelve large-12 col s12'>
                 <h2>Code</h2>
       <pre><code>// Set default options
@@ -161,6 +176,7 @@ editor.on("change",  function() {
         </div>
     </div>
 </div>
+<p>&nbsp;</p>
 <script>
 (function() {
     var schema;
@@ -181,6 +197,7 @@ editor.on("change",  function() {
             "required": [
               'name',
               'age',
+              'date',
               'favorite_color',
               'gender',
               'location',
@@ -208,6 +225,15 @@ editor.on("change",  function() {
                 gender: {
                     type: "string",
                     enum: ["male", "female"]
+                },
+                date: {
+                  type: "string",
+                  format: "date",
+                  options: {
+                    flatpickr: {
+
+                    }
+                  }
                 },
                 location: {
                     type: "object",
@@ -274,11 +300,51 @@ editor.on("change",  function() {
 
     var jsoneditor;
 
+    // Function for loading external javascript(s) during runtime
+    var loadScripts = function(urls, lib) {
+
+      var head = document.getElementsByTagName('head')[0],
+          scripts = Array.prototype.slice.call(head.getElementsByTagName('script')).map(function(key) {return key.src.toLowerCase();})
+
+      if (typeof urls == 'string') urls = [urls];
+
+      return new Promise(
+        function(resolve, reject) {
+          for (var i=0;i<urls.length;i++) {
+
+            if (scripts.indexOf(urls[i].toLowerCase()) == -1) {
+              var script = document.createElement('script');
+              script.classList.add('external_' + lib)
+              script.type = 'text/javascript';
+              script.src = urls[i];
+              script.async = false;
+
+              // If last script, bind the callback event to resolve
+              if (i == urls.length-1) {
+                  // Multiple binding for browser compatibility
+                  script.onreadystatechange = resolve;
+                  script.onload = resolve;
+              }
+
+              // Fire the loading
+              head.appendChild(script);
+            }
+
+          }
+        }
+      );
+    }
+
     var updateDirectLink = function() {
         var url = window.location.href.replace(/\?.*/,'');
 
         url += '?schema='+LZString.compressToBase64(JSON.stringify(schema));
         url += '&value='+LZString.compressToBase64(JSON.stringify(jsoneditor.getValue()));
+        //url += JSONEditor.plugins.selectize.enable ? '&enable_selectize=1':'';
+
+        var libs = document.getElementById('lib_switcher').querySelectorAll(':checked');
+        var result = Object.keys(libs).map(function(key) {return libs[key].value;});
+        url += '&lib_switcher=' + result.join(',');
 
         for(var i in JSONEditor.defaults.options) {
             if(!JSONEditor.defaults.options.hasOwnProperty(i)) continue;
@@ -290,7 +356,6 @@ editor.on("change",  function() {
                 url += '&'+i+'='+JSONEditor.defaults.options[i];
             }
         }
-
         document.getElementById('direct_link').href = url;
     };
 
@@ -357,15 +422,15 @@ editor.on("change",  function() {
         var mapping = {
             barebones: '',
             html: '',
-            bootstrap2: '//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css',
-            bootstrap3: '//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',
-            bootstrap4: '//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
-            foundation3: '//cdnjs.cloudflare.com/ajax/libs/foundation/3.2.5/stylesheets/foundation.css',
-            foundation4: '//cdnjs.cloudflare.com/ajax/libs/foundation/4.3.2/css/foundation.min.css',
-            foundation5: '//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/css/foundation.min.css',
-            foundation6: '//cdnjs.cloudflare.com/ajax/libs/foundation/6.2.4/foundation.min.css',
-            jqueryui: '//code.jquery.com/ui/1.10.3/themes/south-street/jquery-ui.css',
-            materialize: '//cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css'
+            bootstrap2: 'https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css',
+            bootstrap3: 'https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',
+            bootstrap4: 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
+            foundation3: 'https://cdnjs.cloudflare.com/ajax/libs/foundation/3.2.5/stylesheets/foundation.css',
+            foundation4: 'https://cdnjs.cloudflare.com/ajax/libs/foundation/4.3.2/css/foundation.min.css',
+            foundation5: 'https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/css/foundation.min.css',
+            foundation6: 'https://cdnjs.cloudflare.com/ajax/libs/foundation/6.2.4/foundation.min.css',
+            jqueryui: 'https://code.jquery.com/ui/1.10.3/themes/south-street/jquery-ui.css',
+            materialize: 'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css'
         };
 
         if(typeof mapping[theme] === 'undefined') {
@@ -375,8 +440,8 @@ editor.on("change",  function() {
 
         var scriptMapping = {
             materialize: [
-                'https://code.jquery.com/jquery-3.2.1.min.js',
-                'https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js'
+                'https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js',
+                'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js'
             ]
         }
 
@@ -402,15 +467,14 @@ editor.on("change",  function() {
         if(!no_reload) reload(true);
     };
 
-    // Set the icontheme
-    // Set the theme by loading the right stylesheets
+    // Set the icontheme by loading the right stylesheets
     var setIconlib = function(iconlib,no_reload) {
         iconlib = iconlib || '';
         var mapping = {
-            foundation2: '//cdnjs.cloudflare.com/ajax/libs/foundicons/2.0/stylesheets/general_foundicons.css',
-            foundation3: '//cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css',
-            fontawesome3: '//cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.css',
-            fontawesome4: '//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css',
+            foundation2: 'https://cdnjs.cloudflare.com/ajax/libs/foundicons/2.0/stylesheets/general_foundicons.css',
+            foundation3: 'https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css',
+            fontawesome3: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.css',
+            fontawesome4: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css',
             fontawesome5: 'https://use.fontawesome.com/releases/v5.6.1/css/all.css',
             materialicons: 'https://fonts.googleapis.com/icon?family=Material+Icons'
         };
@@ -422,6 +486,80 @@ editor.on("change",  function() {
 
         if(!no_reload) reload(true);
     };
+
+    // Set the external library inclusion
+    var setExternalLib = function(lib_name, no_reload) {
+
+        lib_name = lib_name || '';
+
+        var scriptMapping = {
+          ace_editor: "https://cdn.jsdelivr.net/npm/ace-editor-builds@1.2.4/src-min-noconflict/ace.js",
+          cleavejs: "https://cdn.jsdelivr.net/npm/cleave.js@1.4.7/dist/cleave.min.js",
+          sceditor: [
+            "https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js",
+            "https://cdn.jsdelivr.net/npm/sceditor@2.1.3/minified/sceditor.min.js",
+            "https://cdn.jsdelivr.net/npm/sceditor@2.1.3/minified/formats/bbcode.js",
+            "https://cdn.jsdelivr.net/npm/sceditor@2.1.3/minified/formats/xhtml.js"
+          ],
+          simplemde: "https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js",
+          select2: [
+            "https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js",
+            "https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/js/select2.min.js"
+          ],
+          selectize: "https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/js/standalone/selectize.min.js",
+          flatpickr: "https://cdn.jsdelivr.net/npm/flatpickr",
+          signature_pad: "https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js",
+          mathjs: "https://cdn.jsdelivr.net/npm/mathjs@5.3.1/dist/math.min.js"
+        }
+
+        var styleMapping = {
+          sceditor: "https://cdn.jsdelivr.net/npm/sceditor@2.1.3/minified/themes/default.min.css",
+          select2: "https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/css/select2.min.css",
+          selectize: [
+            "https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/css/selectize.min.css",
+            "https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/css/selectize.default.min.css"
+          ],
+          simplemde: "https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css",
+          flatpickr: "https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+        }
+
+        var libScripts = scriptMapping[lib_name],
+            libStyles = styleMapping[lib_name],
+            head = document.getElementsByTagName('head')[0],
+            script,style;
+
+        if (typeof libStyles == 'string') { libStyles = [libStyles]; }
+        if (Array.isArray(libStyles)) {
+            for (var i = 0; i < libStyles.length; i++) {
+                style = document.createElement('link');
+                style.setAttribute('rel', 'stylesheet');
+                style.setAttribute('type', 'text/css');
+                style.setAttribute('href', libStyles[i]);
+                style.classList.add('external_' + lib_name);
+                head.appendChild(style);
+            }
+        }
+
+        if (libScripts !== undefined) {
+          loadScripts(libScripts, lib_name).then(
+            function(val) {
+              switch (lib_name) {
+                case 'selectize':
+                  JSONEditor.plugins.selectize.enable = true;
+                  break;
+              }
+
+              if(!no_reload) {
+                reload(true);
+              }
+            }
+          ).catch(
+            function(reason) {
+              console.log('Error loading script: ', reason)
+            }
+          );
+        }
+    }
 
     var refreshBooleanOptions = function(no_reload) {
         var boolean_options = document.getElementById('boolean_options').children;
@@ -437,6 +575,23 @@ editor.on("change",  function() {
     });
     document.getElementById('icon_switcher').addEventListener('change',function() {
         setIconlib(this.value);
+    });
+    document.getElementById('lib_switcher').addEventListener('change',function() {
+      var selected = this.querySelectorAll(':checked'),
+          unselected = this.querySelectorAll(':not(:checked)');
+
+      for (var i=0;i<unselected.length;i++) {
+        var els = document.getElementsByTagName('head')[0].getElementsByClassName('external_' + unselected[i].value);
+        for (var j=els.length-1;j>=0;j--) {
+          if (unselected[i].value == 'selectize') JSONEditor.plugins.selectize.enable = false;
+          els[j].parentNode.removeChild(els[j]);
+        }
+      }
+
+      for (var i=0;i<selected.length;i++) {
+        if (selected[i].value == 'selectize') JSONEditor.plugins.selectize.enable = true;
+        setExternalLib(selected[i].value);
+      }
     });
     document.getElementById('object_layout').addEventListener('change',function() {
        JSONEditor.defaults.options.object_layout = this.value;
@@ -465,6 +620,16 @@ editor.on("change",  function() {
 
     document.getElementById('show_errors').value = (window.location.href.match(/[?&]show_errors=([^&]+)/)||[])[1] || 'interaction';
     JSONEditor.defaults.options.show_errors = document.getElementById('show_errors').value;
+
+    var lib_switcher = document.getElementById('lib_switcher');
+    var lib_switcher_values = ((window.location.href.match(/[?&]lib_switcher=([^&]+)/)||[])[1] || '');
+    if (lib_switcher_values != '') {
+      lib_switcher_values = lib_switcher_values.split(',');
+      for (var i=0;i< lib_switcher.options.length;i++) {
+        lib_switcher.options[i].selected = (lib_switcher_values.indexOf(lib_switcher.options[i].value)>-1);
+        if (lib_switcher.options[i].selected) setExternalLib(lib_switcher.options[i].value);
+      }
+    }
 
     var boolean_options = document.getElementById('boolean_options').children;
     for(var i=0; i<boolean_options.length; i++) {
