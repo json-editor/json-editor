@@ -9,7 +9,7 @@ When creating an issue in GitHub, try to include when feasible:
 *  An example JSON schema that causes the issue
 *  Steps to reproduce
 
-If you can reproduce the issue on the demo page (http://rawgithub.com/json-editor/json-editor/master/docs/demo.html), it's helpful to attach the "Direct Link" url (top right of page).  Note: the direct link might not work for very large schemas or JSON values.
+If you can reproduce the issue on the demo page (https://json-editor.github.io/json-editor/), it's helpful to attach the "Direct Link" url (top right of page).  Note: the direct link might not work for very large schemas or JSON values.
 
 if your setup is more complex (i.e. setting values using JavaScript interface), you can create a test setup at sites like  https://jsfiddle.net or https://codepen.io/.
 

@@ -10,7 +10,7 @@ Some pull requests added from the original repo.
 JSON Editor takes a JSON Schema and uses it to generate an HTML form.  
 It has full support for JSON Schema version 3 and 4 and can integrate with several popular CSS frameworks (bootstrap, foundation, and jQueryUI).
 
-Check out an interactive demo (demo.html): http://rawgithub.com/json-editor/json-editor/master/docs/demo.html
+Check out an interactive demo: https://json-editor.github.io/json-editor/
 
 Install
 -----------------
@@ -54,20 +54,20 @@ Usage
 
 If you learn best by example, check these out:
 
-*  Basic Usage Example - http://rawgithub.com/json-editor/json-editor/master/docs/basic.html
-*  ACE Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/ace_editor.html
-*  Advanced Usage Example - http://rawgithub.com/json-editor/json-editor/master/docs/advanced.html
-*  CSS Integration Example - http://rawgithub.com/json-editor/json-editor/master/docs/css_integration.html
-*  Base64 Editor Example (Muiltple Upload) - http://rawgithub.com/json-editor/json-editor/master/docs/multiple_upload_base64.html
-*  Cleave.js Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/cleave.html
-*  Datetime Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/datetime.html
-*  Recursive JSON Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/recursive.html
-*  Select2 Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/select2.html
-*  Selectize Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/selectize.html
-*  Signature Pad Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/signature.html
-*  Star Rating Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/starrating.html
-*  Upload Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/upload.html
-*  WYSIWYG Editor Example - http://rawgithub.com/json-editor/json-editor/master/docs/wysiwyg.html
+*  Basic Usage Example - https://json-editor.github.io/json-editor/basic.html
+*  ACE Editor Example - https://json-editor.github.io/json-editor/ace_editor.html
+*  Advanced Usage Example - https://json-editor.github.io/json-editor/advanced.html
+*  CSS Integration Example - https://json-editor.github.io/json-editor/css_integration.html
+*  Base64 Editor Example (Muiltple Upload) - https://json-editor.github.io/json-editor/multiple_upload_base64.html
+*  Cleave.js Editor Example - https://json-editor.github.io/json-editor/cleave.html
+*  Datetime Editor Example - https://json-editor.github.io/json-editor/datetime.html
+*  Recursive JSON Editor Example - https://json-editor.github.io/json-editor/recursive.html
+*  Select2 Editor Example - https://json-editor.github.io/json-editor/select2.html
+*  Selectize Editor Example - https://json-editor.github.io/json-editor/selectize.html
+*  Signature Pad Editor Example - https://json-editor.github.io/json-editor/signature.html
+*  Star Rating Editor Example - https://json-editor.github.io/json-editor/starrating.html
+*  Upload Editor Example - https://json-editor.github.io/json-editor/upload.html
+*  WYSIWYG Editor Example - https://json-editor.github.io/json-editor/wysiwyg.html
 
 
 The rest of this README contains detailed documentation about every aspect of JSON Editor.  For more [under-the-hood documentation](https://github.com/json-editor/json-editor/wiki), check the wiki.
