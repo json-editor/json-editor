@@ -149,8 +149,8 @@ JSONEditor.AbstractTheme = Class.extend({
   },
   getSwitcher: function(options) {
     var s = this.getSelectInput(options);
-    s.className = (s.className || '') + ' switcher'
-    return s   
+    s.className = (s.className || '') + ' switcher';
+    return s;
   },
   getSwitcherOptions: function(switcher) {
     return switcher.getElementsByTagName('option');
