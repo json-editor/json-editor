@@ -73,21 +73,6 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
     var container;
     var isCategoriesFormat = (this.format === 'categories');
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     if(this.format === 'grid-strict') {
       var rows = [];
       $each(this.property_order, function(j,key) {
@@ -147,29 +132,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
           row.appendChild(editor.container);
         }
       }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    else if(this.format === 'grid') {
+    } else if(this.format === 'grid') {
       var rows = [];
       $each(this.property_order, function(j,key) {
         var editor = self.editors[key];
