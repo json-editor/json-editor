@@ -73,7 +73,103 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
     var container;
     var isCategoriesFormat = (this.format === 'categories');
 
-    if(this.format === 'grid') {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    if(this.format === 'grid-strict') {
+      var rows = [];
+      $each(this.property_order, function(j,key) {
+        var editor = self.editors[key];
+
+        if(editor.property_removed) return;
+        var found = false;
+        var width = editor.options.hidden ? 0 : (editor.options.grid_columns || editor.getNumColumns());
+        var offset = editor.options.hidden ? 0 : (editor.options.grid_offset || 0);
+        var inNewRow = editor.options.hidden ? false : (editor.options.in_new_row || false);
+        var height = editor.options.hidden ? 0 : editor.container.offsetHeight;
+
+        // See if the editor will fit in any of the existing rows first
+        for(var i=0; i<rows.length; i++) {
+          // If the editor will fit in the row horizontally
+          var totCols = (rows[i].width + width + offset);
+          if(totCols <= 12 && !inNewRow) {
+            found = i;
+          }
+        }
+
+        // If there isn't a spot in any of the existing rows, start a new row
+        if(found === false) {
+          rows.push({
+            width: 0,
+            minh: 999999,
+            maxh: 0,
+            editors: []
+          });
+          found = rows.length-1;
+        }
+
+        rows[found].editors.push({
+          key: key,
+          width: width,
+          offset: offset,
+          height: height
+        });
+      });
+
+      // layout hasn't changed
+      if(this.layout === JSON.stringify(rows)) return false;
+      this.layout = JSON.stringify(rows);
+
+      // Layout the form
+      container = document.createElement('div');
+      for(i=0; i<rows.length; i++) {
+        var row = this.theme.getGridRow();
+        container.appendChild(row);
+        for(j=0; j<rows[i].editors.length; j++) {
+          var key = rows[i].editors[j].key;
+
+          var editor = this.editors[key];
+
+          if(editor.options.hidden) editor.container.style.display = 'none';
+          else this.theme.setGridColumnSize(editor.container,rows[i].editors[j].width,rows[i].editors[j].offset);
+          row.appendChild(editor.container);
+        }
+      }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    else if(this.format === 'grid') {
       var rows = [];
       $each(this.property_order, function(j,key) {
         var editor = self.editors[key];
@@ -738,7 +834,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       this.addproperty_controls.appendChild(this.addproperty_holder);
       this.refreshAddProperties();
     }
-            
+
     // Fix table cell ordering
     if(this.options.table_row) {
       this.editor_holder = this.container;
@@ -800,7 +896,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       var json = JSON.parse(this.editjson_textarea.value);
       this.setValue(json);
       this.hideEditJSON();
-      this.onChange(true); 
+      this.onChange(true);
     }
     catch(e) {
       window.alert('invalid JSON');
