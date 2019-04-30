@@ -125,7 +125,7 @@ JSONEditor.defaults.themes.foundation = JSONEditor.AbstractTheme.extend({
       var inputGroup = document.createElement('div');
       inputGroup.classList.add('input-group-button');
       inputGroup.style.verticalAlign = 'top';
-      buttons[i].classList.remove('small');   
+      buttons[i].classList.remove('small');
       inputGroup.appendChild(buttons[i]);
       inputGroupContainer.appendChild(inputGroup);
     }
@@ -160,9 +160,12 @@ JSONEditor.defaults.themes.foundation3 = JSONEditor.defaults.themes.foundation.e
     el.innerHTML = '<dl class="tabs horizontal" style="padding-left: 10px; margin-left: 10px;" id="' + pName + '"></dl><div class="tabs-content twelve columns" style="padding: 10px; margin-left: 10px;" id="' + pName + '"></div>';
     return el;
   },
-  setGridColumnSize: function(el,size) {
+  setGridColumnSize: function(el,size, offset) {
     var sizes = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve'];
     el.classList.add('columns', sizes[size]);
+    if (offset) {
+      el.classList.add('medium-offset-'+offset);
+    }
   },
   getTab: function(text, tabId) {
     var el = document.createElement('dd');

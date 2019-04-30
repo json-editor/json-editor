@@ -73,50 +73,38 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
     var container;
     var isCategoriesFormat = (this.format === 'categories');
     var rows = [];
-    var row = null;
     var key = null;
     var editor = null;
+    var row;
 
     if(this.format === 'grid-strict') {
+      var rowIndex = 0;
+      row = [];
+
       $each(this.property_order, function(j,key) {
         var editor = self.editors[key];
         if (editor.property_removed) {
           return;
         }
-        var rowIndex = false;
         var width = editor.options.hidden ? 0 : (editor.options.grid_columns || editor.getNumColumns());
         var offset = editor.options.hidden ? 0 : (editor.options.grid_offset || 0);
         var gridBreak = editor.options.hidden ? false : (editor.options.grid_break || false);
         var height = editor.options.hidden ? 0 : editor.container.offsetHeight;
 
-        for (var i = 0; i < rows.length; i++) {
-          var totCols = (rows[i].width + width + offset);
-          if (totCols <= 12) {
-            rowIndex = i;
-          }
-        }
-
-        if (rowIndex === false) {
-          rows.push({
-            width: 0,
-            minh: 999999,
-            maxh: 0,
-            editors: []
-          });
-          rowIndex = rows.length - 1;
-        }
-
-        rows[rowIndex].editors.push({
+        var column = {
           key: key,
           width: width,
           offset: offset,
           height: height
-        });
+        };
+
+        row.push(column);
+
+        rows[rowIndex] = row;
 
         if (gridBreak) {
-          rows[rowIndex].width = 12;
-        } else {
-          rows[rowIndex].width += width + offset;
+          rowIndex++;
+          row = [];
         }
       });
 
@@ -129,14 +117,13 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       for (i = 0; i < rows.length; i++) {
         row = this.theme.getGridRow();
         container.appendChild(row);
-        for (j = 0; j < rows[i].editors.length; j++) {
-          key = rows[i].editors[j].key;
+        for (j = 0; j < rows[i].length; j++) {
+          key = rows[i][j].key;
           editor = this.editors[key];
-
           if (editor.options.hidden) {
             editor.container.style.display = 'none';
           } else {
-            this.theme.setGridColumnSize(editor.container, rows[i].editors[j].width, rows[i].editors[j].offset);
+            this.theme.setGridColumnSize(editor.container, rows[i][j].width, rows[i][j].offset);
           }
           row.appendChild(editor.container);
         }

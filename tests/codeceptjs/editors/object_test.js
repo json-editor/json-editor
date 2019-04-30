@@ -29,9 +29,28 @@ Scenario('should validate also not required properties', async (I) => {
 
 Scenario('rows and columns', (I) => {
   I.amOnPage('grid-strict.html');
-  I.seeNumberOfVisibleElements('.row', 7);
-  I.seeNumberOfVisibleElements('.col-md-3', 11);
-  I.seeElement('.col-md-offset-9');
-  I.seeElement('.col-md-offset-6');
+  I.seeNumberOfVisibleElements('.row', 2);
+  I.seeElement('.col-md-1');
+  I.seeElement('.col-md-2');
+  I.seeElement('.col-md-3');
+  I.seeElement('.col-md-4');
+  I.seeElement('.col-md-5');
+  I.seeElement('.col-md-6');
+  I.seeElement('.col-md-7');
+  I.seeElement('.col-md-8');
+  I.seeElement('.col-md-9');
+  I.seeElement('.col-md-10');
+  I.seeElement('.col-md-11');
+  I.seeElement('.col-md-12');
+  I.seeElement('.col-md-offset-1');
+  I.seeElement('.col-md-offset-2');
   I.seeElement('.col-md-offset-3');
+  I.seeElement('.col-md-offset-4');
+  I.seeElement('.col-md-offset-5');
+  I.seeElement('.col-md-offset-6');
+  I.seeElement('.col-md-offset-7');
+  I.seeElement('.col-md-offset-8');
+  I.seeElement('.col-md-offset-9');
+  I.seeElement('.col-md-offset-10');
+  I.seeElement('.col-md-offset-11');
 });
