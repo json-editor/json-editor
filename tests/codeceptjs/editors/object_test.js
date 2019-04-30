@@ -26,3 +26,12 @@ Scenario('should validate also not required properties', async (I) => {
   I.amOnPage('object.html');
   I.see('Value must be at least 3 characters long.');
 });
+
+Scenario('rows and columns', (I) => {
+  I.amOnPage('grid-strict.html');
+  I.seeNumberOfVisibleElements('.row', 7);
+  I.seeNumberOfVisibleElements('.col-md-3', 11);
+  I.seeElement('.col-md-offset-9');
+  I.seeElement('.col-md-offset-6');
+  I.seeElement('.col-md-offset-3');
+});
