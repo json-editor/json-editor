@@ -163,9 +163,6 @@ JSONEditor.defaults.themes.foundation3 = JSONEditor.defaults.themes.foundation.e
   setGridColumnSize: function(el,size, offset) {
     var sizes = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve'];
     el.classList.add('columns', sizes[size]);
-    if (offset) {
-      el.classList.add('medium-offset-'+offset);
-    }
   },
   getTab: function(text, tabId) {
     var el = document.createElement('dd');

@@ -29,7 +29,7 @@ Scenario('should validate also not required properties', async (I) => {
 
 Scenario('rows and columns', (I) => {
   I.amOnPage('grid-strict.html');
-  I.seeNumberOfVisibleElements('.row', 2);
+  I.seeNumberOfVisibleElements('.row', 13);
   I.seeElement('.col-md-1');
   I.seeElement('.col-md-2');
   I.seeElement('.col-md-3');
