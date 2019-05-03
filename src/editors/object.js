@@ -529,6 +529,12 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
   build: function() {
     var self = this;
 
+    $each(this.editors, function(key,editor) {
+      if(!self.isRequired(editor)) {
+        self.editors[key].deactivate()
+      }
+    });
+
     var isCategoriesFormat = (this.format === 'categories');
     this.rows=[];
     this.active_tab = null;
@@ -951,8 +957,8 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
   },
   removeObjectProperty: function(property) {
     if(this.editors[property]) {
-      this.editors[property].unregister();
-      delete this.editors[property];
+        this.editors[property].unregister();
+        delete this.editors[property];
 
       this.refreshValue();
       this.layoutEditors();
@@ -1059,7 +1065,9 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
 
     for(var i in this.editors) {
       if(!this.editors.hasOwnProperty(i)) continue;
-      this.value[i] = this.editors[i].getValue();
+      if (this.editors[i].isActive()) {
+        this.value[i] = this.editors[i].getValue();
+      }
     }
 
     if(this.adding_property) this.refreshAddProperties();
@@ -1147,6 +1155,9 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
     }
   },
   isRequired: function(editor) {
+    if (!editor) {
+      return;
+    }
     if(typeof editor.schema.required === "boolean") return editor.schema.required;
     else if(Array.isArray(this.schema.required)) return this.schema.required.indexOf(editor.key) > -1;
     else if(this.jsoneditor.options.required_by_default) return true;
