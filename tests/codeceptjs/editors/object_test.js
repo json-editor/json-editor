@@ -27,7 +27,7 @@ Scenario('should validate also not required properties', async (I) => {
   I.see('Value must be at least 3 characters long.');
 });
 
-Scenario('rows and columns', (I) => {
+Scenario('grid-strict rows and columns', (I) => {
   I.amOnPage('grid-strict.html');
   I.seeNumberOfVisibleElements('.row', 13);
   I.seeElement('.col-md-1');
@@ -53,4 +53,15 @@ Scenario('rows and columns', (I) => {
   I.seeElement('.col-md-offset-9');
   I.seeElement('.col-md-offset-10');
   I.seeElement('.col-md-offset-11');
+});
+
+Scenario('grid rows and columns', (I) => {
+  I.amOnPage('grid.html');
+  I.seeNumberOfVisibleElements('.row', 6);
+  I.seeNumberOfVisibleElements('.col-md-12', 1);
+  I.seeNumberOfVisibleElements('.col-md-6', 3);
+  I.seeNumberOfVisibleElements('.col-md-4', 3);
+  I.seeNumberOfVisibleElements('.col-md-3', 4);
+  I.seeNumberOfVisibleElements('.col-md-2', 6);
+  I.seeNumberOfVisibleElements('.col-md-1', 6);
 });
