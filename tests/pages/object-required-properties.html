@@ -11,7 +11,7 @@
 
 <div class="container">
 
-<textarea class="value" style="width: 100%; height: 100px;"></textarea>
+<textarea class="value" style="width: 100%; height: 200px;"></textarea>
 <button class='get-value'>get value</button>
 <div class='json-editor-container'></div>
 
@@ -51,6 +51,7 @@
       "string": {
         "title": "string",
         "type": "string",
+        "minLength": 5,
         "options": {
           "grid_columns": 4
         }
@@ -66,18 +67,64 @@
         "title": "boolean",
         "type": "boolean",
         "options": {
-          "grid_columns": 4
+          "grid_columns": 4,
+          "grid_break": true
         }
       },
       "array": {
         "title": "array",
         "type": "array",
         "options": {
-          "grid_columns": 12
+          "grid_columns": 6
         },
         "items": {
           "title": "string",
           "type": "string"
+        }
+      },
+      "object": {
+        "type": "object",
+        "format": "grid-strict",
+        "required": [
+          "array",
+          "string",
+        ],
+        "options": {
+          "grid_columns": 6
+        },
+        "properties": {
+          "string": {
+            "title": "string",
+            "type": "string",
+            "options": {
+              "grid_columns": 4
+            }
+          },
+          "number": {
+            "title": "number",
+            "type": "number",
+            "options": {
+              "grid_columns": 4
+            }
+          },
+          "boolean": {
+            "title": "boolean",
+            "type": "boolean",
+            "options": {
+              "grid_columns": 4
+            }
+          },
+          "array": {
+            "title": "array",
+            "type": "array",
+            "options": {
+              "grid_columns": 12
+            },
+            "items": {
+              "title": "string",
+              "type": "string"
+            }
+          }
         }
       }
     }
@@ -136,11 +183,18 @@
       editor.destroy();
     }
 
+    initJsonEditor();
+
+  };
+
+  initJsonEditor = function () {
     editor = new JSONEditor(container, {
       schema: schema,
-      theme: theme
+      theme: 'bootstrap3',
+      opt_in_optional_properties: true
+      //display_required_only: true
     });
-  };
+  }
 
   document.getElementById('theme_switcher').addEventListener('change',function() {
     setTheme(this.value);
@@ -148,22 +202,14 @@
 
   window.addEventListener('load',function() {
 
-    editor = new JSONEditor(container, {
-      schema: schema,
-      theme: 'bootstrap3'
-      // display_required_only: true
-    });
+    initJsonEditor();
 
     getValue.addEventListener('click', function () {
-      value.value = JSON.stringify(editor.getValue());
+      value.value = JSON.stringify(editor.getValue(), null, 2);
     });
 
     setTheme(this.value);
   });
-
-
-
-
 </script>
 
 </body>

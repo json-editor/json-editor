@@ -65,3 +65,45 @@ Scenario('grid rows and columns', (I) => {
   I.seeNumberOfVisibleElements('.col-md-2', 6);
   I.seeNumberOfVisibleElements('.col-md-1', 6);
 });
+
+Scenario('opt in optional properties', async (I) => {
+  I.amOnPage('object-required-properties.html');
+
+  // the optional properties controls of a disabled object must be disabled too
+
+  value = await I.grabAttributeFrom('[data-schemapath="root.object.number"] .json-editor-opt-in', 'disabled');
+  assert.equal(value, 'true');
+  value = await I.grabAttributeFrom('[data-schemapath="root.object.boolean"] .json-editor-opt-in', 'disabled');
+  assert.equal(value, 'true');
+  I.click('.get-value');
+  value = await I.grabValueFrom('.value');
+  assert.equal(value, '{"number":0,"boolean":false}');
+
+  // opt-in string property
+
+  I.click('[data-schemapath="root.string"] .json-editor-opt-in');
+  I.click('.get-value');
+  value = await I.grabValueFrom('.value');
+  assert.equal(value, '{"string":"","number":0,"boolean":false}');
+
+  // opt-in array property
+
+  I.click('[data-schemapath="root.array"] .json-editor-opt-in');
+  I.click('.get-value');
+  value = await I.grabValueFrom('.value');
+  assert.equal(value, '{"string":"","number":0,"boolean":false,"array":[]}');
+
+  // opt-in object property
+
+  I.click('[data-schemapath="root.object"] .json-editor-opt-in');
+  I.click('.get-value');
+  value = await I.grabValueFrom('.value');
+  assert.equal(value, '{"string":"","number":0,"boolean":false,"array":[],"object":{"string":"","array":[]}}');
+
+  // the optional properties controls of an active object must not be disabled
+
+  value = await I.grabAttributeFrom('[data-schemapath="root.object.number"] .json-editor-opt-in', 'disabled');
+  assert.equal(value, false);
+  value = await I.grabAttributeFrom('[data-schemapath="root.object.boolean"] .json-editor-opt-in', 'disabled');
+  assert.equal(value, false);
+});
