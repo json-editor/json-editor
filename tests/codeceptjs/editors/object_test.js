@@ -69,7 +69,7 @@ Scenario('grid rows and columns', (I) => {
 Scenario('opt in optional properties', async (I) => {
   I.amOnPage('object-required-properties.html');
 
-  // the optional properties controls of a disabled object must be disabled too
+  // if an editor type "object" is disabled, also the child editors opt-in controls will be disabled.
 
   value = await I.grabAttributeFrom('[data-schemapath="root.object.number"] .json-editor-opt-in', 'disabled');
   assert.equal(value, 'true');
@@ -100,7 +100,7 @@ Scenario('opt in optional properties', async (I) => {
   value = await I.grabValueFrom('.value');
   assert.equal(value, '{"string":"","number":0,"boolean":false,"array":[],"object":{"string":"","array":[]}}');
 
-  // the optional properties controls of an active object must not be disabled
+  // if an editor type "object" is enabled, also the child editors opt-in controls will be enabled.
 
   value = await I.grabAttributeFrom('[data-schemapath="root.object.number"] .json-editor-opt-in', 'disabled');
   assert.equal(value, false);
