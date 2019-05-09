@@ -36,6 +36,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
         for(var i in this.editors) {
           if(!this.editors.hasOwnProperty(i)) continue;
           this.editors[i].enable();
+          this.editors[i].optInCheckbox.disabled = false;
         }
       }
     }
@@ -51,6 +52,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       for(var i in this.editors) {
         if(!this.editors.hasOwnProperty(i)) continue;
         this.editors[i].disable(always_disabled);
+        this.editors[i].optInCheckbox.disabled = true;
       }
     }
   },
@@ -529,12 +531,6 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
   build: function() {
     var self = this;
 
-    $each(this.editors, function(key,editor) {
-      if(!self.isRequired(editor)) {
-        self.editors[key].deactivate()
-      }
-    });
-
     var isCategoriesFormat = (this.format === 'categories');
     this.rows=[];
     this.active_tab = null;
@@ -549,6 +545,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
         editor.setContainer(holder);
         editor.build();
         editor.postBuild();
+        editor.setOptInCheckbox(editor.header);
 
         if(self.editors[key].options.hidden) {
           holder.style.display = 'none';
@@ -565,7 +562,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
     }
     // If the object should be rendered as a div
     else {
-      this.header = document.createElement('span');
+      this.header = document.createElement('label');
       this.header.textContent = this.getTitle();
       this.title = this.theme.getHeader(this.header);
       this.container.appendChild(this.title);
@@ -720,6 +717,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
         editor.setContainer(holder);
         editor.build();
         editor.postBuild();
+        editor.setOptInCheckbox(editor.header);
       });
 
       if(this.rows[0]){
@@ -797,6 +795,10 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       this.addproperty_controls.appendChild(this.addproperty_button);
       this.addproperty_controls.appendChild(this.addproperty_holder);
       this.refreshAddProperties();
+
+      // non required properties start deactivated
+      this.deactivateNonRequiredProperties();
+
     }
 
     // Fix table cell ordering
@@ -812,6 +814,17 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       this.layoutEditors();
       // Do it again now that we know the approximate heights of elements
       this.layoutEditors();
+    }
+  },
+  deactivateNonRequiredProperties: function () {
+    var self = this;
+    // hte opt_in_optional_properties editor option is for backward compatibility
+    if (this.jsoneditor.options.opt_in_optional_properties || this.options.opt_in_optional_properties) {
+      $each(this.editors, function(key, editor) {
+        if (!self.isRequired(editor)) {
+          self.editors[key].deactivate();
+        }
+      });
     }
   },
   showEditJSON: function() {
@@ -1006,6 +1019,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
         self.editors[name].setContainer(holder);
         self.editors[name].build();
         self.editors[name].postBuild();
+        self.editors[name].setOptInCheckbox(editor.header);
       }
 
       self.cached_editors[name] = self.editors[name];

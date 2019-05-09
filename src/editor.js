@@ -33,15 +33,16 @@ JSONEditor.AbstractEditor = Class.extend({
   },
   activate: function() {
     this.active = true;
-    this.activeLabel.textContent = 'active';
-    this.activeLabel.setAttribute('style', 'background: green; border-radius: 4px; color: white; padding: 5px;');
+    this.optInCheckbox.checked = true;
+    this.enable();
     this.change();
   },
   deactivate: function() {
+    // only non required properties can be deactivated.
     if (!this.isRequired()) {
       this.active = false;
-      this.activeLabel.textContent = 'deactived';
-      this.activeLabel.setAttribute('style', 'background: red; border-radius: 4px; color: white; padding: 5px;');
+      this.optInCheckbox.checked = false;
+      this.disable();
       this.change();
     }
   },
@@ -57,17 +58,7 @@ JSONEditor.AbstractEditor = Class.extend({
     this.original_schema = options.schema;
     this.schema = this.jsoneditor.expandSchema(this.original_schema);
 
-    var self = this;
-
-    this.activeLabel = document.createElement('label');
-    self.activate();
-    this.activeLabel.addEventListener('click', function () {
-      if (self.isActive()) {
-        self.deactivate();
-      } else {
-        self.activate();
-      }
-    });
+    this.active = true;
 
     this.options = $extend({}, (this.options || {}), (this.schema.options || {}), (options.schema.options || {}), options);
 
@@ -162,9 +153,33 @@ JSONEditor.AbstractEditor = Class.extend({
     if(this.schema.id) this.container.setAttribute('data-schemaid',this.schema.id);
     if(this.schema.type && typeof this.schema.type === "string") this.container.setAttribute('data-schematype',this.schema.type);
     this.container.setAttribute('data-schemapath',this.path);
-    this.container.appendChild(this.activeLabel);
   },
+  setOptInCheckbox: function(header) {
+    // the active/deactive checbox control.
+    var self = this;
+    this.optInCheckbox = document.createElement('input');
+    this.optInCheckbox.setAttribute('type', 'checkbox');
+    this.optInCheckbox.setAttribute('style', 'margin: 0 10px 0 0;');
+    this.optInCheckbox.classList.add('json-editor-opt-in');
 
+    this.optInCheckbox.addEventListener('click', function () {
+      if (self.isActive()) {
+        self.deactivate();
+      } else {
+        self.activate();
+      }
+    });
+
+    // append active/deactive checkbox if opt_in_optional_properties is true
+    if (this.jsoneditor.options.opt_in_optional_properties || this.options.opt_in_optional_properties) {
+      // and control to type object editors if they are not required
+      if (this.parent && this.parent.schema.type === 'object' && !this.isRequired() && this.header) {
+        this.header.appendChild(this.optInCheckbox);
+        this.header.insertBefore(this.optInCheckbox, this.header.firstChild);
+      }
+    }
+
+  },
   preBuild: function() {
 
   },
@@ -179,7 +194,6 @@ JSONEditor.AbstractEditor = Class.extend({
     this.register();
     this.onWatchedFieldChange();
   },
-
   setupWatchListeners: function() {
     var self = this;
 
