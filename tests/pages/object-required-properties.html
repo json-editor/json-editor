@@ -10,34 +10,39 @@
 <body>
 
 <div class="container">
-
-<textarea class="value" style="width: 100%; height: 200px;"></textarea>
-<button class='get-value'>get value</button>
-<div class='json-editor-container'></div>
-
-    <div>
-      <label>CSS Framework</label>
-      <select id='theme_switcher' class='form-control browser-default'>
-        <option value='barebones'>Barebones</option>
-        <option value='html'>HTML</option>
-        <option value='jqueryui'>jQuery UI</option>
-        <option value='bootstrap2'>Bootstrap 2</option>
-        <option value='bootstrap3'>Bootstrap 3</option>
-        <option value='bootstrap4'>Bootstrap 4</option>
-        <option value='foundation3'>Foundation 3</option>
-        <option value='foundation4'>Foundation 4</option>
-        <option value='foundation5'>Foundation 5</option>
-        <option value='foundation6'>Foundation 6</option>
-        <option value='materialize'>Materialize</option>
-      </select>
+  <div class="row">
+    <div class="col-md-8">
+      <div class='json-editor-container'></div>
     </div>
-
+    <div class="col-md-4">
+      <div>
+        <label>CSS Framework</label>
+        <select id='theme_switcher' class='form-control browser-default'>
+          <option value='barebones'>Barebones</option>
+          <option value='html'>HTML</option>
+          <option value='jqueryui'>jQuery UI</option>
+          <option value='bootstrap2'>Bootstrap 2</option>
+          <option value='bootstrap3'>Bootstrap 3</option>
+          <option value='bootstrap4'>Bootstrap 4</option>
+          <option value='foundation3'>Foundation 3</option>
+          <option value='foundation4'>Foundation 4</option>
+          <option value='foundation5'>Foundation 5</option>
+          <option value='foundation6'>Foundation 6</option>
+          <option value='materialize'>Materialize</option>
+        </select>
+      </div>
+      <textarea class="value" style="width: 100%; height: 600px;"></textarea>
+      <button class='get-value'>get value</button>
+      <button class='get-formatted-value'>get formatted value</button>
+    </div>
+  </div>
 </div>
 
 <script>
   var container = document.querySelector('.json-editor-container');
   var value = document.querySelector('.value');
   var getValue = document.querySelector('.get-value');
+  var getFormattedValue = document.querySelector('.get-formatted-value');
 
   var schema = {
     "title": "Data Types",
@@ -206,6 +211,10 @@
 
     getValue.addEventListener('click', function () {
       value.value = JSON.stringify(editor.getValue());
+    });
+
+    getFormattedValue.addEventListener('click', function () {
+      value.value = JSON.stringify(editor.getValue(), null, 2);
     });
 
     setTheme(this.value);
