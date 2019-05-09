@@ -205,7 +205,7 @@
     initJsonEditor();
 
     getValue.addEventListener('click', function () {
-      value.value = JSON.stringify(editor.getValue(), null, 2);
+      value.value = JSON.stringify(editor.getValue());
     });
 
     setTheme(this.value);
