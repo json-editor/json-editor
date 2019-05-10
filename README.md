@@ -841,7 +841,8 @@ You can override this default by passing in a format:
 #### Objects
 
 The default object layout is one child editor per row.  The `grid` format will instead put multiple child editors per row.
-This can make the editor much more compact, but at a cost of not guaranteeing child editor order.
+This can make the editor much more compact, but at a cost of not guaranteeing child editor order. This format will stretch
+columns to fill gaps untill all the 12 columns are filled.
 
 ```json
 {
@@ -852,6 +853,49 @@ This can make the editor much more compact, but at a cost of not guaranteeing ch
   "format": "grid"
 }
 ```
+
+The `grid-strict` format instead will respect columns sizes (no stretching) and properties order.
+It introduces the new `grid-break` property to breaks the current row leaving a 4 colums gap.
+
+```json
+{
+  "type": "object",
+  "format": "grid-strict",
+  "properties": {
+    "a": {
+      "title": "a",
+      "type": "string",
+      "options": {
+        "grid_columns": 4
+      }
+    },
+    "b": {
+      "title": "b",
+      "type": "string",
+      "options": {
+        "grid_columns": 4,
+        "grid_break": true
+      }
+    },
+    "c": {
+      "title": "c",
+      "type": "string",
+      "options": {
+        "grid_columns": 6
+      }
+    },
+    "d": {
+      "title": "d",
+      "type": "string",
+      "options": {
+        "grid_columns": 6
+      }
+    }
+  }
+}
+```
+
+
 The `categories` format groups properties in top-tabbed panels, one for each object or array property plus one that groups all added or other types of properties.  
 Panel tabs titles came from object or array titles and for the grouping panel it defaults to "Basic", unless  `basicCategoryTitle` is defined.
 
