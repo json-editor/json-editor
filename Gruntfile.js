@@ -64,6 +64,7 @@ module.exports = function(grunt) {
           'src/editors/starrating.js',
           'src/editors/datetime.js',
           'src/editors/signature.js',
+          'src/editors/radio.js',
 
           // All the themes and iconlibs
           'src/theme.js',
