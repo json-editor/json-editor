@@ -2,7 +2,11 @@ JSON Editor
 ===========
 
 [![Build Status](https://travis-ci.org/json-editor/json-editor.svg?branch=master)](https://travis-ci.org/json-editor/json-editor)  
-Fork of the inactive [jdorn/json-editor](https://github.com/jdorn/json-editor) using the updated fork [json-editor/json-editor](https://github.com/json-editor/json-editor).  
+Fork of the [json-editor/json-editor](https://github.com/json-editor/json-editor)
+
+Documentation from the original repo:
+____________________________________________________________________________________
+
 Some pull requests added from the original repo.
 
 ![JSON Schema -> HTML Editor -> JSON](./docs/images/jsoneditor.png)
