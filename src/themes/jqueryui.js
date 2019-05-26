@@ -45,7 +45,7 @@ JSONEditor.defaults.themes.jqueryui = JSONEditor.AbstractTheme.extend({
     var el = document.createElement('span');
     el.style.fontSize = '.8em';
     el.style.fontStyle = 'italic';
-    if (window.DOMPurify) el.innerHTML = text;
+    if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text);
     else el.textContent = text;
     return el;
   },

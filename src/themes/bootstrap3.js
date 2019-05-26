@@ -105,7 +105,7 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
   getFormInputDescription: function(text) {
     var el = document.createElement('p');
     el.classList.add('help-block');
-    if (window.DOMPurify) el.innerHTML = text;
+    if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text);
     else el.textContent = text;
     return el;
   },

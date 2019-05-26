@@ -126,7 +126,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
       var el = document.createElement('div');
       el.classList.add('grey-text');
       el.style.marginTop = '-15px';
-      if (window.DOMPurify) el.innerHTML = text;
+      if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text);
       else el.textContent = text;
       return el;
     },

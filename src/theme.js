@@ -235,7 +235,7 @@ JSONEditor.AbstractTheme = Class.extend({
   },
   getDescription: function(text) {
     var el = document.createElement('p');
-    if (window.DOMPurify) el.innerHTML = text;
+    if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text);
     else el.textContent = text;
     return el;
   },
