@@ -89,7 +89,8 @@ JSONEditor.defaults.themes.bootstrap2 = JSONEditor.AbstractTheme.extend({
   getFormInputDescription: function(text) {
     var el = document.createElement('p');
     el.classList.add('help-inline');
-    el.textContent = text;
+    if (window.DOMPurify) el.innerHTML = text;
+    else el.textContent = text;
     return el;
   },
   getFormControl: function(label, input, description, infoText) {
