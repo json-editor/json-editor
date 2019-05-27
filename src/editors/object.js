@@ -727,7 +727,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       }
 
       // Object Properties Button
-      this.addproperty_button = this.getButton('Properties','edit','Object Properties');
+      this.addproperty_button = this.getButton('Properties','edit', self.translate('button_object_properties'));
       this.addproperty_button.classList.add('json-editor-btntype-properties');
       this.addproperty_button.addEventListener('click',function(e) {
         e.preventDefault();
@@ -738,7 +738,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       this.addproperty_controls.appendChild(this.addproperty_holder);
       this.refreshAddProperties();
     }
-            
+
     // Fix table cell ordering
     if(this.options.table_row) {
       this.editor_holder = this.container;
@@ -800,7 +800,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       var json = JSON.parse(this.editjson_textarea.value);
       this.setValue(json);
       this.hideEditJSON();
-      this.onChange(true); 
+      this.onChange(true);
     }
     catch(e) {
       window.alert('invalid JSON');
