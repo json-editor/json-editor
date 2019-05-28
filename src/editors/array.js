@@ -529,7 +529,6 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
 
         var editor = self.rows[i];
 
-        self.empty(true);
         self.setValue(newval);
 
         if (self.rows[i]) {
@@ -723,7 +722,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
       var new_active_tab = null;
 
       var editor = rows.pop();
-      self.empty(true);
+
       self.setValue(rows);
 
       if (self.rows[self.rows.length-1]) {
