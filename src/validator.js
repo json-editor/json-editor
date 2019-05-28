@@ -537,19 +537,19 @@ JSONEditor.Validator = Class.extend({
     // date, time and datetime-local validation
     if(['date', 'time', 'datetime-local'].indexOf(schema.format) != -1) {
 
-      var validator = {
-          'date': /^(\d{4}\D\d{2}\D\d{2})?$/,
-          'time': /^(\d{2}:\d{2}(?::\d{2})?)?$/,
-          'datetime-local': /^(\d{4}\D\d{2}\D\d{2} \d{2}:\d{2}(?::\d{2})?)?$/
+      var validatorRx = {
+        'date': /^(\d{4}\D\d{2}\D\d{2})?$/,
+        'time': /^(\d{2}:\d{2}(?::\d{2})?)?$/,
+        'datetime-local': /^(\d{4}\D\d{2}\D\d{2}[ T]\d{2}:\d{2}(?::\d{2})?)?$/
       };
       var format = {
-          'date': '"YYYY-MM-DD"',
-          'time': '"HH:MM"',
-          'datetime-local': '"YYYY-MM-DD HH:MM"'
+        'date': '"YYYY-MM-DD"',
+        'time': '"HH:MM"',
+        'datetime-local': '"YYYY-MM-DD HH:MM"'
       };
 
       var ed = this.jsoneditor.getEditor(path);
-      var dateFormat = ed.flatpickr ? ed.flatpickr.config.dateFormat : format[ed.format];
+      var dateFormat = (ed && ed.flatpickr) ? ed.flatpickr.config.dateFormat : format[schema.format];
 
       if (schema.type == 'integer') {
         // The value is a timestamp
@@ -566,21 +566,21 @@ JSONEditor.Validator = Class.extend({
           errors.push({
             path: path,
             property: 'format',
-            message: this.translate('error_' + ed.format.replace(/-/g, "_"), [dateFormat])
+            message: this.translate('error_' + schema.format.replace(/-/g, "_"), [dateFormat])
           });
         }
       }
-      else if (!ed.flatpickr) {
+      else if (!ed || !ed.flatpickr) {
         // Standard string input, without flatpickr
-        if(!validator[ed.format].test(value)) {
+        if(!validatorRx[schema.format].test(value)) {
           errors.push({
             path: path,
             property: 'format',
-            message: this.translate('error_' + ed.format.replace(/-/g, "_"), [format[ed.format]])
+            message: this.translate('error_' + schema.format.replace(/-/g, "_"), [dateFormat])
           });
         }
       }
-      else {
+      else if (ed) {
         // Flatpickr validation
         if (value !== '') {
 
