@@ -991,7 +991,7 @@ JSON Editor uses a javascript template engine to accomplish this.  A barebones t
 *  markup
 *  mustache
 *  swig
-*  underscore
+*  underscore >=1.7 (since 1.4.0, see also [#332](https://github.com/json-editor/json-editor/pull/332))
 
 You can change the default by setting `JSONEditor.defaults.options.template` to one of the supported template engines:
 
