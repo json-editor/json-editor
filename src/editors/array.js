@@ -348,9 +348,11 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
         self.rows[i].container.style.display = '';
         if(self.rows[i].tab) self.rows[i].tab.style.display = '';
         self.rows[i].register();
+        self.jsoneditor.trigger('addRow', self.rows[i]);
       }
       else {
-        self.addRow(val,initial);
+        var editor = self.addRow(val,initial);
+        self.jsoneditor.trigger('addRow', editor);
       }
     });
 
@@ -550,30 +552,29 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
       }
     }
 
-	//Button to copy an array element and add it as last element
-	if(self.show_copy_button){
-        self.rows[i].copy_button = this.getButton(self.getItemTitle(),'copy','Copy '+self.getItemTitle());
-        self.rows[i].copy_button.classList.add('copy', 'json-editor-btntype-copy');
-        self.rows[i].copy_button.setAttribute('data-i',i);
-        self.rows[i].copy_button.addEventListener('click',function(e) {
-            var value = self.getValue();
-            e.preventDefault();
-            e.stopPropagation();
-            var i = this.getAttribute('data-i')*1;
+	  //Button to copy an array element and add it as last element
+    if(self.show_copy_button){
+      self.rows[i].copy_button = this.getButton(self.getItemTitle(),'copy','Copy '+self.getItemTitle());
+      self.rows[i].copy_button.classList.add('copy', 'json-editor-btntype-copy');
+      self.rows[i].copy_button.setAttribute('data-i',i);
+      self.rows[i].copy_button.addEventListener('click',function(e) {
+          var value = self.getValue();
+          e.preventDefault();
+          e.stopPropagation();
+          var i = this.getAttribute('data-i')*1;
 
-            $each(value,function(j,row) {
-              if(j===i) {
-                value.push(row);
-              }
-            });
+          $each(value,function(j,row) {
+            if(j===i) {
+              value.push(row);
+            }
+          });
 
-            self.setValue(value);
-            self.refreshValue(true);
-            self.onChange(true);
+          self.setValue(value);
+          self.refreshValue(true);
+          self.onChange(true);
+      });
 
-        });
-
-        controls_holder.appendChild(self.rows[i].copy_button);
+      controls_holder.appendChild(self.rows[i].copy_button);
     }
 
 
