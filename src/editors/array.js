@@ -527,7 +527,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
           }
         });
 
-        var editor = self.rows[i]
+        var editor = self.rows[i];
 
         self.empty(true);
         self.setValue(newval);
