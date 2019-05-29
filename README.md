@@ -917,7 +917,46 @@ JSONEditor.defaults.editors.object.options.collapsed = true;
 
 Dependencies
 ------------------
-Sometimes, it's necessary to have one field's value depend on another's.  
+Sometimes, it's necessary to have one field's value depend on another's.
+
+The dependency information is fetched from the dependencies field in the options field of the control. The `dependencies` field should be a map where the keys are the names of the fields depended on and the value is the expected value. The value may be an array to indicate multiple value possibilities. This uses the internal field value watch system to notify fields of changes in their dependencies.
+
+Here's an example schema:
+
+```json
+{
+  "title": "An object",
+  "type": "object",
+  "properties": {
+    "fieldOne": {
+      "title": "I should be changed to 'foo'",
+      "type": "string",
+      "enum": ["foo","bar"],
+      "default": "bar"
+    },
+    "depender1": {
+      "title": "I depend on fieldOne to be 'foo'",
+      "type": "string",
+      "enum": ["lorem","ipsum"],
+      "options": {
+        "dependencies": {
+          "fieldOne": "foo"
+        }
+      }
+    },
+    "depender2": {
+      "title": "I depend on fieldOne to be 'bar'",
+      "type": "string",
+      "enum": ["dolor", "sit"],
+      "options": {
+        "dependencies": {
+          "fieldOne": "bar"
+        }
+      }
+    }
+  }
+}
+```
 
 The `dependencies` keyword from the JSON Schema specification is not nearly flexible enough to handle most use cases,
 so JSON Editor introduces a couple custom keywords that help in this regard.
