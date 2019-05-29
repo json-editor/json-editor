@@ -931,14 +931,26 @@ Here's an example schema:
     "fieldOne": {
       "title": "I should be changed to 'foo'",
       "type": "string",
+      "enum": ["foo","bar"],
       "default": "bar"
     },
-    "depender": {
+    "depender1": {
       "title": "I depend on fieldOne to be 'foo'",
       "type": "string",
+      "enum": ["lorem","ipsum"],
       "options": {
         "dependencies": {
           "fieldOne": "foo"
+        }
+      }
+    },
+    "depender2": {
+      "title": "I depend on fieldOne to be 'bar'",
+      "type": "string",
+      "enum": ["dolor", "sit"],
+      "options": {
+        "dependencies": {
+          "fieldOne": "bar"
         }
       }
     }
