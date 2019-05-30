@@ -913,6 +913,19 @@ You can globally set the default options too if you want:
 ```js
 JSONEditor.defaults.editors.object.options.collapsed = true;
 ```
+InfoText
+------------------
+Using the option `infoText`, will create a info button, displaying the text you set, on hovering.
+
+```json
+{
+  "type": "string",
+  "title": "Name",
+  "options": {
+    "infoText": "Your full name"
+  }
+}
+```
 
 
 Dependencies
