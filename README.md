@@ -62,6 +62,7 @@ If you learn best by example, check these out:
 *  Base64 Editor Example (Muiltple Upload) - https://json-editor.github.io/json-editor/multiple_upload_base64.html
 *  Cleave.js Editor Example - https://json-editor.github.io/json-editor/cleave.html
 *  Datetime Editor Example - https://json-editor.github.io/json-editor/datetime.html
+*  DescribedBy Hyperlink Editor Example - https://json-editor.github.io/json-editor/describedby.html 
 *  Recursive JSON Editor Example - https://json-editor.github.io/json-editor/recursive.html
 *  Select2 Editor Example - https://json-editor.github.io/json-editor/select2.html
 *  Selectize Editor Example - https://json-editor.github.io/json-editor/selectize.html

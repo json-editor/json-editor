@@ -534,6 +534,25 @@ JSONEditor.Validator = Class.extend({
       }
     }
 
+    if (schema.links) {
+      for (var m = 0; m < schema.links.length; m++) {
+        if (schema.links[m].rel.toLowerCase() === "describedby") {
+          var href = schema.links[m].href;
+          var data = this.jsoneditor.root.getValue();
+          //var template = new UriTemplate(href); //preprocessURI(href));
+          //var ref = template.fillFromObject(data);
+          var template = this.jsoneditor.compileTemplate(href, this.jsoneditor.template);
+          var ref = template(data);
+
+          schema.links.splice(m, 1);
+
+          schema = $extend({}, schema, this.jsoneditor.refs[ref]);
+
+          errors = errors.concat(this._validateSchema(schema, value, path));
+        }
+      }
+    }
+
     // date, time and datetime-local validation
     if(['date', 'time', 'datetime-local'].indexOf(schema.format) != -1) {
 
