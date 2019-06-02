@@ -48,6 +48,7 @@ The following are not required, but can improve the style and usability of JSON 
 *  [Signature Pad](https://github.com/szimek/signature_pad) HTML5 canvas based smooth signature drawing
 *  [Cleave.js](https://github.com/nosir/cleave.js) for formatting your **&lt;input/&gt;** content while you are typing
 *  [math.js](http://mathjs.org/) for more accurate floating point math (multipleOf, divisibleBy, etc.)
+*  [DOMPurify](https://github.com/cure53/DOMPurify) DOM-only, super-fast, uber-tolerant XSS sanitizer. (If you want to use HTML format in descriptions.)
 
 Usage
 --------------
@@ -61,6 +62,7 @@ If you learn best by example, check these out:
 *  Base64 Editor Example (Muiltple Upload) - https://json-editor.github.io/json-editor/multiple_upload_base64.html
 *  Cleave.js Editor Example - https://json-editor.github.io/json-editor/cleave.html
 *  Datetime Editor Example - https://json-editor.github.io/json-editor/datetime.html
+*  DescribedBy Hyperlink Editor Example - https://json-editor.github.io/json-editor/describedby.html 
 *  Recursive JSON Editor Example - https://json-editor.github.io/json-editor/recursive.html
 *  Select2 Editor Example - https://json-editor.github.io/json-editor/select2.html
 *  Selectize Editor Example - https://json-editor.github.io/json-editor/selectize.html
@@ -912,11 +914,63 @@ You can globally set the default options too if you want:
 ```js
 JSONEditor.defaults.editors.object.options.collapsed = true;
 ```
+InfoText
+------------------
+Using the option `infoText`, will create a info button, displaying the text you set, on hovering.
+
+```json
+{
+  "type": "string",
+  "title": "Name",
+  "options": {
+    "infoText": "Your full name"
+  }
+}
+```
 
 
 Dependencies
 ------------------
-Sometimes, it's necessary to have one field's value depend on another's.  
+Sometimes, it's necessary to have one field's value depend on another's.
+
+The dependency information is fetched from the dependencies field in the options field of the control. The `dependencies` field should be a map where the keys are the names of the fields depended on and the value is the expected value. The value may be an array to indicate multiple value possibilities. This uses the internal field value watch system to notify fields of changes in their dependencies.
+
+Here's an example schema:
+
+```json
+{
+  "title": "An object",
+  "type": "object",
+  "properties": {
+    "fieldOne": {
+      "title": "I should be changed to 'foo'",
+      "type": "string",
+      "enum": ["foo","bar"],
+      "default": "bar"
+    },
+    "depender1": {
+      "title": "I depend on fieldOne to be 'foo'",
+      "type": "string",
+      "enum": ["lorem","ipsum"],
+      "options": {
+        "dependencies": {
+          "fieldOne": "foo"
+        }
+      }
+    },
+    "depender2": {
+      "title": "I depend on fieldOne to be 'bar'",
+      "type": "string",
+      "enum": ["dolor", "sit"],
+      "options": {
+        "dependencies": {
+          "fieldOne": "bar"
+        }
+      }
+    }
+  }
+}
+```
 
 The `dependencies` keyword from the JSON Schema specification is not nearly flexible enough to handle most use cases,
 so JSON Editor introduces a couple custom keywords that help in this regard.
@@ -990,7 +1044,7 @@ JSON Editor uses a javascript template engine to accomplish this.  A barebones t
 *  markup
 *  mustache
 *  swig
-*  underscore
+*  underscore >=1.7 (since 1.4.0, see also [#332](https://github.com/json-editor/json-editor/pull/332))
 
 You can change the default by setting `JSONEditor.defaults.options.template` to one of the supported template engines:
 
