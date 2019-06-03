@@ -266,7 +266,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
       var output = document.createElement('output');
       output.setAttribute('class', 'range-output');
       this.control.appendChild(output);
-      output.value = this.schema.default || this.schema.minimum || 0;
+      output.value = this.schema.default || Math.max(this.schema.minimum || 0, 0);
       this.input.addEventListener('change', function () {
         output.value = self.input.value;
       });
