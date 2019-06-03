@@ -89,7 +89,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
     var self = this;
 
     if(!this.options.compact) {
-      this.header = document.createElement('span');
+      this.header = document.createElement('label');
       this.header.textContent = this.getTitle();
       this.title = this.theme.getHeader(this.header);
       this.container.appendChild(this.title);

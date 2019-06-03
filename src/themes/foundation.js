@@ -126,7 +126,7 @@ JSONEditor.defaults.themes.foundation = JSONEditor.AbstractTheme.extend({
       var inputGroup = document.createElement('div');
       inputGroup.classList.add('input-group-button');
       inputGroup.style.verticalAlign = 'top';
-      buttons[i].classList.remove('small');   
+      buttons[i].classList.remove('small');
       inputGroup.appendChild(buttons[i]);
       inputGroupContainer.appendChild(inputGroup);
     }
@@ -161,9 +161,12 @@ JSONEditor.defaults.themes.foundation3 = JSONEditor.defaults.themes.foundation.e
     el.innerHTML = '<dl class="tabs horizontal" style="padding-left: 10px; margin-left: 10px;" id="' + pName + '"></dl><div class="tabs-content twelve columns" style="padding: 10px; margin-left: 10px;" id="' + pName + '"></div>';
     return el;
   },
-  setGridColumnSize: function(el,size) {
+  setGridColumnSize: function(el,size, offset) {
     var sizes = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve'];
     el.classList.add('columns', sizes[size]);
+    if (offset && offset < 11) {
+      el.classList.add('offset-by-' + sizes[offset]);
+    }
   },
   getTab: function(text, tabId) {
     var el = document.createElement('dd');
@@ -234,8 +237,12 @@ JSONEditor.defaults.themes.foundation4 = JSONEditor.defaults.themes.foundation.e
     el.style.fontSize = '.6em';
     return el;
   },
-  setGridColumnSize: function(el,size) {
-    el.classList.add('columns', 'large-'+size);
+  setGridColumnSize: function(el, size, offset) {
+    el.classList.add('columns', 'large-' + size);
+    if (offset) {
+      el.classList.add('large-offset-' + offset);
+    }
+
   },
   getFormInputDescription: function(text) {
     var el = this._super(text);
@@ -256,8 +263,11 @@ JSONEditor.defaults.themes.foundation5 = JSONEditor.defaults.themes.foundation.e
     el.style.fontSize = '.8rem';
     return el;
   },
-  setGridColumnSize: function(el,size) {
+  setGridColumnSize: function(el,size, offset) {
     el.classList.add('columns', 'medium-'+size);
+    if (offset) {
+      el.classList.add('medium-offset-'+offset);
+    }
   },
   getButton: function(text, icon, title) {
     var el = this._super(text,icon,title);

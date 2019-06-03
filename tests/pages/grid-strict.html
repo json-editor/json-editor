@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Grid-strict</title>
+  <script src="../../dist/jsoneditor.js"></script>
+  <link rel='stylesheet' id='theme_stylesheet'>
+</head>
+<body>
+
+<div style="max-width: 80%; margin: 0 auto">
+
+<div>
+  <label>CSS Framework</label>
+  <select id='theme_switcher' class='form-control browser-default'>
+    <option value='barebones'>Barebones</option>
+    <option value='html'>HTML</option>
+    <option value='jqueryui'>jQuery UI</option>
+    <option value='bootstrap2'>Bootstrap 2</option>
+    <option value='bootstrap3'>Bootstrap 3</option>
+    <option value='bootstrap4'>Bootstrap 4</option>
+    <option value='foundation3'>Foundation 3</option>
+    <option value='foundation4'>Foundation 4</option>
+    <option value='foundation5'>Foundation 5</option>
+    <option value='foundation6'>Foundation 6</option>
+    <option value='materialize'>Materialize</option>
+  </select>
+</div>
+
+<div class='json-editor-container'></div>
+
+</div>
+
+<script>
+  var container = document.querySelector('.json-editor-container');
+  var editor = document.querySelector('.value');
+
+  var schema = {
+    "type": "object",
+    "title": "range",
+    "format": "grid-strict",
+    "properties": {
+      "a": {
+        "title": "a",
+        "type": "string",
+        "options": {
+          "grid_columns": 1
+        }
+      },
+      "b": {
+        "title": "b",
+        "type": "string",
+        "options": {
+          "grid_columns": 2
+        }
+      },
+      "c": {
+        "title": "c",
+        "type": "string",
+        "options": {
+          "grid_columns": 3
+        }
+      },
+      "d": {
+        "title": "d",
+        "type": "string",
+        "options": {
+          "grid_columns": 4
+        }
+      },
+      "e": {
+        "title": "e",
+        "type": "string",
+        "options": {
+          "grid_columns": 5
+        }
+      },
+      "f": {
+        "title": "f",
+        "type": "string",
+        "options": {
+          "grid_columns": 6
+        }
+      },
+      "g": {
+        "title": "g",
+        "type": "string",
+        "options": {
+          "grid_columns": 7
+        }
+      },
+      "h": {
+        "title": "h",
+        "type": "string",
+        "options": {
+          "grid_columns": 8
+        }
+      },
+      "i": {
+        "title": "i",
+        "type": "string",
+        "options": {
+          "grid_columns": 9
+        }
+      },
+      "j": {
+        "title": "j",
+        "type": "string",
+        "options": {
+          "grid_columns": 10
+        }
+      },
+      "k": {
+        "title": "k",
+        "type": "string",
+        "options": {
+          "grid_columns": 11
+        }
+      },
+      "l": {
+        "title": "l",
+        "type": "string",
+        "options": {
+          "grid_columns": 12,
+          "grid_break": true
+        }
+      },
+      "m": {
+        "title": "m",
+        "type": "string",
+        "options": {
+          "grid_break": true,
+          "grid_columns": 1
+        }
+      },
+      "n": {
+        "title": "n",
+        "type": "string",
+        "options": {
+          "grid_break": true,
+          "grid_columns": 1,
+          "grid_offset": 1
+        }
+      },
+      "o": {
+        "title": "o",
+        "type": "string",
+        "options": {
+          "grid_break": true,
+          "grid_columns": 1,
+          "grid_offset": 2
+        }
+      },
+      "p": {
+        "title": "p",
+        "type": "string",
+        "options": {
+          "grid_break": true,
+          "grid_columns": 1,
+          "grid_offset": 3
+        }
+      },
+      "q": {
+        "title": "q",
+        "type": "string",
+        "options": {
+          "grid_break": true,
+          "grid_columns": 1,
+          "grid_offset": 4
+        }
+      },
+      "r": {
+        "title": "r",
+        "type": "string",
+        "options": {
+          "grid_break": true,
+          "grid_columns": 1,
+          "grid_offset": 5
+        }
+      },
+      "s": {
+        "title": "s",
+        "type": "string",
+        "options": {
+          "grid_break": true,
+          "grid_columns": 1,
+          "grid_offset": 6
+        }
+      },
+      "t": {
+        "title": "t",
+        "type": "string",
+        "options": {
+          "grid_break": true,
+          "grid_columns": 1,
+          "grid_offset": 7
+        }
+      },
+      "u": {
+        "title": "u",
+        "type": "string",
+        "options": {
+          "grid_break": true,
+          "grid_columns": 1,
+          "grid_offset": 8
+        }
+      },
+      "v": {
+        "title": "v",
+        "type": "string",
+        "options": {
+          "grid_break": true,
+          "grid_columns": 1,
+          "grid_offset": 9
+        }
+      },
+      "w": {
+        "title": "w",
+        "type": "string",
+        "options": {
+          "grid_break": true,
+          "grid_columns": 1,
+          "grid_offset": 10
+        }
+      },
+      "x": {
+        "title": "x",
+        "type": "string",
+        "options": {
+          "grid_columns": 1,
+          "grid_offset": 11
+        }
+      }
+    }
+  };
+
+  var setTheme = function(theme) {
+    theme = theme || '';
+
+    var mapping = {
+      barebones: '',
+      html: '',
+      bootstrap2: 'https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css',
+      bootstrap3: 'https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',
+      bootstrap4: 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
+      foundation3: 'https://cdnjs.cloudflare.com/ajax/libs/foundation/3.2.5/stylesheets/foundation.css',
+      foundation4: 'https://cdnjs.cloudflare.com/ajax/libs/foundation/4.3.2/css/foundation.min.css',
+      foundation5: 'https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/css/foundation.min.css',
+      foundation6: 'https://cdnjs.cloudflare.com/ajax/libs/foundation/6.2.4/foundation.min.css',
+      jqueryui: 'https://code.jquery.com/ui/1.10.3/themes/south-street/jquery-ui.css',
+      materialize: 'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css'
+    };
+
+    if(typeof mapping[theme] === 'undefined') {
+      theme = 'bootstrap3';
+      document.getElementById('theme_switcher').value = theme;
+    }
+
+    var scriptMapping = {
+      materialize: [
+        'https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js'
+      ]
+    }
+
+    var themeScripts = scriptMapping[theme],
+      head = document.getElementsByTagName('head')[0],
+      script;
+
+    if (typeof themeScripts == 'string') { themeScripts = [themeScripts]; }
+    if (Array.isArray(themeScripts)) {
+      for (var i = 0; i < themeScripts.length; i++) {
+        script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = themeScripts[i];
+        head.appendChild(script);
+      }
+    }
+
+    JSONEditor.defaults.options.theme = theme;
+
+    document.getElementById('theme_stylesheet').href = mapping[theme];
+    document.getElementById('theme_switcher').value = JSONEditor.defaults.options.theme;
+
+
+    if (editor) {
+      editor.destroy();
+    }
+
+    editor = new JSONEditor(container, {
+      schema: schema,
+      theme: theme
+    });
+  };
+
+  document.getElementById('theme_switcher').addEventListener('change',function() {
+    setTheme(this.value);
+  });
+
+  window.addEventListener('load',function() {
+    editor = new JSONEditor(container, {
+      schema: schema,
+      theme: 'bootstrap3'
+    });
+    setTheme(this.value);
+  });
+
+</script>
+
+</body>
+</html>

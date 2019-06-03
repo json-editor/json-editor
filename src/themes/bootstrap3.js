@@ -5,8 +5,11 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
     //el.style.width = 'auto';
     return el;
   },
-  setGridColumnSize: function(el,size) {
+  setGridColumnSize: function(el,size, offset) {
     el.classList.add('col-md-'+size);
+    if (offset) {
+      el.classList.add('col-md-offset-'+offset);
+    }
   },
   afterInputReady: function(input) {
     if(input.controlgroup) return;
