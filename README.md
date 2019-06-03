@@ -218,6 +218,11 @@ Here are all the available options:
     <td><code>false</code></td>
   </tr>
   <tr>
+      <td>show_opt_in</td>
+      <td>If <code>true</code>, NON required properties will have an extra toggable checkbox near the title that determines if the value must be included or not in the editor´s value</td>
+      <td><code>false</code></td>
+    </tr>
+  <tr>
     <td>prompt_before_delete</td>
     <td>If <code>true</code>, displays a dialog box with a confirmation message before node deletion.</td>
     <td><code>true</code></td>
