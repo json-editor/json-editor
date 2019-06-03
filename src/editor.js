@@ -170,8 +170,8 @@ JSONEditor.AbstractEditor = Class.extend({
       }
     });
 
-    // append active/deactive checkbox if opt_in_optional_properties is true
-    if (this.jsoneditor.options.opt_in_optional_properties || this.options.opt_in_optional_properties) {
+    // append active/deactive checkbox if show_opt_in is true
+    if (this.jsoneditor.options.show_opt_in || this.options.show_opt_in) {
       // and control to type object editors if they are not required
       if (this.parent && this.parent.schema.type === 'object' && !this.isRequired() && this.header) {
         this.header.appendChild(this.optInCheckbox);

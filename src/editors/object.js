@@ -818,8 +818,8 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
   },
   deactivateNonRequiredProperties: function () {
     var self = this;
-    // hte opt_in_optional_properties editor option is for backward compatibility
-    if (this.jsoneditor.options.opt_in_optional_properties || this.options.opt_in_optional_properties) {
+    // the show_opt_in editor option is for backward compatibility
+    if (this.jsoneditor.options.show_opt_in || this.options.show_opt_in) {
       $each(this.editors, function(key, editor) {
         if (!self.isRequired(editor)) {
           self.editors[key].deactivate();
@@ -1020,6 +1020,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
         self.editors[name].build();
         self.editors[name].postBuild();
         self.editors[name].setOptInCheckbox(editor.header);
+        self.editors[name].activate();
       }
 
       self.cached_editors[name] = self.editors[name];
