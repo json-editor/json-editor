@@ -163,8 +163,8 @@ JSONEditor.defaults.themes.foundation3 = JSONEditor.defaults.themes.foundation.e
   setGridColumnSize: function(el,size, offset) {
     var sizes = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve'];
     el.classList.add('columns', sizes[size]);
-    if (offset) {
-      el.classList.add('medium-offset-'+offset);
+    if (offset && offset < 11) {
+      el.classList.add('offset-by-' + sizes[offset]);
     }
   },
   getTab: function(text, tabId) {
@@ -236,10 +236,10 @@ JSONEditor.defaults.themes.foundation4 = JSONEditor.defaults.themes.foundation.e
     el.style.fontSize = '.6em';
     return el;
   },
-  setGridColumnSize: function(el,size, offset) {
-    el.classList.add('columns', 'large-'+size);
+  setGridColumnSize: function(el, size, offset) {
+    el.classList.add('columns', 'large-' + size);
     if (offset) {
-      el.classList.add('medium-offset-'+offset);
+      el.classList.add('large-offset-' + offset);
     }
 
   },
