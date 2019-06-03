@@ -326,7 +326,12 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
 });
 // Use the `select` editor for dynamic enumSource enums
 JSONEditor.defaults.resolvers.unshift(function(schema) {
-  if(schema.enumSource) return (JSONEditor.plugins.selectize.enable) ? 'selectize' : 'select';
+  if(schema.enumSource) {
+    if(schema.format === "radio") {
+      return "radio";
+    }
+    return (JSONEditor.plugins.selectize.enable) ? 'selectize' : 'select';
+  }
 });
 // Use the `enum` or `select` editors for schemas with enumerated properties
 JSONEditor.defaults.resolvers.unshift(function(schema) {
@@ -335,6 +340,11 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
       return "enum";
     }
     else if(schema.type === "number" || schema.type === "integer" || schema.type === "string") {
+
+      if(schema.format === "radio") {
+        return "radio";
+      }
+
       return (JSONEditor.plugins.selectize.enable) ? 'selectize' : 'select';
     }
   }
