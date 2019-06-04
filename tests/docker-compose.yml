@@ -12,10 +12,22 @@ services:
     depends_on:
       - firefox
   firefox:
-    image: selenium/standalone-firefox-debug:2.53.1
+    image: selenium/standalone-firefox-debug:3.141.59
+    environment:
+      - VNC_NO_PASSWORD=1
     ports:
       - '4444'
       - '9059:5900'
+    volumes:
+      # Mount shm also for firefox, see https://github.com/SeleniumHQ/docker-selenium#running-the-images
+      - /dev/shm:/dev/shm
+  chrome:
+    image: selenium/standalone-chrome-debug:3.141.59
+    environment:
+      - VNC_NO_PASSWORD=1
+    ports:
+      - '4444'
+      - '9060:5900'
     volumes:
       # Mount shm also for firefox, see https://github.com/SeleniumHQ/docker-selenium#running-the-images
       - /dev/shm:/dev/shm
