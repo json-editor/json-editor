@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <script src="../../dist/jsoneditor.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/js/standalone/selectize.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/css/selectize.bootstrap3.css">
+</head>
+<body>
+
+<textarea class="debug" cols="30" rows="10"></textarea>
+<button class='get-value'>Get Value</button>
+<div class='container'></div>
+
+<script>
+  JSONEditor.plugins.selectize.enable = true;
+  var container = document.querySelector('.container');
+  var debug = document.querySelector('.debug');
+  var schema = {
+    "type": "array",
+    "title": "Selectize Arrays",
+    "items": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+      },
+      "default": ["1", "2", "3", "4"],
+      "options": {
+        "selectize_options": {
+            "create": false,
+            "plugins": ["remove_button"]
+          }
+      }
+    }
+  };
+
+  var editor = new JSONEditor(container, {
+    schema: schema
+  });
+
+  document.querySelector('.get-value').addEventListener('click', function () {
+    debug.value = JSON.stringify(editor.getValue());
+    
+    Array.prototype.forEach.call(document.querySelectorAll('select'), function(v, i) {
+      var isSelectized = v.classList.contains('selectized');
+      if (!isSelectized) {
+        console.error(`Select ${i} does not contain default values`);
+      }
+
+      var hasDefaultValues = Array.prototype.reduce.call(v.selectize.options, function(res, x) { res = res && schema.items.default.indexOf(x.value) > -1; return res }, true);
+      if (!hasDefaultValues) {
+        console.error(`Select ${i} does not contain default values`);
+      }
+
+      var isCreatedDisabled = v.selectize.settings.create === false;
+      if (!isCreatedDisabled) {
+        console.error(`Select ${i} allows creating`);
+      }
+
+      var hasPlugins = v.selectize.settings.plugins.length == 1 && v.selectize.selectize.plugins[0] === "remove_button";
+      if (!hasPlugins) {
+        console.error(`Select ${i} has not defined plugins`);
+      }
+    });
+  });
+
+</script>
+
+</body>
+</html>

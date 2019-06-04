@@ -29,6 +29,7 @@ JSONEditor.defaults.editors.arraySelectize = JSONEditor.AbstractEditor.extend({
       }));
   },
   postBuild: function() {
+      this._super();
       var self = this;
       this.input.selectize.on('change', function(event) {
           self.refreshValue();
