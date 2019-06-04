@@ -18,13 +18,18 @@ JSONEditor.defaults.editors.arraySelectize = JSONEditor.AbstractEditor.extend({
     this.container.appendChild(group);
     this.container.appendChild(this.error_holder);
 
-    window.jQuery(this.input).selectize({
-      delimiter: false,
-      createOnBlur: true,
-      create: true
-    });
+    //apply global options to array selectize
+    var options = $extend({},JSONEditor.plugins.selectize);
+    if(this.schema.options && this.schema.options.selectize_options) options = $extend(options,this.schema.options.selectize_options);
+    window.jQuery(this.input).selectize($extend(options,
+      {
+        delimiter: ( options.delimiter === undefined ? false : options.delimiter),
+        createOnBlur: ( options.createOnBlur === undefined ? true : options.createOnBlur),
+        create: ( options.create === undefined ? true : options.create)
+      }));
   },
   postBuild: function() {
+      this._super();
       var self = this;
       this.input.selectize.on('change', function(event) {
           self.refreshValue();
