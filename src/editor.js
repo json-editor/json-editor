@@ -93,7 +93,7 @@ JSONEditor.AbstractEditor = Class.extend({
     });
   },
   checkDependency: function(path, choices) {
-    var wrapper = this.control || this.container;
+    var wrapper = this.container || this.control;
     if (this.path === path || !wrapper || this.jsoneditor === null) {   
       return;
     }

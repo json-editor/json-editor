@@ -11,6 +11,7 @@ JSON Editor takes a JSON Schema and uses it to generate an HTML form.
 It has full support for JSON Schema version 3 and 4 and can integrate with several popular CSS frameworks (bootstrap, foundation, and jQueryUI).
 
 Check out an interactive demo: https://json-editor.github.io/json-editor/
+Or the JSON-Editor Interactive Playground: https://pmk65.github.io/jedemov2/dist/demo.html 
 
 Install
 -----------------
