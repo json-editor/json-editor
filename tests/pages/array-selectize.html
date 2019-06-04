@@ -42,28 +42,6 @@
 
   document.querySelector('.get-value').addEventListener('click', function () {
     debug.value = JSON.stringify(editor.getValue());
-    
-    Array.prototype.forEach.call(document.querySelectorAll('select'), function(v, i) {
-      var isSelectized = v.classList.contains('selectized');
-      if (!isSelectized) {
-        console.error(`Select ${i} does not contain default values`);
-      }
-
-      var hasDefaultValues = Array.prototype.reduce.call(v.selectize.options, function(res, x) { res = res && schema.items.default.indexOf(x.value) > -1; return res }, true);
-      if (!hasDefaultValues) {
-        console.error(`Select ${i} does not contain default values`);
-      }
-
-      var isCreatedDisabled = v.selectize.settings.create === false;
-      if (!isCreatedDisabled) {
-        console.error(`Select ${i} allows creating`);
-      }
-
-      var hasPlugins = v.selectize.settings.plugins.length == 1 && v.selectize.selectize.plugins[0] === "remove_button";
-      if (!hasPlugins) {
-        console.error(`Select ${i} has not defined plugins`);
-      }
-    });
   });
 
 </script>
