@@ -352,13 +352,13 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
 // Specialized editors for arrays of strings
 JSONEditor.defaults.resolvers.unshift(function(schema) {
   if(schema.type === "array" && schema.items && !(Array.isArray(schema.items)) && schema.uniqueItems && ['string','number','integer'].indexOf(schema.items.type) >= 0) {
-    // For enumerated strings, number, or integers
-    if(schema.items.enum) {
-      return 'multiselect';
-    }
-    // For non-enumerated strings (tag editor)
-    else if(JSONEditor.plugins.selectize.enable && schema.items.type === "string") {
+    // if 'selectize' enabled it is expected to be selectized control
+    if (JSONEditor.plugins.selectize.enable) {
       return 'arraySelectize';
+    }
+    // otherwise it is select
+    else {
+      return 'multiselect';
     }
   }
 });
