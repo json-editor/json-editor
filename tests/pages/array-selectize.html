@@ -22,15 +22,17 @@
     "title": "Selectize Arrays",
     "items": {
       "type": "array",
+      "format":"select",
       "uniqueItems": true,
+      "default": ["1", "2"],
       "items": {
         "type": "string",
+        "enum": ["1", "2", "3", "4"]
       },
-      "default": ["1", "2", "3", "4"],
       "options": {
         "selectize_options": {
             "create": false,
-            "plugins": ["remove_button"]
+            "plugins": ["remove_button"],
           }
       }
     }

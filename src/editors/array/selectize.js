@@ -1,4 +1,23 @@
 JSONEditor.defaults.editors.arraySelectize = JSONEditor.AbstractEditor.extend({
+  preBuild: function() {
+    var self = this;
+    this.enum_options = [];
+    this.enum_values = [];
+    this.enum_display = [];
+    var i;
+
+    // Enum options enumerated
+    if(this.schema.items.enum) {
+      var display = this.schema.options && this.schema.options.enum_titles || [];
+
+      $each(this.schema.items.enum,function(i,option) {
+        self.enum_options[i] = ""+option;
+        self.enum_display[i] = ""+(display[i] || option);
+        self.enum_values[i] = self.typecast(option);
+      });
+    }
+    // Dynamic Enum for arrays is not specified in docs
+  },
   build: function() {
     this.title = this.theme.getFormInputLabel(this.getTitle());
 
@@ -10,9 +29,8 @@ JSONEditor.defaults.editors.arraySelectize = JSONEditor.AbstractEditor.extend({
       this.description = this.theme.getDescription(this.schema.description);
     }
 
-    this.input = document.createElement('select');
+    this.input = this.theme.getSelectInput(this.enum_options);
     this.input.setAttribute('multiple', 'multiple');
-
     var group = this.theme.getFormControl(this.title, this.input, this.description);
 
     this.container.appendChild(group);
@@ -54,9 +72,17 @@ JSONEditor.defaults.editors.arraySelectize = JSONEditor.AbstractEditor.extend({
     this.input.selectize.clearOptions();
     this.input.selectize.clear(true);
 
-    value.forEach(function(item) {
-      self.input.selectize.addOption({text: item, value: item});
-    });
+    if (this.schema.items.enum && this.enum_options && this.enum_options.length > 0) {
+      var titles = this.enum_titles || [];
+      this.enum_options.forEach(function(x, idx) {
+        self.input.selectize.addOption({ text: titles[idx] || x, value: x });
+      });
+    } else {
+      value.forEach(function(item) {
+        self.input.selectize.addOption({text: item, value: item});
+      });
+    }
+    
     this.input.selectize.setValue(value);
 
     this.refreshValue(initial);
@@ -94,6 +120,20 @@ JSONEditor.defaults.editors.arraySelectize = JSONEditor.AbstractEditor.extend({
       else {
         this.error_holder.style.display = 'none';
       }
+    }
+  },
+  typecast: function(value) {
+    if(this.schema.type === "boolean") {
+      return !!value;
+    }
+    else if(this.schema.type === "number") {
+      return 1*value;
+    }
+    else if(this.schema.type === "integer") {
+      return Math.floor(value*1);
+    }
+    else {
+      return ""+value;
     }
   }
 });
