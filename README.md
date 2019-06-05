@@ -123,7 +123,7 @@ Here are all the available options:
   </tr>
   <tr>
     <td>ajaxCredentials</td>
-    <td>If <code>true</code>, JSON Editor will make ajax call with credentials.</td>
+    <td>If <code>true</code>, JSON Editor will make ajax call with [credentials](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials).</td>
     <td><code>false</code></td>
   </tr>
   <tr>
