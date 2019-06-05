@@ -2,6 +2,10 @@ sudo: required
 
 language: generic
 
+env:
+  - BROWSER=chrome
+  - BROWSER=firefox
+
 services:
   - docker
 
@@ -13,4 +17,4 @@ before_script:
 script:
   - docker-compose ps
   # exclude optional tests
-  - docker-compose run --rm codeceptjs codeceptjs run --grep '(?=.*)^(?!.*@optional)'
+  - docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$BROWSER --grep '(?=.*)^(?!.*@optional)'
