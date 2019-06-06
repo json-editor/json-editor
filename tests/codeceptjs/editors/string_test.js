@@ -48,9 +48,8 @@ Scenario('editor value and String editor should have coerent values in firefox',
   value = await I.grabValueFrom('.debug');
   assert.equal(value, JSON.stringify([{"editor":"<p>__YELLOW__<br></p>"}]));
 }).config({
-  "url": "http://node:9001/tests/pages/",
-  "browser": "firefox",
-  "host": "firefox"
+  'browser': 'firefox',
+  'host': 'firefox'
 });
 
 Scenario('editor value and String editor should have coerent values in chrome', async (I) => {
@@ -69,11 +68,8 @@ Scenario('editor value and String editor should have coerent values in chrome', 
   value = await I.grabValueFrom('.debug');
   assert.equal(value, JSON.stringify([{"editor":"<p>__YELLOW__</p>"}]));
 }).config({
-  "url": "http://node:9001/tests/pages/",
-  "browser": "chrome",
-  "host": "chrome",
-  "smartWait": 5000,
-  "restart": false
+  'browser': 'chrome',
+  'host': 'chrome'
 });
 
 Scenario('Should work correctly in arrays @optional', async (I) => {
@@ -95,7 +91,7 @@ Scenario('Should work correctly in arrays @optional', async (I) => {
   I.see('__YELLOW__');
   I.switchTo();
 
-  // enters secod iframe, writes text on the body and then exits
+  // enters second iframe, writes text on the body and then exits
   I.switchTo(1);
   I.click('body');
   I.pressKey('__BLUE__');
