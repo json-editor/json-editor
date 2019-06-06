@@ -741,3 +741,30 @@ Scenario('should work well with nested array editors', async (I) => {
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.debug'), '[[],[],[],[],[]]');
 });
+
+Scenario('should work well with selectize multiselect editors', async (I) => {
+  I.amOnPage('array-selectize.html');
+  I.click('Add item');
+  I.click('Add item');
+  I.seeElement('[data-schemapath="root.0"]');
+  I.seeElement('[data-schemapath="root.1"]');
+  I.click('.get-value');
+  value = await I.grabValueFrom('.debug');
+  // ensure defaults
+  assert.equal(value, '[["1","2"],["1","2"]]');
+
+  // every selected item has remove button
+  I.seeElement('[data-schemapath="root.0"] .selectize-input [data-value="1"] a.remove');
+  I.seeElement('[data-schemapath="root.0"] .selectize-input [data-value="2"] a.remove');
+  I.seeElement('[data-schemapath="root.1"] .selectize-input [data-value="1"] a.remove');
+  I.seeElement('[data-schemapath="root.1"] .selectize-input [data-value="2"] a.remove');
+
+  // could not add values
+  I.fillField('[data-schemapath="root.1"] input[type="text"]', "123");
+  I.dontSeeElement('.create.active');
+
+  // selectize dropdown is filled with enum values
+  I.click('[data-schemapath="root.0"] .selectize-input');
+  I.seeElement('[data-schemapath="root.0"] .selectize-dropdown-content [data-value="3"]');
+  I.seeElement('[data-schemapath="root.0"] .selectize-dropdown-content [data-value="4"]');
+});

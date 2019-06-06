@@ -46,7 +46,7 @@ JSONEditor.defaults.themes.jqueryui = JSONEditor.AbstractTheme.extend({
     el.style.fontSize = '.8em';
     el.style.fontStyle = 'italic';
     if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text);
-    else el.textContent = text;
+    else el.textContent = this.cleanText(text);
     return el;
   },
   getButtonHolder: function() {

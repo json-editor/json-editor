@@ -11,6 +11,7 @@ JSON Editor takes a JSON Schema and uses it to generate an HTML form.
 It has full support for JSON Schema version 3 and 4 and can integrate with several popular CSS frameworks (bootstrap, foundation, and jQueryUI).
 
 Check out an interactive demo: https://json-editor.github.io/json-editor/
+
 Or the JSON-Editor Interactive Playground: https://pmk65.github.io/jedemov2/dist/demo.html 
 
 Install
@@ -49,7 +50,7 @@ The following are not required, but can improve the style and usability of JSON 
 *  [Signature Pad](https://github.com/szimek/signature_pad) HTML5 canvas based smooth signature drawing
 *  [Cleave.js](https://github.com/nosir/cleave.js) for formatting your **&lt;input/&gt;** content while you are typing
 *  [math.js](http://mathjs.org/) for more accurate floating point math (multipleOf, divisibleBy, etc.)
-*  [DOMPurify](https://github.com/cure53/DOMPurify) DOM-only, super-fast, uber-tolerant XSS sanitizer. (If you want to use HTML format in descriptions.)
+*  [DOMPurify](https://github.com/cure53/DOMPurify) DOM-only, super-fast, uber-tolerant XSS sanitizer. (If you want to use HTML format in titles/headers and descriptions.)
 
 Usage
 --------------
@@ -113,6 +114,16 @@ Here are all the available options:
   <tr>
     <td>ajax</td>
     <td>If <code>true</code>, JSON Editor will load external URLs in <code>$ref</code> via ajax.</td>
+    <td><code>false</code></td>
+  </tr>
+  <tr>
+    <td>ajaxBase</td>
+    <td>Allows schema references to work either with or without cors; set to protocol://host:port when api is served by different host.</td>
+    <td><code></code></td>
+  </tr>
+  <tr>
+    <td>ajaxCredentials</td>
+    <td>If <code>true</code>, JSON Editor will make ajax call with [credentials](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials).</td>
     <td><code>false</code></td>
   </tr>
   <tr>

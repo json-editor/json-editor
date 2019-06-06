@@ -69,7 +69,7 @@ JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
     var el = document.createElement("p");
     el.classList.add('form-text');
     if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text);
-    else el.textContent = text;
+    else el.textContent = this.cleanText(text);
     return el;
   },
   getHeaderButtonHolder: function() {

@@ -403,18 +403,20 @@ JSONEditor.AbstractEditor = Class.extend({
   },
   updateHeaderText: function() {
     if(this.header) {
+      var header_text = this.getHeaderText();
       // If the header has children, only update the text node's value
       if(this.header.children.length) {
         for(var i=0; i<this.header.childNodes.length; i++) {
           if(this.header.childNodes[i].nodeType===3) {
-            this.header.childNodes[i].nodeValue = this.getHeaderText();
+            this.header.childNodes[i].nodeValue = this.cleanText(header_text);
             break;
           }
         }
       }
       // Otherwise, just update the entire node
       else {
-        this.header.textContent = this.getHeaderText();
+        if (window.DOMPurify) this.header.innerHTML = window.DOMPurify.sanitize(header_text);
+        else this.header.textContent = this.cleanText(header_text);
       }
     }
   },
@@ -422,6 +424,12 @@ JSONEditor.AbstractEditor = Class.extend({
     if(this.header_text) return this.header_text;
     else if(title_only) return this.schema.title;
     else return this.getTitle();
+  },
+  cleanText: function(txt) {
+    // Clean out HTML tags from txt
+    var tmp = document.createElement('div');
+    tmp.innerHTML = txt;
+    return (tmp.textContent || tmp.innerText);
   },
   onWatchedFieldChange: function() {
     var vars;
