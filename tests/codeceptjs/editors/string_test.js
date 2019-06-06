@@ -32,13 +32,13 @@ Scenario('should have correct initial value', async (I) => {
   assert.equal(value, '[]');
 });
 
-Scenario('editor value and String editor should have coerent values', async (I) => {
+Scenario('editor value and String editor should have coerent values in firefox', async (I) => {
   I.amOnPage('string-sceditor.html');
   I.click('Add item');
   I.see('item 1');
 
   // enters first iframe, writes text on the body and then exits
-  I.switchTo('[data-schemapath="root.0.editor"] iframe');
+  I.switchTo(0);
   I.click('body');
   I.pressKey('__YELLOW__');
   I.see('__YELLOW__');
@@ -47,6 +47,33 @@ Scenario('editor value and String editor should have coerent values', async (I) 
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
   assert.equal(value, JSON.stringify([{"editor":"<p>__YELLOW__<br></p>"}]));
+}).config({
+  "url": "http://node:9001/tests/pages/",
+  "browser": "firefox",
+  "host": "firefox"
+});
+
+Scenario('editor value and String editor should have coerent values in chrome', async (I) => {
+  I.amOnPage('string-sceditor.html');
+  I.click('Add item');
+  I.see('item 1');
+
+  // enters first iframe, writes text on the body and then exits
+  I.switchTo(0);
+  I.click('body');
+  I.pressKey('__YELLOW__');
+  I.see('__YELLOW__');
+  I.switchTo();
+
+  I.click('.get-value');
+  value = await I.grabValueFrom('.debug');
+  assert.equal(value, JSON.stringify([{"editor":"<p>__YELLOW__</p>"}]));
+}).config({
+  "url": "http://node:9001/tests/pages/",
+  "browser": "chrome",
+  "host": "chrome",
+  "smartWait": 5000,
+  "restart": false
 });
 
 Scenario('Should work correctly in arrays @optional', async (I) => {
@@ -57,26 +84,26 @@ Scenario('Should work correctly in arrays @optional', async (I) => {
   I.see('item 2');
 
   // enters first iframe, writes text on the body and then exits
-  I.switchTo('[data-schemapath="root.0.editor"] iframe');
+  I.switchTo(0);
   I.click('body');
   I.pressKey('__YELLOW__');
   I.see('__YELLOW__');
   I.switchTo();
 
   // enters first iframe and read text
-  I.switchTo('[data-schemapath="root.0.editor"] iframe');
+  I.switchTo(0);
   I.see('__YELLOW__');
   I.switchTo();
 
   // enters secod iframe, writes text on the body and then exits
-  I.switchTo('[data-schemapath="root.1.editor"] iframe');
+  I.switchTo(1);
   I.click('body');
   I.pressKey('__BLUE__');
   I.see('__BLUE__');
   I.switchTo();
 
   // enters second iframe and read text
-  I.switchTo('[data-schemapath="root.1.editor"] iframe');
+  I.switchTo(1);
   I.see('__BLUE__');
   I.switchTo();
 
@@ -92,12 +119,12 @@ Scenario('Should work correctly in arrays @optional', async (I) => {
   // the last 2 tests will fail because Sceditors iframes loose their content when the iframe is reloaded.
 
   // enters first iframe and read text
-  I.switchTo('[data-schemapath="root.0.editor"] iframe');
+  I.switchTo(0);
   I.see('__BLUE__');
   I.switchTo();
 
   // enters second iframe and read text
-  I.switchTo('[data-schemapath="root.1.editor"] iframe');
+  I.switchTo(1);
   I.see('__YELLOW__');
   I.switchTo();
 
