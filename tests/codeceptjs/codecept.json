@@ -6,7 +6,8 @@
     "WebDriver": {
       "url": "http://node:9001/tests/pages/",
       "browser": "firefox",
-      "host": "firefox"
+      "host": "firefox",
+      "smartWait": 5000
     }
   },
   "include": {
@@ -26,7 +27,6 @@
           "url": "http://node:9001/tests/pages/",
           "browser": "chrome",
           "host": "chrome",
-          "smartWait": 5000,
           "restart": false
         }
       ]
