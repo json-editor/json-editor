@@ -5,8 +5,7 @@ Feature('table');
 Scenario('should have correct initial value', async (I) => {
   I.amOnPage('table.html');
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[]');
+  assert.equal(await I.grabValueFrom('.debug'), '[]');
 });
 
 Scenario('should ask for confirmation on node delete', async (I) => {

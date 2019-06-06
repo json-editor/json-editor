@@ -1,5 +1,4 @@
 var assert = require('assert');
-var value = '';
 
 Feature('core');
 
@@ -35,22 +34,18 @@ Scenario('should destroy', async (I) => {
 Scenario('should set and get form value', async (I) => {
   I.amOnPage('core.html');
   I.click('.get-value');
-  value = await I.grabValueFrom('.value');
-  assert.equal(value, '{"age":18,"name":"Francesco Avizzano"}');
+  assert.equal(await I.grabValueFrom('.value'), '{"age":18,"name":"Francesco Avizzano"}');
   I.click('.set-value');
   I.click('.get-value');
-  value = await I.grabValueFrom('.value');
-  assert.equal(value, '{"age":40,"name":"John Smith"}');
+  assert.equal(await I.grabValueFrom('.value'), '{"age":40,"name":"John Smith"}');
 });
 
 Scenario('should set and get individual values', async (I) => {
   I.amOnPage('core.html');
   I.click('.get-individual-value');
-  value = await I.grabValueFrom('.value');
-  assert.equal(value, '"Francesco Avizzano"');
+  assert.equal(await I.grabValueFrom('.value'), '"Francesco Avizzano"');
   I.click('.set-individual-value');
-  value = await I.grabValueFrom('.value');
-  assert.equal(value, '"john kaminski"');
+  assert.equal(await I.grabValueFrom('.value'), '"john kaminski"');
 });
 
 Scenario('should watch a specific field for changes', async (I) => {
