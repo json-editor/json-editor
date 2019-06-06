@@ -1,4 +1,4 @@
-### 1.4.0-beta1
+### 1.4.0-beta.0
 
  - Updated docs
  - cleanText function for theme descriptions
