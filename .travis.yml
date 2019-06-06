@@ -12,7 +12,7 @@ services:
 before_script:
   - cd tests
   - docker-compose run --rm node npm run build
-  - docker-compose up -d
+  - docker-compose up -d $BROWSER
 
 script:
   - docker-compose ps
