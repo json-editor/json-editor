@@ -163,7 +163,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
         this.item_title = 'item';
       }
     }
-    return this.item_title;
+    return this.cleanText(this.item_title);
   },
   getItemSchema: function(i) {
     if(Array.isArray(this.schema.items)) {

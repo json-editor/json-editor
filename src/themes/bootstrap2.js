@@ -90,7 +90,7 @@ JSONEditor.defaults.themes.bootstrap2 = JSONEditor.AbstractTheme.extend({
     var el = document.createElement('p');
     el.classList.add('help-inline');
     if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text);
-    else el.textContent = text;
+    else el.textContent = this.cleanText(text);
     return el;
   },
   getFormControl: function(label, input, description, infoText) {

@@ -43,7 +43,7 @@ JSONEditor.defaults.themes.foundation = JSONEditor.AbstractTheme.extend({
   getFormInputDescription: function(text) {
     var el = document.createElement('p');
     if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text);
-    else el.textContent = text;
+    else el.textContent = this.cleanText(text);
     el.style.marginTop = '-10px';
     el.style.fontStyle = 'italic';
     return el;
