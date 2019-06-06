@@ -1,13 +1,11 @@
 var assert = require('assert');
-var i;
 
 Feature('array');
 
 Scenario('should have correct initial value', async (I) => {
   I.amOnPage('array.html');
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[]');
+  assert.equal(await I.grabValueFrom('.debug'), '[]');
 });
 
 Scenario('should array editing triggers', async (I) => {
@@ -15,29 +13,25 @@ Scenario('should array editing triggers', async (I) => {
   I.seeElement('[data-schemapath="root.0"]');
   I.seeElement('[data-schemapath="root.1"]');
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '["A","B"]');
+  assert.equal(await I.grabValueFrom('.debug'), '["A","B"]');
 
   I.click('.json-editor-btn-moveup');
   I.seeInPopup('moveRow');
   I.acceptPopup();
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '["B","A"]');
+  assert.equal(await I.grabValueFrom('.debug'), '["B","A"]');
 
   I.click('.json-editor-btn-movedown');
   I.seeInPopup('moveRow');
   I.acceptPopup();
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '["A","B"]');
+  assert.equal(await I.grabValueFrom('.debug'), '["A","B"]');
 
   I.click('.json-editor-btntype-add');
   I.seeInPopup('addRow');
   I.acceptPopup();
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '["A","B",""]');
+  assert.equal(await I.grabValueFrom('.debug'), '["A","B",""]');
 
   I.click('.json-editor-btntype-deletelast');
   I.seeInPopup('Are you sure you want to remove this node?');
@@ -45,8 +39,7 @@ Scenario('should array editing triggers', async (I) => {
   I.seeInPopup('deleteRow');
   I.acceptPopup();
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '["A","B"]');
+  assert.equal(await I.grabValueFrom('.debug'), '["A","B"]');
 
   I.click('.json-editor-btntype-deleteall');
   I.seeInPopup('Are you sure you want to remove this node?');
@@ -54,8 +47,7 @@ Scenario('should array editing triggers', async (I) => {
   I.seeInPopup('deleteAllRows');
   I.acceptPopup();
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[]');
+  assert.equal(await I.grabValueFrom('.debug'), '[]');
 });
 
 Scenario('should work well with string editors', async (I) => {
@@ -76,16 +68,14 @@ Scenario('should work well with string editors', async (I) => {
   I.fillField('[name="root[3]"]', "4");
   I.fillField('[name="root[4]"]', "5");
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '["1","2","3","4","5"]');
+  assert.equal(await I.grabValueFrom('.debug'), '["1","2","3","4","5"]');
 
   // shuffle
   I.click('.moveup[data-i="4"]');
   I.click('.moveup[data-i="2"]');
   I.click('.moveup[data-i="1"]');
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '["3","1","2","5","4"]');
+  assert.equal(await I.grabValueFrom('.debug'), '["3","1","2","5","4"]');
 
   // delete single
   I.see('String 5');
@@ -145,16 +135,14 @@ Scenario('should work well with number editors', async (I) => {
   I.fillField('[name="root[3]"]', "4");
   I.fillField('[name="root[4]"]', "5");
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[1,2,3,4,5]');
+  assert.equal(await I.grabValueFrom('.debug'), '[1,2,3,4,5]');
 
   // shuffle
   I.click('.moveup[data-i="4"]');
   I.click('.moveup[data-i="2"]');
   I.click('.moveup[data-i="1"]');
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[3,1,2,5,4]');
+  assert.equal(await I.grabValueFrom('.debug'), '[3,1,2,5,4]');
 
   // delete single
   I.see('Number 5');
@@ -214,16 +202,14 @@ Scenario('should work well with integer editors', async (I) => {
   I.fillField('[name="root[3]"]', "4");
   I.fillField('[name="root[4]"]', "5");
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[1,2,3,4,5]');
+  assert.equal(await I.grabValueFrom('.debug'), '[1,2,3,4,5]');
 
   // shuffle
   I.click('.moveup[data-i="4"]');
   I.click('.moveup[data-i="2"]');
   I.click('.moveup[data-i="1"]');
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[3,1,2,5,4]');
+  assert.equal(await I.grabValueFrom('.debug'), '[3,1,2,5,4]');
 
   // delete single
   I.see('Integer 5');
@@ -274,14 +260,12 @@ Scenario('should work well with select editors', async (I) => {
   I.selectOption('[name="root[0]"]', "true");
   I.selectOption('[name="root[1]"]', "false");
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[true,false]');
+  assert.equal(await I.grabValueFrom('.debug'), '[true,false]');
 
   // shuffle
   I.click('.moveup[data-i="1"]');
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[false,true]');
+  assert.equal(await I.grabValueFrom('.debug'), '[false,true]');
 
   // delete single
   I.click('Add Select');
@@ -344,16 +328,14 @@ Scenario('should work well with checkbox editors', async (I) => {
   I.checkOption('4', '[data-schemapath="root.3"]');
   I.checkOption('5', '[data-schemapath="root.4"]');
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[["1"],["2"],["3"],["4"],["5"]]');
+  assert.equal(await I.grabValueFrom('.debug'), '[["1"],["2"],["3"],["4"],["5"]]');
 
   // shuffle
   I.click('.moveup[data-i="4"]');
   I.click('.moveup[data-i="2"]');
   I.click('.moveup[data-i="1"]');
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[["3"],["1"],["2"],["5"],["4"]]');
+  assert.equal(await I.grabValueFrom('.debug'), '[["3"],["1"],["2"],["5"],["4"]]');
 
   // delete single
   I.see('Checkbox 5');
@@ -403,16 +385,14 @@ Scenario('should work well with rating editors', async (I) => {
   I.seeElement('[data-schemapath="root.3"]');
   I.seeElement('[data-schemapath="root.4"]');
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[1,2,3,4,5]');
+  assert.equal(await I.grabValueFrom('.debug'), '[1,2,3,4,5]');
 
   // shuffle
   I.click('.moveup[data-i="4"]');
   I.click('.moveup[data-i="2"]');
   I.click('.moveup[data-i="1"]');
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[3,1,2,5,4]');
+  assert.equal(await I.grabValueFrom('.debug'), '[3,1,2,5,4]');
 
   // delete single
   I.see('Rating 5');
@@ -472,16 +452,14 @@ Scenario('should work well with multiselect editors', async (I) => {
   I.selectOption('[name="root[3]"]', "4");
   I.selectOption('[name="root[4]"]', "5");
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[["1"],["2"],["3"],["4"],["5"]]');
+  assert.equal(await I.grabValueFrom('.debug'), '[["1"],["2"],["3"],["4"],["5"]]');
 
   // shuffle
   I.click('.moveup[data-i="4"]');
   I.click('.moveup[data-i="2"]');
   I.click('.moveup[data-i="1"]');
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[["3"],["1"],["2"],["5"],["4"]]');
+  assert.equal(await I.grabValueFrom('.debug'), '[["3"],["1"],["2"],["5"],["4"]]');
 
   // delete single
   I.see('Multiselect 5');
@@ -541,16 +519,14 @@ Scenario('should work well with object editors', async (I) => {
   I.fillField('[name="root[3][property]"]', "4");
   I.fillField('[name="root[4][property]"]', "5");
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[{"property":"1"},{"property":"2"},{"property":"3"},{"property":"4"},{"property":"5"}]');
+  assert.equal(await I.grabValueFrom('.debug'), '[{"property":"1"},{"property":"2"},{"property":"3"},{"property":"4"},{"property":"5"}]');
 
   // shuffle
   I.click('.moveup[data-i="4"]');
   I.click('.moveup[data-i="2"]');
   I.click('.moveup[data-i="1"]');
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[{"property":"3"},{"property":"1"},{"property":"2"},{"property":"5"},{"property":"4"}]');
+  assert.equal(await I.grabValueFrom('.debug'), '[{"property":"3"},{"property":"1"},{"property":"2"},{"property":"5"},{"property":"4"}]');
 
   // delete single
   I.see('Object 5');
@@ -605,26 +581,23 @@ Scenario('should work well with nested array editors', async (I) => {
   I.seeElement('[data-schemapath="root.3"]');
   I.seeElement('[data-schemapath="root.4"]');
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[[],[],[],[],[]]');
+  assert.equal(await I.grabValueFrom('.debug'), '[[],[],[],[],[]]');
 
   // adds one string editor in each first level array
-  for (i = 0; i < 5; i++) {
+  for (let i = 0; i < 5; i++) {
     I.click('Add String', '[data-schemapath="root.' + i + '"]');
     I.fillField('[data-schemapath="root.' + i + '"] [name="root[' + i + '][0]"]', String(i + 1));
   }
 
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[["1"],["2"],["3"],["4"],["5"]]');
+  assert.equal(await I.grabValueFrom('.debug'), '[["1"],["2"],["3"],["4"],["5"]]');
 
   // shuffle
   I.click('.moveup[data-i="4"]');
   I.click('.moveup[data-i="2"]');
   I.click('.moveup[data-i="1"]');
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[["3"],["1"],["2"],["5"],["4"]]');
+  assert.equal(await I.grabValueFrom('.debug'), '[["3"],["1"],["2"],["5"],["4"]]');
 
   // delete single
   I.see('Array 5');
@@ -685,11 +658,10 @@ Scenario('should work well with nested array editors', async (I) => {
   I.seeElement('[data-schemapath="root.1"]');
   I.seeElement('[data-schemapath="root.2"]');
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[[],[],[],[],[]]');
+  assert.equal(await I.grabValueFrom('.debug'), '[[],[],[],[],[]]');
 
   // adds one string editor in each first level array
-  for (i = 0; i < 5; i++) {
+  for (let i = 0; i < 5; i++) {
     I.click('Add String', '[data-schemapath="root.' + i + '"]');
     I.click('Add String', '[data-schemapath="root.' + i + '"]');
     I.click('Add String', '[data-schemapath="root.' + i + '"]');
@@ -703,22 +675,20 @@ Scenario('should work well with nested array editors', async (I) => {
   }
 
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[["1","2","3","4","5"],["1","2","3","4","5"],["1","2","3","4","5"],["1","2","3","4","5"],["1","2","3","4","5"]]');
+  assert.equal(await I.grabValueFrom('.debug'), '[["1","2","3","4","5"],["1","2","3","4","5"],["1","2","3","4","5"],["1","2","3","4","5"],["1","2","3","4","5"]]');
 
   // shuffle every strings array
-  for (i = 0; i < 5; i++) {
+  for (let i = 0; i < 5; i++) {
     I.click('[data-schemapath="root.' + i + '.4"] .moveup');
     I.click('[data-schemapath="root.' + i + '.2"] .moveup');
     I.click('[data-schemapath="root.' + i + '.1"] .moveup');
   }
 
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[["3","1","2","5","4"],["3","1","2","5","4"],["3","1","2","5","4"],["3","1","2","5","4"],["3","1","2","5","4"]]');
+  assert.equal(await I.grabValueFrom('.debug'), '[["3","1","2","5","4"],["3","1","2","5","4"],["3","1","2","5","4"],["3","1","2","5","4"],["3","1","2","5","4"]]');
 
   // delete single (fifth) element from every string array
-  for (i = 0; i < 5; i++) {
+  for (let i = 0; i < 5; i++) {
     I.see('String 5', '[data-schemapath="root.' + i + '"]');
     I.click('[data-schemapath="root.' + i + '.4"] .delete');
     I.seeInPopup('Are you sure you want to remove this node?');
@@ -731,11 +701,10 @@ Scenario('should work well with nested array editors', async (I) => {
   }
 
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[["3","1","2","5"],["3","1","2","5"],["3","1","2","5"],["3","1","2","5"],["3","1","2","5"]]');
+  assert.equal(await I.grabValueFrom('.debug'), '[["3","1","2","5"],["3","1","2","5"],["3","1","2","5"],["3","1","2","5"],["3","1","2","5"]]');
 
   // delete last (fourth) element from every string array
-  for (i = 0; i < 5; i++) {
+  for (let i = 0; i < 5; i++) {
     I.see('String 4', '[data-schemapath="root.' + i + '"]');
     I.click('Delete Last String', '[data-schemapath="root.' + i + '"]');
     I.seeInPopup('Are you sure you want to remove this node?');
@@ -748,11 +717,10 @@ Scenario('should work well with nested array editors', async (I) => {
   }
 
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[["3","1","2"],["3","1","2"],["3","1","2"],["3","1","2"],["3","1","2"]]');
+  assert.equal(await I.grabValueFrom('.debug'), '[["3","1","2"],["3","1","2"],["3","1","2"],["3","1","2"],["3","1","2"]]');
 
   // delete last (fourth) element from every string array
-  for (i = 0; i < 5; i++) {
+  for (let i = 0; i < 5; i++) {
     I.see('String 1', '[data-schemapath="root.' + i + '"]');
     I.see('String 2', '[data-schemapath="root.' + i + '"]');
     I.see('String 3', '[data-schemapath="root.' + i + '"]');
@@ -771,8 +739,5 @@ Scenario('should work well with nested array editors', async (I) => {
   }
 
   I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, '[[],[],[],[],[]]');
-
+  assert.equal(await I.grabValueFrom('.debug'), '[[],[],[],[],[]]');
 });
-
