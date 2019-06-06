@@ -3,8 +3,8 @@ sudo: required
 language: generic
 
 env:
-  - BROWSER=chrome
-  - BROWSER=firefox
+  - SELENIUM_BROWSER=chrome
+  - SELENIUM_BROWSER=firefox
 
 services:
   - docker
@@ -12,9 +12,13 @@ services:
 before_script:
   - cd tests
   - docker-compose run --rm node npm run build
-  - docker-compose up -d $BROWSER
+  - docker-compose up -d $SELENIUM_BROWSER
 
 script:
   - docker-compose ps
   # exclude optional tests
-  - docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$BROWSER --grep '(?=.*)^(?!.*@optional)'
+  - docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --grep '(?=.*)^(?!.*@optional)'
+
+after_script:
+  # run optional tests
+  - docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --grep '@optional'

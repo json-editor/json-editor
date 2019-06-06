@@ -32,27 +32,7 @@ Scenario('should have correct initial value', async (I) => {
   assert.equal(value, '[]');
 });
 
-Scenario('editor value and String editor should have coerent values in firefox', async (I) => {
-  I.amOnPage('string-sceditor.html');
-  I.click('Add item');
-  I.see('item 1');
-
-  // enters first iframe, writes text on the body and then exits
-  I.switchTo(0);
-  I.click('body');
-  I.pressKey('__YELLOW__');
-  I.see('__YELLOW__');
-  I.switchTo();
-
-  I.click('.get-value');
-  value = await I.grabValueFrom('.debug');
-  assert.equal(value, JSON.stringify([{"editor":"<p>__YELLOW__<br></p>"}]));
-}).config({
-  'browser': 'firefox',
-  'host': 'firefox'
-});
-
-Scenario('editor value and String editor should have coerent values in chrome', async (I) => {
+Scenario('editor value and String editor should have coerent values @optional', async (I) => {
   I.amOnPage('string-sceditor.html');
   I.click('Add item');
   I.see('item 1');
@@ -67,9 +47,6 @@ Scenario('editor value and String editor should have coerent values in chrome', 
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
   assert.equal(value, JSON.stringify([{"editor":"<p>__YELLOW__</p>"}]));
-}).config({
-  'browser': 'chrome',
-  'host': 'chrome'
 });
 
 Scenario('Should work correctly in arrays @optional', async (I) => {
