@@ -562,8 +562,11 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
     }
     // If the object should be rendered as a div
     else {
-      this.header = document.createElement('label');
-      this.header.textContent = this.getTitle();
+      this.header = '';
+      if(!this.options.compact) {
+        this.header = document.createElement('label');
+        this.header.textContent = this.getTitle();
+      }
       this.title = this.theme.getHeader(this.header);
       this.container.appendChild(this.title);
       this.container.style.position = 'relative';
@@ -759,10 +762,10 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
 
       // Collapse button disabled
       if(this.schema.options && typeof this.schema.options.disable_collapse !== "undefined") {
-        if(this.schema.options.disable_collapse) this.toggle_button.style.display = 'none';
+        if(this.schema.options.disable_collapse) this.title_controls.style.display = 'none';
       }
       else if(this.jsoneditor.options.disable_collapse) {
-        this.toggle_button.style.display = 'none';
+        this.title_controls.style.display = 'none';
       }
 
       // Edit JSON Button
@@ -778,10 +781,10 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
 
       // Edit JSON Buttton disabled
       if(this.schema.options && typeof this.schema.options.disable_edit_json !== "undefined") {
-        if(this.schema.options.disable_edit_json) this.editjson_button.style.display = 'none';
+        if(this.schema.options.disable_edit_json) this.editjson_controls.style.display = 'none';
       }
       else if(this.jsoneditor.options.disable_edit_json) {
-        this.editjson_button.style.display = 'none';
+        this.editjson_controls.style.display = 'none';
       }
 
       // Object Properties Button
