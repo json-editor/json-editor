@@ -41,14 +41,24 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
       if(this.add_row_button) this.add_row_button.disabled = false;
       if(this.remove_all_rows_button) this.remove_all_rows_button.disabled = false;
       if(this.delete_last_row_button) this.delete_last_row_button.disabled = false;
+      if(this.copy_button) this.copy_button.disabled = false;
+      //if(this.toggle_button) this.toggle_button.disabled = false;
+      if(this.delete_button) this.delete_button.disabled = false;
+      if(this.moveup_button) this.moveup_button.disabled = false;
+      if(this.movedown_button) this.movedown_button.disabled = false;
 
       if(this.rows) {
         for(var i=0; i<this.rows.length; i++) {
           this.rows[i].enable();
 
+          if(this.rows[i].add_row_button) this.rows[i].add_row_button.disabled = false;
+          if(this.rows[i].remove_all_rows_button) this.rows[i].remove_all_rows_button.disabled = false;
+          if(this.rows[i].delete_last_row_button) this.rows[i].delete_last_row_button.disabled = false;
+          if(this.rows[i].copy_button) this.rows[i].copy_button.disabled = false;
+          //if(this.rows[i].toggle_button) this.rows[i].toggle_button.disabled = false;
+          if(this.rows[i].delete_button) this.rows[i].delete_button.disabled = false;
           if(this.rows[i].moveup_button) this.rows[i].moveup_button.disabled = false;
           if(this.rows[i].movedown_button) this.rows[i].movedown_button.disabled = false;
-          if(this.rows[i].delete_button) this.rows[i].delete_button.disabled = false;
         }
       }
       this._super();
@@ -59,14 +69,26 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
     if(this.add_row_button) this.add_row_button.disabled = true;
     if(this.remove_all_rows_button) this.remove_all_rows_button.disabled = true;
     if(this.delete_last_row_button) this.delete_last_row_button.disabled = true;
+    if(this.copy_button) this.copy_button.disabled = true;
+    //if(this.toggle_button) this.toggle_button.disabled = true;
+    if(this.delete_button) this.delete_button.disabled = true;
+    if(this.moveup_button) this.moveup_button.disabled = true;
+    if(this.movedown_button) this.movedown_button.disabled = true;
+
 
     if(this.rows) {
       for(var i=0; i<this.rows.length; i++) {
         this.rows[i].disable(always_disabled);
 
-        if(this.rows[i].moveup_button) this.rows[i].moveup_button.disabled = true;
-        if(this.rows[i].movedown_button) this.rows[i].movedown_button.disabled = true;
+        if(this.rows[i].add_row_button) this.rows[i].add_row_button.disabled = true;
+        if(this.rows[i].remove_all_rows_button) this.rows[i].remove_all_rows_button.disabled = true;
+        if(this.rows[i].delete_last_row_button) this.rows[i].delete_last_row_button.disabled = true;
+        if(this.rows[i].copy_button) this.rows[i].copy_button.disabled = true;
+        //if(this.rows[i].toggle_button) this.rows[i].toggle_button.disabled = true;
         if(this.rows[i].delete_button) this.rows[i].delete_button.disabled = true;
+        if(this.rows[i].moveup_button) this.rows[i].moveup_button.disabled = true;
+       if(this.rows[i].movedown_button) this.rows[i].movedown_button.disabled = true;
+
       }
     }
     this._super();
