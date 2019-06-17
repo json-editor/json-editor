@@ -1,3 +1,7 @@
+### Current
+
+  - Added new editor for uuid. If no uuid is supplied (startval), a random generated V4 uuid is created.
+
 ### 1.4.0-beta.0
 
  - Updated docs
