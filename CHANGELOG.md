@@ -1,3 +1,12 @@
+### Current
+
+  - Added new editor for uuid. If no uuid is supplied (startval), a random generated V4 uuid is created.
+  - Added support for compact option in src/objects.js to hide title.
+  - Added missing buttons to enable/disable state (src/array.js)
+  - Fixed problems with dependencies option not working with Boolean format (src/editor.js).
+  - Fixed problem with JSON and collapse buttons setting display: none; on button and not container. (src/object.js) So now compact in combination with hiding the buttons, will remove the "empty gap" in the layout.
+  
+  
 ### 1.4.0-beta.0
 
  - Updated docs
