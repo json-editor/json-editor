@@ -1,6 +1,7 @@
 ### Current
 
-  - Fiexd of #231 - Now it is possible to use dots in field names (src/editor.js)
+  - Removed "rating" editor and updated "starrating" editor to accept/emulate "rating" editor options.
+  - Fixed #231 - Now it is possible to use dots in field names (src/editor.js)
   - Added new editor for uuid. If no uuid is supplied (startval), a random generated V4 uuid is created.
   - Added support for compact option in src/objects.js to hide title.
   - Added missing buttons to enable/disable state (src/array.js)
