@@ -66,8 +66,8 @@ JSONEditor.AbstractEditor = Class.extend({
     this.path = options.path || 'root';
     this.formname = options.formname || this.path.replace(/\.([^.]+)/g,'[$1]');
     if(this.jsoneditor.options.form_name_root) this.formname = this.formname.replace(/^root\[/,this.jsoneditor.options.form_name_root+'[');
-    this.key = this.path.split('.').pop();
     this.parent = options.parent;
+    this.key = this.parent !== undefined ? this.path.split('.').slice(this.parent.path.split('.').length).join('.') : this.path;
 
     this.link_watchers = [];
 
