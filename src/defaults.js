@@ -284,10 +284,6 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
 JSONEditor.defaults.resolvers.unshift(function(schema) {
   if(schema.type === "string" && schema.format === "signature") return "signature";
 });
-// Use a specialized editor for ratings
-JSONEditor.defaults.resolvers.unshift(function(schema) {
-  if(schema.type === "integer" && schema.format === "rating") return "rating";
-});
 // Use the select editor for all boolean values
 JSONEditor.defaults.resolvers.unshift(function(schema) {
   if(schema.type === 'boolean') {
@@ -375,7 +371,7 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
 });
 // Use a specialized editor for starratings
 JSONEditor.defaults.resolvers.unshift(function(schema) {
-  if (schema.type === "string" && schema.format === "starrating") return "starrating";
+  if (['string', 'integer'].indexOf(schema.type) !== -1 && ['starrating', 'rating'].indexOf(schema.format) !== -1) return "starrating";
 });
 
 // hyper-link describeBy Resolver

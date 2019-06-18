@@ -10,8 +10,16 @@ JSONEditor.defaults.editors.starrating = JSONEditor.defaults.editors.string.exte
     this.ratingContainer = document.createElement('div');
     this.ratingContainer.classList.add('starrating');
 
-    this.enum_values = this.schema.enum;
-    this.radioGroup =[];
+    // Emulate the old "rating" editor parameters
+    if (this.schema.enum == undefined) {
+      var max = this.schema.maximum ? this.schema.maximum : 5;
+      if (this.schema.exclusiveMaximum) max--;
+      this.enum_values = [];
+      for (var k=0;k<max;k++) this.enum_values.push(k+1);
+    }
+    else this.enum_values = this.schema.enum;
+
+    this.radioGroup = [];
 
     var radioInputEventhandler = function(e) {
       e.preventDefault();
@@ -67,6 +75,9 @@ JSONEditor.defaults.editors.starrating = JSONEditor.defaults.editors.string.exte
     
     this.control = this.theme.getFormControl(this.label, ratingsContainerWrapper, this.description, this.infoButton);
     this.container.appendChild(this.control);
+
+    this.refreshValue();
+
   },
   enable: function() {
     if(!this.always_disabled) {
@@ -93,6 +104,15 @@ JSONEditor.defaults.editors.starrating = JSONEditor.defaults.editors.string.exte
   },
   getNumColumns: function() {
     return 2;
+  },
+  getValue: function() {
+    if (!this.dependenciesFulfilled) {
+      return undefined;
+    }
+    if (this.schema.type == 'integer') {
+      return this.value===''?undefined:this.value*1;
+    }
+    return this.value;
   },
   setValue: function (val) {
     for(var i = 0; i < this.radioGroup.length; i++) {
