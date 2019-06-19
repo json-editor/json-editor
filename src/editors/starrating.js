@@ -62,7 +62,7 @@ JSONEditor.defaults.editors.starrating = JSONEditor.defaults.editors.string.exte
 
     if(this.schema.readOnly || this.schema.readonly) {
       this.always_disabled = true;
-      for (var j = 0; i<this.radioGroup.length; j++) {
+      for (var j = 0; j<this.radioGroup.length; j++) {
         this.radioGroup[j].disabled = true;
       }
       this.ratingContainer.classList.add('readonly');
