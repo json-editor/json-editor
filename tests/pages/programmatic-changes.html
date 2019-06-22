@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Programmatic Changes</title>
+    <script src="../../dist/jsoneditor.js"></script>
+    <link rel="stylesheet" href="assets/pages.css">
+</head>
+<body>
+
+<div class="flex-row">
+    <div class="flex-8">
+        <div class='container'></div>
+    </div>
+    <div class="flex-4">
+        <textarea class="value" cols="30" rows="30"></textarea>
+        <div class="state"></div>
+        <div>
+            <button class='get-value'>Get Value</button>
+            <button class='get-value-pretty'>Get Pretty Value</button>
+        </div>
+        <div>
+            <button class='set-values'>Set Values Programmatically</button>
+        </div>
+    </div>
+</div>
+
+<script>
+
+  var container = document.querySelector('.container')
+  var value = document.querySelector('.value')
+  var getValue = document.querySelector('.get-value')
+  var getValuePretty = document.querySelector('.get-value-pretty')
+  var setValues = document.querySelector('.set-values')
+  var state = document.querySelector('.state')
+  var schema = {
+    "type": "object",
+    "title": "range",
+    "properties": {
+      "boolean": {
+        "title": "boolean",
+        "type": "boolean"
+      },
+      "boolean_checkbox": {
+        "title": "boolean checkbox",
+        "type": "boolean",
+        "format": "checkbox"
+      },
+      "string": {
+        "title": "string",
+        "type": "string"
+      },
+      "integer": {
+        "title": "integer",
+        "type": "integer"
+      },
+      "number": {
+        "title": "number",
+        "type": "number"
+      },
+      "array": {
+        "title": "array",
+        "type": "array",
+        "format": "tabs",
+        "items": {
+          "type": "integer",
+          "title": "integer"
+        }
+      },
+      "array_checkbox": {
+        "type": "array",
+        "uniqueItems": true,
+        "format": "checkbox",
+        "items": {
+          "type": "string",
+          "enum": ["value1", "value2"]
+        }
+      },
+      "array_select": {
+        "type": "array",
+        "uniqueItems": true,
+        "format": "select",
+        "items": {
+          "type": "integer",
+          "enum": [1, 2, 3]
+        }
+      }
+    }
+  }
+
+  var editor = new JSONEditor(container, {
+    schema: schema
+  })
+
+  editor.on('ready',function() {
+    state.innerText = 'READY'
+  });
+
+  getValue.addEventListener('click', function () {
+    value.value = JSON.stringify(editor.getValue())
+  })
+
+  getValuePretty.addEventListener('click', function () {
+    value.value = JSON.stringify(editor.getValue(), null, 2)
+  })
+
+  setValues.addEventListener('click', function () {
+    editor.getEditor('root.boolean').setValue(true);
+    editor.getEditor('root.boolean_checkbox').setValue(true);
+    editor.getEditor('root.string').setValue('hello');
+    editor.getEditor('root.integer').setValue(5);
+    editor.getEditor('root.number').setValue(5.5);
+    editor.getEditor('root.array').setValue([1, 2, 3]);
+    editor.getEditor('root.array_checkbox').setValue(["value1", "value2"]);
+    editor.getEditor('root.array_select').setValue([1, 2, 3]);
+  })
+
+</script>
+</body>
+</html>
