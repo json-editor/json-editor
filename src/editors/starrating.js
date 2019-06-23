@@ -30,7 +30,7 @@ JSONEditor.defaults.editors.starrating = JSONEditor.defaults.editors.string.exte
 
     for(var i = this.enum_values.length-1; i>-1; i--) {
 
-      var id = this.key + '-' + i;
+      var id = this.formname + i;
 
       // form radio elements
       var radioInput = this.theme.getFormInputField('radio');
@@ -123,7 +123,7 @@ JSONEditor.defaults.editors.starrating = JSONEditor.defaults.editors.string.exte
         if(this.options.displayValue) {
           this.displayRating.innerHTML = this.value;
         }
-        this.onChange();
+        this.onChange(true);
         break;
       }
     }
