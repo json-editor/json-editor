@@ -1,5 +1,6 @@
 ### Current
 
+  - Removed "rating" editor and updated "starrating" editor to accept/emulate "rating" editor options.
   - Fixed #392 - Now setting checkbox value programmatically will trigger onchange correctly. (src/editors/checkbox.js)
   - Fixed #231 - Now it is possible to use dots in field names (src/editor.js)
   - Added new editor for uuid. If no uuid is supplied (startval), a random generated V4 uuid is created.
