@@ -28,9 +28,9 @@ JSONEditor.defaults.editors.starrating = JSONEditor.defaults.editors.string.exte
       self.onChange(true);
     };
 
-    for(var i = this.enum_values.length; i>0; i--) {
+    for(var i = this.enum_values.length-1; i>-1; i--) {
 
-      var id = this.formname + i;
+      var id = this.formname + (i+1);
 
       // form radio elements
       var radioInput = this.theme.getFormInputField('radio');
