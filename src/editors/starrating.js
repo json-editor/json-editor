@@ -30,7 +30,7 @@ JSONEditor.defaults.editors.starrating = JSONEditor.defaults.editors.string.exte
 
     for(var i = this.enum_values.length-1; i>-1; i--) {
 
-      var id = this.formname + i;
+      var id = this.formname + (i+1);
 
       // form radio elements
       var radioInput = this.theme.getFormInputField('radio');
@@ -72,7 +72,7 @@ JSONEditor.defaults.editors.starrating = JSONEditor.defaults.editors.string.exte
     ratingsContainerWrapper.appendChild(this.ratingContainer);
 
     this.input = ratingsContainerWrapper;
-    
+
     this.control = this.theme.getFormControl(this.label, ratingsContainerWrapper, this.description, this.infoButton);
     this.container.appendChild(this.control);
 
