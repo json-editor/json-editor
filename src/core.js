@@ -157,10 +157,10 @@ JSONEditor.prototype = {
     
     return this;
   },
-  trigger: function(event) {
+  trigger: function(event, editor) {
     if(this.callbacks && this.callbacks[event] && this.callbacks[event].length) {
       for(var i=0; i<this.callbacks[event].length; i++) {
-        this.callbacks[event][i].apply(this, []);
+        this.callbacks[event][i].apply(this, [editor]);
       }
     }
     
