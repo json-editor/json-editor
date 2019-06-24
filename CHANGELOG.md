@@ -1,5 +1,6 @@
 ### Current
 
+  - Added 2 new config options: "noselect2" and "noselectize" which can be used to disable select2/selectize on a specific property/field.
   - Removed "rating" editor and updated "starrating" editor to accept/emulate "rating" editor options.
   - Fixed #392 - Now setting checkbox value programmatically will trigger onchange correctly. (src/editors/checkbox.js)
   - Fixed #231 - Now it is possible to use dots in field names (src/editor.js)
