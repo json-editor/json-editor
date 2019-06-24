@@ -188,7 +188,7 @@ JSONEditor.defaults.editors.selectize = JSONEditor.AbstractEditor.extend({
   setupSelectize: function() {
     // If the Selectize library is loaded use it when we have lots of items
     var self = this;
-    if(window.jQuery && window.jQuery.fn && window.jQuery.fn.selectize && !(this.schema.options && this.schema.options.noselectize) && (this.enum_options.length >= 2 || (this.enum_options.length && this.enumSource))) {
+    if(window.jQuery && window.jQuery.fn && window.jQuery.fn.selectize && !(this.schema.options && this.schema.options.disable_selectize) && (this.enum_options.length >= 2 || (this.enum_options.length && this.enumSource))) {
       var options = $extend({},JSONEditor.plugins.selectize);
       if(this.schema.options && this.schema.options.selectize_options) options = $extend(options,this.schema.options.selectize_options);
       this.selectize = window.jQuery(this.input).selectize($extend(options,

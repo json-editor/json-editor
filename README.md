@@ -1444,7 +1444,7 @@ JSONEditor.plugins.selectize.enable = true;
 ```
 See the demo for an example of the `array` and `select` editor with Selectize support enabled.
 
-To disable Select2/Selectize for a single property, you can set the boolean option `noselectize` or `noselect2` in the schema property options.
+To disable Select2/Selectize for a single property, you can set the boolean option `disable_selectize` or `disable_select2` in the schema property options.
 
 Custom Validation
 ----------------
