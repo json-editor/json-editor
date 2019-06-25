@@ -1,18 +1,18 @@
 JSON Editor
 ===========
 
-[![Build Status](https://travis-ci.org/json-editor/json-editor.svg?branch=master)](https://travis-ci.org/json-editor/json-editor)  
-Fork of the inactive [jdorn/json-editor](https://github.com/jdorn/json-editor) using the updated fork [json-editor/json-editor](https://github.com/json-editor/json-editor).  
+[![Build Status](https://travis-ci.org/json-editor/json-editor.svg?branch=master)](https://travis-ci.org/json-editor/json-editor)
+Fork of the inactive [jdorn/json-editor](https://github.com/jdorn/json-editor) using the updated fork [json-editor/json-editor](https://github.com/json-editor/json-editor).
 Some pull requests added from the original repo.
 
 ![JSON Schema -> HTML Editor -> JSON](./docs/images/jsoneditor.png)
 
-JSON Editor takes a JSON Schema and uses it to generate an HTML form.  
+JSON Editor takes a JSON Schema and uses it to generate an HTML form.
 It has full support for JSON Schema version 3 and 4 and can integrate with several popular CSS frameworks (bootstrap, foundation, and jQueryUI).
 
 Check out an interactive demo: https://json-editor.github.io/json-editor/
 
-Or the JSON-Editor Interactive Playground: https://pmk65.github.io/jedemov2/dist/demo.html 
+Or the JSON-Editor Interactive Playground: https://pmk65.github.io/jedemov2/dist/demo.html
 
 Install
 -----------------
@@ -64,7 +64,7 @@ If you learn best by example, check these out:
 *  Base64 Editor Example (Muiltple Upload) - https://json-editor.github.io/json-editor/multiple_upload_base64.html
 *  Cleave.js Editor Example - https://json-editor.github.io/json-editor/cleave.html
 *  Datetime Editor Example - https://json-editor.github.io/json-editor/datetime.html
-*  DescribedBy Hyperlink Editor Example - https://json-editor.github.io/json-editor/describedby.html 
+*  DescribedBy Hyperlink Editor Example - https://json-editor.github.io/json-editor/describedby.html
 *  Radio Button JSON Editor Example - https://json-editor.github.io/json-editor/radio.html
 *  Recursive JSON Editor Example - https://json-editor.github.io/json-editor/recursive.html
 *  Select2 Editor Example - https://json-editor.github.io/json-editor/select2.html
@@ -452,7 +452,7 @@ It's possible to create your own custom themes and/or icon libs as well.  Look a
 JSON Schema Support
 -----------------
 
-JSON Editor fully supports version 3 and 4 of the JSON Schema [core][core] and [validation][validation] specifications.  
+JSON Editor fully supports version 3 and 4 of the JSON Schema [core][core] and [validation][validation] specifications.
 Some of The [hyper-schema][hyper] specification is supported as well.
 
 [core]: http://json-schema.org/latest/json-schema-core.html
@@ -496,8 +496,8 @@ Self-referential $refs are supported.  Check out `examples/recursive.html` for u
 
 The `links` keyword from the hyper-schema specification can be used to add links to related documents.
 
-JSON Editor will use the `mediaType` property of the links to determine how best to display them.  
-Image, audio, and video links will display the media inline as well as providing a text link.  
+JSON Editor will use the `mediaType` property of the links to determine how best to display them.
+Image, audio, and video links will display the media inline as well as providing a text link.
 
 Here are a couple examples:
 
@@ -916,7 +916,7 @@ It introduces the new `grid-break` property to breaks the current row leaving a 
 ```
 
 
-The `categories` format groups properties in top-tabbed panels, one for each object or array property plus one that groups all added or other types of properties.  
+The `categories` format groups properties in top-tabbed panels, one for each object or array property plus one that groups all added or other types of properties.
 Panel tabs titles came from object or array titles and for the grouping panel it defaults to "Basic", unless  `basicCategoryTitle` is defined.
 
 ```json
@@ -1286,7 +1286,7 @@ All of the optional templates in the verbose form have the properties `item` and
 
 The `title` keyword of a schema is used to add user friendly headers to the editing UI.  Sometimes though, dynamic headers, which change based on other fields, are helpful.
 
-Consider the example of an array of children.  Without dynamic headers, the UI for the array elements would show `Child 1`, `Child 2`, etc..  
+Consider the example of an array of children.  Without dynamic headers, the UI for the array elements would show `Child 1`, `Child 2`, etc..
 It would be much nicer if the headers could be dynamic and incorporate information about the children, such as `1 - John (age 9)`, `2 - Sarah (age 11)`.
 
 To accomplish this, use the `headerTemplate` property.  All of the watched variables are passed into this template, along with the static title `title` (e.g. "Child"), the 0-based index `i0` (e.g. "0" and "1"), the 1-based index `i1`, and the field's value `self` (e.g. `{"name": "John", "age": 9}`).
@@ -1443,6 +1443,8 @@ Selectize support is enabled via the following snippet:
 JSONEditor.plugins.selectize.enable = true;
 ```
 See the demo for an example of the `array` and `select` editor with Selectize support enabled.
+
+To disable Select2/Selectize for a single property, you can set the boolean option `disable_selectize` or `disable_select2` in the schema property options.
 
 Custom Validation
 ----------------

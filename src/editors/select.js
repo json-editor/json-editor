@@ -216,7 +216,7 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
   },
   setupSelect2: function() {
     // If the Select2 library is loaded use it when we have lots of items
-    if(window.jQuery && window.jQuery.fn && window.jQuery.fn.select2 && (this.enum_options.length > 2 || (this.enum_options.length && this.enumSource))) {
+    if(window.jQuery && window.jQuery.fn && window.jQuery.fn.select2 && !(this.schema.options && this.schema.options.disable_select2) && (this.enum_options.length > 2 || (this.enum_options.length && this.enumSource))) {
       var options = $extend({},JSONEditor.plugins.select2);
       if(this.schema.options && this.schema.options.select2_options) options = $extend(options,this.schema.options.select2_options);
       this.select2 = window.jQuery(this.input).select2(options);
