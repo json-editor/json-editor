@@ -1,26 +1,4 @@
 JSONEditor.defaults.editors.choices = JSONEditor.AbstractEditor.extend({
-    setValue: function(value,initial) {
-      value = this.typecast(value||'');
-
-      // Sanitize value before setting it
-      var sanitized = value;
-      if(this.enum_values.length > 0 && this.enum_values.indexOf(sanitized) < 0) {
-        sanitized = this.enum_values[0];
-      }
-
-      if(this.value === sanitized) {
-        return;
-      }
-
-      this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)];
-
-      if(this.choices) {
-        this.choices.setValue(sanitized);
-      }
-
-      this.value = sanitized;
-      this.onChange();
-    },
     register: function() {
       this._super();
       if(!this.input) return;
@@ -40,18 +18,49 @@ JSONEditor.defaults.editors.choices = JSONEditor.AbstractEditor.extend({
       return Math.min(12,Math.max(longest_text/7,2));
     },
     typecast: function(value) {
-      if(this.schema.type === "boolean") {
-        return !!value;
+      switch(this.schema.type) {
+        case 'boolean':
+          switch (value) {
+            case 'true': return true;
+            case 'false': return false;
+          }
+          return !!value;
+        case 'number':
+          return 1*value;
+        case 'integer':
+          return Math.floor(value*1);
+        default:
+          return ''+value;
       }
-      else if(this.schema.type === "number") {
-        return 1*value;
+    },
+    setValue: function(value, initial) {
+      if(this.enum_options.length === 0) {
+        return;
       }
-      else if(this.schema.type === "integer") {
-        return Math.floor(value*1);
+
+      value = value || '';
+
+      // Sanitize value before setting it
+      var sanitized = '' + value;
+      var index = this.enum_options.indexOf(sanitized);
+      if(index === -1) {
+        sanitized = this.enum_options[0];
+        index = 0;
       }
-      else {
-        return ""+value;
+      sanitized = this.typecast(sanitized);
+
+      if(this.value === sanitized) {
+        return;
       }
+
+      this.input.value = this.enum_options[index];
+      this.value = sanitized;
+
+      if(this.choices) {
+        this.choices.setChoiceByValue('' + sanitized);
+      }
+
+      this.onChange();
     },
     getValue: function() {
       if (!this.dependenciesFulfilled) {
@@ -63,8 +72,7 @@ JSONEditor.defaults.editors.choices = JSONEditor.AbstractEditor.extend({
       var self = this;
       this.input_type = 'select';
       this.enum_options = [];
-      this.enum_values = [];
-      this.enum_display = [];
+      this.enum_titles = [];
       var i;
 
       // Enum options enumerated
@@ -72,23 +80,20 @@ JSONEditor.defaults.editors.choices = JSONEditor.AbstractEditor.extend({
         var display = this.schema.options && this.schema.options.enum_titles || [];
 
         $each(this.schema.enum,function(i,option) {
-          self.enum_options[i] = ""+option;
-          self.enum_display[i] = ""+(display[i] || option);
-          self.enum_values[i] = self.typecast(option);
+          self.enum_options[i] = ''+option;
+          self.enum_titles[i] = ''+(display[i] || option);
         });
       }
       // Boolean
-      else if(this.schema.type === "boolean") {
-        self.enum_display = this.schema.options && this.schema.options.enum_titles || ['true','false'];
-        self.enum_options = ['1','0'];
-        self.enum_values = [true,false];
+      else if(this.schema.type === 'boolean') {
+        self.enum_titles = this.schema.options && this.schema.options.enum_titles || ['true', 'false'];
+        self.enum_options = ['true', 'false'];
       }
       // Dynamic Enum
       else if(this.schema.enumSource) {
         this.enumSource = [];
-        this.enum_display = [];
+        this.enum_titles = [];
         this.enum_options = [];
-        this.enum_values = [];
 
         // Shortcut declaration for using a single array
         if(!(Array.isArray(this.schema.enumSource))) {
@@ -111,7 +116,7 @@ JSONEditor.defaults.editors.choices = JSONEditor.AbstractEditor.extend({
         else {
           for(i=0; i<this.schema.enumSource.length; i++) {
             // Shorthand for watched variable
-            if(typeof this.schema.enumSource[i] === "string") {
+            if(typeof this.schema.enumSource[i] === 'string') {
               this.enumSource[i] = {
                 source: this.schema.enumSource[i]
               };
@@ -154,7 +159,7 @@ JSONEditor.defaults.editors.choices = JSONEditor.AbstractEditor.extend({
       if(this.options.compact) this.container.classList.add('compact');
 
       this.input = this.theme.getSelectInput(this.enum_options);
-      this.theme.setSelectOptions(this.input,this.enum_options,this.enum_display);
+      this.theme.setSelectOptions(this.input,this.enum_options,this.enum_titles);
 
       if(this.schema.readOnly || this.schema.readonly) {
         this.always_disabled = true;
@@ -170,31 +175,36 @@ JSONEditor.defaults.editors.choices = JSONEditor.AbstractEditor.extend({
       this.control = this.theme.getFormControl(this.label, this.input, this.description, this.infoButton);
       this.container.appendChild(this.control);
 
-      if (this.enum_values.length > 0) {
-        this.value = this.enum_values[0];
+      if(this.enum_options.length > 0) {
+        this.value = this.typecast(this.enum_options[0]);
       }
     },
     onInputChange: function() {
-      var val = this.input.value;
-
-      // var sanitized = val;
-      // if(this.enum_options.indexOf(val) === -1) {
-      //   sanitized = this.enum_options[0];
-      // }
-
-      //this.value = this.enum_values[this.enum_options.indexOf(val)];
-      this.value = val;
-      this.onChange(true);
-    },
-    setupChoices: function() {
-      if (this.choices) {
+      if(this.enum_options.length === 0) {
         return;
       }
 
-      var self = this;
-      if (window.Choices) { //  && (this.enum_options.length >= 2 || (this.enum_options.length && this.enumSource))
+      var index = this.enum_options.indexOf(this.input.value);
+      if(index === -1) {
+        this.input.value = this.enum_options[0];
+        index = 0;
+      }
+
+      var value = this.typecast(this.enum_options[index]);
+
+      if(value === this.value) {
+        return;
+      }
+
+      this.value = value;
+      this.onChange(true);
+    },
+    setupChoices: function() {
+      if (window.Choices) {
         var options = $extend({}, JSONEditor.plugins.choices);
-        if(this.schema.options && this.schema.options.choices_options) options = $extend(options, this.schema.options.choices_options);
+        if(this.schema.options && this.schema.options.choices_options) {
+          options = $extend(options, this.schema.options.choices_options);
+        }
         this.choices = new window.Choices(this.input, $extend(options, {
           searchEnabled: (options.searchEnabled === undefined ? this.enum_options.length > 2 : options.searchEnabled),
         }));
@@ -277,49 +287,38 @@ JSONEditor.defaults.editors.choices = JSONEditor.AbstractEditor.extend({
         }
       }
 
-      var prev_value = this.value;
-
-      // Check to see if this item is in the list
-      // Note: We have to skip empty string for watch lists to work properly
-      if ((prev_value !== undefined) && (prev_value !== "") && (select_options.indexOf(prev_value) === -1)) {
-        // item is not in the list. Add it.
-        select_options = select_options.concat(prev_value);
-        select_titles = select_titles.concat(prev_value);
-      }
-
       this.theme.setSelectOptions(this.input, select_options, select_titles);
       this.enum_options = select_options;
-      this.enum_display = select_titles;
-      this.enum_values = select_options;
+      this.enum_titles = select_titles;
 
-      // If the previous value is still in the new select options, stick with it
-      if(select_options.indexOf(prev_value) !== -1) {
-        this.input.value = prev_value;
-        this.value = prev_value;
+      if (select_options.length > 0) {
+        // if the previous value is not in the new select options, set the value to the first option
+        if (this.value === undefined || select_options.indexOf('' + this.value) === -1) {
+          this.input.value = select_options[0];
+          this.value = this.typecast(select_options[0]);
+          this.onChange(true);
+        }
       }
-
-      // Otherwise, set the value to the first select option
-      else {
-        this.input.value = select_options[0];
-        this.value = select_options[0] || "";
-        if(this.parent) this.parent.onChildEditorChange(this);
-        else this.jsoneditor.onChange();
-        this.jsoneditor.notifyWatchers(this.path);
+      else if (this.value !== undefined) {
+        this.input.value = '';
+        this.value = undefined;
+        this.onChange(true);
       }
 
       if(this.choices) {
         this.updateChoicesOptions(select_options);
       }
-      else {
-        this.setupChoices();
-      }
 
       this._super();
     },
     updateChoicesOptions: function(select_options) {
-      var choices_list = select_options.map(function(x) { return {value: x, label: x}; });
-      this.choices.setChoices(choices_list, 'value', 'label', true);
-      this.choices.setChoiceByValue(this.value);
+      if (select_options.length > 0) {
+        var choices_list = select_options.map(function(x) { return {value: x, label: x}; });
+        this.choices.setChoices(choices_list, 'value', 'label', true);
+        this.choices.setChoiceByValue('' + this.value);
+      } else {
+        this.choices.clearStore();
+      }
     },
     enable: function() {
       if(!this.always_disabled) {

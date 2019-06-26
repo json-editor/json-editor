@@ -2,17 +2,15 @@ JSONEditor.defaults.editors.arrayChoices = JSONEditor.AbstractEditor.extend({
   preBuild: function() {
     var self = this;
     this.enum_options = [];
-    this.enum_values = [];
-    this.enum_display = [];
+    this.enum_titles = [];
 
     // Enum options enumerated
     if(this.schema.items.enum) {
       var display = this.schema.options && this.schema.options.enum_titles || [];
 
-      $each(this.schema.items.enum,function(i,option) {
-        self.enum_options[i] = ""+option;
-        self.enum_display[i] = ""+(display[i] || option);
-        self.enum_values[i] = self.typecast(option);
+      $each(this.schema.items.enum, function(i, option) {
+        self.enum_options[i] = ''+option;
+        self.enum_titles[i] = ''+(display[i] || option);
       });
     }
     // Dynamic Enum for arrays is not specified in docs
@@ -35,14 +33,16 @@ JSONEditor.defaults.editors.arrayChoices = JSONEditor.AbstractEditor.extend({
     } else {
       this.input = this.theme.getFormInputField('text');
     }
-    var group = this.theme.getFormControl(this.title, this.input, this.description);
 
+    var group = this.theme.getFormControl(this.title, this.input, this.description);
     this.container.appendChild(group);
     this.container.appendChild(this.error_holder);
 
-    //apply global options to array Choices
-    var options = $extend({},JSONEditor.plugins.choices);
-    if(this.schema.options && this.schema.options.choices_options) options = $extend(options,this.schema.options.choices_options);
+    // apply global and schema defined options to array Choices
+    var options = $extend({}, JSONEditor.plugins.choices);
+    if(this.schema.options && this.schema.options.choices_options) {
+      options = $extend(options, this.schema.options.choices_options);
+    }
     this.choices = new window.Choices(this.input, $extend(options, {
       removeItemButton: (options.removeItemButton === undefined ? true : options.removeItemButton),
       duplicateItemsAllowed: (options.duplicateItemsAllowed === undefined ? !this.schema.uniqueItems : options.duplicateItemsAllowed),
@@ -53,18 +53,17 @@ JSONEditor.defaults.editors.arrayChoices = JSONEditor.AbstractEditor.extend({
     }));
   },
   postBuild: function() {
-      this._super();
-      var self = this;
+    this._super();
+    var self = this;
 
-      this.input.addEventListener('change', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        self.refreshValue();
-        self.onChange(true);
-      });
+    this.input.addEventListener('change', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      self.refreshValue();
+      self.onChange(true);
+    });
   },
   destroy: function() {
-    this.empty(true);
     if(this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title);
     if(this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description);
     if(this.input && this.input.parentNode) this.input.parentNode.removeChild(this.input);
@@ -74,24 +73,34 @@ JSONEditor.defaults.editors.arrayChoices = JSONEditor.AbstractEditor.extend({
 
     this._super();
   },
-  empty: function(hard) {},
   setValue: function(value, initial) {
-    // Update the array's value, adding/removing rows when necessary
     value = value || [];
-    if(!(Array.isArray(value))) value = [value];
+    if(!(Array.isArray(value))) {
+      value = [value];
+    }
+    value = value.map(function(x) { return ''+x; });
 
     this.choices.clearStore();
 
-    // var choice_values;
-    if (this.schema.items.enum && this.enum_options && this.enum_options.length > 0) {
-      var titles = this.enum_titles || [];
+    if(this.schema.items.enum && this.enum_options && this.enum_options.length > 0) {
       var enum_options = this.enum_options;
+
+      // remove all values not included in enum options
+      value = value.filter(function(x) {
+        return enum_options.includes(x);
+      });
+
+      // if duplicates are disallowed remove included values from options
       if (!this.choices.config.duplicateItemsAllowed) {
         enum_options = enum_options.filter(function(x) {
           return !value.includes(x);
         });
       }
-      var choices_list = enum_options.map(function(x, idx) { return {value: x, label: titles[idx] || x}; });
+
+      var titles = this.enum_titles || [];
+      var choices_list = enum_options.map(function(x, idx) {
+        return {value: x, label: titles[idx] || x};
+      });
       this.choices.setChoices(choices_list, 'value', 'label');
     }
 
@@ -100,7 +109,8 @@ JSONEditor.defaults.editors.arrayChoices = JSONEditor.AbstractEditor.extend({
     this.refreshValue(initial);
   },
   refreshValue: function(force) {
-    this.value = this.choices.getValue(true);
+    var typecast = this.getTypecastFunction();
+    this.value = this.choices.getValue(true).map(typecast);
   },
   showValidationErrors: function(errors) {
     var self = this;
@@ -132,18 +142,22 @@ JSONEditor.defaults.editors.arrayChoices = JSONEditor.AbstractEditor.extend({
       }
     }
   },
-  typecast: function(value) {
-    if(this.schema.type === "boolean") {
-      return !!value;
+  getTypecastFunction: function() {
+    switch(this.schema.items.type) {
+      case 'boolean':
+        return function(value) {
+          switch (value) {
+            case 'true': return true;
+            case 'false': return false;
+            default: return !!value;
+          }
+        };
+      case 'number':
+        return function(value) { return 1*value; };
+      case 'integer':
+        return function(value) { return Math.floor(value*1); };
+      default:
+        return function(value) { return ""+value; };
     }
-    else if(this.schema.type === "number") {
-      return 1*value;
-    }
-    else if(this.schema.type === "integer") {
-      return Math.floor(value*1);
-    }
-    else {
-      return ""+value;
-    }
-  }
+  },
 });
