@@ -1,5 +1,6 @@
 ### Current
 
+  - Added [Choices.js](https://github.com/jshjohnson/Choices) support for array and select editors.
   - Added 2 new config options: "disable_select2" and "disable_selectize" which can be used to disable select2/selectize on a specific property/field.
   - Removed "rating" editor and updated "starrating" editor to accept/emulate "rating" editor options.
   - Fixed #392 - Now setting checkbox value programmatically will trigger onchange correctly. (src/editors/checkbox.js)
