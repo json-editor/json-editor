@@ -31,7 +31,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
 
     this.input.value = sanitized;
     
-    // If using SCEditor, update the WYSIWYG
+/*    // If using SCEditor, update the WYSIWYG
     if(this.sceditor_instance) {
       this.sceditor_instance.val(sanitized);
     }
@@ -42,7 +42,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
       this.ace_editor.setValue(sanitized);
       this.ace_editor.session.getSelection().clearSelection();
       this.ace_editor.resize();
-    }
+    }*/
     
     var changed = from_template || this.getValue() !== value;
     
@@ -104,7 +104,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
 
         this.input = this.theme.getRangeInput(min,max,step);
       }
-      // Source Code
+/*      // Source Code
       else if([
           'actionscript',
           'batchfile',
@@ -161,9 +161,9 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
       ) {
         this.input_type = this.format;
         this.source_code = true;
-        
+
         this.input = this.theme.getTextareaInput();
-      }
+      }*/
       // HTML5 Input type
       else {
         this.input_type = this.format;
@@ -317,12 +317,12 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
   },
   afterInputReady: function() {
     var self = this, options;
-    
-    // Code editor
-    if(this.source_code) {      
+
+/*    // Code editor
+    if(this.source_code) {
       // WYSIWYG html and bbcode editor
-      if(this.options.wysiwyg && 
-        ['html','bbcode'].indexOf(this.input_type) >= 0 && 
+      if(this.options.wysiwyg &&
+        ['html','bbcode'].indexOf(this.input_type) >= 0 &&
         window.jQuery && window.jQuery.fn && window.jQuery.fn.sceditor
       ) {
         options = $extend({},{
@@ -331,11 +331,11 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
           width: '100%',
           height: 300
         },JSONEditor.plugins.sceditor,self.options.sceditor_options||{});
-        
+
         window.jQuery(self.input).sceditor(options);
-        
+
         self.sceditor_instance = window.jQuery(self.input).sceditor('instance');
-        
+
         self.sceditor_instance.blur(function() {
           // Get editor's value
           var val = window.jQuery("<div>"+self.sceditor_instance.val()+"</div>");
@@ -369,7 +369,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
         if(mode === 'cpp' || mode === 'c++' || mode === 'c') {
           mode = 'c_cpp';
         }
-        
+
         this.ace_container = document.createElement('div');
         this.ace_container.style.width = '100%';
         this.ace_container.style.position = 'relative';
@@ -377,7 +377,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
         this.input.parentNode.insertBefore(this.ace_container,this.input);
         this.input.style.display = 'none';
         this.ace_editor = window.ace.edit(this.ace_container);
-        
+
         var aceOptions = this.schema.options && this.schema.options.ace;
         if (aceOptions) {
           this.ace_editor.setOptions(aceOptions);
@@ -402,7 +402,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
         });
       }
     }
-    
+*/
     self.theme.afterInputReady(self.input);
   },
   refreshValue: function() {
@@ -412,7 +412,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
   },
   destroy: function() {
     // If using SCEditor, destroy the editor instance
-    if(this.sceditor_instance) {
+/*    if(this.sceditor_instance) {
       this.sceditor_instance.destroy();
     }
     else if(this.SimpleMDE) {
@@ -421,7 +421,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
     }
     else if(this.ace_editor) {
       this.ace_editor.destroy();
-    }
+    }*/
     if (this.cleave) {
       this.cleave.destroy();
     }

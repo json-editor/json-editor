@@ -410,5 +410,66 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
 });
 
 JSONEditor.defaults.resolvers.unshift(function(schema) {
-  if (schema.type === "string" && schema.format === "wysiwyg") return "wysiwyg";
+  if (schema.type === "string" && schema.format === "wysiwyg") return "jodit";
+});
+
+JSONEditor.defaults.resolvers.unshift(function(schema) {
+  if(schema.type === "string" && schema.format === 'markdown') return "simplemde";
+});
+
+JSONEditor.defaults.resolvers.unshift(function(schema) {
+  if(schema.type === "string" && ['xhtml', 'bbcode'].indexOf(schema.format) !== -1) return "sceditor";
+});
+
+JSONEditor.defaults.resolvers.unshift(function(schema) {
+  if(schema.type === "string" && ['actionscript',
+      'batchfile',
+      'c',
+      'c++',
+      'cpp',
+      'coffee',
+      'csharp',
+      'css',
+      'dart',
+      'django',
+      'ejs',
+      'erlang',
+      'golang',
+      'groovy',
+      'handlebars',
+      'haskell',
+      'haxe',
+      'html',
+      'ini',
+      'jade',
+      'java',
+      'javascript',
+      'json',
+      'less',
+      'lisp',
+      'lua',
+      'makefile',
+      'matlab',
+      'mysql',
+      'objectivec',
+      'pascal',
+      'perl',
+      'pgsql',
+      'php',
+      'python',
+      'r',
+      'ruby',
+      'sass',
+      'scala',
+      'scss',
+      'smarty',
+      'sql',
+      'sqlserver',
+      'stylus',
+      'svg',
+      'twig',
+      'vbscript',
+      'xml',
+      'yaml'
+    ].indexOf(schema.format)  !== -1) return "ace";
 });

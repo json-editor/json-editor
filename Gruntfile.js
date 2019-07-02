@@ -69,7 +69,10 @@ module.exports = function(grunt) {
           'src/editors/radio.js',
           'src/editors/describedby.js',
           'src/editors/uuid.js',
-          'src/editors/wysiwyg.js',
+          'src/editors/jodit.js',
+          'src/editors/ace.js',
+          'src/editors/simplemde.js',
+          'src/editors/sceditor.js',
 
           // All the themes and iconlibs
           'src/theme.js',
