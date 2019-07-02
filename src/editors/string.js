@@ -55,6 +55,9 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
 
     // Bubble this setValue to parents if the value changed
     this.onChange(changed);
+
+    // Return object with changed state and sanitized value for use in editors that extend this
+    return {changed: changed, value: sanitized};
   },
   getNumColumns: function() {
     var min = Math.ceil(Math.max(this.getTitle().length,this.schema.maxLength||0,this.schema.minLength||0)/5);

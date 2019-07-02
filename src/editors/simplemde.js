@@ -1,35 +1,7 @@
 JSONEditor.defaults.editors.simplemde = JSONEditor.defaults.editors.string.extend({
   setValue: function(value,initial,from_template) {
-
-    if(this.template && !from_template) return;
-
-    if(value === null || typeof value === 'undefined') value = "";
-    else if(typeof value === "object") value = JSON.stringify(value);
-    else if(typeof value !== "string") value = ""+value;
-
-    if(value === this.serialized) return;
-
-    // Sanitize value before setting it
-    var sanitized = this.sanitize(value);
-
-    if(this.input.value === sanitized) return;
-
-    this.input.value = sanitized;
-
-    // Update the SimpleMDE Editor
-    if(this.simplemde_instance) this.simplemde_instance.value(sanitized);
-
-    var changed = from_template || this.getValue() !== value;
-
-    this.refreshValue();
-
-    if(initial) this.is_dirty = false;
-    else if(this.jsoneditor.options.show_errors === "change") this.is_dirty = true;
-
-    if(this.adjust_height) this.adjust_height(this.input);
-
-    // Bubble this setValue to parents if the value changed
-    this.onChange(changed);
+    var res = this._super(value,initial,from_template);
+    if (res !== undefined && res.changed && this.simplemde_instance) this.simplemde_instance.value(res.value);
   },
   build: function() {
     this.format = 'textarea'; // Force format into "textarea"

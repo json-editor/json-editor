@@ -1,46 +1,15 @@
 JSONEditor.defaults.editors.ace = JSONEditor.defaults.editors.string.extend({
   setValue: function(value,initial,from_template) {
-
-    if(this.template && !from_template) return;
-
-    if(value === null || typeof value === 'undefined') value = "";
-    else if(typeof value === "object") value = JSON.stringify(value);
-    else if(typeof value !== "string") value = ""+value;
-
-    if(value === this.serialized) return;
-
-    // Sanitize value before setting it
-    var sanitized = this.sanitize(value);
-
-    if(this.input.value === sanitized) return;
-
-    this.input.value = sanitized;
-
-    // Update the Ace Editor
-    if(this.ace_editor_instance) {
-      console.log('Ace set');
-      this.ace_editor_instance.setValue(sanitized);
+    var res = this._super(value,initial,from_template);
+    if (res !== undefined && res.changed && this.ace_editor_instance) {
+      this.ace_editor_instance.setValue(value);
       this.ace_editor_instance.session.getSelection().clearSelection();
       this.ace_editor_instance.resize();
     }
-
-    var changed = from_template || this.getValue() !== value;
-
-    this.refreshValue();
-
-    if(initial) this.is_dirty = false;
-    else if(this.jsoneditor.options.show_errors === "change") this.is_dirty = true;
-
-    if(this.adjust_height) this.adjust_height(this.input);
-
-    // Bubble this setValue to parents if the value changed
-    this.onChange(changed);
   },
   build: function() {
-    var format = this.format;
     this.format = 'textarea'; // Force format into "textarea"
     this._super();
-    this.input.setAttribute('data-schemaformat',format);
   },
   afterInputReady: function() {
     var self = this, options;
