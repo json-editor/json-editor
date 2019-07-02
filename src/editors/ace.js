@@ -2,7 +2,7 @@ JSONEditor.defaults.editors.ace = JSONEditor.defaults.editors.string.extend({
   setValue: function(value,initial,from_template) {
     var res = this._super(value,initial,from_template);
     if (res !== undefined && res.changed && this.ace_editor_instance) {
-      this.ace_editor_instance.setValue(value);
+      this.ace_editor_instance.setValue(res.value);
       this.ace_editor_instance.session.getSelection().clearSelection();
       this.ace_editor_instance.resize();
     }
