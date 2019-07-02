@@ -44,6 +44,7 @@ The following are not required, but can improve the style and usability of JSON 
 *  [SCEditor](http://www.sceditor.com/) for WYSIWYG editing of HTML or BBCode content
 *  [SimpleMDE](https://simplemde.com/) for editing of Markdown content
 *  [Ace Editor](http://ace.c9.io/) for editing code
+*  [Choices](https://github.com/jshjohnson/Choices) for nicer Select & Array boxes
 *  [Select2](http://ivaynberg.github.io/select2/) for nicer Select boxes
 *  [Selectize](https://selectize.github.io/selectize.js/) for nicer Select & Array boxes
 *  [Flatpickr](https://flatpickr.js.org/) lightweight and powerful datetime picker
@@ -62,6 +63,7 @@ If you learn best by example, check these out:
 *  Advanced Usage Example - https://json-editor.github.io/json-editor/advanced.html
 *  CSS Integration Example - https://json-editor.github.io/json-editor/css_integration.html
 *  Base64 Editor Example (Muiltple Upload) - https://json-editor.github.io/json-editor/multiple_upload_base64.html
+*  Choices Editor Example - https://json-editor.github.io/json-editor/choices.html
 *  Cleave.js Editor Example - https://json-editor.github.io/json-editor/cleave.html
 *  Datetime Editor Example - https://json-editor.github.io/json-editor/datetime.html
 *  DescribedBy Hyperlink Editor Example - https://json-editor.github.io/json-editor/describedby.html
@@ -1434,9 +1436,9 @@ The possibilities are endless.  Some ideas:
 *  Better editor for arrays of strings (tag editor)
 *  Canvas based image editor that produces Base64 data URLs
 
-Select2 & Selectize Support
+Choices, Select2 & Selectize Support
 ----------------
-Select2 support is enabled by default and will become active if the Select2 library is detected.
+JSON editor checks in order if Choices or Select2 is loaded and will use the detected library by default.
 
 Selectize support is enabled via the following snippet:
 ```js

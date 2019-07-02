@@ -239,13 +239,19 @@ JSONEditor.defaults.languages.en = {
   /**
     * Title on Flatpickr clear buttons
     */
-  flatpickr_clear_button: "Clear"
+  flatpickr_clear_button: "Clear",
+  /**
+    * Choices input field placeholder text
+    */
+  choices_placeholder_text: "Start typing to add value",
 };
 
 // Miscellaneous Plugin Settings
 JSONEditor.plugins = {
   ace: {
     theme: ''
+  },
+  choices: {
   },
   SimpleMDE: {
 
@@ -292,6 +298,9 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
       return "checkbox";
     }
     // Otherwise, default to select menu
+    if (window.Choices) {
+      return 'choices';
+    }
     return (JSONEditor.plugins.selectize.enable) ? 'selectize' : 'select';
   }
 });
@@ -326,6 +335,9 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
     if(schema.format === "radio") {
       return "radio";
     }
+    if (window.Choices) {
+      return 'choices';
+    }
     return (JSONEditor.plugins.selectize.enable) ? 'selectize' : 'select';
   }
 });
@@ -341,20 +353,28 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
         return "radio";
       }
 
+      if (window.Choices) {
+        return 'choices';
+      }
       return (JSONEditor.plugins.selectize.enable) ? 'selectize' : 'select';
     }
   }
 });
 // Specialized editors for arrays of strings
 JSONEditor.defaults.resolvers.unshift(function(schema) {
-  if(schema.type === "array" && schema.items && !(Array.isArray(schema.items)) && schema.uniqueItems && ['string','number','integer'].indexOf(schema.items.type) >= 0) {
-    // if 'selectize' enabled it is expected to be selectized control
-    if (JSONEditor.plugins.selectize.enable) {
-      return 'arraySelectize';
+  if(schema.type === "array" && schema.items && !(Array.isArray(schema.items)) && ['string','number','integer'].indexOf(schema.items.type) >= 0) {
+    if (window.Choices) {
+      return 'arrayChoices';
     }
-    // otherwise it is select
-    else {
-      return 'multiselect';
+    if (schema.uniqueItems) {
+      // if 'selectize' enabled it is expected to be selectized control
+      if (JSONEditor.plugins.selectize.enable) {
+        return 'arraySelectize';
+      }
+      // otherwise it is select
+      else {
+        return 'multiselect';
+      }
     }
   }
 });
