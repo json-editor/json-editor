@@ -388,3 +388,7 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
 JSONEditor.defaults.resolvers.unshift(function(schema) {
   if (schema.type === "string" && schema.format === "uuid") return "uuid";
 });
+
+JSONEditor.defaults.resolvers.unshift(function(schema) {
+  if (schema.type === "string" && schema.format === "wysiwyg") return "wysiwyg";
+});
