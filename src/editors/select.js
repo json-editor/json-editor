@@ -16,15 +16,12 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     else if(this.jsoneditor.options.show_errors === "change") this.is_dirty = true;
 
     this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)];
-    if(this.select2) {
-      if(this.select2v4)
-        this.select2.val(this.input.value).trigger("change");
-      else
-        this.select2.select2('val',this.input.value);
-    }
+
     this.value = sanitized;
     this.onChange();
     this.change();
+
+    return {changed: true, value: sanitized};
   },
   register: function() {
     this._super();
@@ -214,44 +211,12 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     this.value = new_val;
     this.onChange(true);
   },
-  setupSelect2: function() {
-    // If the Select2 library is loaded use it when we have lots of items
-    if(window.jQuery && window.jQuery.fn && window.jQuery.fn.select2 && !(this.schema.options && this.schema.options.disable_select2) && (this.enum_options.length > 2 || (this.enum_options.length && this.enumSource))) {
-      var options = $extend({},JSONEditor.plugins.select2);
-      if(this.schema.options && this.schema.options.select2_options) options = $extend(options,this.schema.options.select2_options);
-      this.select2 = window.jQuery(this.input).select2(options);
-      this.select2v4 = this.select2.select2.hasOwnProperty("amd");
-
-      var self = this;
-      this.select2.on('select2-blur',function() {
-        if(self.select2v4)
-          self.input.value = self.select2.val();
-        else
-          self.input.value = self.select2.select2('val');
-
-        self.onInputChange();
-      });
-
-      this.select2.on('change',function() {
-        if(self.select2v4)
-          self.input.value = self.select2.val();
-        else
-          self.input.value = self.select2.select2('val');
-
-        self.onInputChange();
-      });
-    }
-    else {
-      this.select2 = null;
-    }
-  },
   postBuild: function() {
     this._super();
     this.theme.afterInputReady(this.input);
-    this.setupSelect2();
   },
   onWatchedFieldChange: function() {
-    var self = this, vars, j;
+    var self = this, vars, j, update = false;
 
     // If this editor uses a dynamic select box
     if(this.enumSource) {
@@ -334,10 +299,6 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
       this.enum_display = select_titles;
       this.enum_values = select_options;
 
-      if(this.select2) {
-        this.select2.select2('destroy');
-      }
-
       // If the previous value is still in the new select options, stick with it
       if(select_options.indexOf(prev_value) !== -1) {
         this.input.value = prev_value;
@@ -352,42 +313,28 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
         this.jsoneditor.notifyWatchers(this.path);
       }
 
-      this.setupSelect2();
+      update = true;
     }
 
     this._super();
+
+    return update;
   },
   enable: function() {
     if(!this.always_disabled) {
       this.input.disabled = false;
-      if(this.select2) {
-        if(this.select2v4)
-          this.select2.prop("disabled",false);
-        else
-          this.select2.select2("enable",true);
-      }
     }
     this._super();
   },
   disable: function(always_disabled) {
     if(always_disabled) this.always_disabled = true;
     this.input.disabled = true;
-    if(this.select2) {
-      if(this.select2v4)
-        this.select2.prop("disabled",true);
-      else
-        this.select2.select2("enable",false);
-    }
-    this._super();
+    this._super(always_disabled);
   },
   destroy: function() {
     if(this.label && this.label.parentNode) this.label.parentNode.removeChild(this.label);
     if(this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description);
     if(this.input && this.input.parentNode) this.input.parentNode.removeChild(this.input);
-    if(this.select2) {
-      this.select2.select2('destroy');
-      this.select2 = null;
-    }
 
     this._super();
   },

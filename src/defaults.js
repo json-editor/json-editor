@@ -353,6 +353,10 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
         return "radio";
       }
 
+      if(schema.format === "select2") {
+        return "select2";
+      }
+
       if (window.Choices) {
         return 'choices';
       }
