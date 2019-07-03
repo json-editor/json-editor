@@ -9,17 +9,16 @@ JSONEditor.defaults.editors.choices = JSONEditor.defaults.editors.select.extend(
     var options, self = this;
 
     if (this.choices_instance) return;
+
     if (window.Choices) {
 
       // Get options, either global options from "JSONEditor.defaults.options.choices" or
       // single property options from schema "options.choices"
-      options = $extend({},JSONEditor.defaults.options.choices || {}, this.options.choices || {});
+      options = $extend({},{
+        searchEnabled: false
+      }, JSONEditor.defaults.options.choices || {}, this.options.choices || {});
 
       this.choices_instance = new window.Choices(this.input, options);
-
-/*      this.choices_instance.passedElement.element.addEventListener('change', function() {
-        self.onInputChange();
-      });*/
 
     }
 
@@ -34,8 +33,7 @@ JSONEditor.defaults.editors.choices = JSONEditor.defaults.editors.select.extend(
     if (res !== undefined && res.changed) {
       if(this.choices_instance) {
         // Update the Choices options
-                console.log('ff', res.select_options);
-        this.updateChoicesOptions(res.select_options);
+          this.updateChoicesOptions(res.select_options);
       }
       else {
         this.setupChoices();

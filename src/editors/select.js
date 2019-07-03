@@ -211,7 +211,7 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     this.value = new_val;
     this.onChange(true);
   },
-  postBuild: function() {
+  postBuild: function() {    
     this._super();
     this.theme.afterInputReady(this.input);
   },
