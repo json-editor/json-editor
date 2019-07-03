@@ -4,8 +4,11 @@ JSONEditor.defaults.editors.jodit = JSONEditor.defaults.editors.string.extend({
     if (res !== undefined && res.changed && this.jodit_instance) this.jodit_instance.setEditorValue(res.value);
   },
   build: function() {
-    this.format = 'textarea'; // Force format into "textarea"
+    var format = this.schema.format;
+    this.schema.format = 'textarea'; // Force format into "textarea"
     this._super();
+    this.input_type = this.schema.format = format;
+    if(format) this.input.setAttribute('data-schemaformat', format);
   },
   afterInputReady: function() {
     var self = this, options;
