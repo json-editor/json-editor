@@ -4,11 +4,10 @@ JSONEditor.defaults.editors.jodit = JSONEditor.defaults.editors.string.extend({
     if (res !== undefined && res.changed && this.jodit_instance) this.jodit_instance.setEditorValue(res.value);
   },
   build: function() {
-    var format = this.schema.format;
-    this.schema.format = 'textarea'; // Force format into "textarea"
+    this.options.format = 'textarea'; // Force format into "textarea"
     this._super();
-    this.input_type = this.schema.format = format;
-    if(format) this.input.setAttribute('data-schemaformat', format);
+    this.input_type = this.schema.format; // Restore original format
+    this.input.setAttribute('data-schemaformat', this.input_type);
   },
   afterInputReady: function() {
     var self = this, options;
