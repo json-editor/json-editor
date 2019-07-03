@@ -48,6 +48,9 @@ JSONEditor.defaults.editors.sceditor = JSONEditor.defaults.editors.string.extend
     }
     else this._super();  // Library not loaded, so just treat this as a string
   },
+  getNumColumns: function() {
+    return 6;
+  },
   enable: function() {
     if (!this.always_disabled && this.sceditor_instance) this.sceditor_instance.readOnly(false);
     this._super();

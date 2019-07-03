@@ -38,6 +38,9 @@ JSONEditor.defaults.editors.simplemde = JSONEditor.defaults.editors.string.exten
     }
     else this._super();  // Library not loaded, so just treat this as a string
   },
+  getNumColumns: function() {
+    return 6;
+  },
   enable: function() {
     if (!this.always_disabled && this.simplemde_instance) this.simplemde_instance.codemirror.options.readOnly = false;
     this._super();

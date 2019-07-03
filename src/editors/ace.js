@@ -61,6 +61,9 @@ JSONEditor.defaults.editors.ace = JSONEditor.defaults.editors.string.extend({
     }
     else this._super();  // Library not loaded, so just treat this as a string
   },
+  getNumColumns: function() {
+    return 6;
+  },
   enable: function() {
     if (!this.always_disabled && this.ace_editor_instance) this.ace_editor_instance.setReadOnly(false);
     this._super();

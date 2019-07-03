@@ -54,8 +54,8 @@ module.exports = function(grunt) {
           'src/editors/table.js',
           'src/editors/multiple.js',
           'src/editors/enum.js',
-          'src/editors/choices.js',
           'src/editors/select.js',
+          'src/editors/choices.js',
           'src/editors/selectize.js',
           'src/editors/multiselect.js',
           'src/editors/base64.js',
@@ -73,7 +73,7 @@ module.exports = function(grunt) {
           'src/editors/ace.js',
           'src/editors/simplemde.js',
           'src/editors/sceditor.js',
-          'src/editors/select2.js',   
+          'src/editors/select2.js',
 
           // All the themes and iconlibs
           'src/theme.js',

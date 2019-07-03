@@ -35,6 +35,9 @@ JSONEditor.defaults.editors.jodit = JSONEditor.defaults.editors.string.extend({
     }
     else this._super();  // Library not loaded, so just treat this as a string
   },
+  getNumColumns: function() {
+    return 6;
+  },
   enable: function() {
     if (!this.always_disabled && this.jodit_instance) this.jodit_instance.setReadOnly(false);
     this._super();

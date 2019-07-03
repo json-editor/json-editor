@@ -298,10 +298,16 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
       return "checkbox";
     }
     // Otherwise, default to select menu
-    if (window.Choices) {
+    if(schema.format === "select2") {
+      return "select2";
+    }
+    if(schema.format === "selectize") {
+      return "selectize";
+    }
+    if(schema.format === "choices") {
       return 'choices';
     }
-    return (JSONEditor.plugins.selectize.enable) ? 'selectize' : 'select';
+    return 'select';
   }
 });
 // Use the multiple editor for schemas where the `type` is set to "any"
@@ -335,10 +341,17 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
     if(schema.format === "radio") {
       return "radio";
     }
-    if (window.Choices) {
+    if(schema.format === "select2") {
+      return "select2";
+    }
+
+    if(schema.format === "selectize") {
+      return "selectize";
+    }
+    if(schema.format === "choices") {
       return 'choices';
     }
-    return (JSONEditor.plugins.selectize.enable) ? 'selectize' : 'select';
+    return 'select';
   }
 });
 // Use the `enum` or `select` editors for schemas with enumerated properties
@@ -357,10 +370,15 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
         return "select2";
       }
 
-      if (window.Choices) {
+      if(schema.format === "selectize") {
+        return "selectize";
+      }
+
+      if(schema.format === "choices") {
         return 'choices';
       }
-      return (JSONEditor.plugins.selectize.enable) ? 'selectize' : 'select';
+      return 'select';
+      //return (JSONEditor.plugins.selectize.enable) ? 'selectize' : 'select';
     }
   }
 });

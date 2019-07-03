@@ -217,12 +217,11 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
   },
   onWatchedFieldChange: function() {
     var self = this, vars, j, update = false;
+    var select_options = [], select_titles = [];
 
     // If this editor uses a dynamic select box
     if(this.enumSource) {
       vars = this.getWatchedFieldValues();
-      var select_options = [];
-      var select_titles = [];
 
       for(var i=0; i<this.enumSource.length; i++) {
         // Constant values
@@ -307,7 +306,7 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
       // Otherwise, set the value to the first select option
       else {
         this.input.value = select_options[0];
-        this.value = this.typecast(select_options[0] || "");  
+        this.value = this.typecast(select_options[0] || "");
         if(this.parent) this.parent.onChildEditorChange(this);
         else this.jsoneditor.onChange();
         this.jsoneditor.notifyWatchers(this.path);
@@ -318,7 +317,7 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
 
     this._super();
 
-    return update;
+    return {changed: update, select_options: select_options};
   },
   enable: function() {
     if(!this.always_disabled) {
