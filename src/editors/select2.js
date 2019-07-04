@@ -6,41 +6,33 @@ JSONEditor.defaults.editors.select2 = JSONEditor.defaults.editors.select.extend(
       else this.select2_instance.select2('val',res.value);
     }
   },
-  setupSelect2: function() {
+  afterInputReady: function() {
     var options, self = this, select2Handler;
 
-    if (window.jQuery && window.jQuery.fn && window.jQuery.fn.select2) {
+    if (window.jQuery && window.jQuery.fn && window.jQuery.fn.select2 && !self.select2_instance) {
 
       // Get options, either global options from "JSONEditor.defaults.options.select2" or
       // single property options from schema "options.select2"
-      options = $extend({}, JSONEditor.defaults.options.select2 || {}, this.options.select2 || {});
+      options = $extend({}, JSONEditor.defaults.options.select2 || {}, self.options.select2 || {});
 
-      this.select2_instance = window.jQuery(this.input).select2(options);
-      this.select2v4 = this.select2_instance.select2.hasOwnProperty("amd");
+      self.select2_instance = window.jQuery(self.input).select2(options);
+      self.select2v4 = self.select2_instance.select2.hasOwnProperty("amd");
 
       select2Handler = function() {
         if(self.select2v4) self.input.value = self.select2_instance.val();
         else self.input.value = self.select2_instance.select2('val');
         self.onInputChange();
       };
-      this.select2_instance.on('select2-blur',select2Handler);
-      this.select2_instance.on('change',select2Handler);
+      self.select2_instance.on('select2-blur',select2Handler);
+      self.select2_instance.on('change',select2Handler);
     }
-
+    self._super(); 
   },
   onWatchedFieldChange: function() {
     var res = this._super();
-    if (res !== undefined && res.changed) {
-      if(this.select2_instance) {
-        this.select2_instance.select2('destroy');
-        this.setupSelect2();
-      }
+    if (res !== undefined && res.changed && this.select2_instance) {
+      this.afterInputReady();
     }
-  },
-  postBuild: function() {
-    this._super();
-    //this.theme.afterInputReady(this.input);
-    this.setupSelect2();
   },
   enable: function() {
     if (!this.always_disabled) {

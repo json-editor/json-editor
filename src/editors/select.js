@@ -189,6 +189,15 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     this.container.appendChild(this.control);
 
     this.value = this.enum_values[0];
+
+    // Any special formatting that needs to happen after the input is added to the dom
+    window.requestAnimationFrame(function() {
+      if(self.input.parentNode) self.afterInputReady();
+    });
+  },
+  afterInputReady: function() {
+    var self = this;
+    self.theme.afterInputReady(self.input);
   },
   onInputChange: function() {
     var val = this.typecast(this.input.value);
@@ -210,10 +219,6 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     // Store new value and propogate change event
     this.value = new_val;
     this.onChange(true);
-  },
-  postBuild: function() {    
-    this._super();
-    this.theme.afterInputReady(this.input);
   },
   onWatchedFieldChange: function() {
     var self = this, vars, j, update = false;

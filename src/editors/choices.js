@@ -5,23 +5,16 @@ JSONEditor.defaults.editors.choices = JSONEditor.defaults.editors.select.extend(
       this.choices_instance.setValue(res.value);
     }
   },
-  setupChoices: function() {
+  afterInputReady: function() {
     var options, self = this;
-
-    if (this.choices_instance) return;
-
-    if (window.Choices) {
-
+    if (window.Choices && !self.choices_instance) {
       // Get options, either global options from "JSONEditor.defaults.options.choices" or
       // single property options from schema "options.choices"
-      options = $extend({},{
-        searchEnabled: false
-      }, JSONEditor.defaults.options.choices || {}, this.options.choices || {});
+      options = $extend({}, JSONEditor.defaults.options.choices || {}, self.options.choices || {});
 
-      this.choices_instance = new window.Choices(this.input, options);
-
+      self.choices_instance = new window.Choices(self.input, options);
     }
-
+    self._super();
   },
   updateChoicesOptions: function(select_options) {
     var choices_list = select_options.map(function(x) { return {value: x, label: x}; });
@@ -36,13 +29,9 @@ JSONEditor.defaults.editors.choices = JSONEditor.defaults.editors.select.extend(
           this.updateChoicesOptions(res.select_options);
       }
       else {
-        this.setupChoices();
+        this.afterInputReady();
       }
     }
-  },
-  postBuild: function() {
-    this._super();
-    this.setupChoices();
   },
   enable: function() {
     if (!this.always_disabled && this.choices_instance) this.choices_instance.enable();

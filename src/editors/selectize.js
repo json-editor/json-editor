@@ -5,24 +5,22 @@ JSONEditor.defaults.editors.selectize = JSONEditor.defaults.editors.select.exten
       this.selectize_instance[0].selectize.addItem(res.value);
     }
   },
-  setupSelectize: function() {
+  afterInputReady: function() {
     var options, self = this;
 
-    if (this.selectize_instance) return;
-
-    if (window.jQuery && window.jQuery.fn && window.jQuery.fn.selectize) {
+    if (window.jQuery && window.jQuery.fn && window.jQuery.fn.selectize && !self.selectize_instance) {
 
       // Get options, either global options from "JSONEditor.defaults.options.selectize" or
       // single property options from schema "options.selectize"
       options = $extend({}, {
         create: true
-      },JSONEditor.defaults.options.selectize || {}, this.options.selectize || {},{
+      },JSONEditor.defaults.options.selectize || {}, self.options.selectize || {},{
         onChange : function() { self.onInputChange(); }
       });
 
-      this.selectize_instance = window.jQuery(this.input).selectize(options);
+      self.selectize_instance = window.jQuery(self.input).selectize(options);
     }
-
+    self._super();
   },
   updateSelectizeOptions: function(select_options) {
     var selectized = this.selectize_instance[0].selectize,
@@ -46,13 +44,9 @@ JSONEditor.defaults.editors.selectize = JSONEditor.defaults.editors.select.exten
         this.updateSelectizeOptions(res.select_options);
       }
       else {
-        this.setupSelectize();
+        this.afterInputReady();
       }
     }
-  },
-  postBuild: function() {
-    this._super();
-    this.setupSelectize();
   },
   enable: function() {
     if (!this.always_disabled && this.selectize_instance) this.selectize_instance[0].selectize.unlock();
