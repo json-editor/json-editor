@@ -385,18 +385,14 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
 // Specialized editors for arrays of strings
 JSONEditor.defaults.resolvers.unshift(function(schema) {
   if(schema.type === "array" && schema.items && !(Array.isArray(schema.items)) && ['string','number','integer'].indexOf(schema.items.type) >= 0) {
-    if (window.Choices) {
+    if (schema.format === "choices") {
       return 'arrayChoices';
     }
     if (schema.uniqueItems) {
       // if 'selectize' enabled it is expected to be selectized control
-      if (JSONEditor.plugins.selectize.enable) {
-        return 'arraySelectize';
-      }
-      // otherwise it is select
-      else {
-        return 'multiselect';
-      }
+      if (schema.format === "selectize") return 'arraySelectize';
+      else if (schema.format === "select2") return 'arraySelect2';
+      else return 'multiselect'; // otherwise it is select
     }
   }
 });

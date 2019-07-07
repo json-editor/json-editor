@@ -345,9 +345,6 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
   showValidationErrors: function (errors) {
     var self = this;
 
-    if (this.jsoneditor.options.show_errors === "always") {}
-    else if(!this.is_dirty && this.previous_error_setting===this.jsoneditor.options.show_errors) return;
-
     this.previous_error_setting = this.jsoneditor.options.show_errors;
 
     var messages = [];
