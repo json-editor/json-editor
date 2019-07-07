@@ -36,7 +36,8 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
     this.option_keys = [];
     this.option_titles = [];
 
-    var i, items_schema = this.jsoneditor.expandRefs(this.schema.items || {}),
+    var i, self = this,
+        items_schema = this.jsoneditor.expandRefs(this.schema.items || {}),
         e = items_schema['enum'] || [],
         t = items_schema.options ? items_schema.options.enum_titles || [] : [];
 
