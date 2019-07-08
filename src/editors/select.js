@@ -1,9 +1,10 @@
 JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
   setValue: function(value,initial) {
-    value = this.typecast(value||'');
+    //value = this.typecast(value||'');
 
     // Sanitize value before setting it
-    var sanitized = value;
+    var sanitized = this.typecast(value || '');
+
     if(this.enum_values.indexOf(sanitized) < 0) {
       sanitized = this.enum_values[0];
     }
@@ -160,6 +161,7 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     else {
       throw "'select' editor requires the enum property to be set.";
     }
+
   },
   build: function() {
     var self = this;

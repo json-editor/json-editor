@@ -1,7 +1,7 @@
 JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
   onInputChange: function() {
-      this.value = this.input.value;
-      this.onChange(true);
+    this.value = this.input.value;
+    this.onChange(true);
   },
   register: function() {
     this._super();
@@ -21,12 +21,6 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
     }
 
     return Math.min(12,Math.max(longest_text/7,2));
-  },
-  typecast: function(value) {
-    if (this.schema.type === 'boolean') return !!value;
-    else if (this.schema.type === 'number') return 1*value;
-    else if (this.schema.type === 'integer') return Math.floor(value*1);
-    else return ''+value;
   },
   preBuild: function() {
     this._super();
@@ -77,30 +71,33 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
       this.input_type = 'select';
       this.input = this.theme.getSelectInput(this.option_keys);
       this.theme.setSelectOptions(this.input,this.option_keys,this.option_titles);
-      this.input.multiple = true;
+      //this.input.multiple = true;
+      this.input.setAttribute('multiple', 'multiple');
       this.input.size = Math.min(10,this.option_keys.length);
       for(i=0; i<this.option_keys.length; i++) {
         this.select_options[this.option_keys[i]] = this.input.children[i];
       }
-
       this.control = this.theme.getFormControl(this.label, this.input, this.description, this.infoButton);
     }
 
     if (this.schema.readOnly || this.schema.readonly) this.disable(true);
 
     this.container.appendChild(this.control);
-    this.control.addEventListener('change',function(e) {
+
+    this.multiselectChangeHandler = function(e) {
       e.preventDefault();
       e.stopPropagation();
 
       var new_value = [];
       for(i = 0; i<self.option_keys.length; i++) {
-        if (self.select_options[self.option_keys[i]].selected || self.select_options[self.option_keys[i]].checked) new_value.push(self.select_values[self.option_keys[i]]);
+        if (self.select_options[self.option_keys[i]] && (self.select_options[self.option_keys[i]].selected || self.select_options[self.option_keys[i]].checked)) new_value.push(self.select_values[self.option_keys[i]]);
       }
 
       self.updateValue(new_value);
       self.onChange(true);
-    });
+    };
+
+    this.control.addEventListener('change', this.multiselectChangeHandler);
 
     // Any special formatting that needs to happen after the input is added to the dom
     window.requestAnimationFrame(function() {
@@ -113,10 +110,10 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
   },
   afterInputReady: function() {
     var self = this;
-    self.theme.afterInputReady(self.input || self.inputs);
+    this.theme.afterInputReady(self.input || self.inputs);
   },
   setValue: function(value, initial) {
-    var i;
+    var i, changed;
     value = value || [];
     if (!(Array.isArray(value))) value = [value];
 
@@ -129,8 +126,18 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
       this.select_options[i][this.input_type === 'select'? 'selected' : 'checked'] = (value.indexOf(i) !== -1);
     }
 
-    this.updateValue(value);
-    this.onChange();
+    changed = this.updateValue(value);
+    this.onChange(true);
+
+  },
+  removeValue: function(value) {
+    // Remove from existing value(s)
+    value = [].concat(value);
+    this.setValue(this.getValue().filter(function(item) { return value.indexOf(item) == -1; }));
+  },
+  addValue: function(value) {
+    // Add to existing value(s)
+    this.setValue(this.getValue().concat(value));
   },
   updateValue: function(value) {
     var changed = false;
