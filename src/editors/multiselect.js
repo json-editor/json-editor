@@ -191,12 +191,15 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
   destroy: function() {
     this._super();
   },
+  escapeRegExp: function(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  },
   showValidationErrors: function(errors) {
-    var self = this;
+    var regexPath = new RegExp('^' + this.escapeRegExp(this.path) + '(\\.\\d+)?$'),
+        messages = [];
 
-    var messages = [];
     $each(errors, function(i,error) {
-      if (error.path === self.path) {
+      if (error.path.match(regexPath)) {
         messages.push(error.message);
       }
     });
