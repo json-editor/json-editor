@@ -5,13 +5,9 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     // Sanitize value before setting it
     var sanitized = this.typecast(value || '');
 
-    if(this.enum_values.indexOf(sanitized) < 0) {
-      sanitized = this.enum_values[0];
-    }
+    if(this.enum_values.indexOf(sanitized) < 0) sanitized = this.enum_values[0];
 
-    if(this.value === sanitized) {
-      return;
-    }
+    if(this.value === sanitized) return;
 
     if(initial) this.is_dirty = false;
     else if(this.jsoneditor.options.show_errors === "change") this.is_dirty = true;
@@ -21,8 +17,6 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     this.value = sanitized;
     this.onChange();
     this.change();
-
-    return {changed: true, value: sanitized};
   },
   register: function() {
     this._super();
@@ -43,18 +37,10 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     return Math.min(12,Math.max(longest_text/7,2));
   },
   typecast: function(value) {
-    if(this.schema.type === "boolean") {
-      return !!value;
-    }
-    else if(this.schema.type === "number") {
-      return 1*value;
-    }
-    else if(this.schema.type === "integer") {
-      return Math.floor(value*1);
-    }
-    else {
-      return ""+value;
-    }
+    if (this.schema.type === "boolean") return !!value;
+    else if (this.schema.type === "number") return 1*value || 0;
+    else if (this.schema.type === "integer") return Math.floor(value*1 || 0);
+    else return ""+value;
   },
   getValue: function() {
     if (!this.dependenciesFulfilled) {
@@ -323,8 +309,6 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     }
 
     this._super();
-
-    return {changed: update, select_options: select_options};
   },
   enable: function() {
     if(!this.always_disabled) {
