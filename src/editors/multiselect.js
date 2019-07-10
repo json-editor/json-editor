@@ -126,7 +126,7 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
       this.select_options[i][this.input_type === 'select'? 'selected' : 'checked'] = (value.indexOf(i) !== -1);
     }
 
-    changed = this.updateValue(value);
+    changed = this.updateValue(value);        
     this.onChange(true);
 
   },
