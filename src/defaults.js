@@ -437,7 +437,7 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
 });
 
 JSONEditor.defaults.resolvers.unshift(function(schema) {
-  if (schema.type === "string" && schema.format === "wysiwyg") return "jodit";
+  if (schema.type === "string" && schema.format === "jodit") return "jodit";
 });
 
 JSONEditor.defaults.resolvers.unshift(function(schema) {

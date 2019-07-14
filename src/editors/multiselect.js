@@ -86,6 +86,7 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
     this.container.appendChild(this.control);
 
     this.multiselectChangeHandler = function(e) {
+
       e.preventDefault();
       e.stopPropagation();
 

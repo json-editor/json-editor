@@ -64,6 +64,18 @@ JSONEditor.defaults.editors.selectize = JSONEditor.defaults.editors.select.exten
     this._super();
 
   },
+  onWatchedFieldChange: function() {
+    this._super();
+    if (this.selectize_instance) {
+      var self = this;
+      this.selectize_instance.clear(true); // Clear selection
+      this.selectize_instance.clearOptions(true); // Remove all options
+      this.enum_values.forEach(function(value,i) {
+        self.selectize_instance.addOption({value: value, text: self.enum_display[i]});
+      });
+      this.selectize_instance.addItem(this.value, true); // Set new selection
+    }
+  },
   enable: function() {
     if (!this.always_disabled && this.selectize_instance) this.selectize_instance.unlock();
     this._super();
