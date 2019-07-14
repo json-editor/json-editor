@@ -612,7 +612,7 @@ JSONEditor.AbstractEditor = Class.extend({
   expandCallbacks: function(options) {
     for (var i in options) {
       if (options.hasOwnProperty(i) && typeof options[i] === 'string' && typeof JSONEditor.defaults.callbacks[this.format] === 'object' && typeof JSONEditor.defaults.callbacks[this.format][options[i]] === 'function') {
-        options[i] = JSONEditor.defaults.callbacks[this.format][options[i]].bind(this);
+        options[i] = JSONEditor.defaults.callbacks[this.format][options[i]].bind(null, this);//.bind(this);
       }
     }
     return options;

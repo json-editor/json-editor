@@ -432,7 +432,7 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
   if (schema.type === "string" && schema.format === "uuid") return "uuid";
 });
 
-window.JSONEditor.defaults.resolvers.unshift(function(schema) {
+JSONEditor.defaults.resolvers.unshift(function(schema) {
   if (schema.type === "string" && schema.format === "autocomplete") return "autocomplete";
 });
 

@@ -1,4 +1,4 @@
-window.JSONEditor.defaults.editors.autocomplete = window.JSONEditor.defaults.editors.string.extend({
+JSONEditor.defaults.editors.autocomplete = JSONEditor.defaults.editors.string.extend({
   postBuild: function() {
     if (window.Autocomplete) {
       // create wrapper container
