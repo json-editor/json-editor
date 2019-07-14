@@ -24,13 +24,13 @@ JSONEditor.defaults.editors.ace = JSONEditor.defaults.editors.string.extend({
 
       // Get options, either global options from "JSONEditor.defaults.options.ace" or
       // single property options from schema "options.ace"
-      options = $extend({}, {
+      options = this.expandCallbacks($extend({}, {
         selectionStyle: 'text',
         minLines: 30,
         maxLines: 30
       }, JSONEditor.defaults.options.ace || {}, this.options.ace || {}, {
         mode: 'ace/mode/' + mode
-      });
+      }));
 
       this.ace_container = document.createElement('div');
       this.ace_container.style.width = '100%';
@@ -57,7 +57,7 @@ JSONEditor.defaults.editors.ace = JSONEditor.defaults.editors.string.extend({
         self.onChange(true);
       });
 
-      self.theme.afterInputReady(self.input);
+      this.theme.afterInputReady(self.input);
     }
     else this._super();  // Library not loaded, so just treat this as a string
   },

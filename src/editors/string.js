@@ -225,11 +225,11 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
       this.refreshValue();
     }
   },
-  postBuild: function() {
-    this._super();
+  setupCleave: function(el) {
     // Enable cleave.js support if library is loaded and config is available
-    if (window.Cleave && this.schema.options && typeof this.schema.options.cleave == 'object') {
-      this.cleave = new window.Cleave(this.input, this.schema.options.cleave);
+    var options = this.expandCallbacks($extend({}, JSONEditor.defaults.options.cleave || {}, this.options.cleave || {}));
+    if (Array.Keys(options).length > 0) {
+      this.cleave_instance = new window.Cleave(el, options);
     }
   },
   enable: function() {
@@ -246,6 +246,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
   afterInputReady: function() {
     var self = this;
     self.theme.afterInputReady(self.input);
+    if (window.Cleave && !self.cleave_instance) self.setupCleave(self.input);
   },
   refreshValue: function() {
     this.value = this.input.value;
@@ -253,8 +254,8 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
     this.serialized = this.value;
   },
   destroy: function() {
-    if (this.cleave) {
-      this.cleave.destroy();
+    if (this.cleave_instance) {
+      this.cleave_instance.destroy();
     }
 
     this.template = null;

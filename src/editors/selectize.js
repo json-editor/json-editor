@@ -1,64 +1,80 @@
 JSONEditor.defaults.editors.selectize = JSONEditor.defaults.editors.select.extend({
   setValue: function(value,initial) {
-    var res = this._super(value,initial);
-    if(res !== undefined && res.changed && this.selectize_instance) {
-      this.selectize_instance[0].selectize.addItem(res.value);
+
+    if (this.selectize_instance) {
+
+      // Sanitize value before setting it
+      var sanitized = this.typecast(value || '');
+
+      if(this.enum_values.indexOf(sanitized) < 0) sanitized = this.enum_values[0];
+
+      if(this.value === sanitized) return;
+
+      if(initial) this.is_dirty = false;
+      else if(this.jsoneditor.options.show_errors === "change") this.is_dirty = true;
+
+      this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)];
+
+      this.selectize_instance.addItem(sanitized);
+      this.selectize_instance.refreshOptions(false);
+
+      this.value = sanitized;
+      this.onChange();
+      this.change();
+
     }
+    else this._super(value,initial);
+  },
+  addNewOption: function(value) {
+    var sanitized = this.typecast(value);
+
+    if (this.enum_values.indexOf(sanitized) < 0 && sanitized !== '') {
+      // Add to list of valid enum values
+      this.enum_options.push('' + sanitized);
+      this.enum_display.push('' + sanitized);
+      this.enum_values.push(sanitized);
+      // Update Schema enum to prevent triggering error
+      // "Value must be one of the enumerated values"
+      this.schema.enum.push(sanitized);
+      //this.original_schema.enum.push(sanitized);
+    }
+
   },
   afterInputReady: function() {
-    var options, self = this;
 
-    if (window.jQuery && window.jQuery.fn && window.jQuery.fn.selectize && !self.selectize_instance) {
+    if (window.jQuery && window.jQuery.fn && window.jQuery.fn.selectize && !this.selectize_instance) {
 
       // Get options, either global options from "JSONEditor.defaults.options.selectize" or
       // single property options from schema "options.selectize"
-      options = $extend({}, {
-        create: true
-      },JSONEditor.defaults.options.selectize || {}, self.options.selectize || {},{
-        onChange : function() { self.onInputChange(); }
+      var self = this, options = this.expandCallbacks($extend({}, JSONEditor.defaults.options.selectize || {}, this.options.selectize || {}));
+
+      // New items are allowed if option "create" is true and type is "string"
+      this.newEnumAllowed = options.create = !!options.create && this.schema.type == 'string';
+
+      this.selectize_instance = (window.jQuery(this.input).selectize(options))[0].selectize;
+
+      this.selectize_instance.on('change', function() {
+        self.onInputChange();
+      });
+      if (this.newEnumAllowed) this.selectize_instance.on('option_add', function(value) {
+        self.addNewOption(value);
       });
 
-      self.selectize_instance = window.jQuery(self.input).selectize(options);
     }
-    self._super();
-  },
-  updateSelectizeOptions: function(select_options) {
-    var selectized = this.selectize_instance[0].selectize,
-        self = this;
+    this._super();
 
-    selectized.off();
-    selectized.clearOptions();
-    for(var n in select_options) {
-      selectized.addOption({value:select_options[n],text:select_options[n]});
-    }
-    selectized.addItem(this.value);
-    selectized.on('change',function() {
-      self.onInputChange();
-    });
-  },
-  onWatchedFieldChange: function() {
-    var res = this._super();
-    if (res !== undefined && res.changed) {
-      if(this.selectize_instance) {
-        // Update the Selectize options
-        this.updateSelectizeOptions(res.select_options);
-      }
-      else {
-        this.afterInputReady();
-      }
-    }
   },
   enable: function() {
-    if (!this.always_disabled && this.selectize_instance) this.selectize_instance[0].selectize.unlock();
+    if (!this.always_disabled && this.selectize_instance) this.selectize_instance.unlock();
     this._super();
   },
   disable: function(always_disabled) {
-    if(this.selectize_instance) this.selectize_instance[0].selectize.lock();
+    if(this.selectize_instance) this.selectize_instance.lock();
     this._super(always_disabled);
   },
   destroy: function() {
     if(this.selectize_instance) {
-      this.selectize_instance[0].selectize.destroy();
+      this.selectize_instance.destroy();
       this.selectize_instance = null;
     }
     this._super();

@@ -15,14 +15,14 @@ JSONEditor.defaults.editors.sceditor = JSONEditor.defaults.editors.string.extend
     if (window.jQuery && window.jQuery.fn && window.jQuery.fn.sceditor) {
       // Get options, either global options from "JSONEditor.defaults.options.sceditor" or
       // single property options from schema "options.sceditor"
-      options = $extend({}, {
+      options = this.expandCallbacks($extend({}, {
         plugins: self.input_type,
         emoticonsEnabled: false,
         width: '100%',
         height: 300
       }, JSONEditor.defaults.options.sceditor || {}, this.options.sceditor || {}, {
         element: this.input
-      });
+      }));
 
       window.jQuery(self.input).sceditor(options);
       this.sceditor_instance = window.jQuery(self.input).sceditor('instance');
@@ -44,7 +44,7 @@ JSONEditor.defaults.editors.sceditor = JSONEditor.defaults.editors.string.extend
         self.onChange(true);
       });
 
-      self.theme.afterInputReady(self.input);
+      this.theme.afterInputReady(self.input);
     }
     else this._super();  // Library not loaded, so just treat this as a string
   },

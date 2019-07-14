@@ -15,11 +15,11 @@ JSONEditor.defaults.editors.simplemde = JSONEditor.defaults.editors.string.exten
     if (window.SimpleMDE) {
       // Get options, either global options from "JSONEditor.defaults.options.simplemde" or
       // single property options from schema "options.simplemde"
-      options = $extend({}, {
+      options = this.expandCallbacks($extend({}, {
         height: 300
       }, JSONEditor.defaults.options.simplemde || {}, this.options.simplemde || {}, {
         element: this.input
-      });
+      }));
 
       this.simplemde_instance = new window.SimpleMDE(options);
 
@@ -34,7 +34,7 @@ JSONEditor.defaults.editors.simplemde = JSONEditor.defaults.editors.string.exten
         self.onChange(true);
       });
 
-      self.theme.afterInputReady(self.input);
+      this.theme.afterInputReady(self.input);
     }
     else this._super();  // Library not loaded, so just treat this as a string
   },

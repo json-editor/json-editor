@@ -1,6 +1,5 @@
 JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
   setValue: function(value,initial) {
-    //value = this.typecast(value||'');
 
     // Sanitize value before setting it
     var sanitized = this.typecast(value || '');

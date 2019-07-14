@@ -266,6 +266,11 @@ JSONEditor.plugins = {
   }
 };
 
+// Global callback list
+JSONEditor.defaults.callbacks = {
+
+};
+
 // Default per-editor options
 $each(JSONEditor.defaults.editors, function(i,editor) {
   JSONEditor.defaults.editors[i].options = editor.options || {};
@@ -425,6 +430,10 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
 // Enable custom editor type
 JSONEditor.defaults.resolvers.unshift(function(schema) {
   if (schema.type === "string" && schema.format === "uuid") return "uuid";
+});
+
+window.JSONEditor.defaults.resolvers.unshift(function(schema) {
+  if (schema.type === "string" && schema.format === "autocomplete") return "autocomplete";
 });
 
 JSONEditor.defaults.resolvers.unshift(function(schema) {

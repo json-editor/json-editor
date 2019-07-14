@@ -15,9 +15,9 @@ JSONEditor.defaults.editors.jodit = JSONEditor.defaults.editors.string.extend({
     if (window.Jodit) {
       // Get options, either global options from "JSONEditor.defaults.options.jodit" or
       // single property options from schema "options.jodit"
-      options = $extend({}, {
+      options = this.expandCallbacks($extend({}, {
         height: 300
-      }, JSONEditor.defaults.options.jodit || {}, this.options.jodit || {});
+      }, JSONEditor.defaults.options.jodit || {}, this.options.jodit || {}));
 
       this.jodit_instance = new window.Jodit(this.input, options);
 
@@ -31,7 +31,7 @@ JSONEditor.defaults.editors.jodit = JSONEditor.defaults.editors.string.extend({
         self.onChange(true);
       });
 
-      self.theme.afterInputReady(self.input);
+      this.theme.afterInputReady(self.input);
     }
     else this._super();  // Library not loaded, so just treat this as a string
   },

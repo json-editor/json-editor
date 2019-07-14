@@ -77,6 +77,7 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
       for(i=0; i<this.option_keys.length; i++) {
         this.select_options[this.option_keys[i]] = this.input.children[i];
       }
+
       this.control = this.theme.getFormControl(this.label, this.input, this.description, this.infoButton);
     }
 
@@ -157,8 +158,8 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
   },
   sanitize: function(value) {
     if (this.schema.items.type === 'boolean') return !!value;
-    else if (this.schema.items.type === 'number') return 1*value;
-    else if (this.schema.items.type === 'integer') return Math.floor(value*1);
+    else if (this.schema.items.type === 'number') return 1*value || 0;
+    else if (this.schema.items.type === 'integer') return Math.floor(value*1 || 0);
     else return ''+value;
   },
   enable: function() {

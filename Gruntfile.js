@@ -73,6 +73,7 @@ module.exports = function(grunt) {
           'src/editors/jodit.js',
           'src/editors/ace.js',
           'src/editors/simplemde.js',
+          'src/editors/autocomplete.js',
           'src/editors/sceditor.js',
           'src/editors/select2.js',
 

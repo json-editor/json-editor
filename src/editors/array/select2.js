@@ -1,41 +1,18 @@
 JSONEditor.defaults.editors.arraySelect2 = JSONEditor.defaults.editors.multiselect.extend({
   setValue: function(value, initial) {
-    value = value || [];
-    if (!Array.isArray(value)) value = [value];
-
-    if (this.select2_instance) {
-      // Add new enum options if "tags" is enabled
-      if (this.newEnumAllowed) this.addNewOptions(value);
-      if (this.select2v4) this.select2_instance.val(value).change();
-      else this.select2_instance.select2('val', value);
-    }
     this._super(value, initial);
+    if (this.select2_instance) {
+      if (this.select2v4) this.select2_instance.val(this.value).change();
+      else this.select2_instance.select2('val', this.value);
+    }
   },
   addNewOptions: function(value) {
-    var duplicate = [], self = this, newOption,
+    var self = this, new_option,
         // Is the values added new or exists in enum list?
         new_items = value.filter(function(n) { return self.option_keys.indexOf(n) === -1;});
 
     if (new_items.length > 0) {
       new_items.forEach(function(key) {
-        key += '';
-        // Check if option key already exist
-        duplicate = Array.from(self.select2_instance[0].children).filter(function(el) {
-          return el.value === key;
-        });
-
-        if (duplicate.length === 0) {
-          // Value set by setValue(), so no option tag exist
-          newOption = new Option(key, key, true, true);
-          self.select2_instance.append(newOption);
-          self.select_options[key] = newOption;
-        }
-        else {
-          // Value entered directly by user
-          // Remove data attribute to make option tag permanent.
-          duplicate[0].removeAttribute('data-select2-tag');
-        }
-
         if (self.option_keys.indexOf(key) < 0) {
           // Add to list of valid enum values
           self.option_keys.push(key);
@@ -44,8 +21,15 @@ JSONEditor.defaults.editors.arraySelect2 = JSONEditor.defaults.editors.multisele
           // Update Schema enum to prevent triggering error
           // "Value must be one of the enumerated values"
           self.schema.items.enum.push(key);
-          //this.original_schema.enum.push(sanitized);
-        }
+          //this.original_schema.enum.push(key);
+
+          new_option = self.input.querySelector('option[value="' + key + '"]');
+          if (new_option) {
+            // Remove data attribute to make option tag permanent.
+            new_option.removeAttribute('data-select2-tag');
+            self.select_options[key] = new_option;
+          }
+         }
       });
     }
   },
@@ -57,13 +41,10 @@ JSONEditor.defaults.editors.arraySelect2 = JSONEditor.defaults.editors.multisele
 
       // Get options, either global options from "JSONEditor.defaults.options.select2" or
       // single property options from schema "options.select2"
-      options = $extend({}, {
+      options = this.expandCallbacks($extend({}, {
         tags: true,
         width: '100%'
-      }, JSONEditor.defaults.options.select2 || {}, this.options.select2 || {});
-
-      // Tags bug: https://stackoverflow.com/questions/56046676/select2-cant-create-new-options-longer-than-2-characters-tag-true
-      // https://github.com/select2/select2/issues/5485
+      }, JSONEditor.defaults.options.select2 || {}, this.options.select2 || {}));
 
       // New items are allowed if option "tags" is true and items type is "string"
       this.newEnumAllowed = options.tags = !!options.tags && this.schema.items && this.schema.items.type == 'string';
