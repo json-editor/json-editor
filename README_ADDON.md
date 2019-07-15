@@ -260,7 +260,7 @@ This example defines a callback function named "showCreditCardType" and shows ho
 window.JSONEditor.defaults.callbacks.cleave = {
   // 1st parameter in callback is ALWAYS a reference to current editor instance.
   "showCreditCardType": function(jseditor_editor, type) {
-    var el = this.element.nextSibling;
+    var el = jseditor_editor.element.nextSibling;
     if (el) el.innerHTML = 'Card type: <strong>' + type + '</strong>';
   }
 };
