@@ -247,6 +247,7 @@ JSONEditor.defaults.languages.en = {
 };
 
 // Miscellaneous Plugin Settings
+// Obsolete - Can be removed. Now replaced with global + schema options
 JSONEditor.plugins = {
   ace: {
     theme: ''
@@ -421,7 +422,7 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
 JSONEditor.defaults.resolvers.unshift(function(schema) {
   if (schema.links) {
     for (var i = 0; i < schema.links.length; i++) {
-      if (schema.links[i].rel.toLowerCase() === "describedby") {
+      if (schema.links[i].rel && schema.links[i].rel.toLowerCase() === "describedby") {
         return "describedBy";
       }
     }

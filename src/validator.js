@@ -536,7 +536,7 @@ JSONEditor.Validator = Class.extend({
 
     if (schema.links) {
       for (var m = 0; m < schema.links.length; m++) {
-        if (schema.links[m].rel.toLowerCase() === "describedby") {
+        if (schema.links[m].rel && schema.links[m].rel.toLowerCase() === "describedby") {
           var href = schema.links[m].href;
           var data = this.jsoneditor.root.getValue();
           //var template = new UriTemplate(href); //preprocessURI(href));
