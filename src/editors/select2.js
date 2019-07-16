@@ -75,7 +75,7 @@ JSONEditor.defaults.editors.select2 = JSONEditor.defaults.editors.select.extend(
         option_tag.removeAttribute('data-select2-tag');
       }
       else {
-        $(this.input).append(new Option(sanitized, sanitized, false, false)).trigger('change');
+        this.input.appendChild(new Option(sanitized, sanitized, false, false)).trigger('change');
       }
 
       res = true;

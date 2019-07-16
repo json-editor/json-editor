@@ -15,40 +15,6 @@ JSONEditor.defaults.editors.arraySelect2 = JSONEditor.defaults.editors.multisele
     else this._super(value, initial);
 
   },
-  xsetValue: function(value, initial) {
-    this._super(value, initial);
-    if (this.select2_instance) {
-      if (this.select2v4) this.select2_instance.val(this.value).change();
-      else this.select2_instance.select2('val', this.value);
-    }
-  },
-  xaddNewOptions: function(value) {
-    var self = this, new_option,
-        // Is the values added new or exists in enum list?
-        new_items = value.filter(function(n) { return self.option_keys.indexOf(n) === -1;});
-
-    if (new_items.length > 0) {
-      new_items.forEach(function(key) {
-        if (self.option_keys.indexOf(key) < 0) {
-          // Add to list of valid enum values
-          self.option_keys.push(key);
-          self.option_titles.push(key);
-          self.select_values[key] = key;
-          // Update Schema enum to prevent triggering error
-          // "Value must be one of the enumerated values"
-          self.schema.items.enum.push(key);
-          //this.original_schema.enum.push(key);
-
-          new_option = self.input.querySelector('option[value="' + key + '"]');
-          if (new_option) {
-            // Remove data attribute to make option tag permanent.
-            new_option.removeAttribute('data-select2-tag');
-            self.select_options[key] = new_option;
-          }
-         }
-      });
-    }
-  },
   afterInputReady: function() {
 
     var options, self = this, select2Handler;
@@ -113,7 +79,7 @@ JSONEditor.defaults.editors.arraySelect2 = JSONEditor.defaults.editors.multisele
     // Remove data attribute to make option tag permanent. (user input)
     if (option_tag) option_tag.removeAttribute('data-select2-tag');
     // Create new option tag (setValue)
-    else $(this.input).append(new Option(value, value, false, false)).trigger('change');
+    else this.input.appendChild(new Option(value, value, false, false)).trigger('change');
 
     return true;
   },
