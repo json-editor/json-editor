@@ -87,19 +87,15 @@ JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
 
     this.multiselectChangeHandler = function(e) {
 
-      e.preventDefault();
-      e.stopPropagation();
-
       var new_value = [];
       for(i = 0; i<self.option_keys.length; i++) {
         if (self.select_options[self.option_keys[i]] && (self.select_options[self.option_keys[i]].selected || self.select_options[self.option_keys[i]].checked)) new_value.push(self.select_values[self.option_keys[i]]);
       }
-
       self.updateValue(new_value);
       self.onChange(true);
     };
 
-    this.control.addEventListener('change', this.multiselectChangeHandler);
+    this.control.addEventListener('change', this.multiselectChangeHandler, false);
 
     // Any special formatting that needs to happen after the input is added to the dom
     window.requestAnimationFrame(function() {

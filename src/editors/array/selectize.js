@@ -1,14 +1,11 @@
 JSONEditor.defaults.editors.arraySelectize = JSONEditor.defaults.editors.multiselect.extend({
   setValue: function(value, initial) {
     if (this.selectize_instance) {
-      var i, changed;
-      value = value || [];
-      if (!(Array.isArray(value))) value = [value];
 
       // Make sure we are dealing with an array of strings so we can check for strict equality
-      value = value.map(function(e) {return e + '';});
+      value = [].concat(value).map(function(e) {return e + '';});
 
-      changed = this.updateValue(value); // Sets this.value to sanitized value
+      this.updateValue(value); // Sets this.value to sanitized value
 
       this.selectize_instance.setValue(this.value);
 
@@ -16,26 +13,6 @@ JSONEditor.defaults.editors.arraySelectize = JSONEditor.defaults.editors.multise
     }
     else this._super(value, initial);
 
-  },
-  addNewOptions: function(value) {
-    value = [].concat(value); // Make sure value is an array
-    var self = this,
-        // Is the values added new or exists in enum list?
-        new_items = value.filter(function(n) { return self.option_keys.indexOf(n) === -1;});
-
-    if (new_items.length > 0 && this.schema.items && this.schema.items.enum) {
-      new_items.forEach(function(key) {
-        // Add new key and value
-        self.option_keys.push(key + '');
-        self.option_titles.push(key + '');
-        self.select_values[key + ''] = key;
-        // Update Schema enum to prevent triggering "Value must be one of the enumerated values"
-        self.schema.items.enum.push(key);
-        //self.original_schema.items.enum.push(key);
-        // Add key to selectize
-        self.input.selectize.addOption({text: key, value: key});
-      });
-    }
   },
   afterInputReady: function() {
     var options, self = this;
@@ -53,20 +30,21 @@ JSONEditor.defaults.editors.arraySelectize = JSONEditor.defaults.editors.multise
       // New items are allowed if option "create" is true and items type is "string"
       this.newEnumAllowed = options.create = !!options.create && this.schema.items && this.schema.items.type == 'string';
 
-      //this.selectize_instance = window.jQuery(this.input).selectize(options);
       this.selectize_instance = (window.jQuery(this.input).selectize(options))[0].selectize;
 
-      //this.control.removeEventListener('change', this.multiselectChangeHandler);
+      // Remove change handler set in parent class (src/multiselect.js)
+      this.control.removeEventListener('change', this.multiselectChangeHandler);
 
-      this.selectize_instance.on('change', function(e) {
-          var value = self.selectize_instance.getValue();
-          self.updateValue(value);
-          self.onChange(true);
-      });
+      // Create a new change handler
+      this.multiselectChangeHandler = function(e) {
+        var value = self.selectize_instance.getValue();
+        self.updateValue(value);
+        self.onChange(true);
+      };
 
-      if (this.newEnumAllowed) this.selectize_instance.on('option_add', function(value) {
-        self.addNewOptions(value);
-      });
+      // Add new event handler.
+      //Note: Must use the "on()" method and not addEventListener()
+      this.selectize_instance.on('change', this.multiselectChangeHandler);
     }
     this._super();
   },
@@ -77,7 +55,10 @@ JSONEditor.defaults.editors.arraySelectize = JSONEditor.defaults.editors.multise
 //      if (!this.select_options[value[i]+'']) {
       if (!this.select_values[value[i]+'']) {
         changed = true;
-        continue;
+        if (this.newEnumAllowed) {
+          if (!this.addNewOption(value[i])) continue;
+        }
+        else continue;
       }
       var sanitized = this.sanitize(this.select_values[value[i]]);
       new_value.push(sanitized);
@@ -86,6 +67,18 @@ JSONEditor.defaults.editors.arraySelectize = JSONEditor.defaults.editors.multise
     this.value = new_value;
 
     return changed;
+  },
+  addNewOption: function(value) {
+    // Add new value and label
+    this.option_keys.push(value + '');
+    this.option_titles.push(value + '');
+    this.select_values[value + ''] = value;
+    // Update Schema enum to prevent triggering "Value must be one of the enumerated values"
+    this.schema.items.enum.push(value);
+    // Add new value and label to selectize
+    this.selectize_instance.addOption({text: value, value: value});
+
+    return true;
   },
   enable: function() {
     if (!this.always_disabled && this.selectize_instance) this.selectize_instance.unlock();
