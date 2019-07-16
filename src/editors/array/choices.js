@@ -1,149 +1,101 @@
-JSONEditor.defaults.editors.arrayChoices = JSONEditor.AbstractEditor.extend({
-  preBuild: function() {
-    var self = this;
-    this.enum_options = [];
-    this.enum_values = [];
-    this.enum_display = [];
+JSONEditor.defaults.editors.arrayChoices = JSONEditor.defaults.editors.multiselect.extend({
+  setValue: function(value, initial) {
+    if (this.choices_instance) {
 
-    // Enum options enumerated
-    if(this.schema.items.enum) {
-      var display = this.schema.options && this.schema.options.enum_titles || [];
+      // Make sure we are dealing with an array of strings so we can check for strict equality
+      value = [].concat(value).map(function(e) {return e + '';});
 
-      $each(this.schema.items.enum,function(i,option) {
-        self.enum_options[i] = ""+option;
-        self.enum_display[i] = ""+(display[i] || option);
-        self.enum_values[i] = self.typecast(option);
-      });
+      this.updateValue(value); // Sets this.value to sanitized value
+
+      this.choices_instance.removeActiveItems(); // Remove existing selection
+      this.choices_instance.setChoiceByValue(this.value); // Set new selection
+
+      this.onChange(true);
     }
-    // Dynamic Enum for arrays is not specified in docs
+    else this._super(value, initial);
+
   },
-  build: function() {
-    this.title = this.theme.getFormInputLabel(this.getTitle());
+  afterInputReady: function() {
 
-    this.title_controls = this.theme.getHeaderButtonHolder();
-    this.title.appendChild(this.title_controls);
-    this.error_holder = document.createElement('div');
+    if (window.Choices && !this.choices_instance) {
+      var options, self = this;
+      // Get options, either global options from "JSONEditor.defaults.options.choices" or
+      // single property options from schema "options.choices"
+      options = this.expandCallbacks($extend({}, {
+        removeItems: true,
+        removeItemButton: true
+      }, JSONEditor.defaults.options.choices || {}, this.options.choices || {}, {
+        addItems: true,
+        editItems: false,
+        duplicateItemsAllowed: false
+      }));
 
-    if(this.schema.description) {
-      this.description = this.theme.getDescription(this.schema.description);
-    }
+      // New items are allowed if option "addItems" is true and items type is "string"
+      //this.newEnumAllowed = options.addItems = !!options.addItems && this.schema.items && this.schema.items.type == 'string';
 
-    var is_enum = this.schema.items.enum && this.enum_options && this.enum_options.length > 0;
-    if (is_enum) {
-      this.input = this.theme.getSelectInput(this.enum_options);
-      this.input.setAttribute('multiple', 'multiple');
-    } else {
-      this.input = this.theme.getFormInputField('text');
-    }
-    var group = this.theme.getFormControl(this.title, this.input, this.description);
+      // Choices doesn't support adding new items to select type input
+      this.newEnumAllowed = false;
 
-    this.container.appendChild(group);
-    this.container.appendChild(this.error_holder);
+      this.choices_instance = new window.Choices(this.input, options);
 
-    //apply global options to array Choices
-    var options = $extend({},JSONEditor.plugins.choices);
-    if(this.schema.options && this.schema.options.choices_options) options = $extend(options,this.schema.options.choices_options);
-    this.choices = new window.Choices(this.input, $extend(options, {
-      removeItemButton: (options.removeItemButton === undefined ? true : options.removeItemButton),
-      duplicateItemsAllowed: (options.duplicateItemsAllowed === undefined ? !this.schema.uniqueItems : options.duplicateItemsAllowed),
-      editItems: (options.editItems === undefined ? !is_enum : options.editItems),
-      maxItemCount: (options.maxItemCount === undefined ? (this.schema.maxItems > 0 ? this.schema.maxItems : -1) : options.maxItemCount),
-      placeholder: (options.placeholder === undefined ? !is_enum : options.placeholder),
-      placeholderValue: (options.placeholderValue === undefined ? this.translate('choices_placeholder_text') : options.placeholderValue),
-    }));
-  },
-  postBuild: function() {
-      this._super();
-      var self = this;
+      // Remove change handler set in parent class (src/multiselect.js)
+      this.control.removeEventListener('change', this.multiselectChangeHandler);
 
-      this.input.addEventListener('change', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        self.refreshValue();
+      // Create a new change handler
+      this.multiselectChangeHandler = function(e) {
+        var value = self.choices_instance.getValue(true);
+        self.updateValue(value);
         self.onChange(true);
-      });
-  },
-  destroy: function() {
-    this.empty(true);
-    if(this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title);
-    if(this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description);
-    if(this.input && this.input.parentNode) this.input.parentNode.removeChild(this.input);
+      };
+      this.control.addEventListener('change', this.multiselectChangeHandler, false);
 
-    this.choices.destroy();
-    this.choices = null;
-
+    }
     this._super();
   },
-  empty: function(hard) {},
-  setValue: function(value, initial) {
-    // Update the array's value, adding/removing rows when necessary
-    value = value || [];
-    if(!(Array.isArray(value))) value = [value];
-
-    this.choices.clearStore();
-
-    // var choice_values;
-    if (this.schema.items.enum && this.enum_options && this.enum_options.length > 0) {
-      var titles = this.enum_titles || [];
-      var enum_options = this.enum_options;
-      if (!this.choices.config.duplicateItemsAllowed) {
-        enum_options = enum_options.filter(function(x) {
-          return !value.includes(x);
-        });
+  updateValue: function(value) {
+    value = [].concat(value);
+    var changed = false, new_value = [];
+    for(var i=0; i<value.length; i++) {
+      if (!this.select_values[value[i]+'']) {
+        changed = true;
+        if (this.newEnumAllowed) {
+          if (!this.addNewOption(value[i])) continue;
+        }
+        else continue;
       }
-      var choices_list = enum_options.map(function(x, idx) { return {value: x, label: titles[idx] || x}; });
-      this.choices.setChoices(choices_list, 'value', 'label');
+      var sanitized = this.sanitize(this.select_values[value[i]]);
+      new_value.push(sanitized);
+      if (sanitized !== value[i]) changed = true;
     }
+    this.value = new_value;
 
-    this.choices.setValue(value);
-
-    this.refreshValue(initial);
+    return changed;
   },
-  refreshValue: function(force) {
-    this.value = this.choices.getValue(true);
-  },
-  showValidationErrors: function(errors) {
-    var self = this;
+  addNewOption: function(value) {
+    // Add new value and label
+    this.option_keys.push(value + '');
+    this.option_titles.push(value + '');
+    this.select_values[value + ''] = value;
+    // Update Schema enum to prevent triggering "Value must be one of the enumerated values"
+    this.schema.items.enum.push(value);
+    // Add new value and label to choices
+    this.choices_instance.setChoices([{value: value + '', label: value + ''}], 'value', 'label', false);
 
-    // Get all the errors that pertain to this editor
-    var my_errors = [];
-    var other_errors = [];
-    $each(errors, function(i,error) {
-      if(error.path === self.path) {
-        my_errors.push(error);
-      }
-      else {
-        other_errors.push(error);
-      }
-    });
-
-    // Show errors for this editor
-    if(this.error_holder) {
-      if(my_errors.length) {
-        this.error_holder.innerHTML = '';
-        this.error_holder.style.display = '';
-        $each(my_errors, function(i,error) {
-          self.error_holder.appendChild(self.theme.getErrorMessage(error.message));
-        });
-      }
-      // Hide error area
-      else {
-        this.error_holder.style.display = 'none';
-      }
-    }
+    return true;
   },
-  typecast: function(value) {
-    if(this.schema.type === "boolean") {
-      return !!value;
+  enable: function() {
+    if (!this.always_disabled && this.choices_instance) this.choices_instance.enable();
+    this._super();
+  },
+  disable: function(always_disabled) {
+    if(this.choices_instance) this.choices_instance.disable();
+    this._super(always_disabled);
+  },
+  destroy: function() {
+    if(this.choices_instance) {
+        this.choices_instance.destroy();
+        this.choices_instance = null;
     }
-    else if(this.schema.type === "number") {
-      return 1*value;
-    }
-    else if(this.schema.type === "integer") {
-      return Math.floor(value*1);
-    }
-    else {
-      return ""+value;
-    }
+    this._super();
   }
 });

@@ -1,36 +1,47 @@
 JSONEditor.defaults.editors.choices = JSONEditor.defaults.editors.select.extend({
   setValue: function(value,initial) {
-    var res = this._super(value,initial);
-    if(res !== undefined && res.changed && this.choices_instance) {
-      this.choices_instance.setValue(res.value);
+
+    if (this.choices_instance) {
+
+      // Sanitize value before setting it
+      var sanitized = this.typecast(value || '');
+
+      if(this.enum_values.indexOf(sanitized) < 0) sanitized = this.enum_values[0];
+
+      if(this.value === sanitized) return;
+
+      if(initial) this.is_dirty = false;
+      else if(this.jsoneditor.options.show_errors === "change") this.is_dirty = true;
+
+      this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)];
+
+      this.choices_instance.setChoiceByValue(this.input.value);
+
+      this.value = sanitized;
+      this.onChange();
+      this.change();
+
     }
+    else this._super(value,initial);
   },
   afterInputReady: function() {
-    var options, self = this;
-    if (window.Choices && !self.choices_instance) {
+    if (window.Choices && !this.choices_instance) {
+      var options, self = this;
       // Get options, either global options from "JSONEditor.defaults.options.choices" or
       // single property options from schema "options.choices"
-      options = $extend({}, JSONEditor.defaults.options.choices || {}, self.options.choices || {});
+      options = this.expandCallbacks($extend({}, JSONEditor.defaults.options.choices || {}, this.options.choices || {}));
 
-      self.choices_instance = new window.Choices(self.input, options);
+      this.choices_instance = new window.Choices(this.input, options);
+
     }
-    self._super();
-  },
-  updateChoicesOptions: function(select_options) {
-    var choices_list = select_options.map(function(x) { return {value: x, label: x}; });
-    this.choices_instance.setChoices(choices_list, 'value', 'label', true);
-    this.choices_instance.setChoiceByValue(this.value);
+    this._super();
   },
   onWatchedFieldChange: function() {
-    var res = this._super();
-    if (res !== undefined && res.changed) {
-      if(this.choices_instance) {
-        // Update the Choices options
-          this.updateChoicesOptions(res.select_options);
-      }
-      else {
-        this.afterInputReady();
-      }
+    this._super();
+    if (this.choices_instance) {
+      var self = this, choices_list = this.enum_options.map(function(v, i) { return {value: v, label: self.enum_display[i]}; });
+      this.choices_instance.setChoices(choices_list, 'value', 'label', true);
+      this.choices_instance.setChoiceByValue(this.value + '');    // Set new selection
     }
   },
   enable: function() {
