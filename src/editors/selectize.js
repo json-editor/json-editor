@@ -23,7 +23,7 @@ JSONEditor.defaults.editors.selectize = JSONEditor.defaults.editors.select.exten
 
       // Get options, either global options from "JSONEditor.defaults.options.selectize" or
       // single property options from schema "options.selectize"
-      var self = this, options = this.expandCallbacks($extend({}, JSONEditor.defaults.options.selectize || {}, this.options.selectize || {}));
+      var self = this, options = this.expandCallbacks('selectize', $extend({}, JSONEditor.defaults.options.selectize || {}, this.options.selectize || {}));
 
       // New items are allowed if option "create" is true and type is "string"
       this.newEnumAllowed = options.create = !!options.create && this.schema.type == 'string';

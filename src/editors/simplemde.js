@@ -15,7 +15,7 @@ JSONEditor.defaults.editors.simplemde = JSONEditor.defaults.editors.string.exten
     if (window.SimpleMDE) {
       // Get options, either global options from "JSONEditor.defaults.options.simplemde" or
       // single property options from schema "options.simplemde"
-      options = this.expandCallbacks($extend({}, {
+      options = this.expandCallbacks('simplemde', $extend({}, {
         height: 300
       }, JSONEditor.defaults.options.simplemde || {}, this.options.simplemde || {}, {
         element: this.input

@@ -24,7 +24,7 @@ JSONEditor.defaults.editors.ace = JSONEditor.defaults.editors.string.extend({
 
       // Get options, either global options from "JSONEditor.defaults.options.ace" or
       // single property options from schema "options.ace"
-      options = this.expandCallbacks($extend({}, {
+      options = this.expandCallbacks('ace', $extend({}, {
         selectionStyle: 'text',
         minLines: 30,
         maxLines: 30

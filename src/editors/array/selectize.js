@@ -20,7 +20,7 @@ JSONEditor.defaults.editors.arraySelectize = JSONEditor.defaults.editors.multise
     if (window.jQuery && window.jQuery.fn && window.jQuery.fn.selectize && !this.selectize_instance) {
       // Get options, either global options from "JSONEditor.defaults.options.selectize" or
       // single property options from schema "options.selectize"
-      options = this.expandCallbacks($extend({}, {
+      options = this.expandCallbacks('selectize', $extend({}, {
         plugins: ["remove_button"],
         delimiter: false,
         createOnBlur: true,

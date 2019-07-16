@@ -15,7 +15,7 @@ JSONEditor.defaults.editors.sceditor = JSONEditor.defaults.editors.string.extend
     if (window.jQuery && window.jQuery.fn && window.jQuery.fn.sceditor) {
       // Get options, either global options from "JSONEditor.defaults.options.sceditor" or
       // single property options from schema "options.sceditor"
-      options = this.expandCallbacks($extend({}, {
+      options = this.expandCallbacks('sceditor', $extend({}, {
         plugins: self.input_type,
         emoticonsEnabled: false,
         width: '100%',

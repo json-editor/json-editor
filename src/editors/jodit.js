@@ -15,7 +15,7 @@ JSONEditor.defaults.editors.jodit = JSONEditor.defaults.editors.string.extend({
     if (window.Jodit) {
       // Get options, either global options from "JSONEditor.defaults.options.jodit" or
       // single property options from schema "options.jodit"
-      options = this.expandCallbacks($extend({}, {
+      options = this.expandCallbacks('jodit', $extend({}, {
         height: 300
       }, JSONEditor.defaults.options.jodit || {}, this.options.jodit || {}));
 

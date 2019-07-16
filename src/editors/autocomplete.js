@@ -24,7 +24,7 @@ JSONEditor.defaults.editors.autocomplete = JSONEditor.defaults.editors.string.ex
     if (window.Autocomplete && !this.autocomplete_instance) {
       // Get options, either global options from "JSONEditor.defaults.options.autocomplete" or
       // single property options from schema "options.autocomplete"
-      options = this.expandCallbacks($extend({}, {
+      options = this.expandCallbacks('autocomplete', $extend({}, {
         'baseClass': 'autocomplete'
       }, JSONEditor.defaults.options.autocomplete || {}, this.options.autocomplete || {}));
 

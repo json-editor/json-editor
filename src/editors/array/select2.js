@@ -23,7 +23,7 @@ JSONEditor.defaults.editors.arraySelect2 = JSONEditor.defaults.editors.multisele
 
       // Get options, either global options from "JSONEditor.defaults.options.select2" or
       // single property options from schema "options.select2"
-      options = this.expandCallbacks($extend({}, {
+      options = this.expandCallbacks('select2', $extend({}, {
         tags: true,
         width: '100%'
       }, JSONEditor.defaults.options.select2 || {}, this.options.select2 || {}));

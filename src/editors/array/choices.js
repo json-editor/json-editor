@@ -21,7 +21,7 @@ JSONEditor.defaults.editors.arrayChoices = JSONEditor.defaults.editors.multisele
       var options, self = this;
       // Get options, either global options from "JSONEditor.defaults.options.choices" or
       // single property options from schema "options.choices"
-      options = this.expandCallbacks($extend({}, {
+      options = this.expandCallbacks('choices', $extend({}, {
         removeItems: true,
         removeItemButton: true
       }, JSONEditor.defaults.options.choices || {}, this.options.choices || {}, {

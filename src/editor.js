@@ -609,10 +609,10 @@ JSONEditor.AbstractEditor = Class.extend({
       }
     }
   },
-  expandCallbacks: function(options) {
+  expandCallbacks: function(scope, options) {
     for (var i in options) {
-      if (options.hasOwnProperty(i) && typeof options[i] === 'string' && typeof JSONEditor.defaults.callbacks[this.format] === 'object' && typeof JSONEditor.defaults.callbacks[this.format][options[i]] === 'function') {
-        options[i] = JSONEditor.defaults.callbacks[this.format][options[i]].bind(null, this);//.bind(this);
+      if (options.hasOwnProperty(i) && typeof options[i] === 'string' && typeof JSONEditor.defaults.callbacks[scope] === 'object' && typeof JSONEditor.defaults.callbacks[scope][options[i]] === 'function') {
+        options[i] = JSONEditor.defaults.callbacks[scope][options[i]].bind(null, this);//.bind(this);
       }
     }
     return options;

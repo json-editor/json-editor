@@ -29,7 +29,7 @@ JSONEditor.defaults.editors.choices = JSONEditor.defaults.editors.select.extend(
       var options, self = this;
       // Get options, either global options from "JSONEditor.defaults.options.choices" or
       // single property options from schema "options.choices"
-      options = this.expandCallbacks($extend({}, JSONEditor.defaults.options.choices || {}, this.options.choices || {}));
+      options = this.expandCallbacks('choices', $extend({}, JSONEditor.defaults.options.choices || {}, this.options.choices || {}));
 
       this.choices_instance = new window.Choices(this.input, options);
 

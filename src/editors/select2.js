@@ -23,7 +23,7 @@ JSONEditor.defaults.editors.select2 = JSONEditor.defaults.editors.select.extend(
 
       // Get options, either global options from "JSONEditor.defaults.options.select2" or
       // single property options from schema "options.select2"
-      var self = this, options = this.expandCallbacks($extend({}, JSONEditor.defaults.options.select2 || {}, this.options.select2 || {}));
+      var self = this, options = this.expandCallbacks('select2', $extend({}, JSONEditor.defaults.options.select2 || {}, this.options.select2 || {}));
 
       // New items are allowed if option "tags" is true and type is "string"
       this.newEnumAllowed = options.tags = !!options.tags && this.schema.type == 'string';
