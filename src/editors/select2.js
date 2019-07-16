@@ -1,47 +1,21 @@
 JSONEditor.defaults.editors.select2 = JSONEditor.defaults.editors.select.extend({
-  setValue: function(value,initial) {
-
+  setValue: function(value, initial) {
     if (this.select2_instance) {
-
-      // Sanitize value before setting it
-      var sanitized = this.typecast(value || '');
-
-      if(this.enum_values.indexOf(sanitized) < 0) sanitized = this.enum_values[0];
-
-      if(this.value === sanitized) return;
 
       if(initial) this.is_dirty = false;
       else if(this.jsoneditor.options.show_errors === "change") this.is_dirty = true;
 
-      this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)];
+      var sanitized = this.updateValue(value); // Sets this.value to sanitized value
+
+      this.input.value = sanitized;
 
       if(this.select2v4) this.select2_instance.val(sanitized).trigger("change");
       else this.select2_instance.select2('val',sanitized);
 
-      this.value = sanitized;
-      this.onChange();
-      this.change();
-
+      this.onChange(true);
     }
-    else this._super(value,initial);
-  },
-  addNewOption: function(value) {
-    var sanitized = this.typecast(value);
+    else this._super(value, initial);
 
-    if (this.enum_values.indexOf(sanitized) < 0) {
-      // Add to list of valid enum values
-      this.enum_options.push("" + sanitized);
-      this.enum_display.push("" + sanitized);
-      this.enum_values.push(sanitized);
-
-      // Update Schema enum to prevent triggering error
-      // "Value must be one of the enumerated values"
-      this.schema.enum.push(sanitized);
-      //this.original_schema.enum.push(sanitized);
-
-      // Remove data attribute to make option tag permanent.
-      this.input.querySelector('option[value="' + sanitized + '"]').removeAttribute('data-select2-tag');
-    }
   },
   afterInputReady: function() {
 
@@ -57,18 +31,56 @@ JSONEditor.defaults.editors.select2 = JSONEditor.defaults.editors.select.extend(
       this.select2_instance = window.jQuery(this.input).select2(options);
       this.select2v4 = this.select2_instance.select2.hasOwnProperty("amd");
 
-      this.select2_eventhandler = function() {
+      // Create change handler
+      this.selectChangeHandler = function() {
         var value = self.select2v4 ? self.select2_instance.val(): self.select2_instance.select2('val');
-        if (self.newEnumAllowed) self.addNewOption(value); // Add new enum option if "tags" is enabled
-        self.input.value = value;
-        self.onInputChange();
+        self.updateValue(value);
+        self.onChange(true);
       };
 
-      this.select2_instance.on('change',this.select2_eventhandler);
-      this.select2_instance.on('select2-blur',this.select2_eventhandler);
-
+      // Add event handler.
+      // Note: Must use the "on()" method and not addEventListener()
+      this.select2_instance.on('change', this.selectChangeHandler);
+      this.select2_instance.on('select2-blur',this.selectChangeHandler);
     }
     this._super();
+  },
+  updateValue: function(value) {
+    var sanitized = this.enum_values[0];
+    value = this.typecast(value || '');
+    if (this.enum_values.indexOf(value) === -1) {
+      if (this.newEnumAllowed) {
+        sanitized = this.addNewOption(value) ? value : sanitized;
+      }
+    }
+    else sanitized = value;
+    this.value = sanitized;
+    return sanitized;
+  },
+  addNewOption: function(value) {
+    var sanitized = this.typecast(value), res = false, option_tag;
+
+    if (this.enum_values.indexOf(sanitized) < 0 && sanitized !== '') {
+      // Add to list of valid enum values
+      this.enum_options.push('' + sanitized);
+      this.enum_display.push('' + sanitized);
+      this.enum_values.push(sanitized);
+      // Update Schema enum to prevent triggering error
+      // "Value must be one of the enumerated values"
+      this.schema.enum.push(sanitized);
+
+      option_tag = this.input.querySelector('option[value="' + sanitized + '"]');
+      if (option_tag) {
+        // Remove data attribute to make option tag permanent.
+        option_tag.removeAttribute('data-select2-tag');
+      }
+      else {
+        $(this.input).append(new Option(sanitized, sanitized, false, false)).trigger('change');
+      }
+
+      res = true;
+    }
+    return res;
   },
   enable: function() {
     if (!this.always_disabled) {
