@@ -39,7 +39,7 @@
     "node": ">= 0.8.0"
   },
   "devDependencies": {
-    "ace-builds": "^1.4.4",
+    "ace-builds": "^1.4.5",
     "grunt": "^1.0.4",
     "grunt-contrib-concat": "~1.0.0",
     "grunt-contrib-connect": "~2.0.0",
