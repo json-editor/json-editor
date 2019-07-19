@@ -28,16 +28,16 @@ JSONEditor.defaults.editors.autocomplete = JSONEditor.defaults.editors.string.ex
         'baseClass': 'autocomplete'
       }, JSONEditor.defaults.options.autocomplete || {}, this.options.autocomplete || {}));
 
-      if (typeof options.url === 'string' && typeof options.getResultValue === 'function' && typeof options.search === 'function') {
+      if (typeof options.url === 'string') {
         this.autocomplete_url = options.url;
         delete options.url; // Not part of the real "autocomplete" options
+      }
 
-        this.autocomplete_wrapper.classList.add(options.baseClass);
-        this.autocomplete_dropdown.classList.add(options.baseClass + '-result-list');
+      this.autocomplete_wrapper.classList.add(options.baseClass);
+      this.autocomplete_dropdown.classList.add(options.baseClass + '-result-list');
         //this.input.classList.add(options.baseClass + '-input');
 
-        this.autocomplete_instance = new window.Autocomplete(this.autocomplete_wrapper, options);
-      }
+      this.autocomplete_instance = new window.Autocomplete(this.autocomplete_wrapper, options);
     }
     this._super();
   },
