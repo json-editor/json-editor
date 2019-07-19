@@ -21,11 +21,33 @@ JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
 
     this.input = this.getButton(options.text, options.icon, options.text);
     this.input.addEventListener('click', options.action, false);
+
+    if(this.schema.readOnly || this.schema.readonly || this.schema.template) {
+      this.always_disabled = true;
+      this.input.setAttribute('readonly', 'true');
+    }
+
+    // Set custom attributes on input element. Parameter is array of protected keys. Empty array if none.
+    this.setInputAttributes(['readonly']);
+
     this.control = this.theme.getFormControl(this.label, this.input, this.description);
     this.container.appendChild(this.control);
 
   },
+  enable: function() {
+    if(!this.always_disabled) {
+      this.input.disabled = false;
+      this._super();
+    }
+  },
+  disable: function(always_disabled) {
+    if(always_disabled) this.always_disabled = true;
+    this.input.disabled = true;
+    this._super();
+  },
   getNumColumns: function() {
     return 2;
-  }
+  },
+  activate: function() {},
+  deactivate: function() {}
 });
