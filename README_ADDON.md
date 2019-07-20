@@ -137,8 +137,21 @@ For configuration options, see the [Autocomplete homepage](https://autocomplete.
 **Global options:** ``JSONEditor.defaults.options.autocomplete``<br>
 **Schema options:** ``options.autocomplete``<br>
 **Options callback** ``JSONEditor.defaults.callbacks.autocomplete``<br>
-**Required options:**  ``url`` (string), ``getResultValue`` (callback), ``search`` (callback)<br>
+**Required options:** ``search`` (callback)<br>
 **Source:** src/editors/autocomplete.js
+<br>
+
+### Checkbox
+**Description**
+Checkbox format.
+
+**Trigger:** ``"format": "checkbox"`` + enum<br>
+**Supported Types:** string, integer, number, boolean<br>
+**Global options:** N/A<br>
+**Schema options:** N/A<br>
+**Options callback** N/A<br>
+**Required options:** none<br>
+**Source:** src/editors/checkbox.js
 <br>
 
 ### Cleave
@@ -159,6 +172,20 @@ For configuration options, see the [Cleave homepage](https://nosir.github.io/cle
 **Options callback** ``JSONEditor.defaults.callbacks.cleave``<br>
 **Required options:** none<br>
 **Source:** src/editors/string.js
+<br>
+
+### Flatpickr
+**Description**
+Lightweight and powerful datetime picker.<br>
+For configuration options, see the [Flatpickr homepage](https://flatpickr.js.org/).
+
+**Trigger:** ``"format": "datetime-local"``, ``"format": "date"`` or ``"format": "time"``<br>
+**Supported Types:** string, integer<br>
+**Global options:** ``JSONEditor.defaults.options.flatpickr<br>
+**Schema options:** ``options.flatpickr<br>
+**Options callback** ``JSONEditor.defaults.callbacks.flatpickr<br>
+**Required options:** none<br>
+**Source:** src/editors/datetime.js
 <br>
 
 ### Jodit
@@ -229,6 +256,19 @@ For configuration options, see the [SimpleMDE homepage](https://simplemde.com/).
 **Options callback** ``JSONEditor.defaults.callbacks.simplemde``<br>
 **Required options:**  none<br>
 **Source:** src/editors/simplemde.js
+<br>
+
+### Starrating
+**Description**
+Star based rating.
+
+**Trigger:** ``"format": "rating"``<br>
+**Supported Types:** string, integer<br>
+**Global options:** ``JSONEditor.defaults.options.rating<br>
+**Schema options:** ``options.rating<br>
+**Options callback** N/A<br>
+**Required options:**  none<br>
+**Source:** src/editors/starrating.js
 <br>
 
 ### UUID

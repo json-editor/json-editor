@@ -25,13 +25,12 @@ JSONEditor.defaults.editors.autocomplete = JSONEditor.defaults.editors.string.ex
       // Get options, either global options from "JSONEditor.defaults.options.autocomplete" or
       // single property options from schema "options.autocomplete"
       options = this.expandCallbacks('autocomplete', $extend({}, {
+        'search': function(jseditor, input) {
+          console.log('No "search" callback defined for autocomplete in property "' + jseditor.key + '"');
+return [];
+        }.bind(null, this),
         'baseClass': 'autocomplete'
       }, JSONEditor.defaults.options.autocomplete || {}, this.options.autocomplete || {}));
-
-      if (typeof options.url === 'string') {
-        this.autocomplete_url = options.url;
-        delete options.url; // Not part of the real "autocomplete" options
-      }
 
       this.autocomplete_wrapper.classList.add(options.baseClass);
       this.autocomplete_dropdown.classList.add(options.baseClass + '-result-list');
