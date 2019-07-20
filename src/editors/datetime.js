@@ -114,6 +114,7 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
       else if (this.schema.format == 'time') dateValue = time;
 
       this.input.value = dateValue;
+      this.refreshValue();
       if (this.flatpickr) this.flatpickr.setDate(dateValue);
     }
   },
