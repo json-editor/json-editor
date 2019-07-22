@@ -179,6 +179,14 @@ JSONEditor.defaults.languages.en = {
    * When a integer date is less than 1 January 1970
    */
   error_invalid_epoch: 'Date must be greater than 1 January 1970',
+  /**
+   * When an IPv4 is in incorrect format
+   */
+  error_ipv4: 'Value must be a valid IPv4 address in the form of 4 numbers between 0 and 255, separated by dots',
+  /**
+   * When an IPv6 is in incorrect format
+   */
+  error_ipv6: 'Value must be a valid IPv6 address',
 
   /**
    * Text on Delete All buttons
@@ -407,4 +415,7 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
 // Enable custom editor type
 JSONEditor.defaults.resolvers.unshift(function(schema) {
   if (schema.type === "string" && schema.format === "uuid") return "uuid";
+});
+JSONEditor.defaults.resolvers.unshift(function(schema) {
+  if (schema.type === "string" && ['ip', 'ipv4', 'ipv6'].indexOf(schema.format) !== -1 ) return "ip";
 });
