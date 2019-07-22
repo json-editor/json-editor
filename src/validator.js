@@ -631,6 +631,10 @@ JSONEditor.Validator = Class.extend({
         }
       }
     }
+
+    // Internal validators using the custom validator format
+    errors = errors.concat(ipValidator.validate.call(self,schema,value,path));
+
     // Custom type validation (global)
     $each(JSONEditor.defaults.custom_validators,function(i,validator) {
       errors = errors.concat(validator.call(self,schema,value,path));
