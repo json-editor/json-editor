@@ -9,6 +9,13 @@ JSONEditor.defaults.editors.uuid = JSONEditor.defaults.editors.string.extend({
     // Force pattern validation
     this.jsoneditor.validator.schema.properties[this.key].pattern = this.schema.pattern = '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$';
 
+    // Set cleave options if no existing options is present
+    if (!this.schema.options) this.schema.options = {};
+    if (!this.schema.options.cleave) this.schema.options.cleave = {
+        delimiters: ['-'],
+        blocks: [8, 4, 4, 4, 12]
+      };
+
     // Set field to readonly and hide field, label and description
     //this.schema.readonly = this.options.compact = this.options.hidden = true;
   },
