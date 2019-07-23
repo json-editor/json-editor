@@ -21,6 +21,7 @@ $ npm run build
 $ codeceptjs run
 ```
 
+Tests whose `Scenario` string contains the tag `@optional` will be ignored by the automated build process.
 
 ### References
 
