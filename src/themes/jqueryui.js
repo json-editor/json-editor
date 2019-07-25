@@ -55,11 +55,12 @@ JSONEditor.defaults.themes.jqueryui = JSONEditor.AbstractTheme.extend({
     el.style.fontSize = '.7em';
     return el;
   },
-  getFormInputLabel: function(text) {
+  getFormInputLabel: function(text, req) {
     var el = document.createElement('label');
     el.style.fontWeight = 'bold';
     el.style.display = 'block';
     el.textContent = text;
+    if (req) el.classList.add('required');    
     return el;
   },
   getButton: function(text, icon, title) {

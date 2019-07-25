@@ -1,6 +1,6 @@
 JSONEditor.defaults.themes.html = JSONEditor.AbstractTheme.extend({
-  getFormInputLabel: function(text) {
-    var el = this._super(text);
+  getFormInputLabel: function(text, req) {
+    var el = this._super(text, req);
     el.style.display = 'block';
     el.style.marginBottom = '3px';
     el.style.fontWeight = 'bold';
