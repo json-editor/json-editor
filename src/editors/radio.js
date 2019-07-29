@@ -1,4 +1,4 @@
-JSONEditor.defaults.editors.radio = JSONEditor.defaults.editors.string.extend({
+JSONEditor.defaults.editors.radio = JSONEditor.defaults.editors.select.extend({
   build: function () {
     var self = this;
 
@@ -9,7 +9,6 @@ JSONEditor.defaults.editors.radio = JSONEditor.defaults.editors.string.extend({
 
     this.radioContainer = document.createElement('div');
 
-    this.enum_values = this.schema.enum;
     this.radioGroup = [];
 
     var radioInputEventhandler = function(e) {
@@ -39,7 +38,7 @@ JSONEditor.defaults.editors.radio = JSONEditor.defaults.editors.string.extend({
 
       // contains the displayed text to the label
       var radioLabelText = document.createElement('span');
-      radioLabelText.innerText = this.enum_values[i];
+      radioLabelText.innerText = this.enum_display[i];
       radioLabelText.classList.add('radio__label');
 
       // permits the addition of styles for the radio itself (if you want it to look differently than browser default)
