@@ -76,7 +76,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
       type = input.type;
 
       // Checkboxes get wrapped in p elements.
-      if (type && type === 'checkbox') {
+      if (type && (type === 'checkbox' || type === 'radio')) {
 
         ctrl = document.createElement('p');
         if (label) {
