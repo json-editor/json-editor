@@ -36,36 +36,29 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
   },
   getFormInputField: function(type) {
     var el = this._super(type);
-    if(type !== 'checkbox') {
-      el.classList.add('form-control');
+    if (type !== "checkbox" && type !== "radio") {
+      el.classList.add("form-control");
     }
     return el;
   },
-  getFormControl: function(label, input, description, infoText) {
-    var group = document.createElement('div');
+  getFormControl: function(label, input, description) {
+    var group = document.createElement("div");
 
-    if(label && input.type === 'checkbox') {
-      group.classList.add('checkbox');
-      label.appendChild(input);
-      label.style.fontSize = '14px';
-      group.style.marginTop = '0';
-      if(infoText) group.appendChild(infoText);
+    if (label && (input.type === "checkbox" || input.type === "radio")) {
+      group.classList.add(input.type);
+      label.insertBefore(input, label.firstChild);
       group.appendChild(label);
-      input.style.position = 'relative';
-      input.style.cssFloat = 'left';
     }
     else {
-      group.classList.add('form-group');
-      if(label) {
-        label.classList.add('control-label');
+      group.classList.add("form-group");
+      if (label) {
+        label.classList.add("control-label");
         group.appendChild(label);
       }
-
-      if(infoText) group.appendChild(infoText);
       group.appendChild(input);
     }
 
-    if(description) group.appendChild(description);
+    if (description) group.appendChild(description);
 
     return group;
   },

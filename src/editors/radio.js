@@ -23,33 +23,24 @@ JSONEditor.defaults.editors.radio = JSONEditor.defaults.editors.select.extend({
       var id = this.key + '-' + i;
 
       // form radio elements
-      var radioInput = this.theme.getFormInputField('radio');
-      radioInput.name = this.formname;
-      radioInput.value = this.enum_values[i];
-      radioInput.id = id;
-      radioInput.classList.add('radio__field');
-      radioInput.addEventListener('change', radioInputEventhandler, false);
-      this.radioGroup.push(radioInput);
+      this.input = this.theme.getFormInputField('radio');
+      this.input.name = this.formname;
+      this.input.value = this.enum_values[i];
+      this.input.id = id;
+
+      // Set custom attributes on input element. Parameter is array of protected keys. Empty array if none.
+      this.setInputAttributes(['id', 'value', 'name']);
+
+
+      this.input.addEventListener('change', radioInputEventhandler, false);
+      this.radioGroup.push(this.input);
 
       // form-label for radio elements
-      var radioLabel = document.createElement('label');
+      var radioLabel = this.theme.getFormInputLabel(this.enum_display[i]);
       radioLabel.htmlFor = id;
-      radioLabel.classList.add('radio');
 
-      // contains the displayed text to the label
-      var radioLabelText = document.createElement('span');
-      radioLabelText.innerText = this.enum_display[i];
-      radioLabelText.classList.add('radio__label');
+      this.radioContainer.appendChild(this.theme.getFormControl(radioLabel, this.input, this.description));
 
-      // permits the addition of styles for the radio itself (if you want it to look differently than browser default)
-      var radioLabelIcon = document.createElement('span');
-      radioLabelIcon.classList.add('radio__icon');
-
-      radioLabel.appendChild(radioInput);
-      radioLabel.appendChild(radioLabelIcon);
-      radioLabel.appendChild(radioLabelText);
-
-      this.radioContainer.appendChild(radioLabel);
     }
 
     if(this.schema.readOnly || this.schema.readonly) {

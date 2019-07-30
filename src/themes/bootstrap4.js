@@ -31,7 +31,7 @@ JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
   },
   getFormInputField: function(type) {
     var el = this._super(type);
-    if (type !== "checkbox") {
+    if (type !== "checkbox" && type !== "radio") {
       el.classList.add("form-control");
     }
     return el;
@@ -39,15 +39,15 @@ JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
   getFormControl: function(label, input, description) {
     var group = document.createElement("div");
 
-    if (label && input.type === "checkbox") {
-      group.classList.add("checkbox");
-      label.appendChild(input);
-      label.style.fontSize = "14px";
-      group.style.marginTop = "0";
+    if (label && (input.type === "checkbox" || input.type === "radio")) {
+      group.classList.add("form-check");
+      label.classList.add("form-check-label");
+      input.classList.add("form-check-input");
+      //label.appendChild(input);
+      label.insertBefore(input, label.firstChild);
       group.appendChild(label);
-      input.style.position = "relative";
-      input.style.cssFloat = "left";
-    } else {
+    }
+    else {
       group.classList.add("form-group");
       if (label) {
         label.classList.add("form-control-label");
