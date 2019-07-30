@@ -69,7 +69,7 @@ JSONEditor.defaults.themes.tailwind = JSONEditor.AbstractTheme.extend({
     },
     getFormInputField: function (type) {
         var el = this._super(type);
-        if (type !== "checkbox") {
+        if (type !== "checkbox" && type !== "radio") {
             el.classList.add(
                 "block",
                 "w-full",
@@ -95,12 +95,12 @@ JSONEditor.defaults.themes.tailwind = JSONEditor.AbstractTheme.extend({
     getFormControl: function (label, input, description) {
         var group = document.createElement("div");
 
-        if (label && input.type === "checkbox") {
-            group.classList.add("checkbox", "mt-0");
+        if (label &&( input.type === "checkbox" || input.type === "radio")) {
+            group.classList.add(input.type, "mt-0");
             label.appendChild(input);
             label.classList.add("block", "mt-0", "text-xs");
             group.appendChild(label);
-            input.classList.add("relative", "float-left");
+            input.classList.add("relative", "float-left", "mr-1");
         } else {
             group.classList.add("form-group", "mb-2");
             if (label) {

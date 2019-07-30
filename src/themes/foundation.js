@@ -37,7 +37,7 @@ JSONEditor.defaults.themes.foundation = JSONEditor.AbstractTheme.extend({
   getFormInputField: function(type) {
     var el = this._super(type);
     el.style.width = '100%';
-    el.style.marginBottom = type==='checkbox'? '0' : '12px';
+    el.style.marginBottom = (type==='checkbox' || type==='radio')? '0' : '12px';
     return el;
   },
   getFormInputDescription: function(text) {
@@ -372,7 +372,8 @@ JSONEditor.defaults.themes.foundation6 = JSONEditor.defaults.themes.foundation5.
     var el = document.createElement('div');
     el.classList.add('form-control');
     if(label) el.appendChild(label);
-    if(input.type === 'checkbox') {
+    if(input.type === 'checkbox' || input.type === 'radio') {
+      input.style.width = 'auto';
       label.insertBefore(input,label.firstChild);
     }
     else if (label) {
