@@ -43,7 +43,7 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
     return el;
   },
   getButtonHolder: function() {
-    var el = this._super();  ;
+    var el = this._super();
     el.classList.add('btn-group');
     return el;
   },
@@ -138,10 +138,17 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
 
     var button = document.createElement('button');
     button.classList.add('btn', 'btn-primary', 'btn-sm', 'btn-action', 's-circle');
+    // class "btn-sm" is too big
+    button.style.fontWeight = 'bold';  
+    button.style.fontSize = '.5rem';
+    button.style.lineHeight = '.5rem';
+    button.style.height = '1rem';
+    button.style.width = '1rem';
+    button.style.padding = '.25rem';
+    button.style.margin = '.3rem 0';
     popover.appendChild(button);
 
-    var icon = document.createElement('i');
-    icon.classList.add('icon', 'icon-message');
+    var icon = document.createTextNode('I');
     button.appendChild(icon);
 
     var container = document.createElement('div');
