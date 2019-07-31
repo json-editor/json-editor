@@ -207,7 +207,8 @@ JSONEditor.AbstractTheme = Class.extend({
     var el = document.createElement('div');
     el.classList.add('form-control');
     if(label) el.appendChild(label);
-    if(input.type === 'checkbox' && label) {
+    if((input.type === 'checkbox' || input.type === 'radio') && label) {
+      input.style.width = 'auto';  
       label.insertBefore(input,label.firstChild);
       if(infoText) label.appendChild(infoText);
     }

@@ -95,20 +95,23 @@ JSONEditor.defaults.themes.bootstrap2 = JSONEditor.AbstractTheme.extend({
   },
   getFormControl: function(label, input, description, infoText) {
     var ret = document.createElement('div');
-    ret.classList.add('control-group');
 
     var controls = document.createElement('div');
-    controls.classList.add('controls');
 
-    if(label && input.getAttribute('type') === 'checkbox') {
+    if(label && (input.getAttribute('type') === 'checkbox' || input.getAttribute('type') === 'radio')) {
       ret.appendChild(controls);
-      label.classList.add('checkbox');
-      label.appendChild(input);
+      controls.classList.add('form-check');
+      label.classList.add('form-check-label');
+      input.classList.add('form-check-input');
+      input.style.margin = '0 4px 4px 0';
+      input.style.width = 'auto';
+      controls.appendChild(input);
       controls.appendChild(label);
       if(infoText) controls.appendChild(infoText);
       controls.style.height = '30px';
     }
     else {
+    ret.classList.add('control-group');
       if(label) {
         label.classList.add('control-label');
         ret.appendChild(label);
