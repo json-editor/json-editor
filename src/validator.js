@@ -313,7 +313,7 @@ JSONEditor.Validator = Class.extend({
           errors.push({
             path: path,
             property: 'pattern',
-            message: this.translate('error_pattern', [schema.pattern])
+            message: (schema.options && schema.options.patternmessage) ? schema.options.patternmessage : this.translate('error_pattern', [schema.pattern])
           });
         }
       }
