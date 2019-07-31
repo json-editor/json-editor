@@ -125,12 +125,14 @@ JSONEditor.AbstractTheme = Class.extend({
     el.style.width = 'auto';
     return el;
   },
-  getMultiCheckboxHolder: function(controls,label,description) {
+  getMultiCheckboxHolder: function(controls,label,description, infoText) {
     var el = document.createElement('div');
+    el.classList.add('control-group');
 
     if(label) {
       label.style.display = 'block';
       el.appendChild(label);
+      if(infoText) label.appendChild(infoText);
     }
 
     for(var i in controls) {

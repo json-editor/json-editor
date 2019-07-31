@@ -186,7 +186,7 @@ JSONEditor.AbstractEditor = Class.extend({
   build: function() {
 
   },
-  postBuild: function() {
+  postBuild: function() {       
     this.setupWatchListeners();
     this.addLinks();
     this.setValue(this.getDefault(), true);
@@ -608,6 +608,14 @@ JSONEditor.AbstractEditor = Class.extend({
         }
       }
     }
+  },
+  expandCallbacks: function(scope, options) {
+    for (var i in options) {
+      if (options.hasOwnProperty(i) && typeof options[i] === 'string' && typeof JSONEditor.defaults.callbacks[scope] === 'object' && typeof JSONEditor.defaults.callbacks[scope][options[i]] === 'function') {
+        options[i] = JSONEditor.defaults.callbacks[scope][options[i]].bind(null, this);//.bind(this);
+      }
+    }
+    return options;
   },
   getOption: function(key) {
     try {

@@ -31,19 +31,6 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
 
     this.input.value = sanitized;
     
-    // If using SCEditor, update the WYSIWYG
-    if(this.sceditor_instance) {
-      this.sceditor_instance.val(sanitized);
-    }
-    else if(this.SimpleMDE) {
-      this.SimpleMDE.value(sanitized);
-    }
-    else if(this.ace_editor) {
-      this.ace_editor.setValue(sanitized);
-      this.ace_editor.session.getSelection().clearSelection();
-      this.ace_editor.resize();
-    }
-    
     var changed = from_template || this.getValue() !== value;
     
     this.refreshValue();
@@ -55,6 +42,9 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
 
     // Bubble this setValue to parents if the value changed
     this.onChange(changed);
+
+    // Return object with changed state and sanitized value for use in editors that extend this
+    return {changed: changed, value: sanitized};
   },
   getNumColumns: function() {
     var min = Math.ceil(Math.max(this.getTitle().length,this.schema.maxLength||0,this.schema.minLength||0)/5);
@@ -103,66 +93,6 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
         }
 
         this.input = this.theme.getRangeInput(min,max,step);
-      }
-      // Source Code
-      else if([
-          'actionscript',
-          'batchfile',
-          'bbcode',
-          'c',
-          'c++',
-          'cpp',
-          'coffee',
-          'csharp',
-          'css',
-          'dart',
-          'django',
-          'ejs',
-          'erlang',
-          'golang',
-          'groovy',
-          'handlebars',
-          'haskell',
-          'haxe',
-          'html',
-          'ini',
-          'jade',
-          'java',
-          'javascript',
-          'json',
-          'less',
-          'lisp',
-          'lua',
-          'makefile',
-          'markdown',
-          'matlab',
-          'mysql',
-          'objectivec',
-          'pascal',
-          'perl',
-          'pgsql',
-          'php',
-          'python',
-          'r',
-          'ruby',
-          'sass',
-          'scala',
-          'scss',
-          'smarty',
-          'sql',
-          'sqlserver',
-          'stylus',
-          'svg',
-          'twig',
-          'vbscript',
-          'xml',
-          'yaml'
-        ].indexOf(this.format) >= 0
-      ) {
-        this.input_type = this.format;
-        this.source_code = true;
-        
-        this.input = this.theme.getTextareaInput();
       }
       // HTML5 Input type
       else {
@@ -295,115 +225,28 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
       this.refreshValue();
     }
   },
-  postBuild: function() {
-    this._super();
+  setupCleave: function(el) {
     // Enable cleave.js support if library is loaded and config is available
-    if (window.Cleave && this.schema.options && typeof this.schema.options.cleave == 'object') {
-      this.cleave = new window.Cleave(this.input, this.schema.options.cleave);
+    var options = this.expandCallbacks('cleave', $extend({}, JSONEditor.defaults.options.cleave || {}, this.options.cleave || {}));
+    if (Array.Keys(options).length > 0) {
+      this.cleave_instance = new window.Cleave(el, options);
     }
   },
   enable: function() {
     if(!this.always_disabled) {
       this.input.disabled = false;
-      // TODO: WYSIWYG and Markdown editors
       this._super();
     }
   },
   disable: function(always_disabled) {
     if(always_disabled) this.always_disabled = true;
     this.input.disabled = true;
-    // TODO: WYSIWYG and Markdown editors
     this._super();
   },
   afterInputReady: function() {
-    var self = this, options;
-    
-    // Code editor
-    if(this.source_code) {      
-      // WYSIWYG html and bbcode editor
-      if(this.options.wysiwyg && 
-        ['html','bbcode'].indexOf(this.input_type) >= 0 && 
-        window.jQuery && window.jQuery.fn && window.jQuery.fn.sceditor
-      ) {
-        options = $extend({},{
-          plugins: self.input_type==='html'? 'xhtml' : 'bbcode',
-          emoticonsEnabled: false,
-          width: '100%',
-          height: 300
-        },JSONEditor.plugins.sceditor,self.options.sceditor_options||{});
-        
-        window.jQuery(self.input).sceditor(options);
-        
-        self.sceditor_instance = window.jQuery(self.input).sceditor('instance');
-        
-        self.sceditor_instance.blur(function() {
-          // Get editor's value
-          var val = window.jQuery("<div>"+self.sceditor_instance.val()+"</div>");
-          // Remove sceditor spans/divs
-          window.jQuery('#sceditor-start-marker,#sceditor-end-marker,.sceditor-nlf',val).remove();
-          // Set the value and update
-          self.input.value = val.html();
-          self.value = self.input.value;
-          self.is_dirty = true;
-          self.onChange(true);
-        });
-      }
-      // SimpleMDE for markdown (if it's loaded)
-      else if (this.input_type === 'markdown' && window.SimpleMDE) {
-        options = $extend({},JSONEditor.plugins.SimpleMDE,{
-          element: this.input
-        });
-
-        this.SimpleMDE = new window.SimpleMDE((options));
-
-        this.SimpleMDE.codemirror.on("change",function() {
-          self.value = self.SimpleMDE.value();
-          self.is_dirty = true;
-          self.onChange(true);
-        });
-      }
-      // ACE editor for everything else
-      else if(window.ace) {
-        var mode = this.input_type;
-        // aliases for c/cpp
-        if(mode === 'cpp' || mode === 'c++' || mode === 'c') {
-          mode = 'c_cpp';
-        }
-        
-        this.ace_container = document.createElement('div');
-        this.ace_container.style.width = '100%';
-        this.ace_container.style.position = 'relative';
-        this.ace_container.style.height = '400px';
-        this.input.parentNode.insertBefore(this.ace_container,this.input);
-        this.input.style.display = 'none';
-        this.ace_editor = window.ace.edit(this.ace_container);
-        
-        var aceOptions = this.schema.options && this.schema.options.ace;
-        if (aceOptions) {
-          this.ace_editor.setOptions(aceOptions);
-        }
-
-        this.ace_editor.setValue(this.getValue());
-        this.ace_editor.session.getSelection().clearSelection();
-        this.ace_editor.resize();
-
-        // The theme
-        if(JSONEditor.plugins.ace.theme) this.ace_editor.setTheme('ace/theme/'+JSONEditor.plugins.ace.theme);
-        // The mode
-        this.ace_editor.getSession().setMode('ace/mode/' + this.schema.format);
-
-        // Listen for changes
-        this.ace_editor.on('change',function() {
-          var val = self.ace_editor.getValue();
-          self.input.value = val;
-          self.refreshValue();
-          self.is_dirty = true;
-          self.onChange(true);
-        });
-      }
-    }
-    
+    var self = this;
     self.theme.afterInputReady(self.input);
+    if (window.Cleave && !self.cleave_instance) self.setupCleave(self.input);
   },
   refreshValue: function() {
     this.value = this.input.value;
@@ -411,19 +254,8 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
     this.serialized = this.value;
   },
   destroy: function() {
-    // If using SCEditor, destroy the editor instance
-    if(this.sceditor_instance) {
-      this.sceditor_instance.destroy();
-    }
-    else if(this.SimpleMDE) {
-      this.SimpleMDE.toTextArea();
-      this.SimpleMDE = null;
-    }
-    else if(this.ace_editor) {
-      this.ace_editor.destroy();
-    }
-    if (this.cleave) {
-      this.cleave.destroy();
+    if (this.cleave_instance) {
+      this.cleave_instance.destroy();
     }
 
     this.template = null;

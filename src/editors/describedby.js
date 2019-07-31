@@ -75,6 +75,7 @@ JSONEditor.defaults.editors.describedBy = JSONEditor.AbstractEditor.extend({
     });
 
     this.refreshValue();
+    this.onChange(true);
   },
   buildChildEditor: function(ref) {
     this.refs[ref] = this.editors.length;
