@@ -19,8 +19,6 @@ JSONEditor.defaults.editors.choices = JSONEditor.defaults.editors.select.extend(
 
       this.value = sanitized;
       this.onChange();
-      this.change();
-
     }
     else this._super(value,initial);
   },

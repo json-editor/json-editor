@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <script src="../../dist/jsoneditor.js"></script>
+</head>
+<body>
+
+<textarea class="value" cols="30" rows="10"></textarea>
+<button class='get-value'>get value</button>
+<div class='container'></div>
+
+<script>
+  var container = document.querySelector('.container');
+  var value = document.querySelector('.value');
+  var getValue = document.querySelector('.get-value');
+
+  var schema = {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "definitions": {
+          "animal": {
+              "type": "object",
+              "properties": {
+                  "id": {
+                      "type": "number"
+                  }
+              },
+              "required": [
+                  "id"
+              ]
+          },
+          "landAnimal": {
+              "allOf": [
+                  {
+                      "$ref": "#/definitions/animal"
+                  }
+              ],
+              "type": "object",
+              "title": "Land Animal",
+              "properties": {
+                  "numLegs": {
+                      "type": "integer"
+                  }
+              },
+              "required": [
+                  "numLegs"
+              ]
+          }
+      },
+      "allOf": [
+          {
+              "$ref": "#/definitions/landAnimal"
+          }
+      ],
+      "type": "object",
+      "title": "Cat",
+      "properties":{
+          "breed":{"type":"string"}
+      },
+      "required":["breed"]
+  };
+
+  var editor = new JSONEditor(container, {
+    schema: schema,
+    show_errors: 'always'
+  });
+
+  getValue.addEventListener('click', function () {
+    value.value = JSON.stringify(editor.getValue());
+    console.log(editor.getValue());
+  });
+
+</script>
+
+</body>
+</html>

@@ -2,7 +2,7 @@ JSONEditor.defaults.editors.starrating = JSONEditor.defaults.editors.string.exte
   build: function () {
     var self = this;
 
-    if(!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle());
+    if(!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired());
     if(this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description);
     if(this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText);
     if(this.options.compact) this.container.classList.add('compact');

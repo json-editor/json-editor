@@ -29,7 +29,7 @@ JSONEditor.defaults.editors.base64 = JSONEditor.AbstractEditor.extend({
   },
   build: function() {
     var self = this;
-    this.title = this.header = this.label = this.theme.getFormInputLabel(this.getTitle());
+    this.title = this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired());
     if(this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText);
 
     // Input that holds the base64 string
