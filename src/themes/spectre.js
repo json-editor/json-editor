@@ -6,6 +6,16 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
       el.classList.add('col-mx-auto');
     }
   },
+  getGridContainer: function() {
+    var el = document.createElement('div');
+    el.classList.add('container');
+    return el;
+  },
+  getGridColumn: function() {
+    var el = document.createElement('div');
+    el.classList.add('column');
+    return el;
+  },
   getGridRow: function() {
     var el = document.createElement('div');
     el.classList.add('columns');
@@ -52,7 +62,16 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
     el.style.fontWeight = 'bold';
     return el;
   },
+  getCheckboxLabel: function(text) {
+    var el = this.getFormInputLabel(text);
+    el.style.fontWeight = 'normal';
+    return el;
+  },
 
+  getCheckbox: function() {
+    var el = this.getFormInputField('checkbox');
+    return el;
+  },
   getSelectInput: function(options) {
     var el = this._super(options);
     el.classList.add('form-select');
@@ -70,13 +89,16 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
     }
     return el;
   },
-  getFormControl: function(label, input, description) {
+  getFormControl: function(label, input, description, infoText) {
     var group = document.createElement('div');
     group.classList.add('form-group');
 
     if (['checkbox', 'radio'].indexOf(input.type) > -1 && label) {
       label.appendChild(input);
       label.classList.add('form-' + input.type);
+      var icon = document.createElement('i');
+      icon.classList.add('form-icon');
+      label.appendChild(icon);
       group.appendChild(label);
     }
     else {
@@ -84,6 +106,8 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
         label.classList.add('form-label');
         group.appendChild(label);
       }
+      if (infoText) group.insertBefore(infoText, group.firstChild);
+
       group.appendChild(input);
     }
 
@@ -98,17 +122,42 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
     var inputGroup = document.createElement('div');
     inputGroup.classList.add('input-group');
     inputGroup.appendChild(input);
-/*
-    var inputGroup = document.createElement('div');
-    inputGroup.classList.add('input-group-prepend');
-    inputGroupContainer.appendChild(inputGroup);*/
-
     for(var i=0;i<buttons.length;i++) {
       buttons[i].classList.add('input-group-btn');
       inputGroup.appendChild(buttons[i]);
     }
 
     return inputGroup;
+  },
+
+  getInfoButton: function(text) {
+
+    var popover = document.createElement('div');
+    popover.style.float = 'right';
+    popover.classList.add('popover');
+
+    var button = document.createElement('button');
+    button.classList.add('btn', 'btn-primary', 'btn-sm', 'btn-action', 's-circle');
+    popover.appendChild(button);
+
+    var icon = document.createElement('i');
+    icon.classList.add('icon', 'icon-message');
+    button.appendChild(icon);
+
+    var container = document.createElement('div');
+    container.classList.add('popover-container');
+    popover.appendChild(container);
+
+    var card = document.createElement('div');
+    card.classList.add('card');
+    container.appendChild(card);
+
+    var cardbody = document.createElement('div');
+    cardbody.classList.add('card-body');
+    cardbody.innerHTML = text;
+    card.appendChild(cardbody);
+
+    return popover;
   },
 
   /* Controls output of errormessages displayed in form */
