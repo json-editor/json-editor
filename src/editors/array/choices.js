@@ -18,7 +18,7 @@ JSONEditor.defaults.editors.arrayChoices = JSONEditor.AbstractEditor.extend({
     // Dynamic Enum for arrays is not specified in docs
   },
   build: function() {
-    this.title = this.theme.getFormInputLabel(this.getTitle());
+    this.title = this.theme.getFormInputLabel(this.getTitle(), this.isRequired());
 
     this.title_controls = this.theme.getHeaderButtonHolder();
     this.title.appendChild(this.title_controls);
