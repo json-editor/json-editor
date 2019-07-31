@@ -2,3 +2,4 @@
 /.idea/
 /dist/
 /tests/codeceptjs/output
+.vscode
