@@ -1,7 +1,7 @@
 JSONEditor.defaults.editors.radio = JSONEditor.defaults.editors.select.extend({
   build: function () {
     var self = this;
-
+    this.label = '';
     if(!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired());
     if(this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description);
     if(this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText);
@@ -12,34 +12,32 @@ JSONEditor.defaults.editors.radio = JSONEditor.defaults.editors.select.extend({
     this.radioGroup = [];
 
     var radioInputEventhandler = function(e) {
-      e.preventDefault();
-      e.stopPropagation();
       self.setValue(this.value);
       self.onChange(true);
     };
 
     for(var i = 0; i < this.enum_values.length; i++) {
 
-      var id = this.key + '-' + i;
-
       // form radio elements
-      this.input = this.theme.getFormInputField('radio');
-      this.input.name = this.formname;
-      this.input.value = this.enum_values[i];
-      this.input.id = id;
+      this.input = this.theme.getFormRadio({
+        name: this.formname,
+        id: this.formname + '[' + i + ']',
+        value: this.enum_values[i]
+      });
 
       // Set custom attributes on input element. Parameter is array of protected keys. Empty array if none.
       this.setInputAttributes(['id', 'value', 'name']);
-
 
       this.input.addEventListener('change', radioInputEventhandler, false);
       this.radioGroup.push(this.input);
 
       // form-label for radio elements
-      var radioLabel = this.theme.getFormInputLabel(this.enum_display[i]);
-      radioLabel.htmlFor = id;
+      var radioLabel = this.theme.getFormRadioLabel(this.enum_display[i]);
+      radioLabel.htmlFor = this.input.id;
 
-      this.radioContainer.appendChild(this.theme.getFormControl(radioLabel, this.input, this.description));
+      var control = this.theme.getFormRadioControl(radioLabel, this.input, this.options.compact);
+
+      this.radioContainer.appendChild(control);
 
     }
 
@@ -55,7 +53,7 @@ JSONEditor.defaults.editors.radio = JSONEditor.defaults.editors.select.extend({
     radioContainerWrapper.appendChild(this.radioContainer);
 
     this.input = radioContainerWrapper;
-    
+
     this.control = this.theme.getFormControl(this.label, radioContainerWrapper, this.description, this.infoButton);
     this.container.appendChild(this.control);
   },

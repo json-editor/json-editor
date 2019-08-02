@@ -9,6 +9,12 @@ var matchKey = (function () {
 })();
 
 JSONEditor.AbstractTheme = Class.extend({
+  /* Theme config options that allows changing various aspects of the output */
+  options: {
+    'disable_theme_rules': false
+  },
+  /* Custom stylesheet rules. format: "selector" : "CSS rules" */
+  rules: {},
   getContainer: function() {
     return document.createElement('div');
   },
@@ -105,7 +111,7 @@ JSONEditor.AbstractTheme = Class.extend({
   getCheckboxLabel: function(text, req) {
     var el = this.getFormInputLabel(text);
     el.style.fontWeight = 'normal';
-    if (req) el.classList.add('required');  
+    if (req) el.classList.add('required');
     return el;
   },
   getHeader: function(text) {
@@ -208,7 +214,7 @@ JSONEditor.AbstractTheme = Class.extend({
     el.classList.add('form-control');
     if(label) el.appendChild(label);
     if((input.type === 'checkbox' || input.type === 'radio') && label) {
-      input.style.width = 'auto';  
+      input.style.width = 'auto';
       label.insertBefore(input,label.firstChild);
       if(infoText) label.appendChild(infoText);
     }
@@ -276,6 +282,7 @@ JSONEditor.AbstractTheme = Class.extend({
     button.appendChild(spanEl);
     if(title) button.setAttribute('title',title);
   },
+  // Table functions
   getTable: function() {
     return document.createElement('table');
   },
@@ -462,5 +469,47 @@ JSONEditor.AbstractTheme = Class.extend({
     var tmp = document.createElement('div');
     tmp.innerHTML = txt;
     return (tmp.textContent || tmp.innerText);
+  },
+
+  /* NEW */
+  getFormRadio: function(attributes) {
+    var el = this.getFormInputField('radio');
+    for(var key in attributes){
+      el.setAttribute(key, attributes[key]);
+    }
+    el.style.display = 'inline-block';
+    el.style.width = 'auto';
+    return el;
+  },
+  getFormRadioLabel: function(text, req) {
+    var el = document.createElement('label');
+    el.appendChild(document.createTextNode('\u00A0' + text));
+    if (req) el.classList.add('required');
+    return el;
+  },
+  getFormRadioControl: function(label, input, compact) {
+    var el = document.createElement('div');
+    el.appendChild(label);
+    input.style.width = 'auto';
+    label.insertBefore(input, label.firstChild);
+    if (compact) this.applyStyles(el,{
+      display: 'inline-block',
+      marginRight: '1rem'
+    });
+
+    return el;
+  },
+  getFormCheckboxControl: function(label, input, compact) {
+    var el = document.createElement('div');
+    el.appendChild(label);
+    input.style.width = 'auto';
+    label.insertBefore(input, label.firstChild);
+    if (compact) this.applyStyles(el,{
+      display: 'inline-block',
+      marginRight: '1rem'
+    });
+
+    return el;
   }
+
 });
