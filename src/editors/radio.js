@@ -85,13 +85,9 @@ JSONEditor.defaults.editors.radio = JSONEditor.defaults.editors.select.extend({
   },
   setValue: function (val) {
     for(var i = 0; i < this.radioGroup.length; i++) {
-
       if(this.radioGroup[i].value == val) {
         this.radioGroup[i].checked = true;
         this.value = val;
-        if(this.options.displayValue) {
-          this.displayRating.innerHTML = this.value;
-        }
         this.onChange();
         break;
       }
