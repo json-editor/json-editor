@@ -18,7 +18,7 @@ JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
       }.bind(null, this)
     }, JSONEditor.defaults.options.button || {}, this.options.button || {}));
 
-    this.input = this.theme.getButton(options.text, options.icon, options.text);
+    this.input = this.theme.getFormButton(options.text, options.icon, options.text);
     this.input.addEventListener('click', options.action, false);
 
     if(this.schema.readOnly || this.schema.readonly || this.schema.template) {
