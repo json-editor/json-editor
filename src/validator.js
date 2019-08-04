@@ -11,7 +11,7 @@ JSONEditor.Validator = Class.extend({
     if (typeof value === "object" && value !== null) {
       // Work on a copy of the schema
       var schema = $extend({},this.jsoneditor.expandRefs(this.schema));
-      for (i in schema.properties) {
+      for (var i in schema.properties) {
         if (!schema.properties.hasOwnProperty(i)) {
           extraProperties++;
           continue;
@@ -50,7 +50,7 @@ JSONEditor.Validator = Class.extend({
           message: this.translate("error_notset")
         });
       }
-      
+
       return errors;
     }
 
