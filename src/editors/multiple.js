@@ -237,17 +237,40 @@ JSONEditor.defaults.editors.multiple = JSONEditor.AbstractEditor.extend({
     // Determine type by getting the first one that validates
     var self = this;
     var prev_type = this.type;
+    // find the best match one
+    var fitTestVal = {
+      match: 0,
+      extra: 0,
+      i: 0
+    };
     $each(this.validators, function(i,validator) {
-      if(!validator.validate(val).length) {
-        self.type = i;
-        self.switcher.value = self.display_text[i];
-        return false;
+      if (!validator.validate(val).length) {
+        if (typeof self.anyOf !== "undefined" && self.anyOf) {
+          var fitTestResult = validator.fitTest(val);
+          if (fitTestVal.match < fitTestResult.match) {
+            fitTestVal = fitTestResult;
+            fitTestVal.i = i;
+          } else if (fitTestVal.match === fitTestResult.match) {
+            if (fitTestVal.extra > fitTestResult.extra) {
+              fitTestVal = fitTestResult;
+              fitTestVal.i = i;
+            }
+          }
+        } else {
+          self.type = i;
+          self.switcher.value = self.display_text[i];
+          return false;
+        }
       }
     });
+    if (typeof self.anyOf !== "undefined" && self.anyOf) {
+      self.type = fitTestVal.i;
+      self.switcher.value = self.display_text[fitTestVal.i];
+    }
 
     var type_changed = this.type != prev_type;
     if (type_changed) {
-	this.switchEditor(this.type);
+      this.switchEditor(this.type);
     }
 
     this.editors[this.type].setValue(val,initial);
