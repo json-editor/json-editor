@@ -108,12 +108,6 @@ JSONEditor.AbstractTheme = Class.extend({
     if (req) el.classList.add('required');
     return el;
   },
-  getCheckboxLabel: function(text, req) {
-    var el = this.getFormInputLabel(text);
-    el.style.fontWeight = 'normal';
-    if (req) el.classList.add('required');
-    return el;
-  },
   getHeader: function(text) {
     var el = document.createElement('h3');
     if(typeof text === "string") {
@@ -129,6 +123,12 @@ JSONEditor.AbstractTheme = Class.extend({
     var el = this.getFormInputField('checkbox');
     el.style.display = 'inline-block';
     el.style.width = 'auto';
+    return el;
+  },
+  getCheckboxLabel: function(text, req) {
+    var el = document.createElement('label');
+    el.appendChild(document.createTextNode('\u00A0' + text));
+    if (req) el.classList.add('required');
     return el;
   },
   getMultiCheckboxHolder: function(controls,label,description, infoText) {
@@ -149,6 +149,46 @@ JSONEditor.AbstractTheme = Class.extend({
     }
 
     if(description) el.appendChild(description);
+
+    return el;
+  },
+  getFormCheckboxControl: function(label, input, compact) {
+    var el = document.createElement('div');
+    el.appendChild(label);
+    input.style.width = 'auto';
+    label.insertBefore(input, label.firstChild);
+    if (compact) this.applyStyles(el,{
+      display: 'inline-block',
+      marginRight: '1rem'
+    });
+
+    return el;
+  },
+
+  getFormRadio: function(attributes) {
+    var el = this.getFormInputField('radio');
+    for(var key in attributes){
+      el.setAttribute(key, attributes[key]);
+    }
+    el.style.display = 'inline-block';
+    el.style.width = 'auto';
+    return el;
+  },
+  getFormRadioLabel: function(text, req) {
+    var el = document.createElement('label');
+    el.appendChild(document.createTextNode('\u00A0' + text));
+    if (req) el.classList.add('required');
+    return el;
+  },
+  getFormRadioControl: function(label, input, compact) {
+    var el = document.createElement('div');
+    el.appendChild(label);
+    input.style.width = 'auto';
+    label.insertBefore(input, label.firstChild);
+    if (compact) this.applyStyles(el,{
+      display: 'inline-block',
+      marginRight: '1rem'
+    });
 
     return el;
   },
@@ -199,6 +239,21 @@ JSONEditor.AbstractTheme = Class.extend({
     el.setAttribute('min',min);
     el.setAttribute('max',max);
     el.setAttribute('step',step);
+    return el;
+  },
+  getRangeOutput: function(input, startvalue) {
+    var output = document.createElement('output');
+    output.value = startvalue || 0;
+
+    var updateOutput = function() {output.value = this.value;};
+    input.addEventListener('change', updateOutput, false);
+    input.addEventListener('input', updateOutput, false);
+    return output;
+  },
+  getRangeControl: function(input, output) {
+    var el = document.createElement('div');
+    el.appendChild(input);
+    el.appendChild(output);
     return el;
   },
   getFormInputField: function(type) {
@@ -469,47 +524,5 @@ JSONEditor.AbstractTheme = Class.extend({
     var tmp = document.createElement('div');
     tmp.innerHTML = txt;
     return (tmp.textContent || tmp.innerText);
-  },
-
-  /* NEW */
-  getFormRadio: function(attributes) {
-    var el = this.getFormInputField('radio');
-    for(var key in attributes){
-      el.setAttribute(key, attributes[key]);
-    }
-    el.style.display = 'inline-block';
-    el.style.width = 'auto';
-    return el;
-  },
-  getFormRadioLabel: function(text, req) {
-    var el = document.createElement('label');
-    el.appendChild(document.createTextNode('\u00A0' + text));
-    if (req) el.classList.add('required');
-    return el;
-  },
-  getFormRadioControl: function(label, input, compact) {
-    var el = document.createElement('div');
-    el.appendChild(label);
-    input.style.width = 'auto';
-    label.insertBefore(input, label.firstChild);
-    if (compact) this.applyStyles(el,{
-      display: 'inline-block',
-      marginRight: '1rem'
-    });
-
-    return el;
-  },
-  getFormCheckboxControl: function(label, input, compact) {
-    var el = document.createElement('div');
-    el.appendChild(label);
-    input.style.width = 'auto';
-    label.insertBefore(input, label.firstChild);
-    if (compact) this.applyStyles(el,{
-      display: 'inline-block',
-      marginRight: '1rem'
-    });
-
-    return el;
   }
-
 });
