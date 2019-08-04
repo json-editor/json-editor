@@ -189,22 +189,12 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
 
     if(this.format) this.input.setAttribute('data-schemaformat',this.format);
 
-    this.control = this.theme.getFormControl(this.label, this.input, this.description, this.infoButton);
-
-    // output element to display the range value when it changes or have default.
+    var input = this.input;
     if(this.format === 'range') {
-      var output = document.createElement('output');
-      output.setAttribute('class', 'range-output');
-      this.control.appendChild(output);
-      output.value = this.schema.default || Math.max(this.schema.minimum || 0, 0);
-      this.input.addEventListener('change', function () {
-        output.value = self.input.value;
-      });
-      this.input.addEventListener('input', function () {
-        output.value = self.input.value;
-      });
+      input = this.theme.getRangeControl(this.input, this.theme.getRangeOutput(this.input, this.schema.default || Math.max(this.schema.minimum || 0, 0)));
     }
 
+    this.control = this.theme.getFormControl(this.label, input, this.description, this.infoButton);
     this.container.appendChild(this.control);
 
     // Any special formatting that needs to happen after the input is added to the dom
