@@ -79,6 +79,7 @@ module.exports = function(grunt) {
           'src/editors/sceditor.js',
           'src/editors/select2.js',
           'src/editors/ip.js',
+          'src/editors/info.js', 
 
           // All the themes and iconlibs
           'src/theme.js',

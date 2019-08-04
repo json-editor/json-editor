@@ -252,8 +252,9 @@ JSONEditor.AbstractTheme = Class.extend({
   },
   getRangeControl: function(input, output) {
     var el = document.createElement('div');
+    el.style.textAlign = 'center';
+    if (output) el.appendChild(output);
     el.appendChild(input);
-    el.appendChild(output);
     return el;
   },
   getFormInputField: function(type) {
@@ -311,17 +312,23 @@ JSONEditor.AbstractTheme = Class.extend({
   getFormInputDescription: function(text) {
     return this.getDescription(text);
   },
+  getButtonHolder: function() {
+    return document.createElement('div');
+  },
   getHeaderButtonHolder: function() {
     return this.getButtonHolder();
   },
-  getButtonHolder: function() {
-    return document.createElement('div');
+  getFormButtonHolder: function() {
+    return this.getButtonHolder();
   },
   getButton: function(text, icon, title) {
     var el = document.createElement('button');
     el.type = 'button';
     this.setButtonText(el,text,icon,title);
     return el;
+  },
+  getFormButton: function(text, icon, title) {
+    return this.getButton(text, icon, title);
   },
   setButtonText: function(button, text, icon, title) {
     // Clear previous contents. https://jsperf.com/innerhtml-vs-removechild/37
@@ -337,6 +344,7 @@ JSONEditor.AbstractTheme = Class.extend({
     button.appendChild(spanEl);
     if(title) button.setAttribute('title',title);
   },
+
   // Table functions
   getTable: function() {
     return document.createElement('table');
@@ -377,13 +385,13 @@ JSONEditor.AbstractTheme = Class.extend({
   getTabHolder: function(propertyName) {
     var pName = (typeof propertyName === 'undefined')? "" : propertyName;
     var el = document.createElement('div');
-    el.innerHTML = "<div style='float: left; width: 130px;' class='tabs' id='" + pName + "'></div><div class='content' style='margin-left: 120px;' id='" + pName + "'></div><div style='clear:both;'></div>";
+    el.innerHTML = "<div style='float: left; width: 130px;' class='tabs'></div><div class='content' style='margin-left: 120px;' id='" + pName + "'></div><div style='clear:both;'></div>";
     return el;
   },
   getTopTabHolder: function(propertyName) {
     var pName = (typeof propertyName === 'undefined')? "" : propertyName;
     var el = document.createElement('div');
-    el.innerHTML = "<div class='tabs' style='margin-left: 10px;' id='" + pName + "'></div><div style='clear:both;'></div><div class='content' id='" + pName + "'></div>";
+    el.innerHTML = "<div class='tabs' style='margin-left: 10px;'></div><div style='clear:both;'></div><div class='content' id='" + pName + "'></div>";
     return el;
   },
   applyStyles: function(el,styles) {

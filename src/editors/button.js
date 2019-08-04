@@ -1,3 +1,4 @@
+// Non-Active editor for displaying buttons in form
 JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
   init: function(options) {
     this._super(options);
@@ -5,9 +6,7 @@ JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
   },
   build: function() {
 
-    if (typeof this.options.compact === 'undefined') this.options.compact = true;
-    if(!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle());
-    if(this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description);
+    this.options.compact = true;
 
       // Get options, either global options from "JSONEditor.defaults.options.button" or
       // single property options from schema "options.button"
@@ -19,7 +18,7 @@ JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
       }.bind(null, this)
     }, JSONEditor.defaults.options.button || {}, this.options.button || {}));
 
-    this.input = this.getButton(options.text, options.icon, options.text);
+    this.input = this.theme.getButton(options.text, options.icon, options.text);
     this.input.addEventListener('click', options.action, false);
 
     if(this.schema.readOnly || this.schema.readonly || this.schema.template) {
@@ -30,7 +29,9 @@ JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
     // Set custom attributes on input element. Parameter is array of protected keys. Empty array if none.
     this.setInputAttributes(['readonly']);
 
-    this.control = this.theme.getFormControl(this.label, this.input, this.description);
+    this.control = this.theme.getFormButtonHolder();
+    this.control.appendChild(this.input);
+
     this.container.appendChild(this.control);
 
   },

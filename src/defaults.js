@@ -440,6 +440,9 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
 JSONEditor.defaults.resolvers.unshift(function(schema) {
   if (schema.type === "button") return "button";
 });
+JSONEditor.defaults.resolvers.unshift(function(schema) {
+  if (schema.type === "info") return "info";
+});
 
 JSONEditor.defaults.resolvers.unshift(function(schema) {
   if (schema.type === "string" && schema.format === "uuid") return "uuid";
