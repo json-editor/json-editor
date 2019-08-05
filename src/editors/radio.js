@@ -1,4 +1,8 @@
 JSONEditor.defaults.editors.radio = JSONEditor.defaults.editors.select.extend({
+  preBuild: function() {
+    this.schema.required = true; // force editor into required mode to prevent creation of empty radio button
+    this._super();
+  },
   build: function () {
     var self = this;
     this.label = '';
