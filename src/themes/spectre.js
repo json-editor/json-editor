@@ -3,12 +3,13 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
   // Config options that allows changing various aspects of the output
   options: {
     disable_theme_rules: false,   // Disable creation of Inline Style Rules
-    label_bold: false,            // Element labels bold
+    label_bold: true,            // Element labels bold
     object_indent: false,         // Indent nested object elements
     object_border: false,         // Add border around object elements
     table_border: false,          // Add border to array "table" row and cells
     table_zebrastyle: false,      // Add "zebra style" to array "table" rows
     input_size: 'normal',         // Size of input and select elements. "small", "normal", "large"
+    button_size: 'normal',         // Size of buttons. "small", "normal", "large"
     button_align: 'center'        // Alignment of button editor buttons. "left", "center", rignt"
   },
   // Custom stylesheet rules. (Does not suppert comma separated selectors)
@@ -23,7 +24,7 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
     '.mr-5': 'margin-right: 1rem !important;', // margin for checkbox label
     'div[data-schematype]:not([data-schematype="object"])' : 'transition:.5s',  // Hover on input block
     'div[data-schematype]:not([data-schematype="object"]):hover' : 'background-color: #eee', // Hover on input block
-    '.je-table-border td': 'border: .05rem solid #dadee4', // Option: table_border
+    '.je-table-border td': 'border: .05rem solid #dadee4 !important', // Option: table_border
     '.btn-info' : 'font-size:.5rem;font-weight:bold;height:.8rem;padding:.15rem 0;line-height:.8;margin:.3rem 0 .3rem .1rem;', // Infobutton
     '.je-label': 'font-weight: 600', // Option: label_bold
     '.btn-action.btn-info': 'width: .8rem;', // Infobutton
@@ -97,14 +98,14 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
   getFormButton: function(text, icon, title) {
     var el = this._super(text, icon, title);
     el.classList.add('btn', 'btn-primary', 'mx-2', 'my-1');
-
-    if (this.options.input_size === 'small') el.classList.add('btn-sm');
-    else if (this.options.input_size === 'large') el.classList.add('btn-lg');
+    //el.classList..remove('btn-sm');
+    if (this.options.input_size !== 'small') el.classList.remove('btn-sm');
+    if (this.options.input_size === 'large') el.classList.add('btn-lg');
     return el;
   },
   getButton: function(text, icon, title) {
     var el = this._super(text, icon, title);
-    el.classList.add('btn', 'btn-primary', 'mr-2', 'my-1');
+    el.classList.add('btn', 'btn-sm', 'btn-primary', 'mr-2', 'my-1');
     return el;
   },
 
