@@ -5,6 +5,24 @@ JSONEditor.Validator = Class.extend({
     this.options = options || {};
     this.translate = this.jsoneditor.translate || JSONEditor.defaults.translate;
   },
+  fitTest: function(value) {
+    var matchedProperties = 0;
+    var extraProperties = 0;
+    if (typeof value === "object" && value !== null) {
+      // Work on a copy of the schema
+      var schema = $extend({},this.jsoneditor.expandRefs(this.schema));
+      for (var i in schema.properties) {
+        if (!schema.properties.hasOwnProperty(i)) {
+          extraProperties++;
+          continue;
+        }
+        if (typeof value[i] !== "undefined") {
+          matchedProperties++;
+        }
+      }
+    }
+    return {match: matchedProperties, extra: extraProperties};
+  },
   validate: function(value) {
     return this._validateSchema(this.schema, value);
   },
@@ -32,7 +50,7 @@ JSONEditor.Validator = Class.extend({
           message: this.translate("error_notset")
         });
       }
-      
+
       return errors;
     }
 
