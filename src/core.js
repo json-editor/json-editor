@@ -28,7 +28,7 @@ JSONEditor.prototype = {
     this.schema = this.options.schema;
     this.theme = new theme_class();
 
-    this.element.classList.add('theme-' + theme_name);
+    this.element.setAttribute('data-theme', theme_name);
     if (!this.theme.options.disable_theme_rules) this.addNewStyleRules(theme_name, this.theme.rules);
 
     this.template = this.options.template;
@@ -129,7 +129,8 @@ JSONEditor.prototype = {
     this.__data = null;
     this.ready = false;
     this.element.innerHTML = '';
-    
+    this.element.removeAttribute('data-theme');
+        
     this.destroyed = true;
   },
   on: function(event, callback) {
@@ -653,7 +654,7 @@ JSONEditor.prototype = {
 
     for (var selector in rules) {
       if (!rules.hasOwnProperty(selector)) continue;
-      var sel = '.theme-' + themeName + ' ' + selector;
+      var sel = '[data-theme="' + themeName + '"] ' + selector;
       // all browsers, except IE before version 9
       if (sheet.insertRule) sheet.insertRule(sel + ' {' + rules[selector] + '}', 0);
       // Internet Explorer before version 9

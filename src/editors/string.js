@@ -96,9 +96,9 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
       }
       // HTML5 Input type
       else {
-        this.input_type = 'text';     
+        this.input_type = 'text';
         if (['button', 'checkbox', 'color', 'date', 'datetime-local', 'email', 'file', 'hidden', 'image', 'month', 'number', 'password', 'radio', 'reset', 'search', 'submit', 'tel', 'text', 'time', 'url', 'week'].indexOf(this.format) > -1) {
-         this.input_type = this.format;
+          this.input_type = this.format;
         }
         this.input = this.theme.getFormInputField(this.input_type);
       }
@@ -280,7 +280,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
   },
   showValidationErrors: function(errors) {
     var self = this;
-    
+
     if(this.jsoneditor.options.show_errors === "always") {}
     else if(!this.is_dirty && this.previous_error_setting===this.jsoneditor.options.show_errors) return;
     

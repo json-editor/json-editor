@@ -478,6 +478,7 @@ JSONEditor.AbstractEditor = Class.extend({
     $each(this.watched,function(name,adjusted_path) {
       self.jsoneditor.unwatch(adjusted_path,self.watch_listener);
     });
+
     this.watched = null;
     this.watched_values = null;
     this.watch_listener = null;
