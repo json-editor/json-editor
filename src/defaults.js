@@ -187,7 +187,10 @@ JSONEditor.defaults.languages.en = {
    * When an IPv6 is in incorrect format
    */
   error_ipv6: 'Value must be a valid IPv6 address',
-
+  /**
+   * When a hostname is in incorrect format
+   */
+  error_hostname: 'The hostname has the wrong format',
   /**
    * Text on Delete All buttons
    */
@@ -517,5 +520,5 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
     ].indexOf(schema.format)  !== -1) return "ace";
 });
 JSONEditor.defaults.resolvers.unshift(function(schema) {
-  if (schema.type === "string" && ['ip', 'ipv4', 'ipv6'].indexOf(schema.format) !== -1 ) return "ip";
+  if (schema.type === "string" && ['ip', 'ipv4', 'ipv6','hostname'].indexOf(schema.format) !== -1 ) return "ip";
 });
