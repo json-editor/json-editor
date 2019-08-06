@@ -3,6 +3,7 @@ JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
   init: function(options) {
     this._super(options);
     this.active = false;
+    this.changeHandler = null;
   },
   build: function() {
 
@@ -13,6 +14,7 @@ JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
     var options = this.expandCallbacks('button', $extend({}, {
       'text': this.key,
       'icon': '',
+      'validated': false,
       'action': function(jseditor, e) {
         alert('No button action defined for "' + jseditor.path + '"');
       }.bind(null, this)
@@ -34,6 +36,15 @@ JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
 
     this.container.appendChild(this.control);
 
+    var self = this;
+    this.changeHandler = function() {
+      if (self.jsoneditor.validate(self.jsoneditor.getValue()).length > 0) self.disable();
+      else self.enable();
+    };
+    
+    // Enable/disable the button depending on form validation
+    if (options.validated) this.jsoneditor.on('change', this.changeHandler);
+
   },
   enable: function() {
     if(!this.always_disabled) {
@@ -50,5 +61,10 @@ JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
     return 2;
   },
   activate: function() {},
-  deactivate: function() {}
+  deactivate: function() {},
+  destroy: function() {
+    this.jsoneditor.off('change', this.changeHandler);
+    this.changeHandler = null;
+    this._super();
+  }
 });

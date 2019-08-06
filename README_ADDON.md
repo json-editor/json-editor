@@ -294,9 +294,9 @@ The Button editor is a special editor that doesn't return any results. It can be
 **Trigger:** ``"type": "button"``<br>
 **Supported Types:** N/A<br>
 **Global options:** N/A<br>
-**Schema options:** text, action, icon<br>
+**Schema options:** text, action, icon, validated<br>
 **Options callback** window.JSONEditor.defaults.callbacks.button<br>
-**Required options:**  text, action, icon<br>
+**Required options:** action<br>
 **Source:** src/editors/button.js
 <br>
 
