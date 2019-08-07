@@ -39,7 +39,7 @@ JSONEditor.defaults.editors.radio = JSONEditor.defaults.editors.select.extend({
       var radioLabel = this.theme.getFormRadioLabel(this.enum_display[i]);
       radioLabel.htmlFor = this.input.id;
 
-      var control = this.theme.getFormRadioControl(radioLabel, this.input, !!(this.options.layout == 'h' || this.options.compact));
+      var control = this.theme.getFormRadioControl(radioLabel, this.input, !!(this.options.layout == 'horizontal' || this.options.compact));
 
       this.radioContainer.appendChild(control);
 
