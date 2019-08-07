@@ -1,3 +1,5 @@
+import Validator from './class';
+
 var JSONEditor = function(element,options) {
   if (!(element instanceof Element)) {
     throw new Error('element should be an instance of Element');

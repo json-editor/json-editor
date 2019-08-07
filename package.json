@@ -24,7 +24,8 @@
   ],
   "scripts": {
     "prepare": "grunt",
-    "build": "npm install && grunt",
+    "build.grunt": "npm install && grunt",
+    "build": "webpack",
     "start": "grunt watch",
     "test": "grunt test",
     "test.unit": "jasmine --config=jasmine.json",
@@ -64,7 +65,9 @@
     "requirejs": "^2.3.6",
     "sceditor": "^2.1.3",
     "standard": "^11.0.1",
-    "watchify": "^3.11.1"
+    "watchify": "^3.11.1",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6"
   },
   "dependencies": {}
 }
