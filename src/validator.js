@@ -1,6 +1,6 @@
 import Class from './class';
 
-export let JSONEditor.Validator = Class.extend({
+export var JSONEditor.Validator = Class.extend({
   init: function(jsoneditor,schema,options) {
     this.jsoneditor = jsoneditor;
     this.schema = schema || this.jsoneditor.schema;

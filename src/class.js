@@ -4,7 +4,7 @@
  * MIT Licensed.
  */
 // Inspired by base2 and Prototype
-export let Class;
+export var Class;
 (function(){
   var initializing = false, fnTest = /xyz/.test(function(){window.postMessage("xyz");}) ? /\b_super\b/ : /.*/;
  

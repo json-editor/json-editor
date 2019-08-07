@@ -1,5 +1,5 @@
 // Implements ipv4 and ipv6 format validations as perhttps://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-7.3.4
-var ipValidator = {
+export var ipValidator = {
     validate:function(schema, value, path) {
        var errors = [];
        if(schema.format==="ipv4") 

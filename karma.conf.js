@@ -9,12 +9,11 @@ module.exports = function(config) {
 
 
     // frameworks to use
-    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine', 'browserify'],
+    frameworks: ['jasmine'],
 
     // list of files / patterns to load in the browser
     files: [
-      './tests/unit/**/*.spec.js'
+      { pattern:'./tests/unit/**/*.spec.js', watched: false }
     ],
 
 
@@ -26,16 +25,35 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'tests/unit/*.spec.js': [ 'browserify' ]      
+      './src/core.js': [ 'webpack' ],     // Same as entrypoint specified in webpack.config.js
+      './tests/unit/**/*.spec.js': [ 'webpack', 'sourcemap']      
     },
+
+    webpack: {
+      // karma watches the test entry points
+      // (you don't need to specify the entry option)
+      // webpack watches dependencies
+      // webpack configuration
+      devtool: 'inline-source-map'
+    },
+ 
+    webpackMiddleware: {
+      // webpack-dev-middleware configuration
+      // i. e.
+      stats: 'errors-only',
+    },
+
+    beforeMiddleware: [
+      'webpackBlocker'
+    ],
 
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['progress', 'kjhtml'],
 
-    plugins: ['karma-chrome-launcher', 'karma-phantomjs-launcher', 'karma-jasmine', 'karma-browserify'],
+    // plugins: ['karma-chrome-launcher', 'karma-phantomjs-launcher', 'karma-jasmine', 'karma-webpack', 'karma-babel-preprocessor', 'karma-jasmine-html-reporter'],
 
     // web server port
     port: 9876,
@@ -43,6 +61,11 @@ module.exports = function(config) {
 
     // enable / disable colors in the output (reporters and logs)
     colors: true,
+
+    client: {
+      clearContext: false // leave Jasmine Spec Runner output visible in browser
+    },
+
 
 
     // level of logging
@@ -56,7 +79,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS', 'Chrome'],
+    browsers: [/*'PhantomJS',*/ 'Chrome'],
 
     customLaunchers: {
       Chrome_with_debugging: {

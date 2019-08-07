@@ -1,3 +1,4 @@
+// import ipValidator from '../../../src/validators/ip-validator';
 var ipValidator = require('../../../src/validators/ip-validator').ipValidator;
 
 console.log(ipValidator);

@@ -2,15 +2,32 @@
 
 ## Introduction
 
-Unit tests are implemented using the [Jasmine](https://jasmine.github.io/) framework. To run:
+Unit tests are implemented using the [Jasmine](https://jasmine.github.io/) framework. To run directly from the command line:
 ```
 npm run test.unit
 ```
 
-You can debug unit tests via the [Karma](https://karma-runner.github.io/latest/index.html) test runner by running the following command then using Chrome developer tools:
+## Karma Test Runner
+
+### Running
+
+You can continuously watch and debug unit tests using the [Karma](https://karma-runner.github.io/latest/index.html) test runner:
 ```
 npm run karma
 ```
+
+The browser will start and run each unit test in a random sequence, showing the result. If tests are target code is edited, the code will be recompiled and the tests re-run.
+
+### Debugging
+
+To debug tests click the debug button - this will allow you to select each test to run in debug mode. 
+
+You can set breakpoints on the original code by:
+
+1. Opening Chrome developer tools
+2. Opening the Sources tab
+3. Expanding the Webpack://./tests/unit/ hierarchy to display your test file
+4. Clicking on the line number to place the breakpoint
 
 ## File hierarchy
 
