@@ -318,7 +318,7 @@ JSONEditor.AbstractTheme = Class.extend({
   getHeaderButtonHolder: function() {
     return this.getButtonHolder();
   },
-  getFormButtonHolder: function() {
+  getFormButtonHolder: function(button_align) {
     return this.getButtonHolder();
   },
   getButton: function(text, icon, title) {

@@ -3,21 +3,22 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
   // Config options that allows changing various aspects of the output
   options: {
     disable_theme_rules: false,   // Disable creation of Inline Style Rules
-    label_bold: true,            // Element labels bold
+    label_bold: true,             // Element labels bold
+    align_bottom: false,          // Align elements to bottom of flex container
     object_indent: false,         // Indent nested object elements
     object_border: false,         // Add border around object elements
     table_border: false,          // Add border to array "table" row and cells
     table_zebrastyle: false,      // Add "zebra style" to array "table" rows
     input_size: 'normal',         // Size of input and select elements. "small", "normal", "large"
-    button_size: 'normal',         // Size of buttons. "small", "normal", "large"
-    button_align: 'center'        // Alignment of button editor buttons. "left", "center", rignt"
+    button_size: 'normal'         // Size of buttons. "small", "normal", "large"
   },
   // Custom stylesheet rules. (Does not suppert comma separated selectors)
   //  Will create a stylesheet in document head with the id "theme-spectre" if not exists.
   rules: {
     '.slider:focus': 'box-shadow: none', // Remove slider focus shadow
-    'h3>label+.btn-group': 'margin-left:1rem', // Add margin between header and top buttons
-    '.json-editor-btntype-properties+div': 'font-size: .8rem;font-weight: normal;', // Fix fontsize in Properties modal
+    'h4>label+.btn-group': 'margin-left:1rem', // Add margin between header and top buttons
+    '.json-editor-btntype-properties+div>.property-selector': 'font-size: .7rem;font-weight: normal; max-height:260px!important;width:395px!important', // Fix fontsize in Properties modal and increase size of modal box
+    '.json-editor-btntype-properties+div>.property-selector .form-checkbox': 'margin:0', // Remove checkbox margins in Properties modal
     'textarea': 'width:100%;min-height: 2rem;resize:vertical',  // Prevent textarea from being resized horizontally
     'table': 'border-collapse: collapse;', // Remove gap between table element borders
     '.table td': 'padding: .4rem .4rem;', // reduce table padding
@@ -32,6 +33,7 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
     '.je-panel': 'padding:.2rem;margin:.2rem;background-color: rgba(218,222,228,.1)',
     '.je-panel-top': 'padding:.2rem;margin:.2rem;background-color: rgba(218,222,228,.1)',
     '.required:after': 'content: " *";color: red;font:inherit', // Red * after label if field is required
+    '.je-align-bottom': 'margin-top: auto', // option: align_bottom
     '.je-desc': 'font-size: smaller;margin: .2rem 0;', // Description
 /*    '.columns': 'border:1px solid rgba(255,0,0,.5);',
     '.columns .columns': 'border:1px solid rgba(0,255,0,.5);',*/
@@ -56,6 +58,7 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
   getGridColumn: function() {
     var el = document.createElement('div');
     el.classList.add('column');
+    if (this.options.align_bottom) el.classList.add('je-align-bottom');
     return el;
   },
 
@@ -88,11 +91,11 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
     el.classList.add('btn-group');
     return el;
   },
-  getFormButtonHolder: function() {
+  getFormButtonHolder: function(button_align) {
     var el = this._super();
     el.classList.remove('btn-group');
-    if (this.options.button_align === 'center') el.classList.add('text-center');
-    else if (this.options.button_align === 'right') el.classList.add('text-right');
+    if (button_align === 'center') el.classList.add('text-center');
+    else if (button_align === 'right') el.classList.add('text-right');
     return el;
   },
   getFormButton: function(text, icon, title) {
@@ -108,6 +111,20 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
     el.classList.add('btn', 'btn-sm', 'btn-primary', 'mr-2', 'my-1');
     return el;
   },
+
+
+  getHeader: function(text) {
+    var el = document.createElement('h4');
+    if(typeof text === "string") {
+      el.textContent = text;
+    }
+    else {
+      el.appendChild(text);
+    }
+
+    return el;
+  },
+
 
   getFormInputDescription: function(text) {
     var el = this._super(text);

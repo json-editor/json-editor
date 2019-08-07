@@ -441,10 +441,10 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
 });
 // Enable custom editor type
 JSONEditor.defaults.resolvers.unshift(function(schema) {
-  if (schema.type === "button") return "button";
+  if (schema.format === "button") return "button";
 });
 JSONEditor.defaults.resolvers.unshift(function(schema) {
-  if (schema.type === "info") return "info";
+  if (schema.format === "info") return "info";
 });
 
 JSONEditor.defaults.resolvers.unshift(function(schema) {

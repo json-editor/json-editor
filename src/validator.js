@@ -458,6 +458,9 @@ JSONEditor.Validator = Class.extend({
       if(typeof schema.required !== "undefined" && Array.isArray(schema.required)) {
         for(i=0; i<schema.required.length; i++) {
           if(typeof value[schema.required[i]] === "undefined") {
+            var editor = this.jsoneditor.getEditor(path + '.' + schema.required[i]);
+            // Ignore required error if editor is of type "button" or "info"
+            if (editor && ['botton', 'info'].indexOf(editor.format) === -1) continue;
             errors.push({
               path: path,
               property: 'required',

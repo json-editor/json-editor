@@ -3,7 +3,18 @@ JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
   init: function(options) {
     this._super(options);
     this.active = false;
-    this.changeHandler = null;
+
+    // Set field to required in schema otherwize it will not be displayed
+    if(this.parent && this.parent.schema) {
+      if (Array.isArray(this.parent.schema.required)) {
+        if(this.parent.schema.required.indexOf(this.key) === -1) {
+          this.parent.schema.required.push(this.key);
+        }
+        else {
+          this.parent.schema.required = [this.key];
+        }
+      }
+    }
   },
   build: function() {
 
@@ -15,6 +26,7 @@ JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
       'text': this.key,
       'icon': '',
       'validated': false,
+      'align': 'left',
       'action': function(jseditor, e) {
         alert('No button action defined for "' + jseditor.path + '"');
       }.bind(null, this)
@@ -31,7 +43,7 @@ JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
     // Set custom attributes on input element. Parameter is array of protected keys. Empty array if none.
     this.setInputAttributes(['readonly']);
 
-    this.control = this.theme.getFormButtonHolder();
+    this.control = this.theme.getFormButtonHolder(options.align);
     this.control.appendChild(this.input);
 
     this.container.appendChild(this.control);
@@ -41,7 +53,7 @@ JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
       if (self.jsoneditor.validate(self.jsoneditor.getValue()).length > 0) self.disable();
       else self.enable();
     };
-    
+
     // Enable/disable the button depending on form validation
     if (options.validated) this.jsoneditor.on('change', this.changeHandler);
 
@@ -60,8 +72,21 @@ JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
   getNumColumns: function() {
     return 2;
   },
-  activate: function() {},
-  deactivate: function() {},
+  activate: function() {
+    this.active = false;
+    this.optInCheckbox.checked = true;
+    this.enable();
+    this.change();
+  },
+  deactivate: function() {
+    // only non required properties can be deactivated.
+    if (!this.isRequired()) {
+      this.active = false;
+      this.optInCheckbox.checked = false;
+      this.disable();
+      this.change();
+    }
+  },
   destroy: function() {
     this.jsoneditor.off('change', this.changeHandler);
     this.changeHandler = null;
