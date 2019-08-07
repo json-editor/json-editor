@@ -4,15 +4,15 @@ JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
     this._super(options);
     this.active = false;
 
-    // Set field to required in schema otherwize it will not be displayed
+    // Set field to required in schema otherwise it will not be displayed
     if(this.parent && this.parent.schema) {
       if (Array.isArray(this.parent.schema.required)) {
         if(this.parent.schema.required.indexOf(this.key) === -1) {
           this.parent.schema.required.push(this.key);
         }
-        else {
-          this.parent.schema.required = [this.key];
-        }
+      }
+      else {
+        this.parent.schema.required = [this.key];
       }
     }
   },
@@ -22,8 +22,8 @@ JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
 
       // Get options, either global options from "JSONEditor.defaults.options.button" or
       // single property options from schema "options.button"
-    var options = this.expandCallbacks('button', $extend({}, {
-      'text': this.key,
+    var title = this.schema.title || this.key,
+        options = this.expandCallbacks('button', $extend({}, {
       'icon': '',
       'validated': false,
       'align': 'left',
@@ -32,7 +32,8 @@ JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
       }.bind(null, this)
     }, JSONEditor.defaults.options.button || {}, this.options.button || {}));
 
-    this.input = this.theme.getFormButton(options.text, options.icon, options.text);
+
+    this.input = this.theme.getFormButton(title, options.icon, title);
     this.input.addEventListener('click', options.action, false);
 
     if(this.schema.readOnly || this.schema.readonly || this.schema.template) {
@@ -74,17 +75,13 @@ JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
   },
   activate: function() {
     this.active = false;
-    this.optInCheckbox.checked = true;
     this.enable();
-    this.change();
-  },
+   },
   deactivate: function() {
     // only non required properties can be deactivated.
     if (!this.isRequired()) {
       this.active = false;
-      this.optInCheckbox.checked = false;
       this.disable();
-      this.change();
     }
   },
   destroy: function() {

@@ -7,6 +7,9 @@ JSONEditor.defaults.editors.info = JSONEditor.defaults.editors.button.extend({
     this.control = this.theme.getFormControl(this.label, this.description, null);
     this.container.appendChild(this.control);
   },
+  getTitle: function() {
+    return this.schema.title;
+  },
   getNumColumns: function() {
     return 12;
   }
