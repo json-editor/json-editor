@@ -9,8 +9,7 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
     object_border: false,         // Add border around object elements
     table_border: false,          // Add border to array "table" row and cells
     table_zebrastyle: false,      // Add "zebra style" to array "table" rows
-    input_size: 'normal',         // Size of input and select elements. "small", "normal", "large"
-    button_size: 'normal'         // Size of buttons. "small", "normal", "large"
+    input_size: 'normal'         // Size of input and select elements. "small", "normal", "large"
   },
   // Custom stylesheet rules. (Does not suppert comma separated selectors)
   //  Will create a stylesheet in document head with the id "theme-spectre" if not exists.
@@ -23,8 +22,8 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
     'table': 'border-collapse: collapse;', // Remove gap between table element borders
     '.table td': 'padding: .4rem .4rem;', // reduce table padding
     '.mr-5': 'margin-right: 1rem !important;', // margin for checkbox label
-    'div[data-schematype]:not([data-schematype="object"])' : 'transition:.5s',  // Hover on input block
-    'div[data-schematype]:not([data-schematype="object"]):hover' : 'background-color: #eee', // Hover on input block
+    'div[data-schematype]:not([data-schematype="object"])' : 'transition:.5s',  // Hover on input block (Should be removed in final version)
+    'div[data-schematype]:not([data-schematype="object"]):hover' : 'background-color: #eee', // Hover on input block (Should be removed in final version)   
     '.je-table-border td': 'border: .05rem solid #dadee4 !important', // Option: table_border
     '.btn-info' : 'font-size:.5rem;font-weight:bold;height:.8rem;padding:.15rem 0;line-height:.8;margin:.3rem 0 .3rem .1rem;', // Infobutton
     '.je-label': 'font-weight: 600', // Option: label_bold
