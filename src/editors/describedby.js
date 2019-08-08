@@ -85,8 +85,9 @@ JSONEditor.defaults.editors.describedBy = JSONEditor.AbstractEditor.extend({
 
     var schema = $extend({}, this.schema, this.jsoneditor.refs[ref]);
 
-    var editor = this.jsoneditor.createEditor(
-      this.jsoneditor.getEditorClass(schema), {
+    var editor_class = this.jsoneditor.getEditorClass(schema, this.jsoneditor);
+
+    var editor = this.jsoneditor.createEditor(editor_class, {
         jsoneditor: this.jsoneditor,
         schema: schema,
         container: holder,
