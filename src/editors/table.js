@@ -64,7 +64,12 @@ JSONEditor.defaults.editors.table = JSONEditor.defaults.editors.array.extend({
 
     this.panel.appendChild(this.table);
     this.controls = this.theme.getButtonHolder();
-    this.panel.appendChild(this.controls);
+    if (this.array_controls_top) {
+      this.title.appendChild(this.controls);
+    }
+    else {
+      this.panel.appendChild(this.controls);
+    }
 
     if(this.item_has_child_editors) {
       var ce = tmp.getChildEditors();
@@ -103,6 +108,9 @@ JSONEditor.defaults.editors.table = JSONEditor.defaults.editors.array.extend({
     var schema_copy = $extend({},this.schema.items);
     var editor = this.jsoneditor.getEditorClass(schema_copy, this.jsoneditor);
     var row = this.row_holder.appendChild(this.theme.getTableRow());
+    if (this.table_row_top) {
+      row = this.row_holder.insertBefore(this.theme.getTableRow(), this.row_holder.firstChild); 
+    }
     var holder = row;
     if(!this.item_has_child_editors) {
       holder = this.theme.getTableCell();

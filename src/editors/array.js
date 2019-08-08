@@ -106,6 +106,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
     this.hide_add_button = this.options.disable_array_add || this.jsoneditor.options.disable_array_add;
     this.show_copy_button = this.options.enable_array_copy || this.jsoneditor.options.enable_array_copy;
     this.array_controls_top = this.options.array_controls_top || this.jsoneditor.options.array_controls_top;
+    this.table_row_top = this.options.table_row_top || this.jsoneditor.options.table_row_top;
   },
   build: function() {
     var self = this;
