@@ -261,12 +261,10 @@ JSONEditor.defaults.editors.multiple = JSONEditor.AbstractEditor.extend({
           }
         }
       }
-      if (!validator.validate(val).length) {
-        if (validVal.i === null){
-          validVal.i = i;
-          if (fitTestResult !== null){
-            validVal.match = fitTestResult.match;
-          }
+      if (!validator.validate(val).length && validVal.i === null) {
+        validVal.i = i;
+        if (fitTestResult !== null){
+          validVal.match = fitTestResult.match;
         }
       }
     });
