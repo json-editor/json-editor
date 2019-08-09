@@ -23,7 +23,7 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
     '.table td': 'padding: .4rem .4rem;', // reduce table padding
     '.mr-5': 'margin-right: 1rem !important;', // margin for checkbox label
     'div[data-schematype]:not([data-schematype="object"])' : 'transition:.5s',  // Hover on input block (Should be removed in final version)
-    'div[data-schematype]:not([data-schematype="object"]):hover' : 'background-color: #eee', // Hover on input block (Should be removed in final version)   
+    'div[data-schematype]:not([data-schematype="object"]):hover' : 'background-color: #eee', // Hover on input block (Should be removed in final version)
     '.je-table-border td': 'border: .05rem solid #dadee4 !important', // Option: table_border
     '.btn-info' : 'font-size:.5rem;font-weight:bold;height:.8rem;padding:.15rem 0;line-height:.8;margin:.3rem 0 .3rem .1rem;', // Infobutton
     '.je-label': 'font-weight: 600', // Option: label_bold
@@ -208,7 +208,7 @@ console.log('mul');
 
 
   // Create select box field
-  getSelectInput: function(options) {
+  getSelectInput: function(options, multiple) {
     var el = this._super(options);
     el.classList.add('form-select');
     return el;

@@ -21,7 +21,7 @@ JSONEditor.defaults.themes.tailwind = JSONEditor.AbstractTheme.extend({
     getTitle: function () {
         return this.schema.title;
     },
-    getSelectInput: function (options) {
+    getSelectInput: function (options, multiple) {
         var el = this._super(options);
         el.classList.add(
             "block",

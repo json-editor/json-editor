@@ -393,7 +393,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    * @return {HTMLElement} The DOM element.
    * @see http://materializecss.com/forms.html#select
    */
-  getSelectInput: function(options) {
+  getSelectInput: function(options, multiple) {
 
       var select = this._super(options);
       select.classList.add('browser-default');

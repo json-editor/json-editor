@@ -13,7 +13,7 @@ JSONEditor.defaults.themes.foundation = JSONEditor.AbstractTheme.extend({
     el.style.marginBottom = '15px';
     return el;
   },
-  getSelectInput: function(options) {
+  getSelectInput: function(options, multiple) {
     var el = this._super(options);
     el.style.minWidth = 'none';
     el.style.padding = '5px';
