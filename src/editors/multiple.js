@@ -264,7 +264,7 @@ JSONEditor.defaults.editors.multiple = JSONEditor.AbstractEditor.extend({
       if (!validator.validate(val).length) {
         if (validVal.i === null){
           validVal.i = i;
-          if (typeof fitTestResult !== null){
+          if (fitTestResult !== null){
             validVal.match = fitTestResult.match;
           }
         }
@@ -279,7 +279,7 @@ JSONEditor.defaults.editors.multiple = JSONEditor.AbstractEditor.extend({
       }
     }
     if (finalI === null) {
-      finalI = this.type
+      finalI = this.type;
     }
     this.type = finalI;
     this.switcher.value = this.display_text[finalI];
