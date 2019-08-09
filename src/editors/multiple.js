@@ -248,8 +248,9 @@ JSONEditor.defaults.editors.multiple = JSONEditor.AbstractEditor.extend({
       i: null
     };
     $each(this.validators, function (i, validator) {
+      var fitTestResult = null;
       if (typeof self.anyOf !== "undefined" && self.anyOf) {
-        var fitTestResult = validator.fitTest(val);
+        fitTestResult = validator.fitTest(val);
         if (fitTestVal.match < fitTestResult.match) {
           fitTestVal = fitTestResult;
           fitTestVal.i = i;
@@ -263,7 +264,7 @@ JSONEditor.defaults.editors.multiple = JSONEditor.AbstractEditor.extend({
       if (!validator.validate(val).length) {
         if (validVal.i === null){
           validVal.i = i;
-          if (typeof fitTestResult !== "undefined"){
+          if (typeof fitTestResult !== null){
             validVal.match = fitTestResult.match;
           }
         }
