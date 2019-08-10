@@ -82,6 +82,13 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
       var ctrl,
       type = input.type;
 
+      // Fix overlapping label
+      if (input.dataset.containerFor && (input.dataset.containerFor === 'radio' || input.dataset.containerFor === 'range')) {
+        if(label){
+          label.classList.add('active'); 
+        }
+      }
+      
       // Checkboxes get wrapped in p elements.
       if (type && (type === 'checkbox' || type === 'radio')) {
 
