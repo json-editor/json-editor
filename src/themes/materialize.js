@@ -67,6 +67,13 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
 
     },
 
+  afterInputReady: function(input) {
+      var label = input.previousSibling;
+      if(input.value && label && label.localName === 'label'){
+        label.classList.add('active'); 
+      }
+    },
+
     /**
    * Gets a form control object consisiting of several sub objects.
    *
