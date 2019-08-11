@@ -36,7 +36,18 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
     '.je-desc': 'font-size: smaller;margin: .2rem 0;', // Description
 /*    '.columns': 'border:1px solid rgba(255,0,0,.5);',
     '.columns .columns': 'border:1px solid rgba(0,255,0,.5);',*/
-    '.columns .container.je-noindent': 'padding-left:0;padding-right:0;' // Option: object_indent
+    '.columns .container.je-noindent': 'padding-left:0;padding-right:0;', // Option: object_indent
+    /* Adjustments for Selectize styling */
+    '.selectize-control.multi .item': 'background: #5755d9 !important;',
+    /* Adjustments for Select2 styling */
+    '.select2-container--default .select2-selection--single .select2-selection__arrow': 'display: none',
+    '.select2-container--default .select2-selection--single': 'border: none;',
+    '.select2-container .select2-selection--single .select2-selection__rendered': 'padding: 0; ',
+    '.select2-container .select2-search--inline .select2-search__field': 'margin-top: 0;',
+    '.select2-container--default.select2-container--focus .select2-selection--multiple': 'border: .05rem solid #bcc3ce;',
+    '.select2-container--default .select2-selection--multiple .select2-selection__choice': 'margin: .4rem .2rem .2rem 0;',
+    '.select2-container--default .select2-search--inline .select2-search__field': 'line-height: normal;'
+
   },
   // Functions for setting up the grid container, row and columns
   setGridColumnSize: function(el,size, offset) {
@@ -100,7 +111,6 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
   getFormButton: function(text, icon, title) {
     var el = this._super(text, icon, title);
     el.classList.add('btn', 'btn-primary', 'mx-2', 'my-1');
-    //el.classList..remove('btn-sm');
     if (this.options.input_size !== 'small') el.classList.remove('btn-sm');
     if (this.options.input_size === 'large') el.classList.add('btn-lg');
     return el;
@@ -252,6 +262,7 @@ console.log('mul');
     inputGroup.appendChild(input);
     for(var i=0;i<buttons.length;i++) {
       buttons[i].classList.add('input-group-btn');
+      buttons[i].classList.remove('btn-sm','mr-2', 'my-1');
       inputGroup.appendChild(buttons[i]);
     }
 
@@ -345,15 +356,35 @@ console.log('mul');
     else row.container.style.display = 'none';
   },
 
-
-  // Controls output of errormessages displayed in form
   afterInputReady: function(input) {
+
+    if (input.localName === 'select') {
+      // Selectize adjustments
+      if (input.classList.contains('selectized')) {
+        var selectized = input.nextSibling;
+        if (selectized) {
+          // Remove Spectre class 'form-select' as this conflicts with Selectize styling
+          selectized.classList.remove('form-select');
+          $each(selectized.querySelectorAll('.form-select'), function(i, el) {
+            el.classList.remove('form-select');
+          });
+        }
+      }
+      // Select2 ajustments
+      else if (input.classList.contains('select2-hidden-accessible')) {
+        var select2 = input.nextSibling,
+            single = select2 && select2.querySelector('.select2-selection--single');
+        if (single) select2.classList.add('form-select');
+      }
+    }
+
     if (input.controlgroup) return;
     input.controlgroup = this.closest(input, '.form-group');
     if (this.closest(input, '.compact')) {
       input.controlgroup.style.marginBottom = 0;
     }
   },
+  // Controls output of errormessages displayed in form 
   addInputError: function(input, text) {
     if (!input.controlgroup) return;
     input.controlgroup.classList.add('has-error');
