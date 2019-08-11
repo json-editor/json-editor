@@ -60,6 +60,12 @@ JSONEditor.defaults.editors.radio = JSONEditor.defaults.editors.select.extend({
 
     this.control = this.theme.getFormControl(this.label, radioContainerWrapper, this.description, this.infoButton);
     this.container.appendChild(this.control);
+
+    // Any special formatting that needs to happen after the input is added to the dom
+    window.requestAnimationFrame(function() {
+      if(self.input.parentNode) self.afterInputReady();
+    });
+
   },
   enable: function() {
     if(!this.always_disabled) {
