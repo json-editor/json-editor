@@ -67,16 +67,18 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
 
     },
 
-  afterInputReady: function(input) {
+    afterInputReady: function(input) {
       var label = input.previousSibling;
 
       if(input.type && input.type === 'range'){
         label = input.parentElement.previousSibling;
       }
 
-      if(input.value && label && label.localName === 'label'){
-        label.classList.add('active'); 
-      }
+      if(input.value || (input.dataset.containerFor && input.dataset.containerFor === 'radio')){
+        if(label && label.localName === 'label'){
+          label.classList.add('active'); 
+        }
+      } 
     },
 
     /**
@@ -93,13 +95,6 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
 
       var ctrl,
       type = input.type;
-
-      // Fix overlapping label
-      if (input.dataset.containerFor && input.dataset.containerFor === 'radio') {
-        if(label){
-          label.classList.add('active'); 
-        }
-      }
       
       // Checkboxes get wrapped in p elements.
       if (type && (type === 'checkbox' || type === 'radio')) {

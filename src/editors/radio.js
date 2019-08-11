@@ -85,6 +85,11 @@ JSONEditor.defaults.editors.radio = JSONEditor.defaults.editors.select.extend({
     this.radioContainer.classList.add('readonly');
     this._super();
   },
+  afterInputReady: function() {
+    var self = this;
+    self.input.dataset.containerFor = 'radio';
+    self.theme.afterInputReady(self.input);
+  },
   destroy: function() {
     if(this.radioContainer.parentNode && this.radioContainer.parentNode.parentNode) this.radioContainer.parentNode.parentNode.removeChild(this.radioContainer.parentNode);
     if(this.label && this.label.parentNode) this.label.parentNode.removeChild(this.label);
