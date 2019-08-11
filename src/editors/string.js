@@ -195,7 +195,6 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
     var input = this.input;
     if(this.format === 'range') {
       input = this.theme.getRangeControl(this.input, this.theme.getRangeOutput(this.input, this.schema.default || Math.max(this.schema.minimum || 0, 0)));
-      input.dataset.containerFor = this.format;
     }
 
     this.control = this.theme.getFormControl(this.label, input, this.description, this.infoButton);
