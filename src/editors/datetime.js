@@ -34,9 +34,6 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
       // Attribute for flatpicker
       this.input.setAttribute('data-input','');
 
-      // disable autocomplete
-      this.input.setAttribute('autocomplete','off');
-
       var input = this.input;
 
       if (this.options.flatpickr.wrap === true) {
