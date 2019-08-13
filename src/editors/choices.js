@@ -347,4 +347,29 @@ JSONEditor.defaults.editors.choices = JSONEditor.AbstractEditor.extend({
       }
       this._super();
     }
+    this._super();
+  },
+  onWatchedFieldChange: function() {
+    this._super();
+    if (this.choices_instance) {
+      var self = this, choices_list = this.enum_options.map(function(v, i) { return {value: v, label: self.enum_display[i]}; });
+      this.choices_instance.setChoices(choices_list, 'value', 'label', true);
+      this.choices_instance.setChoiceByValue(this.value + '');    // Set new selection
+    }
+  },
+  enable: function() {
+    if (!this.always_disabled && this.choices_instance) this.choices_instance.enable();
+    this._super();
+  },
+  disable: function(always_disabled) {
+    if(this.choices_instance) this.choices_instance.disable();
+    this._super(always_disabled);
+  },
+  destroy: function() {
+    if(this.choices_instance) {
+        this.choices_instance.destroy();
+        this.choices_instance = null;
+    }
+    this._super();
+  }
 });

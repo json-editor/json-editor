@@ -1,5 +1,13 @@
 JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
-  getSelectInput: function(options) {
+  /* Theme config options that allows changing various aspects of the output */
+  options: {
+    'disable_theme_rules': false
+  },
+  /* Custom stylesheet rules. format: "selector" : "CSS rules" */
+  rules: {
+  'div[data-schemaid="root"]:after': 'position:relative;color:red;margin:10px 0;font-weight:600;display:block;width:100%;text-align:center;content:"This is an old JSON-Editor 1.x Theme and might not display elements correctly when used with the 2.x version"'
+  },
+  getSelectInput: function(options, multiple) {
     var el = this._super(options);
     el.classList.add('form-control');
     //el.style.width = 'auto';
@@ -36,36 +44,29 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
   },
   getFormInputField: function(type) {
     var el = this._super(type);
-    if(type !== 'checkbox') {
-      el.classList.add('form-control');
+    if (type !== "checkbox" && type !== "radio") {
+      el.classList.add("form-control");
     }
     return el;
   },
-  getFormControl: function(label, input, description, infoText) {
-    var group = document.createElement('div');
+  getFormControl: function(label, input, description) {
+    var group = document.createElement("div");
 
-    if(label && input.type === 'checkbox') {
-      group.classList.add('checkbox');
-      label.appendChild(input);
-      label.style.fontSize = '14px';
-      group.style.marginTop = '0';
-      if(infoText) group.appendChild(infoText);
+    if (label && (input.type === "checkbox" || input.type === "radio")) {
+      group.classList.add(input.type);
+      label.insertBefore(input, label.firstChild);
       group.appendChild(label);
-      input.style.position = 'relative';
-      input.style.cssFloat = 'left';
     }
     else {
-      group.classList.add('form-group');
-      if(label) {
-        label.classList.add('control-label');
+      group.classList.add("form-group");
+      if (label) {
+        label.classList.add("control-label");
         group.appendChild(label);
       }
-
-      if(infoText) group.appendChild(infoText);
       group.appendChild(input);
     }
 
-    if(description) group.appendChild(description);
+    if (description) group.appendChild(description);
 
     return group;
   },

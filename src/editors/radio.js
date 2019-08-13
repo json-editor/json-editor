@@ -1,7 +1,11 @@
-JSONEditor.defaults.editors.radio = JSONEditor.defaults.editors.string.extend({
+JSONEditor.defaults.editors.radio = JSONEditor.defaults.editors.select.extend({
+  preBuild: function() {
+    this.schema.required = true; // force editor into required mode to prevent creation of empty radio button
+    this._super();
+  },
   build: function () {
     var self = this;
-
+    this.label = '';
     if(!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired());
     if(this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description);
     if(this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText);
@@ -9,48 +13,36 @@ JSONEditor.defaults.editors.radio = JSONEditor.defaults.editors.string.extend({
 
     this.radioContainer = document.createElement('div');
 
-    this.enum_values = this.schema.enum;
     this.radioGroup = [];
 
     var radioInputEventhandler = function(e) {
-      e.preventDefault();
-      e.stopPropagation();
       self.setValue(this.value);
       self.onChange(true);
     };
 
     for(var i = 0; i < this.enum_values.length; i++) {
 
-      var id = this.key + '-' + i;
-
       // form radio elements
-      var radioInput = this.theme.getFormInputField('radio');
-      radioInput.name = this.formname;
-      radioInput.value = this.enum_values[i];
-      radioInput.id = id;
-      radioInput.classList.add('radio__field');
-      radioInput.addEventListener('change', radioInputEventhandler, false);
-      this.radioGroup.push(radioInput);
+      this.input = this.theme.getFormRadio({
+        name: this.formname,
+        id: this.formname + '[' + i + ']',
+        value: this.enum_values[i]
+      });
+
+      // Set custom attributes on input element. Parameter is array of protected keys. Empty array if none.
+      this.setInputAttributes(['id', 'value', 'name']);
+
+      this.input.addEventListener('change', radioInputEventhandler, false);
+      this.radioGroup.push(this.input);
 
       // form-label for radio elements
-      var radioLabel = document.createElement('label');
-      radioLabel.htmlFor = id;
-      radioLabel.classList.add('radio');
+      var radioLabel = this.theme.getFormRadioLabel(this.enum_display[i]);
+      radioLabel.htmlFor = this.input.id;
 
-      // contains the displayed text to the label
-      var radioLabelText = document.createElement('span');
-      radioLabelText.innerText = this.enum_values[i];
-      radioLabelText.classList.add('radio__label');
+      var control = this.theme.getFormRadioControl(radioLabel, this.input, !!(this.options.layout == 'horizontal' || this.options.compact));
 
-      // permits the addition of styles for the radio itself (if you want it to look differently than browser default)
-      var radioLabelIcon = document.createElement('span');
-      radioLabelIcon.classList.add('radio__icon');
+      this.radioContainer.appendChild(control);
 
-      radioLabel.appendChild(radioInput);
-      radioLabel.appendChild(radioLabelIcon);
-      radioLabel.appendChild(radioLabelText);
-
-      this.radioContainer.appendChild(radioLabel);
     }
 
     if(this.schema.readOnly || this.schema.readonly) {
@@ -65,9 +57,15 @@ JSONEditor.defaults.editors.radio = JSONEditor.defaults.editors.string.extend({
     radioContainerWrapper.appendChild(this.radioContainer);
 
     this.input = radioContainerWrapper;
-    
+
     this.control = this.theme.getFormControl(this.label, radioContainerWrapper, this.description, this.infoButton);
     this.container.appendChild(this.control);
+
+    // Any special formatting that needs to happen after the input is added to the dom
+    window.requestAnimationFrame(function() {
+      if(self.input.parentNode) self.afterInputReady();
+    });
+
   },
   enable: function() {
     if(!this.always_disabled) {
@@ -97,13 +95,9 @@ JSONEditor.defaults.editors.radio = JSONEditor.defaults.editors.string.extend({
   },
   setValue: function (val) {
     for(var i = 0; i < this.radioGroup.length; i++) {
-
       if(this.radioGroup[i].value == val) {
         this.radioGroup[i].checked = true;
         this.value = val;
-        if(this.options.displayValue) {
-          this.displayRating.innerHTML = this.value;
-        }
         this.onChange();
         break;
       }

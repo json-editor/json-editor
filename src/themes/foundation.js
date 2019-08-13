@@ -1,11 +1,19 @@
 // Base Foundation theme
 JSONEditor.defaults.themes.foundation = JSONEditor.AbstractTheme.extend({
+  /* Theme config options that allows changing various aspects of the output */
+  options: {
+    'disable_theme_rules': false
+  },
+  /* Custom stylesheet rules. format: "selector" : "CSS rules" */
+  rules: {
+  'div[data-schemaid="root"]:after': 'position:relative;color:red;margin:10px 0;font-weight:600;display:block;width:100%;text-align:center;content:"This is an old JSON-Editor 1.x Theme and might not display elements correctly when used with the 2.x version"'
+  },
   getChildEditorHolder: function() {
     var el = document.createElement('div');
     el.style.marginBottom = '15px';
     return el;
   },
-  getSelectInput: function(options) {
+  getSelectInput: function(options, multiple) {
     var el = this._super(options);
     el.style.minWidth = 'none';
     el.style.padding = '5px';
@@ -37,7 +45,7 @@ JSONEditor.defaults.themes.foundation = JSONEditor.AbstractTheme.extend({
   getFormInputField: function(type) {
     var el = this._super(type);
     el.style.width = '100%';
-    el.style.marginBottom = type==='checkbox'? '0' : '12px';
+    el.style.marginBottom = (type==='checkbox' || type==='radio')? '0' : '12px';
     return el;
   },
   getFormInputDescription: function(text) {
@@ -372,7 +380,8 @@ JSONEditor.defaults.themes.foundation6 = JSONEditor.defaults.themes.foundation5.
     var el = document.createElement('div');
     el.classList.add('form-control');
     if(label) el.appendChild(label);
-    if(input.type === 'checkbox') {
+    if(input.type === 'checkbox' || input.type === 'radio') {
+      input.style.width = 'auto';
       label.insertBefore(input,label.firstChild);
     }
     else if (label) {

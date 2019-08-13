@@ -1,6 +1,13 @@
 JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
   {
-
+  /* Theme config options that allows changing various aspects of the output */
+  options: {
+    'disable_theme_rules': false
+  },
+  /* Custom stylesheet rules. format: "selector" : "CSS rules" */
+  rules: {
+  'div[data-schemaid="root"]:after': 'position:relative;color:red;margin:10px 0;font-weight:600;display:block;width:100%;text-align:center;content:"This is an old JSON-Editor 1.x Theme and might not display elements correctly when used with the 2.x version"'
+  },
     /**
    * Applies grid size to specified element.
    *
@@ -76,7 +83,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
       type = input.type;
 
       // Checkboxes get wrapped in p elements.
-      if (type && type === 'checkbox') {
+      if (type && (type === 'checkbox' || type === 'radio')) {
 
         ctrl = document.createElement('p');
         if (label) {
@@ -386,7 +393,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    * @return {HTMLElement} The DOM element.
    * @see http://materializecss.com/forms.html#select
    */
-  getSelectInput: function(options) {
+  getSelectInput: function(options, multiple) {
 
       var select = this._super(options);
       select.classList.add('browser-default');

@@ -9,6 +9,12 @@ var matchKey = (function () {
 })();
 
 JSONEditor.AbstractTheme = Class.extend({
+  /* Theme config options that allows changing various aspects of the output */
+  options: {
+    'disable_theme_rules': false
+  },
+  /* Custom stylesheet rules. format: "selector" : "CSS rules" */
+  rules: {},
   getContainer: function() {
     return document.createElement('div');
   },
@@ -102,12 +108,6 @@ JSONEditor.AbstractTheme = Class.extend({
     if (req) el.classList.add('required');
     return el;
   },
-  getCheckboxLabel: function(text, req) {
-    var el = this.getFormInputLabel(text);
-    el.style.fontWeight = 'normal';
-    if (req) el.classList.add('required');  
-    return el;
-  },
   getHeader: function(text) {
     var el = document.createElement('h3');
     if(typeof text === "string") {
@@ -125,12 +125,20 @@ JSONEditor.AbstractTheme = Class.extend({
     el.style.width = 'auto';
     return el;
   },
-  getMultiCheckboxHolder: function(controls,label,description) {
+  getCheckboxLabel: function(text, req) {
+    var el = document.createElement('label');
+    el.appendChild(document.createTextNode('\u00A0' + text));
+    if (req) el.classList.add('required');
+    return el;
+  },
+  getMultiCheckboxHolder: function(controls,label,description, infoText) {
     var el = document.createElement('div');
+    el.classList.add('control-group');
 
     if(label) {
       label.style.display = 'block';
       el.appendChild(label);
+      if(infoText) label.appendChild(infoText);
     }
 
     for(var i in controls) {
@@ -144,13 +152,53 @@ JSONEditor.AbstractTheme = Class.extend({
 
     return el;
   },
-  getSelectInput: function(options) {
+  getFormCheckboxControl: function(label, input, compact) {
+    var el = document.createElement('div');
+    el.appendChild(label);
+    input.style.width = 'auto';
+    label.insertBefore(input, label.firstChild);
+    if (compact) this.applyStyles(el,{
+      display: 'inline-block',
+      marginRight: '1rem'
+    });
+
+    return el;
+  },
+
+  getFormRadio: function(attributes) {
+    var el = this.getFormInputField('radio');
+    for(var key in attributes){
+      el.setAttribute(key, attributes[key]);
+    }
+    el.style.display = 'inline-block';
+    el.style.width = 'auto';
+    return el;
+  },
+  getFormRadioLabel: function(text, req) {
+    var el = document.createElement('label');
+    el.appendChild(document.createTextNode('\u00A0' + text));
+    if (req) el.classList.add('required');
+    return el;
+  },
+  getFormRadioControl: function(label, input, compact) {
+    var el = document.createElement('div');
+    el.appendChild(label);
+    input.style.width = 'auto';
+    label.insertBefore(input, label.firstChild);
+    if (compact) this.applyStyles(el,{
+      display: 'inline-block',
+      marginRight: '1rem'
+    });
+
+    return el;
+  },
+  getSelectInput: function(options, multiple) {
     var select = document.createElement('select');
     if(options) this.setSelectOptions(select, options);
     return select;
   },
   getSwitcher: function(options) {
-    var switcher = this.getSelectInput(options);
+    var switcher = this.getSelectInput(options, false);
     switcher.style.backgroundColor = 'transparent';
     switcher.style.display = 'inline-block';
     switcher.style.fontStyle = 'italic';
@@ -193,6 +241,22 @@ JSONEditor.AbstractTheme = Class.extend({
     el.setAttribute('step',step);
     return el;
   },
+  getRangeOutput: function(input, startvalue) {
+    var output = document.createElement('output');
+    output.value = startvalue || 0;
+
+    var updateOutput = function() {output.value = this.value;};
+    input.addEventListener('change', updateOutput, false);
+    input.addEventListener('input', updateOutput, false);
+    return output;
+  },
+  getRangeControl: function(input, output) {
+    var el = document.createElement('div');
+    el.style.textAlign = 'center';
+    if (output) el.appendChild(output);
+    el.appendChild(input);
+    return el;
+  },
   getFormInputField: function(type) {
     var el = document.createElement('input');
     el.setAttribute('type',type);
@@ -205,7 +269,8 @@ JSONEditor.AbstractTheme = Class.extend({
     var el = document.createElement('div');
     el.classList.add('form-control');
     if(label) el.appendChild(label);
-    if(input.type === 'checkbox' && label) {
+    if((input.type === 'checkbox' || input.type === 'radio') && label) {
+      input.style.width = 'auto';
       label.insertBefore(input,label.firstChild);
       if(infoText) label.appendChild(infoText);
     }
@@ -247,17 +312,23 @@ JSONEditor.AbstractTheme = Class.extend({
   getFormInputDescription: function(text) {
     return this.getDescription(text);
   },
+  getButtonHolder: function() {
+    return document.createElement('div');
+  },
   getHeaderButtonHolder: function() {
     return this.getButtonHolder();
   },
-  getButtonHolder: function() {
-    return document.createElement('div');
+  getFormButtonHolder: function(button_align) {
+    return this.getButtonHolder();
   },
   getButton: function(text, icon, title) {
     var el = document.createElement('button');
     el.type = 'button';
     this.setButtonText(el,text,icon,title);
     return el;
+  },
+  getFormButton: function(text, icon, title) {
+    return this.getButton(text, icon, title);
   },
   setButtonText: function(button, text, icon, title) {
     // Clear previous contents. https://jsperf.com/innerhtml-vs-removechild/37
@@ -273,6 +344,8 @@ JSONEditor.AbstractTheme = Class.extend({
     button.appendChild(spanEl);
     if(title) button.setAttribute('title',title);
   },
+
+  // Table functions
   getTable: function() {
     return document.createElement('table');
   },
@@ -312,13 +385,13 @@ JSONEditor.AbstractTheme = Class.extend({
   getTabHolder: function(propertyName) {
     var pName = (typeof propertyName === 'undefined')? "" : propertyName;
     var el = document.createElement('div');
-    el.innerHTML = "<div style='float: left; width: 130px;' class='tabs' id='" + pName + "'></div><div class='content' style='margin-left: 120px;' id='" + pName + "'></div><div style='clear:both;'></div>";
+    el.innerHTML = "<div style='float: left; width: 130px;' class='tabs'></div><div class='content' style='margin-left: 120px;' id='" + pName + "'></div><div style='clear:both;'></div>";
     return el;
   },
   getTopTabHolder: function(propertyName) {
     var pName = (typeof propertyName === 'undefined')? "" : propertyName;
     var el = document.createElement('div');
-    el.innerHTML = "<div class='tabs' style='margin-left: 10px;' id='" + pName + "'></div><div style='clear:both;'></div><div class='content' id='" + pName + "'></div>";
+    el.innerHTML = "<div class='tabs' style='margin-left: 10px;'></div><div style='clear:both;'></div><div class='content' id='" + pName + "'></div>";
     return el;
   },
   applyStyles: function(el,styles) {

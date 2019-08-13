@@ -13,7 +13,7 @@ JSONEditor.prototype = {
   constructor: JSONEditor,
   init: function() {
     var self = this;
-    
+
     this.ready = false;
     this.copyClipboard = null;
     // full references info
@@ -21,11 +21,16 @@ JSONEditor.prototype = {
     this.refs_prefix = "#/counter/";
     this.refs_counter = 1;
 
-    var theme_class = JSONEditor.defaults.themes[this.options.theme || JSONEditor.defaults.theme];
-    if(!theme_class) throw "Unknown theme " + (this.options.theme || JSONEditor.defaults.theme);
-    
+    var theme_name = this.options.theme || JSONEditor.defaults.theme;
+    var theme_class = JSONEditor.defaults.themes[theme_name];
+    if(!theme_class) throw "Unknown theme " + theme_name;
+
     this.schema = this.options.schema;
     this.theme = new theme_class();
+
+    this.element.setAttribute('data-theme', theme_name);
+    if (!this.theme.options.disable_theme_rules) this.addNewStyleRules(theme_name, this.theme.rules);
+
     this.template = this.options.template;
     this.refs = this.options.refs || {};
     this.uuid = 0;
@@ -35,6 +40,7 @@ JSONEditor.prototype = {
     if(icon_class) this.iconlib = new icon_class();
 
     this.root_container = this.theme.getContainer();
+
     this.element.appendChild(this.root_container);
     
     this.translate = this.options.translate || JSONEditor.defaults.translate;
@@ -123,7 +129,8 @@ JSONEditor.prototype = {
     this.__data = null;
     this.ready = false;
     this.element.innerHTML = '';
-    
+    this.element.removeAttribute('data-theme');
+        
     this.destroyed = true;
   },
   on: function(event, callback) {
@@ -633,6 +640,27 @@ JSONEditor.prototype = {
   },
   getCopyClipboardContents: function() {
     return this.copyClipboard;
+  },
+  addNewStyleRules: function(themeName, rules) {
+    var styleTag = document.querySelector('#theme-' + themeName);
+    if (!styleTag) {
+      styleTag = document.createElement('style');
+      styleTag.setAttribute('id', 'theme-' + themeName);
+      styleTag.appendChild(document.createTextNode(''));
+      document.head.appendChild(styleTag);
+    }
+
+    var sheet = styleTag.sheet ? styleTag.sheet : styleTag.styleSheet;
+    var qualifier = this.element.nodeName.toLowerCase();
+
+    for (var selector in rules) {
+      if (!rules.hasOwnProperty(selector)) continue;
+      var sel = qualifier + '[data-theme="' + themeName + '"] ' + selector;
+      // all browsers, except IE before version 9
+      if (sheet.insertRule) sheet.insertRule(sel + ' {' + rules[selector] + '}', 0);
+      // Internet Explorer before version 9
+      else if (sheet.addRule) sheet.addRule(sel, rules[selector], 0);
+    }
   }
 };
 

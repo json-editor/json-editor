@@ -1,4 +1,12 @@
 JSONEditor.defaults.themes.bootstrap2 = JSONEditor.AbstractTheme.extend({
+  /* Theme config options that allows changing various aspects of the output */
+  options: {
+    'disable_theme_rules': false
+  },
+  /* Custom stylesheet rules. format: "selector" : "CSS rules" */
+  rules: {
+  'div[data-schemaid="root"]:after': 'position:relative;color:red;margin:10px 0;font-weight:600;display:block;width:100%;text-align:center;content:"This is an old JSON-Editor 1.x Theme and might not display elements correctly when used with the 2.x version"'
+  },
   getRangeInput: function(min, max, step) {
     // TODO: use bootstrap slider
     return this._super(min, max, step);
@@ -22,7 +30,7 @@ JSONEditor.defaults.themes.bootstrap2 = JSONEditor.AbstractTheme.extend({
   setGridColumnSize: function(el,size) {
     el.classList.add('span'+size);
   },
-  getSelectInput: function(options) {
+  getSelectInput: function(options, multiple) {
     var input = this._super(options);
     input.style.width = 'auto';
     input.style.maxWidth = '98%';
@@ -95,20 +103,23 @@ JSONEditor.defaults.themes.bootstrap2 = JSONEditor.AbstractTheme.extend({
   },
   getFormControl: function(label, input, description, infoText) {
     var ret = document.createElement('div');
-    ret.classList.add('control-group');
 
     var controls = document.createElement('div');
-    controls.classList.add('controls');
 
-    if(label && input.getAttribute('type') === 'checkbox') {
+    if(label && (input.getAttribute('type') === 'checkbox' || input.getAttribute('type') === 'radio')) {
       ret.appendChild(controls);
-      label.classList.add('checkbox');
-      label.appendChild(input);
+      controls.classList.add('form-check');
+      label.classList.add('form-check-label');
+      input.classList.add('form-check-input');
+      input.style.margin = '0 4px 4px 0';
+      input.style.width = 'auto';
+      controls.appendChild(input);
       controls.appendChild(label);
       if(infoText) controls.appendChild(infoText);
       controls.style.height = '30px';
     }
     else {
+    ret.classList.add('control-group');
       if(label) {
         label.classList.add('control-label');
         ret.appendChild(label);

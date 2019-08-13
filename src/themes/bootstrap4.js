@@ -1,5 +1,13 @@
 JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
-  getSelectInput: function(options) {
+  /* Theme config options that allows changing various aspects of the output */
+  options: {
+    'disable_theme_rules': false
+  },
+  /* Custom stylesheet rules. format: "selector" : "CSS rules" */
+  rules: {
+  'div[data-schemaid="root"]:after': 'position:relative;color:red;margin:10px 0;font-weight:600;display:block;width:100%;text-align:center;content:"This is an old JSON-Editor 1.x Theme and might not display elements correctly when used with the 2.x version"'
+  },
+  getSelectInput: function(options, multiple) {
     var el = this._super(options);
     el.classList.add("form-control");
     //el.style.width = 'auto';
@@ -31,7 +39,7 @@ JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
   },
   getFormInputField: function(type) {
     var el = this._super(type);
-    if (type !== "checkbox") {
+    if (type !== "checkbox" && type !== "radio") {
       el.classList.add("form-control");
     }
     return el;
@@ -39,15 +47,15 @@ JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
   getFormControl: function(label, input, description) {
     var group = document.createElement("div");
 
-    if (label && input.type === "checkbox") {
-      group.classList.add("checkbox");
-      label.appendChild(input);
-      label.style.fontSize = "14px";
-      group.style.marginTop = "0";
+    if (label && (input.type === "checkbox" || input.type === "radio")) {
+      group.classList.add("form-check");
+      label.classList.add("form-check-label");
+      input.classList.add("form-check-input");
+      //label.appendChild(input);
+      label.insertBefore(input, label.firstChild);
       group.appendChild(label);
-      input.style.position = "relative";
-      input.style.cssFloat = "left";
-    } else {
+    }
+    else {
       group.classList.add("form-group");
       if (label) {
         label.classList.add("form-control-label");
