@@ -429,9 +429,13 @@
                 required: ["required"],
                 additionalProperties: true
             },
-            valid: [{required: true, test: 1}],
+            valid: [
+                {required: true, test: 1}
+            ],
             invalid: [
-                {}
+                {},
+                "a string",
+                [1,2,3]
             ]
         },
         required4_merge: {
@@ -766,10 +770,10 @@
                   var result = editor.validate(value);
                   if(result.length) {
                       console.error(num,'valid',j,JSON.stringify(result,null,2));
-                      $("#output").append("<div><strong>"+i+" test "+j+"</strong>: Fail. Expected: [], Actual: "+JSON.stringify(result)+"</div>");
+                      $("#output").append("<div><strong>"+i+" [test valid "+j+"]</strong>: fail. Expected: [], Actual: "+JSON.stringify(result)+"</div>");
                   }
                   else {
-                      $("#output").append("<div><strong>"+i+" test "+j+"</strong>: Test for valid is success</div>");
+                      $("#output").append("<div><strong>"+i+" [test valid "+j+"]</strong>: success</div>");
                       console.log(num,'valid',j);
                   }
                 }
@@ -784,7 +788,7 @@
                   var result = editor.validate(value);
                   if(!result.length) {
                       console.error(num,'invalid',j,JSON.stringify(result,null,2));
-                      $("#output").append("<div><strong>"+i+" test "+j+"</strong>: Fail. Expected: errors, Actual: []</div>");
+                      $("#output").append("<div><strong>"+i+" [test invalid "+j+"]</strong>: fail. Expected: errors, Actual: []</div>");
                   }
                   else {
                       var errors = [];
@@ -792,7 +796,7 @@
                           errors.push(error.path+": "+error.message);
                       });
                       if(errors.length === 1) errors = errors[0];
-                      $("#output").append("<div><strong>"+i+" test "+j+"</strong>: Test for invalid is success</div>");
+                      $("#output").append("<div><strong>"+i+" [test invalid "+j+"]</strong>: success</div>");
                       console.log(num,'invalid',j,JSON.stringify(errors,null,2));
                   }
                 }
