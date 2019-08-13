@@ -157,12 +157,15 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
       }
     }
     else {
+        // compact mode
+        this.title = this.theme.getHeader('');
+        this.container.appendChild(this.title);
         this.panel = this.theme.getIndentedPanel();
         this.container.appendChild(this.panel);
         this.title_controls = this.theme.getHeaderButtonHolder();
-        this.panel.appendChild(this.title_controls);
-        this.controls = this.theme.getButtonHolder();
-        this.panel.appendChild(this.controls);
+        this.title.appendChild(this.title_controls);
+        this.controls = this.theme.getHeaderButtonHolder();
+        this.title.appendChild(this.controls);
         this.row_holder = document.createElement('div');
         this.panel.appendChild(this.row_holder);
     }
