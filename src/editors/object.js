@@ -1058,7 +1058,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
     this.cached_editors = null;
     if(this.editor_holder && this.editor_holder.parentNode) this.editor_holder.parentNode.removeChild(this.editor_holder);
     this.editor_holder = null;
-    document.removeEventListener('click', this.onOutsideClick);
+    document.removeEventListener('click', this.onOutsideModalClick);
 
     this._super();
   },
