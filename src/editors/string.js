@@ -211,7 +211,9 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
 
     // Compile and store the template
     if(this.schema.template) {
-      this.template = this.jsoneditor.compileTemplate(this.schema.template, this.template_engine);
+      var callback = this.expandCallbacks('template', {template: this.schema.template});
+      if (typeof callback.template === 'function') this.template = callback.template;
+      else this.template = this.jsoneditor.compileTemplate(this.schema.template, this.template_engine);
       this.refreshValue();
     }
     else {

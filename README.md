@@ -1149,6 +1149,40 @@ Here is the completed `full_name` example using the default barebones template e
 }
 ```
 
+It is also possible to set the "template" property to a JavaScript callback function, defined under `window.JSONEditor.defaults.callbacks.template`. Inside the JavaScript callback, you have access to all the variables defined under the `watch` property + the current editor.
+
+
+Example Schema:
+```js+jinja
+{
+  "type": "object",
+  "properties": {
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "full_name": {
+      "type": "string",
+      "template": "callbackFunction",
+      "watch": {
+        "fname": "first_name",
+        "lname": "last_name"
+      }
+    }
+  }
+}
+```
+ Example Callback function:
+```js+jinja
+window.JSONEditor.defaults.callbacks.template = {
+  "callbackFunction": function(jseditor,e) {
+    return e.fname + " " + e.lname;
+  }
+};
+```
+
 ### Enum Values
 
 Another common dependency is a drop down menu whose possible values depend on other fields.  Here's an example:
