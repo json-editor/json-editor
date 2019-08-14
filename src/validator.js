@@ -667,6 +667,13 @@ JSONEditor.Validator = Class.extend({
       });
     }
 
+    // Filter out duplicate error messages
+    errors = errors.filter(function (value, i, self) {
+        return self.findIndex(function (test) {
+            return test.path === value.path && test.message === value.message && test.property === value.property;
+        }) === i;
+    });
+
     return errors;
   },
   _checkType: function(type, value) {
