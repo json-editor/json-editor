@@ -14,8 +14,11 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
   // Custom stylesheet rules. (Does not suppert comma separated selectors)
   //  Will create a stylesheet in document head with the id "theme-spectre" if not exists.
   rules: {
+    '*': '--primary-color:#5755d9;--gray-color:#bcc3ce;--light-color:#fff', // CSS variables
     '.slider:focus': 'box-shadow: none', // Remove slider focus shadow
     'h4>label+.btn-group': 'margin-left:1rem', // Add margin between header and top buttons
+    '.text-right>button': 'margin-right: 0 !important', // Remove right margin on right-aligned button
+    '.text-left>button': 'margin-left: 0 !important', // Remove left margin on left-aligned button
     '.json-editor-btntype-properties+div>.property-selector': 'font-size: .7rem;font-weight: normal; max-height:260px!important;width:395px!important', // Fix fontsize in Properties modal and increase size of modal box
     '.json-editor-btntype-properties+div>.property-selector .form-checkbox': 'margin:0', // Remove checkbox margins in Properties modal
     'textarea': 'width:100%;min-height: 2rem;resize:vertical',  // Prevent textarea from being resized horizontally
@@ -38,16 +41,15 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
     '.columns .columns': 'border:1px solid rgba(0,255,0,.5);',*/
     '.columns .container.je-noindent': 'padding-left:0;padding-right:0;', // Option: object_indent
     /* Adjustments for Selectize styling */
-    '.selectize-control.multi .item': 'background: #5755d9 !important;',
+    '.selectize-control.multi .item': 'background: var(--primary-color) !important;',
     /* Adjustments for Select2 styling */
     '.select2-container--default .select2-selection--single .select2-selection__arrow': 'display: none',
     '.select2-container--default .select2-selection--single': 'border: none;',
     '.select2-container .select2-selection--single .select2-selection__rendered': 'padding: 0; ',
     '.select2-container .select2-search--inline .select2-search__field': 'margin-top: 0;',
-    '.select2-container--default.select2-container--focus .select2-selection--multiple': 'border: .05rem solid #bcc3ce;',
-    '.select2-container--default .select2-selection--multiple .select2-selection__choice': 'margin: .4rem .2rem .2rem 0;',
+    '.select2-container--default.select2-container--focus .select2-selection--multiple': 'border: .05rem solid var(--gray-color);',
+    '.select2-container--default .select2-selection--multiple .select2-selection__choice': 'margin:.4rem .2rem .2rem 0;padding:2px 5px;background-color:var(--primary-color);color:var(--light-color)',
     '.select2-container--default .select2-search--inline .select2-search__field': 'line-height: normal;'
-
   },
   // Functions for setting up the grid container, row and columns
   setGridColumnSize: function(el,size, offset) {
@@ -106,6 +108,7 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
     el.classList.remove('btn-group');
     if (button_align === 'center') el.classList.add('text-center');
     else if (button_align === 'right') el.classList.add('text-right');
+    else el.classList.add('text-left');
     return el;
   },
   getFormButton: function(text, icon, title) {
@@ -357,7 +360,6 @@ console.log('mul');
   },
 
   afterInputReady: function(input) {
-
     if (input.localName === 'select') {
       // Selectize adjustments
       if (input.classList.contains('selectized')) {
@@ -374,6 +376,7 @@ console.log('mul');
       else if (input.classList.contains('select2-hidden-accessible')) {
         var select2 = input.nextSibling,
             single = select2 && select2.querySelector('.select2-selection--single');
+        // Add Spectre 'form-select' to single-select2 elements
         if (single) select2.classList.add('form-select');
       }
     }
@@ -384,7 +387,7 @@ console.log('mul');
       input.controlgroup.style.marginBottom = 0;
     }
   },
-  // Controls output of errormessages displayed in form 
+  // Controls output of errormessages displayed in form
   addInputError: function(input, text) {
     if (!input.controlgroup) return;
     input.controlgroup.classList.add('has-error');
