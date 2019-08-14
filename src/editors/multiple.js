@@ -297,7 +297,7 @@ JSONEditor.defaults.editors.multiple = JSONEditor.AbstractEditor.extend({
         var check = self.path+'.'+check_part+'['+i+']';
         var new_errors = [];
         $each(errors, function(j,error) {
-          if(error.path.substr(0,check.length)===check) {
+          if(error.path === check.substr(0,error.path.length)) {
             var new_error = $extend({},error);
             new_error.path = self.path+new_error.path.substr(check.length);
             new_errors.push(new_error);
