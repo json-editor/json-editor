@@ -1,3 +1,6 @@
+export function jqueryuiTheme(JSONEditor)
+{
+
 JSONEditor.defaults.themes.jqueryui = JSONEditor.AbstractTheme.extend({
   getTable: function() {
     var el = this._super();
@@ -183,3 +186,4 @@ JSONEditor.defaults.themes.jqueryui = JSONEditor.AbstractTheme.extend({
     }
   }
 });
+};

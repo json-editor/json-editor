@@ -1,4 +1,6 @@
-JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
+import { AbstractEditor } from '../editor';
+
+export var ArrayEditor = AbstractEditor.extend({
   askConfirmation: function() {
     if (this.jsoneditor.options.prompt_before_delete === true) {
       if (confirm("Are you sure you want to remove this node?") === false) {

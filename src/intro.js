@@ -1,3 +1,5 @@
+// Obsolete header to export the rest of the stuff
+
 /**
  * @name JSON Editor
  * @description JSON Schema Based Editor

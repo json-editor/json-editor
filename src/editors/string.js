@@ -1,4 +1,6 @@
-JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
+import { AbstractEditor } from '../editor';
+
+export var StringEditor = AbstractEditor.extend({
   register: function() {
     this._super();
     if(!this.input) return;

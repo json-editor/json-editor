@@ -1,4 +1,7 @@
-JSONEditor.defaults.editors.selectize = JSONEditor.defaults.editors.select.extend({
+import { SelectEditor } from './select';
+
+export var SelectizeEditor = SelectEditor.extend({
+
   setValue: function(value, initial) {
     if (this.selectize_instance) {
 

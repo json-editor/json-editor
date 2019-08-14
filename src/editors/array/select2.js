@@ -1,4 +1,7 @@
-JSONEditor.defaults.editors.arraySelect2 = JSONEditor.defaults.editors.multiselect.extend({
+import { MultiSelectEditor } from '../multiselect';
+
+export var ArraySelect2Editor = MultiSelectEditor.extend({
+
   setValue: function(value, initial) {
     if (this.select2_instance) {
 

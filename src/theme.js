@@ -1,3 +1,19 @@
+
+import { Class } from './class';
+import { htmlTheme } from './themes/html';
+import { bootstrap2Theme } from './themes/bootstrap2';
+import { bootstrap3Theme } from './themes/bootstrap3';
+import { bootstrap4Theme } from './themes/bootstrap4';
+import { foundationTheme } from './themes/foundation';
+import { jqueryuiTheme } from './themes/jqueryui';
+import { barebonesTheme } from './themes/jsoneditor.barebones-theme';
+import { materializeTheme } from './themes/materialize';
+import { spectreTheme } from './themes/spectre';
+import { tailwindTheme } from './themes/tailwind';
+
+export function theme(JSONEditor)
+{
+  
 var matchKey = (function () {
   var elem = document.documentElement;
 
@@ -534,3 +550,16 @@ JSONEditor.AbstractTheme = Class.extend({
     return (tmp.textContent || tmp.innerText);
   }
 });
+
+htmlTheme(JSONEditor);
+bootstrap2Theme(JSONEditor);
+bootstrap3Theme(JSONEditor);
+bootstrap4Theme(JSONEditor);
+foundationTheme(JSONEditor);
+jqueryuiTheme(JSONEditor);
+barebonesTheme(JSONEditor);
+materializeTheme(JSONEditor);
+spectreTheme(JSONEditor);
+tailwindTheme(JSONEditor);
+
+};

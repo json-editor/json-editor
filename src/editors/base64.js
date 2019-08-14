@@ -1,4 +1,7 @@
-JSONEditor.defaults.editors.base64 = JSONEditor.AbstractEditor.extend({
+import { AbstractEditor } from '../editor';
+
+export var Base64Editor = AbstractEditor.extend({
+
   getNumColumns: function() {
     return 4;
   },

@@ -1,4 +1,7 @@
-JSONEditor.defaults.editors.number = JSONEditor.defaults.editors.string.extend({
+import { StringEditor } from './string';
+
+export var NumberEditor = StringEditor.extend({
+
   build: function() {
     this._super();
 

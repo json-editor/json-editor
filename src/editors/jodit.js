@@ -1,4 +1,7 @@
-JSONEditor.defaults.editors.jodit = JSONEditor.defaults.editors.string.extend({
+import { StringEditor } from './string';
+
+export var JoditEditor = StringEditor.extend({
+
   setValue: function(value,initial,from_template) {
     var res = this._super(value,initial,from_template);
     if (res !== undefined && res.changed && this.jodit_instance) this.jodit_instance.setEditorValue(res.value);

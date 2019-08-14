@@ -1,3 +1,6 @@
+export function bootstrap3Theme(JSONEditor)
+{
+
 JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
   getSelectInput: function(options) {
     var el = this._super(options);
@@ -276,3 +279,4 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
     return inputGroupContainer;
   }
 });
+};

@@ -1,4 +1,7 @@
-JSONEditor.defaults.editors.radio = JSONEditor.defaults.editors.select.extend({
+import { SelectEditor } from './select';
+
+export var RadioEditor = SelectEditor.extend({
+
   preBuild: function() {
     this.schema.required = true; // force editor into required mode to prevent creation of empty radio button
     this._super();

@@ -1,4 +1,7 @@
-JSONEditor.defaults.editors.ace = JSONEditor.defaults.editors.string.extend({
+import { String } from './string';
+
+export var AceEditor = StringEditor.extend({
+
   setValue: function(value,initial,from_template) {
     var res = this._super(value,initial,from_template);
     if (res !== undefined && res.changed && this.ace_editor_instance) {

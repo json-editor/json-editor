@@ -1,3 +1,6 @@
+export function tailwindTheme(JSONEditor)
+{
+
 JSONEditor.defaults.themes.tailwind = JSONEditor.AbstractTheme.extend({
     getGridRow: function () {
         var el = document.createElement("div");
@@ -373,3 +376,4 @@ JSONEditor.defaults.themes.tailwind = JSONEditor.AbstractTheme.extend({
         return inputGroupContainer;
     }
 });
+};

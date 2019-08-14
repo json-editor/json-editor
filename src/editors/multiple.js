@@ -1,5 +1,8 @@
 // Multiple Editor (for when `type` is an array, also when `oneOf` is present)
-JSONEditor.defaults.editors.multiple = JSONEditor.AbstractEditor.extend({
+import { AbstractEditor } from '../editor';
+
+export var MultipleEditor = AbstractEditor.extend({
+
   register: function() {
     if(this.editors) {
       for(var i=0; i<this.editors.length; i++) {

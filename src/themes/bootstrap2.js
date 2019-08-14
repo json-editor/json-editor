@@ -1,3 +1,6 @@
+export function bootstrap2Theme(JSONEditor)
+{
+
 JSONEditor.defaults.themes.bootstrap2 = JSONEditor.AbstractTheme.extend({
   getRangeInput: function(min, max, step) {
     // TODO: use bootstrap slider
@@ -283,3 +286,4 @@ JSONEditor.defaults.themes.bootstrap2 = JSONEditor.AbstractTheme.extend({
     return inputGroupContainer;
   }
 });
+};

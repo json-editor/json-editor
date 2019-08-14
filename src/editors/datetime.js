@@ -17,7 +17,10 @@ ToDo:
  - Improve Handling of flatpicker "multiple" and "range" modes. (Currently the values are just added as string values, but the optimal scenario would be to save those as array if possible)
 
 */
-JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend({
+import { StringEditor } from './string';
+
+export var DatetimeEditor = StringEditor.extend({
+
   build: function () {
     this._super();
     if(!this.input) return;

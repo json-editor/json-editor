@@ -1,4 +1,8 @@
-JSONEditor.defaults.editors.starrating = JSONEditor.defaults.editors.string.extend({
+import { StringEditor } from './string';
+
+export var StarratingEditor = StringEditor.extend({
+
+
   build: function () {
     var self = this;
 

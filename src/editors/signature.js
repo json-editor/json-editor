@@ -1,7 +1,9 @@
-JSONEditor.defaults.editors.signature = JSONEditor.defaults.editors.string.extend({
-
   // This editor is using the signature pad editor from https://github.com/szimek/signature_pad
   // Credits for the pad itself go to https://github.com/szimek
+
+import { StringEditor } from './string';
+
+export var SignatureEditor = StringEditor.extend({
 
   build: function() {
     var self = this, i;

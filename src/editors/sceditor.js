@@ -1,4 +1,7 @@
-JSONEditor.defaults.editors.sceditor = JSONEditor.defaults.editors.string.extend({
+import { StringEditor } from './string';
+
+export var ScEditor = StringEditor.extend({
+
   setValue: function(value,initial,from_template) {
     var res = this._super(value,initial,from_template);
     if (res !== undefined && res.changed && this.sceditor_instance) this.sceditor_instance.val(res.value);

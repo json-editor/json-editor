@@ -1,4 +1,7 @@
-JSONEditor.defaults.editors.upload = JSONEditor.AbstractEditor.extend({
+import { AbstractEditor } from '../editor';
+
+export var UploadEditor = AbstractEditor.extend({
+
   getNumColumns: function() {
     return 4;
   },

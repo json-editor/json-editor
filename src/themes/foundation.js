@@ -1,4 +1,7 @@
 // Base Foundation theme
+export function foundationTheme(JSONEditor)
+{
+
 JSONEditor.defaults.themes.foundation = JSONEditor.AbstractTheme.extend({
   getChildEditorHolder: function() {
     var el = document.createElement('div');
@@ -505,3 +508,4 @@ JSONEditor.defaults.themes.foundation6 = JSONEditor.defaults.themes.foundation5.
     return holder.firstChild.firstChild.firstChild;
   }
 });
+};

@@ -1,4 +1,7 @@
-JSONEditor.defaults.editors.table = JSONEditor.defaults.editors.array.extend({
+import { ArrayEditor } from './array';
+
+export var TableEditor = ArrayEditor.extend({
+
   register: function() {
     this._super();
     if(this.rows) {

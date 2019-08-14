@@ -1,4 +1,6 @@
-JSONEditor.defaults.editors.autocomplete = JSONEditor.defaults.editors.string.extend({
+import { String } from './string';
+
+export var AutocompleteEditor = StringEditor.extend({
   postBuild: function() {
     if (window.Autocomplete) {
       // create wrapper container

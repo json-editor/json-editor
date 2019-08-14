@@ -1,3 +1,6 @@
+export function barebonesTheme(JSONEditor)
+{
+
 JSONEditor.defaults.themes.barebones = JSONEditor.AbstractTheme.extend({
     getFormInputLabel: function (text, req) {
         var el = this._super(text, req);
@@ -58,3 +61,4 @@ JSONEditor.defaults.themes.barebones = JSONEditor.AbstractTheme.extend({
         progressBar.removeAttribute('value');
     }
 });
+};

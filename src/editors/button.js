@@ -1,5 +1,7 @@
 // Non-Active editor for displaying buttons in form
-JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
+import { AbstractEditor } from '../editor';
+
+export var ButtonEditor = AbstractEditor.extend({
   init: function(options) {
     this._super(options);
     this.active = false;

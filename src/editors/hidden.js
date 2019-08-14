@@ -1,7 +1,10 @@
 /**
  * Created by Mehmet Baker on 12.04.2017
  */
-JSONEditor.defaults.editors.hidden = JSONEditor.AbstractEditor.extend({
+import { AbstractEditor } from '../editor';
+
+export var HiddenEditor = AbstractEditor.extend({
+
   register: function () {
     this._super();
     if (!this.input) return;

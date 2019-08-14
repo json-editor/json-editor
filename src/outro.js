@@ -1,2 +1,4 @@
-	return JSONEditor;
+// Obsolete
+
+return JSONEditor;
 });

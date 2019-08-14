@@ -1,4 +1,7 @@
-JSONEditor.defaults.editors.checkbox = JSONEditor.AbstractEditor.extend({
+import { AbstractEditor } from '../editor';
+
+export var CheckboxEditor = AbstractEditor.extend({
+
   setValue: function(value,initial) {
     value = !!value;
     var changed = this.getValue() !== value;

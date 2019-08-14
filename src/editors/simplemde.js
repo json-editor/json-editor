@@ -1,4 +1,7 @@
-JSONEditor.defaults.editors.simplemde = JSONEditor.defaults.editors.string.extend({
+import { StringEditor } from './string';
+
+export var SimplemdeEditor = StringEditor.extend({
+
   setValue: function(value,initial,from_template) {
     var res = this._super(value,initial,from_template);
     if (res !== undefined && res.changed && this.simplemde_instance) this.simplemde_instance.value(res.value);

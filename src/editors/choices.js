@@ -1,4 +1,7 @@
-JSONEditor.defaults.editors.choices = JSONEditor.defaults.editors.select.extend({
+import { SelectEditor } from './select';
+
+export var ChoicesEditor = SelectEditor.extend({
+
   setValue: function(value,initial) {
 
     if (this.choices_instance) {

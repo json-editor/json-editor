@@ -1,4 +1,7 @@
 // Spectre Theme using Spectre CSS framework. <https://picturepan2.github.io/spectre/index.html>
+export function spectreTheme(JSONEditor)
+{
+
 JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
   // Config options that allows changing various aspects of the output
   options: {
@@ -356,3 +359,4 @@ console.log('mul');
   }
 
 });
+};

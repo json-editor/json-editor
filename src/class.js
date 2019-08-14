@@ -4,7 +4,7 @@
  * MIT Licensed.
  */
 // Inspired by base2 and Prototype
-export var Class;
+exports.Class=
 (function(){
   var initializing = false, fnTest = /xyz/.test(function(){window.postMessage("xyz");}) ? /\b_super\b/ : /.*/;
  
@@ -47,6 +47,7 @@ export var Class;
    
     // The dummy class constructor
     function Class() {
+      console.log("Invoking dummy Class constructor");
       // All construction is actually done in the init method
       if ( !initializing && this.init )
         this.init.apply(this, arguments);

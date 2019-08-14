@@ -1,4 +1,7 @@
-JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
+import { AbstractEditor } from '../editor';
+
+export var SelectEditor = AbstractEditor.extend({
+
   setValue: function(value,initial) {
 
     // Sanitize value before setting it

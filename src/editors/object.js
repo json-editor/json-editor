@@ -1,4 +1,7 @@
-JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
+import { AbstractEditor } from '../editor';
+
+export var ObjectEditor = AbstractEditor.extend({
+
   getDefault: function() {
     return $extend({},this.schema["default"] || {});
   },

@@ -1,6 +1,8 @@
 // hyper-link describeBy Editor
+import { AbstractEditor } from '../editor';
 
-JSONEditor.defaults.editors.describedBy = JSONEditor.AbstractEditor.extend({
+export var DescribedByEditor = AbstractEditor.extend({
+
   register: function() {
     if (this.editors) {
       for (var i = 0; i < this.editors.length; i++) {

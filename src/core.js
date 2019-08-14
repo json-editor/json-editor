@@ -1,9 +1,92 @@
-import Validator from './class';
+import { getDefaults } from './defaults';
+import { theme } from './theme';
+import { Validator } from './validator';
+import { $extend, $each } from './utilities';
+
+import { AbstractEditor } from './editor';
+import { ArrayEditor } from './editors/array';
+import { ArrayChoicesEditor } from './editors/array/choices';
+import { ArraySelect2Editor } from './editors/array/select2';
+import { ArraySelectizeEditor } from './editors/array/selectize';
+import { AutocompleteEditor } from './editors/autocomplete';
+import { Base64Editor } from './editors/base64';
+import { ButtonEditor } from './editors/button';
+import { CheckboxEditor } from './editors/checkbox';
+import { ChoicesEditor } from './editors/choices';
+import { DatetimeEditor } from './editors/datetime';
+import { DescribedByEditor } from './editors/describedby';
+import { EnumEditor } from './editors/enum';
+import { HiddenEditor } from './editors/hidden';
+import { InfoEditor } from './editors/info';
+import { IntegerEditor } from './editors/integer';
+import { IpEditor } from './editors/ip';
+import { JoditEditor } from './editors/jodit';
+import { MultipleEditor } from './editors/multiple';
+import { MultiSelectEditor } from './editors/multiselect';
+import { NullEditor } from './editors/null';
+import { NumberEditor } from './editors/number';
+import { ObjectEditor } from './editors/object';
+import { RadioEditor } from './editors/radio';
+import { ScEditor } from './editors/sceditor';
+import { SelectEditor } from './editors/select';
+import { Select2Editor } from './editors/select2';
+import { SelectizeEditor } from './editors/selectize';
+import { SignatureEditor } from './editors/signature';
+import { SimplemdeEditor } from './editors/simplemde';
+import { StarratingEditor } from './editors/starrating';
+import { StringEditor } from './editors/string';
+import { TableEditor } from './editors/table';
+import { UploadEditor } from './editors/upload';
+import { UuidEditor } from './editors/uuid';
+
+
+// Internal helper function called only here so we won't export as part of class
+// Previously the assignment to the JSONEditor.defaults.editors was done in each of the editor
+// files but doing it this way removes each of the editors' dependency on JSONEditor
+var assignDefaultEditors = function (editors) {
+  editors.ace = AceEditor;
+  editors.array = ArrayEditor;
+  editors.arrayChoices = ArrayChoicesEditor;
+  editors.arraySelect2 = ArraySelect2Editor;
+  editors.arraySelectize = ArraySelectizeEditor;
+  editors.autocomplete = AutocompleteEditor;
+  editors.base64 = Base64Editor;
+  editors.button = ButtonEditor;
+  editors.checkbox = CheckboxEditor;
+  editors.choices = ChoicesEditor;
+  editors.datetime = DatetimeEditor;
+  editors.describedBy = DescribedByEditor;
+  editors.enum = EnumEditor;
+  editors.hidden = HiddenEditor
+  editors.info = InfoEditor;
+  editors.integer = IntegerEditor;
+  editors.ip = IpEditor;
+  editors.jodit = JoditEditor;
+  editors.multiple = MultipleEditor;
+  editors.multiselect = MultiSelectEditor;
+  editors.null = NullEditor;
+  editors.number = NumberEditor;
+  editors.object = ObjectEditor;
+  editors.radio = RadioEditor;
+  editors.sceditor = ScEditor;
+  editors.select = SelectEditor;
+  editors.select2 = Select2Editor;
+  editors.selectize = SelectizeEditor;
+  editors.signature = SignatureEditor;
+  editors.simplemde = SimplemdeEditor;
+  editors.starrating = StarratingEditor;
+  editors.string = StringEditor;
+  editors.table = TableEditor;
+  editors.upload = UploadEditor;
+  editors.uuid = UuidEditor;
+}
+
 
 var JSONEditor = function(element,options) {
   if (!(element instanceof Element)) {
     throw new Error('element should be an instance of Element');
   }
+  console.log("core function invoking $extend");
   options = $extend({},JSONEditor.defaults.options,options||{});
   this.element = element;
   this.options = options;
@@ -58,7 +141,7 @@ JSONEditor.prototype = {
       if(self.options.custom_validators) {
         validator_options.custom_validators = self.options.custom_validators;
       }
-      self.validator = new JSONEditor.Validator(self,null,validator_options);
+      self.validator = new Validator(self,null,validator_options);
       
       // Create the root editor
       var schema = self.expandRefs(self.schema);
@@ -91,6 +174,7 @@ JSONEditor.prototype = {
       });
     }, fetchUrl, fileBase);
   },
+
   getValue: function() {
     if(!this.ready) throw "JSON Editor not ready yet.  Listen for 'ready' event before getting the value";
 
@@ -665,12 +749,9 @@ JSONEditor.prototype = {
   }
 };
 
-JSONEditor.defaults = {
-  themes: {},
-  templates: {},
-  iconlibs: {},
-  editors: {},
-  languages: {},
-  resolvers: [],
-  custom_validators: []
-};
+
+JSONEditor.defaults=getDefaults();
+theme(JSONEditor);
+JSONEditor.AbstractEditor = AbstractEditor;
+assignDefaultEditors(JSONEditor.defaults.editors);
+export { JSONEditor };
