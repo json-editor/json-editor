@@ -1,5 +1,5 @@
 import { SelectEditor } from './select';
-
+import { $extend, $each } from '../utilities';
 export var SelectizeEditor = SelectEditor.extend({
 
   setValue: function(value, initial) {
@@ -24,9 +24,9 @@ export var SelectizeEditor = SelectEditor.extend({
 
     if (window.jQuery && window.jQuery.fn && window.jQuery.fn.selectize && !this.selectize_instance) {
 
-      // Get options, either global options from "JSONEditor.defaults.options.selectize" or
+      // Get options, either global options from "this.defaults.options.selectize" or
       // single property options from schema "options.selectize"
-      var self = this, options = this.expandCallbacks('selectize', $extend({}, JSONEditor.defaults.options.selectize || {}, this.options.selectize || {}));
+      var self = this, options = this.expandCallbacks('selectize', $extend({}, this.defaults.options.selectize || {}, this.options.selectize || {}));
 
       // New items are allowed if option "create" is true and type is "string"
       this.newEnumAllowed = options.create = !!options.create && this.schema.type == 'string';

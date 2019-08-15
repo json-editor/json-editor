@@ -1,5 +1,5 @@
 import { MultiSelectEditor } from '../multiselect';
-
+import { $extend } from '../../utilities';
 export var ArraySelect2Editor = MultiSelectEditor.extend({
 
   setValue: function(value, initial) {
@@ -24,12 +24,12 @@ export var ArraySelect2Editor = MultiSelectEditor.extend({
 
     if (window.jQuery && window.jQuery.fn && window.jQuery.fn.select2 && !this.select2_instance) {
 
-      // Get options, either global options from "JSONEditor.defaults.options.select2" or
+      // Get options, either global options from "this.defaults.options.select2" or
       // single property options from schema "options.select2"
       options = this.expandCallbacks('select2', $extend({}, {
         tags: true,
         width: '100%'
-      }, JSONEditor.defaults.options.select2 || {}, this.options.select2 || {}));
+      }, this.defaults.options.select2 || {}, this.options.select2 || {}));
 
       // New items are allowed if option "tags" is true and items type is "string"
       this.newEnumAllowed = options.tags = !!options.tags && this.schema.items && this.schema.items.type == 'string';

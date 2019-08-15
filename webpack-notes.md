@@ -1,4 +1,23 @@
-# Webpack Todo
+# Webpack
+
+## Refactoring Issues
+
+### Editors
+
+#### JSONEditor.defaults
+
+The base class editor had a dependency on the `translate` and `callbacks` properties of `JSONEditor.defaults`.
+
+Aditionally, all  editors had a single dependency on `JSONEditor` via the `.defaults.options` property, accessed in the `build()` or `afterInputReady()` method. In each case, these options are merged with the user options using a virtually identical formula. Would it be worth looking at creating a base class helper method for this merge, to keep things DRY?.
+
+For now I have passed in `JSONEditor.defaults` as `defaults`.
+
+
+
+#### MultipleEditor validator
+Aditionally, MultipleEditor needs to create an instance of the Validator class (not sure why only that editor)
+
+## TODO
 
 ## Source Files
 

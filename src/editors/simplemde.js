@@ -1,5 +1,5 @@
 import { StringEditor } from './string';
-
+import { $extend, $each } from '../utilities';
 export var SimplemdeEditor = StringEditor.extend({
 
   setValue: function(value,initial,from_template) {
@@ -16,11 +16,11 @@ export var SimplemdeEditor = StringEditor.extend({
     var self = this, options;
 
     if (window.SimpleMDE) {
-      // Get options, either global options from "JSONEditor.defaults.options.simplemde" or
+      // Get options, either global options from "this.defaults.options.simplemde" or
       // single property options from schema "options.simplemde"
       options = this.expandCallbacks('simplemde', $extend({}, {
         height: 300
-      }, JSONEditor.defaults.options.simplemde || {}, this.options.simplemde || {}, {
+      }, this.defaults.options.simplemde || {}, this.options.simplemde || {}, {
         element: this.input
       }));
 

@@ -1,5 +1,5 @@
 import { AbstractEditor } from '../editor';
-
+import { $extend, $each } from '../utilities';
 export var ObjectEditor = AbstractEditor.extend({
 
   getDefault: function() {

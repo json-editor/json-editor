@@ -1,5 +1,5 @@
 import { MultiSelectEditor } from '../multiselect';
-
+import { $extend } from '../../utilities';
 export var ArrayChoicesEditor = MultiSelectEditor.extend({
   setValue: function(value, initial) {
     if (this.choices_instance) {
@@ -21,12 +21,12 @@ export var ArrayChoicesEditor = MultiSelectEditor.extend({
 
     if (window.Choices && !this.choices_instance) {
       var options, self = this;
-      // Get options, either global options from "JSONEditor.defaults.options.choices" or
+      // Get options, either global options from "this.defaults.options.choices" or
       // single property options from schema "options.choices"
       options = this.expandCallbacks('choices', $extend({}, {
         removeItems: true,
         removeItemButton: true
-      }, JSONEditor.defaults.options.choices || {}, this.options.choices || {}, {
+      }, this.defaults.options.choices || {}, this.options.choices || {}, {
         addItems: true,
         editItems: false,
         duplicateItemsAllowed: false

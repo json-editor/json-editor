@@ -1,5 +1,5 @@
 import { AbstractEditor } from '../editor';
-
+import { $extend, $each } from '../utilities';
 export var StringEditor = AbstractEditor.extend({
   register: function() {
     this._super();
@@ -222,7 +222,7 @@ export var StringEditor = AbstractEditor.extend({
   },
   setupCleave: function(el) {
     // Enable cleave.js support if library is loaded and config is available
-    var options = this.expandCallbacks('cleave', $extend({}, JSONEditor.defaults.options.cleave || {}, this.options.cleave || {}));
+    var options = this.expandCallbacks('cleave', $extend({}, this.defaults.options.cleave || {}, this.options.cleave || {}));
     if (Array.Keys(options).length > 0) {
       this.cleave_instance = new window.Cleave(el, options);
     }

@@ -1,5 +1,5 @@
 import { SelectEditor } from './select';
-
+import { $extend, $each } from '../utilities';
 export var ChoicesEditor = SelectEditor.extend({
 
   setValue: function(value,initial) {
@@ -28,9 +28,9 @@ export var ChoicesEditor = SelectEditor.extend({
   afterInputReady: function() {
     if (window.Choices && !this.choices_instance) {
       var options, self = this;
-      // Get options, either global options from "JSONEditor.defaults.options.choices" or
+      // Get options, either global options from "this.defaults.options.choices" or
       // single property options from schema "options.choices"
-      options = this.expandCallbacks('choices', $extend({}, JSONEditor.defaults.options.choices || {}, this.options.choices || {}));
+      options = this.expandCallbacks('choices', $extend({}, this.defaults.options.choices || {}, this.options.choices || {}));
 
       this.choices_instance = new window.Choices(this.input, options);
 

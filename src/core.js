@@ -4,6 +4,7 @@ import { Validator } from './validator';
 import { $extend, $each } from './utilities';
 
 import { AbstractEditor } from './editor';
+import { AceEditor } from './editors/ace';
 import { ArrayEditor } from './editors/array';
 import { ArrayChoicesEditor } from './editors/array/choices';
 import { ArraySelect2Editor } from './editors/array/select2';
@@ -39,11 +40,11 @@ import { TableEditor } from './editors/table';
 import { UploadEditor } from './editors/upload';
 import { UuidEditor } from './editors/uuid';
 
-
 // Internal helper function called only here so we won't export as part of class
 // Previously the assignment to the JSONEditor.defaults.editors was done in each of the editor
 // files but doing it this way removes each of the editors' dependency on JSONEditor
 var assignDefaultEditors = function (editors) {
+  
   editors.ace = AceEditor;
   editors.array = ArrayEditor;
   editors.arrayChoices = ArrayChoicesEditor;
@@ -293,7 +294,7 @@ JSONEditor.prototype = {
   },
   createEditor: function(editor_class, options) {
     options = $extend({},editor_class.options||{},options);
-    return new editor_class(options);
+    return new editor_class(options, JSONEditor.defaults);
   },
   onChange: function() {
     if(!this.ready) return;

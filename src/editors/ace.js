@@ -1,5 +1,5 @@
-import { String } from './string';
-
+import { StringEditor } from './string';
+import { $extend, $each } from '../utilities';
 export var AceEditor = StringEditor.extend({
 
   setValue: function(value,initial,from_template) {
@@ -25,13 +25,13 @@ export var AceEditor = StringEditor.extend({
         // aliases for c/cpp
       if(mode === 'cpp' || mode === 'c++' || mode === 'c') mode = 'c_cpp';
 
-      // Get options, either global options from "JSONEditor.defaults.options.ace" or
+      // Get options, either global options from "this.defaults.options.ace" or
       // single property options from schema "options.ace"
       options = this.expandCallbacks('ace', $extend({}, {
         selectionStyle: 'text',
         minLines: 30,
         maxLines: 30
-      }, JSONEditor.defaults.options.ace || {}, this.options.ace || {}, {
+      }, this.defaults.options.ace || {}, this.options.ace || {}, {
         mode: 'ace/mode/' + mode
       }));
 

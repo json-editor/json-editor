@@ -1,5 +1,5 @@
 import { AbstractEditor } from '../editor';
-
+import { $extend, $each } from '../utilities';
 export var SelectEditor = AbstractEditor.extend({
 
   setValue: function(value,initial) {

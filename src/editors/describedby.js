@@ -1,6 +1,6 @@
 // hyper-link describeBy Editor
 import { AbstractEditor } from '../editor';
-
+import { $extend, $each } from '../utilities';
 export var DescribedByEditor = AbstractEditor.extend({
 
   register: function() {

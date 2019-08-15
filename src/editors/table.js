@@ -1,5 +1,5 @@
 import { ArrayEditor } from './array';
-
+import { $extend, $each } from '../utilities';
 export var TableEditor = ArrayEditor.extend({
 
   register: function() {

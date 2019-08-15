@@ -1,5 +1,5 @@
 import { MultiSelectEditor } from '../multiselect';
-
+import { $extend } from '../../utilities';
 export var ArraySelectizeEditor = MultiSelectEditor.extend({
 
   setValue: function(value, initial) {
@@ -21,14 +21,14 @@ export var ArraySelectizeEditor = MultiSelectEditor.extend({
     var options, self = this;
 
     if (window.jQuery && window.jQuery.fn && window.jQuery.fn.selectize && !this.selectize_instance) {
-      // Get options, either global options from "JSONEditor.defaults.options.selectize" or
+      // Get options, either global options from "this.defaults.options.selectize" or
       // single property options from schema "options.selectize"
       options = this.expandCallbacks('selectize', $extend({}, {
         plugins: ["remove_button"],
         delimiter: false,
         createOnBlur: true,
         create: true
-      },JSONEditor.defaults.options.selectize || {}, this.options.selectize || {}));
+      },this.defaults.options.selectize || {}, this.options.selectize || {}));
 
       // New items are allowed if option "create" is true and items type is "string"
       this.newEnumAllowed = options.create = !!options.create && this.schema.items && this.schema.items.type == 'string';

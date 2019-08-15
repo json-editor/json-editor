@@ -1,5 +1,5 @@
 import { AbstractEditor } from '../editor';
-
+import { $extend, $each } from '../utilities';
 export var ArrayEditor = AbstractEditor.extend({
   askConfirmation: function() {
     if (this.jsoneditor.options.prompt_before_delete === true) {
