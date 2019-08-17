@@ -54,6 +54,7 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     this.enum_values = [];
     this.enum_display = [];
     var i;
+    var callback;
 
     // Enum options enumerated
     if(this.schema["enum"]) {
@@ -132,13 +133,19 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
       // Walk through this array and fix up the values
       for(i=0; i<this.enumSource.length; i++) {
         if(this.enumSource[i].value) {
-          this.enumSource[i].value = this.jsoneditor.compileTemplate(this.enumSource[i].value, this.template_engine);
+          callback = this.expandCallbacks('template', {template: this.enumSource[i].value});
+          if (typeof callback.template === 'function') this.enumSource[i].value = callback.template;
+          else this.enumSource[i].value = this.jsoneditor.compileTemplate(this.enumSource[i].value, this.template_engine);
         }
         if(this.enumSource[i].title) {
-          this.enumSource[i].title = this.jsoneditor.compileTemplate(this.enumSource[i].title, this.template_engine);
+          callback = this.expandCallbacks('template', {template: this.enumSource[i].title});
+          if (typeof callback.template === 'function') this.enumSource[i].title = callback.template;
+          else this.enumSource[i].title = this.jsoneditor.compileTemplate(this.enumSource[i].title, this.template_engine);
         }
         if(this.enumSource[i].filter && !(Array.isArray(this.enumSource[i]))) {
-          this.enumSource[i].filter = this.jsoneditor.compileTemplate(this.enumSource[i].filter, this.template_engine);
+          callback = this.expandCallbacks('template', {template: this.enumSource[i].filter});
+          if (typeof callback.template === 'function') this.enumSource[i].filter = callback.template;
+          else this.enumSource[i].filter = this.jsoneditor.compileTemplate(this.enumSource[i].filter, this.template_engine);
         }
       }
     }
