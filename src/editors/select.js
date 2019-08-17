@@ -282,20 +282,16 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
             }
 
             if (this.enumSource[i].sort) {
-              var sorted = (function(iv, it, or) {
-                var i;
-                iv.map(function (v, i) {
-                  return { v: v, t: it[i] };
+              (function(item_values, item_titles, order) {
+                item_values.map(function (v, i) {
+                  return { v: v, t: item_titles[i] };
                 }).sort(function(a, b) {
-                  return ((a.v < b.v) ? -or : ((a.v == b.v) ? 0 : or));
+                  return ((a.v < b.v) ? -order : ((a.v == b.v) ? 0 : order));
                 }).forEach(function(v, i) {
-                  iv[i] = v.v;
-                  it[i] = v.t;
+                  item_values[i] = v.v;
+                  item_titles[i] = v.t;
                 });
-                return [iv, it];
               }.bind(null, item_values, item_titles, this.enumSource[i].sort == 'desc' ? 1 : -1))();
-              item_values = sorted[0];
-              item_titles = sorted[1];
             }
 
             select_options = select_options.concat(item_values);
