@@ -128,7 +128,6 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
           }
         }
       }
-
       // Now, enumSource is an array of sources
       // Walk through this array and fix up the values
       for(i=0; i<this.enumSource.length; i++) {
@@ -142,7 +141,7 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
           if (typeof callback.template === 'function') this.enumSource[i].title = callback.template;
           else this.enumSource[i].title = this.jsoneditor.compileTemplate(this.enumSource[i].title, this.template_engine);
         }
-        if(this.enumSource[i].filter && !(Array.isArray(this.enumSource[i]))) {
+        if(this.enumSource[i].filter && this.enumSource[i].value) {
           callback = this.expandCallbacks('template', {template: this.enumSource[i].filter});
           if (typeof callback.template === 'function') this.enumSource[i].filter = callback.template;
           else this.enumSource[i].filter = this.jsoneditor.compileTemplate(this.enumSource[i].filter, this.template_engine);
@@ -282,10 +281,24 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
               }
             }
 
-            // TODO: sort
+            if (this.enumSource[i].sort) {
+              var order = this.enumSource[i].sort == 'desc' ? 1 : -1;
+              item_values.map(function(v, i) {
+                return {
+                  value1  : v,
+                  value2  : item_titles[i]
+                };
+              }).sort(function(a, b) {
+                return ((a.value1 < b.value1) ? -order : ((a.value1 == b.value1) ? 0 : order));
+              }).forEach(function(v, i) {
+                item_values[i] = v.value1;
+                item_titles[i] = v.value2;
+              });
+            }
 
             select_options = select_options.concat(item_values);
             select_titles = select_titles.concat(item_titles);
+
           }
         }
       }
