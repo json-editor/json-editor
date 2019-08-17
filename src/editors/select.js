@@ -137,7 +137,7 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
         if(this.enumSource[i].title) {
           this.enumSource[i].title = this.jsoneditor.compileTemplate(this.enumSource[i].title, this.template_engine);
         }
-        if(this.enumSource[i].filter) {
+        if(this.enumSource[i].filter && !(Array.isArray(this.enumSource[i]))) {
           this.enumSource[i].filter = this.jsoneditor.compileTemplate(this.enumSource[i].filter, this.template_engine);
         }
       }
