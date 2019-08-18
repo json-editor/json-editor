@@ -142,7 +142,7 @@ JSONEditor.prototype = {
       if(self.options.custom_validators) {
         validator_options.custom_validators = self.options.custom_validators;
       }
-      self.validator = new Validator(self,null,validator_options);
+      self.validator = new Validator(self,null,validator_options, JSONEditor.defaults);
       
       // Create the root editor
       var schema = self.expandRefs(self.schema);
