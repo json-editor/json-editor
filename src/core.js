@@ -40,6 +40,16 @@ import { TableEditor } from './editors/table';
 import { UploadEditor } from './editors/upload';
 import { UuidEditor } from './editors/uuid';
 
+import { defaultTemplate } from './templates/default';
+import { ejsTemplate } from './templates/ejs';
+import { handlebarsTemplate } from './templates/handlebars';
+import { hoganTemplate } from './templates/hogan';
+import { lodashTemplate } from './templates/lodash';
+import { markupTemplate } from './templates/markup';
+import { mustacheTemplate } from './templates/mustache';
+import { swigTemplate } from './templates/swig';
+import { underscoreTemplate } from './templates/underscore';
+
 // Internal helper function called only here so we won't export as part of class
 // Previously the assignment to the JSONEditor.defaults.editors was done in each of the editor
 // files but doing it this way removes each of the editors' dependency on JSONEditor
@@ -80,6 +90,19 @@ var assignDefaultEditors = function (editors) {
   editors.table = TableEditor;
   editors.upload = UploadEditor;
   editors.uuid = UuidEditor;
+}
+
+var assignTemplates = function(templates)
+{
+  templates.default = defaultTemplate;
+  templates.ejs = ejsTemplate;
+  templates.handlebars = handlebarsTemplate;
+  templates.hogan = hoganTemplate;
+  templates.hogan = lodashTemplate;
+  templates.markup = markupTemplate;
+  templates.mustache = mustacheTemplate;
+  templates.swig = swigTemplate;
+  templates.underscore = underscoreTemplate;
 }
 
 
@@ -755,4 +778,5 @@ JSONEditor.defaults=getDefaults();
 theme(JSONEditor);
 JSONEditor.AbstractEditor = AbstractEditor;
 assignDefaultEditors(JSONEditor.defaults.editors);
+assignTemplates(JSONEditor.defaults.templates);
 export { JSONEditor };

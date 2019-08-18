@@ -1,4 +1,4 @@
-JSONEditor.defaults.templates["default"] = function() {
+export var defaultTemplate =  function() {
   return {
     compile: function(template) {
       var matches = template.match(/{{\s*([a-zA-Z0-9\-_ \.]+)\s*}}/g);
