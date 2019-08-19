@@ -40,16 +40,21 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
 /*    '.columns': 'border:1px solid rgba(255,0,0,.5);',
     '.columns .columns': 'border:1px solid rgba(0,255,0,.5);',*/
     '.columns .container.je-noindent': 'padding-left:0;padding-right:0;', // Option: object_indent
-    /* Adjustments for Selectize styling */
+    // Adjustments for Selectize styling
     '.selectize-control.multi .item': 'background: var(--primary-color) !important;',
-    /* Adjustments for Select2 styling */
+    // Adjustments for Select2 styling
     '.select2-container--default .select2-selection--single .select2-selection__arrow': 'display: none',
     '.select2-container--default .select2-selection--single': 'border: none;',
     '.select2-container .select2-selection--single .select2-selection__rendered': 'padding: 0; ',
     '.select2-container .select2-search--inline .select2-search__field': 'margin-top: 0;',
     '.select2-container--default.select2-container--focus .select2-selection--multiple': 'border: .05rem solid var(--gray-color);',
     '.select2-container--default .select2-selection--multiple .select2-selection__choice': 'margin:.4rem .2rem .2rem 0;padding:2px 5px;background-color:var(--primary-color);color:var(--light-color)',
-    '.select2-container--default .select2-search--inline .select2-search__field': 'line-height: normal;'
+    '.select2-container--default .select2-search--inline .select2-search__field': 'line-height: normal;',
+    // Adjustment styling for Choices
+    '.choices': 'margin-bottom: auto',
+    '.choices__list--multiple .choices__item': 'border:none;background-color:var(--primary-color);color:var(--light-color)',
+    '.choices[data-type*="select-multiple"] .choices__button': 'border-left:.05rem solid #2826A6',
+    '.choices__inner': 'min-height: 20px;padding: 2px 7.5px 2px 3.75px'
   },
   // Functions for setting up the grid container, row and columns
   setGridColumnSize: function(el,size, offset) {
