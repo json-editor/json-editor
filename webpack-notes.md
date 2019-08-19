@@ -20,9 +20,13 @@ Aditionally, MultipleEditor needs to create an instance of the Validator class (
 ###
 
 1. ie9.js polyfill - can we get rid altogether?
-2. implement any remaining grunt stuff then remove grunt dependencies
-3. implement afterAll in core.spec.js
-4. implement production/development?
+1. implement any remaining grunt stuff then remove grunt dependencies:
+    1. cssmin?
+    1. jshint?
+    1. connect?
+    1. run? - interestingly includes mocha/selenium
+1. implement afterAll in core.spec.js
+1. implement production/development?
 
 ### Source Files
 
