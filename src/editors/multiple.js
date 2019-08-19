@@ -215,7 +215,7 @@ export var MultipleEditor = AbstractEditor.extend({
         }
       }
 
-      self.validators[i] = new Validator(self.jsoneditor,schema,validator_options);
+      self.validators[i] = new Validator(self.jsoneditor,schema,validator_options,self.defaults);
     });
 
     this.switchEditor(0);

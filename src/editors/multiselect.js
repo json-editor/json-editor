@@ -1,4 +1,6 @@
 import { AbstractEditor } from '../editor';
+import { $each } from '../utilities';
+
 
 export var MultiSelectEditor = AbstractEditor.extend({
   onInputChange: function() {

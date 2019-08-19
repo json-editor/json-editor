@@ -1,5 +1,11 @@
 # Webpack
 
+## Useful docs
+
+https://webpack.js.org/guides/
+
+https://v5.angular.io/guide/webpack
+
 ## Refactoring Issues
 
 ### Editors
@@ -26,7 +32,7 @@ Aditionally, MultipleEditor needs to create an instance of the Validator class (
     1. connect?
     1. run? - interestingly includes mocha/selenium
 1. implement afterAll in core.spec.js
-1. implement production/development?
+1. implement production/development? - done
 
 ### Source Files
 

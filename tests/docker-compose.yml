@@ -7,7 +7,7 @@ services:
     working_dir: /repo
     command: npm run serve-test
     ports:
-      - '9000:9000'
+      - '9010:9010'
       - '9001:9001'
   firefox:
     image: selenium/standalone-firefox-debug:3.141.59-oxygen

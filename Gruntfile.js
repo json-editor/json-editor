@@ -189,7 +189,7 @@ module.exports = function(grunt) {
     connect: {
         default: {
             options: {
-                port: 9000,
+                port: 9010,
                 hostname: '0.0.0.0',
                 debug: true,
                 keepalive: true

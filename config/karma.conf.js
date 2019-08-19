@@ -1,11 +1,11 @@
 // Karma configuration
-// Generated on Mon Jul 22 2019 09:33:09 GMT+0200 (Central European Summer Time)
+var webpackConfig = require('./webpack.test');
 
 module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
+    basePath: '../',
 
 
     // frameworks to use
@@ -29,13 +29,7 @@ module.exports = function(config) {
 
 
 
-    webpack: {
-      // karma watches the test entry points
-      // (you don't need to specify the entry option)
-      // webpack watches dependencies
-      // webpack configuration
-      devtool: 'inline-source-map'
-    },
+    webpack: webpackConfig,
  
     webpackMiddleware: {
       // webpack-dev-middleware configuration

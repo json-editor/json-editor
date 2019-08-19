@@ -1,7 +1,7 @@
 /**
  * All editors should extend from this class
  */
-import { $extend } from './utilities';
+import { $extend, $each } from './utilities';
 
 export var AbstractEditor = Class.extend({
   onChildEditorChange: function(editor) {

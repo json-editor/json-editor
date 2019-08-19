@@ -1,5 +1,7 @@
-import { getDefaults } from './defaults';
-import { theme } from './theme';
+import './styles/choices.css';
+import './styles/starrating.css';
+
+import { getDefaults, getPlugins } from './defaults';
 import { Validator } from './validator';
 import { $extend, $each } from './utilities';
 
@@ -62,13 +64,13 @@ import { swigTemplate } from './templates/swig';
 import { underscoreTemplate } from './templates/underscore';
 
 import { bootstrap2Iconlib } from './iconlibs/bootstrap2';
-import { bootstrap3Iconlib } from './iconlibs/bootstrap2';
+import { bootstrap3Iconlib } from './iconlibs/bootstrap3';
 import { fontawesome3Iconlib } from './iconlibs/fontawesome3';
 import { fontawesome4Iconlib } from './iconlibs/fontawesome4';
 import { fontawesome5Iconlib } from './iconlibs/fontawesome5';
 import { foundation2Iconlib } from './iconlibs/foundation2';
 import { foundation3Iconlib } from './iconlibs/foundation3';
-import { jqueryuiIconlib } from './iconlibs/foundation3';
+import { jqueryuiIconlib } from './iconlibs/jqueryui';
 import { materialiconsIconlib } from './iconlibs/materialicons';
 import { spectreIconlib } from './iconlibs/spectre';
 
@@ -162,7 +164,7 @@ var assignTemplates = function(templates)
 }
 
 
-var JSONEditor = function(element,options) {
+export var JSONEditor = function(element,options) {
   if (!(element instanceof Element)) {
     throw new Error('element should be an instance of Element');
   }
@@ -830,10 +832,13 @@ JSONEditor.prototype = {
 
 
 JSONEditor.defaults=getDefaults();
+JSONEditor.plugins=getPlugins();
 assignThemes(JSONEditor.defaults.themes);
 JSONEditor.AbstractEditor = AbstractEditor;
 assignDefaultEditors(JSONEditor.defaults.editors);
 assignTemplates(JSONEditor.defaults.templates);
 assignIconlibs(JSONEditor.defaults.iconlibs);
 wrapJQuery();
-export { JSONEditor };
+
+// Webpack will now allocate this to Window
+global.JSONEditor = JSONEditor;
