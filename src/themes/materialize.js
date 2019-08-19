@@ -67,6 +67,20 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
 
     },
 
+    afterInputReady: function(input) {
+      var label = input.previousSibling;
+
+      if(input.type && input.type === 'range'){
+        label = input.parentElement.previousSibling;
+      }
+
+      if(input.value || (input.dataset.containerFor && input.dataset.containerFor === 'radio')){
+        if(label && label.localName === 'label'){
+          label.classList.add('active'); 
+        }
+      } 
+    },
+
     /**
    * Gets a form control object consisiting of several sub objects.
    *
@@ -81,7 +95,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
 
       var ctrl,
       type = input.type;
-
+      
       // Checkboxes get wrapped in p elements.
       if (type && (type === 'checkbox' || type === 'radio')) {
 
