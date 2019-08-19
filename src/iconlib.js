@@ -1,4 +1,4 @@
-JSONEditor.AbstractIconLib = Class.extend({
+export var AbstractIconLib = Class.extend({
   mapping: {
     collapse: '',
     expand: '',

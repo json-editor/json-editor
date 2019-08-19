@@ -61,7 +61,32 @@ import { mustacheTemplate } from './templates/mustache';
 import { swigTemplate } from './templates/swig';
 import { underscoreTemplate } from './templates/underscore';
 
+import { bootstrap2Iconlib } from './iconlibs/bootstrap2';
+import { bootstrap3Iconlib } from './iconlibs/bootstrap2';
+import { fontawesome3Iconlib } from './iconlibs/fontawesome3';
+import { fontawesome4Iconlib } from './iconlibs/fontawesome4';
+import { fontawesome5Iconlib } from './iconlibs/fontawesome5';
+import { foundation2Iconlib } from './iconlibs/foundation2';
+import { foundation3Iconlib } from './iconlibs/foundation3';
+import { jqueryuiIconlib } from './iconlibs/foundation3';
+import { materialiconsIconlib } from './iconlibs/materialicons';
+import { spectreIconlib } from './iconlibs/spectre';
+
 import { wrapJQuery } from './jquery';
+
+var assignIconlibs = function(iconlibs)
+{
+  iconlibs.bootstrap2 = bootstrap2Iconlib;
+  iconlibs.bootstrap3 = bootstrap3Iconlib;
+  iconlibs.fontawesome3 = fontawesome3Iconlib;
+  iconlibs.fontawesome4 = fontawesome4Iconlib;
+  iconlibs.fontawesome5 = fontawesome5Iconlib;
+  iconlibs.foundation2 = foundation2Iconlib;
+  iconlibs.foundation3 = foundation3Iconlib;
+  iconlibs.jqueryui = jqueryuiIconlib;
+  iconlibs.materialicons = materialiconsIconlib;
+  iconlibs.spectre = spectreIconlib;
+}
 
 var assignThemes = function (themes)
 {
@@ -809,5 +834,6 @@ assignThemes(JSONEditor.defaults.themes);
 JSONEditor.AbstractEditor = AbstractEditor;
 assignDefaultEditors(JSONEditor.defaults.editors);
 assignTemplates(JSONEditor.defaults.templates);
+assignIconlibs(JSONEditor.defaults.iconlibs);
 wrapJQuery();
 export { JSONEditor };

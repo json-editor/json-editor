@@ -12,14 +12,19 @@ Aditionally, all  editors had a single dependency on `JSONEditor` via the `.defa
 
 For now I have passed in `JSONEditor.defaults` as `defaults`.
 
-
-
 #### MultipleEditor validator
 Aditionally, MultipleEditor needs to create an instance of the Validator class (not sure why only that editor)
 
 ## TODO
 
-## Source Files
+###
+
+1. ie9.js polyfill - can we get rid altogether?
+2. implement any remaining grunt stuff then remove grunt dependencies
+3. implement afterAll in core.spec.js
+4. implement production/development?
+
+### Source Files
 
 ```javascript
 {
@@ -84,8 +89,8 @@ Aditionally, MultipleEditor needs to create an instance of the Validator class (
           // All the themes and iconlibs
           'src/theme.js',           // Done
           'src/themes/*.js',        // Done
-          'src/iconlib.js',
-          'src/iconlibs/*.js',
+          'src/iconlib.js',         // Done
+          'src/iconlibs/*.js',      // Done
 
           // The JS templating engines
           'src/templates/*.js',     // Done
@@ -94,7 +99,7 @@ Aditionally, MultipleEditor needs to create an instance of the Validator class (
           'src/defaults.js',    // Done
 
           // Wrapper for $.fn style initialization
-          'src/jquery.js',      
+          'src/jquery.js',    // Done  
 
           // End the closure
           'src/outro.js'        // Remove
