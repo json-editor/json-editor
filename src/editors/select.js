@@ -54,6 +54,7 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
     this.enum_values = [];
     this.enum_display = [];
     var i;
+    var callback;
 
     // Enum options enumerated
     if(this.schema["enum"]) {
@@ -127,18 +128,23 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
           }
         }
       }
-
       // Now, enumSource is an array of sources
       // Walk through this array and fix up the values
       for(i=0; i<this.enumSource.length; i++) {
         if(this.enumSource[i].value) {
-          this.enumSource[i].value = this.jsoneditor.compileTemplate(this.enumSource[i].value, this.template_engine);
+          callback = this.expandCallbacks('template', {template: this.enumSource[i].value});
+          if (typeof callback.template === 'function') this.enumSource[i].value = callback.template;
+          else this.enumSource[i].value = this.jsoneditor.compileTemplate(this.enumSource[i].value, this.template_engine);
         }
         if(this.enumSource[i].title) {
-          this.enumSource[i].title = this.jsoneditor.compileTemplate(this.enumSource[i].title, this.template_engine);
+          callback = this.expandCallbacks('template', {template: this.enumSource[i].title});
+          if (typeof callback.template === 'function') this.enumSource[i].title = callback.template;
+          else this.enumSource[i].title = this.jsoneditor.compileTemplate(this.enumSource[i].title, this.template_engine);
         }
-        if(this.enumSource[i].filter) {
-          this.enumSource[i].filter = this.jsoneditor.compileTemplate(this.enumSource[i].filter, this.template_engine);
+        if(this.enumSource[i].filter && this.enumSource[i].value) {
+          callback = this.expandCallbacks('template', {template: this.enumSource[i].filter});
+          if (typeof callback.template === 'function') this.enumSource[i].filter = callback.template;
+          else this.enumSource[i].filter = this.jsoneditor.compileTemplate(this.enumSource[i].filter, this.template_engine);
         }
       }
     }
@@ -275,10 +281,22 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
               }
             }
 
-            // TODO: sort
+            if (this.enumSource[i].sort) {
+              (function(item_values, item_titles, order) {
+                item_values.map(function (v, i) {
+                  return { v: v, t: item_titles[i] };
+                }).sort(function(a, b) {
+                  return ((a.v < b.v) ? -order : ((a.v == b.v) ? 0 : order));
+                }).forEach(function(v, i) {
+                  item_values[i] = v.v;
+                  item_titles[i] = v.t;
+                });
+              }.bind(null, item_values, item_titles, this.enumSource[i].sort == 'desc' ? 1 : -1))();
+            }
 
             select_options = select_options.concat(item_values);
             select_titles = select_titles.concat(item_titles);
+
           }
         }
       }
@@ -299,7 +317,7 @@ JSONEditor.defaults.editors.select = JSONEditor.AbstractEditor.extend({
       else {
         this.input.value = select_options[0];
         this.value = this.typecast(select_options[0] || "");
-        if(this.parent) this.parent.onChildEditorChange(this);
+        if(this.parent && !this.watchLoop) this.parent.onChildEditorChange(this);
         else this.jsoneditor.onChange();
         this.jsoneditor.notifyWatchers(this.path);
       }

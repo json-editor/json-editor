@@ -1318,6 +1318,63 @@ also make it work with an array of objects.  Here's an example:
 
 All of the optional templates in the verbose form have the properties `item` and `i` passed into them. `item` refers to the array element.  `i` is the zero-based index.
 
+#### JavaScript callbacks
+It is also possible to use JavaScript callback functions instead of templates for the enumSource properties properties: `value`, `title` and `filter`.
+
+**Example Schema:**
+````json
+{
+  "type": "object",
+  "properties": {
+    "possible_colors": {
+      "type": "array",
+      "format": "table",
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "primary_color": {
+      "type": "string",
+      "watch": {
+        "colors": "possible_colors"
+      },
+      "enumSource": [{
+        "source": "colors",
+        "filter": "enumFilterCB",
+        "title": "enumTitleCB",
+        "value": "enumValueCB"
+      }]
+    }
+  }
+}
+````
+
+**Example JavaScript callbacks:**
+````javascript
+window.JSONEditor.defaults.callbacks.template = {
+  "enumFilterCB": function(jseditor, e) {
+    if (e.item.text.toLowerCase() == 'red') return ""; // "red" is not allowed
+    return e.item.text;
+  },
+  "enumTitleCB": function(jseditor, e) {
+    return e.item.text.toUpperCase();
+  },
+  "enumValueCB": function(jseditor, e) {
+    return e.item.text.toLowerCase();
+  }
+};
+````
+
+#### Sorting
+
+To sort the dynamic EnumSource, you can set the EnumSource property `sort` to either `asc` or `desc`.
+
+
 ### Dynamic Headers
 
 The `title` keyword of a schema is used to add user friendly headers to the editing UI.  Sometimes though, dynamic headers, which change based on other fields, are helpful.
