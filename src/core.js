@@ -3,6 +3,17 @@ import { theme } from './theme';
 import { Validator } from './validator';
 import { $extend, $each } from './utilities';
 
+import { htmlTheme } from './themes/html';
+import { bootstrap2Theme } from './themes/bootstrap2';
+import { bootstrap3Theme } from './themes/bootstrap3';
+import { bootstrap4Theme } from './themes/bootstrap4';
+import { foundationTheme, foundation3Theme, foundation4Theme, foundation5Theme, foundation6Theme } from './themes/foundation';
+import { jqueryuiTheme } from './themes/jqueryui';
+import { barebonesTheme } from './themes/jsoneditor.barebones-theme';
+import { materializeTheme } from './themes/materialize';
+import { spectreTheme } from './themes/spectre';
+import { tailwindTheme } from './themes/tailwind';
+
 import { AbstractEditor } from './editor';
 import { AceEditor } from './editors/ace';
 import { ArrayEditor } from './editors/array';
@@ -49,6 +60,26 @@ import { markupTemplate } from './templates/markup';
 import { mustacheTemplate } from './templates/mustache';
 import { swigTemplate } from './templates/swig';
 import { underscoreTemplate } from './templates/underscore';
+
+import { wrapJQuery } from './jquery';
+
+var assignThemes = function (themes)
+{
+  themes.html = htmlTheme;
+  themes.bootstrap2 = bootstrap2Theme;
+  themes.bootstrap3 = bootstrap3Theme;
+  themes.bootstrap4 = bootstrap4Theme;
+  themes.foundation = foundationTheme;
+  themes.foundation3 = foundation3Theme;
+  themes.foundation4 = foundation4Theme;
+  themes.foundation5 = foundation5Theme;
+  themes.foundation6 = foundation6Theme;
+  themes.jqueryui = jqueryuiTheme;
+  themes.barebonesTheme = barebonesTheme;
+  themes.materialize = materializeTheme;
+  themes.spectre = spectreTheme;
+  themes.tailwind = tailwindTheme;  
+}
 
 // Internal helper function called only here so we won't export as part of class
 // Previously the assignment to the JSONEditor.defaults.editors was done in each of the editor
@@ -110,7 +141,6 @@ var JSONEditor = function(element,options) {
   if (!(element instanceof Element)) {
     throw new Error('element should be an instance of Element');
   }
-  console.log("core function invoking $extend");
   options = $extend({},JSONEditor.defaults.options,options||{});
   this.element = element;
   this.options = options;
@@ -775,8 +805,9 @@ JSONEditor.prototype = {
 
 
 JSONEditor.defaults=getDefaults();
-theme(JSONEditor);
+assignThemes(JSONEditor.defaults.themes);
 JSONEditor.AbstractEditor = AbstractEditor;
 assignDefaultEditors(JSONEditor.defaults.editors);
 assignTemplates(JSONEditor.defaults.templates);
+wrapJQuery();
 export { JSONEditor };

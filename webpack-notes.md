@@ -82,13 +82,13 @@ Aditionally, MultipleEditor needs to create an instance of the Validator class (
           'src/editors/info.js', // Done 
 
           // All the themes and iconlibs
-          'src/theme.js',           // Done - but should refactor
+          'src/theme.js',           // Done
           'src/themes/*.js',        // Done
           'src/iconlib.js',
           'src/iconlibs/*.js',
 
           // The JS templating engines
-          'src/templates/*.js',
+          'src/templates/*.js',     // Done
 
           // Set the defaults
           'src/defaults.js',    // Done

@@ -1,7 +1,6 @@
-export function htmlTheme(JSONEditor)
-{
+import { AbstractTheme } from '../theme'
 
-JSONEditor.defaults.themes.html = JSONEditor.AbstractTheme.extend({
+export var htmlTheme = AbstractTheme.extend({
   getFormInputLabel: function(text, req) {
     var el = this._super(text, req);
     el.style.display = 'block';
@@ -86,5 +85,3 @@ JSONEditor.defaults.themes.html = JSONEditor.AbstractTheme.extend({
     progressBar.removeAttribute('value');
   }
 });
-
-};

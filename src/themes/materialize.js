@@ -1,7 +1,6 @@
-export function materializeTheme(JSONEditor)
-{
+import { AbstractTheme } from '../theme'
 
-JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
+export var materializeTheme = AbstractTheme.extend(
   {
 
     /**
@@ -456,4 +455,3 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
 
   }
 );
-};

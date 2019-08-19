@@ -1,7 +1,6 @@
-export function bootstrap4Theme(JSONEditor)
-{
+import { AbstractTheme } from '../theme'
 
-JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
+export var bootstrap4Theme = AbstractTheme.extend({
   getSelectInput: function(options) {
     var el = this._super(options);
     el.classList.add("form-control");
@@ -244,4 +243,3 @@ JSONEditor.defaults.themes.bootstrap4 = JSONEditor.AbstractTheme.extend({
     return inputGroupContainer;
   }
 });
-};

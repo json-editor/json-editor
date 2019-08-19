@@ -1,7 +1,6 @@
-export function jqueryuiTheme(JSONEditor)
-{
+import { AbstractTheme } from '../theme'
 
-JSONEditor.defaults.themes.jqueryui = JSONEditor.AbstractTheme.extend({
+export var jqueryuiTheme = AbstractTheme.extend({
   getTable: function() {
     var el = this._super();
     el.setAttribute('cellpadding',5);
@@ -186,4 +185,3 @@ JSONEditor.defaults.themes.jqueryui = JSONEditor.AbstractTheme.extend({
     }
   }
 });
-};

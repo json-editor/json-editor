@@ -1,8 +1,7 @@
 // Base Foundation theme
-export function foundationTheme(JSONEditor)
-{
+import { AbstractTheme } from '../theme'
 
-JSONEditor.defaults.themes.foundation = JSONEditor.AbstractTheme.extend({
+export var foundationTheme = AbstractTheme.extend({
   getChildEditorHolder: function() {
     var el = document.createElement('div');
     el.style.marginBottom = '15px';
@@ -139,7 +138,7 @@ JSONEditor.defaults.themes.foundation = JSONEditor.AbstractTheme.extend({
 });
 
 // Foundation 3 Specific Theme
-JSONEditor.defaults.themes.foundation3 = JSONEditor.defaults.themes.foundation.extend({
+export var foundation3Theme = foundationTheme.extend({
   getHeaderButtonHolder: function() {
     var el = this._super();
     el.style.fontSize = '.6em';
@@ -234,7 +233,7 @@ JSONEditor.defaults.themes.foundation3 = JSONEditor.defaults.themes.foundation.e
 });
 
 // Foundation 4 Specific Theme
-JSONEditor.defaults.themes.foundation4 = JSONEditor.defaults.themes.foundation.extend({
+export var foundation4Theme = foundationTheme.extend({
   getHeaderButtonHolder: function() {
     var el = this._super();
     el.style.fontSize = '.6em';
@@ -260,7 +259,7 @@ JSONEditor.defaults.themes.foundation4 = JSONEditor.defaults.themes.foundation.e
 });
 
 // Foundation 5 Specific Theme
-JSONEditor.defaults.themes.foundation5 = JSONEditor.defaults.themes.foundation.extend({
+export var foundation5Theme = foundationTheme.extend({
   getFormInputDescription: function(text) {
     var el = this._super(text);
     el.style.fontSize = '.8rem';
@@ -353,7 +352,7 @@ JSONEditor.defaults.themes.foundation5 = JSONEditor.defaults.themes.foundation.e
 
 });
 
-JSONEditor.defaults.themes.foundation6 = JSONEditor.defaults.themes.foundation5.extend({
+export var foundation6Theme = foundation5Theme.extend({
   getIndentedPanel: function() {
     var el = document.createElement('div');
     el.classList.add('callout', 'secondary');
@@ -508,4 +507,3 @@ JSONEditor.defaults.themes.foundation6 = JSONEditor.defaults.themes.foundation5.
     return holder.firstChild.firstChild.firstChild;
   }
 });
-};

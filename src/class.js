@@ -47,7 +47,6 @@ exports.Class=
    
     // The dummy class constructor
     function Class() {
-      console.log("Invoking dummy Class constructor");
       // All construction is actually done in the init method
       if ( !initializing && this.init )
         this.init.apply(this, arguments);

@@ -1,7 +1,6 @@
-export function tailwindTheme(JSONEditor)
-{
+import { AbstractTheme } from '../theme'
 
-JSONEditor.defaults.themes.tailwind = JSONEditor.AbstractTheme.extend({
+export var tailwindTheme = AbstractTheme.extend({
     getGridRow: function () {
         var el = document.createElement("div");
         el.classList.add("flex", "flex-wrap");
@@ -376,4 +375,3 @@ JSONEditor.defaults.themes.tailwind = JSONEditor.AbstractTheme.extend({
         return inputGroupContainer;
     }
 });
-};

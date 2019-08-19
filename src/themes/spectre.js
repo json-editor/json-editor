@@ -1,8 +1,7 @@
 // Spectre Theme using Spectre CSS framework. <https://picturepan2.github.io/spectre/index.html>
-export function spectreTheme(JSONEditor)
-{
+import { AbstractTheme } from '../theme'
 
-JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
+export var spectreTheme = AbstractTheme.extend({
   // Config options that allows changing various aspects of the output
   options: {
     disable_theme_rules: false,   // Disable creation of Inline Style Rules
@@ -359,4 +358,3 @@ console.log('mul');
   }
 
 });
-};
