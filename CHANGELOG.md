@@ -1,5 +1,7 @@
 ### Current
 
+  - Added new 2.x Theme "Spectre".
+  - Updated Theme "Tailwind" to 2.x format.
   - Added sort option for dynamic enumSource.
   - Added JavaScript callback templating support for enumSource: filter, title and value properties.
   - Fix of #470 - Constant enumSource value specified as array of strings causes a template compilation error.
