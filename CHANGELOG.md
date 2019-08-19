@@ -1,5 +1,11 @@
 ### Current
 
+  - Added new 2.x Theme "Spectre".
+  - Updated Theme "Tailwind" to 2.x format.
+  - Added sort option for dynamic enumSource.
+  - Added JavaScript callback templating support for enumSource: filter, title and value properties.
+  - Fix of #470 - Constant enumSource value specified as array of strings causes a template compilation error.
+  - Fix of #467 - child watches parent = infinite recursion.
   - Select and Multiselect now uses requestAnimationFrame when applying special editor code to select field in order to prevent delays.
   - Added missing validation messages and support for options infoText an compact in Multiselect editor.    
   - Refactored src/editors/multiselect.js and moved hardcoded support for Select2 into seperate editor files which then extends src/editors/multiselect.js
