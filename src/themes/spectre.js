@@ -54,7 +54,9 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
     '.choices': 'margin-bottom: auto',
     '.choices__list--multiple .choices__item': 'border:none;background-color:var(--primary-color);color:var(--light-color)',
     '.choices[data-type*="select-multiple"] .choices__button': 'border-left:.05rem solid #2826A6',
-    '.choices__inner': 'min-height: 20px;padding: 2px 7.5px 2px 3.75px'
+    '.choices__inner': 'font-size: inherit;min-height: 20px;padding: 4px 7.5px 4px 3.75px',
+    '.choices[data-type*="select-one"] .choices__inner': 'padding-bottom: 4px',
+    '.choices__list--dropdown .choices__item': 'font-size:inherit'
   },
   // Functions for setting up the grid container, row and columns
   setGridColumnSize: function(el,size, offset) {
