@@ -1,3 +1,5 @@
+import { Class } from './class';
+
 export var AbstractIconLib = Class.extend({
   mapping: {
     collapse: '',

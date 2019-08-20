@@ -1,5 +1,6 @@
 // Enum Editor (used for objects and arrays with enumerated values)
 import { AbstractEditor } from '../editor';
+import { $each } from '../utilities';
 
 export var EnumEditor = AbstractEditor.extend({
   getNumColumns: function() {

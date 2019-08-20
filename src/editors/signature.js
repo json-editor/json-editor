@@ -2,6 +2,7 @@
   // Credits for the pad itself go to https://github.com/szimek
 
 import { StringEditor } from './string';
+import { $each } from '../utilities';
 
 export var SignatureEditor = StringEditor.extend({
 

@@ -1,6 +1,7 @@
 /**
  * All editors should extend from this class
  */
+import { Class } from './class';
 import { $extend, $each } from './utilities';
 
 export var AbstractEditor = Class.extend({

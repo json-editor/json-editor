@@ -1,4 +1,5 @@
 import { AbstractEditor } from '../editor';
+import { $each } from '../utilities';
 
 export var CheckboxEditor = AbstractEditor.extend({
 

@@ -1,5 +1,5 @@
 import { StringEditor } from './string';
-import { $extend, $each } from '../utilities';
+import { $extend } from '../utilities';
 export var ScEditor = StringEditor.extend({
 
   setValue: function(value,initial,from_template) {

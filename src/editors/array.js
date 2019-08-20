@@ -1,5 +1,5 @@
 import { AbstractEditor } from '../editor';
-import { $extend, $each } from '../utilities';
+import { $extend, $each, $trigger } from '../utilities';
 export var ArrayEditor = AbstractEditor.extend({
   askConfirmation: function() {
     if (this.jsoneditor.options.prompt_before_delete === true) {
@@ -575,7 +575,7 @@ export var ArrayEditor = AbstractEditor.extend({
       }
     }
 
-	  //Button to copy an array element and add it as last element
+    //Button to copy an array element and add it as last element
     if(self.show_copy_button){
       self.rows[i].copy_button = this.getButton(self.getItemTitle(),'copy','Copy '+self.getItemTitle());
       self.rows[i].copy_button.classList.add('copy', 'json-editor-btntype-copy');
