@@ -819,10 +819,11 @@ JSONEditor.prototype = {
     }
 
     var sheet = styleTag.sheet ? styleTag.sheet : styleTag.styleSheet;
+    var qualifier = this.element.nodeName.toLowerCase();
 
     for (var selector in rules) {
       if (!rules.hasOwnProperty(selector)) continue;
-      var sel = '[data-theme="' + themeName + '"] ' + selector;
+      var sel = qualifier + '[data-theme="' + themeName + '"] ' + selector;
       // all browsers, except IE before version 9
       if (sheet.insertRule) sheet.insertRule(sel + ' {' + rules[selector] + '}', 0);
       // Internet Explorer before version 9

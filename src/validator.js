@@ -10,19 +10,26 @@ export const Validator = Class.extend({
     this.translate = this.jsoneditor.translate || defaults.translate;
     this.defaults = defaults;
   },
-  fitTest: function(value) {
+  fitTest: function(value, givenSchema, weight) {
+    weight = typeof weight === "undefined" ? 10000000 : weight;
     var matchedProperties = 0;
     var extraProperties = 0;
     if (typeof value === "object" && value !== null) {
       // Work on a copy of the schema
-      var schema = $extend({},this.jsoneditor.expandRefs(this.schema));
+      var schema = typeof givenSchema === "undefined" ? $extend({},this.jsoneditor.expandRefs(this.schema)) : givenSchema;
+
       for (var i in schema.properties) {
         if (!schema.properties.hasOwnProperty(i)) {
-          extraProperties++;
+          extraProperties += weight;
           continue;
         }
+        if (typeof value[i] === "object" && typeof schema.properties[i] === "object" && typeof schema.properties[i].properties === "object"){
+          var result = this.fitTest(value[i], schema.properties[i], weight / 100);
+          matchedProperties += result.match;
+          extraProperties += result.extra;
+        }
         if (typeof value[i] !== "undefined") {
-          matchedProperties++;
+          matchedProperties += weight;
         }
       }
     }
@@ -463,6 +470,9 @@ export const Validator = Class.extend({
       if(typeof schema.required !== "undefined" && Array.isArray(schema.required)) {
         for(i=0; i<schema.required.length; i++) {
           if(typeof value[schema.required[i]] === "undefined") {
+            var editor = this.jsoneditor.getEditor(path + '.' + schema.required[i]);
+            // Ignore required error if editor is of type "button" or "info"
+            if (editor && ['button', 'info'].indexOf(editor.schema.format || editor.schema.type) !== -1) continue;
             errors.push({
               path: path,
               property: 'required',

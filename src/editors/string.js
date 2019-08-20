@@ -213,7 +213,9 @@ export var StringEditor = AbstractEditor.extend({
 
     // Compile and store the template
     if(this.schema.template) {
-      this.template = this.jsoneditor.compileTemplate(this.schema.template, this.template_engine);
+      var callback = this.expandCallbacks('template', {template: this.schema.template});
+      if (typeof callback.template === 'function') this.template = callback.template;
+      else this.template = this.jsoneditor.compileTemplate(this.schema.template, this.template_engine);
       this.refreshValue();
     }
     else {
@@ -222,8 +224,8 @@ export var StringEditor = AbstractEditor.extend({
   },
   setupCleave: function(el) {
     // Enable cleave.js support if library is loaded and config is available
-    var options = this.expandCallbacks('cleave', $extend({}, this.defaults.options.cleave || {}, this.options.cleave || {}));
-    if (Array.Keys(options).length > 0) {
+    var options = this.expandCallbacks('cleave', $extend({}, JSONEditor.defaults.options.cleave || {}, this.options.cleave || {}));
+    if (typeof options == 'object' && Object.keys(options).length > 0) {
       this.cleave_instance = new window.Cleave(el, options);
     }
   },

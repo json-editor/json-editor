@@ -42,7 +42,7 @@ export var RadioEditor = SelectEditor.extend({
       var radioLabel = this.theme.getFormRadioLabel(this.enum_display[i]);
       radioLabel.htmlFor = this.input.id;
 
-      var control = this.theme.getFormRadioControl(radioLabel, this.input, !!(this.options.layout == 'h' || this.options.compact));
+      var control = this.theme.getFormRadioControl(radioLabel, this.input, !!(this.options.layout == 'horizontal' || this.options.compact));
 
       this.radioContainer.appendChild(control);
 
@@ -58,11 +58,18 @@ export var RadioEditor = SelectEditor.extend({
 
     var radioContainerWrapper = this.theme.getContainer();
     radioContainerWrapper.appendChild(this.radioContainer);
+    radioContainerWrapper.dataset.containerFor = 'radio';
 
     this.input = radioContainerWrapper;
 
     this.control = this.theme.getFormControl(this.label, radioContainerWrapper, this.description, this.infoButton);
     this.container.appendChild(this.control);
+
+    // Any special formatting that needs to happen after the input is added to the dom
+    window.requestAnimationFrame(function() {
+      if(self.input.parentNode) self.afterInputReady();
+    });
+
   },
   enable: function() {
     if(!this.always_disabled) {

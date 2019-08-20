@@ -196,13 +196,13 @@ export var AbstractTheme = Class.extend({
 
     return el;
   },
-  getSelectInput: function(options) {
+  getSelectInput: function(options, multiple) {
     var select = document.createElement('select');
     if(options) this.setSelectOptions(select, options);
     return select;
   },
   getSwitcher: function(options) {
-    var switcher = this.getSelectInput(options);
+    var switcher = this.getSelectInput(options, false);
     switcher.style.backgroundColor = 'transparent';
     switcher.style.display = 'inline-block';
     switcher.style.fontStyle = 'italic';
@@ -322,7 +322,7 @@ export var AbstractTheme = Class.extend({
   getHeaderButtonHolder: function() {
     return this.getButtonHolder();
   },
-  getFormButtonHolder: function() {
+  getFormButtonHolder: function(button_align) {
     return this.getButtonHolder();
   },
   getButton: function(text, icon, title) {

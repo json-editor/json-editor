@@ -73,7 +73,7 @@ export var MultiSelectEditor = AbstractEditor.extend({
     }
     else {
       this.input_type = 'select';
-      this.input = this.theme.getSelectInput(this.option_keys);
+      this.input = this.theme.getSelectInput(this.option_keys, true);
       this.theme.setSelectOptions(this.input,this.option_keys,this.option_titles);
       //this.input.multiple = true;
       this.input.setAttribute('multiple', 'multiple');

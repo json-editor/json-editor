@@ -56,7 +56,7 @@ export var MultipleEditor = AbstractEditor.extend({
     if(!this.editors[i]) {
       this.buildChildEditor(i);
     }
-    
+
     var current_value = self.getValue();
 
     self.type = i;
@@ -189,8 +189,8 @@ export var MultipleEditor = AbstractEditor.extend({
 
     this.editor_holder = document.createElement('div');
     container.appendChild(this.editor_holder);
-    
-      
+
+
     var validator_options = {};
     if(self.jsoneditor.options.custom_validators) {
       validator_options.custom_validators = self.jsoneditor.options.custom_validators;
@@ -245,32 +245,46 @@ export var MultipleEditor = AbstractEditor.extend({
     var fitTestVal = {
       match: 0,
       extra: 0,
-      i: 0
+      i: this.type
     };
-    $each(this.validators, function(i,validator) {
-      if (!validator.validate(val).length) {
-        if (typeof self.anyOf !== "undefined" && self.anyOf) {
-          var fitTestResult = validator.fitTest(val);
-          if (fitTestVal.match < fitTestResult.match) {
+    var validVal = {
+      match: 0,
+      i: null
+    };
+    $each(this.validators, function (i, validator) {
+      var fitTestResult = null;
+      if (typeof self.anyOf !== "undefined" && self.anyOf) {
+        fitTestResult = validator.fitTest(val);
+        if (fitTestVal.match < fitTestResult.match) {
+          fitTestVal = fitTestResult;
+          fitTestVal.i = i;
+        } else if (fitTestVal.match === fitTestResult.match) {
+          if (fitTestVal.extra > fitTestResult.extra) {
             fitTestVal = fitTestResult;
             fitTestVal.i = i;
-          } else if (fitTestVal.match === fitTestResult.match) {
-            if (fitTestVal.extra > fitTestResult.extra) {
-              fitTestVal = fitTestResult;
-              fitTestVal.i = i;
-            }
           }
-        } else {
-          self.type = i;
-          self.switcher.value = self.display_text[i];
-          return false;
+        }
+      }
+      if (!validator.validate(val).length && validVal.i === null) {
+        validVal.i = i;
+        if (fitTestResult !== null){
+          validVal.match = fitTestResult.match;
         }
       }
     });
+    var finalI = validVal.i;
+    // if the best fit schema has more match properties, then use the best fit schema.
+    // usually the value could be
     if (typeof self.anyOf !== "undefined" && self.anyOf) {
-      self.type = fitTestVal.i;
-      self.switcher.value = self.display_text[fitTestVal.i];
+      if (validVal.match < fitTestVal.match){
+        finalI = fitTestVal.i;
+      }
     }
+    if (finalI === null) {
+      finalI = this.type;
+    }
+    this.type = finalI;
+    this.switcher.value = this.display_text[finalI];
 
     var type_changed = this.type != prev_type;
     if (type_changed) {
@@ -301,7 +315,7 @@ export var MultipleEditor = AbstractEditor.extend({
         var check = self.path+'.'+check_part+'['+i+']';
         var new_errors = [];
         $each(errors, function(j,error) {
-          if(error.path.substr(0,check.length)===check) {
+          if(error.path === check.substr(0,error.path.length)) {
             var new_error = $extend({},error);
             new_error.path = self.path+new_error.path.substr(check.length);
             new_errors.push(new_error);
