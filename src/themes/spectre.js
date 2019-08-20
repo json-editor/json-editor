@@ -1,6 +1,8 @@
 // Spectre Theme using Spectre CSS framework. <https://picturepan2.github.io/spectre/index.html>
 import { AbstractTheme } from '../theme'
 
+import { $each } from '../utilities';
+
 export var spectreTheme = AbstractTheme.extend({
   // Config options that allows changing various aspects of the output
   options: {
