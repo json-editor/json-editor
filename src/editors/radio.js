@@ -55,6 +55,7 @@ JSONEditor.defaults.editors.radio = JSONEditor.defaults.editors.select.extend({
 
     var radioContainerWrapper = this.theme.getContainer();
     radioContainerWrapper.appendChild(this.radioContainer);
+    radioContainerWrapper.dataset.containerFor = 'radio';
 
     this.input = radioContainerWrapper;
 
