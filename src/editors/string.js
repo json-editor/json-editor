@@ -224,7 +224,7 @@ export var StringEditor = AbstractEditor.extend({
   },
   setupCleave: function(el) {
     // Enable cleave.js support if library is loaded and config is available
-    var options = this.expandCallbacks('cleave', $extend({}, JSONEditor.defaults.options.cleave || {}, this.options.cleave || {}));
+    var options = this.expandCallbacks('cleave', $extend({}, self.defaults.options.cleave || {}, this.options.cleave || {}));
     if (typeof options == 'object' && Object.keys(options).length > 0) {
       this.cleave_instance = new window.Cleave(el, options);
     }
