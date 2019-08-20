@@ -1032,7 +1032,7 @@ export var ObjectEditor = AbstractEditor.extend({
       self.layoutEditors();
     }
   },
-  onOutsideModalClick: function() {
+  onOutsideModalClick: function(e) {
     if (this.addproperty_holder && !this.addproperty_holder.contains(e.target) && this.adding_property) {
       e.preventDefault();
       e.stopPropagation();
