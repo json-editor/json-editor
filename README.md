@@ -1149,6 +1149,40 @@ Here is the completed `full_name` example using the default barebones template e
 }
 ```
 
+It is also possible to set the "template" property to a JavaScript callback function, defined under `window.JSONEditor.defaults.callbacks.template`. Inside the JavaScript callback, you have access to all the variables defined under the `watch` property + the current editor.
+
+
+Example Schema:
+```js+jinja
+{
+  "type": "object",
+  "properties": {
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "full_name": {
+      "type": "string",
+      "template": "callbackFunction",
+      "watch": {
+        "fname": "first_name",
+        "lname": "last_name"
+      }
+    }
+  }
+}
+```
+ Example Callback function:
+```js+jinja
+window.JSONEditor.defaults.callbacks.template = {
+  "callbackFunction": function(jseditor,e) {
+    return e.fname + " " + e.lname;
+  }
+};
+```
+
 ### Enum Values
 
 Another common dependency is a drop down menu whose possible values depend on other fields.  Here's an example:
@@ -1283,6 +1317,63 @@ also make it work with an array of objects.  Here's an example:
 ```
 
 All of the optional templates in the verbose form have the properties `item` and `i` passed into them. `item` refers to the array element.  `i` is the zero-based index.
+
+#### JavaScript callbacks
+It is also possible to use JavaScript callback functions instead of templates for the enumSource properties properties: `value`, `title` and `filter`.
+
+**Example Schema:**
+````json
+{
+  "type": "object",
+  "properties": {
+    "possible_colors": {
+      "type": "array",
+      "format": "table",
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "primary_color": {
+      "type": "string",
+      "watch": {
+        "colors": "possible_colors"
+      },
+      "enumSource": [{
+        "source": "colors",
+        "filter": "enumFilterCB",
+        "title": "enumTitleCB",
+        "value": "enumValueCB"
+      }]
+    }
+  }
+}
+````
+
+**Example JavaScript callbacks:**
+````javascript
+window.JSONEditor.defaults.callbacks.template = {
+  "enumFilterCB": function(jseditor, e) {
+    if (e.item.text.toLowerCase() == 'red') return ""; // "red" is not allowed
+    return e.item.text;
+  },
+  "enumTitleCB": function(jseditor, e) {
+    return e.item.text.toUpperCase();
+  },
+  "enumValueCB": function(jseditor, e) {
+    return e.item.text.toLowerCase();
+  }
+};
+````
+
+#### Sorting
+
+To sort the dynamic EnumSource, you can set the EnumSource property `sort` to either `asc` or `desc`.
+
 
 ### Dynamic Headers
 

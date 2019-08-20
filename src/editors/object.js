@@ -647,13 +647,7 @@ export var ObjectEditor = AbstractEditor.extend({
       this.addproperty_holder.appendChild(spacer);
 
       // Close properties modal if clicked outside modal
-      document.addEventListener('click', function(e) {
-          if (!this.addproperty_holder.contains(e.target) && this.adding_property) {
-            e.preventDefault();
-            e.stopPropagation();
-            this.toggleAddProperty();
-          }
-      }.bind(this));
+      document.addEventListener('click', this.onOutsideModalClick);
 
       // Description
       if(this.schema.description) {
@@ -1038,6 +1032,13 @@ export var ObjectEditor = AbstractEditor.extend({
       self.layoutEditors();
     }
   },
+  onOutsideModalClick: function() {
+    if (this.addproperty_holder && !this.addproperty_holder.contains(e.target) && this.adding_property) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.toggleAddProperty();
+    }
+  },
   onChildEditorChange: function(editor) {
     this.refreshValue();
     this._super(editor);
@@ -1060,6 +1061,7 @@ export var ObjectEditor = AbstractEditor.extend({
     this.cached_editors = null;
     if(this.editor_holder && this.editor_holder.parentNode) this.editor_holder.parentNode.removeChild(this.editor_holder);
     this.editor_holder = null;
+    document.removeEventListener('click', this.onOutsideModalClick);
 
     this._super();
   },

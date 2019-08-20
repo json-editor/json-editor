@@ -2,7 +2,14 @@ import { AbstractTheme } from '../theme'
 
 export var materializeTheme = AbstractTheme.extend(
   {
-
+  /* Theme config options that allows changing various aspects of the output */
+  options: {
+    'disable_theme_rules': false
+  },
+  /* Custom stylesheet rules. format: "selector" : "CSS rules" */
+  rules: {
+  'div[data-schemaid="root"]:after': 'position:relative;color:red;margin:10px 0;font-weight:600;display:block;width:100%;text-align:center;content:"This is an old JSON-Editor 1.x Theme and might not display elements correctly when used with the 2.x version"'
+  },
     /**
    * Applies grid size to specified element.
    *
@@ -62,6 +69,20 @@ export var materializeTheme = AbstractTheme.extend(
 
     },
 
+    afterInputReady: function(input) {
+      var label = input.previousSibling;
+
+      if(input.type && input.type === 'range'){
+        label = input.parentElement.previousSibling;
+      }
+
+      if(input.value || (input.dataset.containerFor && input.dataset.containerFor === 'radio')){
+        if(label && label.localName === 'label'){
+          label.classList.add('active'); 
+        }
+      } 
+    },
+
     /**
    * Gets a form control object consisiting of several sub objects.
    *
@@ -76,7 +97,7 @@ export var materializeTheme = AbstractTheme.extend(
 
       var ctrl,
       type = input.type;
-
+      
       // Checkboxes get wrapped in p elements.
       if (type && (type === 'checkbox' || type === 'radio')) {
 
@@ -388,7 +409,7 @@ export var materializeTheme = AbstractTheme.extend(
    * @return {HTMLElement} The DOM element.
    * @see http://materializecss.com/forms.html#select
    */
-  getSelectInput: function(options) {
+  getSelectInput: function(options, multiple) {
 
       var select = this._super(options);
       select.classList.add('browser-default');

@@ -75,6 +75,7 @@ export var AbstractEditor = Class.extend({
     this.key = this.parent !== undefined ? this.path.split('.').slice(this.parent.path.split('.').length).join('.') : this.path;
 
     this.link_watchers = [];
+    this.watchLoop = false;  
 
     if(options.container) this.setContainer(options.container);
     this.registerDependencies();
@@ -213,7 +214,7 @@ export var AbstractEditor = Class.extend({
     };
 
     if(this.schema.hasOwnProperty('watch')) {
-      var path,path_parts,first,root,adjusted_path;
+      var path,path_parts,first,root,adjusted_path, my_path = self.container.getAttribute('data-schemapath');
 
       for(var name in this.schema.watch) {
         if(!this.schema.watch.hasOwnProperty(name)) continue;
@@ -238,6 +239,7 @@ export var AbstractEditor = Class.extend({
         // Keep track of the root node and path for use when rendering the template
         adjusted_path = root.getAttribute('data-schemapath') + '.' + path_parts.join('.');
 
+        if(my_path.startsWith(adjusted_path)) self.watchLoop = true;
         self.jsoneditor.watch(adjusted_path,self.watch_listener);
 
         self.watched[name] = adjusted_path;
