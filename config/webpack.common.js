@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 var webpack = require('webpack');
 
-const bannerText= `/**
+var bannerText= `/**
 * @name JSON Editor
 * @description JSON Schema Based Editor
 * This library is the continuation of jdorn's great work (see also https://github.com/jdorn/json-editor/issues/800)

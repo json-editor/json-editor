@@ -1,4 +1,0 @@
-// Obsolete
-
-return JSONEditor;
-});
