@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // Karma configuration
 var webpackConfig = require('./webpack.test');
 
@@ -46,8 +47,6 @@ module.exports = function(config) {
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['progress', 'kjhtml'],
-
-    // plugins: ['karma-chrome-launcher', 'karma-phantomjs-launcher', 'karma-jasmine', 'karma-webpack', 'karma-babel-preprocessor', 'karma-jasmine-html-reporter'],
 
     // web server port
     port: 9876,

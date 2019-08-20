@@ -1,5 +1,7 @@
 // CustomEvent constructor polyfill
 // From MDN
+export function ie9Polyfill()
+{
 (function () {
   function CustomEvent ( event, params ) {
     params = params || { bubbles: false, cancelable: false, detail: undefined };
@@ -44,8 +46,9 @@
 // From MDN
 (function() {
 	if(!Array.isArray) {
-	  Array.isArray = function(arg) {
-		return Object.prototype.toString.call(arg) === '[object Array]';
-	  };
+    Array.isArray = function(arg) {
+    return Object.prototype.toString.call(arg) === '[object Array]';  
+    };
 	}
 }());
+}

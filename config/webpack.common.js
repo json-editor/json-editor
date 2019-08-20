@@ -1,5 +1,20 @@
 
-// eslint-disable-next-line no-undef
+/* eslint-disable no-undef */
+var webpack = require('webpack');
+
+const bannerText= `/**
+* @name JSON Editor
+* @description JSON Schema Based Editor
+* This library is the continuation of jdorn's great work (see also https://github.com/jdorn/json-editor/issues/800)
+* @version {{ VERSION }}
+* @author Jeremy Dorn
+* @see https://github.com/jdorn/json-editor/
+* @see https://github.com/json-editor/json-editor
+* @license MIT
+* @example see README.md and docs/ for requirements, examples and usage info
+*/`
+
+
 module.exports = {
   entry: {
     // 'polyfills': './src/polyfills.ts',      
@@ -11,35 +26,6 @@ module.exports = {
   module: {
   
     rules: [
-      // Tried using jslint-loader but it creates an error
-      // repo is archived and marked as deprecated in favour of eslint
-      /*
-      {
-        test: /.js/,
-        enforce: 'pre',
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: `jshint-loader`,
-            options: {
-              // browser: true,
-              // indent: 2,
-              // devel:true,
-              // nonbsp: true,
-              // nonew: true,
-              // immed: true,
-              // latedef: true,
-              // globals: {
-              //     "module": true,
-              //     "define": true,
-              // }
-        
-            }
-          }
-        ]
-      },   
-       */
-
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -59,5 +45,6 @@ module.exports = {
     ]
   },
   plugins: [
+      new webpack.BannerPlugin(bannerText.replace("{{ VERSION }}", JSON.stringify(require("../package.json").version) ))
   ],    
 };

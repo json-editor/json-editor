@@ -9,6 +9,8 @@ services:
     ports:
       - '9010:9010'
       - '9001:9001'
+    expose:
+      - '9001'
   firefox:
     image: selenium/standalone-firefox-debug:3.141.59-oxygen
     depends_on:

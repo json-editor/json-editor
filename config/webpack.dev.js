@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 var webpackMerge = require('webpack-merge');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 var commonConfig = require('./webpack.common.js');

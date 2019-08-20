@@ -1,6 +1,7 @@
 import './styles/choices.css';
 import './styles/starrating.css';
 
+import { ie9Polyfill } from './ie9';
 import { getDefaults, getPlugins } from './defaults';
 import { Validator } from './validator';
 import { $extend, $each } from './utilities';
@@ -830,7 +831,7 @@ JSONEditor.prototype = {
   }
 };
 
-
+ie9Polyfill();
 JSONEditor.defaults=getDefaults();
 JSONEditor.plugins=getPlugins();
 assignThemes(JSONEditor.defaults.themes);

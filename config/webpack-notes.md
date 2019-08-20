@@ -1,4 +1,18 @@
-# Webpack
+# Webpack Notes
+
+## Introduction
+
+This work package replaces Grunt-based concatenation and minification and testing, with Webpack, providing the following advantages:
+
+1. Clearer and more modular dependency management using `import`/`export`
+1. Module code is easier to unit-test
+1. On-the-fly compilation and serving of files
+1. Facility for splitting distribution into several modules so that less commonly used features can be lazy-loaded (TODO)
+1. Possibility of upgrading javascript ES6 by introducing babel compiler (TODO)
+
+The emphasis is this work-package has been to make minimal and localized changes to the core code to factilitate merging back into the main branch. However the interdependencies between the different files were quite complicated and untangling them with minimal impact hasn't been easy.
+
+Assuming the PR is accepted and merged into the main branch, there will be potential for a lot more refactoring and simplification of the codebase.
 
 ## Useful docs
 
@@ -6,7 +20,27 @@ https://webpack.js.org/guides/
 
 https://v5.angular.io/guide/webpack
 
-## Refactoring Issues
+## Summary of Changes
+
+1. Refactored code to use `import` / `export` to specify dependencies instead of relying on concatenation
+1. Replaced Grunt with Webpack tasks - setting up files in `./config` for production/development/test builds
+1. Replaced jshint with eslint
+1. Created some unit test stub implementations
+1. package.json:
+    1. Replaced all grunt-based scripts 
+    1. Removed all grunt dev-dependencies (also package.lock.json)
+
+1. updated docs
+1. removed other references to Grunt
+
+## TODO
+
+1. ie9.js polyfill - can we get rid altogether?
+1. implement afterAll in core.spec.js
+1. implement headless unit testing and integrate into Travis
+
+
+## Future Work
 
 ### Editors
 
@@ -20,98 +54,3 @@ For now I have passed in `JSONEditor.defaults` as `defaults`.
 
 #### MultipleEditor validator
 Aditionally, MultipleEditor needs to create an instance of the Validator class (not sure why only that editor)
-
-## TODO
-
-###
-
-1. ie9.js polyfill - can we get rid altogether?
-1. implement any remaining grunt stuff then remove grunt dependencies:
-    1. cssmin?
-    1. jshint?
-    1. connect?
-    1. run? - interestingly includes mocha/selenium
-1. implement afterAll in core.spec.js
-1. implement production/development? - done
-
-### Source Files
-
-```javascript
-{
-          // License & version info, start the containing closure
-          'src/intro.js',  // Remove
-
-          // Simple inheritance
-          'src/class.js',   // Done
-
-          // IE9 polyfills
-          'src/ie9.js',     // Need to check this one
-
-          // Utils like extend, each, and trigger
-          'src/utilities.js',   // Done
-
-          // The main JSONEditor class
-          'src/core.js',    // Done
-
-          // JSON Schema validator
-          'src/validators/*.js',    // Done
-          'src/validator.js',       // Done
-
-          // All the editors
-          'src/editor.js', // Done          
-          'src/editors/null.js', // Done
-          'src/editors/string.js', // Done
-          'src/editors/hidden.js', // Done
-          'src/editors/number.js', // Done
-          'src/editors/integer.js', // Done
-          'src/editors/rating.js', // Done
-          'src/editors/object.js', // Done
-          'src/editors/array.js', // Done
-          'src/editors/table.js', // Done
-          'src/editors/multiple.js', // Done
-          'src/editors/enum.js', // Done
-          'src/editors/select.js', // Done
-          'src/editors/choices.js', // Done
-          'src/editors/selectize.js', // Done
-          'src/editors/multiselect.js', // Done
-          'src/editors/base64.js', // Done
-          'src/editors/upload.js', // Done
-          'src/editors/checkbox.js', // Done
-          'src/editors/array/choices.js', // Done
-          'src/editors/array/select2.js', // Done
-          'src/editors/array/selectize.js', // Done
-          'src/editors/starrating.js', // Done
-          'src/editors/datetime.js', // Done
-          'src/editors/signature.js', // Done
-          'src/editors/radio.js', // Done
-          'src/editors/describedby.js', // Done
-          'src/editors/uuid.js', // Done
-          'src/editors/jodit.js', // Done
-          'src/editors/ace.js', // Done
-          'src/editors/simplemde.js', // Done
-          'src/editors/autocomplete.js', // Done
-          'src/editors/button.js', // Done
-          'src/editors/sceditor.js', // Done
-          'src/editors/select2.js', // Done
-          'src/editors/ip.js', // Done
-          'src/editors/info.js', // Done 
-
-          // All the themes and iconlibs
-          'src/theme.js',           // Done
-          'src/themes/*.js',        // Done
-          'src/iconlib.js',         // Done
-          'src/iconlibs/*.js',      // Done
-
-          // The JS templating engines
-          'src/templates/*.js',     // Done
-
-          // Set the defaults
-          'src/defaults.js',    // Done
-
-          // Wrapper for $.fn style initialization
-          'src/jquery.js',    // Done  
-
-          // End the closure
-          'src/outro.js'        // Remove
-}
-```
