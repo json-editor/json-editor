@@ -40,7 +40,7 @@ To do a production build which includes eslint and minification, run `npm build`
 We encourage you to use a [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) and [TDD](https://en.wikipedia.org/wiki/Test-driven_development) approach to developing features and fixing bugs, in each case:
 
 1. Writing end-to-end tests for your new features (`./tests/codeceptjs`)
-1. Write unit tests for edits to specify and confirm correc operation of small units of code such as functions and methods (`./tests/unit`)
+1. Write unit tests for edits to specify and confirm correct operation of small units of code such as functions and methods (`./tests/unit`)
 
 ### Submitting Pull Requests
 Try to limit pull requests to a single narrow feature or bug fix.
