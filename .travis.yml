@@ -19,7 +19,7 @@ before_script:
 script:
   - docker-compose ps
   # exclude optional tests
-  - docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --grep '(?=.*)^(?!.*@optional)'
+  - docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
 
 after_script:
   # run optional tests
