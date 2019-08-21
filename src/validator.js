@@ -674,7 +674,27 @@ JSONEditor.Validator = Class.extend({
       });
     }
 
+    // Remove duplicate errors and add "errorcount" property
+    errors = this._removeDuplicateErrors(errors);
+
     return errors;
+  },
+  _removeDuplicateErrors: function(errors) {
+    return errors.reduce(function(err, obj) {
+      var first = true;
+      if (!err) err = [];
+      err.forEach(function(a) {
+        if (a.message === obj.message && a.path === obj.path && a.property === obj.property) {
+          a.errorcount++;
+          first = false;
+        }
+      });
+      if (first) {
+        obj.errorcount = 1;
+        err.push(obj);
+      }
+      return err;
+    }, []);
   },
   _checkType: function(type, value) {
     // Simple types

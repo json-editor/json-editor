@@ -1239,6 +1239,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
         this.error_holder.innerHTML = '';
         this.error_holder.style.display = '';
         $each(my_errors, function(i,error) {
+          if (error.errorcount && error.errorcount > 1) error.message += ' (' + error.errorcount + ' errors)';
           self.error_holder.appendChild(self.theme.getErrorMessage(error.message));
         });
       }
