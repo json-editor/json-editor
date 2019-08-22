@@ -1,4 +1,7 @@
-JSONEditor.defaults.editors.jodit = JSONEditor.defaults.editors.string.extend({
+import { StringEditor } from './string';
+import { $extend, $each } from '../utilities';
+export var JoditEditor = StringEditor.extend({
+
   setValue: function(value,initial,from_template) {
     var res = this._super(value,initial,from_template);
     if (res !== undefined && res.changed && this.jodit_instance) this.jodit_instance.setEditorValue(res.value);
@@ -13,11 +16,11 @@ JSONEditor.defaults.editors.jodit = JSONEditor.defaults.editors.string.extend({
     var self = this, options;
 
     if (window.Jodit) {
-      // Get options, either global options from "JSONEditor.defaults.options.jodit" or
+      // Get options, either global options from "this.defaults.options.jodit" or
       // single property options from schema "options.jodit"
       options = this.expandCallbacks('jodit', $extend({}, {
         height: 300
-      }, JSONEditor.defaults.options.jodit || {}, this.options.jodit || {}));
+      }, this.defaults.options.jodit || {}, this.options.jodit || {}));
 
       this.jodit_instance = new window.Jodit(this.input, options);
 

@@ -1,23 +1,35 @@
-JSONEditor.Validator = Class.extend({
-  init: function(jsoneditor,schema,options) {
+import { Class } from './class';
+import { ipValidator } from './validators/ip-validator';
+import {  $extend, $each } from './utilities';
+
+export const Validator = Class.extend({
+  init: function(jsoneditor,schema,options,defaults) {
     this.jsoneditor = jsoneditor;
     this.schema = schema || this.jsoneditor.schema;
     this.options = options || {};
-    this.translate = this.jsoneditor.translate || JSONEditor.defaults.translate;
+    this.translate = this.jsoneditor.translate || defaults.translate;
+    this.defaults = defaults;
   },
-  fitTest: function(value) {
+  fitTest: function(value, givenSchema, weight) {
+    weight = typeof weight === "undefined" ? 10000000 : weight;
     var matchedProperties = 0;
     var extraProperties = 0;
     if (typeof value === "object" && value !== null) {
       // Work on a copy of the schema
-      var schema = $extend({},this.jsoneditor.expandRefs(this.schema));
+      var schema = typeof givenSchema === "undefined" ? $extend({},this.jsoneditor.expandRefs(this.schema)) : givenSchema;
+
       for (var i in schema.properties) {
         if (!schema.properties.hasOwnProperty(i)) {
-          extraProperties++;
+          extraProperties += weight;
           continue;
         }
+        if (typeof value[i] === "object" && typeof schema.properties[i] === "object" && typeof schema.properties[i].properties === "object"){
+          var result = this.fitTest(value[i], schema.properties[i], weight / 100);
+          matchedProperties += result.match;
+          extraProperties += result.extra;
+        }
         if (typeof value[i] !== "undefined") {
-          matchedProperties++;
+          matchedProperties += weight;
         }
       }
     }
@@ -654,10 +666,10 @@ JSONEditor.Validator = Class.extend({
     }
 
     // Internal validators using the custom validator format
-    errors = errors.concat(ipValidator.validate.call(self,schema,value,path));
+    errors = errors.concat(ipValidator.call(self,schema,value,path));
 
     // Custom type validation (global)
-    $each(JSONEditor.defaults.custom_validators,function(i,validator) {
+    $each(self.defaults.custom_validators,function(i,validator) {
       errors = errors.concat(validator.call(self,schema,value,path));
     });
     // Custom type validation (instance specific)
@@ -667,7 +679,27 @@ JSONEditor.Validator = Class.extend({
       });
     }
 
+    // Remove duplicate errors and add "errorcount" property
+    errors = this._removeDuplicateErrors(errors);
+
     return errors;
+  },
+  _removeDuplicateErrors: function(errors) {
+    return errors.reduce(function(err, obj) {
+      var first = true;
+      if (!err) err = [];
+      err.forEach(function(a) {
+        if (a.message === obj.message && a.path === obj.path && a.property === obj.property) {
+          a.errorcount++;
+          first = false;
+        }
+      });
+      if (first) {
+        obj.errorcount = 1;
+        err.push(obj);
+      }
+      return err;
+    }, []);
   },
   _checkType: function(type, value) {
     // Simple types
@@ -687,3 +719,4 @@ JSONEditor.Validator = Class.extend({
     }
   }
 });
+

@@ -1,4 +1,4 @@
-JSONEditor.defaults.templates.hogan = function() {
+export var hoganTemplate = function() {
   if(!window.Hogan) return false;
 
   return {

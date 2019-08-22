@@ -1,4 +1,6 @@
-JSONEditor.defaults.editors.autocomplete = JSONEditor.defaults.editors.string.extend({
+import { StringEditor } from './string';
+import { $extend, $each } from '../utilities';
+export var AutocompleteEditor = StringEditor.extend({
   postBuild: function() {
     if (window.Autocomplete) {
       // create wrapper container
@@ -22,7 +24,7 @@ JSONEditor.defaults.editors.autocomplete = JSONEditor.defaults.editors.string.ex
     var options;
 
     if (window.Autocomplete && !this.autocomplete_instance) {
-      // Get options, either global options from "JSONEditor.defaults.options.autocomplete" or
+      // Get options, either global options from "this.defaults.options.autocomplete" or
       // single property options from schema "options.autocomplete"
       options = this.expandCallbacks('autocomplete', $extend({}, {
         'search': function(jseditor, input) {
@@ -30,7 +32,7 @@ JSONEditor.defaults.editors.autocomplete = JSONEditor.defaults.editors.string.ex
 return [];
         }.bind(null, this),
         'baseClass': 'autocomplete'
-      }, JSONEditor.defaults.options.autocomplete || {}, this.options.autocomplete || {}));
+      }, this.defaults.options.autocomplete || {}, this.options.autocomplete || {}));
 
       this.autocomplete_wrapper.classList.add(options.baseClass);
       this.autocomplete_dropdown.classList.add(options.baseClass + '-result-list');

@@ -1,4 +1,7 @@
-JSONEditor.defaults.editors.ip = JSONEditor.defaults.editors.string.extend({
+import { StringEditor } from './string';
+
+export var IpEditor = StringEditor.extend({
+
   preBuild: function() {
     this._super();
     var pattern, patternmessage;

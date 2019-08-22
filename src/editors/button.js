@@ -1,5 +1,7 @@
 // Non-Active editor for displaying buttons in form
-JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
+import { AbstractEditor } from '../editor';
+import { $extend, $each } from '../utilities';
+export var ButtonEditor = AbstractEditor.extend({
   init: function(options) {
     this._super(options);
     this.active = false;
@@ -20,7 +22,7 @@ JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
 
     this.options.compact = true;
 
-      // Get options, either global options from "JSONEditor.defaults.options.button" or
+      // Get options, either global options from "this.defaults.options.button" or
       // single property options from schema "options.button"
     var title = this.schema.title || this.key,
         options = this.expandCallbacks('button', $extend({}, {
@@ -30,7 +32,7 @@ JSONEditor.defaults.editors.button = JSONEditor.AbstractEditor.extend({
       'action': function(jseditor, e) {
         alert('No button action defined for "' + jseditor.path + '"');
       }.bind(null, this)
-    }, JSONEditor.defaults.options.button || {}, this.options.button || {}));
+    }, this.defaults.options.button || {}, this.options.button || {}));
 
 
     this.input = this.theme.getFormButton(title, options.icon, title);

@@ -1,4 +1,6 @@
-JSONEditor.defaults.iconlibs.fontawesome5 = JSONEditor.AbstractIconLib.extend({
+import { AbstractIconLib } from '../iconlib';
+
+export var fontawesome5Iconlib = AbstractIconLib.extend({
   mapping: {
     collapse: 'caret-down',
     expand: 'caret-right',

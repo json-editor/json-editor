@@ -1,4 +1,6 @@
-JSONEditor.defaults.themes.html = JSONEditor.AbstractTheme.extend({
+import { AbstractTheme } from '../theme';
+
+export var htmlTheme = AbstractTheme.extend({
   /* Theme config options that allows changing various aspects of the output */
   options: {
     'disable_theme_rules': false
@@ -71,7 +73,10 @@ JSONEditor.defaults.themes.html = JSONEditor.AbstractTheme.extend({
     input.errmsg.appendChild(document.createTextNode(text));
   },
   removeInputError: function(input) {
-    if(input.style) input.style.borderColor = '';
+    if( input.style )
+    {
+      input.style.borderColor = '';
+    }
     if(input.errmsg) input.errmsg.style.display = 'none';
   },
   getProgressBar: function() {

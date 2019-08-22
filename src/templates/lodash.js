@@ -1,4 +1,4 @@
-JSONEditor.defaults.templates.lodash = function() {
+export var lodashTemplate = function() {
   if(!window._) return false;
 
   return {

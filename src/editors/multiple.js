@@ -1,5 +1,9 @@
 // Multiple Editor (for when `type` is an array, also when `oneOf` is present)
-JSONEditor.defaults.editors.multiple = JSONEditor.AbstractEditor.extend({
+import { AbstractEditor } from '../editor';
+import { Validator } from '../validator';
+import { $extend, $each } from '../utilities';
+export var MultipleEditor = AbstractEditor.extend({
+
   register: function() {
     if(this.editors) {
       for(var i=0; i<this.editors.length; i++) {
@@ -52,7 +56,7 @@ JSONEditor.defaults.editors.multiple = JSONEditor.AbstractEditor.extend({
     if(!this.editors[i]) {
       this.buildChildEditor(i);
     }
-    
+
     var current_value = self.getValue();
 
     self.type = i;
@@ -185,8 +189,8 @@ JSONEditor.defaults.editors.multiple = JSONEditor.AbstractEditor.extend({
 
     this.editor_holder = document.createElement('div');
     container.appendChild(this.editor_holder);
-    
-      
+
+
     var validator_options = {};
     if(self.jsoneditor.options.custom_validators) {
       validator_options.custom_validators = self.jsoneditor.options.custom_validators;
@@ -211,7 +215,7 @@ JSONEditor.defaults.editors.multiple = JSONEditor.AbstractEditor.extend({
         }
       }
 
-      self.validators[i] = new JSONEditor.Validator(self.jsoneditor,schema,validator_options);
+      self.validators[i] = new Validator(self.jsoneditor,schema,validator_options,self.defaults);
     });
 
     this.switchEditor(0);
@@ -241,32 +245,46 @@ JSONEditor.defaults.editors.multiple = JSONEditor.AbstractEditor.extend({
     var fitTestVal = {
       match: 0,
       extra: 0,
-      i: 0
+      i: this.type
     };
-    $each(this.validators, function(i,validator) {
-      if (!validator.validate(val).length) {
-        if (typeof self.anyOf !== "undefined" && self.anyOf) {
-          var fitTestResult = validator.fitTest(val);
-          if (fitTestVal.match < fitTestResult.match) {
+    var validVal = {
+      match: 0,
+      i: null
+    };
+    $each(this.validators, function (i, validator) {
+      var fitTestResult = null;
+      if (typeof self.anyOf !== "undefined" && self.anyOf) {
+        fitTestResult = validator.fitTest(val);
+        if (fitTestVal.match < fitTestResult.match) {
+          fitTestVal = fitTestResult;
+          fitTestVal.i = i;
+        } else if (fitTestVal.match === fitTestResult.match) {
+          if (fitTestVal.extra > fitTestResult.extra) {
             fitTestVal = fitTestResult;
             fitTestVal.i = i;
-          } else if (fitTestVal.match === fitTestResult.match) {
-            if (fitTestVal.extra > fitTestResult.extra) {
-              fitTestVal = fitTestResult;
-              fitTestVal.i = i;
-            }
           }
-        } else {
-          self.type = i;
-          self.switcher.value = self.display_text[i];
-          return false;
+        }
+      }
+      if (!validator.validate(val).length && validVal.i === null) {
+        validVal.i = i;
+        if (fitTestResult !== null){
+          validVal.match = fitTestResult.match;
         }
       }
     });
+    var finalI = validVal.i;
+    // if the best fit schema has more match properties, then use the best fit schema.
+    // usually the value could be
     if (typeof self.anyOf !== "undefined" && self.anyOf) {
-      self.type = fitTestVal.i;
-      self.switcher.value = self.display_text[fitTestVal.i];
+      if (validVal.match < fitTestVal.match){
+        finalI = fitTestVal.i;
+      }
     }
+    if (finalI === null) {
+      finalI = this.type;
+    }
+    this.type = finalI;
+    this.switcher.value = this.display_text[finalI];
 
     var type_changed = this.type != prev_type;
     if (type_changed) {

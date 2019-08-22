@@ -1,4 +1,171 @@
-var JSONEditor = function(element,options) {
+import './styles/choices.css';
+import './styles/starrating.css';
+
+import { ie9Polyfill } from './ie9';
+import { getDefaults, getPlugins } from './defaults';
+import { Validator } from './validator';
+import { $extend, $each } from './utilities';
+
+import { htmlTheme } from './themes/html';
+import { bootstrap2Theme } from './themes/bootstrap2';
+import { bootstrap3Theme } from './themes/bootstrap3';
+import { bootstrap4Theme } from './themes/bootstrap4';
+import { foundationTheme, foundation3Theme, foundation4Theme, foundation5Theme, foundation6Theme } from './themes/foundation';
+import { jqueryuiTheme } from './themes/jqueryui';
+import { barebonesTheme } from './themes/jsoneditor.barebones-theme';
+import { materializeTheme } from './themes/materialize';
+import { spectreTheme } from './themes/spectre';
+import { tailwindTheme } from './themes/tailwind';
+
+import { AbstractEditor } from './editor';
+import { AceEditor } from './editors/ace';
+import { ArrayEditor } from './editors/array';
+import { ArrayChoicesEditor } from './editors/array/choices';
+import { ArraySelect2Editor } from './editors/array/select2';
+import { ArraySelectizeEditor } from './editors/array/selectize';
+import { AutocompleteEditor } from './editors/autocomplete';
+import { Base64Editor } from './editors/base64';
+import { ButtonEditor } from './editors/button';
+import { CheckboxEditor } from './editors/checkbox';
+import { ChoicesEditor } from './editors/choices';
+import { DatetimeEditor } from './editors/datetime';
+import { DescribedByEditor } from './editors/describedby';
+import { EnumEditor } from './editors/enum';
+import { HiddenEditor } from './editors/hidden';
+import { InfoEditor } from './editors/info';
+import { IntegerEditor } from './editors/integer';
+import { IpEditor } from './editors/ip';
+import { JoditEditor } from './editors/jodit';
+import { MultipleEditor } from './editors/multiple';
+import { MultiSelectEditor } from './editors/multiselect';
+import { NullEditor } from './editors/null';
+import { NumberEditor } from './editors/number';
+import { ObjectEditor } from './editors/object';
+import { RadioEditor } from './editors/radio';
+import { ScEditor } from './editors/sceditor';
+import { SelectEditor } from './editors/select';
+import { Select2Editor } from './editors/select2';
+import { SelectizeEditor } from './editors/selectize';
+import { SignatureEditor } from './editors/signature';
+import { SimplemdeEditor } from './editors/simplemde';
+import { StarratingEditor } from './editors/starrating';
+import { StringEditor } from './editors/string';
+import { TableEditor } from './editors/table';
+import { UploadEditor } from './editors/upload';
+import { UuidEditor } from './editors/uuid';
+
+import { defaultTemplate } from './templates/default';
+import { ejsTemplate } from './templates/ejs';
+import { handlebarsTemplate } from './templates/handlebars';
+import { hoganTemplate } from './templates/hogan';
+import { lodashTemplate } from './templates/lodash';
+import { markupTemplate } from './templates/markup';
+import { mustacheTemplate } from './templates/mustache';
+import { swigTemplate } from './templates/swig';
+import { underscoreTemplate } from './templates/underscore';
+
+import { bootstrap2Iconlib } from './iconlibs/bootstrap2';
+import { bootstrap3Iconlib } from './iconlibs/bootstrap3';
+import { fontawesome3Iconlib } from './iconlibs/fontawesome3';
+import { fontawesome4Iconlib } from './iconlibs/fontawesome4';
+import { fontawesome5Iconlib } from './iconlibs/fontawesome5';
+import { foundation2Iconlib } from './iconlibs/foundation2';
+import { foundation3Iconlib } from './iconlibs/foundation3';
+import { jqueryuiIconlib } from './iconlibs/jqueryui';
+import { materialiconsIconlib } from './iconlibs/materialicons';
+import { spectreIconlib } from './iconlibs/spectre';
+
+import { wrapJQuery } from './jquery';
+
+var assignIconlibs = function(iconlibs)
+{
+  iconlibs.bootstrap2 = bootstrap2Iconlib;
+  iconlibs.bootstrap3 = bootstrap3Iconlib;
+  iconlibs.fontawesome3 = fontawesome3Iconlib;
+  iconlibs.fontawesome4 = fontawesome4Iconlib;
+  iconlibs.fontawesome5 = fontawesome5Iconlib;
+  iconlibs.foundation2 = foundation2Iconlib;
+  iconlibs.foundation3 = foundation3Iconlib;
+  iconlibs.jqueryui = jqueryuiIconlib;
+  iconlibs.materialicons = materialiconsIconlib;
+  iconlibs.spectre = spectreIconlib;
+}
+
+var assignThemes = function (themes)
+{
+  themes.html = htmlTheme;
+  themes.bootstrap2 = bootstrap2Theme;
+  themes.bootstrap3 = bootstrap3Theme;
+  themes.bootstrap4 = bootstrap4Theme;
+  themes.foundation = foundationTheme;
+  themes.foundation3 = foundation3Theme;
+  themes.foundation4 = foundation4Theme;
+  themes.foundation5 = foundation5Theme;
+  themes.foundation6 = foundation6Theme;
+  themes.jqueryui = jqueryuiTheme;
+  themes.barebonesTheme = barebonesTheme;
+  themes.materialize = materializeTheme;
+  themes.spectre = spectreTheme;
+  themes.tailwind = tailwindTheme;  
+}
+
+// Internal helper function called only here so we won't export as part of class
+// Previously the assignment to the JSONEditor.defaults.editors was done in each of the editor
+// files but doing it this way removes each of the editors' dependency on JSONEditor
+var assignDefaultEditors = function (editors) {
+  
+  editors.ace = AceEditor;
+  editors.array = ArrayEditor;
+  editors.arrayChoices = ArrayChoicesEditor;
+  editors.arraySelect2 = ArraySelect2Editor;
+  editors.arraySelectize = ArraySelectizeEditor;
+  editors.autocomplete = AutocompleteEditor;
+  editors.base64 = Base64Editor;
+  editors.button = ButtonEditor;
+  editors.checkbox = CheckboxEditor;
+  editors.choices = ChoicesEditor;
+  editors.datetime = DatetimeEditor;
+  editors.describedBy = DescribedByEditor;
+  editors.enum = EnumEditor;
+  editors.hidden = HiddenEditor
+  editors.info = InfoEditor;
+  editors.integer = IntegerEditor;
+  editors.ip = IpEditor;
+  editors.jodit = JoditEditor;
+  editors.multiple = MultipleEditor;
+  editors.multiselect = MultiSelectEditor;
+  editors.null = NullEditor;
+  editors.number = NumberEditor;
+  editors.object = ObjectEditor;
+  editors.radio = RadioEditor;
+  editors.sceditor = ScEditor;
+  editors.select = SelectEditor;
+  editors.select2 = Select2Editor;
+  editors.selectize = SelectizeEditor;
+  editors.signature = SignatureEditor;
+  editors.simplemde = SimplemdeEditor;
+  editors.starrating = StarratingEditor;
+  editors.string = StringEditor;
+  editors.table = TableEditor;
+  editors.upload = UploadEditor;
+  editors.uuid = UuidEditor;
+}
+
+var assignTemplates = function(templates)
+{
+  templates.default = defaultTemplate;
+  templates.ejs = ejsTemplate;
+  templates.handlebars = handlebarsTemplate;
+  templates.hogan = hoganTemplate;
+  templates.hogan = lodashTemplate;
+  templates.markup = markupTemplate;
+  templates.mustache = mustacheTemplate;
+  templates.swig = swigTemplate;
+  templates.underscore = underscoreTemplate;
+}
+
+
+export var JSONEditor = function(element,options) {
   if (!(element instanceof Element)) {
     throw new Error('element should be an instance of Element');
   }
@@ -56,7 +223,7 @@ JSONEditor.prototype = {
       if(self.options.custom_validators) {
         validator_options.custom_validators = self.options.custom_validators;
       }
-      self.validator = new JSONEditor.Validator(self,null,validator_options);
+      self.validator = new Validator(self,null,validator_options, JSONEditor.defaults);
       
       // Create the root editor
       var schema = self.expandRefs(self.schema);
@@ -89,6 +256,7 @@ JSONEditor.prototype = {
       });
     }, fetchUrl, fileBase);
   },
+
   getValue: function() {
     if(!this.ready) throw "JSON Editor not ready yet.  Listen for 'ready' event before getting the value";
 
@@ -207,7 +375,7 @@ JSONEditor.prototype = {
   },
   createEditor: function(editor_class, options) {
     options = $extend({},editor_class.options||{},options);
-    return new editor_class(options);
+    return new editor_class(options, JSONEditor.defaults);
   },
   onChange: function() {
     if(!this.ready) return;
@@ -664,12 +832,15 @@ JSONEditor.prototype = {
   }
 };
 
-JSONEditor.defaults = {
-  themes: {},
-  templates: {},
-  iconlibs: {},
-  editors: {},
-  languages: {},
-  resolvers: [],
-  custom_validators: []
-};
+ie9Polyfill();
+JSONEditor.defaults=getDefaults();
+JSONEditor.plugins=getPlugins();
+assignThemes(JSONEditor.defaults.themes);
+JSONEditor.AbstractEditor = AbstractEditor;
+assignDefaultEditors(JSONEditor.defaults.editors);
+assignTemplates(JSONEditor.defaults.templates);
+assignIconlibs(JSONEditor.defaults.iconlibs);
+wrapJQuery();
+
+// Webpack will now allocate this to Window
+global.JSONEditor = JSONEditor;

@@ -1,4 +1,8 @@
-JSONEditor.defaults.editors.multiselect = JSONEditor.AbstractEditor.extend({
+import { AbstractEditor } from '../editor';
+import { $each } from '../utilities';
+
+
+export var MultiSelectEditor = AbstractEditor.extend({
   onInputChange: function() {
     this.value = this.input.value;
     this.onChange(true);

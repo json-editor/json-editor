@@ -1,5 +1,8 @@
 // Non-Active editor for displaying text blocks in form
-JSONEditor.defaults.editors.info = JSONEditor.defaults.editors.button.extend({
+import { AbstractEditor } from '../editor';
+
+export var InfoEditor = AbstractEditor.extend({
+
   build: function() {
     this.options.compact = false;
     this.header = this.label = this.theme.getFormInputLabel(this.getTitle());

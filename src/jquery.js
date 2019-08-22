@@ -1,7 +1,9 @@
 /**
  * This is a small wrapper for using JSON Editor like a typical jQuery plugin.
  */
-(function() {
+import { JSONEditor } from './core';
+
+export function wrapJQuery() {
   if(window.jQuery || window.Zepto) {
     var $ = window.jQuery || window.Zepto;
     $.jsoneditor = JSONEditor.defaults;
@@ -61,4 +63,4 @@
       return this;
     };
   }
-})();
+};

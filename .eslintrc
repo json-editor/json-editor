@@ -1,0 +1,61 @@
+
+// The config file for eslint - which replaces jshint, previously used in the Grunt build
+// We have replicated the following jshint options as well as making allowances for new
+// module format
+// See https://eslint.org/docs/user-guide/  for more info
+/*
+  "devel":true,
+  "nonbsp": true,
+  "nonew": true,
+  "immed": true,
+  "latedef": true,
+  "globals": {
+      "module": true,
+      "define": true,
+  }
+*/
+{
+  "extends":"eslint:recommended", // Includes replication for jshint nonbsp:true, 
+  "env":
+  {
+    "browser":true // Was jshint options.browser: true
+  },
+  "parserOptions": 
+  {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": 
+    {
+      "jsx": true,
+      "modules": true,
+      "experimentalObjectRestSpread": true
+    }
+},
+"globals":{
+  "global":"writable" // webpack variable for substitution to window
+},
+  "rules": 
+  {
+    // See https://eslint.org/docs/rules/ for more info
+
+    // Rules inherited from 'eslint:recommended' but disabled here as they conflict with existing code
+    // TODO: Decide whether we want to bring code in line with rules then re-enable as warning or error
+    "no-unused-vars":"off",
+    "no-prototype-builtins":"off",
+    "no-useless-escape":"off",
+    "no-extra-semi":"off",
+    "no-empty":"off",
+
+
+    // Aditional rules previously defined for jshint but which are broken by existing code
+    // TODO: Decide whether we want to bring code in line with rules then re-enable as warning or error
+    "indent": ["off", 2],   // Was jshint options.indent: 2
+    "wrap-iife":"off",      // Was jshint options.immded: true
+
+    // Rules previously defined for jshint and which are not currently broken
+    "no-use-before-define":"error",  // Was jshint options.latedef:true
+    
+    // We have not replicated the following jshint options:
+    // devel:true
+  }
+}

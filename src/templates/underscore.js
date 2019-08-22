@@ -1,4 +1,4 @@
-JSONEditor.defaults.templates.underscore = function() {
+export var underscoreTemplate = function() {
   if(!window._) return false;
 
   return {

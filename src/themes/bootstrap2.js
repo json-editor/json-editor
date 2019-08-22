@@ -1,4 +1,6 @@
-JSONEditor.defaults.themes.bootstrap2 = JSONEditor.AbstractTheme.extend({
+import { AbstractTheme } from '../theme';
+
+export var bootstrap2Theme = AbstractTheme.extend({
   /* Theme config options that allows changing various aspects of the output */
   options: {
     'disable_theme_rules': false

@@ -1,5 +1,9 @@
 ### Current
 
+  - Added Spectre Theme styling for `anyOf`, `oneOf` and `allOf` selectbox.
+  - Added filter to remove duplicate error messages. Duplicate error messages are now displayed as single error message with error count. (Duplicate error messages can occur when using `not`, `anyOf`, `oneOf` and `allOf` due to these are **conditions**, not properties.) 
+  - Added new 2.x Theme "Spectre".
+  - Updated Theme "Tailwind" to 2.x format.
   - Added sort option for dynamic enumSource.
   - Added JavaScript callback templating support for enumSource: filter, title and value properties.
   - Fix of #470 - Constant enumSource value specified as array of strings causes a template compilation error.

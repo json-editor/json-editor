@@ -1,4 +1,4 @@
-JSONEditor.defaults.templates.ejs = function() {
+export var ejsTemplate =  function() {
   if(!window.EJS) return false;
 
   return {

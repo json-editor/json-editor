@@ -1,4 +1,4 @@
-JSONEditor.defaults.templates.mustache = function() {
+export var mustacheTemplate = function() {
   if(!window.Mustache) return false;
 
   return {

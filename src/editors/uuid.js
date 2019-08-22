@@ -1,5 +1,7 @@
-// Add custom editor code
-JSONEditor.defaults.editors.uuid = JSONEditor.defaults.editors.string.extend({
+import { AbstractEditor } from '../editor';
+
+export var UuidEditor = AbstractEditor.extend({
+
   preBuild: function() {
     this._super();
 

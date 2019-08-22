@@ -1,4 +1,7 @@
-JSONEditor.defaults.editors.sceditor = JSONEditor.defaults.editors.string.extend({
+import { StringEditor } from './string';
+import { $extend } from '../utilities';
+export var ScEditor = StringEditor.extend({
+
   setValue: function(value,initial,from_template) {
     var res = this._super(value,initial,from_template);
     if (res !== undefined && res.changed && this.sceditor_instance) this.sceditor_instance.val(res.value);
@@ -13,14 +16,14 @@ JSONEditor.defaults.editors.sceditor = JSONEditor.defaults.editors.string.extend
     var self = this, options;
 
     if (window.jQuery && window.jQuery.fn && window.jQuery.fn.sceditor) {
-      // Get options, either global options from "JSONEditor.defaults.options.sceditor" or
+      // Get options, either global options from "this.defaults.options.sceditor" or
       // single property options from schema "options.sceditor"
       options = this.expandCallbacks('sceditor', $extend({}, {
         plugins: self.input_type,
         emoticonsEnabled: false,
         width: '100%',
         height: 300
-      }, JSONEditor.defaults.options.sceditor || {}, this.options.sceditor || {}, {
+      }, this.defaults.options.sceditor || {}, this.options.sceditor || {}, {
         element: this.input
       }));
 

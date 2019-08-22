@@ -1,5 +1,9 @@
 // Spectre Theme using Spectre CSS framework. <https://picturepan2.github.io/spectre/index.html>
-JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
+import { AbstractTheme } from '../theme'
+
+import { $each } from '../utilities';
+
+export var spectreTheme = AbstractTheme.extend({
   // Config options that allows changing various aspects of the output
   options: {
     disable_theme_rules: false,   // Disable creation of Inline Style Rules
@@ -29,6 +33,7 @@ JSONEditor.defaults.themes.spectre = JSONEditor.AbstractTheme.extend({
     'div[data-schematype]:not([data-schematype="object"]):hover' : 'background-color: #eee', // Hover on input block (Should be removed in final version)
     '.je-table-border td': 'border: .05rem solid #dadee4 !important', // Option: table_border
     '.btn-info' : 'font-size:.5rem;font-weight:bold;height:.8rem;padding:.15rem 0;line-height:.8;margin:.3rem 0 .3rem .1rem;', // Infobutton
+    '.je-label+select': 'min-width: 5rem', // Select box for oneOf, anyOf and allOf
     '.je-label': 'font-weight: 600', // Option: label_bold
     '.btn-action.btn-info': 'width: .8rem;', // Infobutton
     '.je-border': 'border:.05rem solid #dadee4', // Option: object_border

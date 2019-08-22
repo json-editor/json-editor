@@ -1,4 +1,6 @@
-JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
+import { AbstractEditor } from '../editor';
+import { $extend, $each } from '../utilities';
+export var StringEditor = AbstractEditor.extend({
   register: function() {
     this._super();
     if(!this.input) return;
@@ -222,7 +224,7 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
   },
   setupCleave: function(el) {
     // Enable cleave.js support if library is loaded and config is available
-    var options = this.expandCallbacks('cleave', $extend({}, JSONEditor.defaults.options.cleave || {}, this.options.cleave || {}));
+    var options = this.expandCallbacks('cleave', $extend({}, self.defaults.options.cleave || {}, this.options.cleave || {}));
     if (typeof options == 'object' && Object.keys(options).length > 0) {
       this.cleave_instance = new window.Cleave(el, options);
     }
