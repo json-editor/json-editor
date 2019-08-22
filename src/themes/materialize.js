@@ -1,4 +1,6 @@
-JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
+import { AbstractTheme } from '../theme'
+
+export var materializeTheme = AbstractTheme.extend(
   {
   /* Theme config options that allows changing various aspects of the output */
   options: {

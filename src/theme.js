@@ -1,3 +1,7 @@
+
+import { Class } from './class';
+
+  
 var matchKey = (function () {
   var elem = document.documentElement;
 
@@ -8,7 +12,7 @@ var matchKey = (function () {
   else if (elem.oMatchesSelector) return 'oMatchesSelector';
 })();
 
-JSONEditor.AbstractTheme = Class.extend({
+export var AbstractTheme = Class.extend({
   /* Theme config options that allows changing various aspects of the output */
   options: {
     'disable_theme_rules': false
@@ -534,3 +538,4 @@ JSONEditor.AbstractTheme = Class.extend({
     return (tmp.textContent || tmp.innerText);
   }
 });
+

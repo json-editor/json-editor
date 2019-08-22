@@ -1,7 +1,10 @@
 /**
  * All editors should extend from this class
  */
-JSONEditor.AbstractEditor = Class.extend({
+import { Class } from './class';
+import { $extend, $each } from './utilities';
+
+export var AbstractEditor = Class.extend({
   onChildEditorChange: function(editor) {
     this.onChange(true);
   },
@@ -46,14 +49,16 @@ JSONEditor.AbstractEditor = Class.extend({
       this.change();
     }
   },
-  init: function(options) {
+  init: function(options, defaults) {
+    this.defaults=defaults;
+
     this.jsoneditor = options.jsoneditor;
 
     this.theme = this.jsoneditor.theme;
     this.template_engine = this.jsoneditor.template;
     this.iconlib = this.jsoneditor.iconlib;
 
-    this.translate = this.jsoneditor.translate || JSONEditor.defaults.translate;
+    this.translate = this.jsoneditor.translate || this.defaults.translate;
 
     this.original_schema = options.schema;
     this.schema = this.jsoneditor.expandSchema(this.original_schema);
@@ -614,8 +619,8 @@ JSONEditor.AbstractEditor = Class.extend({
   },
   expandCallbacks: function(scope, options) {
     for (var i in options) {
-      if (options.hasOwnProperty(i) && typeof options[i] === 'string' && typeof JSONEditor.defaults.callbacks[scope] === 'object' && typeof JSONEditor.defaults.callbacks[scope][options[i]] === 'function') {
-        options[i] = JSONEditor.defaults.callbacks[scope][options[i]].bind(null, this);//.bind(this);
+      if (options.hasOwnProperty(i) && typeof options[i] === 'string' && typeof this.defaults.callbacks[scope] === 'object' && typeof this.defaults.callbacks[scope][options[i]] === 'function') {
+        options[i] = this.defaults.callbacks[scope][options[i]].bind(null, this);//.bind(this);
       }
     }
     return options;

@@ -1,4 +1,7 @@
-JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
+import { AbstractEditor } from '../editor';
+import { $extend, $each, $trigger } from '../utilities';
+export var ObjectEditor = AbstractEditor.extend({
+
   getDefault: function() {
     return $extend({},this.schema["default"] || {});
   },
@@ -1029,7 +1032,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       self.layoutEditors();
     }
   },
-  onOutsideModalClick: function() {
+  onOutsideModalClick: function(e) {
     if (this.addproperty_holder && !this.addproperty_holder.contains(e.target) && this.adding_property) {
       e.preventDefault();
       e.stopPropagation();

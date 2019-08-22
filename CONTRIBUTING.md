@@ -27,12 +27,20 @@ If you fix a bug or add a cool feature, please submit a pull request!
 *  Use comments whenever the code's meaning is not obvious
 *  When in doubt, try to match the style in existing source files
 
-### Grunt
+### Development
 
-The easiest way to hack on JSON Editor is to run `grunt watch`, which 
-re-builds `dist/jsoneditor.js` every time a source file changes.
+The easiest way to hack on JSON Editor is to run `npm start`, which 
+re-builds `dist/jsoneditor.js` every time a source file changes and serves the repo to a
+development server on port 8080, so you can load test pages such as (http://localhost:8080/tests/pages/array-selectize.html) and immmediately view and debug the results.
 
-To do a full grunt build which includes jshint and minification, run `grunt`.
+Similarly, you can run and view the results of unit tests every time code changes by running `npm test`.
+
+To do a production build which includes eslint and minification, run `npm build`.
+
+We encourage you to use a [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development) and [TDD](https://en.wikipedia.org/wiki/Test-driven_development) approach to developing features and fixing bugs, in each case:
+
+1. Writing end-to-end tests for your new features (`./tests/codeceptjs`)
+1. Write unit tests for edits to specify and confirm correct operation of small units of code such as functions and methods (`./tests/unit`)
 
 ### Submitting Pull Requests
 Try to limit pull requests to a single narrow feature or bug fix.

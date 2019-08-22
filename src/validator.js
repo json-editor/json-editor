@@ -1,9 +1,14 @@
-JSONEditor.Validator = Class.extend({
-  init: function(jsoneditor,schema,options) {
+import { Class } from './class';
+import { ipValidator } from './validators/ip-validator';
+import {  $extend, $each } from './utilities';
+
+export const Validator = Class.extend({
+  init: function(jsoneditor,schema,options,defaults) {
     this.jsoneditor = jsoneditor;
     this.schema = schema || this.jsoneditor.schema;
     this.options = options || {};
-    this.translate = this.jsoneditor.translate || JSONEditor.defaults.translate;
+    this.translate = this.jsoneditor.translate || defaults.translate;
+    this.defaults = defaults;
   },
   fitTest: function(value, givenSchema, weight) {
     weight = typeof weight === "undefined" ? 10000000 : weight;
@@ -661,10 +666,10 @@ JSONEditor.Validator = Class.extend({
     }
 
     // Internal validators using the custom validator format
-    errors = errors.concat(ipValidator.validate.call(self,schema,value,path));
+    errors = errors.concat(ipValidator.call(self,schema,value,path));
 
     // Custom type validation (global)
-    $each(JSONEditor.defaults.custom_validators,function(i,validator) {
+    $each(self.defaults.custom_validators,function(i,validator) {
       errors = errors.concat(validator.call(self,schema,value,path));
     });
     // Custom type validation (instance specific)
@@ -714,3 +719,4 @@ JSONEditor.Validator = Class.extend({
     }
   }
 });
+

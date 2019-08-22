@@ -1,4 +1,6 @@
-JSONEditor.defaults.iconlibs.bootstrap2 = JSONEditor.AbstractIconLib.extend({
+import { AbstractIconLib } from '../iconlib';
+
+export var bootstrap2Iconlib = AbstractIconLib.extend({
   mapping: {
     collapse: 'chevron-down',
     expand: 'chevron-up',

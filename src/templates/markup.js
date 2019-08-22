@@ -1,4 +1,4 @@
-JSONEditor.defaults.templates.markup = function() {
+export var markupTemplate = function() {
   if(!window.Mark || !window.Mark.up) return false;
 
   return {

@@ -4,7 +4,7 @@
  * @param obj
  * @returns {boolean}
  */
-var $isplainobject = function( obj ) {
+export var $isplainobject = function( obj ) {
   // Not plain objects:
   // - Any object or value whose internal [[Class]] property is not "[object Object]"
   // - DOM nodes
@@ -22,7 +22,7 @@ var $isplainobject = function( obj ) {
   return true;
 };
 
-var $extend = function(destination) {
+export var $extend = function(destination) {
   var source, i,property;
   for(i=1; i<arguments.length; i++) {
     source = arguments[i];
@@ -40,7 +40,7 @@ var $extend = function(destination) {
   return destination;
 };
 
-var $each = function(obj,callback) {
+export var $each = function(obj,callback) {
   if(!obj || typeof obj !== "object") return;
   var i;
   if(Array.isArray(obj) || (typeof obj.length === 'number' && obj.length > 0 && (obj.length - 1) in obj)) {
@@ -64,7 +64,7 @@ var $each = function(obj,callback) {
   }
 };
 
-var $trigger = function(el,event) {
+export var $trigger = function(el,event) {
   var e = document.createEvent('HTMLEvents');
   e.initEvent(event, true, true);
   el.dispatchEvent(e);

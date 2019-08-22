@@ -1,4 +1,7 @@
-JSONEditor.defaults.editors.simplemde = JSONEditor.defaults.editors.string.extend({
+import { StringEditor } from './string';
+import { $extend, $each } from '../utilities';
+export var SimplemdeEditor = StringEditor.extend({
+
   setValue: function(value,initial,from_template) {
     var res = this._super(value,initial,from_template);
     if (res !== undefined && res.changed && this.simplemde_instance) this.simplemde_instance.value(res.value);
@@ -13,11 +16,11 @@ JSONEditor.defaults.editors.simplemde = JSONEditor.defaults.editors.string.exten
     var self = this, options;
 
     if (window.SimpleMDE) {
-      // Get options, either global options from "JSONEditor.defaults.options.simplemde" or
+      // Get options, either global options from "this.defaults.options.simplemde" or
       // single property options from schema "options.simplemde"
       options = this.expandCallbacks('simplemde', $extend({}, {
         height: 300
-      }, JSONEditor.defaults.options.simplemde || {}, this.options.simplemde || {}, {
+      }, this.defaults.options.simplemde || {}, this.options.simplemde || {}, {
         element: this.input
       }));
 

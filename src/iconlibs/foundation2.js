@@ -1,4 +1,6 @@
-JSONEditor.defaults.iconlibs.foundation2 = JSONEditor.AbstractIconLib.extend({
+import { AbstractIconLib } from '../iconlib';
+
+export var foundation2Iconlib = AbstractIconLib.extend({
   mapping: {
     collapse: 'minus',
     expand: 'plus',

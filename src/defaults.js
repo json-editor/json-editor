@@ -1,3 +1,25 @@
+import { $each } from './utilities';
+
+export function getDefaults()
+{
+
+// To aid modularity and avoicd circular references, We are now returning defaults to the JSONEditor object in core 
+// raher than editing it here but
+// I've created this local object (and will return the defaults property) to make it easier to merge the PR
+// Once the merge has been carried out, I recommend changing `JSONEditor.defaults` to `retval`
+var JSONEditor={};
+
+// This assignment was previously in core.js but makes more sense here
+JSONEditor.defaults = {
+  themes: {},
+  templates: {},
+  iconlibs: {},
+  editors: {},
+  languages: {},
+  resolvers: [],
+  custom_validators: []
+};
+
 // Set the default theme
 JSONEditor.defaults.theme = 'html';
 
@@ -257,26 +279,6 @@ JSONEditor.defaults.languages.en = {
   choices_placeholder_text: "Start typing to add value",
 };
 
-// Miscellaneous Plugin Settings
-// Obsolete - Can be removed. Now replaced with global + schema options
-JSONEditor.plugins = {
-  ace: {
-    theme: ''
-  },
-  choices: {
-  },
-  SimpleMDE: {
-
-  },
-  sceditor: {
-
-  },
-  select2: {
-
-  },
-  selectize: {
-  }
-};
 
 // Global callback list
 JSONEditor.defaults.callbacks = {
@@ -522,3 +524,30 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
 JSONEditor.defaults.resolvers.unshift(function(schema) {
   if (schema.type === "string" && ['ip', 'ipv4', 'ipv6','hostname'].indexOf(schema.format) !== -1 ) return "ip";
 });
+
+return JSONEditor.defaults;
+};
+
+// Miscellaneous Plugin Settings
+// Obsolete - Can be removed. Now replaced with global + schema options
+// DS: Actually it can't without breaking tests :-D
+export function getPlugins()  {
+  return {
+  ace: {
+    theme: ''
+  },
+  choices: {
+  },
+  SimpleMDE: {
+
+  },
+  sceditor: {
+
+  },
+  select2: {
+
+  },
+  selectize: {
+  }
+}
+};

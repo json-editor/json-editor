@@ -1,5 +1,8 @@
 // Enum Editor (used for objects and arrays with enumerated values)
-JSONEditor.defaults.editors["enum"] = JSONEditor.AbstractEditor.extend({
+import { AbstractEditor } from '../editor';
+import { $each } from '../utilities';
+
+export var EnumEditor = AbstractEditor.extend({
   getNumColumns: function() {
     return 4;
   },

@@ -1,4 +1,6 @@
-JSONEditor.defaults.iconlibs.materialicons = JSONEditor.AbstractIconLib.extend({
+import { AbstractIconLib } from '../iconlib';
+
+export var materialiconsIconlib = AbstractIconLib.extend({
 
     mapping: {
       collapse: 'arrow_drop_up',
