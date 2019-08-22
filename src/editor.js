@@ -625,16 +625,6 @@ export var AbstractEditor = Class.extend({
     }
     return options;
   },
-  getOption: function(key) {
-    try {
-      throw "getOption is deprecated";
-    }
-    catch(e) {
-      window.console.error(e);
-    }
-
-    return this.options[key];
-  },
   showValidationErrors: function(errors) {
 
   }
