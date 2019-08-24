@@ -11,6 +11,7 @@ export var fontawesome3Iconlib = AbstractIconLib.extend({
     save: 'save',
     moveup: 'arrow-up',
     movedown: 'arrow-down',
+    copy: 'copy',
     clear: 'remove-circle',
     time: 'time',
     calendar: 'calendar'

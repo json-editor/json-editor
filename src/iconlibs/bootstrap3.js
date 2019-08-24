@@ -11,6 +11,7 @@ export var bootstrap3Iconlib = AbstractIconLib.extend({
     save: 'floppy-saved',
     moveup: 'arrow-up',
     movedown: 'arrow-down',
+    copy: 'copy',
     clear: 'remove-circle',
     time: 'time',
     calendar: 'calendar'
