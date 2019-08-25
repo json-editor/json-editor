@@ -7,7 +7,7 @@ var helpers = require('./helpers');
 // See https://webpack.js.org/guides/development/
 module.exports = webpackMerge(commonConfig, {
   mode: 'development',
-  devtool: '#@source-map', 
+  devtool: '@source-map', 
   output: {
     path: helpers.root('dist/nonmin'),
     publicPath: '/dist/',
