@@ -2,8 +2,8 @@
 import { AbstractEditor } from '../editor';
 import { $extend, $each } from '../utilities';
 export var ButtonEditor = AbstractEditor.extend({
-  init: function(options) {
-    this._super(options);
+  init: function(options, defaults) {
+    this._super(options, defaults);
     this.active = false;
 
     // Set field to required in schema otherwise it will not be displayed
