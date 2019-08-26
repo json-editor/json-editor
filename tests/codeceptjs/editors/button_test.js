@@ -2,14 +2,14 @@ var assert = require('assert');
 
 Feature('button');
 
-Scenario('should work with button editor callbacks', async (I) => {
+Scenario('should work with button editor callbacks @optional', async (I) => {
   I.amOnPage('button-callbacks.html');
   I.seeElement('[data-schemapath="root.button1"] button');
   I.click('[data-schemapath="root.button1"] button');
   assert.equal(await I.grabValueFrom('.value'), 'button1CB');
 });
 
-Scenario('should work with button editor with option validated = true', async (I) => {
+Scenario('should work with button editor with option validated = true @optional', async (I) => {
   I.amOnPage('button-callbacks.html');
   I.seeElement('[data-schemapath="root.button2"] button');
   assert.equal(await I.grabAttributeFrom('[data-schemapath="root.button2"] button', 'disabled'), 'true');
