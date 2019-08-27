@@ -66,5 +66,7 @@
     "webpack-dev-server": "^3.8.0",
     "webpack-merge": "^4.2.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "cleave.js": "^1.5.3"
+  }
 }
