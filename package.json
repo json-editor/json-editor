@@ -28,8 +28,9 @@
     "build.prod": "webpack --config config/webpack.prod.js --progress --profile --bail",
     "build.nonmin": "webpack --config config/webpack.nonmin.js --progress --profile --bail",
     "build.dev": "webpack --config config/webpack.dev.js --progress --profile --bail",
-    "start": "webpack-dev-server --config config/webpack.dev.js --progress",
-    "start.nonmin": "webpack-dev-server --config config/webpack.nonmin.js --progress",
+    "watch": "webpack --config config/webpack.nonmin.js --watch",
+    "debug": "webpack-dev-server --config config/webpack.dev.js --progress",
+    "debug.nonmin": "webpack-dev-server --config config/webpack.nonmin.js --progress",
     "test": "karma start config/karma.conf.js --browsers Chrome --log-level debug",
     "test-headless": "karma start config/karma.conf.js --singleRun true --browsers ChromeHeadless",
     "serve-test": "http-server --p 9001",
@@ -72,6 +73,5 @@
     "webpack-dev-server": "^3.8.0",
     "webpack-merge": "^4.2.1"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
