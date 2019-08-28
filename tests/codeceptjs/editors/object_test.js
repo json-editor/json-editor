@@ -93,3 +93,14 @@ Scenario('opt in optional properties', async (I) => {
   assert.equal(await I.grabAttributeFrom('[data-schemapath="root.object.number"] .json-editor-opt-in', 'disabled'), false);
   assert.equal(await I.grabAttributeFrom('[data-schemapath="root.object.boolean"] .json-editor-opt-in', 'disabled'), false);
 });
+
+Scenario('should hide but not delete additional properties, when no_additional_properties is true @optional', async (I) => {
+  I.amOnPage('object-no-additional-properties.html');
+  I.seeElement('[data-schemapath="root.name"] input');
+  I.dontSeeElement('[data-schemapath="root.age"] input');
+  I.click('.get-value');
+  let json = await I.grabValueFrom('.value');
+  let value = JSON.parse(json);
+  assert.equal(value.name, "Jeremy Dorn");
+  assert.equal(value.age, 34); // This will currently fail
+});
