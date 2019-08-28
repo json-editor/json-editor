@@ -527,27 +527,3 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
 
 return JSONEditor.defaults;
 };
-
-// Miscellaneous Plugin Settings
-// Obsolete - Can be removed. Now replaced with global + schema options
-// DS: Actually it can't without breaking tests :-D
-export function getPlugins()  {
-  return {
-  ace: {
-    theme: ''
-  },
-  choices: {
-  },
-  SimpleMDE: {
-
-  },
-  sceditor: {
-
-  },
-  select2: {
-
-  },
-  selectize: {
-  }
-}
-};
