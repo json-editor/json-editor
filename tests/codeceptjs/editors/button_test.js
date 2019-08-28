@@ -13,11 +13,9 @@ Scenario('should work with option "validated"', async (I) => {
   I.amOnPage('button-callbacks.html');
   I.seeElement('[data-schemapath="root.button2"] button:disabled');
 
-  //I.seeElement('[data-schemapath="root.textinput"] input');
   await I.fillField('[name="root[textinput]"]', 'Hello World');
 
   // Dummy value needed to trigger onChange event
-  //I.seeElement('[data-schemapath="root.textinput2"] input');
   await I.fillField('[name="root[textinput2]"]', 'Hello World');
 
   I.seeElement('[data-schemapath="root.button2"] button:not(:disabled)');
