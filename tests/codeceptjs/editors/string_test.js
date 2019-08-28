@@ -1,5 +1,5 @@
 var assert = require('assert');
-
+ 
 Feature('string');
 
 Scenario('should have correct initial value', async (I) => {
