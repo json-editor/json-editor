@@ -1,5 +1,5 @@
 var assert = require('assert');
-
+ 
 Feature('string');
 
 Scenario('should have correct initial value', async (I) => {
@@ -106,4 +106,12 @@ Scenario('should have a custom attribute with custom value', async (I) => {
   I.amOnPage('string-custom-attributes.html');
   I.seeElement('[name="root[custom_attributes]"]');
   assert.equal(await I.grabAttributeFrom('[name="root[custom_attributes]"]', 'custom-attribute'), 'custom-value');
+});
+
+Scenario('should work with cleave.js library', async (I) => {
+  I.amOnPage('string-cleave.html');
+  I.seeElement('[name="root[cleave_test]"]');
+  await I.fillField('[name="root[cleave_test]"]', '12345678901234567890');
+  I.click('.get-value');
+  assert.equal(await I.grabValueFrom('.debug'), JSON.stringify({"cleave_test":"1234.567.890-1234"}));
 });

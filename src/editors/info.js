@@ -1,7 +1,7 @@
 // Non-Active editor for displaying text blocks in form
-import { AbstractEditor } from '../editor';
+import { ButtonEditor } from './button';
 
-export var InfoEditor = AbstractEditor.extend({
+export var InfoEditor = ButtonEditor.extend({
 
   build: function() {
     this.options.compact = false;

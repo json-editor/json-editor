@@ -34,7 +34,7 @@ docker-compose run --rm node bash
 $ npm start
 ```
 
-which effectively runs `grunt watch` in your project.
+which effectively runs the Webpack development server in your project
 
 
 ### References
