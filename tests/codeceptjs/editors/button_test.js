@@ -9,18 +9,25 @@ Scenario('should work with button editor callbacks', async (I) => {
   assert.equal(await I.grabValueFrom('.value'), 'button1CB');
 });
 
-// TODO - remove @optional once we have worked out why test failing
-Scenario('should work with button editor with option validated = true @optional', async (I) => {
+Scenario('should work with option "validated"', async (I) => {
   I.amOnPage('button-callbacks.html');
-  I.seeElement('[data-schemapath="root.button2"] button');
-  assert.equal(await I.grabAttributeFrom('[data-schemapath="root.button2"] button', 'disabled'), 'true');
+  I.seeElement('[data-schemapath="root.button2"] button:disabled');
 
-  I.seeElement('[data-schemapath="root.textinput"] input');
+  //I.seeElement('[data-schemapath="root.textinput"] input');
   await I.fillField('[name="root[textinput]"]', 'Hello World');
-  // Test fails on next line and I have no idea why - it works when I carry out these steps manually
-  assert.equal(await I.grabAttributeFrom('[data-schemapath="root.button2"] button', 'disabled'), 'false');
-  I.seeElement('[data-schemapath="root.button2"] button');
+
+  // Dummy value needed to trigger onChange event
+  //I.seeElement('[data-schemapath="root.textinput2"] input');
+  await I.fillField('[name="root[textinput2]"]', 'Hello World');
+
+  I.seeElement('[data-schemapath="root.button2"] button:not(:disabled)');
   I.click('[data-schemapath="root.button2"] button');
   assert.equal(await I.grabValueFrom('.value'), 'button2CB');
+});
+
+Scenario('should not leave any footprints in result', async (I) => {
+  I.amOnPage('button-callbacks.html');
+  I.click('.get-value');
+  assert.equal(await I.grabValueFrom('.value'), JSON.stringify({"textinput":"","textinput2":""}));
 });
 

@@ -2,12 +2,14 @@
 <html>
 <head>
   <meta charset="utf-8"/>
-  <title>string-cleave</title>
+  <title>string-jodit-editor</title>
+
   <!-- json editor -->
   <script src="../../dist/jsoneditor.js"></script>
 
-  <!-- ace-editor -->
-  <script src="./../../node_modules/cleave.js/dist/cleave.min.js"></script>
+  <!-- jodit-editor -->
+  <script src="./../../node_modules/jodit/build/jodit.min.js"></script>
+  <link rel="stylesheet" href="./../../node_modules/jodit/build/jodit.min.css" />
 </head>
 <body>
 
@@ -18,28 +20,29 @@
 <script>
   var container = document.querySelector('.container');
   var debug = document.querySelector('.debug');
+
   var schema = {
-    "type": "object",
-    "title": "string-cleave-editor",
-    "properties": {
-      "cleave_test": {
-        "type": "string",
-        "options": {
-          "cleave": {
-            "blocks": [4, 3, 3, 4],
-            "delimiters": ['.', '.', '-'],
-            "uppercase": true
-          }
+    "type": "array",
+    "title": "string-jodit-editor",
+    "items": {
+      "type": "object",
+      "properties": {
+        "editor": {
+          "type": "string",
+          "format": "jodit"
         }
       }
     }
   };
+
   var editor = new JSONEditor(container, {
     schema: schema
   });
+
   document.querySelector('.get-value').addEventListener('click', function () {
     debug.value = JSON.stringify(editor.getValue());
   });
+
 </script>
 
 </body>
