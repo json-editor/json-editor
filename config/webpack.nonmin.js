@@ -1,20 +1,22 @@
-/* eslint-disable no-undef */
 var webpackMerge = require('webpack-merge');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 var commonConfig = require('./webpack.common.js');
 var helpers = require('./helpers');
 
+// See https://webpack.js.org/guides/development/
 module.exports = webpackMerge(commonConfig, {
   mode: 'development',
-  devtool: 'cheap-module-eval-source-map',
+  devtool: '@source-map', 
   output: {
-    path: helpers.root('dist/dev'),
+    path: helpers.root('dist/nonmin'),
     publicPath: '/dist/',
     filename: '[name].js',
     chunkFilename: '[id].chunk.js'
   },
 
   plugins: [
+    new CleanWebpackPlugin(), // Cleans directory before building
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
       // all options are optional

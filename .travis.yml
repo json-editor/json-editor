@@ -5,6 +5,8 @@ language: generic
 env:
   - SELENIUM_BROWSER=chrome
   - SELENIUM_BROWSER=firefox
+  - SELENIUM_BROWSER=chrome DIST_SUB_PATH=nonmin
+  - SELENIUM_BROWSER=firefox DIST_SUB_PATH=nonmin
 
 services:
   - docker

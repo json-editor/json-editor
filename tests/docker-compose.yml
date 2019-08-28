@@ -4,10 +4,10 @@ services:
     image: node
     volumes:
       - ../:/repo:delegated
+      - ../${DIST_SUB_PATH-.}/dist:/repo/dist:delegated
     working_dir: /repo
     command: npm run serve-test
     ports:
-      - '9010:9010'
       - '9001:9001'
     expose:
       - '9001'
@@ -37,6 +37,8 @@ services:
       - /dev/shm:/dev/shm
 
   codeceptjs:
+    depends_on:
+      - node
     image: codeception/codeceptjs
     working_dir: /repo/tests/codeceptjs
     volumes:
