@@ -11,6 +11,7 @@ export var foundation2Iconlib = AbstractIconLib.extend({
     save: 'checkmark',
     moveup: 'up-arrow',
     movedown: 'down-arrow',
+    copy: 'page-copy',   
     clear: 'remove',
     time: 'clock',
     calendar: 'calendar'

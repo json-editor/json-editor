@@ -4,7 +4,7 @@ export var fontawesome5Iconlib = AbstractIconLib.extend({
   mapping: {
     collapse: 'caret-down',
     expand: 'caret-right',
-    delete: 'times',
+    "delete": 'times',
     edit: 'pen',
     add: 'plus',
     cancel: 'ban',
