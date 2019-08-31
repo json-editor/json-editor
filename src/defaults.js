@@ -412,6 +412,9 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
       if (schema.format === "selectize") return 'arraySelectize';
       else if (schema.format === "select2") return 'arraySelect2';
     }
+    else if (schema.enum || schema.enumSource) {
+      return 'multiselect'; // otherwise it is select
+    }
   }
 });
 // Use the multiple editor for schemas with `oneOf` set
