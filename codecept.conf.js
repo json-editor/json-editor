@@ -14,6 +14,9 @@ exports.config = {
       chrome: {
         args: ['--ignore-certificate-errors', '--no-sandbox']
       }
+    },
+    customHelpers: {
+      require: './config/puppeteer.helpers.js'
     }
   },
   include: {
