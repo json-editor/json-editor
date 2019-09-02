@@ -6,7 +6,7 @@ class customHelpers extends Helper {
   // Custom isTrue function.
   // returns boolean value
   async isTrue(val) {
-    const helper = this.helpers['Puppeteer'] || this.helpers['Docker'];
+    const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver'];
     try {
       return val === true
           || val === 1
