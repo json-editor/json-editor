@@ -65,8 +65,8 @@ Scenario('opt in optional properties', async (I) => {
 
   // if an editor type "object" is disabled, also the child editors opt-in controls will be disabled.
 
-  assert.equal(await I.grabAttributeFrom('[data-schemapath="root.object.number"] .json-editor-opt-in', 'disabled'), 'true');
-  assert.equal(await I.grabAttributeFrom('[data-schemapath="root.object.boolean"] .json-editor-opt-in', 'disabled'), 'true');
+  assert.equal(await I.grabAttributeFrom('[data-schemapath="root.object.number"] .json-editor-opt-in', 'disabled'), true);
+  assert.equal(await I.grabAttributeFrom('[data-schemapath="root.object.boolean"] .json-editor-opt-in', 'disabled'), true);
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.value'), '{"number":0,"boolean":false}');
 
@@ -90,6 +90,6 @@ Scenario('opt in optional properties', async (I) => {
 
   // if an editor type "object" is enabled, also the child editors opt-in controls will be enabled.
 
-  assert.equal(await I.grabAttributeFrom('[data-schemapath="root.object.number"] .json-editor-opt-in', 'disabled'), false);
-  assert.equal(await I.grabAttributeFrom('[data-schemapath="root.object.boolean"] .json-editor-opt-in', 'disabled'), false);
+  assert.equal(await I.grabAttributeFrom('[data-schemapath="root.object.number"] .json-editor-opt-in', 'disabled'), null);
+  assert.equal(await I.grabAttributeFrom('[data-schemapath="root.object.boolean"] .json-editor-opt-in', 'disabled'), null);
 });
