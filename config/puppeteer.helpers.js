@@ -18,10 +18,10 @@ class customHelpers extends Helper {
 
   // Custom grabBooleanAttributeFrom function.
   // returns boolean value
-  async grabBooleanAttributeFrom(xpath) {
+  async grabBooleanAttributeFrom(xpath, attrib) {
     const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver'];
     try {
-      let res = await helper.grabAttributeFrom(xpath);
+      let res = await helper.grabAttributeFrom(xpath, attrib);
       return res === true || res !== null && res.toString().toLowerCase() == 'true';
     } catch(err) {
       console.log('CodeceptJs Custom Helper "grabBooleanAttributeFrom" Error:', err);
