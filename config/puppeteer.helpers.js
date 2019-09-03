@@ -16,6 +16,21 @@ class customHelpers extends Helper {
     }
   }
 
+
+  async pressKey(key) {
+    const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver'];
+    try {
+      if (!Array.isArray(key) && key.length > 1) {
+       Array.from(key).forEach(async function(el) {
+         await helper.pressKey(el);
+       });
+      }
+      else await helper.pressKey(key);
+    } catch(err) {
+      console.log('CodeceptJs Custom Helper "pressKey" Error:', err);
+    }
+  }
+
   // Custom grabBooleanAttributeFrom function.
   // returns boolean value
   async grabBooleanAttributeFrom(xpath, attrib) {

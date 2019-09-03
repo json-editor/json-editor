@@ -14,8 +14,8 @@ Scenario('should have coerent values', async (I) => {
   I.see('item 1');
   I.seeElement('.ace_editor');
 
-  //I.click('.ace_text-input');
-  //I.pressKey('__YELLOW__');
+  I.click('.ace_editor');
+  I.pressKey('__YELLOW__');
   await I.fillField('.ace_text-input', '__YELLOW__');
   I.see('__YELLOW__');
 
