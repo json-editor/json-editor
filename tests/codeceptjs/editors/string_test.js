@@ -102,8 +102,9 @@ Scenario('Should work correctly in arrays @optional', async (I) => {
 
 Scenario('should be readonly if specified and not disabled', async (I) => {
   I.amOnPage('read-only.html');
-  I.seeElement('[name="root[string]"]');
-  assert.equal(await I.grabAttributeFrom('[name="root[string]"]', 'readonly'), 'true');
+  //I.seeElement('[name="root[string]"]');
+  //assert.equal(await I.grabAttributeFrom('[name="root[string]"]', 'readonly'), 'true');
+  I.seeElement('[name="root[string]"]:read-only');
 });
 
 Scenario('should have a custom attribute with custom value', async (I) => {
