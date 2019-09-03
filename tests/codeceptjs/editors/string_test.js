@@ -12,9 +12,9 @@ Scenario('should have coerent values', async (I) => {
   I.amOnPage('string-ace-editor.html');
   I.click('Add item');
   I.see('item 1');
-  I.seeElement('.ace_text-input');
+  I.seeElement('.ace_editor');
 
-  I.click('.ace_text-input');
+  //I.click('.ace_text-input');
   //I.pressKey('__YELLOW__');
   await I.fillField('.ace_text-input', '__YELLOW__');
   I.see('__YELLOW__');
