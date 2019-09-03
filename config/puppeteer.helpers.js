@@ -21,14 +21,19 @@ class customHelpers extends Helper {
   async pressKey(key) {
     const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver'];
     try {
-      if (!Array.isArray(key) && key.length > 1 && ['Add', 'Alt', 'ArrowDown', 'Down arrow', 'ArrowLeft', 'Left arrow', 'ArrowRight', 'Right arrow', 'ArrowUp', 'Up arrow', 'Backspace', 'Command', 'Control', 'Del', 'Divide', 'End', 'Enter', 'Equals', 'Escape', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'Home', 'Insert', 'Meta', 'Multiply', 'Numpad 0', 'Numpad 1', 'Numpad 2', 'Numpad 3', 'Numpad 4', 'Numpad 5', 'Numpad 6', 'Numpad 7', 'Numpad 8', 'Numpad 9', 'Pagedown', 'PageDown', 'Pageup', 'PageUp', 'Pause', 'Semicolon', 'Shift', 'Space', 'Subtract', 'Tab'].indexOf(key) === -1) {
-       Array.from(key).forEach(async function(el) {
-         await helper.pressKey(el);
-       });
-      }
-      else await helper.pressKey(key);
+      await helper.pressKey(key);
     } catch(err) {
-      console.log('CodeceptJs Custom Helper "pressKey" Error:', err);
+      if (/^Unknown key:/.test(err.message)) {
+        // If unknown key, then apply 'pressKey' for each character in key
+        try {
+          Array.from(key).forEach(async function(char) {
+            await helper.pressKey(char);
+          });
+        } catch(err) {
+          console.log('CodeceptJs Custom Helper "pressKey" Error:', err);
+        }
+      }
+      else console.log('CodeceptJs Custom Helper "pressKey" Error:', err);
     }
   }
 
