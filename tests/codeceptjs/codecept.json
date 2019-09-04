@@ -10,7 +10,7 @@
       "smartWait": 5000
     },
     "customHelpers": {
-      "require": "./../../config/puppeteer.helpers.js"
+      "require": "./../../config/codeceptjs_helpers.js"
     }
   },
   "include": {

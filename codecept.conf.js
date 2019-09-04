@@ -16,7 +16,7 @@ exports.config = {
       }
     },
     customHelpers: {
-      require: './config/puppeteer.helpers.js'
+      require: './config/codeceptjs_helpers.js'
     }
   },
   include: {
