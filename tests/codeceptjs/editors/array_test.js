@@ -15,24 +15,18 @@ Scenario('should array editing triggers', async (I) => {
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.debug'), '["A","B"]');
 
-  I.amAcceptingPopups();
   I.click('.json-editor-btn-moveup');
-  I.seeInPopup('moveRow');
-  I.acceptPopup();
+  assert.equal(await I.grabValueFrom('.action'), 'moveRow');
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.debug'), '["B","A"]');
 
-  I.amAcceptingPopups();
   I.click('.json-editor-btn-movedown');
-  I.seeInPopup('moveRow');
-  I.acceptPopup();
+  assert.equal(await I.grabValueFrom('.action'), 'moveRow');
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.debug'), '["A","B"]');
 
-  I.amAcceptingPopups();
   I.click('.json-editor-btntype-add');
-  I.seeInPopup('addRow');
-  I.acceptPopup();
+  assert.equal(await I.grabValueFrom('.action'), 'addRow');
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.debug'), '["A","B",""]');
 
@@ -40,9 +34,7 @@ Scenario('should array editing triggers', async (I) => {
   I.click('.json-editor-btntype-deletelast');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
-  I.amAcceptingPopups();  // This fails in Puppeteer due to the double popup
-  I.seeInPopup('deleteRow');
-  I.acceptPopup();
+  assert.equal(await I.grabValueFrom('.action'), 'deleteRow');
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.debug'), '["A","B"]');
 
@@ -50,9 +42,7 @@ Scenario('should array editing triggers', async (I) => {
   I.click('.json-editor-btntype-deleteall');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
-  I.amAcceptingPopups();  // This fails in Puppeteer due to the double popup 
-  I.seeInPopup('deleteAllRows');
-  I.acceptPopup();
+  assert.equal(await I.grabValueFrom('.action'), 'deleteAllRows');
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.debug'), '[]');
 });
