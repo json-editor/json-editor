@@ -40,6 +40,7 @@ Scenario('should array editing triggers', async (I) => {
   I.click('.json-editor-btntype-deletelast');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
+  I.amAcceptingPopups();  // This fails in Puppeteer due to the double popup
   I.seeInPopup('deleteRow');
   I.acceptPopup();
   I.click('.get-value');
@@ -49,6 +50,7 @@ Scenario('should array editing triggers', async (I) => {
   I.click('.json-editor-btntype-deleteall');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
+  I.amAcceptingPopups();  // This fails in Puppeteer due to the double popup 
   I.seeInPopup('deleteAllRows');
   I.acceptPopup();
   I.click('.get-value');

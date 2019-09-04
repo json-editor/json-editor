@@ -16,14 +16,10 @@ Scenario('should have coerent values', async (I) => {
 
   I.click('.jodit_toolbar_btn-bold a');
   I.click('.jodit_wysiwyg');
-  I.pressKey('j');
-  I.pressKey('O');
-  I.pressKey('d');
-  I.pressKey('I');
-  I.pressKey('t');
-  I.see('jOdIt');
+  I.pressKey('__JODIT__');
+  I.see('__JODIT__');
 
   I.click('.get-value');
-  assert.equal(await I.grabValueFrom('.debug'), JSON.stringify([{"editor":"<strong>jOdIt</strong>"}]));
+  assert.equal(await I.grabValueFrom('.debug'), JSON.stringify([{"editor":"<strong>__JODIT__</strong>"}]));
 
 });

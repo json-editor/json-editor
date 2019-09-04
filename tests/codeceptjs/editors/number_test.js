@@ -64,7 +64,5 @@ Scenario('should respect step by incrementing and decrementing the value of a ra
 
 Scenario('should be readonly if specified and not disabled', async (I) => {
   I.amOnPage('read-only.html');
-  //I.seeElement('[name="root[number]"]');
-  //assert.equal(await I.grabAttributeFrom('[name="root[number]"]', 'readonly'), 'true');
-  I.seeElement('[name="root[number]"]:read-only');
+  I.seeReadOnlyAttribute('[name="root[number]"]');
 });

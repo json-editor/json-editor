@@ -11,12 +11,12 @@ Scenario('should work with button editor callbacks', async (I) => {
 
 Scenario('should work with option "validated"', async (I) => {
   I.amOnPage('button-callbacks.html');
-  I.seeElement('[data-schemapath="root.button2"] button:disabled');
+  I.seeDisabledAttribute('[data-schemapath="root.button2"] button');
 
   await I.fillField('[name="root[textinput]"]', 'Hello World');
 
   I.pressKey('Tab');
-  I.seeElement('[data-schemapath="root.button2"] button:not(:disabled)');
+  I.dontSeeDisabledAttribute('[data-schemapath="root.button2"] button');
   I.click('[data-schemapath="root.button2"] button');
   assert.equal(await I.grabValueFrom('.value'), 'button2CB');
 });

@@ -13,10 +13,9 @@ Scenario('should have coerent values', async (I) => {
   I.click('Add item');
   I.see('item 1');
   I.seeElement('.ace_editor');
-
   I.click('.ace_editor');
   I.pressKey('__YELLOW__');
-  await I.fillField('.ace_text-input', '__YELLOW__');
+  I.click('.ace_editor');
   I.see('__YELLOW__');
 
   I.click('.get-value');
@@ -37,8 +36,7 @@ Scenario('editor value and String editor should have coerent values @optional', 
   // enters first iframe, writes text on the body and then exits
   I.switchTo(0);
   I.click('body');
-  //I.pressKey('__YELLOW__');
-  await I.fillField('body', '__YELLOW__');
+  I.pressKey('__YELLOW__');
   I.see('__YELLOW__');
   I.switchTo();
 
@@ -56,8 +54,7 @@ Scenario('Should work correctly in arrays @optional', async (I) => {
   // enters first iframe, writes text on the body and then exits
   I.switchTo(0);
   I.click('body');
-  //I.pressKey('__YELLOW__');
-  await I.fillField('body', '__YELLOW__');
+  I.pressKey('__YELLOW__');
   I.see('__YELLOW__');
   I.switchTo();
 
@@ -69,8 +66,8 @@ Scenario('Should work correctly in arrays @optional', async (I) => {
   // enters second iframe, writes text on the body and then exits
   I.switchTo(1);
   I.click('body');
-  //I.pressKey('__BLUE__');
-  await I.fillField('body', '__BLUE__');  
+  I.pressKey('__BLUE__');
+
   I.see('__BLUE__');
   I.switchTo();
 
@@ -102,9 +99,7 @@ Scenario('Should work correctly in arrays @optional', async (I) => {
 
 Scenario('should be readonly if specified and not disabled', async (I) => {
   I.amOnPage('read-only.html');
-  //I.seeElement('[name="root[string]"]');
-  //assert.equal(await I.grabAttributeFrom('[name="root[string]"]', 'readonly'), 'true');
-  I.seeElement('[name="root[string]"]:read-only');
+  I.seeReadOnlyAttribute('[name="root[string]"]');
 });
 
 Scenario('should have a custom attribute with custom value', async (I) => {
