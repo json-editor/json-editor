@@ -31,9 +31,9 @@ describe("JSONEditor", function() {
   });  
 
   it("should create an editor", function(){
-    // expect(JSONEditor).toBeTruthy();
     var element = document.getElementById('fixture');
     console.log("Attempting to create new JSONEditor");
     var editor = new JSONEditor(element, {schema:schema });
+    expect(editor).toBeTruthy();
   });
 })

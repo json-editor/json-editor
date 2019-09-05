@@ -842,5 +842,4 @@ assignTemplates(JSONEditor.defaults.templates);
 assignIconlibs(JSONEditor.defaults.iconlibs);
 wrapJQuery();
 
-// Webpack will now allocate this to Window
-global.JSONEditor = JSONEditor;
+window.JSONEditor = JSONEditor;
