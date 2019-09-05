@@ -60,8 +60,11 @@
   });
 
   var changeCallback = function () {
-    formChanged.style.display = 'block'
-  };
+    if (this.getCount()>1) formChanged.style.display = 'block'
+  }.bind({
+    count:0,
+    getCount: function(){return ++this.count;}
+  });
   editor.on('change', changeCallback);
 
   var watchCallback = function () {

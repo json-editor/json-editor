@@ -16,6 +16,5 @@ Scenario('should return correct booleans values when selected', async (I) => {
 
 Scenario('should be disabled if "readonly" is specified', async (I) => {
   I.amOnPage('read-only.html');
-  I.seeElement('[name="root[select]"]');
-  assert.equal(await I.grabAttributeFrom('[name="root[select]"]', 'disabled'), 'true');
+  I.seeDisabledAttribute('[name="root[select]"]');
 });
