@@ -34,7 +34,9 @@
     }
   };
 
-  JSONEditor.plugins.ace.theme = 'twilight';
+  JSONEditor.defaults.options.ace = {
+    theme: 'ace/theme/twilight'
+  };
 
   var editor = new JSONEditor(container, {
     schema: schema
