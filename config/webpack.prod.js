@@ -20,37 +20,20 @@ function createConfig(target){
       filename: '[name]' + filenameInsert + 'js',
       chunkFilename: '[id]' + filenameInsert + 'chunk.js',
       libraryTarget:target
-        // 'amd' // e2e n, import y
-        // 'var' // e2e y, import n
-        // 'assign' // e2e n, import n  
-        // 'global'  // e2e y, import 
     },
   
     optimization:{
-      // Enabling splitChunks seems to stop the global JSONEditor object being set
-      /*
-      splitChunks:{
-        chunks:'all'
-      },
-      */
       minimize:true
     },
   
     plugins: [
-      // new CleanWebpackPlugin({ // Clean all but dev subdirectory before building
-      //   cleanOnceBeforeBuildPatterns: ['**/*', 
-      //    // '!dev/**/*'      // doesn't work
-      //    '!dev/**'      // works
-      //   ],      
-      // }), 
       new RemoveStrictPlugin(),           // I have put this in to avoid IE throwing error Assignment to read-only properties is not allowed in strict mode
       // This doesn't seem to actually be minimising the CSS!
       new OptimizeCSSAssetsPlugin({
         cssProcessor: require('cssnano'),
         cssProcessorPluginOptions: {
           preset: ['default', { discardComments: { removeAll: true } }],
-        }/*,
-        canPrint: true*/
+        }
       }),
       new webpack.NoEmitOnErrorsPlugin(),
       new MiniCssExtractPlugin({
