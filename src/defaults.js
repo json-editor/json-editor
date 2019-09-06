@@ -252,6 +252,10 @@ JSONEditor.defaults.languages.en = {
     * Choices input field placeholder text
     */
   choices_placeholder_text: "Start typing to add value",
+  /**
+    * Default title for array items
+    */
+  default_array_item_title: "item",
 };
 
 // Miscellaneous Plugin Settings
