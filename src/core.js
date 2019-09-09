@@ -12,7 +12,7 @@ import { bootstrap3Theme } from './themes/bootstrap3';
 import { bootstrap4Theme } from './themes/bootstrap4';
 import { foundationTheme, foundation3Theme, foundation4Theme, foundation5Theme, foundation6Theme } from './themes/foundation';
 import { jqueryuiTheme } from './themes/jqueryui';
-import { barebonesTheme } from './themes/jsoneditor.barebones-theme';
+import { barebonesTheme } from './themes/barebones';
 import { materializeTheme } from './themes/materialize';
 import { spectreTheme } from './themes/spectre';
 import { tailwindTheme } from './themes/tailwind';
@@ -103,7 +103,7 @@ var assignThemes = function (themes)
   themes.foundation5 = foundation5Theme;
   themes.foundation6 = foundation6Theme;
   themes.jqueryui = jqueryuiTheme;
-  themes.barebonesTheme = barebonesTheme;
+  themes.barebones = barebonesTheme;
   themes.materialize = materializeTheme;
   themes.spectre = spectreTheme;
   themes.tailwind = tailwindTheme;  
