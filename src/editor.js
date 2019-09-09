@@ -148,11 +148,13 @@ export var AbstractEditor = Class.extend({
       this.notify();
     }
 
-    if (this.dependenciesFulfilled) {
-      wrapper.style.display = 'block';
-    } else {
-      wrapper.style.display = 'none';
+    var displayMode = this.dependenciesFulfilled ? 'block' : 'none';
+    if (wrapper.tagName == 'TD') {
+      for (var child in wrapper.childNodes) {
+        if (wrapper.childNodes.hasOwnProperty(child)) wrapper.childNodes[child].style.display = displayMode;
+      }
     }
+    else wrapper.style.display = displayMode;
   },
   setContainer: function(container) {
     this.container = container;
