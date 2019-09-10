@@ -3,7 +3,7 @@ import { $each } from './utilities';
 export function getDefaults()
 {
 
-// To aid modularity and avoicd circular references, We are now returning defaults to the JSONEditor object in core 
+// To aid modularity and avoicd circular references, We are now returning defaults to the JSONEditor object in core
 // raher than editing it here but
 // I've created this local object (and will return the defaults property) to make it easier to merge the PR
 // Once the merge has been carried out, I recommend changing `JSONEditor.defaults` to `retval`
@@ -277,6 +277,10 @@ JSONEditor.defaults.languages.en = {
     * Choices input field placeholder text
     */
   choices_placeholder_text: "Start typing to add value",
+  /**
+    * Default title for array items
+    */
+  default_array_item_title: "item",
 };
 
 
@@ -521,6 +525,7 @@ JSONEditor.defaults.resolvers.unshift(function(schema) {
       'yaml'
     ].indexOf(schema.format)  !== -1) return "ace";
 });
+
 JSONEditor.defaults.resolvers.unshift(function(schema) {
   if (schema.type === "string" && ['ip', 'ipv4', 'ipv6','hostname'].indexOf(schema.format) !== -1 ) return "ip";
 });
@@ -551,3 +556,4 @@ export function getPlugins()  {
   }
 }
 };
+
