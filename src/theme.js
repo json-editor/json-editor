@@ -536,6 +536,22 @@ export var AbstractTheme = Class.extend({
     var tmp = document.createElement('div');
     tmp.innerHTML = txt;
     return (tmp.textContent || tmp.innerText);
+  },
+  getProgressBar: function () {
+    var max = 100, start = 0;
+
+    var progressBar = document.createElement('progress');
+    progressBar.setAttribute('max', max);
+    progressBar.setAttribute('value', start);
+    return progressBar;
+  },
+  updateProgressBar: function (progressBar, progress) {
+    if (!progressBar) return;
+    progressBar.setAttribute('value', progress);
+  },
+  updateProgressBarUnknown: function (progressBar) {
+    if (!progressBar) return;
+    progressBar.removeAttribute('value');
   }
 });
 

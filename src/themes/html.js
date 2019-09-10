@@ -7,29 +7,26 @@ export var htmlTheme = AbstractTheme.extend({
   },
   /* Custom stylesheet rules. format: "selector" : "CSS rules" */
   rules: {
-  'div[data-schemaid="root"]:after': 'position:relative;color:red;margin:10px 0;font-weight:600;display:block;width:100%;text-align:center;content:"This is an old JSON-Editor 1.x Theme and might not display elements correctly when used with the 2.x version"'
+  'je-form-input-label': 'display:block;margin-bottom:3px;font-weight:bold;',
+  'je-form-input-description': 'display:inline-block;margin:0;font-size:.8em;font-style:italic;',
+  'je-indented-panel': 'padding:5px;margin:10px;border-radius:3px;border:1px solid #ddd;',
+  'je-child-editor-holder': 'margin-bottom:8px;',
+  'je-header-button-holder': 'display:inline-block;margin-left:10px;font-size:.8em;vertical-align:middle;',
+  'je-table': 'margin-bottom:5px;border-bottom:1px solid #ccc;'
   },
   getFormInputLabel: function(text, req) {
     var el = this._super(text, req);
-    el.style.display = 'block';
-    el.style.marginBottom = '3px';
-    el.style.fontWeight = 'bold';
+    el.classList.add('je-form-input-label');
     return el;
   },
   getFormInputDescription: function(text) {
     var el = this._super(text);
-    el.style.fontSize = '.8em';
-    el.style.margin = 0;
-    el.style.display = 'inline-block';
-    el.style.fontStyle = 'italic';
+    el.classList.add('je-form-input-label');
     return el;
   },
   getIndentedPanel: function() {
     var el = this._super();
-    el.style.border = '1px solid #ddd';
-    el.style.padding = '5px';
-    el.style.margin = '10px';
-    el.style.borderRadius = '3px';
+    el.classList.add('je-indented-panel');
     return el;
   },
   getTopIndentedPanel: function() {
@@ -37,21 +34,17 @@ export var htmlTheme = AbstractTheme.extend({
   },
   getChildEditorHolder: function() {
     var el = this._super();
-    el.style.marginBottom = '8px';
+    el.classList.add('je-child-editor-holder');
     return el;
   },
   getHeaderButtonHolder: function() {
     var el = this.getButtonHolder();
-    el.style.display = 'inline-block';
-    el.style.marginLeft = '10px';
-    el.style.fontSize = '.8em';
-    el.style.verticalAlign = 'middle';
+    el.classList.add('je-header-button-holder');
     return el;
   },
   getTable: function() {
     var el = this._super();
-    el.style.borderBottom = '1px solid #ccc';
-    el.style.marginBottom = '5px';
+    el.classList.add('je-table');
     return el;
   },
   addInputError: function(input, text) {
@@ -73,26 +66,9 @@ export var htmlTheme = AbstractTheme.extend({
     input.errmsg.appendChild(document.createTextNode(text));
   },
   removeInputError: function(input) {
-    if( input.style )
-    {
+    if (input.style) {
       input.style.borderColor = '';
     }
     if(input.errmsg) input.errmsg.style.display = 'none';
-  },
-  getProgressBar: function() {
-    var max = 100, start = 0;
-
-    var progressBar = document.createElement('progress');
-    progressBar.setAttribute('max', max);
-    progressBar.setAttribute('value', start);
-    return progressBar;
-  },
-  updateProgressBar: function(progressBar, progress) {
-    if (!progressBar) return;
-    progressBar.setAttribute('value', progress);
-  },
-  updateProgressBarUnknown: function(progressBar) {
-    if (!progressBar) return;
-    progressBar.removeAttribute('value');
   }
 });
