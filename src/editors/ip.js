@@ -1,4 +1,5 @@
 import { StringEditor } from './string';
+import { $extend, $each } from '../utilities';
 
 export var IpEditor = StringEditor.extend({
 
@@ -39,5 +40,7 @@ export var IpEditor = StringEditor.extend({
     // Force pattern validation
     this.jsoneditor.validator.schema.properties[this.key].pattern = this.schema.pattern = pattern;
 
+    // Update options object
+    this.options = $extend(this.options, this.schema.options || {});
   }
 });
