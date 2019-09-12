@@ -36,22 +36,25 @@ export var IpEditor = StringEditor.extend({
         };
     }
 
-    if (this.jsoneditor.validator.schema["extends"] ) this.setValidatorPatterns(this.jsoneditor.validator.schema["extends"], pattern, patternmessage);
-    else if (this.jsoneditor.validator.schema.allOf) this.setValidatorPatterns(this.jsoneditor.validator.schema.allOf, pattern, patternmessage);
-    else if (this.jsoneditor.validator.schema.anyOf) this.setValidatorPatterns(this.jsoneditor.validator.schema.anyOf, pattern, patternmessage);
-    else if (this.jsoneditor.validator.schema.oneOf) this.setValidatorPatterns(this.jsoneditor.validator.schema.oneOf, pattern, patternmessage);
-    else if (this.jsoneditor.validator.schema.properties) {
+    // Standard type field
+    if (this.jsoneditor.validator.schema.properties) {
       // Set custom pattern error validation message
       if (!this.jsoneditor.validator.schema.properties[this.key].options) this.jsoneditor.validator.schema.properties[this.key].options = {};
       this.options.patternmessage = this.jsoneditor.validator.schema.properties[this.key].options.patternmessage = patternmessage;
       // Force pattern validation
       this.jsoneditor.validator.schema.properties[this.key].pattern = this.schema.pattern = pattern;
     }
+    // extends, allOf, anyOf and oneOf type of field
+    else {
+      this.setValidatorPatterns( this.jsoneditor.validator.schema["extends"] || this.jsoneditor.validator.schema.allOf || this.jsoneditor.validator.schema.anyOf || this.jsoneditor.validator.schema.oneOf, pattern, patternmessage);
+    }
 
     // Update options object
     this.options = $extend(this.options, this.schema.options || {});
   },
+  // Set validator pattern for: extends, allOf, anyOf and oneOf 
   setValidatorPatterns: function(validator, pattern, patternmessage) {
+    if (!validator) return;
     for (var i=0;i<validator.length;i++) {
       // Set custom pattern error validation message
       if (!validator[i].properties[this.key].options) validator[i].properties[this.key].options = {};
