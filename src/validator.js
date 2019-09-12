@@ -1,5 +1,5 @@
 import { Class } from './class';
-//import { ipValidator } from './validators/ip-validator';
+import { ipValidator } from './validators/ip-validator';
 import {  $extend, $each } from './utilities';
 
 export const Validator = Class.extend({
@@ -666,8 +666,7 @@ export const Validator = Class.extend({
     }
 
     // Internal validators using the custom validator format
-    // Placeholder - don't remove
-    //errors = errors.concat(ipValidator.call(self,schema,value,path));
+    errors = errors.concat(ipValidator.call(self,schema,value,path));
 
     // Custom type validation (global)
     $each(self.defaults.custom_validators,function(i,validator) {

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>wysiwyg-sceditor</title>
+
+  <!-- json editor -->
+  <script src="../../dist/jsoneditor.js"></script>
+
+  <!-- jquery -->
+  <script src="./../../node_modules/jquery/dist/jquery.min.js"></script>
+
+</head>
+<body>
+
+<textarea class="debug" cols="30" rows="10"></textarea>
+<button class='get-value'>Get Value</button>
+<div class='container'></div>
+
+<script>
+  var container = document.querySelector('.container');
+  var debug = document.querySelector('.debug');
+  var schema ={
+    "definitions": {
+        "parent": {
+            "properties": {
+                "ipAddress": {
+                    "title": "IP Address",
+                    "type": "string",
+                    "format": "ipv4"
+                }
+            },
+            "required": [
+                "ipAddress"
+            ]
+        },
+    },
+    "type": "object",
+    "allOf": [
+        {
+            "$ref": "#/definitions/parent"
+        }
+    ]
+};
+  
+  var editor = new JSONEditor(container, {
+    schema: schema
+  });
+
+  document.querySelector('.get-value').addEventListener('click', function () {
+    debug.value = JSON.stringify(editor.getValue());
+  });
+
+</script>
+
+</body>
+</html>
