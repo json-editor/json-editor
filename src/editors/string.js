@@ -229,6 +229,13 @@ export var StringEditor = AbstractEditor.extend({
       this.cleave_instance = new window.Cleave(el, options);
     }
   },
+  setupImask: function(el) {
+    // Enable imask.js support if library is loaded and config is available
+    var options = this.expandCallbacks('imask', $extend({}, this.defaults.options.imask || {}, this.options.imask || {}));
+    if (typeof options == 'object' && Object.keys(options).length > 0) {
+      this.imask_instance = window.IMask(el, options);
+    }
+  },
   enable: function() {
     if(!this.always_disabled) {
       this.input.disabled = false;
@@ -244,6 +251,7 @@ export var StringEditor = AbstractEditor.extend({
     var self = this;
     self.theme.afterInputReady(self.input);
     if (window.Cleave && !self.cleave_instance) self.setupCleave(self.input);
+    if (window.IMask && !self.imask_instance) self.setupImask(self.input);
   },
   refreshValue: function() {
     this.value = this.input.value;
@@ -251,9 +259,8 @@ export var StringEditor = AbstractEditor.extend({
     this.serialized = this.value;
   },
   destroy: function() {
-    if (this.cleave_instance) {
-      this.cleave_instance.destroy();
-    }
+    if (this.cleave_instance) this.cleave_instance.destroy();
+    if (this.imask_instance) this.imask_instance.destroy();
 
     this.template = null;
     if(this.input && this.input.parentNode) this.input.parentNode.removeChild(this.input);
