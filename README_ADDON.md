@@ -174,6 +174,21 @@ For configuration options, see the [Cleave homepage](https://nosir.github.io/cle
 **Source:** src/editors/string.js
 <br>
 
+### IMask
+**Description**
+Javascript input mask.
+
+For configuration options, see the [IMask homepage](https://imask.js.org/).
+
+**Trigger:** ``options.imask<br>
+**Supported Types:** string, number, integer, boolean<br>
+**Global options:** ``JSONEditor.defaults.options.imask``<br>
+**Schema options:** ``options.imask``<br>
+**Options callback** ``JSONEditor.defaults.callbacks.imask``<br>
+**Required options:** none<br>
+**Source:** src/editors/string.js
+<br>
+
 ### Flatpickr
 **Description**
 Lightweight and powerful datetime picker.<br>
