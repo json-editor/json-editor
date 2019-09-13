@@ -70,6 +70,13 @@ Scenario('opt in optional properties', async (I) => {
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.value'), '{"number":0,"boolean":false}');
 
+  // Opening and Closing "Edit JSON" should keep opt-in state.
+
+  I.click('[data-schemapath="root"] .json-editor-btn-edit');
+  I.click('[data-schemapath="root"] .json-editor-btn-edit');
+  assert.equal(await I.grabAttributeFrom('[data-schemapath="root.object.number"] .json-editor-opt-in', 'disabled'), 'true');
+  assert.equal(await I.grabAttributeFrom('[data-schemapath="root.object.boolean"] .json-editor-opt-in', 'disabled'), 'true');
+
   // opt-in string property
 
   I.click('[data-schemapath="root.string"] .json-editor-opt-in');
