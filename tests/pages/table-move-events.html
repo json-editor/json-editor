@@ -29,21 +29,21 @@
     debug.value = JSON.stringify(editor.getValue());
   });
   editor.setValue(["A","B"]);
-  editor.on('moveRow', function (editor) {
+  editor.on('moveRow', function () {
     alert('moveRow')
-    console.log('moveRow', editor)
+    console.log('moveRow')
   });
-  editor.on('addRow', function (editor) {
+  editor.on('addRow', function () {
     alert('addRow')
-    console.log('addRow', editor)
+    console.log('addRow')
   });
-  editor.on('deleteRow', function (editor) {
+  editor.on('deleteRow', function () {
     alert('deleteRow')
-    console.log('deleteRow', editor)
+    console.log('deleteRow')
   });
-  editor.on('deleteAllRows', function (editor) {
+  editor.on('deleteAllRows', function () {
     alert('deleteAllRows')
-    console.log('deleteAllRows', editor)
+    console.log('deleteAllRows')
   });
 </script>
 
