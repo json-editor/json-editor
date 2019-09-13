@@ -4,7 +4,7 @@ var validateIpv4 = function(value)
   var parts=value.split('.');
   if( parts.length !==4)
   {
-    throw(Error());
+    throw new Error('error_ipv4');
   }
   parts.forEach(function(part){
     if( isNaN(+part) || +part < 0 || +part>255)
