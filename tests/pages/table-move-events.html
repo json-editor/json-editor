@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8"/>
-  <script src="../../dist/jsoneditor.js"></script>
+    <meta charset="utf-8"/>
+    <script src="../../dist/jsoneditor.js"></script>
 </head>
 <body>
 
@@ -16,43 +16,35 @@
   var schema = {
     "type": "array",
     "title": "Strings",
+    "format": "table",
     "items": {
       "type": "string",
       "title": "String"
     }
   };
-
   var editor = new JSONEditor(container, {
     schema: schema
   });
-
   document.querySelector('.get-value').addEventListener('click', function () {
     debug.value = JSON.stringify(editor.getValue());
   });
-
   editor.setValue(["A","B"]);
-
   editor.on('moveRow', function (editor) {
     alert('moveRow')
     console.log('moveRow', editor)
   });
-
   editor.on('addRow', function (editor) {
     alert('addRow')
     console.log('addRow', editor)
   });
-
   editor.on('deleteRow', function (editor) {
     alert('deleteRow')
     console.log('deleteRow', editor)
   });
-
   editor.on('deleteAllRows', function (editor) {
     alert('deleteAllRows')
     console.log('deleteAllRows', editor)
   });
-
-
 </script>
 
 </body>
