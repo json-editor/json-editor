@@ -345,6 +345,7 @@ JSONEditor.defaults.editors.table = JSONEditor.defaults.editors.array.extend({
         });
         self.setValue(newval);
         self.onChange(true);
+        self.jsoneditor.trigger('deleteRow', self.rows[i]);
       });
       controls_holder.appendChild(self.rows[i].delete_button);
     }
@@ -367,6 +368,7 @@ JSONEditor.defaults.editors.table = JSONEditor.defaults.editors.array.extend({
 
         self.setValue(rows);
         self.onChange(true);
+        self.jsoneditor.trigger('moveRow', self.rows[i-1]);
       });
       controls_holder.appendChild(self.rows[i].moveup_button);
     }
@@ -387,6 +389,7 @@ JSONEditor.defaults.editors.table = JSONEditor.defaults.editors.array.extend({
 
         self.setValue(rows);
         self.onChange(true);
+        self.jsoneditor.trigger('moveRow', self.rows[i+1]);
       });
       controls_holder.appendChild(self.rows[i].movedown_button);
     }
@@ -438,10 +441,11 @@ JSONEditor.defaults.editors.table = JSONEditor.defaults.editors.array.extend({
       e.preventDefault();
       e.stopPropagation();
 
-      self.addRow();
+      var editor = self.addRow();
       self.refreshValue();
       self.refreshRowButtons();
       self.onChange(true);
+      self.jsoneditor.trigger('addRow', editor);
     });
     self.controls.appendChild(this.add_row_button);
 
@@ -456,9 +460,10 @@ JSONEditor.defaults.editors.table = JSONEditor.defaults.editors.array.extend({
       }
 
       var rows = self.getValue();
-      rows.pop();
+      var editor = rows.pop();
       self.setValue(rows);
       self.onChange(true);
+      self.jsoneditor.trigger('deleteRow', editor);
     });
     self.controls.appendChild(this.delete_last_row_button);
 
@@ -474,6 +479,7 @@ JSONEditor.defaults.editors.table = JSONEditor.defaults.editors.array.extend({
 
       self.setValue([]);
       self.onChange(true);
+      self.jsoneditor.trigger('deleteAllRows');
     });
     self.controls.appendChild(this.remove_all_rows_button);
   }
