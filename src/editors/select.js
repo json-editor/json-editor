@@ -39,7 +39,7 @@ export var SelectEditor = AbstractEditor.extend({
     return Math.min(12,Math.max(longest_text/7,2));
   },
   typecast: function(value) {
-    if (this.schema.type === "boolean") return !!value;
+    if (this.schema.type === "boolean") return value == 'undefined' || value === undefined ? undefined : !!value;  
     else if (this.schema.type === "number") return 1*value || 0;
     else if (this.schema.type === "integer") return Math.floor(value*1 || 0);
     else return ""+value;
