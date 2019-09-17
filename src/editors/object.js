@@ -35,7 +35,9 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       if(this.editors) {
         for(var i in this.editors) {
           if(!this.editors.hasOwnProperty(i)) continue;
-          this.editors[i].enable();
+          if(this.editors[i].isActive()) {
+            this.editors[i].enable();
+          } 
           this.editors[i].optInCheckbox.disabled = false;
         }
       }
@@ -51,7 +53,9 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
     if(this.editors) {
       for(var i in this.editors) {
         if(!this.editors.hasOwnProperty(i)) continue;
-        this.editors[i].disable(always_disabled);
+        if(this.editors[i].isActive()) {
+          this.editors[i].disable(always_disabled);
+        }
         this.editors[i].optInCheckbox.disabled = true;
       }
     }
