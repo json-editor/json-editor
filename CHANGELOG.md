@@ -1,5 +1,6 @@
 ### Current
 
+  - Added Array events for table format, tests
   - Fixed #408 - Now upload editor should be working again. 
   - Added [Choices.js](https://github.com/jshjohnson/Choices) support for array and select editors.
   - Added 2 new config options: "disable_select2" and "disable_selectize" which can be used to disable select2/selectize on a specific property/field.
