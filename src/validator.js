@@ -581,7 +581,7 @@ export const Validator = Class.extend({
 
           schema = $extend({}, schema, this.jsoneditor.refs[ref]);
 
-          errors = errors.concat(this._validateSchema(schema, value, path));
+          errors = errors.concat(this._validateSchema(schema, value, path, this.translate));
         }
       }
     }
@@ -666,7 +666,7 @@ export const Validator = Class.extend({
     }
 
     // Internal validators using the custom validator format
-    errors = errors.concat(ipValidator.call(self,schema,value,path));
+    errors = errors.concat(ipValidator.call(self,schema,value,path,self.translate));
 
     // Custom type validation (global)
     $each(self.defaults.custom_validators,function(i,validator) {
