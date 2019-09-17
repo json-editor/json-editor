@@ -1,60 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8"/>
-  <script src="../../dist/jsoneditor.js"></script>
+    <meta charset="utf-8"/>
+    <script src="../../dist/jsoneditor.js"></script>
 </head>
 <body>
 
 <textarea class="debug" cols="30" rows="10"></textarea>
-<textarea class="action" cols="30" rows="5"></textarea>
 <button class='get-value'>Get Value</button>
 <div class='container'></div>
 
 <script>
   var container = document.querySelector('.container');
   var debug = document.querySelector('.debug');
-  var action = document.querySelector('.action');
   var schema = {
     "type": "array",
     "title": "Strings",
+    "format": "table",
     "items": {
       "type": "string",
       "title": "String"
     }
   };
-
   var editor = new JSONEditor(container, {
     schema: schema
   });
-
   document.querySelector('.get-value').addEventListener('click', function () {
     debug.value = JSON.stringify(editor.getValue());
   });
-
   editor.setValue(["A","B"]);
-
   editor.on('moveRow', function () {
-    action.value = 'moveRow';
-    console.log('moveRow');
+    alert('moveRow')
+    console.log('moveRow')
   });
-
   editor.on('addRow', function () {
-    action.value = 'addRow'
+    alert('addRow')
     console.log('addRow')
   });
-
   editor.on('deleteRow', function () {
-    action.value = 'deleteRow'
+    alert('deleteRow')
     console.log('deleteRow')
   });
-
   editor.on('deleteAllRows', function () {
-    action.value = 'deleteAllRows'
+    alert('deleteAllRows')
     console.log('deleteAllRows')
   });
-
-
 </script>
 
 </body>
