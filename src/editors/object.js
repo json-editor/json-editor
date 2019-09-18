@@ -38,7 +38,9 @@ export var ObjectEditor = AbstractEditor.extend({
       if (this.editors) {
         for (var i in this.editors) {
           if (!this.editors.hasOwnProperty(i)) continue
-          this.editors[i].enable()
+          if (this.editors[i].isActive()) {
+            this.editors[i].enable()
+          }
           this.editors[i].optInCheckbox.disabled = false
         }
       }
@@ -54,7 +56,9 @@ export var ObjectEditor = AbstractEditor.extend({
     if (this.editors) {
       for (var i in this.editors) {
         if (!this.editors.hasOwnProperty(i)) continue
-        this.editors[i].disable(alwaysDisabled)
+        if (this.editors[i].isActive()) {
+          this.editors[i].disable(alwaysDisabled)
+        }
         this.editors[i].optInCheckbox.disabled = true
       }
     }
