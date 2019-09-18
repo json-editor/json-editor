@@ -5,27 +5,27 @@ export var Base64Editor = AbstractEditor.extend({
   getNumColumns: function () {
     return 4
   },
-  setFileReaderListener: function (fr_multiple) {
+  setFileReaderListener: function (frMultiple) {
     var self = this
-    fr_multiple.addEventListener('load', function (event) {
-      if (self.count == self.current_item_index) {
+    frMultiple.addEventListener('load', function (event) {
+      if (self.count === self.current_item_index) {
         // Overwrite existing file by default, leave other properties unchanged
         self.value[self.count][self.key] = event.target.result
       } else {
-        var temp_object = {}
+        var tempObject = {}
         // Create empty object
         for (var key in self.parent.schema.properties) {
-          temp_object[key] = ''
+          tempObject[key] = ''
         }
         // Set object media file
-        temp_object[self.key] = event.target.result
-        self.value.splice(self.count, 0, temp_object) // insert new file object
+        tempObject[self.key] = event.target.result
+        self.value.splice(self.count, 0, tempObject) // insert new file object
       }
 
       // Increment using the listener and not the 'for' loop as the listener will be processed asynchronously
       self.count += 1
       // When all files have been processed, update the value of the editor
-      if (self.count == (self.total + self.current_item_index)) {
+      if (self.count === (self.total + self.current_item_index)) {
         self.arrayEditor.setValue(self.value)
       }
     })
@@ -41,7 +41,7 @@ export var Base64Editor = AbstractEditor.extend({
 
     // Don't show uploader if this is readonly
     if (!this.schema.readOnly && !this.schema.readonly) {
-      if (!window.FileReader) throw 'FileReader required for base64 editor'
+      if (!window.FileReader) throw new Error('FileReader required for base64 editor')
 
       // File uploader
       this.uploader = this.theme.getFormInputField('file')
@@ -50,7 +50,7 @@ export var Base64Editor = AbstractEditor.extend({
       // 'multiple' key has been set to 'true' in the schema
       // and the parent object is of type 'object'
       // and the parent of the parent type has been set to 'array'
-      if (self.schema.options && self.schema.options.multiple && self.schema.options.multiple == true && self.parent && self.parent.schema.type == 'object' && self.parent.parent && self.parent.parent.schema.type == 'array') {
+      if (self.schema.options && self.schema.options.multiple && self.schema.options.multiple === true && self.parent && self.parent.schema.type === 'object' && self.parent.parent && self.parent.parent.schema.type === 'array') {
         this.uploader.setAttribute('multiple', '')
       }
 
@@ -61,7 +61,7 @@ export var Base64Editor = AbstractEditor.extend({
         if (this.files && this.files.length) {
           // Check the amount of files uploaded.
           // If 1, use the regular upload, otherwise use the multiple upload method
-          if (this.files.length > 1 && self.schema.options && self.schema.options.multiple && self.schema.options.multiple == true && self.parent && self.parent.schema.type == 'object' && self.parent.parent && self.parent.parent.schema.type == 'array') {
+          if (this.files.length > 1 && self.schema.options && self.schema.options.multiple && self.schema.options.multiple === true && self.parent && self.parent.schema.type === 'object' && self.parent.parent && self.parent.parent.schema.type === 'array') {
             // Load editor of parent.parent to get the array
             self.arrayEditor = self.jsoneditor.getEditor(self.parent.parent.path)
             // Check the current value of this editor
@@ -73,11 +73,13 @@ export var Base64Editor = AbstractEditor.extend({
             self.count = self.current_item_index
 
             for (var i = 0; i < self.total; i++) {
-              var fr_multiple = new FileReader()
-              self.setFileReaderListener(fr_multiple)
-              fr_multiple.readAsDataURL(this.files[i])
+              // eslint-disable-next-line no-undef
+              var frMultiple = new FileReader()
+              self.setFileReaderListener(frMultiple)
+              frMultiple.readAsDataURL(this.files[i])
             }
           } else {
+            // eslint-disable-next-line no-undef
             var fr = new FileReader()
             fr.onload = function (evt) {
               self.value = evt.target.result
@@ -128,8 +130,8 @@ export var Base64Editor = AbstractEditor.extend({
       this._super()
     }
   },
-  disable: function (always_disabled) {
-    if (always_disabled) this.always_disabled = true
+  disable: function (alwaysDisabled) {
+    if (alwaysDisabled) this.always_disabled = true
     if (this.uploader) this.uploader.disabled = true
     this._super()
   },

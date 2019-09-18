@@ -1,6 +1,6 @@
 // Non-Active editor for displaying buttons in form
 import { AbstractEditor } from '../editor'
-import { $extend, $each } from '../utilities'
+import { $extend } from '../utilities'
 export var ButtonEditor = AbstractEditor.extend({
   init: function (options, defaults) {
     this._super(options, defaults)
@@ -28,7 +28,7 @@ export var ButtonEditor = AbstractEditor.extend({
       'validated': false,
       'align': 'left',
       'action': function (jseditor, e) {
-        alert('No button action defined for "' + jseditor.path + '"')
+        window.alert('No button action defined for "' + jseditor.path + '"')
       }.bind(null, this)
     }, this.defaults.options.button || {}, this.options.button || {}))
 
@@ -63,8 +63,8 @@ export var ButtonEditor = AbstractEditor.extend({
       this._super()
     }
   },
-  disable: function (always_disabled) {
-    if (always_disabled) this.always_disabled = true
+  disable: function (alwaysDisabled) {
+    if (alwaysDisabled) this.always_disabled = true
     this.input.disabled = true
     this._super()
   },

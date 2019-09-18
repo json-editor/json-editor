@@ -50,7 +50,7 @@ export var ArraySelectizeEditor = MultiSelectEditor.extend({
   },
   updateValue: function (value) {
     value = [].concat(value)
-    var changed = false; var new_value = []
+    var changed = false; var newValue = []
     for (var i = 0; i < value.length; i++) {
       //      if (!this.select_options[value[i]+'']) {
       if (!this.select_values[value[i] + '']) {
@@ -60,10 +60,10 @@ export var ArraySelectizeEditor = MultiSelectEditor.extend({
         } else continue
       }
       var sanitized = this.sanitize(this.select_values[value[i]])
-      new_value.push(sanitized)
+      newValue.push(sanitized)
       if (sanitized !== value[i]) changed = true
     }
-    this.value = new_value
+    this.value = newValue
 
     return changed
   },
@@ -83,9 +83,9 @@ export var ArraySelectizeEditor = MultiSelectEditor.extend({
     if (!this.always_disabled && this.selectize_instance) this.selectize_instance.unlock()
     this._super()
   },
-  disable: function (always_disabled) {
+  disable: function (alwaysDisabled) {
     if (this.selectize_instance) this.selectize_instance.lock()
-    this._super(always_disabled)
+    this._super(alwaysDisabled)
   },
   destroy: function () {
     if (this.selectize_instance) {

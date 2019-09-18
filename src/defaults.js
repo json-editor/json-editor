@@ -36,11 +36,11 @@ export function getDefaults () {
   // String translate function
   JSONEditor.defaults.translate = function (key, variables) {
     var lang = JSONEditor.defaults.languages[JSONEditor.defaults.language]
-    if (!lang) throw 'Unknown language ' + JSONEditor.defaults.language
+    if (!lang) throw new Error('Unknown language ' + JSONEditor.defaults.language)
 
     var string = lang[key] || JSONEditor.defaults.languages[JSONEditor.defaults.default_language][key]
 
-    if (typeof string === 'undefined') throw 'Unknown translate string ' + key
+    if (typeof string === 'undefined') throw new Error('Unknown translate string ' + key)
 
     if (variables) {
       for (var i = 0; i < variables.length; i++) {

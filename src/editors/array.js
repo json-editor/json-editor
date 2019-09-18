@@ -3,7 +3,7 @@ import { $extend, $each, $trigger } from '../utilities'
 export var ArrayEditor = AbstractEditor.extend({
   askConfirmation: function () {
     if (this.jsoneditor.options.prompt_before_delete === true) {
-      if (confirm('Are you sure you want to remove this node?') === false) {
+      if (window.confirm('Are you sure you want to remove this node?') === false) {
         return false
       }
     }
@@ -65,8 +65,8 @@ export var ArrayEditor = AbstractEditor.extend({
       this._super()
     }
   },
-  disable: function (always_disabled) {
-    if (always_disabled) this.always_disabled = true
+  disable: function (alwaysDisabled) {
+    if (alwaysDisabled) this.always_disabled = true
     if (this.add_row_button) this.add_row_button.disabled = true
     if (this.remove_all_rows_button) this.remove_all_rows_button.disabled = true
     if (this.delete_last_row_button) this.delete_last_row_button.disabled = true
@@ -78,7 +78,7 @@ export var ArrayEditor = AbstractEditor.extend({
 
     if (this.rows) {
       for (var i = 0; i < this.rows.length; i++) {
-        this.rows[i].disable(always_disabled)
+        this.rows[i].disable(alwaysDisabled)
 
         if (this.rows[i].add_row_button) this.rows[i].add_row_button.disabled = true
         if (this.rows[i].remove_all_rows_button) this.rows[i].remove_all_rows_button.disabled = true
@@ -107,8 +107,6 @@ export var ArrayEditor = AbstractEditor.extend({
     this.array_controls_top = this.options.array_controls_top || this.jsoneditor.options.array_controls_top
   },
   build: function () {
-    var self = this
-
     if (!this.options.compact) {
       this.header = document.createElement('label')
       this.header.textContent = this.getTitle()
@@ -222,10 +220,10 @@ export var ArrayEditor = AbstractEditor.extend({
     return this.item_info[stringified]
   },
   getElementEditor: function (i) {
-    var item_info = this.getItemInfo(i)
+    var itemInfo = this.getItemInfo(i)
     var schema = this.getItemSchema(i)
     schema = this.jsoneditor.expandRefs(schema)
-    schema.title = item_info.title + ' ' + (i + 1)
+    schema.title = itemInfo.title + ' ' + (i + 1)
 
     var editor = this.jsoneditor.getEditorClass(schema)
 
@@ -237,7 +235,7 @@ export var ArrayEditor = AbstractEditor.extend({
         holder = this.theme.getTabContent()
       }
       holder.id = this.path + '.' + i
-    } else if (item_info.child_editors) {
+    } else if (itemInfo.child_editors) {
       holder = this.theme.getChildEditorHolder()
     } else {
       holder = this.theme.getIndentedPanel()
@@ -309,12 +307,12 @@ export var ArrayEditor = AbstractEditor.extend({
       return this.schema.maxItems || Infinity
     }
   },
-  refreshTabs: function (refresh_headers) {
+  refreshTabs: function (refreshHeaders) {
     var self = this
     $each(this.rows, function (i, row) {
       if (!row.tab) return
 
-      if (refresh_headers) {
+      if (refreshHeaders) {
         row.tab_text.textContent = row.getHeaderText()
       } else {
         if (row.tab === self.active_tab) {
@@ -369,16 +367,16 @@ export var ArrayEditor = AbstractEditor.extend({
     self.rows = self.rows.slice(0, value.length)
 
     // Set the active tab
-    var new_active_tab = null
+    var newActiveTab = null
     $each(self.rows, function (i, row) {
       if (row.tab === self.active_tab) {
-        new_active_tab = row.tab
+        newActiveTab = row.tab
         return false
       }
     })
-    if (!new_active_tab && self.rows.length) new_active_tab = self.rows[0].tab
+    if (!newActiveTab && self.rows.length) newActiveTab = self.rows[0].tab
 
-    self.active_tab = new_active_tab
+    self.active_tab = newActiveTab
 
     self.refreshValue(initial)
     self.refreshTabs(true)
@@ -425,7 +423,7 @@ export var ArrayEditor = AbstractEditor.extend({
         self.value[i] = editor.getValue()
       })
 
-      var controls_needed = false
+      var controlsNeeded = false
 
       if (!this.value.length) {
         this.delete_last_row_button.style.display = 'none'
@@ -438,21 +436,21 @@ export var ArrayEditor = AbstractEditor.extend({
           this.delete_last_row_button.style.display = 'none'
         } else {
           this.delete_last_row_button.style.display = ''
-          controls_needed = true
+          controlsNeeded = true
         }
       } else {
         if (minItems || this.hide_delete_last_row_buttons) {
           this.delete_last_row_button.style.display = 'none'
         } else {
           this.delete_last_row_button.style.display = ''
-          controls_needed = true
+          controlsNeeded = true
         }
 
         if (minItems || this.hide_delete_all_rows_buttons) {
           this.remove_all_rows_button.style.display = 'none'
         } else {
           this.remove_all_rows_button.style.display = ''
-          controls_needed = true
+          controlsNeeded = true
         }
       }
 
@@ -461,10 +459,10 @@ export var ArrayEditor = AbstractEditor.extend({
         this.add_row_button.style.display = 'none'
       } else {
         this.add_row_button.style.display = ''
-        controls_needed = true
+        controlsNeeded = true
       }
 
-      if (!this.collapsed && controls_needed) {
+      if (!this.collapsed && controlsNeeded) {
         this.controls.style.display = 'inline-block'
       } else {
         this.controls.style.display = 'none'
@@ -496,7 +494,7 @@ export var ArrayEditor = AbstractEditor.extend({
       })
     }
 
-    var controls_holder = self.rows[i].title_controls || self.rows[i].array_controls
+    var controlsHolder = self.rows[i].title_controls || self.rows[i].array_controls
 
     // Buttons to delete row, move row up, and move row down
     if (!self.hide_delete_buttons) {
@@ -514,7 +512,7 @@ export var ArrayEditor = AbstractEditor.extend({
         var i = this.getAttribute('data-i') * 1
         var value = self.getValue()
         var newval = []
-        var new_active_tab = null
+        var newActiveTab = null
 
         $each(value, function (j, row) {
           if (j !== i) {
@@ -527,13 +525,13 @@ export var ArrayEditor = AbstractEditor.extend({
         self.setValue(newval)
 
         if (self.rows[i]) {
-          new_active_tab = self.rows[i].tab
+          newActiveTab = self.rows[i].tab
         } else if (self.rows[i - 1]) {
-          new_active_tab = self.rows[i - 1].tab
+          newActiveTab = self.rows[i - 1].tab
         }
 
-        if (new_active_tab) {
-          self.active_tab = new_active_tab
+        if (newActiveTab) {
+          self.active_tab = newActiveTab
           self.refreshTabs()
         }
 
@@ -541,8 +539,8 @@ export var ArrayEditor = AbstractEditor.extend({
         self.jsoneditor.trigger('deleteRow', editor)
       })
 
-      if (controls_holder) {
-        controls_holder.appendChild(self.rows[i].delete_button)
+      if (controlsHolder) {
+        controlsHolder.appendChild(self.rows[i].delete_button)
       }
     }
 
@@ -568,7 +566,7 @@ export var ArrayEditor = AbstractEditor.extend({
         self.onChange(true)
       })
 
-      controls_holder.appendChild(self.rows[i].copy_button)
+      controlsHolder.appendChild(self.rows[i].copy_button)
     }
 
     if (i && !self.hide_move_buttons) {
@@ -595,8 +593,8 @@ export var ArrayEditor = AbstractEditor.extend({
         self.jsoneditor.trigger('moveRow', self.rows[i - 1])
       })
 
-      if (controls_holder) {
-        controls_holder.appendChild(self.rows[i].moveup_button)
+      if (controlsHolder) {
+        controlsHolder.appendChild(self.rows[i].moveup_button)
       }
     }
 
@@ -623,8 +621,8 @@ export var ArrayEditor = AbstractEditor.extend({
         self.jsoneditor.trigger('moveRow', self.rows[i + 1])
       })
 
-      if (controls_holder) {
-        controls_holder.appendChild(self.rows[i].movedown_button)
+      if (controlsHolder) {
+        controlsHolder.appendChild(self.rows[i].movedown_button)
       }
     }
 
@@ -640,17 +638,17 @@ export var ArrayEditor = AbstractEditor.extend({
     this.toggle_button = this.getButton('', 'collapse', this.translate('button_collapse'))
     this.toggle_button.classList.add('json-editor-btntype-toggle')
     this.title_controls.appendChild(this.toggle_button)
-    var row_holder_display = self.row_holder.style.display
-    var controls_display = self.controls.style.display
+    var rowHolderDisplay = self.row_holder.style.display
+    var controlsDisplay = self.controls.style.display
     this.toggle_button.addEventListener('click', function (e) {
       e.preventDefault()
       e.stopPropagation()
       if (self.collapsed) {
         self.collapsed = false
         if (self.panel) self.panel.style.display = ''
-        self.row_holder.style.display = row_holder_display
+        self.row_holder.style.display = rowHolderDisplay
         if (self.tabs_holder) self.tabs_holder.style.display = ''
-        self.controls.style.display = controls_display
+        self.controls.style.display = controlsDisplay
         self.setButtonText(this, '', 'collapse', self.translate('button_collapse'))
       } else {
         self.collapsed = true
@@ -710,18 +708,18 @@ export var ArrayEditor = AbstractEditor.extend({
       }
 
       var rows = self.getValue()
-      var new_active_tab = null
+      var newActiveTab = null
 
       var editor = rows.pop()
 
       self.setValue(rows)
 
       if (self.rows[self.rows.length - 1]) {
-        new_active_tab = self.rows[self.rows.length - 1].tab
+        newActiveTab = self.rows[self.rows.length - 1].tab
       }
 
-      if (new_active_tab) {
-        self.active_tab = new_active_tab
+      if (newActiveTab) {
+        self.active_tab = newActiveTab
         self.refreshTabs()
       }
 
@@ -765,35 +763,33 @@ export var ArrayEditor = AbstractEditor.extend({
     var self = this
 
     // Get all the errors that pertain to this editor
-    var my_errors = []
-    var other_errors = []
+    var myErrors = []
+    var otherErrors = []
     $each(errors, function (i, error) {
       if (error.path === self.path) {
-        my_errors.push(error)
+        myErrors.push(error)
       } else {
-        other_errors.push(error)
+        otherErrors.push(error)
       }
     })
 
     // Show errors for this editor
     if (this.error_holder) {
-      if (my_errors.length) {
-        var message = []
+      if (myErrors.length) {
         this.error_holder.innerHTML = ''
         this.error_holder.style.display = ''
-        $each(my_errors, function (i, error) {
+        $each(myErrors, function (i, error) {
           self.error_holder.appendChild(self.theme.getErrorMessage(error.message))
         })
-      }
       // Hide error area
-      else {
+      } else {
         this.error_holder.style.display = 'none'
       }
     }
 
     // Show errors for child editors
     $each(this.rows, function (i, row) {
-      row.showValidationErrors(other_errors)
+      row.showValidationErrors(otherErrors)
     })
   }
 })

@@ -51,7 +51,7 @@ export var ArrayChoicesEditor = MultiSelectEditor.extend({
   },
   updateValue: function (value) {
     value = [].concat(value)
-    var changed = false; var new_value = []
+    var changed = false; var newValue = []
     for (var i = 0; i < value.length; i++) {
       if (!this.select_values[value[i] + '']) {
         changed = true
@@ -60,10 +60,10 @@ export var ArrayChoicesEditor = MultiSelectEditor.extend({
         } else continue
       }
       var sanitized = this.sanitize(this.select_values[value[i]])
-      new_value.push(sanitized)
+      newValue.push(sanitized)
       if (sanitized !== value[i]) changed = true
     }
-    this.value = new_value
+    this.value = newValue
 
     return changed
   },
@@ -83,9 +83,9 @@ export var ArrayChoicesEditor = MultiSelectEditor.extend({
     if (!this.always_disabled && this.choices_instance) this.choices_instance.enable()
     this._super()
   },
-  disable: function (always_disabled) {
+  disable: function (alwaysDisabled) {
     if (this.choices_instance) this.choices_instance.disable()
-    this._super(always_disabled)
+    this._super(alwaysDisabled)
   },
   destroy: function () {
     if (this.choices_instance) {

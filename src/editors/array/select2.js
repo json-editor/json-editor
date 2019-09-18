@@ -16,7 +16,7 @@ export var ArraySelect2Editor = MultiSelectEditor.extend({
     } else this._super(value, initial)
   },
   afterInputReady: function () {
-    var options; var self = this; var select2Handler
+    var options; var self = this
 
     if (window.jQuery && window.jQuery.fn && window.jQuery.fn.select2 && !this.select2_instance) {
       // Get options, either global options from "this.defaults.options.select2" or
@@ -47,7 +47,7 @@ export var ArraySelect2Editor = MultiSelectEditor.extend({
   },
   updateValue: function (value) {
     value = [].concat(value)
-    var changed = false; var new_value = []
+    var changed = false; var newValue = []
     for (var i = 0; i < value.length; i++) {
       //      if (!this.select_options[value[i]+'']) {
       if (!this.select_values[value[i] + '']) {
@@ -57,10 +57,10 @@ export var ArraySelect2Editor = MultiSelectEditor.extend({
         } else continue
       }
       var sanitized = this.sanitize(this.select_values[value[i]])
-      new_value.push(sanitized)
+      newValue.push(sanitized)
       if (sanitized !== value[i]) changed = true
     }
-    this.value = new_value
+    this.value = newValue
 
     return changed
   },
@@ -72,10 +72,11 @@ export var ArraySelect2Editor = MultiSelectEditor.extend({
     // Update Schema enum to prevent triggering "Value must be one of the enumerated values"
     this.schema.items.enum.push(value)
 
-    var option_tag = this.input.querySelector('option[value="' + value + '"]')
+    var optionTag = this.input.querySelector('option[value="' + value + '"]')
     // Remove data attribute to make option tag permanent. (user input)
-    if (option_tag) option_tag.removeAttribute('data-select2-tag')
+    if (optionTag) optionTag.removeAttribute('data-select2-tag')
     // Create new option tag (setValue)
+    // eslint-disable-next-line no-undef
     else this.input.appendChild(new Option(value, value, false, false)).trigger('change')
 
     return true
@@ -87,7 +88,7 @@ export var ArraySelect2Editor = MultiSelectEditor.extend({
     }
     this._super()
   },
-  disable: function (always_disabled) {
+  disable: function (alwaysDisabled) {
     if (this.select2_instance) {
       if (this.select2v4) this.select2_instance.prop('disabled', true)
       else this.select2_instance.select2('enable', false)
