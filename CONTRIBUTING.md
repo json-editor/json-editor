@@ -31,8 +31,6 @@ Also:
 *  Use comments whenever the code's meaning is not obvious
 *  When in doubt, try to match the style in existing source files
 
-The build process will attempt to automatically fix ESLint errors but will fail on any which it can't fix.
-
 To check for errors without building:
 ```bash
 npm run eslint
