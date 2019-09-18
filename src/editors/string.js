@@ -234,8 +234,8 @@ export var StringEditor = AbstractEditor.extend({
       this._super()
     }
   },
-  disable: function (always_disabled) {
-    if (always_disabled) this.always_disabled = true
+  disable: function (alwaysDisabled) {
+    if (alwaysDisabled) this.always_disabled = true
     this.input.disabled = true
     this._super()
   },
@@ -271,7 +271,7 @@ export var StringEditor = AbstractEditor.extend({
    * Re-calculates the value if needed
    */
   onWatchedFieldChange: function () {
-    var self = this; var vars; var j
+    var vars
 
     // If this editor needs to be rendered by a macro template
     if (this.template) {

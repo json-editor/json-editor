@@ -17,13 +17,13 @@ export var MultiSelectEditor = AbstractEditor.extend({
     this.input.removeAttribute('name')
   },
   getNumColumns: function () {
-    var longest_text = this.getTitle().length
+    var longestText = this.getTitle().length
     for (var i in this.select_values) {
       if (!this.select_values.hasOwnProperty(i)) continue
-      longest_text = Math.max(longest_text, (this.select_values[i] + '').length + 4)
+      longestText = Math.max(longestText, (this.select_values[i] + '').length + 4)
     }
 
-    return Math.min(12, Math.max(longest_text / 7, 2))
+    return Math.min(12, Math.max(longestText / 7, 2))
   },
   preBuild: function () {
     this._super()
@@ -33,10 +33,10 @@ export var MultiSelectEditor = AbstractEditor.extend({
     this.option_keys = []
     this.option_titles = []
 
-    var i; var self = this
-    var items_schema = this.jsoneditor.expandRefs(this.schema.items || {})
-    var e = items_schema['enum'] || []
-    var t = items_schema.options ? items_schema.options.enum_titles || [] : []
+    var i
+    var itemsSchema = this.jsoneditor.expandRefs(this.schema.items || {})
+    var e = itemsSchema['enum'] || []
+    var t = itemsSchema.options ? itemsSchema.options.enum_titles || [] : []
 
     for (i = 0; i < e.length; i++) {
       // If the sanitized value is different from the enum value, don't include it
@@ -87,11 +87,11 @@ export var MultiSelectEditor = AbstractEditor.extend({
     this.container.appendChild(this.control)
 
     this.multiselectChangeHandler = function (e) {
-      var new_value = []
+      var newValue = []
       for (i = 0; i < self.option_keys.length; i++) {
-        if (self.select_options[self.option_keys[i]] && (self.select_options[self.option_keys[i]].selected || self.select_options[self.option_keys[i]].checked)) new_value.push(self.select_values[self.option_keys[i]])
+        if (self.select_options[self.option_keys[i]] && (self.select_options[self.option_keys[i]].selected || self.select_options[self.option_keys[i]].checked)) newValue.push(self.select_values[self.option_keys[i]])
       }
-      self.updateValue(new_value)
+      self.updateValue(newValue)
       self.onChange(true)
     }
 
@@ -111,7 +111,7 @@ export var MultiSelectEditor = AbstractEditor.extend({
     this.theme.afterInputReady(self.input || self.inputs)
   },
   setValue: function (value, initial) {
-    var i, changed
+    var i
     value = value || []
     if (!(Array.isArray(value))) value = [value]
 
@@ -124,13 +124,13 @@ export var MultiSelectEditor = AbstractEditor.extend({
       this.select_options[i][this.input_type === 'select' ? 'selected' : 'checked'] = (value.indexOf(i) !== -1)
     }
 
-    changed = this.updateValue(value)
+    this.updateValue(value)
     this.onChange(true)
   },
   removeValue: function (value) {
     // Remove from existing value(s)
     value = [].concat(value)
-    this.setValue(this.getValue().filter(function (item) { return value.indexOf(item) == -1 }))
+    this.setValue(this.getValue().filter(function (item) { return value.indexOf(item) === -1 }))
   },
   addValue: function (value) {
     // Add to existing value(s)
@@ -138,17 +138,17 @@ export var MultiSelectEditor = AbstractEditor.extend({
   },
   updateValue: function (value) {
     var changed = false
-    var new_value = []
+    var newValue = []
     for (var i = 0; i < value.length; i++) {
       if (!this.select_options[value[i] + '']) {
         changed = true
         continue
       }
       var sanitized = this.sanitize(this.select_values[value[i]])
-      new_value.push(sanitized)
+      newValue.push(sanitized)
       if (sanitized !== value[i]) changed = true
     }
-    this.value = new_value
+    this.value = newValue
 
     return changed
   },
@@ -171,8 +171,8 @@ export var MultiSelectEditor = AbstractEditor.extend({
       this._super()
     }
   },
-  disable: function (always_disabled) {
-    if (always_disabled) this.always_disabled = true
+  disable: function (alwaysDisabled) {
+    if (alwaysDisabled) this.always_disabled = true
     if (this.input) {
       this.input.disabled = true
     } else if (this.inputs) {
