@@ -149,7 +149,7 @@ export var AbstractEditor = Class.extend({
     }
 
     var displayMode = this.dependenciesFulfilled ? 'block' : 'none'
-    if (wrapper.tagName == 'TD') {
+    if (wrapper.tagName === 'TD') {
       for (var child in wrapper.childNodes) {
         if (wrapper.childNodes.hasOwnProperty(child)) wrapper.childNodes[child].style.display = displayMode
       }
@@ -214,7 +214,8 @@ export var AbstractEditor = Class.extend({
     }
 
     if (this.schema.hasOwnProperty('watch')) {
-      var path; var path_parts; var first; var root; var adjusted_path; var my_path = self.container.getAttribute('data-schemapath')
+      var path; var pathParts; var first; var root; var adjustedPath
+      var myPath = self.container.getAttribute('data-schemapath')
 
       for (var name in this.schema.watch) {
         if (!this.schema.watch.hasOwnProperty(name)) continue
@@ -222,26 +223,26 @@ export var AbstractEditor = Class.extend({
 
         if (Array.isArray(path)) {
           if (path.length < 2) continue
-          path_parts = [path[0]].concat(path[1].split('.'))
+          pathParts = [path[0]].concat(path[1].split('.'))
         } else {
-          path_parts = path.split('.')
-          if (!self.theme.closest(self.container, '[data-schemaid="' + path_parts[0] + '"]')) path_parts.unshift('#')
+          pathParts = path.split('.')
+          if (!self.theme.closest(self.container, '[data-schemaid="' + pathParts[0] + '"]')) pathParts.unshift('#')
         }
-        first = path_parts.shift()
+        first = pathParts.shift()
 
         if (first === '#') first = self.jsoneditor.schema.id || 'root'
 
         // Find the root node for this template variable
         root = self.theme.closest(self.container, '[data-schemaid="' + first + '"]')
-        if (!root) throw 'Could not find ancestor node with id ' + first
+        if (!root) throw new Error('Could not find ancestor node with id ' + first)
 
         // Keep track of the root node and path for use when rendering the template
-        adjusted_path = root.getAttribute('data-schemapath') + '.' + path_parts.join('.')
+        adjustedPath = root.getAttribute('data-schemapath') + '.' + pathParts.join('.')
 
-        if (my_path.startsWith(adjusted_path)) self.watchLoop = true
-        self.jsoneditor.watch(adjusted_path, self.watch_listener)
+        if (myPath.startsWith(adjustedPath)) self.watchLoop = true
+        self.jsoneditor.watch(adjustedPath, self.watch_listener)
 
-        self.watched[name] = adjusted_path
+        self.watched[name] = adjustedPath
       }
     }
 
@@ -328,9 +329,8 @@ export var AbstractEditor = Class.extend({
         link.setAttribute('title', rel || url)
         image.setAttribute('src', url)
       })
-    }
     // Audio/Video links
-    else if (['audio', 'video'].indexOf(type) >= 0) {
+    } else if (['audio', 'video'].indexOf(type) >= 0) {
       holder = this.theme.getBlockLinkHolder()
 
       link = this.theme.getBlockLink()
@@ -349,9 +349,8 @@ export var AbstractEditor = Class.extend({
         link.textContent = rel || url
         media.setAttribute('src', url)
       })
-    }
     // Text links
-    else {
+    } else {
       link = holder = this.theme.getBlockLink()
       holder.setAttribute('target', '_blank')
       holder.textContent = data.rel
@@ -408,26 +407,25 @@ export var AbstractEditor = Class.extend({
   },
   updateHeaderText: function () {
     if (this.header) {
-      var header_text = this.getHeaderText()
+      var headerText = this.getHeaderText()
       // If the header has children, only update the text node's value
       if (this.header.children.length) {
         for (var i = 0; i < this.header.childNodes.length; i++) {
           if (this.header.childNodes[i].nodeType === 3) {
-            this.header.childNodes[i].nodeValue = this.cleanText(header_text)
+            this.header.childNodes[i].nodeValue = this.cleanText(headerText)
             break
           }
         }
-      }
       // Otherwise, just update the entire node
-      else {
-        if (window.DOMPurify) this.header.innerHTML = window.DOMPurify.sanitize(header_text)
-        else this.header.textContent = this.cleanText(header_text)
+      } else {
+        if (window.DOMPurify) this.header.innerHTML = window.DOMPurify.sanitize(headerText)
+        else this.header.textContent = this.cleanText(headerText)
       }
     }
   },
-  getHeaderText: function (title_only) {
+  getHeaderText: function (titleOnly) {
     if (this.header_text) return this.header_text
-    else if (title_only) return this.schema.title
+    else if (titleOnly) return this.schema.title
     else return this.getTitle()
   },
   cleanText: function (txt) {
@@ -446,10 +444,10 @@ export var AbstractEditor = Class.extend({
         i1: (this.key * 1 + 1),
         title: this.getTitle()
       })
-      var header_text = this.header_template(vars)
+      var headerText = this.header_template(vars)
 
-      if (header_text !== this.header_text) {
-        this.header_text = header_text
+      if (headerText !== this.header_text) {
+        this.header_text = headerText
         this.updateHeaderText()
         this.notify()
         // this.fireChangeHeaderEvent();
@@ -480,8 +478,8 @@ export var AbstractEditor = Class.extend({
   destroy: function () {
     var self = this
     this.unregister(this)
-    $each(this.watched, function (name, adjusted_path) {
-      self.jsoneditor.unwatch(adjusted_path, self.watch_listener)
+    $each(this.watched, function (name, adjustedPath) {
+      self.jsoneditor.unwatch(adjustedPath, self.watch_listener)
     })
 
     this.watched = null
@@ -609,7 +607,7 @@ export var AbstractEditor = Class.extend({
       var inputAttributes = this.schema.options.inputAttributes
       var protectedAttributes = ['name', 'type'].concat(inputAttribute)
       for (var key in inputAttributes) {
-        if (inputAttributes.hasOwnProperty(key) && protectedAttributes.indexOf(key.toLowerCase()) == -1) {
+        if (inputAttributes.hasOwnProperty(key) && protectedAttributes.indexOf(key.toLowerCase()) === -1) {
           this.input.setAttribute(key, inputAttributes[key])
         }
       }

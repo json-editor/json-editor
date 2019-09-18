@@ -15,10 +15,8 @@ export var HiddenEditor = AbstractEditor.extend({
     if (!this.input) return
     this.input.removeAttribute('name')
   },
-  setValue: function (value, initial, from_template) {
-    var self = this
-
-    if (this.template && !from_template) {
+  setValue: function (value, initial, fromTemplate) {
+    if (this.template && !fromTemplate) {
       return
     }
 
@@ -37,7 +35,7 @@ export var HiddenEditor = AbstractEditor.extend({
 
     this.input.value = sanitized
 
-    var changed = from_template || this.getValue() !== value
+    var changed = fromTemplate || this.getValue() !== value
 
     this.refreshValue()
 
@@ -81,7 +79,7 @@ export var HiddenEditor = AbstractEditor.extend({
    * Re-calculates the value if needed
    */
   onWatchedFieldChange: function () {
-    var self = this; var vars; var j
+    var vars
 
     // If this editor needs to be rendered by a macro template
     if (this.template) {
@@ -92,8 +90,6 @@ export var HiddenEditor = AbstractEditor.extend({
     this._super()
   },
   build: function () {
-    var self = this
-
     this.format = this.schema.format
     if (!this.format && this.options.default_format) {
       this.format = this.options.default_format
