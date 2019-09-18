@@ -11,10 +11,8 @@ export var StringEditor = AbstractEditor.extend({
     if (!this.input) return
     this.input.removeAttribute('name')
   },
-  setValue: function (value, initial, from_template) {
-    var self = this
-
-    if (this.template && !from_template) {
+  setValue: function (value, initial, fromTemplate) {
+    if (this.template && !fromTemplate) {
       return
     }
 
@@ -33,7 +31,7 @@ export var StringEditor = AbstractEditor.extend({
 
     this.input.value = sanitized
 
-    var changed = from_template || this.getValue() !== value
+    var changed = fromTemplate || this.getValue() !== value
 
     this.refreshValue()
 
@@ -59,7 +57,7 @@ export var StringEditor = AbstractEditor.extend({
     return Math.min(12, Math.max(min, num))
   },
   build: function () {
-    var self = this; var i
+    var self = this
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
     if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText)
@@ -81,9 +79,8 @@ export var StringEditor = AbstractEditor.extend({
       if (this.format === 'textarea') {
         this.input_type = 'textarea'
         this.input = this.theme.getTextareaInput()
-      }
       // Range Input
-      else if (this.format === 'range') {
+      } else if (this.format === 'range') {
         this.input_type = 'range'
         var min = this.schema.minimum || 0
         var max = this.schema.maximum || Math.max(100, min + 1)
@@ -95,18 +92,16 @@ export var StringEditor = AbstractEditor.extend({
         }
 
         this.input = this.theme.getRangeInput(min, max, step)
-      }
       // HTML5 Input type
-      else {
+      } else {
         this.input_type = 'text'
         if (['button', 'checkbox', 'color', 'date', 'datetime-local', 'email', 'file', 'hidden', 'image', 'month', 'number', 'password', 'radio', 'reset', 'search', 'submit', 'tel', 'text', 'time', 'url', 'week'].indexOf(this.format) > -1) {
           this.input_type = this.format
         }
         this.input = this.theme.getFormInputField(this.input_type)
       }
-    }
     // Normal text input
-    else {
+    } else {
       this.input_type = 'text'
       this.input = this.theme.getFormInputField(this.input_type)
     }

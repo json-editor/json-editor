@@ -1100,8 +1100,6 @@ export var ObjectEditor = AbstractEditor.extend({
         }
       } else {
         showModal = true
-        // eslint-disable-next-line no-undef
-        canRemove = true
       }
     }
 
