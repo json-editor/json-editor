@@ -1,10 +1,10 @@
-import { AbstractIconLib } from '../iconlib';
+import { AbstractIconLib } from '../iconlib'
 
 export var spectreIconlib = AbstractIconLib.extend({
   mapping: {
     collapse: 'arrow-down',
     expand: 'arrow-right',
-    "delete": 'delete',
+    'delete': 'delete',
     edit: 'edit',
     add: 'plus',
     cancel: 'close',
@@ -17,4 +17,4 @@ export var spectreIconlib = AbstractIconLib.extend({
     calendar: 'bookmark'
   },
   icon_prefix: 'icon icon-'
-});
+})

@@ -1,10 +1,10 @@
-import { AbstractIconLib } from '../iconlib';
+import { AbstractIconLib } from '../iconlib'
 
 export var fontawesome4Iconlib = AbstractIconLib.extend({
   mapping: {
     collapse: 'caret-square-o-down',
     expand: 'caret-square-o-right',
-    "delete": 'times',
+    'delete': 'times',
     edit: 'pencil',
     add: 'plus',
     cancel: 'ban',
@@ -17,4 +17,4 @@ export var fontawesome4Iconlib = AbstractIconLib.extend({
     calendar: 'calendar'
   },
   icon_prefix: 'fa fa-'
-});
+})

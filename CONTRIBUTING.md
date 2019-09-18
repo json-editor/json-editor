@@ -23,9 +23,30 @@ If you fix a bug or add a cool feature, please submit a pull request!
 
 ### Code Style
 
+We use the [standardjs](https://standardjs.com/) standard style, enforced by [ESLint](https://eslint.org/).
+
+Also:
+
 *  Use 2 spaces for indentation
 *  Use comments whenever the code's meaning is not obvious
 *  When in doubt, try to match the style in existing source files
+
+To check for errors without building:
+```bash
+npm run eslint
+```
+
+To automatically fix errors without building:
+```bash
+npm run eslint.fix
+```
+
+If you absolutely *must* break a style rule you can disable a rule for the next line with a comment of the following form:
+```javascript
+// eslint-disable-line rule-name
+```
+
+[ESLint integrations](https://eslint.org/docs/user-guide/integrations) are provided for most IDEs. They will normally provide  highlighting of errors and suggestions for fixes.
 
 ### Development
 
