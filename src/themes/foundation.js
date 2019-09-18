@@ -193,11 +193,11 @@ export var foundation3Theme = foundationTheme.extend({
     el.appendChild(a)
     return el
   },
-  getTabContentHolder: function (tab_holder) {
-    return tab_holder.children[1]
+  getTabContentHolder: function (tabHolder) {
+    return tabHolder.children[1]
   },
-  getTopTabContentHolder: function (tab_holder) {
-    return tab_holder.children[1]
+  getTopTabContentHolder: function (tabHolder) {
+    return tabHolder.children[1]
   },
   getTabContent: function () {
     var el = document.createElement('div')
@@ -309,11 +309,11 @@ export var foundation5Theme = foundationTheme.extend({
     el.appendChild(a)
     return el
   },
-  getTabContentHolder: function (tab_holder) {
-    return tab_holder.children[1]
+  getTabContentHolder: function (tabHolder) {
+    return tabHolder.children[1]
   },
-  getTopTabContentHolder: function (tab_holder) {
-    return tab_holder.children[1]
+  getTopTabContentHolder: function (tabHolder) {
+    return tabHolder.children[1]
   },
   getTabContent: function () {
     var el = document.createElement('div')
@@ -430,8 +430,8 @@ export var foundation6Theme = foundation5Theme.extend({
     el.innerHTML = '<div className="cell"><ul class="tabs" data-tabs id="' + pName + '"></ul><div class="tabs-content" data-tabs-content="' + pName + '"></div></div>'
     return el
   },
-  insertBasicTopTab: function (tab, newTabs_holder) {
-    newTabs_holder.firstChild.firstChild.insertBefore(tab, newTabs_holder.firstChild.firstChild.firstChild)
+  insertBasicTopTab: function (tab, newTabsHolder) {
+    newTabsHolder.firstChild.firstChild.insertBefore(tab, newTabsHolder.firstChild.firstChild.firstChild)
   },
   getTab: function (text, tabId) {
     var el = document.createElement('li')
@@ -451,11 +451,11 @@ export var foundation6Theme = foundation5Theme.extend({
     el.appendChild(a)
     return el
   },
-  getTabContentHolder: function (tab_holder) {
-    return tab_holder.children[1].firstChild
+  getTabContentHolder: function (tabHolder) {
+    return tabHolder.children[1].firstChild
   },
-  getTopTabContentHolder: function (tab_holder) {
-    return tab_holder.firstChild.children[1]
+  getTopTabContentHolder: function (tabHolder) {
+    return tabHolder.firstChild.children[1]
   },
   getTabContent: function () {
     var el = document.createElement('div')
