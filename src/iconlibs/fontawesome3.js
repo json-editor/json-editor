@@ -1,10 +1,10 @@
-import { AbstractIconLib } from '../iconlib';
+import { AbstractIconLib } from '../iconlib'
 
 export var fontawesome3Iconlib = AbstractIconLib.extend({
   mapping: {
     collapse: 'chevron-down',
     expand: 'chevron-right',
-    "delete": 'remove',
+    'delete': 'remove',
     edit: 'pencil',
     add: 'plus',
     cancel: 'ban-circle',
@@ -17,4 +17,4 @@ export var fontawesome3Iconlib = AbstractIconLib.extend({
     calendar: 'calendar'
   },
   icon_prefix: 'icon-'
-});
+})

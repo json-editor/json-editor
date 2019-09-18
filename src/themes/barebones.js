@@ -1,4 +1,4 @@
-import { AbstractTheme } from '../theme';
+import { AbstractTheme } from '../theme'
 
 export var barebonesTheme = AbstractTheme.extend({
   /* Theme config options that allows changing various aspects of the output */
@@ -10,21 +10,20 @@ export var barebonesTheme = AbstractTheme.extend({
   },
   addInputError: function (input, text) {
     if (!input.errmsg) {
-      var group = this.closest(input, '.form-control');
-      input.errmsg = document.createElement('div');
-      input.errmsg.setAttribute('class', 'errmsg');
-      group.appendChild(input.errmsg);
-    }
-    else {
-      input.errmsg.style.display = 'block';
+      var group = this.closest(input, '.form-control')
+      input.errmsg = document.createElement('div')
+      input.errmsg.setAttribute('class', 'errmsg')
+      group.appendChild(input.errmsg)
+    } else {
+      input.errmsg.style.display = 'block'
     }
 
-    input.errmsg.innerHTML = '';
-    input.errmsg.appendChild(document.createTextNode(text));
+    input.errmsg.innerHTML = ''
+    input.errmsg.appendChild(document.createTextNode(text))
   },
   removeInputError: function (input) {
-    input.style.borderColor = '';
-    if (input.errmsg) input.errmsg.style.display = 'none';
+    input.style.borderColor = ''
+    if (input.errmsg) input.errmsg.style.display = 'none'
   }
 
-});
+})

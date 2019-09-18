@@ -17,117 +17,112 @@ ToDo:
  - Improve Handling of flatpicker "multiple" and "range" modes. (Currently the values are just added as string values, but the optimal scenario would be to save those as array if possible)
 
 */
-import { StringEditor } from './string';
+import { StringEditor } from './string'
 
 export var DatetimeEditor = StringEditor.extend({
 
   build: function () {
-    this._super();
-    if(!this.input) return;
+    this._super()
+    if (!this.input) return
 
-    if(window.flatpickr && typeof this.options.flatpickr == 'object') {
-
+    if (window.flatpickr && typeof this.options.flatpickr === 'object') {
       // Make sure that flatpickr settings matches the input type
-      this.options.flatpickr.enableTime = this.schema.format == 'date' ? false : true;
-      this.options.flatpickr.noCalendar = this.schema.format == 'time' ? true : false;
+      this.options.flatpickr.enableTime = this.schema.format != 'date'
+      this.options.flatpickr.noCalendar = this.schema.format == 'time'
 
       // Curently only string can contain range or multiple values
-      if (this.schema.type == 'integer') this.options.flatpickr.mode = 'single';
+      if (this.schema.type == 'integer') this.options.flatpickr.mode = 'single'
 
       // Attribute for flatpicker
-      this.input.setAttribute('data-input','');
+      this.input.setAttribute('data-input', '')
 
-      var input = this.input;
+      var input = this.input
 
       if (this.options.flatpickr.wrap === true) {
-
         // Create buttons for input group
-        var buttons = [];
+        var buttons = []
         if (this.options.flatpickr.showToggleButton !== false) {
-          var toggleButton = this.getButton('',this.schema.format == 'time' ? 'time' :'calendar', this.translate('flatpickr_toggle_button'));
+          var toggleButton = this.getButton('', this.schema.format == 'time' ? 'time' : 'calendar', this.translate('flatpickr_toggle_button'))
           // Attribute for flatpicker
-          toggleButton.setAttribute('data-toggle','');
-          buttons.push(toggleButton);
+          toggleButton.setAttribute('data-toggle', '')
+          buttons.push(toggleButton)
         }
         if (this.options.flatpickr.showClearButton !== false) {
-          var clearButton = this.getButton('','clear', this.translate('flatpickr_clear_button'));
+          var clearButton = this.getButton('', 'clear', this.translate('flatpickr_clear_button'))
           // Attribute for flatpicker
-          clearButton.setAttribute('data-clear','');
-          buttons.push(clearButton);
+          clearButton.setAttribute('data-clear', '')
+          buttons.push(clearButton)
         }
 
         // Save position of input field
-        var parentNode = this.input.parentNode, nextSibling = this.input.nextSibling;
+        var parentNode = this.input.parentNode; var nextSibling = this.input.nextSibling
 
-        var buttonContainer = this.theme.getInputGroup(this.input, buttons);
+        var buttonContainer = this.theme.getInputGroup(this.input, buttons)
         if (buttonContainer !== undefined) {
           // Make sure "inline" option is turned off
-          this.options.flatpickr.inline = false;
+          this.options.flatpickr.inline = false
 
           // Insert container at same position as input field
-          parentNode.insertBefore(buttonContainer, nextSibling);
+          parentNode.insertBefore(buttonContainer, nextSibling)
 
-          input = buttonContainer;
+          input = buttonContainer
+        } else {
+          this.options.flatpickr.wrap = false
         }
-        else {
-          this.options.flatpickr.wrap = false;
-        }
-
       }
 
-      this.flatpickr = window.flatpickr(input, this.options.flatpickr);
+      this.flatpickr = window.flatpickr(input, this.options.flatpickr)
 
       if (this.options.flatpickr.inline === true && this.options.flatpickr.inlineHideInput === true) {
-          this.input.setAttribute('type','hidden');
+        this.input.setAttribute('type', 'hidden')
       }
     }
   },
-  getValue: function() {
+  getValue: function () {
     if (!this.dependenciesFulfilled) {
-      return undefined;
+      return undefined
     }
     if (this.schema.type == 'string') {
-      return this.value;
+      return this.value
     }
     if (this.value === '' || this.value === undefined) {
-      return undefined;
+      return undefined
     }
 
-    var value =  this.schema.format == 'time' ? '1970-01-01 ' + this.value : this.value;
-    return parseInt(new Date(value).getTime() / 1000);
+    var value = this.schema.format == 'time' ? '1970-01-01 ' + this.value : this.value
+    return parseInt(new Date(value).getTime() / 1000)
   },
-  setValue: function(value, initial, from_template) {
+  setValue: function (value, initial, from_template) {
     if (this.schema.type == 'string') {
-      this._super(value, initial, from_template);
-      if (this.flatpickr) this.flatpickr.setDate(value);
-    }
-    else if (value > 0) {
-      var dateObj = new Date(value * 1000),
-          year = dateObj.getFullYear(),
-          month = this.zeroPad(dateObj.getMonth() + 1),
-          day = this.zeroPad(dateObj.getDate()),
-          hour = this.zeroPad(dateObj.getHours()),
-          min = this.zeroPad(dateObj.getMinutes()),
-          sec = this.zeroPad(dateObj.getSeconds()),
-          date = [year, month, day].join('-'),
-          time = [hour, min, sec].join(':'),
-          dateValue = date + 'T' + time;
+      this._super(value, initial, from_template)
+      if (this.flatpickr) this.flatpickr.setDate(value)
+    } else if (value > 0) {
+      var dateObj = new Date(value * 1000)
+      var year = dateObj.getFullYear()
+      var month = this.zeroPad(dateObj.getMonth() + 1)
+      var day = this.zeroPad(dateObj.getDate())
+      var hour = this.zeroPad(dateObj.getHours())
+      var min = this.zeroPad(dateObj.getMinutes())
+      var sec = this.zeroPad(dateObj.getSeconds())
+      var date = [year, month, day].join('-')
+      var time = [hour, min, sec].join(':')
+      var dateValue = date + 'T' + time
 
-      if (this.schema.format == 'date') dateValue = date;
-      else if (this.schema.format == 'time') dateValue = time;
+      if (this.schema.format == 'date') dateValue = date
+      else if (this.schema.format == 'time') dateValue = time
 
-      this.input.value = dateValue;
-      this.refreshValue();
-      if (this.flatpickr) this.flatpickr.setDate(dateValue);
+      this.input.value = dateValue
+      this.refreshValue()
+      if (this.flatpickr) this.flatpickr.setDate(dateValue)
     }
   },
-  destroy: function() {
-    if (this.flatpickr) this.flatpickr.destroy();
-    this.flatpickr = null;
-    this._super();
+  destroy: function () {
+    if (this.flatpickr) this.flatpickr.destroy()
+    this.flatpickr = null
+    this._super()
   },
   // helper function
-  zeroPad: function(value) {
-    return ('0' + value).slice(-2);
+  zeroPad: function (value) {
+    return ('0' + value).slice(-2)
   }
-});
+})

@@ -1,3 +1,3 @@
-export var handlebarsTemplate = function() {
-  return window.Handlebars;
-};
+export var handlebarsTemplate = function () {
+  return window.Handlebars
+}

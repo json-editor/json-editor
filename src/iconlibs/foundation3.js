@@ -1,10 +1,10 @@
-import { AbstractIconLib } from '../iconlib';
+import { AbstractIconLib } from '../iconlib'
 
 export var foundation3Iconlib = AbstractIconLib.extend({
   mapping: {
     collapse: 'minus',
     expand: 'plus',
-    "delete": 'x',
+    'delete': 'x',
     edit: 'pencil',
     add: 'page-add',
     cancel: 'x-circle',
@@ -17,4 +17,4 @@ export var foundation3Iconlib = AbstractIconLib.extend({
     calendar: 'calendar'
   },
   icon_prefix: 'fi-'
-});
+})

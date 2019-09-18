@@ -1,10 +1,10 @@
-import { AbstractIconLib } from '../iconlib';
+import { AbstractIconLib } from '../iconlib'
 
 export var jqueryuiIconlib = AbstractIconLib.extend({
   mapping: {
     collapse: 'triangle-1-s',
     expand: 'triangle-1-e',
-    "delete": 'trash',
+    'delete': 'trash',
     edit: 'pencil',
     add: 'plusthick',
     cancel: 'closethick',
@@ -16,4 +16,4 @@ export var jqueryuiIconlib = AbstractIconLib.extend({
     calendar: 'calendar'
   },
   icon_prefix: 'ui-icon ui-icon-'
-});
+})

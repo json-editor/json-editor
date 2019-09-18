@@ -1,10 +1,10 @@
-import { AbstractIconLib } from '../iconlib';
+import { AbstractIconLib } from '../iconlib'
 
 export var bootstrap3Iconlib = AbstractIconLib.extend({
   mapping: {
     collapse: 'chevron-down',
     expand: 'chevron-right',
-    "delete": 'remove',
+    'delete': 'remove',
     edit: 'pencil',
     add: 'plus',
     cancel: 'floppy-remove',
@@ -17,4 +17,4 @@ export var bootstrap3Iconlib = AbstractIconLib.extend({
     calendar: 'calendar'
   },
   icon_prefix: 'glyphicon glyphicon-'
-});
+})
