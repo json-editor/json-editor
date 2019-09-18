@@ -81,15 +81,13 @@ export var jqueryuiTheme = AbstractTheme.extend({
       button.classList.add('ui-button-icon-only')
       icon.classList.add('ui-button-icon-primary', 'ui-icon-primary')
       button.appendChild(icon)
-    }
     // Icon and Text
-    else if (icon) {
+    } else if (icon) {
       button.classList.add('ui-button-text-icon-primary')
       icon.classList.add('ui-button-icon-primary', 'ui-icon-primary')
       button.appendChild(icon)
-    }
     // Text only
-    else {
+    } else {
       button.classList.add('ui-button-text-only')
     }
 
@@ -111,15 +109,13 @@ export var jqueryuiTheme = AbstractTheme.extend({
       button.classList.add('ui-button-icon-only')
       icon.classList.add('ui-button-icon-primary', 'ui-icon-primary')
       button.appendChild(icon)
-    }
     // Icon and Text
-    else if (icon) {
+    } else if (icon) {
       button.classList.add('ui-button-text-icon-primary')
       icon.classList.add('ui-button-icon-primary', 'ui-icon-primary')
       button.appendChild(icon)
-    }
     // Text only
-    else {
+    } else {
       button.classList.add('ui-button-text-only')
     }
 

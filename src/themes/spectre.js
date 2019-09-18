@@ -113,11 +113,11 @@ export var spectreTheme = AbstractTheme.extend({
     el.classList.add('btn-group')
     return el
   },
-  getFormButtonHolder: function (button_align) {
+  getFormButtonHolder: function (buttonAlign) {
     var el = this._super()
     el.classList.remove('btn-group')
-    if (button_align === 'center') el.classList.add('text-center')
-    else if (button_align === 'right') el.classList.add('text-right')
+    if (buttonAlign === 'center') el.classList.add('text-center')
+    else if (buttonAlign === 'right') el.classList.add('text-right')
     else el.classList.add('text-left')
     return el
   },
@@ -375,9 +375,8 @@ export var spectreTheme = AbstractTheme.extend({
             el.classList.remove('form-select')
           })
         }
-      }
       // Select2 ajustments
-      else if (input.classList.contains('select2-hidden-accessible')) {
+      } else if (input.classList.contains('select2-hidden-accessible')) {
         var select2 = input.nextSibling
         var single = select2 && select2.querySelector('.select2-selection--single')
         // Add Spectre 'form-select' to single-select2 elements

@@ -173,7 +173,7 @@ export var tailwindTheme = AbstractTheme.extend({
   },
   getRadioHolder: function (schema, controls, label, description, infoText) {
     var el = this._super(controls, label, description, infoText)
-    if (schema.options.layout == 'h') el.classList.add('inline-flex', 'flex-row')
+    if (schema.options.layout === 'h') el.classList.add('inline-flex', 'flex-row')
     else el.classList.add('inline-flex', 'flex-col')
     return el
   },
@@ -202,13 +202,13 @@ export var tailwindTheme = AbstractTheme.extend({
     if (label) {
       label.classList.add('text-xs')
 
-      if (input.type == 'checkbox') {
+      if (input.type === 'checkbox') {
         input.classList.add('form-checkbox', 'text-xs', 'text-red-600', 'mr-1')
         label.classList.add('items-center', 'flex')
         label = this.getFormCheckboxControl(label, input, false, infoText)
       }
 
-      if (input.type == 'radio') {
+      if (input.type === 'radio') {
         input.classList.add('form-radio', 'text-red-600', 'mr-1')
         label.classList.add('items-center', 'flex')
         label = this.getFormRadioControl(label, input, false, infoText)
@@ -349,13 +349,13 @@ export var tailwindTheme = AbstractTheme.extend({
   },
   markTabActive: function (row) {
     row.tab.firstChild.classList.add('block')
-    if (row.tab.firstChild.classList.contains('border-b') == true) {
+    if (row.tab.firstChild.classList.contains('border-b') === true) {
       row.tab.firstChild.classList.add('border-b-0')
       row.tab.firstChild.classList.remove('border-b')
     } else {
       row.tab.firstChild.classList.add('border-b-0')
     }
-    if (row.container.classList.contains('hidden') == true) {
+    if (row.container.classList.contains('hidden') === true) {
       row.container.classList.remove('hidden')
       row.container.classList.add('block')
     } else {
@@ -363,13 +363,13 @@ export var tailwindTheme = AbstractTheme.extend({
     }
   },
   markTabInactive: function (row) {
-    if (row.tab.firstChild.classList.contains('border-b-0') == true) {
+    if (row.tab.firstChild.classList.contains('border-b-0') === true) {
       row.tab.firstChild.classList.add('border-b')
       row.tab.firstChild.classList.remove('border-b-0')
     } else {
       row.tab.firstChild.classList.add('border-b')
     }
-    if (row.container.classList.contains('block') == true) {
+    if (row.container.classList.contains('block') === true) {
       row.container.classList.remove('block')
       row.container.classList.add('hidden')
     }
