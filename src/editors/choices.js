@@ -1,5 +1,5 @@
 import { SelectEditor } from './select'
-import { $extend, $each } from '../utilities'
+import { $extend } from '../utilities'
 export var ChoicesEditor = SelectEditor.extend({
 
   setValue: function (value, initial) {
@@ -24,7 +24,7 @@ export var ChoicesEditor = SelectEditor.extend({
   },
   afterInputReady: function () {
     if (window.Choices && !this.choices_instance) {
-      var options; var self = this
+      var options
       // Get options, either global options from "this.defaults.options.choices" or
       // single property options from schema "options.choices"
       options = this.expandCallbacks('choices', $extend({}, this.defaults.options.choices || {}, this.options.choices || {}))
@@ -36,8 +36,8 @@ export var ChoicesEditor = SelectEditor.extend({
   onWatchedFieldChange: function () {
     this._super()
     if (this.choices_instance) {
-      var self = this; var choices_list = this.enum_options.map(function (v, i) { return {value: v, label: self.enum_display[i]} })
-      this.choices_instance.setChoices(choices_list, 'value', 'label', true)
+      var self = this; var choicesList = this.enum_options.map(function (v, i) { return {value: v, label: self.enum_display[i]} })
+      this.choices_instance.setChoices(choicesList, 'value', 'label', true)
       this.choices_instance.setChoiceByValue(this.value + '') // Set new selection
     }
   },
@@ -45,9 +45,9 @@ export var ChoicesEditor = SelectEditor.extend({
     if (!this.always_disabled && this.choices_instance) this.choices_instance.enable()
     this._super()
   },
-  disable: function (always_disabled) {
+  disable: function (alwaysDisabled) {
     if (this.choices_instance) this.choices_instance.disable()
-    this._super(always_disabled)
+    this._super(alwaysDisabled)
   },
   destroy: function () {
     if (this.choices_instance) {

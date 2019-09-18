@@ -27,11 +27,11 @@ export var DatetimeEditor = StringEditor.extend({
 
     if (window.flatpickr && typeof this.options.flatpickr === 'object') {
       // Make sure that flatpickr settings matches the input type
-      this.options.flatpickr.enableTime = this.schema.format != 'date'
-      this.options.flatpickr.noCalendar = this.schema.format == 'time'
+      this.options.flatpickr.enableTime = this.schema.format !== 'date'
+      this.options.flatpickr.noCalendar = this.schema.format === 'time'
 
       // Curently only string can contain range or multiple values
-      if (this.schema.type == 'integer') this.options.flatpickr.mode = 'single'
+      if (this.schema.type === 'integer') this.options.flatpickr.mode = 'single'
 
       // Attribute for flatpicker
       this.input.setAttribute('data-input', '')
@@ -42,7 +42,7 @@ export var DatetimeEditor = StringEditor.extend({
         // Create buttons for input group
         var buttons = []
         if (this.options.flatpickr.showToggleButton !== false) {
-          var toggleButton = this.getButton('', this.schema.format == 'time' ? 'time' : 'calendar', this.translate('flatpickr_toggle_button'))
+          var toggleButton = this.getButton('', this.schema.format === 'time' ? 'time' : 'calendar', this.translate('flatpickr_toggle_button'))
           // Attribute for flatpicker
           toggleButton.setAttribute('data-toggle', '')
           buttons.push(toggleButton)
@@ -82,19 +82,19 @@ export var DatetimeEditor = StringEditor.extend({
     if (!this.dependenciesFulfilled) {
       return undefined
     }
-    if (this.schema.type == 'string') {
+    if (this.schema.type === 'string') {
       return this.value
     }
     if (this.value === '' || this.value === undefined) {
       return undefined
     }
 
-    var value = this.schema.format == 'time' ? '1970-01-01 ' + this.value : this.value
+    var value = this.schema.format === 'time' ? '1970-01-01 ' + this.value : this.value
     return parseInt(new Date(value).getTime() / 1000)
   },
-  setValue: function (value, initial, from_template) {
-    if (this.schema.type == 'string') {
-      this._super(value, initial, from_template)
+  setValue: function (value, initial, fromTemplate) {
+    if (this.schema.type === 'string') {
+      this._super(value, initial, fromTemplate)
       if (this.flatpickr) this.flatpickr.setDate(value)
     } else if (value > 0) {
       var dateObj = new Date(value * 1000)
@@ -108,8 +108,8 @@ export var DatetimeEditor = StringEditor.extend({
       var time = [hour, min, sec].join(':')
       var dateValue = date + 'T' + time
 
-      if (this.schema.format == 'date') dateValue = date
-      else if (this.schema.format == 'time') dateValue = time
+      if (this.schema.format === 'date') dateValue = date
+      else if (this.schema.format === 'time') dateValue = time
 
       this.input.value = dateValue
       this.refreshValue()

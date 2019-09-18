@@ -31,14 +31,14 @@ export var SelectEditor = AbstractEditor.extend({
   },
   getNumColumns: function () {
     if (!this.enum_options) return 3
-    var longest_text = this.getTitle().length
+    var longestText = this.getTitle().length
     for (var i = 0; i < this.enum_options.length; i++) {
-      longest_text = Math.max(longest_text, this.enum_options[i].length + 4)
+      longestText = Math.max(longestText, this.enum_options[i].length + 4)
     }
-    return Math.min(12, Math.max(longest_text / 7, 2))
+    return Math.min(12, Math.max(longestText / 7, 2))
   },
   typecast: function (value) {
-    if (this.schema.type === 'boolean') return value == 'undefined' || value === undefined ? undefined : !!value
+    if (this.schema.type === 'boolean') return value === 'undefined' || value === undefined ? undefined : !!value
     else if (this.schema.type === 'number') return 1 * value || 0
     else if (this.schema.type === 'integer') return Math.floor(value * 1 || 0)
     else return '' + value
@@ -60,7 +60,7 @@ export var SelectEditor = AbstractEditor.extend({
 
     // Enum options enumerated
     if (this.schema['enum']) {
-      var display = this.schema.options && this.schema.options.enum_titles || []
+      var display = (this.schema.options && this.schema.options.enum_titles) || []
 
       $each(this.schema['enum'], function (i, option) {
         self.enum_options[i] = '' + option
@@ -73,10 +73,9 @@ export var SelectEditor = AbstractEditor.extend({
         self.enum_options.unshift('undefined')
         self.enum_values.unshift(undefined)
       }
-    }
     // Boolean
-    else if (this.schema.type === 'boolean') {
-      self.enum_display = this.schema.options && this.schema.options.enum_titles || ['true', 'false']
+    } else if (this.schema.type === 'boolean') {
+      self.enum_display = (this.schema.options && this.schema.options.enum_titles) || ['true', 'false']
       self.enum_options = ['1', '']
       self.enum_values = [true, false]
 
@@ -85,9 +84,8 @@ export var SelectEditor = AbstractEditor.extend({
         self.enum_options.unshift('undefined')
         self.enum_values.unshift(undefined)
       }
-    }
     // Dynamic Enum
-    else if (this.schema.enumSource) {
+    } else if (this.schema.enumSource) {
       this.enumSource = []
       this.enum_display = []
       this.enum_options = []
@@ -116,9 +114,8 @@ export var SelectEditor = AbstractEditor.extend({
             this.enumSource[i] = {
               source: this.schema.enumSource[i]
             }
-          }
           // Make a copy of the schema
-          else if (!(Array.isArray(this.schema.enumSource[i]))) {
+          } else if (!(Array.isArray(this.schema.enumSource[i]))) {
             this.enumSource[i] = $extend({}, this.schema.enumSource[i])
           } else {
             this.enumSource[i] = this.schema.enumSource[i]
@@ -144,10 +141,9 @@ export var SelectEditor = AbstractEditor.extend({
           else this.enumSource[i].filter = this.jsoneditor.compileTemplate(this.enumSource[i].filter, this.template_engine)
         }
       }
-    }
     // Other, not supported
-    else {
-      throw "'select' editor requires the enum property to be set."
+    } else {
+      throw new Error("'select' editor requires the enum property to be set.")
     }
   },
   build: function () {
@@ -191,26 +187,26 @@ export var SelectEditor = AbstractEditor.extend({
   onInputChange: function () {
     var val = this.typecast(this.input.value)
 
-    var new_val
+    var newVal
     // Invalid option, use first option instead
     if (this.enum_values.indexOf(val) === -1) {
-      new_val = this.enum_values[0]
+      newVal = this.enum_values[0]
     } else {
-      new_val = this.enum_values[this.enum_values.indexOf(val)]
+      newVal = this.enum_values[this.enum_values.indexOf(val)]
     }
 
     // If valid hasn't changed
-    if (new_val === this.value) return
+    if (newVal === this.value) return
 
     this.is_dirty = true
 
     // Store new value and propogate change event
-    this.value = new_val
+    this.value = newVal
     this.onChange(true)
   },
   onWatchedFieldChange: function () {
-    var self = this; var vars; var j; var update = false
-    var select_options = []; var select_titles = []
+    var vars; var j
+    var selectOptions = []; var selectTitles = []
 
     // If this editor uses a dynamic select box
     if (this.enumSource) {
@@ -219,8 +215,8 @@ export var SelectEditor = AbstractEditor.extend({
       for (var i = 0; i < this.enumSource.length; i++) {
         // Constant values
         if (Array.isArray(this.enumSource[i])) {
-          select_options = select_options.concat(this.enumSource[i])
-          select_titles = select_titles.concat(this.enumSource[i])
+          selectOptions = selectOptions.concat(this.enumSource[i])
+          selectTitles = selectTitles.concat(this.enumSource[i])
         } else {
           var items = []
           // Static list of items
@@ -238,83 +234,81 @@ export var SelectEditor = AbstractEditor.extend({
             }
             // Filter the items
             if (this.enumSource[i].filter) {
-              var new_items = []
+              var newItems = []
               for (j = 0; j < items.length; j++) {
-                if (this.enumSource[i].filter({i: j, item: items[j], watched: vars})) new_items.push(items[j])
+                if (this.enumSource[i].filter({i: j, item: items[j], watched: vars})) newItems.push(items[j])
               }
-              items = new_items
+              items = newItems
             }
 
-            var item_titles = []
-            var item_values = []
+            var itemTitles = []
+            var itemValues = []
             for (j = 0; j < items.length; j++) {
               var item = items[j]
 
               // Rendered value
               if (this.enumSource[i].value) {
-                item_values[j] = this.typecast(this.enumSource[i].value({
+                itemValues[j] = this.typecast(this.enumSource[i].value({
                   i: j,
                   item: item
                 }))
-              }
               // Use value directly
-              else {
-                item_values[j] = items[j]
+              } else {
+                itemValues[j] = items[j]
               }
 
               // Rendered title
               if (this.enumSource[i].title) {
-                item_titles[j] = this.enumSource[i].title({
+                itemTitles[j] = this.enumSource[i].title({
                   i: j,
                   item: item
                 })
-              }
               // Use value as the title also
-              else {
-                item_titles[j] = item_values[j]
+              } else {
+                itemTitles[j] = itemValues[j]
               }
             }
 
             if (this.enumSource[i].sort) {
-              (function (item_values, item_titles, order) {
-                item_values.map(function (v, i) {
-                  return { v: v, t: item_titles[i] }
+              (function (itemValues, itemTitles, order) {
+                itemValues.map(function (v, i) {
+                  return { v: v, t: itemTitles[i] }
                 }).sort(function (a, b) {
-                  return ((a.v < b.v) ? -order : ((a.v == b.v) ? 0 : order))
+                  return ((a.v < b.v) ? -order : ((a.v === b.v) ? 0 : order))
                 }).forEach(function (v, i) {
-                  item_values[i] = v.v
-                  item_titles[i] = v.t
+                  itemValues[i] = v.v
+                  itemTitles[i] = v.t
                 })
-              }.bind(null, item_values, item_titles, this.enumSource[i].sort == 'desc' ? 1 : -1))()
+              }.bind(null, itemValues, itemTitles, this.enumSource[i].sort === 'desc' ? 1 : -1))()
             }
 
-            select_options = select_options.concat(item_values)
-            select_titles = select_titles.concat(item_titles)
+            selectOptions = selectOptions.concat(itemValues)
+            selectTitles = selectTitles.concat(itemTitles)
           }
         }
       }
 
-      var prev_value = this.value
+      var prevValue = this.value
 
-      this.theme.setSelectOptions(this.input, select_options, select_titles)
-      this.enum_options = select_options
-      this.enum_display = select_titles
-      this.enum_values = select_options
+      this.theme.setSelectOptions(this.input, selectOptions, selectTitles)
+      this.enum_options = selectOptions
+      this.enum_display = selectTitles
+      this.enum_values = selectOptions
 
       // If the previous value is still in the new select options, stick with it
-      if (select_options.indexOf(prev_value) !== -1) {
-        this.input.value = prev_value
-        this.value = prev_value
-      }
+      if (selectOptions.indexOf(prevValue) !== -1) {
+        this.input.value = prevValue
+        this.value = prevValue
       // Otherwise, set the value to the first select option
-      else {
-        this.input.value = select_options[0]
-        this.value = this.typecast(select_options[0] || '')
+      } else {
+        this.input.value = selectOptions[0]
+        this.value = this.typecast(selectOptions[0] || '')
         if (this.parent && !this.watchLoop) this.parent.onChildEditorChange(this)
         else this.jsoneditor.onChange()
         this.jsoneditor.notifyWatchers(this.path)
       }
 
+      // eslint-disable-next-line no-undef
       update = true
     }
 
@@ -326,10 +320,10 @@ export var SelectEditor = AbstractEditor.extend({
     }
     this._super()
   },
-  disable: function (always_disabled) {
-    if (always_disabled) this.always_disabled = true
+  disable: function (alwaysDisabled) {
+    if (alwaysDisabled) this.always_disabled = true
     this.input.disabled = true
-    this._super(always_disabled)
+    this._super(alwaysDisabled)
   },
   destroy: function () {
     if (this.label && this.label.parentNode) this.label.parentNode.removeChild(this.label)
