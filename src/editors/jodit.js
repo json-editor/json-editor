@@ -1,9 +1,9 @@
 import { StringEditor } from './string'
-import { $extend, $each } from '../utilities'
+import { $extend } from '../utilities'
 export var JoditEditor = StringEditor.extend({
 
-  setValue: function (value, initial, from_template) {
-    var res = this._super(value, initial, from_template)
+  setValue: function (value, initial, fromTemplate) {
+    var res = this._super(value, initial, fromTemplate)
     if (res !== undefined && res.changed && this.jodit_instance) this.jodit_instance.setEditorValue(res.value)
   },
   build: function () {
@@ -44,9 +44,9 @@ export var JoditEditor = StringEditor.extend({
     if (!this.always_disabled && this.jodit_instance) this.jodit_instance.setReadOnly(false)
     this._super()
   },
-  disable: function (always_disabled) {
+  disable: function (alwaysDisabled) {
     if (this.jodit_instance) this.jodit_instance.setReadOnly(true)
-    this._super(always_disabled)
+    this._super(alwaysDisabled)
   },
   destroy: function () {
     if (this.jodit_instance) {
