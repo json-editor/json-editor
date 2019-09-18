@@ -307,9 +307,6 @@ export var SelectEditor = AbstractEditor.extend({
         else this.jsoneditor.onChange()
         this.jsoneditor.notifyWatchers(this.path)
       }
-
-      // eslint-disable-next-line no-undef
-      update = true
     }
 
     this._super()
