@@ -28,7 +28,7 @@ export var ArraySelectizeEditor = MultiSelectEditor.extend({
       }, this.defaults.options.selectize || {}, this.options.selectize || {}))
 
       // New items are allowed if option "create" is true and items type is "string"
-      this.newEnumAllowed = options.create = !!options.create && this.schema.items && this.schema.items.type == 'string'
+      this.newEnumAllowed = options.create = !!options.create && this.schema.items && this.schema.items.type === 'string'
 
       this.selectize_instance = (window.jQuery(this.input).selectize(options))[0].selectize
 

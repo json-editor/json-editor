@@ -27,7 +27,7 @@ export var ArraySelect2Editor = MultiSelectEditor.extend({
       }, this.defaults.options.select2 || {}, this.options.select2 || {}))
 
       // New items are allowed if option "tags" is true and items type is "string"
-      this.newEnumAllowed = options.tags = !!options.tags && this.schema.items && this.schema.items.type == 'string'
+      this.newEnumAllowed = options.tags = !!options.tags && this.schema.items && this.schema.items.type === 'string'
 
       this.select2_instance = window.jQuery(this.input).select2(options)
       this.select2v4 = this.select2_instance.select2.hasOwnProperty('amd')
