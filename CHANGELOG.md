@@ -1,4 +1,4 @@
-### Current
+### Current 2.x-dev
 
   - Added Spectre Theme styling for `anyOf`, `oneOf` and `allOf` selectbox.
   - Added filter to remove duplicate error messages. Duplicate error messages are now displayed as single error message with error count. (Duplicate error messages can occur when using `not`, `anyOf`, `oneOf` and `allOf` due to these are **conditions**, not properties.) 
@@ -16,6 +16,8 @@
   - Jodit, Ace Editor, SimpleMDE and SCEditor can now be configured using global config options which can be overridden for single properties using schema options.
   - Refactored src/editors/string.js and moved hardcoded support for special editors (Ace Editor, SimpleMDE and SCEditor) into seperate editor files which then extends src/editors/string.js.
   - Fixed #408 - Now upload editor should be working again.
+  - Added Array events for table format, tests
+  - Fixed #408 - Now upload editor should be working again. 
   - Added [Choices.js](https://github.com/jshjohnson/Choices) support for array and select editors.
   - Added 2 new config options: "disable_select2" and "disable_selectize" which can be used to disable select2/selectize on a specific property/field.
   - Removed "rating" editor and updated "starrating" editor to accept/emulate "rating" editor options.
