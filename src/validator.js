@@ -116,7 +116,7 @@ export const Validator = Class.extend({
     // `oneOf`
     if (schema.oneOf) {
       valid = 0
-      var oneof_errors = []
+      var oneofErrors = []
       for (i = 0; i < schema.oneOf.length; i++) {
         // Set the error paths to be path.oneOf[i].rest.of.path
         var tmp = this._validateSchema(schema.oneOf[i], value, path)
@@ -127,7 +127,7 @@ export const Validator = Class.extend({
         for (j = 0; j < tmp.length; j++) {
           tmp[j].path = path + '.oneOf[' + i + ']' + tmp[j].path.substr(path.length)
         }
-        oneof_errors = oneof_errors.concat(tmp)
+        oneofErrors = oneofErrors.concat(tmp)
       }
       if (valid !== 1) {
         errors.push({
@@ -135,7 +135,7 @@ export const Validator = Class.extend({
           property: 'oneOf',
           message: this.translate('error_oneOf', [valid])
         })
-        errors = errors.concat(oneof_errors)
+        errors = errors.concat(oneofErrors)
       }
     }
 
@@ -168,10 +168,9 @@ export const Validator = Class.extend({
             message: this.translate('error_type_union')
           })
         }
-      }
+      } else {
       // Simple type
-      else {
-        if (['date', 'time', 'datetime-local'].indexOf(schema.format) != -1 && schema.type == 'integer') {
+        if (['date', 'time', 'datetime-local'].indexOf(schema.format) !== -1 && schema.type === 'integer') {
           // Hack to get validator to validate as string even if value is integer
           // As validation of 'date', 'time', 'datetime-local' is done in separate validator
           if (!this._checkType('string', '' + value)) {
@@ -209,9 +208,8 @@ export const Validator = Class.extend({
             message: this.translate('error_disallow_union')
           })
         }
-      }
-      // Simple type
-      else {
+      } else {
+        // Simple type
         if (this._checkType(schema.disallow, value)) {
           errors.push({
             path: path,
@@ -237,9 +235,8 @@ export const Validator = Class.extend({
         // Use math.js is available
         if (window.math) {
           valid = window.math.mod(window.math.bignumber(value), window.math.bignumber(divisor)).equals(0)
-        }
-        // Use decimal.js is available
-        else if (window.Decimal) {
+        } else if (window.Decimal) {
+          // Use decimal.js is available
           valid = (new window.Decimal(value)).mod(new window.Decimal(divisor)).equals(0)
         }
 
@@ -263,9 +260,8 @@ export const Validator = Class.extend({
             window.math.bignumber(value),
             window.math.bignumber(schema.maximum)
           )
-        }
-        // Use Decimal.js if available
-        else if (window.Decimal) {
+        } else if (window.Decimal) {
+          // Use Decimal.js if available
           valid = (new window.Decimal(value))[schema.exclusiveMaximum ? 'lt' : 'lte'](new window.Decimal(schema.maximum))
         }
 
@@ -292,9 +288,8 @@ export const Validator = Class.extend({
             window.math.bignumber(value),
             window.math.bignumber(schema.minimum)
           )
-        }
         // Use Decimal.js if available
-        else if (window.Decimal) {
+        } else if (window.Decimal) {
           valid = (new window.Decimal(value))[schema.exclusiveMinimum ? 'gt' : 'gte'](new window.Decimal(schema.minimum))
         }
 
@@ -309,9 +304,8 @@ export const Validator = Class.extend({
           })
         }
       }
-    }
     // String specific validation
-    else if (typeof value === 'string') {
+    } else if (typeof value === 'string') {
       // `maxLength`
       if (schema.maxLength) {
         if ((value + '').length > schema.maxLength) {
@@ -344,9 +338,8 @@ export const Validator = Class.extend({
           })
         }
       }
-    }
     // Array specific validation
-    else if (typeof value === 'object' && value !== null && Array.isArray(value)) {
+    } else if (typeof value === 'object' && value !== null && Array.isArray(value)) {
       // `items` and `additionalItems`
       if (schema.items) {
         // `items` is an array
@@ -356,33 +349,28 @@ export const Validator = Class.extend({
             // Validate against it
             if (schema.items[i]) {
               errors = errors.concat(this._validateSchema(schema.items[i], value[i], path + '.' + i))
-            }
             // If all additional items are allowed
-            else if (schema.additionalItems === true) {
+            } else if (schema.additionalItems === true) {
               break
-            }
             // If additional items is a schema
             // TODO: Incompatibility between version 3 and 4 of the spec
-            else if (schema.additionalItems) {
+            } else if (schema.additionalItems) {
               errors = errors.concat(this._validateSchema(schema.additionalItems, value[i], path + '.' + i))
-            }
             // If no additional items are allowed
-            else if (schema.additionalItems === false) {
+            } else if (schema.additionalItems === false) {
               errors.push({
                 path: path,
                 property: 'additionalItems',
                 message: this.translate('error_additionalItems')
               })
               break
-            }
             // Default for `additionalItems` is an empty schema
-            else {
+            } else {
               break
             }
           }
-        }
         // `items` is a schema
-        else {
+        } else {
           // Each item in the array must validate against the schema
           for (i = 0; i < value.length; i++) {
             errors = errors.concat(this._validateSchema(schema.items, value[i], path + '.' + i))
@@ -428,9 +416,8 @@ export const Validator = Class.extend({
           seen[valid] = true
         }
       }
-    }
     // Object specific validation
-    else if (typeof value === 'object' && value !== null) {
+    } else if (typeof value === 'object' && value !== null) {
       // `maxProperties`
       if (schema.maxProperties) {
         valid = 0
@@ -480,10 +467,10 @@ export const Validator = Class.extend({
       }
 
       // `properties`
-      var validated_properties = {}
+      var validatedProperties = {}
       for (i in schema.properties) {
         if (!schema.properties.hasOwnProperty(i)) continue
-        validated_properties[i] = true
+        validatedProperties[i] = true
         errors = errors.concat(this._validateSchema(schema.properties[i], value[i], path + '.' + i))
       }
 
@@ -497,7 +484,7 @@ export const Validator = Class.extend({
           for (j in value) {
             if (!value.hasOwnProperty(j)) continue
             if (regex.test(j)) {
-              validated_properties[j] = true
+              validatedProperties[j] = true
               errors = errors.concat(this._validateSchema(schema.patternProperties[i], value[j], path + '.' + j))
             }
           }
@@ -513,7 +500,7 @@ export const Validator = Class.extend({
       if (typeof schema.additionalProperties !== 'undefined') {
         for (i in value) {
           if (!value.hasOwnProperty(i)) continue
-          if (!validated_properties[i]) {
+          if (!validatedProperties[i]) {
             // No extra properties allowed
             if (!schema.additionalProperties) {
               errors.push({
@@ -522,14 +509,12 @@ export const Validator = Class.extend({
                 message: this.translate('error_additional_properties', [i])
               })
               break
-            }
             // Allowed
-            else if (schema.additionalProperties === true) {
+            } else if (schema.additionalProperties === true) {
               break
-            }
             // Must match schema
             // TODO: incompatibility between version 3 and 4 of the spec
-            else {
+            } else {
               errors = errors.concat(this._validateSchema(schema.additionalProperties, value[i], path + '.' + i))
             }
           }
@@ -555,9 +540,8 @@ export const Validator = Class.extend({
                 })
               }
             }
-          }
           // Schema dependency
-          else {
+          } else {
             errors = errors.concat(this._validateSchema(schema.dependencies[i], value, path))
           }
         }
@@ -584,7 +568,7 @@ export const Validator = Class.extend({
     }
 
     // date, time and datetime-local validation
-    if (['date', 'time', 'datetime-local'].indexOf(schema.format) != -1) {
+    if (['date', 'time', 'datetime-local'].indexOf(schema.format) !== -1) {
       var validatorRx = {
         'date': /^(\d{4}\D\d{2}\D\d{2})?$/,
         'time': /^(\d{2}:\d{2}(?::\d{2})?)?$/,
@@ -599,7 +583,7 @@ export const Validator = Class.extend({
       var ed = this.jsoneditor.getEditor(path)
       var dateFormat = (ed && ed.flatpickr) ? ed.flatpickr.config.dateFormat : format[schema.format]
 
-      if (schema.type == 'integer') {
+      if (schema.type === 'integer') {
         // The value is a timestamp
         if (value * 1 < 1) {
           // If value is less than 1, then it's an invalid epoch date before 00:00:00 UTC Thursday, 1 January 1970
@@ -608,7 +592,7 @@ export const Validator = Class.extend({
             property: 'format',
             message: this.translate('error_invalid_epoch')
           })
-        } else if (value != Math.abs(parseInt(value))) {
+        } else if (value !== Math.abs(parseInt(value))) {
           // not much to check for, so we assume value is ok if it's a positive number
           errors.push({
             path: path,
@@ -629,8 +613,8 @@ export const Validator = Class.extend({
         // Flatpickr validation
         if (value !== '') {
           var compareValue
-          if (ed.flatpickr.config.mode != 'single') {
-            var seperator = ed.flatpickr.config.mode == 'range' ? ed.flatpickr.l10n.rangeSeparator : ', '
+          if (ed.flatpickr.config.mode !== 'single') {
+            var seperator = ed.flatpickr.config.mode === 'range' ? ed.flatpickr.l10n.rangeSeparator : ', '
             var selectedDates = ed.flatpickr.selectedDates.map(function (val) {
               return ed.flatpickr.formatDate(val, ed.flatpickr.config.dateFormat)
             })
@@ -641,8 +625,10 @@ export const Validator = Class.extend({
             if (compareValue) {
               // Not the best validation method, but range and multiple mode are special
               // Optimal solution would be if it is possible to change the return format from string/integer to array
-              if (compareValue != value) throw ed.flatpickr.config.mode + ' mismatch'
-            } else if (ed.flatpickr.formatDate(ed.flatpickr.parseDate(value, ed.flatpickr.config.dateFormat), ed.flatpickr.config.dateFormat) != value) throw 'mismatch'
+              if (compareValue !== value) throw new Error(ed.flatpickr.config.mode + ' mismatch')
+            } else if (ed.flatpickr.formatDate(ed.flatpickr.parseDate(value, ed.flatpickr.config.dateFormat), ed.flatpickr.config.dateFormat) !== value) {
+              throw new Error('mismatch')
+            }
           } catch (err) {
             var errorDateFormat = ed.flatpickr.config.errorDateFormat !== undefined ? ed.flatpickr.config.errorDateFormat : ed.flatpickr.config.dateFormat
             errors.push({
@@ -702,9 +688,8 @@ export const Validator = Class.extend({
       else if (type === 'object') return value !== null && !(Array.isArray(value)) && typeof value === 'object'
       else if (type === 'null') return value === null
       else return true
-    }
     // Schema
-    else {
+    } else {
       return !this._validateSchema(type, value).length
     }
   }
