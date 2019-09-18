@@ -1,7 +1,7 @@
 
-var webpack = require('webpack');
+var webpack = require('webpack')
 
-var bannerText= `/**
+var bannerText = `/**
 * @name JSON Editor
 * @description JSON Schema Based Editor
 * This library is the continuation of jdorn's great work (see also https://github.com/jdorn/json-editor/issues/800)
@@ -12,28 +12,26 @@ var bannerText= `/**
 * @license MIT
 * @example see README.md and docs/ for requirements, examples and usage info
 */`
-
-
 module.exports = {
   entry: {
-    // 'polyfills': './src/polyfills.ts',      
-    'jsoneditor': './src/core.js',
+    // 'polyfills': './src/polyfills.ts',
+    'jsoneditor': './src/core.js'
   },
   resolve: {
     extensions: ['.js']
-  },  
+  },
   module: {
-  
+
     rules: [
-      {
-        enforce: 'pre',
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: `eslint-loader`,
-        options: {
-          // configFile: helpers.root('config/.eslintrc')              
-        }, 
-      },
+      // {
+      //   enforce: 'pre',
+      //   test: /\.js$/,
+      //   exclude: /node_modules/,
+      //   loader: `eslint-loader`,
+      //   options: {
+      //     // configFile: helpers.root('config/.eslintrc')
+      //   },
+      // },
       {
         test: /\.css$/,
         use: [
@@ -44,6 +42,6 @@ module.exports = {
     ]
   },
   plugins: [
-      new webpack.BannerPlugin(bannerText.replace("{{ VERSION }}", JSON.stringify(require("../package.json").version) ))
-  ],    
-};
+    new webpack.BannerPlugin(bannerText.replace('{{ VERSION }}', JSON.stringify(require('../package.json').version)))
+  ]
+}
