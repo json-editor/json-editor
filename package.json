@@ -41,7 +41,9 @@
     "cp:test": "codeceptjs run --steps --invert --grep  @optional",
     "cp:testmocha": "codeceptjs run --steps --reporter mochawesome --invert --grep  @optional",
     "cp:fulltest": "codeceptjs run --steps",
-    "cp:fulltestmocha": "codeceptjs run --steps --reporter mochawesome"
+    "cp:fulltestmocha": "codeceptjs run --steps --reporter mochawesome",
+    "eslint.fix": "eslint -c ./.eslintrc src/** --fix",
+    "eslint": "eslint -c ./.eslintrc src/**"
   },
   "license": "MIT",
   "engines": {
@@ -53,7 +55,7 @@
     "cleave.js": "^1.5.3",
     "codeceptjs": "^2.3.0",
     "css-loader": "^3.2.0",
-    "eslint": "^6.2.0",
+    "eslint": "^6.4.0",
     "eslint-loader": "^2.2.1",
     "http-server": "^0.11.1",
     "jasmine": "^3.4.0",
