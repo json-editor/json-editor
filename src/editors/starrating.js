@@ -14,7 +14,7 @@ export var StarratingEditor = StringEditor.extend({
     this.ratingContainer.classList.add('starrating')
 
     // Emulate the old "rating" editor parameters
-    if (this.schema.enum == undefined) {
+    if (this.schema.enum === undefined) {
       var max = this.schema.maximum ? this.schema.maximum : 5
       if (this.schema.exclusiveMaximum) max--
       this.enum_values = []
@@ -87,8 +87,8 @@ export var StarratingEditor = StringEditor.extend({
       this._super()
     }
   },
-  disable: function (always_disabled) {
-    if (always_disabled) this.always_disabled = true
+  disable: function (alwaysDisabled) {
+    if (alwaysDisabled) this.always_disabled = true
     for (var i = 0; i < this.radioGroup.length; i++) {
       this.radioGroup[i].disabled = true
     }
@@ -108,7 +108,7 @@ export var StarratingEditor = StringEditor.extend({
     if (!this.dependenciesFulfilled) {
       return undefined
     }
-    if (this.schema.type == 'integer') {
+    if (this.schema.type === 'integer') {
       return this.value === '' ? undefined : this.value * 1
     }
     return this.value
