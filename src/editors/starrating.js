@@ -115,6 +115,7 @@ export var StarratingEditor = StringEditor.extend({
   },
   setValue: function (val) {
     for (var i = 0; i < this.radioGroup.length; i++) {
+      // eslint-disable-next-line eqeqeq
       if (this.radioGroup[i].value == val) {
         this.radioGroup[i].checked = true
         this.value = val
