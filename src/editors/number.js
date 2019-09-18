@@ -34,6 +34,8 @@ export var NumberEditor = StringEditor.extend({
     this.setInputAttributes(['maxlength', 'pattern', 'readonly', 'min', 'max', 'step'])
   },
   sanitize: function (value) {
+    // eslint says the first escape is useless but removing it breaks e2e tests
+    // eslint-disable-next-line no-useless-escape
     return (value + '').replace(/[^0-9\.\-eE]/g, '')
   },
   getNumColumns: function () {

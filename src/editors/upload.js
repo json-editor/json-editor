@@ -15,7 +15,7 @@ export var UploadEditor = AbstractEditor.extend({
 
     // Don't show uploader if this is readonly
     if (!this.schema.readOnly && !this.schema.readonly) {
-      if (!this.jsoneditor.options.upload) throw 'Upload handler required for upload editor'
+      if (!this.jsoneditor.options.upload) throw new Error('Upload handler required for upload editor')
 
       // File uploader
       this.uploader = this.theme.getFormInputField('file')
@@ -25,6 +25,7 @@ export var UploadEditor = AbstractEditor.extend({
         e.stopPropagation()
 
         if (this.files && this.files.length) {
+          // eslint-disable-next-line no-undef
           var fr = new FileReader()
           fr.onload = function (evt) {
             self.preview_value = evt.target.result
@@ -126,6 +127,7 @@ export var UploadEditor = AbstractEditor.extend({
     })
 
     if (this.jsoneditor.options.auto_upload || this.schema.options.auto_upload) {
+      // eslint-disable-next-line no-undef
       uploadButton.dispatchEvent(new MouseEvent('click'))
       this.preview.removeChild(uploadButton)
     }
@@ -136,8 +138,8 @@ export var UploadEditor = AbstractEditor.extend({
       this._super()
     }
   },
-  disable: function (always_disabled) {
-    if (always_disabled) this.always_disabled = true
+  disable: function (alwaysDisabled) {
+    if (alwaysDisabled) this.always_disabled = true
     if (this.uploader) this.uploader.disabled = true
     this._super()
   },

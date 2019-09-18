@@ -7,7 +7,6 @@ export var EnumEditor = AbstractEditor.extend({
     return 4
   },
   build: function () {
-    var container = this.container
     this.title = this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     this.container.appendChild(this.title)
 
@@ -70,8 +69,8 @@ export var EnumEditor = AbstractEditor.extend({
       this._super()
     }
   },
-  disable: function (always_disabled) {
-    if (always_disabled) this.always_disabled = true
+  disable: function (alwaysDisabled) {
+    if (alwaysDisabled) this.always_disabled = true
     this.switcher.disabled = true
     this._super()
   },
@@ -80,9 +79,8 @@ export var EnumEditor = AbstractEditor.extend({
 
     if (el === null) {
       return '<em>null</em>'
-    }
     // Array or Object
-    else if (typeof el === 'object') {
+    } else if (typeof el === 'object') {
       // TODO: use theme
       var ret = ''
 
@@ -103,17 +101,14 @@ export var EnumEditor = AbstractEditor.extend({
       else ret = "<ul style='margin-top:0;margin-bottom:0;padding-top:0;padding-bottom:0;'>" + ret + '</ul>'
 
       return ret
-    }
     // Boolean
-    else if (typeof el === 'boolean') {
+    } else if (typeof el === 'boolean') {
       return el ? 'true' : 'false'
-    }
     // String
-    else if (typeof el === 'string') {
+    } else if (typeof el === 'string') {
       return el.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    }
     // Number
-    else {
+    } else {
       return el
     }
   },

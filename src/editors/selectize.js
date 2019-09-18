@@ -1,5 +1,5 @@
 import { SelectEditor } from './select'
-import { $extend, $each } from '../utilities'
+import { $extend } from '../utilities'
 export var SelectizeEditor = SelectEditor.extend({
 
   setValue: function (value, initial) {
@@ -24,7 +24,7 @@ export var SelectizeEditor = SelectEditor.extend({
       var self = this; var options = this.expandCallbacks('selectize', $extend({}, this.defaults.options.selectize || {}, this.options.selectize || {}))
 
       // New items are allowed if option "create" is true and type is "string"
-      this.newEnumAllowed = options.create = !!options.create && this.schema.type == 'string'
+      this.newEnumAllowed = options.create = !!options.create && this.schema.type === 'string'
 
       this.selectize_instance = (window.jQuery(this.input).selectize(options))[0].selectize
 
@@ -92,9 +92,9 @@ export var SelectizeEditor = SelectEditor.extend({
     if (!this.always_disabled && this.selectize_instance) this.selectize_instance.unlock()
     this._super()
   },
-  disable: function (always_disabled) {
+  disable: function (alwaysDisabled) {
     if (this.selectize_instance) this.selectize_instance.lock()
-    this._super(always_disabled)
+    this._super(alwaysDisabled)
   },
   destroy: function () {
     if (this.selectize_instance) {

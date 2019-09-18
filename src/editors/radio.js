@@ -41,7 +41,7 @@ export var RadioEditor = SelectEditor.extend({
       var radioLabel = this.theme.getFormRadioLabel(this.enum_display[i])
       radioLabel.htmlFor = this.input.id
 
-      var control = this.theme.getFormRadioControl(radioLabel, this.input, !!(this.options.layout == 'horizontal' || this.options.compact))
+      var control = this.theme.getFormRadioControl(radioLabel, this.input, !!(this.options.layout === 'horizontal' || this.options.compact))
 
       this.radioContainer.appendChild(control)
     }
@@ -77,8 +77,8 @@ export var RadioEditor = SelectEditor.extend({
       this._super()
     }
   },
-  disable: function (always_disabled) {
-    if (always_disabled) this.always_disabled = true
+  disable: function (alwaysDisabled) {
+    if (alwaysDisabled) this.always_disabled = true
     for (var i = 0; i < this.radioGroup.length; i++) {
       this.radioGroup[i].disabled = true
     }
@@ -96,7 +96,7 @@ export var RadioEditor = SelectEditor.extend({
   },
   setValue: function (val) {
     for (var i = 0; i < this.radioGroup.length; i++) {
-      if (this.radioGroup[i].value == val) {
+      if (this.radioGroup[i].value === val) {
         this.radioGroup[i].checked = true
         this.value = val
         this.onChange()

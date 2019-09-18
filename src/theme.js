@@ -323,7 +323,7 @@ export var AbstractTheme = Class.extend({
   getHeaderButtonHolder: function () {
     return this.getButtonHolder()
   },
-  getFormButtonHolder: function (button_align) {
+  getFormButtonHolder: function (buttonAlign) {
     return this.getButtonHolder()
   },
   getButton: function (text, icon, title) {
@@ -419,8 +419,8 @@ export var AbstractTheme = Class.extend({
     }
     return false
   },
-  insertBasicTopTab: function (tab, newTabs_holder) {
-    newTabs_holder.firstChild.insertBefore(tab, newTabs_holder.firstChild.firstChild)
+  insertBasicTopTab: function (tab, newTabsHolder) {
+    newTabsHolder.firstChild.insertBefore(tab, newTabsHolder.firstChild.firstChild)
   },
   getTab: function (span, tabId) {
     var el = document.createElement('div')
@@ -461,11 +461,11 @@ export var AbstractTheme = Class.extend({
     })
     return el
   },
-  getTabContentHolder: function (tab_holder) {
-    return tab_holder.children[1]
+  getTabContentHolder: function (tabHolder) {
+    return tabHolder.children[1]
   },
-  getTopTabContentHolder: function (tab_holder) {
-    return tab_holder.children[1]
+  getTopTabContentHolder: function (tabHolder) {
+    return tabHolder.children[1]
   },
   getTabContent: function () {
     return this.getIndentedPanel()

@@ -39,12 +39,12 @@ export var MultipleEditor = AbstractEditor.extend({
       this._super()
     }
   },
-  disable: function (always_disabled) {
-    if (always_disabled) this.always_disabled = true
+  disable: function (alwaysDisabled) {
+    if (alwaysDisabled) this.always_disabled = true
     if (this.editors) {
       for (var i = 0; i < this.editors.length; i++) {
         if (!this.editors[i]) continue
-        this.editors[i].disable(always_disabled)
+        this.editors[i].disable(alwaysDisabled)
       }
     }
     this.switcher.disabled = true
@@ -57,7 +57,7 @@ export var MultipleEditor = AbstractEditor.extend({
       this.buildChildEditor(i)
     }
 
-    var current_value = self.getValue()
+    var currentValue = self.getValue()
 
     self.type = i
 
@@ -66,7 +66,7 @@ export var MultipleEditor = AbstractEditor.extend({
     $each(self.editors, function (type, editor) {
       if (!editor) return
       if (self.type === type) {
-        if (self.keep_values) editor.setValue(current_value, true)
+        if (self.keep_values) editor.setValue(currentValue, true)
         editor.container.style.display = ''
       } else editor.container.style.display = 'none'
     })
@@ -119,8 +119,6 @@ export var MultipleEditor = AbstractEditor.extend({
     if (i !== self.type) holder.style.display = 'none'
   },
   preBuild: function () {
-    var self = this
-
     this.types = []
     this.type = 0
     this.editors = []
@@ -148,11 +146,11 @@ export var MultipleEditor = AbstractEditor.extend({
           if (typeof disallow !== 'object' || !(Array.isArray(disallow))) {
             disallow = [disallow]
           }
-          var allowed_types = []
+          var allowedTypes = []
           $each(this.types, function (i, type) {
-            if (disallow.indexOf(type) === -1) allowed_types.push(type)
+            if (disallow.indexOf(type) === -1) allowedTypes.push(type)
           })
-          this.types = allowed_types
+          this.types = allowedTypes
         }
       } else if (Array.isArray(this.schema.type)) {
         this.types = this.schema.type
@@ -184,9 +182,9 @@ export var MultipleEditor = AbstractEditor.extend({
     this.editor_holder = document.createElement('div')
     container.appendChild(this.editor_holder)
 
-    var validator_options = {}
+    var validatorOptions = {}
     if (self.jsoneditor.options.custom_validators) {
-      validator_options.custom_validators = self.jsoneditor.options.custom_validators
+      validatorOptions.custom_validators = self.jsoneditor.options.custom_validators
     }
 
     this.switcher_options = this.theme.getSwitcherOptions(this.switcher)
@@ -207,7 +205,7 @@ export var MultipleEditor = AbstractEditor.extend({
         }
       }
 
-      self.validators[i] = new Validator(self.jsoneditor, schema, validator_options, self.defaults)
+      self.validators[i] = new Validator(self.jsoneditor, schema, validatorOptions, self.defaults)
     })
 
     this.switchEditor(0)
@@ -221,9 +219,9 @@ export var MultipleEditor = AbstractEditor.extend({
     this._super()
   },
   refreshHeaderText: function () {
-    var display_text = this.getDisplayText(this.types)
+    var displayText = this.getDisplayText(this.types)
     $each(this.switcher_options, function (i, option) {
-      option.textContent = display_text[i]
+      option.textContent = displayText[i]
     })
   },
   refreshValue: function () {
@@ -232,7 +230,7 @@ export var MultipleEditor = AbstractEditor.extend({
   setValue: function (val, initial) {
     // Determine type by getting the first one that validates
     var self = this
-    var prev_type = this.type
+    var prevType = this.type
     // find the best match one
     var fitTestVal = {
       match: 0,
@@ -278,15 +276,15 @@ export var MultipleEditor = AbstractEditor.extend({
     this.type = finalI
     this.switcher.value = this.display_text[finalI]
 
-    var type_changed = this.type != prev_type
-    if (type_changed) {
+    var typeChanged = this.type !== prevType
+    if (typeChanged) {
       this.switchEditor(this.type)
     }
 
     this.editors[this.type].setValue(val, initial)
 
     this.refreshValue()
-    self.onChange(type_changed)
+    self.onChange(typeChanged)
   },
   destroy: function () {
     $each(this.editors, function (type, editor) {
@@ -301,20 +299,20 @@ export var MultipleEditor = AbstractEditor.extend({
 
     // oneOf and anyOf error paths need to remove the oneOf[i] part before passing to child editors
     if (this.oneOf || this.anyOf) {
-      var check_part = this.oneOf ? 'oneOf' : 'anyOf'
+      var checkPart = this.oneOf ? 'oneOf' : 'anyOf'
       $each(this.editors, function (i, editor) {
         if (!editor) return
-        var check = self.path + '.' + check_part + '[' + i + ']'
-        var new_errors = []
+        var check = self.path + '.' + checkPart + '[' + i + ']'
+        var newErrors = []
         $each(errors, function (j, error) {
           if (error.path === check.substr(0, error.path.length)) {
-            var new_error = $extend({}, error)
-            new_error.path = self.path + new_error.path.substr(check.length)
-            new_errors.push(new_error)
+            var newError = $extend({}, error)
+            newError.path = self.path + newError.path.substr(check.length)
+            newErrors.push(newError)
           }
         })
 
-        editor.showValidationErrors(new_errors)
+        editor.showValidationErrors(newErrors)
       })
     } else {
       $each(this.editors, function (type, editor) {

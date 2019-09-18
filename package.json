@@ -42,8 +42,8 @@
     "cp:testmocha": "codeceptjs run --steps --reporter mochawesome --invert --grep  @optional",
     "cp:fulltest": "codeceptjs run --steps",
     "cp:fulltestmocha": "codeceptjs run --steps --reporter mochawesome",
-    "eslint.fix": "eslint -c ./.eslintrc src/** --fix",
-    "eslint": "eslint -c ./.eslintrc src/**"
+    "eslint.fix": "eslint -c ./.eslintrc src/**/*.js --fix",
+    "eslint": "eslint -c ./.eslintrc src/**/*.js"
   },
   "license": "MIT",
   "engines": {

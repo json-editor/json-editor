@@ -7,7 +7,7 @@ import { $each } from '../utilities'
 export var SignatureEditor = StringEditor.extend({
 
   build: function () {
-    var self = this; var i
+    var self = this
 
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
@@ -15,8 +15,6 @@ export var SignatureEditor = StringEditor.extend({
 
     if (typeof SignaturePad === 'function') {
       // Dynamically add the required CSS the first time this editor is used
-      var styleId = 'json-editor-style-signature'
-      var styles = document.getElementById(styleId)
       this.input = this.theme.getFormInputField('hidden')
       this.container.appendChild(this.input)
 
@@ -92,9 +90,8 @@ export var SignatureEditor = StringEditor.extend({
     }
   },
   setValue: function (val) {
-    var self = this; var i
+    var self = this
     if (typeof SignaturePad === 'function') {
-      var formname = this.formname.replace(/\W/g, '')
       var sanitized = this.sanitize(val)
       if (this.value === sanitized) {
         return
@@ -103,7 +100,7 @@ export var SignatureEditor = StringEditor.extend({
       self.input.value = self.value
       self.signaturePad.clear()
       // only set contents if value != ''
-      if (val && val != '') {
+      if (val && val !== '') {
         self.signaturePad.fromDataURL(val)
       }
       self.watch_listener()
@@ -112,8 +109,7 @@ export var SignatureEditor = StringEditor.extend({
     }
   },
   destroy: function () {
-    var self = this; var i
-    var formname = this.formname.replace(/\W/g, '')
+    var self = this
     self.signaturePad.off()
     delete self.signaturePad
   }

@@ -1,7 +1,7 @@
 export var defaultTemplate = function () {
   return {
     compile: function (template) {
-      var matches = template.match(/{{\s*([a-zA-Z0-9\-_ \.]+)\s*}}/g)
+      var matches = template.match(/{{\s*([a-zA-Z0-9\-_ .]+)\s*}}/g)
       var l = matches && matches.length
 
       // Shortcut if the template contains no variables
@@ -10,7 +10,7 @@ export var defaultTemplate = function () {
       // Pre-compute the search/replace functions
       // This drastically speeds up template execution
       var replacements = []
-      var get_replacement = function (i) {
+      var getReplacement = function (i) {
         var p = matches[i].replace(/[{}]+/g, '').trim().split('.')
         var n = p.length
         var func
@@ -38,7 +38,7 @@ export var defaultTemplate = function () {
         })
       }
       for (var i = 0; i < l; i++) {
-        get_replacement(i)
+        getReplacement(i)
       }
 
       // The compiled function

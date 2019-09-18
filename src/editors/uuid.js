@@ -27,15 +27,17 @@ export var UuidEditor = AbstractEditor.extend({
     if (!this.testUuid(value)) value = this.uuid
     return value
   },
-  setValue: function (value, initial, from_template) {
+  setValue: function (value, initial, fromTemplate) {
     if (!this.testUuid(value)) value = this.uuid
     this.uuid = value
-    this._super(value, initial, from_template)
+    this._super(value, initial, fromTemplate)
   },
   getUuid: function () {
     // https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
     var d = new Date().getTime()
+    // eslint-disable-next-line no-undef
     if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+      // eslint-disable-next-line no-undef
       d += performance.now() // use high-precision timer if available
     }
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {

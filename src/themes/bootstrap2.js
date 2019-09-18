@@ -213,11 +213,11 @@ export var bootstrap2Theme = AbstractTheme.extend({
     el.appendChild(a)
     return el
   },
-  getTabContentHolder: function (tab_holder) {
-    return tab_holder.children[1]
+  getTabContentHolder: function (tabHolder) {
+    return tabHolder.children[1]
   },
-  getTopTabContentHolder: function (tab_holder) {
-    return tab_holder.children[1]
+  getTopTabContentHolder: function (tabHolder) {
+    return tabHolder.children[1]
   },
   getTabContent: function () {
     var el = document.createElement('div')

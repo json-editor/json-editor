@@ -1,9 +1,9 @@
 import { StringEditor } from './string'
-import { $extend, $each } from '../utilities'
+import { $extend } from '../utilities'
 export var SimplemdeEditor = StringEditor.extend({
 
-  setValue: function (value, initial, from_template) {
-    var res = this._super(value, initial, from_template)
+  setValue: function (value, initial, fromTemplate) {
+    var res = this._super(value, initial, fromTemplate)
     if (res !== undefined && res.changed && this.simplemde_instance) this.simplemde_instance.value(res.value)
   },
   build: function () {
@@ -47,9 +47,9 @@ export var SimplemdeEditor = StringEditor.extend({
     if (!this.always_disabled && this.simplemde_instance) this.simplemde_instance.codemirror.options.readOnly = false
     this._super()
   },
-  disable: function (always_disabled) {
+  disable: function (alwaysDisabled) {
     if (this.simplemde_instance) this.simplemde_instance.codemirror.options.readOnly = true
-    this._super(always_disabled)
+    this._super(alwaysDisabled)
   },
   destroy: function () {
     if (this.simplemde_instance) {

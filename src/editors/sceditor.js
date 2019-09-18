@@ -2,8 +2,8 @@ import { StringEditor } from './string'
 import { $extend } from '../utilities'
 export var ScEditor = StringEditor.extend({
 
-  setValue: function (value, initial, from_template) {
-    var res = this._super(value, initial, from_template)
+  setValue: function (value, initial, fromTemplate) {
+    var res = this._super(value, initial, fromTemplate)
     if (res !== undefined && res.changed && this.sceditor_instance) this.sceditor_instance.val(res.value)
   },
   build: function () {
@@ -57,9 +57,9 @@ export var ScEditor = StringEditor.extend({
     if (!this.always_disabled && this.sceditor_instance) this.sceditor_instance.readOnly(false)
     this._super()
   },
-  disable: function (always_disabled) {
+  disable: function (alwaysDisabled) {
     if (this.sceditor_instance) this.sceditor_instance.readOnly(true)
-    this._super(always_disabled)
+    this._super(alwaysDisabled)
   },
   destroy: function () {
     if (this.sceditor_instance) {

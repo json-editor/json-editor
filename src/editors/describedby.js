@@ -87,9 +87,9 @@ export var DescribedByEditor = AbstractEditor.extend({
 
     var schema = $extend({}, this.schema, this.jsoneditor.refs[ref])
 
-    var editor_class = this.jsoneditor.getEditorClass(schema, this.jsoneditor)
+    var editorClass = this.jsoneditor.getEditorClass(schema, this.jsoneditor)
 
-    var editor = this.jsoneditor.createEditor(editor_class, {
+    var editor = this.jsoneditor.createEditor(editorClass, {
       jsoneditor: this.jsoneditor,
       schema: schema,
       container: holder,
@@ -106,8 +106,6 @@ export var DescribedByEditor = AbstractEditor.extend({
     editor.postBuild()
   },
   preBuild: function () {
-    var self = this
-
     this.refs = {}
     this.editors = []
     this.currentEditor = ''
