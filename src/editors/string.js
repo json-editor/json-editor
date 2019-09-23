@@ -322,31 +322,46 @@ JSONEditor.defaults.editors.string = JSONEditor.AbstractEditor.extend({
     if(this.source_code) {      
       // WYSIWYG html and bbcode editor
       if(this.options.wysiwyg && 
-        ['html','bbcode'].indexOf(this.input_type) >= 0 && 
-        window.jQuery && window.jQuery.fn && window.jQuery.fn.sceditor
+        ['html','bbcode'].indexOf(this.input_type) >= 0
       ) {
         options = $extend({},{
           plugins: self.input_type==='html'? 'xhtml' : 'bbcode',
           emoticonsEnabled: false,
           width: '100%',
           height: 300
-        },JSONEditor.plugins.sceditor,self.options.sceditor_options||{});
+        }, JSONEditor.plugins.sceditor,self.options.sceditor_options||{});
         
-        window.jQuery(self.input).sceditor(options);
-        
-        self.sceditor_instance = window.jQuery(self.input).sceditor('instance');
-        
-        self.sceditor_instance.blur(function() {
-          // Get editor's value
-          var val = window.jQuery("<div>"+self.sceditor_instance.val()+"</div>");
-          // Remove sceditor spans/divs
-          window.jQuery('#sceditor-start-marker,#sceditor-end-marker,.sceditor-nlf',val).remove();
-          // Set the value and update
-          self.input.value = val.html();
-          self.value = self.input.value;
-          self.is_dirty = true;
-          self.onChange(true);
-        });
+        if (window.jQuery && window.jQuery.fn && window.jQuery.fn.sceditor) {
+          window.jQuery(self.input).sceditor(options);
+          
+          self.sceditor_instance = window.jQuery(self.input).sceditor('instance');
+          
+          self.sceditor_instance.blur(function() {
+            // Get editor's value
+            var val = window.jQuery("<div>"+self.sceditor_instance.val()+"</div>");
+            // Remove sceditor spans/divs
+            window.jQuery('#sceditor-start-marker,#sceditor-end-marker,.sceditor-nlf',val).remove();
+            // Set the value and update
+            self.input.value = val.html();
+            self.value = self.input.value;
+            self.is_dirty = true;
+            self.onChange(true);
+          });
+        } else if (window.sceditor) {
+          var instance = sceditor.instance(self.input);
+
+          if (instance === undefined)
+            sceditor.create(self.input, options);
+          
+          self.sceditor_instance = instance || sceditor.instance(self.input);
+
+          self.sceditor_instance.blur(function() {
+            self.value = self.sceditor_instance.val();
+            self.input.value = self.sceditor_instance.val();
+            self.is_dirty = true;
+            self.onChange(true);
+          });
+        }
       }
       // SimpleMDE for markdown (if it's loaded)
       else if (this.input_type === 'markdown' && window.SimpleMDE) {
