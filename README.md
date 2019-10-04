@@ -244,6 +244,11 @@ Here are all the available options:
     <td>If <code>true</code>, displays a dialog box with a confirmation message before node deletion.</td>
     <td><code>true</code></td>
   </tr>
+  <tr>
+    <td>object_layout</td>
+    <td>The default value of `format` for objects. If set to <code>table</code> for example, objects will use table layout if `format` is not specified.</td>
+    <td><code>normal</code></td>
+  </tr>
   </tbody>
 </table>
 
