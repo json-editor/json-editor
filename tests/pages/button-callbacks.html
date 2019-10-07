@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Button Callbacks</title>
+  <script src="../../dist/jsoneditor.js"></script>
+</head>
+<body>
+
+<textarea class="value" cols="30" rows="10"></textarea>
+<button class='get-value'>Get Value</button>
+<div class='container'></div>
+
+<script>
+  var container = document.querySelector('.container');
+  var value = document.querySelector('.value');
+
+  JSONEditor.defaults.callbacks = {
+    "button" : {
+      "button1CB" : function(jseditor,e) {
+        value.value = 'button1CB';
+        console.log('button1CB', jseditor.jsoneditor.getValue());
+      },
+      "button2CB" : function(jseditor,e) {
+        value.value = 'button2CB';
+        console.log('button2CB', jseditor.jsoneditor.getValue());
+      }
+    }
+  }
+
+  var schema = {
+    "type": "object",
+    "title": "button",
+    "required": [
+      "textinput"
+    ],
+    "properties": {
+      "textinput": {
+        "title": "Text input",
+        "type": "string",
+         "minLength": 2
+      },
+      "button1": {
+        "title": "Button 1",
+        "format": "button",
+        "options": {
+          "button": {
+            "action": "button1CB"
+          }
+        }
+      },
+      "button2": {
+        "title": "Button 2",
+        "format": "button",
+        "options": {
+          "button": {
+            "action": "button2CB",
+            "validated": true
+          }
+        }
+      }
+    }
+  };
+
+  var editor = new JSONEditor(container, {
+    schema: schema
+  });
+
+  document.querySelector('.get-value').addEventListener('click', function () {
+    value.value = JSON.stringify(editor.getValue());
+    console.log(editor.getValue());
+  });
+
+</script>
+
+</body>
+</html>

@@ -1,9 +1,13 @@
-JSONEditor.defaults.editors.integer = JSONEditor.defaults.editors.number.extend({
-  sanitize: function(value) {
-    value = value + "";
-    return value.replace(/[^0-9\-]/g,'');
+import { NumberEditor } from './number'
+
+export var IntegerEditor = NumberEditor.extend({
+
+  sanitize: function (value) {
+    value = value + ''
+    // eslint-disable-next-line no-useless-escape
+    return value.replace(/[^0-9\-]/g, '')
   },
-  getNumColumns: function() {
-    return 2;
+  getNumColumns: function () {
+    return 2
   }
-});
+})

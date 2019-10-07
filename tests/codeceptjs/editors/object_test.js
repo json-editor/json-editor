@@ -64,7 +64,10 @@ Scenario('opt in optional properties', async (I) => {
   I.amOnPage('object-required-properties.html');
 
   // if an editor type "object" is disabled, also the child editors opt-in controls will be disabled.
+  I.seeDisabledAttribute('[data-schemapath="root.object.number"] .json-editor-opt-in');
+  I.seeDisabledAttribute('[data-schemapath="root.object.boolean"] .json-editor-opt-in');
 
+  // tests merged from master 17.9.2019
   assert.equal(await I.grabAttributeFrom('[data-schemapath="root.string"] .json-editor-opt-in', 'checked'), false);
   assert.equal(await I.grabAttributeFrom('[data-schemapath="root.string"] .json-editor-opt-in', 'disabled'), false);
   assert.equal(await I.grabAttributeFrom('[name="root[string]"]', 'disabled'), 'true');
@@ -73,6 +76,7 @@ Scenario('opt in optional properties', async (I) => {
   assert.equal(await I.grabAttributeFrom('[name="root[object][number]"]', 'disabled'), 'true');
   assert.equal(await I.grabAttributeFrom('[data-schemapath="root.object.boolean"] .json-editor-opt-in', 'checked'), false);
   assert.equal(await I.grabAttributeFrom('[data-schemapath="root.object.boolean"] .json-editor-opt-in', 'disabled'), 'true');
+
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.value'), '{"number":0,"boolean":false}');
 
@@ -111,7 +115,18 @@ Scenario('opt in optional properties', async (I) => {
   assert.equal(await I.grabValueFrom('.value'), '{"string":"","number":0,"boolean":false,"array":[],"object":{"string":"","array":[]}}');
 
   // if an editor type "object" is enabled, also the child editors opt-in controls will be enabled.
+  I.dontSeeDisabledAttribute('[data-schemapath="root.object.number"] .json-editor-opt-in');
+  I.dontSeeDisabledAttribute('[data-schemapath="root.object.boolean"] .json-editor-opt-in');
 
-  assert.equal(await I.grabAttributeFrom('[data-schemapath="root.object.number"] .json-editor-opt-in', 'disabled'), false);
-  assert.equal(await I.grabAttributeFrom('[data-schemapath="root.object.boolean"] .json-editor-opt-in', 'disabled'), false);
+});
+
+Scenario('should hide but not delete additional properties, when no_additional_properties is true @optional', async (I) => {
+  I.amOnPage('object-no-additional-properties.html');
+  I.seeElement('[data-schemapath="root.name"] input');
+  I.dontSeeElement('[data-schemapath="root.age"] input');
+  I.click('.get-value');
+  let json = await I.grabValueFrom('.value');
+  let value = JSON.parse(json);
+  assert.equal(value.name, "Jeremy Dorn");
+  assert.equal(value.age, 34); // This will currently fail
 });

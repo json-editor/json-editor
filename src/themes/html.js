@@ -1,85 +1,73 @@
-JSONEditor.defaults.themes.html = JSONEditor.AbstractTheme.extend({
-  getFormInputLabel: function(text, req) {
-    var el = this._super(text, req);
-    el.style.display = 'block';
-    el.style.marginBottom = '3px';
-    el.style.fontWeight = 'bold';
-    return el;
-  },
-  getFormInputDescription: function(text) {
-    var el = this._super(text);
-    el.style.fontSize = '.8em';
-    el.style.margin = 0;
-    el.style.display = 'inline-block';
-    el.style.fontStyle = 'italic';
-    return el;
-  },
-  getIndentedPanel: function() {
-    var el = this._super();
-    el.style.border = '1px solid #ddd';
-    el.style.padding = '5px';
-    el.style.margin = '10px';
-    el.style.borderRadius = '3px';
-    return el;
-  },
-  getTopIndentedPanel: function() {
-    return this.getIndentedPanel();
-  },
-  getChildEditorHolder: function() {
-    var el = this._super();
-    el.style.marginBottom = '8px';
-    return el;
-  },
-  getHeaderButtonHolder: function() {
-    var el = this.getButtonHolder();
-    el.style.display = 'inline-block';
-    el.style.marginLeft = '10px';
-    el.style.fontSize = '.8em';
-    el.style.verticalAlign = 'middle';
-    return el;
-  },
-  getTable: function() {
-    var el = this._super();
-    el.style.borderBottom = '1px solid #ccc';
-    el.style.marginBottom = '5px';
-    return el;
-  },
-  addInputError: function(input, text) {
-    input.style.borderColor = 'red';
-    
-    if(!input.errmsg) {
-      var group = this.closest(input,'.form-control');
-      input.errmsg = document.createElement('div');
-      input.errmsg.setAttribute('class','errmsg');
-      input.errmsg.style = input.errmsg.style || {};
-      input.errmsg.style.color = 'red';
-      group.appendChild(input.errmsg);
-    }
-    else {
-      input.errmsg.style.display = 'block';
-    }
-    
-    input.errmsg.innerHTML = '';
-    input.errmsg.appendChild(document.createTextNode(text));
-  },
-  removeInputError: function(input) {
-    input.style.borderColor = '';
-    if(input.errmsg) input.errmsg.style.display = 'none';
-  },
-  getProgressBar: function() {
-    var max = 100, start = 0;
+import { AbstractTheme } from '../theme'
 
-    var progressBar = document.createElement('progress');
-    progressBar.setAttribute('max', max);
-    progressBar.setAttribute('value', start);
-    return progressBar;
+export var htmlTheme = AbstractTheme.extend({
+  /* Theme config options that allows changing various aspects of the output */
+  options: {
+    'disable_theme_rules': false
   },
-  updateProgressBar: function(progressBar, progress) {
-    if (!progressBar) return;
-    progressBar.setAttribute('value', progress);
+  /* Custom stylesheet rules. format: "selector" : "CSS rules" */
+  rules: {
+    'je-form-input-label': 'display:block;margin-bottom:3px;font-weight:bold;',
+    'je-form-input-description': 'display:inline-block;margin:0;font-size:.8em;font-style:italic;',
+    'je-indented-panel': 'padding:5px;margin:10px;border-radius:3px;border:1px solid #ddd;',
+    'je-child-editor-holder': 'margin-bottom:8px;',
+    'je-header-button-holder': 'display:inline-block;margin-left:10px;font-size:.8em;vertical-align:middle;',
+    'je-table': 'margin-bottom:5px;border-bottom:1px solid #ccc;'
   },
-  updateProgressBarUnknown: function(progressBar) {
-    if (!progressBar) return;
-    progressBar.removeAttribute('value');
+  getFormInputLabel: function (text, req) {
+    var el = this._super(text, req)
+    el.classList.add('je-form-input-label')
+    return el
+  },
+  getFormInputDescription: function (text) {
+    var el = this._super(text)
+    el.classList.add('je-form-input-label')
+    return el
+  },
+  getIndentedPanel: function () {
+    var el = this._super()
+    el.classList.add('je-indented-panel')
+    return el
+  },
+  getTopIndentedPanel: function () {
+    return this.getIndentedPanel()
+  },
+  getChildEditorHolder: function () {
+    var el = this._super()
+    el.classList.add('je-child-editor-holder')
+    return el
+  },
+  getHeaderButtonHolder: function () {
+    var el = this.getButtonHolder()
+    el.classList.add('je-header-button-holder')
+    return el
+  },
+  getTable: function () {
+    var el = this._super()
+    el.classList.add('je-table')
+    return el
+  },
+  addInputError: function (input, text) {
+    input.style.borderColor = 'red'
+
+    if (!input.errmsg) {
+      var group = this.closest(input, '.form-control')
+      input.errmsg = document.createElement('div')
+      input.errmsg.setAttribute('class', 'errmsg')
+      input.errmsg.style = input.errmsg.style || {}
+      input.errmsg.style.color = 'red'
+      group.appendChild(input.errmsg)
+    } else {
+      input.errmsg.style.display = 'block'
+    }
+
+    input.errmsg.innerHTML = ''
+    input.errmsg.appendChild(document.createTextNode(text))
+  },
+  removeInputError: function (input) {
+    if (input.style) {
+      input.style.borderColor = ''
+    }
+    if (input.errmsg) input.errmsg.style.display = 'none'
   }
-});
+})

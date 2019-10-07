@@ -1,139 +1,97 @@
-JSONEditor.defaults.editors.arraySelectize = JSONEditor.AbstractEditor.extend({
-  preBuild: function() {
-    var self = this;
-    this.enum_options = [];
-    this.enum_values = [];
-    this.enum_display = [];
-    var i;
+import { MultiSelectEditor } from '../multiselect'
+import { $extend } from '../../utilities'
+export var ArraySelectizeEditor = MultiSelectEditor.extend({
 
-    // Enum options enumerated
-    if(this.schema.items.enum) {
-      var display = this.schema.options && this.schema.options.enum_titles || [];
+  setValue: function (value, initial) {
+    if (this.selectize_instance) {
+      // Make sure we are dealing with an array of strings so we can check for strict equality
+      value = [].concat(value).map(function (e) { return e + '' })
 
-      $each(this.schema.items.enum,function(i,option) {
-        self.enum_options[i] = ""+option;
-        self.enum_display[i] = ""+(display[i] || option);
-        self.enum_values[i] = self.typecast(option);
-      });
-    }
-    // Dynamic Enum for arrays is not specified in docs
+      this.updateValue(value) // Sets this.value to sanitized value
+
+      this.selectize_instance.setValue(this.value)
+
+      this.onChange(true)
+    } else this._super(value, initial)
   },
-  build: function() {
-    this.title = this.theme.getFormInputLabel(this.getTitle(), this.isRequired());
+  afterInputReady: function () {
+    var options; var self = this
 
-    this.title_controls = this.theme.getHeaderButtonHolder();
-    this.title.appendChild(this.title_controls);
-    this.error_holder = document.createElement('div');
+    if (window.jQuery && window.jQuery.fn && window.jQuery.fn.selectize && !this.selectize_instance) {
+      // Get options, either global options from "this.defaults.options.selectize" or
+      // single property options from schema "options.selectize"
+      options = this.expandCallbacks('selectize', $extend({}, {
+        plugins: ['remove_button'],
+        delimiter: false,
+        createOnBlur: true,
+        create: true
+      }, this.defaults.options.selectize || {}, this.options.selectize || {}))
 
-    if(this.schema.description) {
-      this.description = this.theme.getDescription(this.schema.description);
-    }
+      // New items are allowed if option "create" is true and items type is "string"
+      this.newEnumAllowed = options.create = !!options.create && this.schema.items && this.schema.items.type === 'string'
 
-    this.input = this.theme.getSelectInput(this.enum_options);
-    this.input.setAttribute('multiple', 'multiple');
-    var group = this.theme.getFormControl(this.title, this.input, this.description);
+      this.selectize_instance = (window.jQuery(this.input).selectize(options))[0].selectize
 
-    this.container.appendChild(group);
-    this.container.appendChild(this.error_holder);
+      // Remove change handler set in parent class (src/multiselect.js)
+      this.control.removeEventListener('change', this.multiselectChangeHandler)
 
-    //apply global options to array selectize
-    var options = $extend({},JSONEditor.plugins.selectize);
-    if(this.schema.options && this.schema.options.selectize_options) options = $extend(options,this.schema.options.selectize_options);
-    window.jQuery(this.input).selectize($extend(options,
-      {
-        delimiter: ( options.delimiter === undefined ? false : options.delimiter),
-        createOnBlur: ( options.createOnBlur === undefined ? true : options.createOnBlur),
-        create: ( options.create === undefined ? true : options.create)
-      }));
-  },
-  postBuild: function() {
-      this._super();
-      var self = this;
-      this.input.selectize.on('change', function(event) {
-          self.refreshValue();
-          self.onChange(true);
-      });
-  },
-  destroy: function() {
-    this.empty(true);
-    if(this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title);
-    if(this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description);
-    if(this.input && this.input.parentNode) this.input.parentNode.removeChild(this.input);
-
-    this._super();
-  },
-  empty: function(hard) {},
-  setValue: function(value, initial) {
-    var self = this;
-    // Update the array's value, adding/removing rows when necessary
-    value = value || [];
-    if(!(Array.isArray(value))) value = [value];
-
-    this.input.selectize.clearOptions();
-    this.input.selectize.clear(true);
-
-    if (this.schema.items.enum && this.enum_options && this.enum_options.length > 0) {
-      var titles = this.enum_titles || [];
-      this.enum_options.forEach(function(x, idx) {
-        self.input.selectize.addOption({ text: titles[idx] || x, value: x });
-      });
-    } else {
-      value.forEach(function(item) {
-        self.input.selectize.addOption({text: item, value: item});
-      });
-    }
-    
-    this.input.selectize.setValue(value);
-
-    this.refreshValue(initial);
-  },
-  refreshValue: function(force) {
-    this.value = this.input.selectize.getValue();
-  },
-  showValidationErrors: function(errors) {
-    var self = this;
-
-    // Get all the errors that pertain to this editor
-    var my_errors = [];
-    var other_errors = [];
-    $each(errors, function(i,error) {
-      if(error.path === self.path) {
-        my_errors.push(error);
+      // Create a new change handler
+      this.multiselectChangeHandler = function (e) {
+        var value = self.selectize_instance.getValue()
+        self.updateValue(value)
+        self.onChange(true)
       }
-      else {
-        other_errors.push(error);
-      }
-    });
 
-    // Show errors for this editor
-    if(this.error_holder) {
-
-      if(my_errors.length) {
-        var message = [];
-        this.error_holder.innerHTML = '';
-        this.error_holder.style.display = '';
-        $each(my_errors, function(i,error) {
-          self.error_holder.appendChild(self.theme.getErrorMessage(error.message));
-        });
-      }
-      // Hide error area
-      else {
-        this.error_holder.style.display = 'none';
-      }
+      // Add new event handler.
+      // Note: Must use the "on()" method and not addEventListener()
+      this.selectize_instance.on('change', this.multiselectChangeHandler)
     }
+    this._super()
   },
-  typecast: function(value) {
-    if(this.schema.type === "boolean") {
-      return !!value;
+  updateValue: function (value) {
+    value = [].concat(value)
+    var changed = false; var newValue = []
+    for (var i = 0; i < value.length; i++) {
+      //      if (!this.select_options[value[i]+'']) {
+      if (!this.select_values[value[i] + '']) {
+        changed = true
+        if (this.newEnumAllowed) {
+          if (!this.addNewOption(value[i])) continue
+        } else continue
+      }
+      var sanitized = this.sanitize(this.select_values[value[i]])
+      newValue.push(sanitized)
+      if (sanitized !== value[i]) changed = true
     }
-    else if(this.schema.type === "number") {
-      return 1*value;
+    this.value = newValue
+
+    return changed
+  },
+  addNewOption: function (value) {
+    // Add new value and label
+    this.option_keys.push(value + '')
+    this.option_titles.push(value + '')
+    this.select_values[value + ''] = value
+    // Update Schema enum to prevent triggering "Value must be one of the enumerated values"
+    this.schema.items.enum.push(value)
+    // Add new value and label to selectize
+    this.selectize_instance.addOption({text: value, value: value})
+
+    return true
+  },
+  enable: function () {
+    if (!this.always_disabled && this.selectize_instance) this.selectize_instance.unlock()
+    this._super()
+  },
+  disable: function (alwaysDisabled) {
+    if (this.selectize_instance) this.selectize_instance.lock()
+    this._super(alwaysDisabled)
+  },
+  destroy: function () {
+    if (this.selectize_instance) {
+      this.selectize_instance.destroy()
+      this.selectize_instance = null
     }
-    else if(this.schema.type === "integer") {
-      return Math.floor(value*1);
-    }
-    else {
-      return ""+value;
-    }
+    this._super()
   }
-});
+})

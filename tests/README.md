@@ -23,6 +23,20 @@ $ codeceptjs run
 
 Tests whose `Scenario` string contains the tag `@optional` will be ignored by the automated build process.
 
+
+### Development
+
+To watch changes, eg. while development or fixing code you can run
+
+```
+docker-compose run --rm node bash
+
+$ npm start
+```
+
+which effectively runs the Webpack development server in your project
+
+
 ### References
 
 - CodeceptJS - https://codecept.io

@@ -1,363 +1,106 @@
-JSONEditor.defaults.editors.selectize = JSONEditor.AbstractEditor.extend({
-  setValue: function(value,initial) {
-    value = this.typecast(value||'');
+import { SelectEditor } from './select'
+import { $extend } from '../utilities'
+export var SelectizeEditor = SelectEditor.extend({
 
-    // Sanitize value before setting it
-    var sanitized = value;
-    if(this.enum_values.indexOf(sanitized) < 0) {
-      sanitized = this.enum_values[0];
-    }
+  setValue: function (value, initial) {
+    if (this.selectize_instance) {
+      if (initial) this.is_dirty = false
+      else if (this.jsoneditor.options.show_errors === 'change') this.is_dirty = true
 
-    if(this.value === sanitized) {
-      return;
-    }
+      var sanitized = this.updateValue(value) // Sets this.value to sanitized value
 
-    this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)];
+      this.input.value = sanitized
 
-    if(this.selectize) {
-      this.selectize[0].selectize.addItem(sanitized);
-    }
+      this.selectize_instance.clear(true)
+      this.selectize_instance.setValue(sanitized)
 
-    this.value = sanitized;
-    this.onChange();
+      this.onChange(true)
+    } else this._super(value, initial)
   },
-  register: function() {
-    this._super();
-    if(!this.input) return;
-    this.input.setAttribute('name',this.formname);
-  },
-  unregister: function() {
-    this._super();
-    if(!this.input) return;
-    this.input.removeAttribute('name');
-  },
-  getNumColumns: function() {
-    if(!this.enum_options) return 3;
-    var longest_text = this.getTitle().length;
-    for(var i=0; i<this.enum_options.length; i++) {
-      longest_text = Math.max(longest_text,this.enum_options[i].length+4);
-    }
-    return Math.min(12,Math.max(longest_text/7,2));
-  },
-  typecast: function(value) {
-    if(this.schema.type === "boolean") {
-      return !!value;
-    }
-    else if(this.schema.type === "number") {
-      return 1*value;
-    }
-    else if(this.schema.type === "integer") {
-      return Math.floor(value*1);
-    }
-    else {
-      return ""+value;
-    }
-  },
-  getValue: function() {
-    if (!this.dependenciesFulfilled) {
-      return undefined;
-    }
-    return this.value;
-  },
-  preBuild: function() {
-    var self = this;
-    this.input_type = 'select';
-    this.enum_options = [];
-    this.enum_values = [];
-    this.enum_display = [];
-    var i;
+  afterInputReady: function () {
+    if (window.jQuery && window.jQuery.fn && window.jQuery.fn.selectize && !this.selectize_instance) {
+      // Get options, either global options from "this.defaults.options.selectize" or
+      // single property options from schema "options.selectize"
+      var self = this; var options = this.expandCallbacks('selectize', $extend({}, this.defaults.options.selectize || {}, this.options.selectize || {}))
 
-    // Enum options enumerated
-    if(this.schema.enum) {
-      var display = this.schema.options && this.schema.options.enum_titles || [];
+      // New items are allowed if option "create" is true and type is "string"
+      this.newEnumAllowed = options.create = !!options.create && this.schema.type === 'string'
 
-      $each(this.schema.enum,function(i,option) {
-        self.enum_options[i] = ""+option;
-        self.enum_display[i] = ""+(display[i] || option);
-        self.enum_values[i] = self.typecast(option);
-      });
-    }
-    // Boolean
-    else if(this.schema.type === "boolean") {
-      self.enum_display = this.schema.options && this.schema.options.enum_titles || ['true','false'];
-      self.enum_options = ['1','0'];
-      self.enum_values = [true,false];
-    }
-    // Dynamic Enum
-    else if(this.schema.enumSource) {
-      this.enumSource = [];
-      this.enum_display = [];
-      this.enum_options = [];
-      this.enum_values = [];
+      this.selectize_instance = (window.jQuery(this.input).selectize(options))[0].selectize
 
-      // Shortcut declaration for using a single array
-      if(!(Array.isArray(this.schema.enumSource))) {
-        if(this.schema.enumValue) {
-          this.enumSource = [
-            {
-              source: this.schema.enumSource,
-              value: this.schema.enumValue
-            }
-          ];
-        }
-        else {
-          this.enumSource = [
-            {
-              source: this.schema.enumSource
-            }
-          ];
-        }
-      }
-      else {
-        for(i=0; i<this.schema.enumSource.length; i++) {
-          // Shorthand for watched variable
-          if(typeof this.schema.enumSource[i] === "string") {
-            this.enumSource[i] = {
-              source: this.schema.enumSource[i]
-            };
-          }
-          // Make a copy of the schema
-          else if(!(Array.isArray(this.schema.enumSource[i]))) {
-            this.enumSource[i] = $extend({},this.schema.enumSource[i]);
-          }
-          else {
-            this.enumSource[i] = this.schema.enumSource[i];
-          }
-        }
+      // Remove change handler set in parent class (src/multiselect.js)
+      this.control.removeEventListener('change', this.multiselectChangeHandler)
+
+      // Create a new change handler
+      this.multiselectChangeHandler = function (value) {
+        // var value = self.selectize_instance.getValue(true);
+        // self.value = value;
+        self.updateValue(value)
+        self.onChange(true)
       }
 
-      // Now, enumSource is an array of sources
-      // Walk through this array and fix up the values
-      for(i=0; i<this.enumSource.length; i++) {
-        if(this.enumSource[i].value) {
-          this.enumSource[i].value = this.jsoneditor.compileTemplate(this.enumSource[i].value, this.template_engine);
-        }
-        if(this.enumSource[i].title) {
-          this.enumSource[i].title = this.jsoneditor.compileTemplate(this.enumSource[i].title, this.template_engine);
-        }
-        if(this.enumSource[i].filter) {
-          this.enumSource[i].filter = this.jsoneditor.compileTemplate(this.enumSource[i].filter, this.template_engine);
-        }
+      // Add new event handler.
+      // Note: Must use the "on()" method and not addEventListener()
+      this.selectize_instance.on('change', this.multiselectChangeHandler)
+    }
+    this._super()
+  },
+  updateValue: function (value) {
+    var sanitized = this.enum_values[0]
+    value = this.typecast(value || '')
+    if (this.enum_values.indexOf(value) === -1) {
+      if (this.newEnumAllowed) {
+        sanitized = this.addNewOption(value) ? value : sanitized
       }
+    } else sanitized = value
+    this.value = sanitized
+    return sanitized
+  },
+  addNewOption: function (value) {
+    var sanitized = this.typecast(value); var res = false
+
+    if (this.enum_values.indexOf(sanitized) < 0 && sanitized !== '') {
+      // Add to list of valid enum values
+      this.enum_options.push('' + sanitized)
+      this.enum_display.push('' + sanitized)
+      this.enum_values.push(sanitized)
+      // Update Schema enum to prevent triggering error
+      // "Value must be one of the enumerated values"
+      this.schema.enum.push(sanitized)
+
+      // Add selectize item
+      this.selectize_instance.addItem(sanitized)
+      this.selectize_instance.refreshOptions(false)
+
+      res = true
     }
-    // Other, not supported
-    else {
-      throw "'select' editor requires the enum property to be set.";
+    return res
+  },
+  onWatchedFieldChange: function () {
+    this._super()
+    if (this.selectize_instance) {
+      var self = this
+      this.selectize_instance.clear(true) // Clear selection
+      this.selectize_instance.clearOptions(true) // Remove all options
+      this.enum_options.forEach(function (value, i) {
+        self.selectize_instance.addOption({value: value, text: self.enum_display[i]})
+      })
+      this.selectize_instance.addItem(this.value + '', true) // Set new selection
     }
   },
-  build: function() {
-    var self = this;
-    if(!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired());
-    if(this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description);
-    if(this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText);
-
-    if(this.options.compact) this.container.classList.add('compact');
-
-    this.input = this.theme.getSelectInput(this.enum_options);
-    this.theme.setSelectOptions(this.input,this.enum_options,this.enum_display);
-
-    if(this.schema.readOnly || this.schema.readonly) {
-      this.always_disabled = true;
-      this.input.disabled = true;
-    }
-
-    this.input.addEventListener('change',function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      self.onInputChange();
-    });
-
-    this.control = this.theme.getFormControl(this.label, this.input, this.description, this.infoButton);
-    this.container.appendChild(this.control);
-
-    this.value = this.enum_values[0];
+  enable: function () {
+    if (!this.always_disabled && this.selectize_instance) this.selectize_instance.unlock()
+    this._super()
   },
-  onInputChange: function() {
-    //console.log("onInputChange");
-    var val = this.input.value;
-
-    var sanitized = val;
-    if(this.enum_options.indexOf(val) === -1) {
-      sanitized = this.enum_options[0];
-    }
-
-    //this.value = this.enum_values[this.enum_options.indexOf(val)];
-    this.value = val;
-    this.onChange(true);
+  disable: function (alwaysDisabled) {
+    if (this.selectize_instance) this.selectize_instance.lock()
+    this._super(alwaysDisabled)
   },
-  setupSelectize: function() {
-    // If the Selectize library is loaded use it when we have lots of items
-    var self = this;
-    if(window.jQuery && window.jQuery.fn && window.jQuery.fn.selectize && !(this.schema.options && this.schema.options.disable_selectize) && (this.enum_options.length >= 2 || (this.enum_options.length && this.enumSource))) {
-      var options = $extend({},JSONEditor.plugins.selectize);
-      if(this.schema.options && this.schema.options.selectize_options) options = $extend(options,this.schema.options.selectize_options);
-      this.selectize = window.jQuery(this.input).selectize($extend(options,
-      {
-        // set the create option to true by default, or to the user specified value if defined
-        create: ( options.create === undefined ? true : options.create),
-        onChange : function() {
-          self.onInputChange();
-        }
-      }));
+  destroy: function () {
+    if (this.selectize_instance) {
+      this.selectize_instance.destroy()
+      this.selectize_instance = null
     }
-    else {
-      this.selectize = null;
-    }
-  },
-  postBuild: function() {
-    this._super();
-    this.theme.afterInputReady(this.input);
-    this.setupSelectize();
-  },
-  onWatchedFieldChange: function() {
-    var self = this, vars, j;
-
-    // If this editor uses a dynamic select box
-    if(this.enumSource) {
-      vars = this.getWatchedFieldValues();
-      var select_options = [];
-      var select_titles = [];
-
-      for(var i=0; i<this.enumSource.length; i++) {
-        // Constant values
-        if(Array.isArray(this.enumSource[i])) {
-          select_options = select_options.concat(this.enumSource[i]);
-          select_titles = select_titles.concat(this.enumSource[i]);
-        }
-        // A watched field
-        else if(vars[this.enumSource[i].source]) {
-          var items = vars[this.enumSource[i].source];
-
-          // Only use a predefined part of the array
-          if(this.enumSource[i].slice) {
-            items = Array.prototype.slice.apply(items,this.enumSource[i].slice);
-          }
-          // Filter the items
-          if(this.enumSource[i].filter) {
-            var new_items = [];
-            for(j=0; j<items.length; j++) {
-              if(this.enumSource[i].filter({i:j,item:items[j]})) new_items.push(items[j]);
-            }
-            items = new_items;
-          }
-
-          var item_titles = [];
-          var item_values = [];
-          for(j=0; j<items.length; j++) {
-            var item = items[j];
-
-            // Rendered value
-            if(this.enumSource[i].value) {
-              item_values[j] = this.enumSource[i].value({
-                i: j,
-                item: item
-              });
-            }
-            // Use value directly
-            else {
-              item_values[j] = items[j];
-            }
-
-            // Rendered title
-            if(this.enumSource[i].title) {
-              item_titles[j] = this.enumSource[i].title({
-                i: j,
-                item: item
-              });
-            }
-            // Use value as the title also
-            else {
-              item_titles[j] = item_values[j];
-            }
-          }
-
-          // TODO: sort
-
-          select_options = select_options.concat(item_values);
-          select_titles = select_titles.concat(item_titles);
-        }
-      }
-
-      var prev_value = this.value;
-
-      // Check to see if this item is in the list
-      // Note: We have to skip empty string for watch lists to work properly
-      if ((prev_value !== undefined) && (prev_value !== "") && (select_options.indexOf(prev_value) === -1)) {
-        // item is not in the list. Add it.
-        select_options = select_options.concat(prev_value);
-        select_titles = select_titles.concat(prev_value);
-      }
-
-      this.theme.setSelectOptions(this.input, select_options, select_titles);
-      this.enum_options = select_options;
-      this.enum_display = select_titles;
-      this.enum_values = select_options;
-
-      // If the previous value is still in the new select options, stick with it
-      if(select_options.indexOf(prev_value) !== -1) {
-        this.input.value = prev_value;
-        this.value = prev_value;
-      }
-
-      // Otherwise, set the value to the first select option
-      else {
-        this.input.value = select_options[0];
-        this.value = select_options[0] || "";
-        if(this.parent) this.parent.onChildEditorChange(this);
-        else this.jsoneditor.onChange();
-        this.jsoneditor.notifyWatchers(this.path);
-      }
-
-      if(this.selectize) {
-        // Update the Selectize options
-        this.updateSelectizeOptions(select_options);
-      }
-      else {
-        this.setupSelectize();
-      }
-
-      this._super();
-    }
-  },
-  updateSelectizeOptions: function(select_options) {
-    var selectized = this.selectize[0].selectize,
-        self = this;
-
-    selectized.off();
-    selectized.clearOptions();
-    for(var n in select_options) {
-      selectized.addOption({value:select_options[n],text:select_options[n]});
-    }
-    selectized.addItem(this.value);
-    selectized.on('change',function() {
-      self.onInputChange();
-    });
-  },
-  enable: function() {
-    if(!this.always_disabled) {
-      this.input.disabled = false;
-      if(this.selectize) {
-        this.selectize[0].selectize.unlock();
-      }
-      this._super();
-    }
-  },
-  disable: function(always_disabled) {
-    if(always_disabled) this.always_disabled = true;
-    this.input.disabled = true;
-    if(this.selectize) {
-      this.selectize[0].selectize.lock();
-    }
-    this._super();
-  },
-  destroy: function() {
-    if(this.label && this.label.parentNode) this.label.parentNode.removeChild(this.label);
-    if(this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description);
-    if(this.input && this.input.parentNode) this.input.parentNode.removeChild(this.input);
-    if(this.selectize) {
-      this.selectize[0].selectize.destroy();
-      this.selectize = null;
-    }
-    this._super();
+    this._super()
   }
-});
+})

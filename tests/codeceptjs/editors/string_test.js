@@ -13,9 +13,9 @@ Scenario('should have coerent values', async (I) => {
   I.click('Add item');
   I.see('item 1');
   I.seeElement('.ace_editor');
-
   I.click('.ace_editor');
   I.pressKey('__YELLOW__');
+  I.click('.ace_editor');
   I.see('__YELLOW__');
 
   I.click('.get-value');
@@ -67,6 +67,7 @@ Scenario('Should work correctly in arrays @optional', async (I) => {
   I.switchTo(1);
   I.click('body');
   I.pressKey('__BLUE__');
+
   I.see('__BLUE__');
   I.switchTo();
 
@@ -98,12 +99,19 @@ Scenario('Should work correctly in arrays @optional', async (I) => {
 
 Scenario('should be readonly if specified and not disabled', async (I) => {
   I.amOnPage('read-only.html');
-  I.seeElement('[name="root[string]"]');
-  assert.equal(await I.grabAttributeFrom('[name="root[string]"]', 'readonly'), 'true');
+  I.seeReadOnlyAttribute('[name="root[string]"]');
 });
 
 Scenario('should have a custom attribute with custom value', async (I) => {
   I.amOnPage('string-custom-attributes.html');
   I.seeElement('[name="root[custom_attributes]"]');
   assert.equal(await I.grabAttributeFrom('[name="root[custom_attributes]"]', 'custom-attribute'), 'custom-value');
+});
+
+Scenario('should work with cleave.js library', async (I) => {
+  I.amOnPage('string-cleave.html');
+  I.seeElement('[name="root[cleave_test]"]');
+  await I.fillField('[name="root[cleave_test]"]', '12345678901234567890');
+  I.click('.get-value');
+  assert.equal(await I.grabValueFrom('.debug'), JSON.stringify({"cleave_test":"1234.567.890-1234"}));
 });

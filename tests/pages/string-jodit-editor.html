@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>string-jodit-editor</title>
+
+  <!-- json editor -->
+  <script src="../../dist/jsoneditor.js"></script>
+
+  <!-- jodit-editor -->
+  <script src="./../../node_modules/jodit/build/jodit.min.js"></script>
+  <link rel="stylesheet" href="./../../node_modules/jodit/build/jodit.min.css" />
+</head>
+<body>
+
+<textarea class="debug" cols="30" rows="10"></textarea>
+<button class='get-value'>Get Value</button>
+<div class='container'></div>
+
+<script>
+  var container = document.querySelector('.container');
+  var debug = document.querySelector('.debug');
+
+  var schema = {
+    "type": "array",
+    "title": "string-jodit-editor",
+    "items": {
+      "type": "object",
+      "properties": {
+        "editor": {
+          "type": "string",
+          "format": "jodit"
+        }
+      }
+    }
+  };
+
+  var editor = new JSONEditor(container, {
+    schema: schema
+  });
+
+  document.querySelector('.get-value').addEventListener('click', function () {
+    debug.value = JSON.stringify(editor.getValue());
+  });
+
+</script>
+
+</body>
+</html>
