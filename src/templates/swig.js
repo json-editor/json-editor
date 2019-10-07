@@ -1,3 +1,3 @@
-JSONEditor.defaults.templates.swig = function() {
-  return window.swig;
-};
+export var swigTemplate = function () {
+  return window.swig
+}

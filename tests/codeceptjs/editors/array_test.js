@@ -64,36 +64,33 @@ Scenario('should array editing triggers', async (I) => {
   assert.equal(await I.grabValueFrom('.debug'), '["A","B"]');
 
   I.click('.json-editor-btn-moveup');
-  I.seeInPopup('moveRow');
-  I.acceptPopup();
+  assert.equal(await I.grabValueFrom('.action'), 'moveRow');
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.debug'), '["B","A"]');
 
   I.click('.json-editor-btn-movedown');
-  I.seeInPopup('moveRow');
-  I.acceptPopup();
+  assert.equal(await I.grabValueFrom('.action'), 'moveRow');
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.debug'), '["A","B"]');
 
   I.click('.json-editor-btntype-add');
-  I.seeInPopup('addRow');
-  I.acceptPopup();
+  assert.equal(await I.grabValueFrom('.action'), 'addRow');
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.debug'), '["A","B",""]');
 
+  I.amAcceptingPopups();
   I.click('.json-editor-btntype-deletelast');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
-  I.seeInPopup('deleteRow');
-  I.acceptPopup();
+  assert.equal(await I.grabValueFrom('.action'), 'deleteRow');
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.debug'), '["A","B"]');
 
+  I.amAcceptingPopups();
   I.click('.json-editor-btntype-deleteall');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
-  I.seeInPopup('deleteAllRows');
-  I.acceptPopup();
+  assert.equal(await I.grabValueFrom('.action'), 'deleteAllRows');
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.debug'), '[]');
 });
@@ -127,10 +124,12 @@ Scenario('should work well with string editors', async (I) => {
 
   // delete single
   I.see('String 5');
+  I.amCancellingPopups();
   I.click('[data-schemapath="root.4"] .delete');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('String 5');
+  I.amAcceptingPopups();
   I.click('[data-schemapath="root.4"] .delete');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -138,10 +137,12 @@ Scenario('should work well with string editors', async (I) => {
 
   // delete last
   I.see('String 4');
+  I.amCancellingPopups();
   I.click('Delete Last String');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('String 4');
+  I.amAcceptingPopups();
   I.click('Delete Last String');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -151,12 +152,14 @@ Scenario('should work well with string editors', async (I) => {
   I.see('String 1');
   I.see('String 2');
   I.see('String 3');
+  I.amCancellingPopups();
   I.click('Delete All');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('String 1');
   I.see('String 2');
   I.see('String 3');
+  I.amAcceptingPopups();
   I.click('Delete All');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -194,10 +197,12 @@ Scenario('should work well with number editors', async (I) => {
 
   // delete single
   I.see('Number 5');
+  I.amCancellingPopups();
   I.click('[data-schemapath="root.4"] .delete');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Number 5');
+  I.amAcceptingPopups();
   I.click('[data-schemapath="root.4"] .delete');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -205,10 +210,12 @@ Scenario('should work well with number editors', async (I) => {
 
   // delete last
   I.see('Number 4');
+  I.amCancellingPopups();
   I.click('Delete Last Number');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Number 4');
+  I.amAcceptingPopups();
   I.click('Delete Last Number');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -218,12 +225,14 @@ Scenario('should work well with number editors', async (I) => {
   I.see('Number 1');
   I.see('Number 2');
   I.see('Number 3');
+  I.amCancellingPopups();
   I.click('Delete All');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Number 1');
   I.see('Number 2');
   I.see('Number 3');
+  I.amAcceptingPopups();
   I.click('Delete All');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -261,10 +270,12 @@ Scenario('should work well with integer editors', async (I) => {
 
   // delete single
   I.see('Integer 5');
+  I.amCancellingPopups();
   I.click('[data-schemapath="root.4"] .delete');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Integer 5');
+  I.amAcceptingPopups();
   I.click('[data-schemapath="root.4"] .delete');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -272,10 +283,12 @@ Scenario('should work well with integer editors', async (I) => {
 
   // delete last
   I.see('Integer 4');
+  I.amCancellingPopups();
   I.click('Delete Last Integer');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Integer 4');
+  I.amAcceptingPopups();
   I.click('Delete Last Integer');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -285,12 +298,14 @@ Scenario('should work well with integer editors', async (I) => {
   I.see('Integer 1');
   I.see('Integer 2');
   I.see('Integer 3');
+  I.amCancellingPopups();
   I.click('Delete All');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Integer 1');
   I.see('Integer 2');
   I.see('Integer 3');
+  I.amAcceptingPopups();
   I.click('Delete All');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -320,10 +335,12 @@ Scenario('should work well with select editors', async (I) => {
   I.click('Add Select');
   I.click('Add Select');
   I.see('Select 5');
+  I.amCancellingPopups();
   I.click('[data-schemapath="root.4"] .delete');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Select 5');
+  I.amAcceptingPopups();
   I.click('[data-schemapath="root.4"] .delete');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -331,10 +348,12 @@ Scenario('should work well with select editors', async (I) => {
 
   // delete last
   I.see('Select 4');
+  I.amCancellingPopups();
   I.click('Delete Last Select');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Select 4');
+  I.amAcceptingPopups();
   I.click('Delete Last Select');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -344,12 +363,14 @@ Scenario('should work well with select editors', async (I) => {
   I.see('Select 1');
   I.see('Select 2');
   I.see('Select 3');
+  I.amCancellingPopups();
   I.click('Delete All');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Select 1');
   I.see('Select 2');
   I.see('Select 3');
+  I.amAcceptingPopups();
   I.click('Delete All');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -387,10 +408,12 @@ Scenario('should work well with checkbox editors', async (I) => {
 
   // delete single
   I.see('Checkbox 5');
+  I.amCancellingPopups();
   I.click('[data-schemapath="root.4"] .delete');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Checkbox 5');
+  I.amAcceptingPopups();
   I.click('[data-schemapath="root.4"] .delete');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -398,10 +421,12 @@ Scenario('should work well with checkbox editors', async (I) => {
 
   // delete last
   I.see('Checkbox 4');
+  I.amCancellingPopups();
   I.click('Delete Last Checkbox');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Checkbox 4');
+  I.amAcceptingPopups();
   I.click('Delete Last Checkbox');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -411,12 +436,14 @@ Scenario('should work well with checkbox editors', async (I) => {
   I.see('Checkbox 1');
   I.see('Checkbox 2');
   I.see('Checkbox 3');
+  I.amCancellingPopups();
   I.click('Delete All');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Checkbox 1');
   I.see('Checkbox 2');
   I.see('Checkbox 3');
+  I.amAcceptingPopups();
   I.click('Delete All');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -444,10 +471,12 @@ Scenario('should work well with rating editors', async (I) => {
 
   // delete single
   I.see('Rating 5');
+  I.amCancellingPopups();
   I.click('[data-schemapath="root.4"] .delete');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Rating 5');
+  I.amAcceptingPopups();
   I.click('[data-schemapath="root.4"] .delete');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -455,10 +484,12 @@ Scenario('should work well with rating editors', async (I) => {
 
   // delete last
   I.see('Rating 4');
+  I.amCancellingPopups();
   I.click('Delete Last Rating');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Rating 4');
+  I.amAcceptingPopups();
   I.click('Delete Last Rating');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -468,12 +499,14 @@ Scenario('should work well with rating editors', async (I) => {
   I.see('Rating 1');
   I.see('Rating 2');
   I.see('Rating 3');
+  I.amCancellingPopups();
   I.click('Delete All');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Rating 1');
   I.see('Rating 2');
   I.see('Rating 3');
+  I.amAcceptingPopups();
   I.click('Delete All');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -511,10 +544,12 @@ Scenario('should work well with multiselect editors', async (I) => {
 
   // delete single
   I.see('Multiselect 5');
+  I.amCancellingPopups();
   I.click('[data-schemapath="root.4"] .delete');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Multiselect 5');
+  I.amAcceptingPopups();
   I.click('[data-schemapath="root.4"] .delete');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -522,6 +557,7 @@ Scenario('should work well with multiselect editors', async (I) => {
 
   // delete last
   I.see('Multiselect 4');
+  I.amCancellingPopups();
   I.click('Delete Last Multiselect');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
@@ -535,12 +571,14 @@ Scenario('should work well with multiselect editors', async (I) => {
   I.see('Multiselect 1');
   I.see('Multiselect 2');
   I.see('Multiselect 3');
+  I.amCancellingPopups();
   I.click('Delete All');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Multiselect 1');
   I.see('Multiselect 2');
   I.see('Multiselect 3');
+  I.amAcceptingPopups();
   I.click('Delete All');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -578,10 +616,12 @@ Scenario('should work well with object editors', async (I) => {
 
   // delete single
   I.see('Object 5');
+  I.amCancellingPopups();
   I.click('[data-schemapath="root.4"] .delete');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Object 5');
+  I.amAcceptingPopups();
   I.click('[data-schemapath="root.4"] .delete');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -589,10 +629,12 @@ Scenario('should work well with object editors', async (I) => {
 
   // delete last
   I.see('Object 4');
+  I.amCancellingPopups();
   I.click('Delete Last Object');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Object 4');
+  I.amAcceptingPopups();
   I.click('Delete Last Object');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -602,12 +644,14 @@ Scenario('should work well with object editors', async (I) => {
   I.see('Object 1');
   I.see('Object 2');
   I.see('Object 3');
+  I.amCancellingPopups();
   I.click('Delete All');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Object 1');
   I.see('Object 2');
   I.see('Object 3');
+  I.amAcceptingPopups();
   I.click('Delete All');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -649,10 +693,12 @@ Scenario('should work well with nested array editors', async (I) => {
 
   // delete single
   I.see('Array 5');
+  I.amCancellingPopups();
   I.click('[data-schemapath="root.4"] .delete');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Array 5');
+  I.amAcceptingPopups();
   I.click('[data-schemapath="root.4"] .delete');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -660,10 +706,12 @@ Scenario('should work well with nested array editors', async (I) => {
 
   // delete last
   I.see('Array 4');
+  I.amCancellingPopups();
   I.click('Delete Last Array');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.cancelPopup();
   I.see('Array 4');
+  I.amAcceptingPopups();
   I.click('Delete Last Array');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
@@ -676,6 +724,7 @@ Scenario('should work well with nested array editors', async (I) => {
   // there are hidden "Delete All" buttons right now and "I.click(Delete All)"
   // will attempt to click the first match. It fails because is hidden.
   // this is why i use this script. is more flexible.
+  I.amCancellingPopups();
   I.executeScript(function() {
     var e = document.querySelectorAll('.json-editor-btn-delete');
     e[e.length - 1].click();
@@ -685,6 +734,7 @@ Scenario('should work well with nested array editors', async (I) => {
   I.see('Array 1');
   I.see('Array 2');
   I.see('Array 3');
+  I.amAcceptingPopups();
   I.executeScript(function() {
     var e = document.querySelectorAll('.json-editor-btn-delete');
     e[e.length - 1].click();
@@ -738,10 +788,12 @@ Scenario('should work well with nested array editors', async (I) => {
   // delete single (fifth) element from every string array
   for (let i = 0; i < 5; i++) {
     I.see('String 5', '[data-schemapath="root.' + i + '"]');
+    I.amCancellingPopups();
     I.click('[data-schemapath="root.' + i + '.4"] .delete');
     I.seeInPopup('Are you sure you want to remove this node?');
     I.cancelPopup();
     I.see('String 5', '[data-schemapath="root.' + i + '"]');
+    I.amAcceptingPopups();
     I.click('[data-schemapath="root.' + i + '.4"] .delete');
     I.seeInPopup('Are you sure you want to remove this node?');
     I.acceptPopup();
@@ -754,10 +806,12 @@ Scenario('should work well with nested array editors', async (I) => {
   // delete last (fourth) element from every string array
   for (let i = 0; i < 5; i++) {
     I.see('String 4', '[data-schemapath="root.' + i + '"]');
+    I.amCancellingPopups();
     I.click('Delete Last String', '[data-schemapath="root.' + i + '"]');
     I.seeInPopup('Are you sure you want to remove this node?');
     I.cancelPopup();
     I.see('String 4', '[data-schemapath="root.' + i + '"]');
+    I.amAcceptingPopups();
     I.click('Delete Last String', '[data-schemapath="root.' + i + '"]');
     I.seeInPopup('Are you sure you want to remove this node?');
     I.acceptPopup();
@@ -772,12 +826,14 @@ Scenario('should work well with nested array editors', async (I) => {
     I.see('String 1', '[data-schemapath="root.' + i + '"]');
     I.see('String 2', '[data-schemapath="root.' + i + '"]');
     I.see('String 3', '[data-schemapath="root.' + i + '"]');
+    I.amCancellingPopups();
     I.click('Delete All', '[data-schemapath="root.' + i + '"]');
     I.seeInPopup('Are you sure you want to remove this node?');
     I.cancelPopup();
     I.see('String 1', '[data-schemapath="root.' + i + '"]');
     I.see('String 2', '[data-schemapath="root.' + i + '"]');
     I.see('String 3', '[data-schemapath="root.' + i + '"]');
+    I.amAcceptingPopups();
     I.click('Delete All', '[data-schemapath="root.' + i + '"]');
     I.seeInPopup('Are you sure you want to remove this node?');
     I.acceptPopup();

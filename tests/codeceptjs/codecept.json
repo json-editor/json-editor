@@ -8,6 +8,9 @@
       "browser": "firefox",
       "host": "firefox",
       "smartWait": 5000
+    },
+    "customHelpers": {
+      "require": "./../../config/codeceptjs_helpers.js"
     }
   },
   "include": {

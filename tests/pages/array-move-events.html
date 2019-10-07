@@ -7,12 +7,14 @@
 <body>
 
 <textarea class="debug" cols="30" rows="10"></textarea>
+<textarea class="action" cols="30" rows="5"></textarea>
 <button class='get-value'>Get Value</button>
 <div class='container'></div>
 
 <script>
   var container = document.querySelector('.container');
   var debug = document.querySelector('.debug');
+  var action = document.querySelector('.action');
   var schema = {
     "type": "array",
     "title": "Strings",
@@ -33,22 +35,22 @@
   editor.setValue(["A","B"]);
 
   editor.on('moveRow', function () {
-    alert('moveRow')
-    console.log('moveRow')
+    action.value = 'moveRow';
+    console.log('moveRow');
   });
 
   editor.on('addRow', function () {
-    alert('addRow')
+    action.value = 'addRow'
     console.log('addRow')
   });
 
   editor.on('deleteRow', function () {
-    alert('deleteRow')
+    action.value = 'deleteRow'
     console.log('deleteRow')
   });
 
   editor.on('deleteAllRows', function () {
-    alert('deleteAllRows')
+    action.value = 'deleteAllRows'
     console.log('deleteAllRows')
   });
 

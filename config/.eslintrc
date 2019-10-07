@@ -1,0 +1,7 @@
+{
+  "extends":"../.eslintrc",  
+  "rules":
+  {
+    "no-undef":"off"
+  }
+}

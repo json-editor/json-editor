@@ -1,8 +1,10 @@
-JSONEditor.defaults.iconlibs.jqueryui = JSONEditor.AbstractIconLib.extend({
+import { AbstractIconLib } from '../iconlib'
+
+export var jqueryuiIconlib = AbstractIconLib.extend({
   mapping: {
     collapse: 'triangle-1-s',
     expand: 'triangle-1-e',
-    "delete": 'trash',
+    'delete': 'trash',
     edit: 'pencil',
     add: 'plusthick',
     cancel: 'closethick',
@@ -14,4 +16,4 @@ JSONEditor.defaults.iconlibs.jqueryui = JSONEditor.AbstractIconLib.extend({
     calendar: 'calendar'
   },
   icon_prefix: 'ui-icon ui-icon-'
-});
+})

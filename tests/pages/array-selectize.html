@@ -4,8 +4,8 @@
   <meta charset="utf-8"/>
   <script src="../../dist/jsoneditor.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/js/standalone/selectize.js"></script>
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/css/selectize.bootstrap3.css">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/standalone/selectize.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/css/selectize.bootstrap3.css">
 </head>
 <body>
 
@@ -14,7 +14,6 @@
 <div class='container'></div>
 
 <script>
-  JSONEditor.plugins.selectize.enable = true;
   var container = document.querySelector('.container');
   var debug = document.querySelector('.debug');
   var schema = {
@@ -22,7 +21,7 @@
     "title": "Selectize Arrays",
     "items": {
       "type": "array",
-      "format":"select",
+      "format":"selectize",
       "uniqueItems": true,
       "default": ["1", "2"],
       "items": {
@@ -30,7 +29,7 @@
         "enum": ["1", "2", "3", "4"]
       },
       "options": {
-        "selectize_options": {
+        "selectize": {
             "create": false,
             "plugins": ["remove_button"],
           }

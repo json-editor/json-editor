@@ -5,11 +5,15 @@ language: generic
 env:
   - SELENIUM_BROWSER=chrome
   - SELENIUM_BROWSER=firefox
+  - SELENIUM_BROWSER=chrome DIST_SUB_PATH=nonmin
+  - SELENIUM_BROWSER=firefox DIST_SUB_PATH=nonmin
 
 services:
   - docker
 
 before_script:
+  - npm install
+  - npm run test-headless # Run unit tests in headless chrome
   - cd tests
   - docker-compose run --rm node npm run build
   - docker-compose up -d $SELENIUM_BROWSER
@@ -17,7 +21,7 @@ before_script:
 script:
   - docker-compose ps
   # exclude optional tests
-  - docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --grep '(?=.*)^(?!.*@optional)'
+  - docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
 
 after_script:
   # run optional tests

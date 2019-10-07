@@ -4,11 +4,13 @@ services:
     image: node
     volumes:
       - ../:/repo:delegated
+      - ../${DIST_SUB_PATH-.}/dist:/repo/dist:delegated
     working_dir: /repo
     command: npm run serve-test
     ports:
-      - '9000:9000'
       - '9001:9001'
+    expose:
+      - '9001'
   firefox:
     image: selenium/standalone-firefox-debug:3.141.59-oxygen
     depends_on:
@@ -35,6 +37,8 @@ services:
       - /dev/shm:/dev/shm
 
   codeceptjs:
+    depends_on:
+      - node
     image: codeception/codeceptjs
     working_dir: /repo/tests/codeceptjs
     volumes:
