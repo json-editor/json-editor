@@ -57,7 +57,7 @@ export var DescribedByEditor = AbstractEditor.extend({
 
     // var ref = this.template.fillFromObject(vars);
     // var ref = this.template(vars);
-    var ref = document.location.toString() + this.template(vars)
+    var ref = document.location.origin + document.location.pathname + this.template(vars)
 
     if (!this.editors[this.refs[ref]]) {
       this.buildChildEditor(ref)
@@ -124,7 +124,7 @@ export var DescribedByEditor = AbstractEditor.extend({
       return '';
     }); */
 
-    this.schema.links.splice(0, 1)
+    this.schema.links.splice(i, 1)
     if (this.schema.links.length === 0) delete this.schema.links
 
     this.baseSchema = $extend({}, this.schema)
