@@ -31,6 +31,8 @@ export var $extend = function (destination) {
       if (source[property] && $isplainobject(source[property])) {
         if (!destination.hasOwnProperty(property)) destination[property] = {}
         $extend(destination[property], source[property])
+      } else if (Array.isArray(source[property])) {
+        destination[property] = source[property].map((value) => $extend(value))
       } else {
         destination[property] = source[property]
       }

@@ -59,7 +59,7 @@ export var DescribedByEditor = AbstractEditor.extend({
     // var ref = this.template(vars);
     var ref = document.location.origin + document.location.pathname + this.template(vars)
 
-    if (!this.editors[this.refs[ref]]) {
+    if (this.jsoneditor.refs.hasOwnProperty(ref) && !this.editors[this.refs[ref]]) {
       this.buildChildEditor(ref)
     }
 
@@ -109,8 +109,8 @@ export var DescribedByEditor = AbstractEditor.extend({
     this.refs = {}
     this.editors = []
     this.currentEditor = ''
-
-    for (var i = 0; i < this.schema.links.length; i++) {
+    var i
+    for (i = 0; i < this.schema.links.length; i++) {
       if (this.schema.links[i].rel.toLowerCase() === 'describedby') {
         // this.template = new UriTemplate(this.schema.links[i].href);
         this.template = this.jsoneditor.compileTemplate(this.schema.links[i].href, this.template_engine)
