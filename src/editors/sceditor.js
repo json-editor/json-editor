@@ -15,7 +15,7 @@ export var ScEditor = StringEditor.extend({
   afterInputReady: function () {
     var self = this; var options
 
-    if (window.jQuery && window.jQuery.fn && window.jQuery.fn.sceditor) {
+    if (window.sceditor) {
       // Get options, either global options from "this.defaults.options.sceditor" or
       // single property options from schema "options.sceditor"
       options = this.expandCallbacks('sceditor', $extend({}, {
@@ -27,8 +27,7 @@ export var ScEditor = StringEditor.extend({
         element: this.input
       }))
 
-      window.jQuery(self.input).sceditor(options)
-      this.sceditor_instance = window.jQuery(self.input).sceditor('instance')
+      this.sceditor_instance = window.sceditor.create(this.input, options)
 
       if (this.schema.readOnly || this.schema.readonly || this.schema.template) {
         this.sceditor_instance.readOnly(true)
@@ -37,9 +36,7 @@ export var ScEditor = StringEditor.extend({
       // Listen for changes
       self.sceditor_instance.blur(function () {
         // Get editor's value
-        var val = window.jQuery('<div>' + self.sceditor_instance.val() + '</div>')
-        // Remove sceditor spans/divs
-        window.jQuery('#sceditor-start-marker,#sceditor-end-marker,.sceditor-nlf', val).remove()
+        var val = self.sceditor_instance.val()
         // Set the value and update
         self.input.value = val.html()
         self.value = self.input.value
