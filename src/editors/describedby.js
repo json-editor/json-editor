@@ -126,7 +126,6 @@ export var DescribedByEditor = AbstractEditor.extend({
 
     this.schema.links = this.schema.links.slice(0, i).concat(this.schema.links.slice(i + 1))
     if (this.schema.links.length === 0) delete this.schema.links
-
     this.baseSchema = $extend({}, this.schema)
   },
   build: function () {
