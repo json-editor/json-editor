@@ -18,22 +18,18 @@ Scenario('should show errors @optional', async (I) => {
   assert.equal(value, '{"correct":"","items":[]}');
 
   I.fillField('root[correct]', 'a');
-  I.dontSee('Value must match the pattern ^[a-zA-Z0-9_]+$.');
-  value = await I.grabValueFrom('.debug');
+  assert.equal(await I.dontSee('Value must match the pattern ^[a-zA-Z0-9_]+$.'), true, 'should show warning');
 
   I.fillField('root[correct]', 'a!');
-  I.seeInField('root[correct]', 'a!');
-  I.see('Value must match the pattern ^[a-zA-Z0-9_]+$.');
-  value = await I.grabValueFrom('.debug');
+  assert.equal(await I.seeInField('root[correct]', 'a!'), true, 'fillField failed');
+  assert.equal(await I.see('Value must match the pattern ^[a-zA-Z0-9_]+$.'), true, 'should show warning');
 
   I.clearField('root[correct]');
   I.seeInField('root[correct]', '');
-  I.see('Value must match the pattern ^[a-zA-Z0-9_]+$.');
-  value = await I.grabValueFrom('.debug');
+  assert.equal(await I.see('Value must match the pattern ^[a-zA-Z0-9_]+$.'), true, "should show warning");
 
   I.fillField('root[correct]', 'a');
   I.dontSee('Value must match the pattern ^[a-zA-Z0-9_]+$.');
-  value = await I.grabValueFrom('.debug');
 
   I.click('.json-editor-btntype-add');
   I.click('.get-value');
@@ -42,18 +38,13 @@ Scenario('should show errors @optional', async (I) => {
 
   I.fillField('root[items][0][id]', 'a');
   I.dontSee('Value must match the pattern ^[a-zA-Z0-9_]+$.');
-  value = await I.grabValueFrom('.debug');
 
   I.clearField('root[items][0][id]');
-  I.click('.get-value');
   I.seeInField('root[items][0][id]', '');
-  // todo: why this passed?
-  let r = I.see('Value must match the pattern ^[a-zA-Z0-9_]+$.');
-  assert.equal(r, true, 'it should appear');
-  value = await I.grabValueFrom('.debug');
+  // todo still not work
+  assert.equal(await I.see('Value must match the pattern ^[a-zA-Z0-9_]+$.'), true, 'should show warning');
 
   I.fillField('root[items][0][id]', 'a!');
-  I.click('.get-value');
   I.see('Value must match the pattern ^[a-zA-Z0-9_]+$.');
 
 });
