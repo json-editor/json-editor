@@ -15,7 +15,7 @@ Scenario('should work with option "validated"', async (I) => {
 
   await I.fillField('[name="root[textinput]"]', 'Hello World');
 
-  I.pressKey('Tab');
+  I.pressKey('\uE004'); // I.pressKey('Tab');
   I.dontSeeDisabledAttribute('[data-schemapath="root.button2"] button');
   I.click('[data-schemapath="root.button2"] button');
   assert.equal(await I.grabValueFrom('.value'), 'button2CB');
