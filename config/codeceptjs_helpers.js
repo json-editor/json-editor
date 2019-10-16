@@ -18,9 +18,9 @@ class customHelpers extends Helper {
             await helper.pressKey.call(char)
           })
         } catch (err) {
-          console.log('CodeceptJs Custom Helper "pressKey" Error:', err)
+          console.log('CodeceptJs Custom Helper "pressKey" Error2:', err)
         }
-      } else console.log('CodeceptJs Custom Helper "pressKey" Error:', err)
+      } else console.log('CodeceptJs Custom Helper "pressKey" Error1:', err)
     }
   }
 
