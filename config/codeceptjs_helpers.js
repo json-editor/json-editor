@@ -6,21 +6,21 @@ class customHelpers extends Helper {
   // Custom pressKey function, overriding original function.
   // Required for tests to work with Puppeteer, since WebDriver allows undefined keys as multiple keystrokes.
   // Extends to allows use of string of characters instead of single character
-  async pressKey (key) {
+  pressKey () {
     const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
     try {
-      await helper.pressKey(key)
+      helper.pressKey.call(arguments)
     } catch (err) {
-      if (/^Unknown key:/.test(err.message)) {
+      if (/^Unknown key:/.test(err.message) && arguments.length == 1 && typeof arguments[0] == 'string') {
         // If unknown key, then apply 'pressKey' for each character in key
         try {
-          Array.from(key).forEach(async function (char) {
-            await helper.pressKey(char)
+          Array.from(arguments[0]).forEach(function (char) {
+            helper.pressKey.call(char)
           })
         } catch (err) {
-          console.log('CodeceptJs Custom Helper "pressKey" Error:', err)
+          console.log('CodeceptJs Custom Helper "pressKey" Error2:', err)
         }
-      } else console.log('CodeceptJs Custom Helper "pressKey" Error:', err)
+      } else console.log('CodeceptJs Custom Helper "pressKey" Error1:', err)
     }
   }
 
