@@ -4,9 +4,9 @@
     <meta charset="utf-8" />
     <title>JSON Editor Selectize Integration Example</title>
     <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/js/standalone/selectize.js"></script>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/css/selectize.bootstrap3.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/js/standalone/selectize.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/css/selectize.bootstrap3.css">
   </head>
   <body>
     <h1>JSON Editor Selectize Integration Example</h1>
@@ -17,9 +17,6 @@
     <button id='submit'>Submit (console.log)</button>
 
     <script>
-    // Global selectize options
-    JSONEditor.plugins.selectize.enable = true;
-
       // Initialize the editor with a JSON schema
       var editor = new JSONEditor(document.getElementById('editor_holder'),{
         schema: {
@@ -29,21 +26,23 @@
           properties: {
             fontSize: {
               type: "integer",
+              format: "selectize",
               enum: [10,11,12,14,16,18,20,22,24,36,48,60,72,100],
               default: 24,
               options: {
                 // Override defaullt options
-                selectize_options: {
+                selectize: {
                   create: true
                 }
               }
             },
             color: {
               type: "string",
+              format: "selectize",
               enum: ["black","red","green","blue","yellow","orange","purple","brown","white","cyan","magenta"],
               options: {
                 // Override defaullt options
-                selectize_options: {
+                selectize: {
                   create: false,
                   sortField: 'text'
                 }
@@ -51,13 +50,14 @@
             },
             font: {
               type: "string",
+              format: "selectize",
               enumSource: "possible_fonts",
               watch: {
                 "possible_fonts": "root.possibleFonts"
               },
               options: {
                 // Override defaullt options
-                selectize_options: {
+                selectize: {
                   create: false,
                   sortField: 'text'
                 }
@@ -65,6 +65,7 @@
             },
             weight: {
               type: "string",
+              format: "selectize",
               enum: ["normal","bold","bolder","lighter"],
               options: {
                 enum_titles: ["Normal (400)","Bold (700)","Bolder (900)","Lighter (200)"]
@@ -72,6 +73,7 @@
             },
             possibleFonts: {
               type: "array",
+              format: "selectize",
               uniqueItems: true,
               items: {
                 type: "string"
