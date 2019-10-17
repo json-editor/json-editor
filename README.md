@@ -1552,18 +1552,6 @@ The possibilities are endless.  Some ideas:
 *  Better editor for arrays of strings (tag editor)
 *  Canvas based image editor that produces Base64 data URLs
 
-Choices, Select2 & Selectize Support
-----------------
-JSON editor checks in order if Choices or Select2 is loaded and will use the detected library by default.
-
-Selectize support is enabled via the following snippet:
-```js
-JSONEditor.plugins.selectize.enable = true;
-```
-See the demo for an example of the `array` and `select` editor with Selectize support enabled.
-
-To disable Select2/Selectize for a single property, you can set the boolean option `disable_selectize` or `disable_select2` in the schema property options.
-
 Custom Validation
 ----------------
 
