@@ -36,7 +36,7 @@ export var ScEditor = StringEditor.extend({
       // Listen for changes
       this.sceditor_instance.blur(function () {
         this.value = this.sceditor_instance.val();
-        this.input.value = this.sceditor_instance.val();
+        this.sceditor_instance.updateOriginal();
         this.is_dirty = true
         this.onChange(true)
       }.bind(this))
