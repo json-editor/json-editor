@@ -24,6 +24,19 @@ class customHelpers extends Helper {
     }
   }
 
+  async pressKeys (string) {
+    const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
+    try {
+      await helper.wait(1)
+      let digits = string.split('')
+      for (let i = 0; i < digits.length; i++) {
+        await helper.pressKey(digits[i])
+      }
+    } catch (err) {
+      console.log('CodeceptJs Custom Helper "pressKeys" Error:', err)
+    }
+  }
+
   // Custom amCancellingPopups function, overriding original function.
   // Required for tests to work with WebDriver, since "amCancellingPopups" is a Puppeteer command.
   // returns existing amCancellingPopups function if exists
