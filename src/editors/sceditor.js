@@ -25,18 +25,19 @@ export var ScEditor = StringEditor.extend({
       }, this.defaults.options.sceditor || {}, this.options.sceditor || {}, {
         element: this.input
       }))
-      
-      var instance = window.sceditor.instance(this.input);
 
-      if (instance === undefined)
-        window.sceditor.create(this.input, options); // Create doesn't return instance.
+      var instance = window.sceditor.instance(this.input)
 
-      this.sceditor_instance = instance || window.sceditor.instance(this.input);
+      if (instance === undefined) {
+        window.sceditor.create(this.input, options) // Create doesn't return instance.
+      }
+
+      this.sceditor_instance = instance || window.sceditor.instance(this.input)
 
       // Listen for changes
       this.sceditor_instance.blur(function () {
-        this.value = this.sceditor_instance.val();
-        this.sceditor_instance.updateOriginal();
+        this.value = this.sceditor_instance.val()
+        this.sceditor_instance.updateOriginal()
         this.is_dirty = true
         this.onChange(true)
       }.bind(this))
