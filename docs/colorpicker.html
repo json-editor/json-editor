@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hyper-Link DescribedBy JSON Editor Example</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsive viewport -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+  <!-- Bootstrap3 -->
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+
+  <!-- JSON-Editor -->
+  <script src="../dist/dev/jsoneditor.js"></script>
+  <!-- AColorPicker -->
+  <script src="./js/jQueryColorPicker.min.js"></script>
+
+  <style type="text/css">
+  body {
+    margin: 1em;
+  }
+
+  </style>
+  </head>
+  <body>
+    <h1>Hyper-Link DescribedBy JSON Editor Example</h1>
+
+    <div id='editor_holder'></div>
+    <button id='submit'>Submit (console.log)</button>
+
+    <script>
+
+      // Initialize the editor
+      var editor = new JSONEditor(document.getElementById('editor_holder'), {
+        theme: 'bootstrap3',
+        iconlib: 'bootstrap3',
+        //show_errors: "always",
+        disable_collapse: true,
+        disable_edit_json: true,
+        disable_properties: true,
+        //no_additional_properties: true,
+        schema: {
+          'type': 'array',
+          'items': {
+            'title': 'Property for Sale',
+            'type': 'string',
+            'format': 'color',
+            "default": "#000000",
+            'options': {
+              'ColorPicker': {
+                'mode': 'rgb-b'
+              }
+            }
+          }
+        }
+      });
+
+      function validate() {
+          var errors = editor.validate();
+          console.log(editor.getValue());
+          if(errors.length) {
+            // errors is an array of objects, each with a `path`, `property`, and `message` parameter
+            // `property` is the schema keyword that triggered the validation error (e.g. "minLength")
+            // `path` is a dot separated path into the JSON object (e.g. "root.path.to.field")
+            editor.root.showValidationErrors(errors);
+            console.log('ERRORS', errors);
+          }
+          else {
+            // It's valid!
+            console.log('OK');
+          }
+      }
+
+      // Hook up the submit button to log to the console
+      document.getElementById('submit').addEventListener('click',function() {
+        // Get the value from the editor
+        validate();
+      });
+    </script>
+  </body>
+</html>
