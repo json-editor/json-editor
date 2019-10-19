@@ -3,24 +3,16 @@ const assert = require('assert')
 let Helper = codecept_helper
 
 class customHelpers extends Helper {
-  // Custom pressKey function, overriding original function.
-  // Required for tests to work with Puppeteer, since WebDriver allows undefined keys as multiple keystrokes.
-  // Extends to allows use of string of characters instead of single character
-  async pressKey (key) {
+  async pressKeys (string) {
     const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
     try {
-      await helper.pressKey(key)
+      await helper.wait(1)
+      let digits = string.split('')
+      for (let i = 0; i < digits.length; i++) {
+        await helper.pressKey(digits[i])
+      }
     } catch (err) {
-      if (/^Unknown key:/.test(err.message)) {
-        // If unknown key, then apply 'pressKey' for each character in key
-        try {
-          Array.from(key).forEach(async function (char) {
-            await helper.pressKey(char)
-          })
-        } catch (err) {
-          console.log('CodeceptJs Custom Helper "pressKey" Error:', err)
-        }
-      } else console.log('CodeceptJs Custom Helper "pressKey" Error:', err)
+      console.log('CodeceptJs Custom Helper "pressKeys" Error:', err)
     }
   }
 
