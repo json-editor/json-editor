@@ -531,7 +531,7 @@ export function getDefaults () {
 // Miscellaneous Plugin Settings
 // Obsolete - Can be removed. Now replaced with global + schema options
 // DS: Actually it can't without breaking tests :-D
-export function getPlugins () {
+/* export function getPlugins () {
   return {
     ace: {
       theme: ''
@@ -551,3 +551,4 @@ export function getPlugins () {
     }
   }
 };
+*/
