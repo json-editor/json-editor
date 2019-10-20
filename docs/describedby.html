@@ -46,34 +46,44 @@
         disable_properties: true,
         //no_additional_properties: true,
         schema: {
-          "type": "object",
           "title": "Property for Sale",
-          "properties": {
-            "propertyName": {
-              "type": "string",
-              "title": "Property Name",
-              "description": "The name of the property being sold",
-              "minLength": 5
-            },
-            "propertyType": {
-              "type": "string",
-              "title": "Property Type",
-              "enum": ["house", "car", "yacht"]
-            },
-            "propertyTypeOptions": {
-              "type": "object",
-              "title": "Property Options",
-              "watch": {
-                  "propertyType": "propertyType"
-              },
-              "links": [{
-                "rel": "describedBy",
-                "href": "#/definitions/{{propertyType}}"
-              }]
-            }
-          },
-          "required": ["propertyName","propertyType"],
+          "$ref": "#/definitions/single",
           "definitions": {
+            "multiple": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/single"
+              }
+            },
+            "single": {
+              "id": "basic",
+              "type": "object",
+              "properties": {
+                "propertyName": {
+                  "type": "string",
+                  "title": "Property Name",
+                  "description": "The name of the property being sold",
+                  "minLength": 5
+                },
+                "propertyType": {
+                  "type": "string",
+                  "title": "Property Type",
+                  "enum": ["house", "car", "yacht","multiple"]
+                },
+                "propertyTypeOptions": {
+                  "type": ["object","array"],
+                  "title": "Property Options",
+                  "watch": {
+                    "tag": "basic.propertyType"
+                  },
+                  "links": [{
+                    "rel": "describedBy",
+                    "href": "#/definitions/{{tag}}"
+                  }]
+                }
+              },
+              "required": ["propertyName","propertyType"],
+            },
             "house": {
               "properties": {
                 "address": {

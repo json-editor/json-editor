@@ -558,7 +558,7 @@ export const Validator = Class.extend({
           var template = this.jsoneditor.compileTemplate(href, this.jsoneditor.template)
           var ref = template(data)
 
-          schema.links.splice(m, 1)
+          schema.links = schema.links.slice(0, m).concat(schema.links.slice(m + 1))
 
           schema = $extend({}, schema, this.jsoneditor.refs[ref])
 
