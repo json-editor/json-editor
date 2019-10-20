@@ -211,7 +211,7 @@ JSONEditor.prototype = {
     this.translate = this.options.translate || JSONEditor.defaults.translate
 
     // Fetch all external refs via ajax
-    var fetchUrl = document.location.toString()
+    var fetchUrl = document.location.origin + document.location.pathname.toString()
     var fileBase = this._getFileBase()
     this._loadExternalRefs(this.schema, function () {
       self._getDefinitions(self.schema, fetchUrl + '#/definitions/')

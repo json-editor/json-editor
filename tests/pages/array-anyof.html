@@ -17,6 +17,11 @@
     "title": "anyOf",
     "type": "object",
     "properties": {
+      "correct": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9_]+$",
+        "maxLength": 50
+      },
       "items": {
         "title": "title",
         "type": "array",
@@ -42,6 +47,7 @@
       }
     },
     "defaultProperties": [
+      "correct",
       "items"
     ],
     "definitions": {
