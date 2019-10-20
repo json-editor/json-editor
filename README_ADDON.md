@@ -270,6 +270,7 @@ For configuration options, see the [SimpleMDE homepage](https://simplemde.com/).
 **Schema options:** ``options.simplemde``<br>
 **Options callback** ``JSONEditor.defaults.callbacks.simplemde``<br>
 **Required options:**  none<br>
+**Special options:** ``autorefresh`` when true, fixes problem with Chrome and editor inside Tabs<br>
 **Source:** src/editors/simplemde.js
 <br>
 
