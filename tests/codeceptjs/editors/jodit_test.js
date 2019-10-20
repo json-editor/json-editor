@@ -15,8 +15,7 @@ Scenario('should have coerent values', async (I) => {
   I.seeElement('.jodit_wysiwyg');
 
   I.click('.jodit_toolbar_btn-bold a');
-  I.click('.jodit_wysiwyg');
-  I.pressKey('__JODIT__');
+  I.pressKeys('__JODIT__');
   I.see('__JODIT__');
 
   I.click('.get-value');
