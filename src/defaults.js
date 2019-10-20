@@ -396,7 +396,6 @@ export function getDefaults () {
           return 'choices'
         }
         return 'select'
-      // return (JSONEditor.plugins.selectize.enable) ? 'selectize' : 'select';
       }
     }
   })
@@ -527,28 +526,3 @@ export function getDefaults () {
 
   return JSONEditor.defaults
 };
-
-// Miscellaneous Plugin Settings
-// Obsolete - Can be removed. Now replaced with global + schema options
-// DS: Actually it can't without breaking tests :-D
-/* export function getPlugins () {
-  return {
-    ace: {
-      theme: ''
-    },
-    choices: {
-    },
-    SimpleMDE: {
-
-    },
-    sceditor: {
-
-    },
-    select2: {
-
-    },
-    selectize: {
-    }
-  }
-};
-*/
