@@ -1,8 +1,7 @@
 import './styles/choices.css'
 import './styles/starrating.css'
 
-import { ie9Polyfill } from './ie9'
-import { getDefaults, getPlugins } from './defaults'
+import { getDefaults } from './defaults'
 import { Validator } from './validator'
 import { $extend, $each } from './utilities'
 
@@ -74,8 +73,6 @@ import { foundation3Iconlib } from './iconlibs/foundation3'
 import { jqueryuiIconlib } from './iconlibs/jqueryui'
 import { materialiconsIconlib } from './iconlibs/materialicons'
 import { spectreIconlib } from './iconlibs/spectre'
-
-import { wrapJQuery } from './jquery'
 
 var assignIconlibs = function (iconlibs) {
   iconlibs.bootstrap2 = bootstrap2Iconlib
@@ -810,14 +807,11 @@ JSONEditor.prototype = {
   }
 }
 
-ie9Polyfill()
 JSONEditor.defaults = getDefaults()
-JSONEditor.plugins = getPlugins()
 assignThemes(JSONEditor.defaults.themes)
 JSONEditor.AbstractEditor = AbstractEditor
 assignDefaultEditors(JSONEditor.defaults.editors)
 assignTemplates(JSONEditor.defaults.templates)
 assignIconlibs(JSONEditor.defaults.iconlibs)
-wrapJQuery()
 
 window.JSONEditor = JSONEditor
