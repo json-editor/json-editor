@@ -1,70 +1,63 @@
 /*
 
-Edtended handling of date, time and datetime-local type fields.
+Edtended handling of  oolor type fields.
 
-Works with both string and integer data types. (default only support string type)
-
-Has optional support for using flatpickr datepicker.
-All flatpickr options is supported with a few minor differences.
-- "enableTime" and "noCalendar" are set automatically, based on the data type.
-- Extra config option "errorDateFormat". If this is set, it will replace the format displayed in error messages.
-- It is not possible to use "inline" and "wrap" options together.
-- When using the "wrap" option, "toggle" and "clear" buttons are automatically added to markup. 2 extra boolean options ("showToggleButton" and "showClearButton") are available to control which buttons to display. Note: not all frameworks supports this. (Works in: Bootstrap and Foundation)
-- When using the "inline" option, an extra boolean option ("inlineHideInput") is available to hide the original input field.
-- If "mode" is set to either "multiple" or "range", only string data type is supported. Also the result from these is returned as a string not an array.
-
-ToDo:
- - Improve Handling of flatpicker "multiple" and "range" modes. (Currently the values are just added as string values, but the optimal scenario would be to save those as array if possible)
+Has optional support for using https://github.com/PitPik/colorPicker. The https://github.com/hybtalented/colorPicker is
+ a fork, which fix the multiple cases did'nt create ColorPicker appropriately.
 
 */
 import { StringEditor } from './string'
 import {$extend} from '../utilities'
-
+const colorPickers = []
+var currentColorPicker = null // current focused colorpicker
+var windowListener = null
 export var ColorEditor = StringEditor.extend({
 
   build: function () {
     this._super()
     if (!this.input) return
 
-    if (window.$ && window.$.prototype.colorPicker && typeof this.options.ColorPicker === 'object') {
+    if (window.ColorPicker && typeof this.options.ColorPicker === 'object') {
       this.input.setAttribute('type', 'text')
       const options = this.options.ColorPicker
-      var self = this
       this.isAlpha = false
       options.mode = options.mode.toLowerCase()
-      if (options.mode && options.mode.substr(3, 1).indexOf('a')) {
+      if (options.mode) {
+        if (options.mode.indexOf('a') !== -1) {
+          this.isAlpha = true
+        }
         options.mode = options.mode.replace(/a/g, '')
-        this.isAlpha = true
       }
-      // create color picker container
-      window.$(this.input).colorPicker($extend({
+      const self = this
+      const colorPickerOption = $extend({
+        isIE8: !!document.all && !document.addEventListener, // Opera???
+        animationSpeed: 200,
+        margin: {left: -1, top: 2},
+        customBG: '#FFFFFF',
+        noAlpha: !self.isAlpha,
+        // displayCallback: displayCallback,
+        /* --- regular colorPicker options from this point --- */
+        initStyle: 'display: none',
         color: this.schema.default || '#000',
         readOnly: this.schema.readOnly || this.schema.template,
         // this callback change the value and color of the input
         renderCallback: function (colors, mode) {
           var options = this
-          var input = self.input
-          var patch = options.patch
+          var patch = self.input
           var RGB = colors.RND.rgb
           var HSL = colors.RND.hsl
-          var AHEX = options.isIE8 ? (colors.alpha < 0.16 ? '0' : '') + (Math.round(colors.alpha * 100)).toString(16).toUpperCase() + colors.HEX : ''
           var RGBInnerText = RGB.r + ', ' + RGB.g + ', ' + RGB.b
           var RGBAText = 'rgba(' + RGBInnerText + ', ' + colors.alpha + ')'
-
           patch.style.cssText =
               'color:' + (colors.rgbaMixCustom.luminance > 0.22 ? '#222' : '#ddd') + ';' + // Black...???
               'background-color:' + RGBAText + ';' +
               'filter:' + (options.isIE8 ? 'progid:DXImageTransform.Microsoft.gradient(' + // IE<9
-              'startColorstr=#' + AHEX + ',' + 'endColorstr=#' + AHEX + ')' : '')
-
-          input.value = (mode.type.toLowerCase() === 'hex' ? '#' + (options.isIE8 ? AHEX : colors.HEX + colors.Apl) : ( mode.type + ( self.isAlpha ? 'a' : '') +|| (colorMode === 'HEX' && isAlpha) ?
-                      (!isAlpha ? 'rgb(' + RGBInnerText + ')' : RGBAText) :
-                      ('hsl' + (isAlpha ? 'a(' : '(') + HSL.h + ', ' + HSL.s + '%, ' + HSL.l + '%' +
-                          (isAlpha ? ', ' + colors.alpha : '') + ')')
-          )
-
+              'startColorstr=#' + colors.hex + ',' + 'endColorstr=#' + colors.hex + ')' : '')
+          self.setValue((mode.type.toLowerCase() === 'hex' ? '#' + colors.hex : mode.type === 'rgb' ? (!self.isAlpha ? 'rgb(' + RGBInnerText + ')' : RGBAText) : ('hsl' + (self.isAlpha ? 'a(' : '(') + HSL.h + ', ' + HSL.s + '%, ' + HSL.l + '%' +
+                  (self.isAlpha ? ', ' + colors.alpha : '') + ')')
+          ))
           if (options.displayCallback) {
-            options.displayCallback(colors, mode, options);
+            options.displayCallback(colors, mode, options)
           }
         },
         // set the initial background color
@@ -72,7 +65,78 @@ export var ColorEditor = StringEditor.extend({
           elm.style.backgroundColor = elm.value
           elm.style.color = colors.rgbaMixCustom.luminance > 0.22 ? '#222' : '#ddd'
         }
-      }, options))
+      }, options)
+      // create color picker container
+      this.colorPicker = new window.ColorPicker(colorPickerOption)
+      self.doEventListeners(false) // listen events
+    }
+  },
+  removeColorPicker: function () {
+    var appendTo = (this.colorPicker.color.options.appendTo || document.body)
+    appendTo.removeChild(this.colorPicker.nodes.colorPicker)
+  },
+  doEventListeners: function (off) {
+    var onOff = off ? 'removeEventListener' : 'addEventListener'
+    var self = this
+    // do when colorpicker input is focusing
+    var focusListener = function (e) {
+      var input = this
+      var position = window.ColorPicker.getOrigin(input)
+      var options = self.colorPicker.color.options
+      var colorPickerUI = self.colorPicker.nodes.colorPicker
+      var appendTo = (self.colorPicker.color.options.appendTo || document.body)
+      var isStatic = /static/.test(window.getComputedStyle(appendTo).position)
+      var atrect = isStatic ? {left: 0, top: 0} : appendTo.getBoundingClientRect()
+      var waitTimer = 0
+      options.color = self.value // brings color to default on reset
+      colorPickerUI.style.cssText =
+              'position: absolute;' + (!self.colorPicker.cssIsReady ? 'display: none;' : '') +
+              'left:' + (position.left + options.margin.left - atrect.left) + 'px;' +
+              'top:' + (position.top + +input.offsetHeight + options.margin.top - atrect.top) + 'px;'
+      appendTo.appendChild(colorPickerUI)
+      currentColorPicker = self
+      waitTimer = setInterval(function () { // compensating late style on onload in colorPicker
+        if (self.colorPicker.cssIsReady) {
+          waitTimer = clearInterval(waitTimer)
+          colorPickerUI.style.display = 'block'
+        }
+      }, 10)
+    }
+    var mouseDownListener = function (e) {
+      if (currentColorPicker) {
+        var colorPicker = currentColorPicker.colorPicker
+        var isColorPicker = colorPicker && (function (elm) {
+          while (elm) {
+            if ((elm.className || '').indexOf('cp-app') !== -1) return elm
+            elm = elm.parentNode
+          }
+          return false
+        })(e.target)
+
+        if (isColorPicker) {
+          if (e.target === colorPicker.nodes.exit) {
+            currentColorPicker.removeColorPicker()
+            currentColorPicker = null
+            document.activeElement.blur()
+          }
+        } else if (e.target !== currentColorPicker.input) {
+          currentColorPicker.removeColorPicker()
+          currentColorPicker = null
+        }
+      }
+    }
+    self.input[onOff]('focus', focusListener)
+
+    if (!windowListener || off) {
+      if (off) {
+        mouseDownListener = windowListener
+      } else {
+        windowListener = mouseDownListener
+      }
+      window[onOff]('mousedown', mouseDownListener)
+    }
+    if (!off) {
+      colorPickers.push(this)
     }
   },
   getValue: function () {
@@ -81,13 +145,19 @@ export var ColorEditor = StringEditor.extend({
     }
     return this.value
   },
-  setValue: function (value, initial, fromTemplate) {
-    if (this.schema.type === 'string') {
-      this._super(value, initial, fromTemplate)
-    }
-  },
   destroy: function () {
-    window.jsColorPicker(this.input, 'destroy')
+    var index = colorPickers.indexOf(this)
+    if (index !== -1) {
+      colorPickers.splice(index, 1)
+    }
+    if (currentColorPicker === this) {
+      currentColorPicker.removeColorPicker()
+      currentColorPicker = null
+    }
+    if (this.colorPicker) {
+      this.doEventListeners(true) // remove event listener
+      this.colorPicker.destroyAll()
+    }
     this._super()
   },
   // helper function

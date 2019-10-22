@@ -525,7 +525,7 @@ export function getDefaults () {
     if (schema.type === 'string' && ['ip', 'ipv4', 'ipv6', 'hostname'].indexOf(schema.format) !== -1) return 'ip'
   })
   JSONEditor.defaults.resolvers.unshift(function (schema) {
-    if (schema.type === 'string' && schema.format === 'color' && schema.options.ColorPicker) {
+    if (schema.type === 'string' && schema.format === 'color') {
       return 'colorpicker'
     }
   })

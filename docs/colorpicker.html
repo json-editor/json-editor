@@ -21,8 +21,10 @@
   <!-- JSON-Editor -->
   <script src="../dist/dev/jsoneditor.js"></script>
   <!-- AColorPicker -->
-  <script src="./js/jQueryColorPicker.min.js"></script>
-
+  <script src="./js/color.all.min.js"></script>
+  <!--<script src="./js/colorPicker.data.js"></script>-->
+  <!--<script src="./js/colorPicker.js"></script>-->
+  <!--<script src="./js/colors.js"></script>-->
   <style type="text/css">
   body {
     margin: 1em;
@@ -48,16 +50,30 @@
         disable_properties: true,
         //no_additional_properties: true,
         schema: {
-          'type': 'array',
-          'items': {
-            'title': 'Property for Sale',
-            'type': 'string',
-            'format': 'color',
-            "default": "#000000",
-            'options': {
-              'ColorPicker': {
-                'mode': 'rgb-b'
+          'type': 'object',
+          'title': 'color input use colorpicker',
+          'properties': {
+            "rgb-b": {
+              'title': 'use rgb mode while \'b\' as z axis',
+              'type': 'string',
+              'format': 'color',
+              "default": "#000000",
+              'options': {
+                'ColorPicker': {
+                  'mode': 'rgb-b',
+                }
               }
+            },
+              "rgba-r": {
+                'title': 'use rgb mode while \'r\' as z axis',
+                'type': 'string',
+                'format': 'color',
+                "default": "#000000",
+                'options': {
+                  'ColorPicker': {
+                    'mode': 'rgba-r',
+                  }
+                }
             }
           }
         }
