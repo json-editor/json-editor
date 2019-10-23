@@ -46,26 +46,37 @@ export var bootstrap4Theme = AbstractTheme.extend({
     }
     return el
   },
+
   getFormControl: function (label, input, description) {
     var group = document.createElement('div')
+    group.classList.add('form-group')
 
     if (label && (input.type === 'checkbox' || input.type === 'radio')) {
-      group.classList.add('form-check')
-      label.classList.add('form-check-label')
+      var check = document.createElement('div')
+      check.classList.add('form-check')
+
       input.classList.add('form-check-input')
-      // label.appendChild(input);
-      label.insertBefore(input, label.firstChild)
-      group.appendChild(label)
+      label.classList.add('form-check-label')
+
+      // todo: nest input under label? not bootstrap default, can we set an unique ID here?
+      input.id = input.name // no name yet available?
+      label.for = input.id
+
+      check.appendChild(input)
+      check.appendChild(label)
+
+      group.appendChild(check)
     } else {
-      group.classList.add('form-group')
       if (label) {
-        label.classList.add('form-control-label')
         group.appendChild(label)
       }
+
       group.appendChild(input)
     }
 
-    if (description) group.appendChild(description)
+    if (description) {
+      group.appendChild(description)
+    }
 
     return group
   },
