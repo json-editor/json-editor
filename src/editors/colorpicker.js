@@ -70,9 +70,9 @@ export var ColorEditor = StringEditor.extend({
     this._super()
     if (!this.input) return
 
-    if (window.ColorPicker && typeof this.options.ColorPicker === 'object') {
+    if (window.ColorPicker) {
       this.input.setAttribute('type', 'text')
-      const options = this.options.ColorPicker
+      const options = (this.options || {}).ColorPicker || {}
       this.isAlpha = false
       this.format = 'hex'
       if (options.format) {
