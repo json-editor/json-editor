@@ -626,6 +626,9 @@ JSONEditor.prototype = {
           }
         }
       }
+      if (this.refs[ref]['extends']) {
+        this.refs[ref] = this.expandSchema(this.refs[ref])
+      }
       schema = this.extendSchemas(schema, $extend({}, this.refs[ref]))
     }
     return schema
