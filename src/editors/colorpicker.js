@@ -120,21 +120,11 @@ export var ColorEditor = StringEditor.extend({
     }
     self.input[onOff]('focus', focusListener)
   },
-  getValue: function () {
-    if (!this.dependenciesFulfilled) {
-      return undefined
-    }
-    return this.value
-  },
   destroy: function () {
     if (this.created) {
       this.created = false
       this.doEventListeners(true) // remove event listener
     }
     this._super()
-  },
-  // helper function
-  zeroPad: function (value) {
-    return ('0' + value).slice(-2)
   }
 })
