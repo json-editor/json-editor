@@ -570,7 +570,7 @@ export var ArrayEditor = AbstractEditor.extend({
     }
 
     if (i && !self.hide_move_buttons) {
-      self.rows[i].moveup_button = this.getButton('', 'moveup', this.translate('button_move_up_title'))
+      self.rows[i].moveup_button = this.getButton('', (this.schema.format === 'tabs-top' ? 'moveleft' : 'moveup'), this.translate('button_move_up_title'))
       self.rows[i].moveup_button.classList.add('moveup', 'json-editor-btntype-move')
       self.rows[i].moveup_button.setAttribute('data-i', i)
       self.rows[i].moveup_button.addEventListener('click', function (e) {
@@ -599,7 +599,7 @@ export var ArrayEditor = AbstractEditor.extend({
     }
 
     if (!self.hide_move_buttons) {
-      self.rows[i].movedown_button = this.getButton('', 'movedown', this.translate('button_move_down_title'))
+      self.rows[i].movedown_button = this.getButton('', (this.schema.format === 'tabs-top' ? 'moveright' : 'movedown'), this.translate('button_move_down_title'))
       self.rows[i].movedown_button.classList.add('movedown', 'json-editor-btntype-move')
       self.rows[i].movedown_button.setAttribute('data-i', i)
       self.rows[i].movedown_button.addEventListener('click', function (e) {
