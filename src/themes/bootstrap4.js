@@ -80,6 +80,41 @@ export var bootstrap4Theme = AbstractTheme.extend({
 
     return group
   },
+
+  /**
+   * Multiple checkboxes in a row.
+   *
+   */
+  getMultiCheckboxHolder: function (controls, label, description, infoText) {
+    var el = document.createElement('div')
+    el.classList.add('form-group')
+
+    if (label) {
+      label.style.display = 'block'
+      el.appendChild(label)
+
+      if (infoText) {
+        label.appendChild(infoText)
+      }
+    }
+
+    for (var i in controls) {
+      if (!controls.hasOwnProperty(i)) {
+        continue
+      }
+
+      // controls are already parsed by getFormControl() so they have an .form-group
+      // wrapper we need to get rid of...
+      var ctrl = controls[i].firstChild
+
+      ctrl.classList.add('form-check-inline')
+      el.appendChild(ctrl)
+    }
+
+    if (description) el.appendChild(description)
+
+    return el
+  },
   getIndentedPanel: function () {
     var el = document.createElement('div')
     el.classList.add('card', 'card-body', 'bg-light')
