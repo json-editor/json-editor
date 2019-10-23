@@ -74,13 +74,20 @@ export var bootstrap4Theme = AbstractTheme.extend({
     el.classList.add('card', 'card-body', 'bg-light')
     return el
   },
+
   getFormInputDescription: function (text) {
-    var el = document.createElement('p')
+    var el = document.createElement('small')
     el.classList.add('form-text')
-    if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text)
-    else el.textContent = this.cleanText(text)
+
+    if (window.DOMPurify) {
+      el.innerHTML = window.DOMPurify.sanitize(text)
+    } else {
+      el.textContent = this.cleanText(text)
+    }
+
     return el
   },
+
   getHeaderButtonHolder: function () {
     var el = this.getButtonHolder()
     el.style.marginLeft = '10px'
