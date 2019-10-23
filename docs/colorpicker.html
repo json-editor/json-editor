@@ -52,28 +52,62 @@
         schema: {
           'type': 'object',
           'title': 'color input use colorpicker',
+          'format': 'grid',
           'properties': {
-            "rgb-b": {
-              'title': 'use rgb mode while \'b\' as z axis',
+            'rgb': {
+              'title': 'use rgb format',
               'type': 'string',
               'format': 'color',
-              "default": "#000000",
+              'default': 'rgb(0,0,0)',
               'options': {
                 'ColorPicker': {
-                  'mode': 'rgb-b',
+                  'format': 'rgb',
                 }
               }
             },
-              "rgba-r": {
-                'title': 'use rgb mode while \'r\' as z axis',
-                'type': 'string',
-                'format': 'color',
-                "default": "#000000",
-                'options': {
-                  'ColorPicker': {
-                    'mode': 'rgba-r',
-                  }
+            'rgba': {
+              'title': 'use rgba format',
+              'type': 'string',
+              'format': 'color',
+              'default': 'rgba(0,0,0,1)',
+              'options': {
+                'ColorPicker': {
+                  'format': 'rgba',
                 }
+              }
+            },
+            'hsl': {
+              'title': 'use hsl format',
+              'type': 'string',
+              'format': 'color',
+              'default': 'hsl(0,0,0)',
+              'options': {
+                'ColorPicker': {
+                  'format': 'hsl',
+                }
+              }
+            },
+            'hsla': {
+              'title': 'use hsla format',
+              'type': 'string',
+              'format': 'color',
+              'default': 'hsl(0,0,0,1)',
+              'options': {
+                'ColorPicker': {
+                  'format': 'hsla',
+                }
+              }
+            },
+            'hex': {
+              'title': 'use hex format',
+              'type': 'string',
+              'format': 'color',
+              'default': '#000000',
+              'options': {
+                'ColorPicker': {
+                  'format': 'hex',
+                }
+              }
             }
           }
         }
