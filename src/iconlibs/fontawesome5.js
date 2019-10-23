@@ -4,17 +4,20 @@ export var fontawesome5Iconlib = AbstractIconLib.extend({
   mapping: {
     collapse: 'caret-down',
     expand: 'caret-right',
-    'delete': 'times',
+    'delete': 'trash',
     edit: 'pen',
     add: 'plus',
     cancel: 'ban',
     save: 'save',
     moveup: 'arrow-up',
+    moveright: 'arrow-right',
     movedown: 'arrow-down',
+    moveleft: 'arrow-left',
     copy: 'copy',
     clear: 'times-circle',
     time: 'clock',
-    calendar: 'calendar'
+    calendar: 'calendar',
+    edit_properties: 'tasks'
   },
   icon_prefix: 'fas fa-'
 })
