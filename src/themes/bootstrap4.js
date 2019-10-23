@@ -9,36 +9,41 @@ export var bootstrap4Theme = AbstractTheme.extend({
   rules: {
     'div[data-schemaid="root"]:after': 'position:relative;color:red;margin:10px 0;font-weight:600;display:block;width:100%;text-align:center;content:"This is an old JSON-Editor 1.x Theme and might not display elements correctly when used with the 2.x version"'
   },
+
   getSelectInput: function (options, multiple) {
     var el = this._super(options)
     el.classList.add('form-control')
     // el.style.width = 'auto';
     return el
   },
+
   setGridColumnSize: function (el, size, offset) {
     el.classList.add('col-md-' + size)
+
     if (offset) {
       el.classList.add('offset-md-' + offset)
     }
   },
+
   afterInputReady: function (input) {
     if (input.controlgroup) return
+
     input.controlgroup = this.closest(input, '.form-group')
-    if (this.closest(input, '.compact')) {
-      input.controlgroup.style.marginBottom = 0
-    }
 
     // TODO: use bootstrap slider
   },
+
   getTextareaInput: function () {
     var el = document.createElement('textarea')
     el.classList.add('form-control')
     return el
   },
+
   getRangeInput: function (min, max, step) {
     // TODO: use better slider
     return this._super(min, max, step)
   },
+
   getFormInputField: function (type) {
     var el = this._super(type)
     if (type !== 'checkbox' && type !== 'radio') {
@@ -115,6 +120,51 @@ export var bootstrap4Theme = AbstractTheme.extend({
 
     return el
   },
+
+  /**
+   * Single radio element
+   */
+  getFormRadio: function (attributes) {
+    var el = this.getFormInputField('radio')
+
+    for (var key in attributes) {
+      el.setAttribute(key, attributes[key])
+    }
+
+    el.classList.add('form-check-input')
+
+    return el
+  },
+
+  /**
+   * Add the <label> for the single radio from getFormRadio()
+   *
+   */
+  getFormRadioLabel: function (text, req) {
+    var el = document.createElement('label')
+    el.classList.add('form-check-label')
+    el.appendChild(document.createTextNode(text))
+    return el
+  },
+
+  /**
+   * Stack the radios from getFormRadio()/getFormRadioLabel()
+   *
+   */
+  getFormRadioControl: function (label, input, compact) {
+    var el = document.createElement('div')
+    el.classList.add('form-check')
+
+    el.appendChild(input)
+    el.appendChild(label)
+
+    if (compact) {
+      el.classList.add('form-check-inline')
+    }
+
+    return el
+  },
+
   getIndentedPanel: function () {
     var el = document.createElement('div')
     el.classList.add('card', 'card-body', 'bg-light')
