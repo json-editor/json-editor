@@ -12,6 +12,11 @@ var matchKey = (function () {
 })()
 
 export var AbstractTheme = Class.extend({
+
+  init: function (jsoneditor) {
+    this.jsoneditor = jsoneditor
+  },
+
   /* Theme config options that allows changing various aspects of the output */
   options: {
     'disable_theme_rules': false
@@ -344,9 +349,11 @@ export var AbstractTheme = Class.extend({
       button.appendChild(icon)
       text = ' ' + text
     }
-    var spanEl = document.createElement('span')
-    spanEl.appendChild(document.createTextNode(text))
-    button.appendChild(spanEl)
+    if (!this.jsoneditor.options.remove_button_labels) {
+      var spanEl = document.createElement('span')
+      spanEl.appendChild(document.createTextNode(text))
+      button.appendChild(spanEl)
+    }
     if (title) button.setAttribute('title', title)
   },
 
