@@ -14,7 +14,7 @@ Scenario('should have coerent values', async (I) => {
   I.see('item 1');
   I.seeElement('.ace_editor');
   I.click('.ace_editor');
-  I.pressKey('__YELLOW__');
+  I.pressKeys('__YELLOW__');
   I.click('.ace_editor');
   I.see('__YELLOW__');
 
@@ -36,7 +36,7 @@ Scenario('editor value and String editor should have coerent values @optional', 
   // enters first iframe, writes text on the body and then exits
   I.switchTo(0);
   I.click('body');
-  I.pressKey('__YELLOW__');
+  I.pressKeys('__YELLOW__');
   I.see('__YELLOW__');
   I.switchTo();
 
@@ -54,7 +54,7 @@ Scenario('Should work correctly in arrays @optional', async (I) => {
   // enters first iframe, writes text on the body and then exits
   I.switchTo(0);
   I.click('body');
-  I.pressKey('__YELLOW__');
+  I.pressKeys('__YELLOW__');
   I.see('__YELLOW__');
   I.switchTo();
 
@@ -66,7 +66,7 @@ Scenario('Should work correctly in arrays @optional', async (I) => {
   // enters second iframe, writes text on the body and then exits
   I.switchTo(1);
   I.click('body');
-  I.pressKey('__BLUE__');
+  I.pressKeys('__BLUE__');
 
   I.see('__BLUE__');
   I.switchTo();
