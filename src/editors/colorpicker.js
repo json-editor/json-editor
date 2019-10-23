@@ -2,8 +2,7 @@
 
 Edtended handling of  oolor type fields.
 
-Has optional support for using https://github.com/PitPik/colorPicker. The https://github.com/hybtalented/colorPicker is
- a fork, which fix the multiple cases did'nt create ColorPicker appropriately.
+Has optional support for using https://github.com/PitPik/colorPicker.
 
 */
 import { StringEditor } from './string'
@@ -110,7 +109,8 @@ export var ColorEditor = StringEditor.extend({
       colorPickerUI.style.cssText =
               'position: absolute;' + (!currentColorPicker.cssIsReady ? 'display: none;' : '') +
               'left:' + (position.left + options.margin.left - atrect.left) + 'px;' +
-              'top:' + (position.top + +input.offsetHeight + options.margin.top - atrect.top) + 'px;'
+              'top:' + (position.top + input.offsetHeight + options.margin.top - atrect.top) + 'px;'
+      currentColorPicker.setColor(self.value || '#000000', undefined, undefined, true)
       waitTimer = setInterval(function () { // compensating late style on onload in colorPicker
         if (currentColorPicker.cssIsReady) {
           waitTimer = clearInterval(waitTimer)
