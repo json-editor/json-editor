@@ -19,5 +19,6 @@ Scenario('test ColorPicker Editor  using vanilla-picker', async (I) => {
   await I.dragAndDrop('[data-schemapath="root.colorpicker"] .picker_wrapper .picker_alpha .picker_selector', '[data-schemapath="root.colorpicker"] .picker_wrapper .picker_alpha')
   I.click('.get-value');
   I.click('.get-value');
-  assert.equal(await I.grabValueFrom('.debug'), JSON.stringify({"colorpicker":"rgba(64,191,191,0.502)"}));
+  const color = await I.grabValueFrom('.debug')
+  assert.ok(/\{"colorpicker":"rgba\(6\d,19\d,19\d,0.5\d*\)"\}/.test(color), color + " not match {\"colorpicker\":\"rgba(6\\d,19\\d,19\\d,0.5\\d*)\"}");
 });
