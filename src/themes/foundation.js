@@ -72,7 +72,7 @@ export var foundationTheme = AbstractTheme.extend({
     return el
   },
   getButtonHolder: function () {
-    var el = document.createElement('div')
+    var el = document.createElement('span')
     el.classList.add('button-group')
     return el
   },
@@ -362,7 +362,7 @@ export var foundation6Theme = foundation5Theme.extend({
     return el
   },
   getButtonHolder: function () {
-    var el = document.createElement('div')
+    var el = document.createElement('span')
     el.classList.add('button-group', 'tiny')
     el.style.marginBottom = 0
     return el
