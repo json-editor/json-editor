@@ -2,24 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>theme-bootstrap4</title>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"/>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <title>theme-html</title>
     <script src="../../dist/nonmin/jsoneditor.js"></script>
   </head>
   <body>
-    <div class="container">
-      <div id="json-editor-form"></div>
-    </div>
+    <div id="json-editor-form"></div>
   <script>
     const schema = {
       "type": "object",
-      "title": "Bootstrap 4 Theme Layout Test Case",
+      "title": "Spectre Theme Layout Test Case",
       "properties": {
         "caseinfo": {
           "type": "info",
           "title": "Layout test cases",
-          "description": "This test case was made to help create or update themes for JSON-Editor 2.x version. It shows the available standard elements with all displayable options enabled, such as description and infoText. The buttons/select at the top of the form shows how to toggle various theme specific options.<br><br>Note: If you use this with the 1.x version, some of the fields might not be displayed correctly."
+          "description": "This testcase was made to help create or update themes for JSON-Editor 2.x version. It shows the available standard elements with all displayable options enabled, such as description and infoText. The buttons/select at the top of the form shows how to toggle various theme specific options.<br><br>Note: If you use this with the 1.x version, some of the fields might not be displayed correctly."
         },
         "standardcase1": {
           "type": "object",
@@ -421,14 +417,9 @@
     }
     new window.JSONEditor(document.querySelector("#json-editor-form"), {
       schema: schema,
-      // show_opt_in: true,
-      remove_button_labels: true,
-      theme: 'bootstrap4',
-      iconlib: 'fontawesome5',
-      // no_additional_properties: true
-      // disable_edit_json: true,
-      // disable_properties: true,
-      // disable_collapse: true
+      // show_opt_in: false,
+      // remove_button_labels: false,
+      // iconlib: 'fontawesome5',
     });
   </script>
   </body>
