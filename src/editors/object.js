@@ -556,6 +556,8 @@ export var ObjectEditor = AbstractEditor.extend({
       }
       this.title = this.theme.getHeader(this.header)
       this.controls = this.theme.getButtonHolder()
+      this.controls.style.margin = '0 0 0 10px'
+
       this.container.appendChild(this.title)
       this.title.appendChild(this.controls)
       this.container.style.position = 'relative'
@@ -708,8 +710,11 @@ export var ObjectEditor = AbstractEditor.extend({
       // Show/Hide button
       this.collapsed = false
       this.collapse_control = this.getButton('', 'collapse', this.translate('button_collapse'))
+      this.collapse_control.style.margin = '0 10px 0 0'
       this.collapse_control.classList.add('json-editor-btntype-toggle')
-      this.controls.appendChild(this.collapse_control)
+      // this.controls.appendChild(this.collapse_control)
+      this.title.insertBefore(this.collapse_control, this.title.childNodes[0])
+
       this.collapse_control.addEventListener('click', function (e) {
         e.preventDefault()
         e.stopPropagation()
