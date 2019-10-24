@@ -20,11 +20,8 @@
 
   <!-- JSON-Editor -->
   <script src="../dist/dev/jsoneditor.js"></script>
-  <!-- AColorPicker -->
-  <script src="http://www.dematte.at/colorPicker/color.all.min.js"></script>
-  <!--<script src="./js/colorPicker.data.js"></script>-->
-  <!--<script src="./js/colorPicker.js"></script>-->
-  <!--<script src="./js/colors.js"></script>-->
+  <!-- JSON-Editor -->
+  <script src="https://unpkg.com/vanilla-picker@2"></script>
   <style type="text/css">
   body {
     margin: 1em;
@@ -60,8 +57,8 @@
               'format': 'color',
               'default': 'rgb(0,0,0)',
               'options': {
-                'ColorPicker': {
-                  'format': 'rgb',
+                'Picker': {
+                  'editorFormat': 'rgb'
                 }
               }
             },
@@ -71,8 +68,9 @@
               'format': 'color',
               'default': 'rgba(0,0,0,1)',
               'options': {
-                'ColorPicker': {
-                  'format': 'rgba',
+                'Picker': {
+                  'editorFormat': 'rgb',
+                  'alpha': true
                 }
               }
             },
@@ -82,8 +80,8 @@
               'format': 'color',
               'default': 'hsl(0,0,0)',
               'options': {
-                'ColorPicker': {
-                  'format': 'hsl',
+                'Picker': {
+                  'editorFormat': 'hsl'
                 }
               }
             },
@@ -93,8 +91,9 @@
               'format': 'color',
               'default': 'hsl(0,0,0,1)',
               'options': {
-                'ColorPicker': {
-                  'format': 'hsla',
+                'Picker': {
+                  'editorFormat': 'hsl',
+                  'alpha': true
                 }
               }
             },
@@ -102,10 +101,60 @@
               'title': 'use hex format',
               'type': 'string',
               'format': 'color',
+              'default': '#000000'
+            },
+            'hexa': {
+              'title': 'use hexa format',
+              'type': 'string',
+              'format': 'color',
               'default': '#000000',
               'options': {
-                'ColorPicker': {
-                  'format': 'hex',
+                'Picker': {
+                  'alpha': true
+                }
+              }
+            },
+            'inline': {
+              'title': 'inline colorpicker',
+              'type': 'string',
+              'format': 'color',
+              'default': '#000000',
+              'options': {
+                'Picker': {
+                  'popup': false
+                }
+              }
+            },
+            'top': {
+              'title': 'position: top',
+              'type': 'string',
+              'format': 'color',
+              'default': '#000000',
+              'options': {
+                'Picker': {
+                  'popup': 'top'
+                }
+              }
+            },
+            'bottom': {
+              'title': 'position: bottom',
+              'type': 'string',
+              'format': 'color',
+              'default': '#000000',
+              'options': {
+                'Picker': {
+                  'popup': 'bottom'
+                }
+              }
+            },
+            'left': {
+              'title': 'position: left',
+              'type': 'string',
+              'format': 'color',
+              'default': '#000000',
+              'options': {
+                'Picker': {
+                  'popup': 'left'
                 }
               }
             }
