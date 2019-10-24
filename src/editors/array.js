@@ -699,7 +699,7 @@ export var ArrayEditor = AbstractEditor.extend({
     })
     self.controls.appendChild(this.add_row_button)
 
-    this.delete_last_row_button = this.getButton(this.translate('button_delete_last', [this.getItemTitle()]), 'delete', this.translate('button_delete_last_title', [this.getItemTitle()]))
+    this.delete_last_row_button = this.getButton(this.translate('button_delete_last', [this.getItemTitle()]), 'subtract', this.translate('button_delete_last_title', [this.getItemTitle()]))
     this.delete_last_row_button.classList.add('json-editor-btntype-deletelast')
     this.delete_last_row_button.addEventListener('click', function (e) {
       e.preventDefault()
