@@ -2,26 +2,24 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>theme-barebones</title>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundicons/2.0/stylesheets/general_foundicons.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css"/>
+    <title>theme-materialize</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
     <script src="../../dist/nonmin/jsoneditor.js"></script>
   </head>
   <body>
-    <div id="json-editor-form"></div>
+    <div class="container">
+      <div id="json-editor-form"></div>
+    </div>
   <script>
     const schema = {
       "type": "object",
-      "title": "Spectre Theme Layout Test Case",
+      "title": "Bootstrap 4 Theme Layout Test Case",
       "properties": {
         "caseinfo": {
           "type": "info",
           "title": "Layout test cases",
-          "description": "This testcase was made to help create or update themes for JSON-Editor 2.x version. It shows the available standard elements with all displayable options enabled, such as description and infoText. The buttons/select at the top of the form shows how to toggle various theme specific options.<br><br>Note: If you use this with the 1.x version, some of the fields might not be displayed correctly."
+          "description": "This test case was made to help create or update themes for JSON-Editor 2.x version. It shows the available standard elements with all displayable options enabled, such as description and infoText. The buttons/select at the top of the form shows how to toggle various theme specific options.<br><br>Note: If you use this with the 1.x version, some of the fields might not be displayed correctly."
         },
         "standardcase1": {
           "type": "object",
@@ -424,7 +422,7 @@
     new window.JSONEditor(document.querySelector("#json-editor-form"), {
       schema: schema,
       remove_button_labels: true,
-      theme: 'barebones',
+      theme: 'materialize',
       iconlib: 'materialicons',
       // no_additional_properties: true
       // disable_edit_json: true,
