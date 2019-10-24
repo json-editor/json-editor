@@ -11,10 +11,6 @@ Scenario('test ColorPicker Editor  without third party library', async (I) => {
 
 Scenario('test ColorPicker Editor  using vanilla-picker', async (I) => {
   I.amOnPage('colorpicker-use-vanilla-picker.html');
-  I.click('.get-value');
-  I.click('.get-value');
-  assert.equal(await I.grabValueFrom('.debug'), JSON.stringify({"colorpicker":"#000000"})); // default value
-  I.click('[name="root[colorpicker]"]');
   I.seeElement('[name="root[colorpicker]"]');
   I.seeElement('[data-schemapath="root.colorpicker"] .picker_wrapper');
   I.seeElement('[data-schemapath="root.colorpicker"] .picker_wrapper .picker_selector');
@@ -24,5 +20,4 @@ Scenario('test ColorPicker Editor  using vanilla-picker', async (I) => {
   I.click('.get-value');
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.debug'), JSON.stringify({"colorpicker":"rgba(64,191,191,0.502)"}));
-
 });
