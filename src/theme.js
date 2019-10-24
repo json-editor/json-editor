@@ -349,7 +349,7 @@ export var AbstractTheme = Class.extend({
       button.appendChild(icon)
       text = ' ' + text
     }
-    if (!this.jsoneditor.options.remove_button_labels) {
+    if (!this.jsoneditor.options.iconlib || !this.jsoneditor.options.remove_button_labels || !icon) {
       var spanEl = document.createElement('span')
       spanEl.appendChild(document.createTextNode(text))
       button.appendChild(spanEl)
