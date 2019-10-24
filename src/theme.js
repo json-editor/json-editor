@@ -285,7 +285,7 @@ export var AbstractTheme = Class.extend({
       label.insertBefore(input, label.firstChild)
       if (infoText) label.appendChild(infoText)
     } else {
-      if (infoText) label.appendChild(infoText)
+      if (infoText && label) label.appendChild(infoText)
       el.appendChild(input)
     }
 
