@@ -87,7 +87,7 @@ export var bootstrap4Theme = AbstractTheme.extend({
     return el
   },
   getButtonHolder: function () {
-    var el = document.createElement('div')
+    var el = document.createElement('span')
     el.classList.add('btn-group')
     return el
   },

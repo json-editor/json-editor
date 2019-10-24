@@ -323,7 +323,7 @@ export var AbstractTheme = Class.extend({
     return this.getDescription(text)
   },
   getButtonHolder: function () {
-    return document.createElement('div')
+    return document.createElement('span')
   },
   getHeaderButtonHolder: function () {
     return this.getButtonHolder()
