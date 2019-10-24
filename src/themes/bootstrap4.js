@@ -166,8 +166,12 @@ export var bootstrap4Theme = AbstractTheme.extend({
   },
 
   getIndentedPanel: function () {
+
     var el = document.createElement('div')
-    el.classList.add('card', 'card-body', 'bg-light')
+    el.classList.add('card', 'card-body', 'bg-light', 'mb-3')
+
+    // for better twbs card styling we should be able to return a nested div
+
     return el
   },
 
