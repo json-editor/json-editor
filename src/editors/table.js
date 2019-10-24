@@ -392,8 +392,9 @@ export var TableEditor = ArrayEditor.extend({
     this.collapsed = false
     this.toggle_button = this.getButton('', 'collapse', this.translate('button_collapse'))
     this.toggle_button.classList.add('json-editor-btntype-toggle')
+    this.toggle_button.style.margin = '0 10px 0 0'
     if (this.title_controls) {
-      this.title_controls.appendChild(this.toggle_button)
+      this.title.insertBefore(this.toggle_button, this.title.childNodes[0])
       this.toggle_button.addEventListener('click', function (e) {
         e.preventDefault()
         e.stopPropagation()

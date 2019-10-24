@@ -637,7 +637,9 @@ export var ArrayEditor = AbstractEditor.extend({
     this.collapsed = false
     this.toggle_button = this.getButton('', 'collapse', this.translate('button_collapse'))
     this.toggle_button.classList.add('json-editor-btntype-toggle')
-    this.title_controls.appendChild(this.toggle_button)
+    this.toggle_button.style.margin = '0 10px 0 0'
+    this.title.insertBefore(this.toggle_button, this.title.childNodes[0])
+
     var rowHolderDisplay = self.row_holder.style.display
     var controlsDisplay = self.controls.style.display
     this.toggle_button.addEventListener('click', function (e) {
