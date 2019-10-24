@@ -20,5 +20,6 @@ Scenario('test ColorPicker Editor  using vanilla-picker', async (I) => {
   I.click('.get-value');
   I.click('.get-value');
   const color = await I.grabValueFrom('.debug')
-  assert.ok(/\{"colorpicker":"rgba\(6\d,19\d,19\d,0.5\d*\)"\}/.test(color), color + " not match {\"colorpicker\":\"rgba(6\\d,19\\d,19\\d,0.5\\d*)\"}");
+  const reg = /\{"colorpicker":"rgba\(6\d,19\d,19\d,0.5\d*\)"\}/;
+  assert.ok(reg.test(color), color + ' match ' + reg);
 });

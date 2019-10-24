@@ -9,53 +9,38 @@ import { StringEditor } from './string'
 import { $extend } from '../utilities'
 
 export var ColorEditor = StringEditor.extend({
-
-  build: function () {
+  afterInputReady: function () {
     this._super()
-    if (!this.input) return
-    if (window.Picker) { // do when vanilla-picker loaded
-      this.input.type = 'text'
+    if (window.Picker && !this.picker_instance) { // do when vanilla-picker loaded
       const self = this
-      const defaultValue = this.schema.default || '#000000'
-      const pickerOptions = $extend({
+      var options = this.expandCallbacks('colorpicker', $extend({}, {
         editor: false, // default no editor
         alpha: false, // default no alpha
+        color: this.value,
         popup: 'bottom' // show in the bottom
-      }, (this.options || {}).Picker || {}, {
+      }, this.defaults.options.colorpicker || {}, this.options.colorpicker || {}, {
         parent: this.container,
-        color: defaultValue,
         onChange: function (color) {
           const format = this.settings.editorFormat
           const isAlpha = this.settings.alpha
           self.setValue(format === 'hex' ? (isAlpha ? color.hex : color.hex.slice(0, 7)) : color[format + (isAlpha ? 'a' : '') + 'String'])
         }
-      })
-      this.picker = new window.Picker(pickerOptions)
-      this.picker.openHandler()
-      if (!pickerOptions.popup) { // use inline colorPicker
+      }))
+      this.input.type = 'text'
+      this.picker_instance = new window.Picker(options)
+      this.picker_instance.openHandler()
+      if (!options.popup) { // use inline colorPicker
         this.input.style.display = 'none'
-      } else {
-        this.addEventListener(false)
+        this.theme.afterInputReady(this.picker_instance.domElement)
       }
     }
   },
   destroy: function () {
-    if (this.picker) {
-      this.picker.closeHandler()
-      this.picker.destroy()
-      this.picker = null
+    if (this.picker_instance) {
+      this.picker_instance.closeHandler()
+      this.picker_instance.destroy()
+      this.picker_instance = null
     }
-    this.addEventListener(true)
     this._super()
-  },
-  // helper functions
-  addEventListener: function (off) {
-    var action = off ? 'removeEventListener' : 'addEventListener'
-    var self = this
-    function onfocus (e) {
-      self.picker.setColor(self.input.value, true)
-      self.picker.show()
-    }
-    this.input[action]('focus', onfocus)
   }
 })
