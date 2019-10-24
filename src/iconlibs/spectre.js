@@ -7,14 +7,18 @@ export var spectreIconlib = AbstractIconLib.extend({
     'delete': 'delete',
     edit: 'edit',
     add: 'plus',
-    cancel: 'close',
-    save: 'save',
+    subtract: 'minus',
+    cancel: 'cross',
+    save: 'check',
     moveup: 'upward',
+    moveright: 'forward',
     movedown: 'downward',
+    moveleft: 'back',
     copy: 'copy',
     clear: 'close',
     time: 'time',
-    calendar: 'bookmark'
+    calendar: 'bookmark',
+    edit_properties: 'menu'
   },
   icon_prefix: 'icon icon-'
 })
