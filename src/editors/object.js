@@ -712,7 +712,6 @@ export var ObjectEditor = AbstractEditor.extend({
       this.collapse_control = this.getButton('', 'collapse', this.translate('button_collapse'))
       this.collapse_control.style.margin = '0 10px 0 0'
       this.collapse_control.classList.add('json-editor-btntype-toggle')
-      // this.controls.appendChild(this.collapse_control)
       this.title.insertBefore(this.collapse_control, this.title.childNodes[0])
 
       this.collapse_control.addEventListener('click', function (e) {
