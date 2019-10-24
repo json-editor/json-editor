@@ -7,7 +7,9 @@
     <script src="../../dist/nonmin/jsoneditor.js"></script>
   </head>
   <body>
-    <div id="json-editor-form"></div>
+    <div class="container">
+      <div id="json-editor-form"></div>
+    </div>
   <script>
     const schema = {
       "type": "object",
@@ -418,10 +420,13 @@
     }
     new window.JSONEditor(document.querySelector("#json-editor-form"), {
       schema: schema,
-      // show_opt_in: true,
-      remove_button_labels: false,
+      remove_button_labels: true,
+      theme: 'bootstrap3',
       iconlib: 'fontawesome5',
-      theme: 'bootstrap3'
+      // no_additional_properties: true
+      // disable_edit_json: true,
+      // disable_properties: true,
+      // disable_collapse: true
     });
   </script>
   </body>
