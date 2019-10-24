@@ -387,7 +387,7 @@ export var foundation6Theme = foundation5Theme.extend({
       el.appendChild(input)
     }
 
-    if (description) label.appendChild(description)
+    if (description && label) label.appendChild(description)
     return el
   },
   addInputError: function (input, text) {
