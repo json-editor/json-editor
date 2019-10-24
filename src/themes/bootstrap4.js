@@ -184,21 +184,43 @@ export var bootstrap4Theme = AbstractTheme.extend({
     return el
   },
 
+  getHeader: function (text) {
+    // var cardHeader = document.createElement('div')
+    // cardHeader.classList.add('card-header')
+
+    var el = document.createElement('h3')
+    el.classList.add('card-title')
+
+    if (typeof text === 'string') {
+      el.textContent = text
+    } else {
+      text.classList.add('pr-3')
+      el.appendChild(text)
+    }
+
+    // cardHeader.appendChild(el)
+
+    return el
+  },
   getHeaderButtonHolder: function () {
     var el = this.getButtonHolder()
-    el.style.marginLeft = '10px'
+
     return el
   },
   getButtonHolder: function () {
-    var el = document.createElement('div')
-    el.classList.add('btn-group')
+    // todo: we dont want to use div.btn-group until we can wrap all buttons inside it
+    // single button inside a group get's it's corners cut off
+    var el = document.createElement('span')
+    //el.classList.add('btn-group')
+    // el.classList.add('ml-2')
     return el
   },
   getButton: function (text, icon, title) {
     var el = this._super(text, icon, title)
-    el.classList.add('btn', 'btn-secondary')
+    el.classList.add('btn', 'btn-secondary', 'btn-sm', 'mr-2')
     return el
   },
+
   getTable: function () {
     var el = document.createElement('table')
     el.classList.add('table-bordered', 'table-sm')
