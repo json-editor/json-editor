@@ -40,9 +40,11 @@ export var ColorEditor = StringEditor.extend({
     }
   },
   destroy: function () {
-    this.picker.closeHandler()
-    this.picker.destroy()
-    this.picker = null
+    if (this.picker) {
+      this.picker.closeHandler()
+      this.picker.destroy()
+      this.picker = null
+    }
     this.addEventListener(true)
     this._super()
   },
