@@ -1,5 +1,6 @@
 ### Current 2.x-dev
 
+  - Added remove_button_labels option.
   - Added Spectre Theme styling for `anyOf`, `oneOf` and `allOf` selectbox.
   - Added filter to remove duplicate error messages. Duplicate error messages are now displayed as single error message with error count. (Duplicate error messages can occur when using `not`, `anyOf`, `oneOf` and `allOf` due to these are **conditions**, not properties.) 
   - Added new 2.x Theme "Spectre".
