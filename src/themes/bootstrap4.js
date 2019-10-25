@@ -265,8 +265,11 @@ export var bootstrap4Theme = AbstractTheme.extend({
   },
   getTopTabHolder: function (propertyName) {
     var pName = (typeof propertyName === 'undefined') ? '' : propertyName
+
     var el = document.createElement('div')
-    el.innerHTML = "<ul class='nav nav-tabs' id='" + pName + "'></ul><div class='card-body tab-content' id='" + pName + "'></div>"
+    el.classList.add('card')
+    el.innerHTML = "<div class='card-header'><ul class='nav nav-tabs card-header-tabs' id='" + pName + "'></ul></div><div class='card-body'><div class='tab-content' id='" + pName + "'></div></div>"
+
     return el
   },
   getTab: function (text, tabId) {
@@ -284,12 +287,15 @@ export var bootstrap4Theme = AbstractTheme.extend({
   getTopTab: function (text, tabId) {
     var el = document.createElement('li')
     el.classList.add('nav-item')
+
     var a = document.createElement('a')
     a.classList.add('nav-link')
     a.setAttribute('href', '#' + tabId)
     a.setAttribute('data-toggle', 'tab')
     a.appendChild(text)
+
     el.appendChild(a)
+
     return el
   },
   getTabContent: function () {
@@ -322,6 +328,15 @@ export var bootstrap4Theme = AbstractTheme.extend({
       row.container.classList.remove('active')
     }
   },
+
+  addTopTab: function (holder, tab) {
+    holder.children[0].children[0].appendChild(tab)
+  },
+
+  getTopTabContentHolder: function (tabHolder) {
+    return tabHolder.children[1].children[0]
+  },
+
   getProgressBar: function () {
     var min = 0
     var max = 100
