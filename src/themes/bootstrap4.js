@@ -4,7 +4,8 @@ export var bootstrap4Theme = AbstractTheme.extend({
   /* Theme config options that allows changing various aspects of the output */
   options: {
     disable_theme_rules: false,
-    input_size: 'normal' // Size of input and select elements. "small", "normal", "large"
+    input_size: 'normal', // Size of input and select elements. "small", "normal", "large"
+    custom_forms: false // use twbs custom form stylings
   },
   /* Custom stylesheet rules. format: "selector" : "CSS rules" */
   rules: {
@@ -16,8 +17,17 @@ export var bootstrap4Theme = AbstractTheme.extend({
   getSelectInput: function (options, multiple) {
     var el = this._super(options)
     el.classList.add('form-control')
-    if (this.options.input_size === 'small') el.classList.add('form-control-sm')
-    if (this.options.input_size === 'large') el.classList.add('form-control-lg')
+
+    if (this.options.custom_forms === false) {
+      if (this.options.input_size === 'small') el.classList.add('form-control-sm')
+      if (this.options.input_size === 'large') el.classList.add('form-control-lg')
+    } else {
+      el.classList.remove('form-control')
+      el.classList.add('custom-select')
+      if (this.options.input_size === 'small') el.classList.add('custom-select-sm')
+      if (this.options.input_size === 'large') el.classList.add('custom-select-lg')
+    }
+
     return el
   },
 
@@ -44,8 +54,14 @@ export var bootstrap4Theme = AbstractTheme.extend({
   },
 
   getRangeInput: function (min, max, step) {
-    // TODO: use better slider
-    return this._super(min, max, step)
+    var el = this._super(min, max, step)
+
+    if (this.options.custom_forms === true) {
+      el.classList.remove('form-control')
+      el.classList.add('custom-range')
+    }
+
+    return el
   },
 
   getFormInputField: function (type) {
@@ -64,14 +80,22 @@ export var bootstrap4Theme = AbstractTheme.extend({
 
     if (label && (input.type === 'checkbox' || input.type === 'radio')) {
       var check = document.createElement('div')
-      check.classList.add('form-check')
 
-      input.classList.add('form-check-input')
-      label.classList.add('form-check-label')
+      if (this.options.custom_forms === false) {
+        check.classList.add('form-check')
+        input.classList.add('form-check-input')
+        label.classList.add('form-check-label')
+      } else {
+        check.classList.add('custom-control')
+        input.classList.add('custom-control-input')
+        label.classList.add('custom-control-label')
 
-      // todo: nest input under label? not bootstrap default, can we set an unique ID here?
-      input.id = input.name // no name yet available?
-      label.for = input.id
+        if (input.type === 'checkbox') {
+          check.classList.add('custom-checkbox')
+        } else {
+          check.classList.add('custom-radio')
+        }
+      }
 
       check.appendChild(input)
       check.appendChild(label)
@@ -126,6 +150,16 @@ export var bootstrap4Theme = AbstractTheme.extend({
   },
 
   /**
+   * Generates a checkbox...
+   *
+   * Overwriten from master theme to get rid of inline styles.
+   */
+  getCheckbox: function () {
+    var el = this.getFormInputField('checkbox')
+    return el
+  },
+
+  /**
    * Multiple checkboxes in a row.
    *
    */
@@ -170,7 +204,11 @@ export var bootstrap4Theme = AbstractTheme.extend({
       el.setAttribute(key, attributes[key])
     }
 
-    el.classList.add('form-check-input')
+    if (this.options.custom_forms === false) {
+      el.classList.add('form-check-input')
+    } else {
+      el.classList.add('custom-control-input')
+    }
 
     return el
   },
@@ -181,7 +219,13 @@ export var bootstrap4Theme = AbstractTheme.extend({
    */
   getFormRadioLabel: function (text, req) {
     var el = document.createElement('label')
-    el.classList.add('form-check-label')
+
+    if (this.options.custom_forms === false) {
+      el.classList.add('form-check-label')
+    } else {
+      el.classList.add('custom-control-label')
+    }
+
     el.appendChild(document.createTextNode(text))
     return el
   },
@@ -192,13 +236,22 @@ export var bootstrap4Theme = AbstractTheme.extend({
    */
   getFormRadioControl: function (label, input, compact) {
     var el = document.createElement('div')
-    el.classList.add('form-check')
+
+    if (this.options.custom_forms === false) {
+      el.classList.add('form-check')
+    } else {
+      el.classList.add('custom-control', 'custom-radio')
+    }
 
     el.appendChild(input)
     el.appendChild(label)
 
     if (compact) {
-      el.classList.add('form-check-inline')
+      if (this.options.custom_forms === false) {
+        el.classList.add('form-check-inline')
+      } else {
+        el.classList.add('custom-control-inline')
+      }
     }
 
     return el
