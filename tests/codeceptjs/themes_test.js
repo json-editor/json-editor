@@ -173,7 +173,7 @@ Scenario('It should display button Labels: bootstrap2 | null', async (I) => {
 
 // only icons
 
-Scenario('(Spectre) It should hide button Labels: null | bootstrap2', async (I) => {
+Scenario('It should hide button Labels: null | bootstrap2', async (I) => {
   I.amOnPage('themes.html')
   I.selectOption('iconlib', 'Bootstrap 2')
   I.waitForText('Themes Test Page')
@@ -186,6 +186,7 @@ Scenario('(Spectre) It should hide button Labels: null | bootstrap2', async (I) 
   I.dontSee('Move down')
   I.dontSee('Move up')
 
+  I.click('Collapse')
   I.seeElementInDOM('i.icon-chevron-down')
   I.seeElementInDOM('i.icon-chevron-up')
   I.seeElementInDOM('i.icon-trash')
@@ -202,7 +203,7 @@ Scenario('(Spectre) It should hide button Labels: null | bootstrap2', async (I) 
   I.seeElementInDOM('i.icon-list')
 })
 
-Scenario('(Spectre) It should hide button Labels: null | bootstrap3', async (I) => {
+Scenario('It should hide button Labels: null | bootstrap3', async (I) => {
   I.amOnPage('themes.html')
   I.selectOption('iconlib', 'Bootstrap 3')
   I.waitForText('Themes Test Page')
@@ -215,6 +216,7 @@ Scenario('(Spectre) It should hide button Labels: null | bootstrap3', async (I) 
   I.dontSee('Move down')
   I.dontSee('Move up')
 
+  I.click('Collapse')
   I.seeElementInDOM('i.glyphicon.glyphicon-chevron-down')
   I.seeElementInDOM('i.glyphicon.glyphicon-chevron-right')
   I.seeElementInDOM('i.glyphicon.glyphicon-trash')
@@ -231,7 +233,7 @@ Scenario('(Spectre) It should hide button Labels: null | bootstrap3', async (I) 
   I.seeElementInDOM('i.glyphicon.glyphicon-list')
 })
 
-Scenario('(Spectre) It should hide button Labels: null | fontawesome3', async (I) => {
+Scenario('It should hide button Labels: null | fontawesome3', async (I) => {
   I.amOnPage('themes.html')
   I.selectOption('iconlib', 'fontawesome 3')
   I.waitForText('Themes Test Page')
@@ -244,6 +246,7 @@ Scenario('(Spectre) It should hide button Labels: null | fontawesome3', async (I
   I.dontSee('Move down')
   I.dontSee('Move up')
 
+  I.click('Collapse')
   I.seeElementInDOM('i.icon-chevron-down')
   I.seeElementInDOM('i.icon-chevron-right')
   I.seeElementInDOM('i.icon-trash')
@@ -260,7 +263,7 @@ Scenario('(Spectre) It should hide button Labels: null | fontawesome3', async (I
   I.seeElementInDOM('i.icon-list')
 })
 
-Scenario('(Spectre) It should hide button Labels: null | fontawesome4', async (I) => {
+Scenario('It should hide button Labels: null | fontawesome4', async (I) => {
   I.amOnPage('themes.html')
   I.selectOption('iconlib', 'fontawesome 4')
   I.waitForText('Themes Test Page')
@@ -273,6 +276,7 @@ Scenario('(Spectre) It should hide button Labels: null | fontawesome4', async (I
   I.dontSee('Move down')
   I.dontSee('Move up')
 
+  I.click('Collapse')
   I.seeElementInDOM('i.fa.fa-caret-square-o-down')
   I.seeElementInDOM('i.fa.fa-caret-square-o-right')
   I.seeElementInDOM('i.fa.fa-times')
@@ -289,7 +293,7 @@ Scenario('(Spectre) It should hide button Labels: null | fontawesome4', async (I
   I.seeElementInDOM('i.fa.fa-list')
 })
 
-Scenario('(Spectre) It should hide button Labels: null | fontawesome5', async (I) => {
+Scenario('It should hide button Labels: null | fontawesome5', async (I) => {
   I.amOnPage('themes.html')
   I.selectOption('iconlib', 'fontawesome 5')
   I.waitForText('Themes Test Page')
@@ -302,6 +306,7 @@ Scenario('(Spectre) It should hide button Labels: null | fontawesome5', async (I
   I.dontSee('Move down')
   I.dontSee('Move up')
 
+  I.click('Collapse')
   I.seeElementInDOM('i.fas.fa-caret-down')
   I.seeElementInDOM('i.fas.fa-caret-right')
   I.seeElementInDOM('i.fas.fa-trash')
@@ -318,7 +323,7 @@ Scenario('(Spectre) It should hide button Labels: null | fontawesome5', async (I
   I.seeElementInDOM('i.fas.fa-list')
 })
 
-Scenario('(Spectre) It should hide button Labels: null | foundation3', async (I) => {
+Scenario('It should hide button Labels: null | foundation3', async (I) => {
   I.amOnPage('themes.html')
   I.selectOption('iconlib', 'Foundation 3')
   I.waitForText('Themes Test Page')
@@ -331,6 +336,7 @@ Scenario('(Spectre) It should hide button Labels: null | foundation3', async (I)
   I.dontSee('Move down')
   I.dontSee('Move up')
 
+  I.click('Collapse')
   I.seeElementInDOM('i.fi-minus')
   I.seeElementInDOM('i.fi-plus')
   I.seeElementInDOM('i.fi-trash')
@@ -347,7 +353,7 @@ Scenario('(Spectre) It should hide button Labels: null | foundation3', async (I)
   I.seeElementInDOM('i.fi-list')
 })
 
-Scenario('(Spectre) It should hide button Labels: null | jqueryui', async (I) => {
+Scenario('It should hide button Labels: null | jqueryui', async (I) => {
   I.amOnPage('themes.html')
   I.selectOption('iconlib', 'jQuery UI')
   I.waitForText('Themes Test Page')
@@ -360,6 +366,7 @@ Scenario('(Spectre) It should hide button Labels: null | jqueryui', async (I) =>
   I.dontSee('Move down')
   I.dontSee('Move up')
 
+  I.click('Collapse')
   I.seeElementInDOM('i.ui-icon.ui-icon-triangle-1-s')
   I.seeElementInDOM('i.ui-icon.ui-icon-triangle-1-e')
   I.seeElementInDOM('i.ui-icon.ui-icon-trash')
@@ -376,7 +383,7 @@ Scenario('(Spectre) It should hide button Labels: null | jqueryui', async (I) =>
   I.seeElementInDOM('i.ui-icon.ui-icon-note')
 })
 
-Scenario('(Spectre) It should hide button Labels: null | materialicons', async (I) => {
+Scenario('It should hide button Labels: null | materialicons', async (I) => {
   I.amOnPage('themes.html')
   I.selectOption('iconlib', 'Material icons')
   I.waitForText('Themes Test Page')
@@ -408,7 +415,7 @@ Scenario('(Spectre) It should hide button Labels: null | materialicons', async (
   I.waitForText('arrow_drop_down', 'i.material-icons')
 })
 
-Scenario('(Spectre) It should hide button Labels: null | spectre', async (I) => {
+Scenario('It should hide button Labels: null | spectre', async (I) => {
   I.amOnPage('themes.html')
   I.selectOption('iconlib', 'Spectre')
   I.waitForText('Themes Test Page')
@@ -421,6 +428,7 @@ Scenario('(Spectre) It should hide button Labels: null | spectre', async (I) => 
   I.dontSee('Move down')
   I.dontSee('Move up')
 
+  I.click('Collapse')
   I.seeElementInDOM('i.icon.icon-arrow-down')
   I.seeElementInDOM('i.icon.icon-arrow-right')
   I.seeElementInDOM('i.icon.icon-delete')
@@ -439,7 +447,7 @@ Scenario('(Spectre) It should hide button Labels: null | spectre', async (I) => 
 
 // icons + themes
 
-Scenario('(Spectre) It should hide button Labels: spectre | spectre', async (I) => {
+Scenario('It should hide button Labels: spectre | spectre', async (I) => {
   I.amOnPage('themes.html')
   I.selectOption('theme', 'Spectre')
   I.selectOption('iconlib', 'Spectre')
