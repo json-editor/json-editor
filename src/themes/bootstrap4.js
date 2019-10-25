@@ -10,8 +10,7 @@ export var bootstrap4Theme = AbstractTheme.extend({
   /* Custom stylesheet rules. format: "selector" : "CSS rules" */
   rules: {
     '.jsoneditor-twbs4-text-button': 'background: none;padding: 0;border: 0',
-    'td>.form-group': 'margin-bottom: 0',
-    'div[data-schemaid="root"]:after': 'position:relative;color:red;margin:10px 0;font-weight:600;display:block;width:100%;text-align:center;content:"This is an old JSON-Editor 1.x Theme and might not display elements correctly when used with the 2.x version"'
+    'td>.form-group': 'margin-bottom: 0'
   },
 
   getSelectInput: function (options, multiple) {
