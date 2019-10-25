@@ -215,7 +215,7 @@ export var bootstrap4Theme = AbstractTheme.extend({
     // todo: we dont want to use div.btn-group until we can wrap all buttons inside it
     // single button inside a group get's it's corners cut off
     var el = document.createElement('span')
-    //el.classList.add('btn-group')
+    // el.classList.add('btn-group')
     // el.classList.add('ml-2')
     return el
   },
@@ -233,13 +233,17 @@ export var bootstrap4Theme = AbstractTheme.extend({
     return el
   },
 
+  /**
+   * input validation on <input>
+   */
   addInputError: function (input, text) {
     if (!input.controlgroup) return
-    input.controlgroup.classList.add('has-danger')
+
     input.classList.add('is-invalid')
+
     if (!input.errmsg) {
       input.errmsg = document.createElement('p')
-      input.errmsg.classList.add('form-text', 'invalid-feedback')
+      input.errmsg.classList.add('invalid-feedback')
       input.controlgroup.appendChild(input.errmsg)
     } else {
       input.errmsg.style.display = ''
@@ -251,8 +255,8 @@ export var bootstrap4Theme = AbstractTheme.extend({
     if (!input.errmsg) return
     input.errmsg.style.display = 'none'
     input.classList.remove('is-invalid')
-    input.controlgroup.classList.remove('has-danger')
   },
+
   getTabHolder: function (propertyName) {
     var el = document.createElement('div')
     var pName = (typeof propertyName === 'undefined') ? '' : propertyName
