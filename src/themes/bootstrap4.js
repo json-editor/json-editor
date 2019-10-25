@@ -350,6 +350,14 @@ export var bootstrap4Theme = AbstractTheme.extend({
     return el
   },
 
+  getErrorMessage: function (text) {
+    var el = document.createElement('div')
+    el.classList.add('alert', 'alert-danger')
+    el.setAttribute('role', 'alert')
+    el.appendChild(document.createTextNode(text))
+    return el
+  },
+
   /**
    * input validation on <input>
    */
