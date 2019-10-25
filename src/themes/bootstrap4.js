@@ -10,7 +10,8 @@ export var bootstrap4Theme = AbstractTheme.extend({
   /* Custom stylesheet rules. format: "selector" : "CSS rules" */
   rules: {
     '.jsoneditor-twbs4-text-button': 'background: none;padding: 0;border: 0',
-    'td>.form-group': 'margin-bottom: 0'
+    'td>.form-group': 'margin-bottom: 0',
+    '.json-editor-btn-upload': 'margin-top: 1rem'
   },
 
   getSelectInput: function (options, multiple) {
@@ -42,6 +43,7 @@ export var bootstrap4Theme = AbstractTheme.extend({
     if (input.controlgroup) return
 
     // set id/for
+    // is not working for: [type=file], [type=checkbox]
     var id = input.name
     input.id = id
     // 2x parentNode, b/c range input has an <div> wrapper
@@ -74,11 +76,19 @@ export var bootstrap4Theme = AbstractTheme.extend({
 
   getFormInputField: function (type) {
     var el = this._super(type)
-    if (type !== 'checkbox' && type !== 'radio') {
+    if (type !== 'checkbox' && type !== 'radio' && type !== 'file') {
       el.classList.add('form-control')
       if (this.options.input_size === 'small') el.classList.add('form-control-sm')
       if (this.options.input_size === 'large') el.classList.add('form-control-lg')
     }
+
+    if (type === 'file') {
+      // custom_form is not used on files, would be a bit ticky since we need more
+      // markup. Also it contains language strings which would need be translateable?
+      // and most of all, w/o JavaScript teh name of the file can't be displayed.
+      el.classList.add('form-control-file')
+    }
+
     return el
   },
 
@@ -491,6 +501,22 @@ export var bootstrap4Theme = AbstractTheme.extend({
     bar.style.width = '100%'
     bar.innerHTML = ''
   },
+
+  getBlockLink: function () {
+    var link = document.createElement('a')
+    return link
+  },
+
+  /**
+   * Link after successfull upload
+   */
+  getLinksHolder: function () {
+    var el = document.createElement('div')
+    el.classList.add('form-group')
+    return el
+  },
+
+
   getInputGroup: function (input, buttons) {
     if (!input) return
 
