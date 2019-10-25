@@ -7,6 +7,7 @@ export var bootstrap4Theme = AbstractTheme.extend({
   },
   /* Custom stylesheet rules. format: "selector" : "CSS rules" */
   rules: {
+    '.jsoneditor-twbs4-text-button': 'background: none;padding: 0;border: 0',
     'td>.form-group': 'margin-bottom: 0',
     'div[data-schemaid="root"]:after': 'position:relative;color:red;margin:10px 0;font-weight:600;display:block;width:100%;text-align:center;content:"This is an old JSON-Editor 1.x Theme and might not display elements correctly when used with the 2.x version"'
   },
@@ -85,6 +86,36 @@ export var bootstrap4Theme = AbstractTheme.extend({
     }
 
     return group
+  },
+
+  getInfoButton: function (text) {
+    var button = document.createElement('button') // shoud be a <button> but no fitting tbws style...
+    button.type = 'button'
+    button.classList.add('ml-3', 'jsoneditor-twbs4-text-button')
+    button.setAttribute('data-toggle', 'tooltip')
+    button.setAttribute('data-placement', 'auto')
+    button.title = text
+
+    var icon = document.createTextNode('ⓘ')
+    button.appendChild(icon)
+
+    var tooltip = document.createElement('div')
+    tooltip.classList.add('tooltip', 'bs-tooltip-top')
+    tooltip.setAttribute('role', 'tooltip')
+
+    if (window.jQuery) {
+      // arrow is only usefull if positioned by popover.js
+      var arrow = document.createElement('div')
+      arrow.classList.add('arrow')
+      tooltip.appendChild(arrow)
+
+      window.jQuery(button).tooltip()
+    } else {
+      // better fallback for non-js / no twbs js situtions?
+      // for now just rely on browser native [title]
+    }
+
+    return button
   },
 
   /**
@@ -167,7 +198,6 @@ export var bootstrap4Theme = AbstractTheme.extend({
   },
 
   getIndentedPanel: function () {
-
     var el = document.createElement('div')
     el.classList.add('card', 'card-body', 'bg-light', 'mb-3')
 
