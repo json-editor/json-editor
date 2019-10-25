@@ -42,6 +42,15 @@ export var bootstrap4Theme = AbstractTheme.extend({
   afterInputReady: function (input) {
     if (input.controlgroup) return
 
+    // set id/for
+    var id = input.name
+    input.id = id
+    // 2x parentNode, b/c range input has an <div> wrapper
+    var label = input.parentNode.parentNode.getElementsByTagName('label')[0]
+    if (label) {
+      label.htmlFor = id
+    }
+
     input.controlgroup = this.closest(input, '.form-group')
   },
 
