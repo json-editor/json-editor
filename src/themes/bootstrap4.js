@@ -3,7 +3,8 @@ import { AbstractTheme } from '../theme'
 export var bootstrap4Theme = AbstractTheme.extend({
   /* Theme config options that allows changing various aspects of the output */
   options: {
-    'disable_theme_rules': false
+    disable_theme_rules: false,
+    input_size: 'normal' // Size of input and select elements. "small", "normal", "large"
   },
   /* Custom stylesheet rules. format: "selector" : "CSS rules" */
   rules: {
@@ -15,7 +16,8 @@ export var bootstrap4Theme = AbstractTheme.extend({
   getSelectInput: function (options, multiple) {
     var el = this._super(options)
     el.classList.add('form-control')
-    // el.style.width = 'auto';
+    if (this.options.input_size === 'small') el.classList.add('form-control-sm')
+    if (this.options.input_size === 'large') el.classList.add('form-control-lg')
     return el
   },
 
@@ -31,13 +33,13 @@ export var bootstrap4Theme = AbstractTheme.extend({
     if (input.controlgroup) return
 
     input.controlgroup = this.closest(input, '.form-group')
-
-    // TODO: use bootstrap slider
   },
 
   getTextareaInput: function () {
     var el = document.createElement('textarea')
     el.classList.add('form-control')
+    if (this.options.input_size === 'small') el.classList.add('form-control-sm')
+    if (this.options.input_size === 'large') el.classList.add('form-control-lg')
     return el
   },
 
@@ -50,6 +52,8 @@ export var bootstrap4Theme = AbstractTheme.extend({
     var el = this._super(type)
     if (type !== 'checkbox' && type !== 'radio') {
       el.classList.add('form-control')
+      if (this.options.input_size === 'small') el.classList.add('form-control-sm')
+      if (this.options.input_size === 'large') el.classList.add('form-control-lg')
     }
     return el
   },
