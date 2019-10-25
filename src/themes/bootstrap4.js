@@ -168,13 +168,15 @@ export var bootstrap4Theme = AbstractTheme.extend({
     el.classList.add('form-group')
 
     if (label) {
-      label.style.display = 'block'
       el.appendChild(label)
 
       if (infoText) {
         label.appendChild(infoText)
       }
     }
+
+    // for inline view we need an container so it doesnt wrap in the "row" of the <label>
+    var container = document.createElement('div')
 
     for (var i in controls) {
       if (!controls.hasOwnProperty(i)) {
@@ -185,9 +187,17 @@ export var bootstrap4Theme = AbstractTheme.extend({
       // wrapper we need to get rid of...
       var ctrl = controls[i].firstChild
 
-      ctrl.classList.add('form-check-inline')
-      el.appendChild(ctrl)
+      // we don't know if this should be an normal / compact view
+      /* if (this.options.custom_forms === false) {
+        ctrl.classList.add('form-check-inline')
+      } else {
+        ctrl.classList.add('custom-control-inline')
+      } */
+
+      container.appendChild(ctrl)
     }
+
+    el.appendChild(container)
 
     if (description) el.appendChild(description)
 
