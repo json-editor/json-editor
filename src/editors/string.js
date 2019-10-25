@@ -225,8 +225,27 @@ export var StringEditor = AbstractEditor.extend({
     // Enable imask.js support if library is loaded and config is available
     var options = this.expandCallbacks('imask', $extend({}, this.defaults.options.imask || {}, this.options.imask || {}))
     if (typeof options === 'object' && Object.keys(options).length > 0) {
-      this.imask_instance = window.IMask(el, options)
+      this.imask_instance = window.IMask(el, this.ajustIMaskOptions(options))
     }
+  },
+  ajustIMaskOptions: function (obj) {
+    // iMask config format is not JSON friendly, so some function based mask properties
+    // have to be adjusted from string to the correct format
+    for (var prop in obj) {
+      if (obj[prop] === Object(obj[prop])) obj[prop] = this.ajustIMaskOptions(obj[prop])
+      else if (prop === 'mask') {
+        if (obj[prop] === 'Number') obj[prop] = window.Number
+        else if (obj[prop] === 'Date') obj[prop] = window.Date
+        else if (obj[prop] === 'IMask.MaskedEnum') obj[prop] = window.IMask.MaskedEnum
+        else if (obj[prop] === 'IMask.MaskedRange') obj[prop] = window.IMask.MaskedRange
+      }
+    }
+    return obj
+  },
+  getValue: function () {
+    if (this.imask_instance && this.dependenciesFulfilled && this.options.imask.returnUnmasked) {
+      return this.imask_instance.unmaskedValue
+    } else return this._super()
   },
   enable: function () {
     if (!this.always_disabled) {
