@@ -54,7 +54,7 @@ export var bootstrap4Theme = AbstractTheme.extend({
     return el
   },
 
-  getFormControl: function (label, input, description) {
+  getFormControl: function (label, input, description, infoText) {
     var group = document.createElement('div')
     group.classList.add('form-group')
 
@@ -71,11 +71,14 @@ export var bootstrap4Theme = AbstractTheme.extend({
 
       check.appendChild(input)
       check.appendChild(label)
+      if (infoText) check.appendChild(infoText)
 
       group.appendChild(check)
     } else {
       if (label) {
         group.appendChild(label)
+
+        if (infoText) group.appendChild(infoText)
       }
 
       group.appendChild(input)
