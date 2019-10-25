@@ -524,19 +524,23 @@ export var bootstrap4Theme = AbstractTheme.extend({
     return el
   },
 
-
   getInputGroup: function (input, buttons) {
     if (!input) return
 
     var inputGroupContainer = document.createElement('div')
     inputGroupContainer.classList.add('input-group')
+
     inputGroupContainer.appendChild(input)
 
     var inputGroup = document.createElement('div')
-    inputGroup.classList.add('input-group-prepend')
+    inputGroup.classList.add('input-group-append')
     inputGroupContainer.appendChild(inputGroup)
 
     for (var i = 0; i < buttons.length; i++) {
+      // this uses the getButton() wrapper, so we have to remove the panel/ctrl spacing for this case
+      buttons[i].classList.remove('mr-2', 'btn-secondary')
+      buttons[i].classList.add('btn-outline-secondary')
+
       inputGroup.appendChild(buttons[i])
     }
 
