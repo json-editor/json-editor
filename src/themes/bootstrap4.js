@@ -259,13 +259,17 @@ export var bootstrap4Theme = AbstractTheme.extend({
   getTabHolder: function (propertyName) {
     var el = document.createElement('div')
     var pName = (typeof propertyName === 'undefined') ? '' : propertyName
-    el.innerHTML = "<div class='col-md-2' id='" + pName + "'><ul class='nav flex-column nav-pills'></ul></div><div class='tab-content col-md-10' id='" + pName + "'></div>"
+    el.innerHTML = "<div class='col-md-2' id='" + pName + "'><ul class='nav flex-column nav-pills'></ul></div><div class='col-md-10'><div class='tab-content' id='" + pName + "'></div></div>"
     el.classList.add('row')
     return el
   },
   addTab: function (holder, tab) {
     holder.children[0].children[0].appendChild(tab)
   },
+  getTabContentHolder: function (tabHolder) {
+    return tabHolder.children[1].children[0]
+  },
+
   getTopTabHolder: function (propertyName) {
     var pName = (typeof propertyName === 'undefined') ? '' : propertyName
 
@@ -278,13 +282,15 @@ export var bootstrap4Theme = AbstractTheme.extend({
   getTab: function (text, tabId) {
     var liel = document.createElement('li')
     liel.classList.add('nav-item')
+
     var ael = document.createElement('a')
     ael.classList.add('nav-link')
-    ael.setAttribute('style', 'padding:10px;')
     ael.setAttribute('href', '#' + tabId)
     ael.setAttribute('data-toggle', 'tab')
     ael.appendChild(text)
+
     liel.appendChild(ael)
+
     return liel
   },
   getTopTab: function (text, tabId) {
