@@ -1039,7 +1039,7 @@ export var ObjectEditor = AbstractEditor.extend({
     if (this.jsoneditor.options.remove_empty_properties || this.options.remove_empty_properties) {
       for (var i in result) {
         if (result.hasOwnProperty(i)) {
-          if ((typeof result[i] === 'undefined' || result[i] === '' || result[i] === Object(result[i])) && Object.keys(result[i]).length === 0 && result[i].constructor === Object) {
+          if (typeof result[i] === 'undefined' || result[i] === '' || (result[i] === Object(result[i]) && Object.keys(result[i]).length === 0 && result[i].constructor === Object)) {
             delete result[i]
           }
         }
