@@ -229,15 +229,17 @@ export var StringEditor = AbstractEditor.extend({
     }
   },
   ajustIMaskOptions: function (obj) {
-    // iMask config format is not JSON friendly, so some function based mask properties
-    // have to be adjusted from string to the correct format
+    // iMask config format is not JSON friendly, so function and regex based mask
+    // properties have to be adjusted from string to the correct format
     for (var prop in obj) {
       if (obj[prop] === Object(obj[prop])) obj[prop] = this.ajustIMaskOptions(obj[prop])
       else if (prop === 'mask') {
-        if (obj[prop] === 'Number') obj[prop] = window.Number
-        else if (obj[prop] === 'Date') obj[prop] = window.Date
-        else if (obj[prop] === 'IMask.MaskedEnum') obj[prop] = window.IMask.MaskedEnum
-        else if (obj[prop] === 'IMask.MaskedRange') obj[prop] = window.IMask.MaskedRange
+        var regExMatch = obj[prop].match(/^\/(.*)\/([gimsuy]*)$/)
+        if (regExMatch) obj[prop] = new RegExp(regExMatch[1], regExMatch[2])
+        else {
+          var i = ['Date', 'Number', 'IMask.MaskedEnum', 'IMask.MaskedRange'].indexOf(obj[prop])
+          if (i > -1) obj[prop] = [window.Date, window.Number, window.IMask.MaskedEnum, window.IMask.MaskedRange][i]
+        }
       }
     }
     return obj
@@ -262,7 +264,7 @@ export var StringEditor = AbstractEditor.extend({
     var self = this
     self.theme.afterInputReady(self.input)
     if (window.Cleave && !self.cleave_instance) self.setupCleave(self.input)
-    if (window.IMask && !self.imask_instance) self.setupImask(self.input)
+    else if (window.IMask && !self.imask_instance) self.setupImask(self.input)
   },
   refreshValue: function () {
     this.value = this.input.value

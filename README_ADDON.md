@@ -186,7 +186,10 @@ For configuration options, see the [IMask homepage](https://imask.js.org/).
 **Schema options:** ``options.imask``<br>
 **Options callback** ``JSONEditor.defaults.callbacks.imask``<br>
 **Required options:** none<br>
+**Special options:** ``returnUnmasked`` when true, returns the unmasked value<br>
 **Source:** src/editors/string.js
+
+IMask configuration format is not "JSON friendly" as it is possible to set the mask to an object ("Date", "Number", "IMask.MaskedEnum" and "IMask.MaskedRange") or a regular expression. In order for those to work, you will have to enclose them in quotes. 
 <br>
 
 ### Flatpickr
