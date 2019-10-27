@@ -3,7 +3,7 @@
   - Improved IMask support for `Date`, `Number`, `IMask.MaskedEnum`, `IMask.MaskedRange` and regular expression masks.
   - Added support for recurcive callback options.
 
-### 2.0.0-alpha
+### 2.0.0-alpha-1
 
   - Added Spectre Theme styling for `anyOf`, `oneOf` and `allOf` selectbox.
   - Added filter to remove duplicate error messages. Duplicate error messages are now displayed as single error message with error count. (Duplicate error messages can occur when using `not`, `anyOf`, `oneOf` and `allOf` due to these are **conditions**, not properties.)
