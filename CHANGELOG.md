@@ -1,7 +1,7 @@
 ### Current 2.0.0-dev
 
-  - Improved IMask support for `Date`, `Number`, `IMask.MaskedEnum`, `IMask.MaskedRange` and regular expression masks.
-  - Added support for recurcive callback options.
+  - Improved IMask support for `Date`, `Number`, `IMask.MaskedEnum`, `IMask.MaskedRange` and regular expression masks. #591
+  - Added support for recursive callback options.
 
 ### 2.0.0-alpha-1
 
