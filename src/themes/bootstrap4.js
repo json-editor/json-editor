@@ -439,14 +439,6 @@ export var bootstrap4Theme = AbstractTheme.extend({
     var el = document.createElement('div')
     el.classList.add('card')
 
-    if (this.options.object_background) {
-      el.classList.add(this.options.object_background)
-    }
-
-    if (this.options.object_text) {
-      el.classList.add(this.options.object_text)
-    }
-
     el.innerHTML = "<div class='card-header'><ul class='nav nav-tabs card-header-tabs' id='" + pName + "'></ul></div><div class='card-body'><div class='tab-content' id='" + pName + "'></div></div>"
 
     return el
