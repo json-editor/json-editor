@@ -10,7 +10,8 @@ export var bootstrap4Theme = AbstractTheme.extend({
     object_background: 'bg-light', // Bootstrap 4 card background modifier class (https://getbootstrap.com/docs/4.1/getting-started/introduction/)
     object_text: '', // Bootstrap 4 card tect color modifier class (https://getbootstrap.com/docs/4.1/getting-started/introduction/)
     table_border: false, // Add border to array "table" row and cells
-    table_zebrastyle: false // Add "zebra style" to array "table" rows
+    table_zebrastyle: false, // Add "zebra style" to array "table" rows
+    tooltip: 'bootstrap' // how to display tooltips (infoText). Can be `browser` for native `title`, `css` for simple CSS Styling, or `bootstrap` for TWBS/Popper.js handling
   },
   /* Custom stylesheet rules. format: "selector" : "CSS rules" */
   rules: {
@@ -18,6 +19,11 @@ export var bootstrap4Theme = AbstractTheme.extend({
     'td>.form-group': 'margin-bottom: 0',
     '.json-editor-btn-upload': 'margin-top: 1rem',
     '.je-noindent .card': 'padding: 0; border: 0', // Option: object_indent
+
+    // no-js handling of tooltips. Option: tooltip = 'css'
+
+    '.je-tooltip:hover::before, .je-tooltip:hover::after': 'display:block;position:absolute;font-size:0.8em;color:#fff',
+    '.je-tooltip:hover::before': 'border-radius:0.2em; content:attr(title);background-color:#000; margin-top:-2.5em;padding:0.3em',
 
     // bring select2 input size to default twbs4 size (only matched size for input_size: normal)
     '.select2-container--default .select2-selection--single, .select2-container--default .select2-selection--single .select2-selection__arrow': 'height: calc(1.5em + .75rem + 2px)',
@@ -168,21 +174,15 @@ export var bootstrap4Theme = AbstractTheme.extend({
     var icon = document.createTextNode('ⓘ')
     button.appendChild(icon)
 
-    var tooltip = document.createElement('div')
-    tooltip.classList.add('tooltip', 'bs-tooltip-top')
-    tooltip.setAttribute('role', 'tooltip')
-
-    if (window.jQuery) {
-      // arrow is only usefull if positioned by popover.js
-      var arrow = document.createElement('div')
-      arrow.classList.add('arrow')
-      tooltip.appendChild(arrow)
-
-      window.jQuery(button).tooltip()
-    } else {
-      // better fallback for non-js / no twbs js situtions?
-      // for now just rely on browser native [title]
-    }
+    if (this.options.tooltip === 'bootstrap') {
+      if (window.jQuery && window.jQuery().tooltip) {
+        window.jQuery(button).tooltip()
+      } else {
+        console.warn('Could not find popper jQuery plugin of Bootstrap.')
+      }
+    } else if (this.options.tooltip === 'css') {
+      button.classList.add('je-tooltip')
+    } // else -> nothing todo for native [title] handling
 
     return button
   },
