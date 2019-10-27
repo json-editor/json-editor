@@ -6,11 +6,13 @@ export var bootstrap4Theme = AbstractTheme.extend({
     disable_theme_rules: false,
     input_size: 'normal', // Size of input and select elements. "small", "normal", "large"
     custom_forms: false, // use twbs custom form stylings
-    object_indent: true // Indent nested object elements (use nested .card layout).
+    object_indent: true, // Indent nested object elements (use nested .card layout)
+    object_background: 'bg-light', // Bootstrap 4 card background modifier class (https://getbootstrap.com/docs/4.1/getting-started/introduction/)
+    object_text: '' // Bootstrap 4 card tect color modifier class (https://getbootstrap.com/docs/4.1/getting-started/introduction/)
   },
   /* Custom stylesheet rules. format: "selector" : "CSS rules" */
   rules: {
-    '.jsoneditor-twbs4-text-button': 'background: none;padding: 0;border: 0',
+    '.jsoneditor-twbs4-text-button': 'background: none;padding: 0;border: 0;color: currentColor;',
     'td>.form-group': 'margin-bottom: 0',
     '.json-editor-btn-upload': 'margin-top: 1rem',
     '.je-noindent .card': 'padding: 0; border: 0' // Option: object_indent
@@ -295,7 +297,15 @@ export var bootstrap4Theme = AbstractTheme.extend({
 
   getIndentedPanel: function () {
     var el = document.createElement('div')
-    el.classList.add('card', 'card-body', 'bg-light', 'mb-3')
+    el.classList.add('card', 'card-body', 'mb-3')
+
+    if (this.options.object_background) {
+      el.classList.add(this.options.object_background)
+    }
+
+    if (this.options.object_text) {
+      el.classList.add(this.options.object_text)
+    }
 
     // for better twbs card styling we should be able to return a nested div
 
@@ -409,6 +419,15 @@ export var bootstrap4Theme = AbstractTheme.extend({
 
     var el = document.createElement('div')
     el.classList.add('card')
+
+    if (this.options.object_background) {
+      el.classList.add(this.options.object_background)
+    }
+
+    if (this.options.object_text) {
+      el.classList.add(this.options.object_text)
+    }
+
     el.innerHTML = "<div class='card-header'><ul class='nav nav-tabs card-header-tabs' id='" + pName + "'></ul></div><div class='card-body'><div class='tab-content' id='" + pName + "'></div></div>"
 
     return el
