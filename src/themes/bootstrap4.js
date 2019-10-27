@@ -21,7 +21,11 @@ export var bootstrap4Theme = AbstractTheme.extend({
 
     // bring select2 input size to default twbs4 size (only matched size for input_size: normal)
     '.select2-container--default .select2-selection--single, .select2-container--default .select2-selection--single .select2-selection__arrow': 'height: calc(1.5em + .75rem + 2px)',
-    '.select2-container--default .select2-selection--single .select2-selection__rendered': 'line-height: calc(1.5em + .75rem + 2px);'
+    '.select2-container--default .select2-selection--single .select2-selection__rendered': 'line-height: calc(1.5em + .75rem + 2px);',
+
+    // selectize
+    '.selectize-control.form-control': 'padding: 0',
+    '.selectize-dropdown.form-control': 'padding: 0;height: auto' // this cut off options can also be prohibited by setting `copyClassesToDropdown: true` in the slectize options
   },
 
   getSelectInput: function (options, multiple) {
