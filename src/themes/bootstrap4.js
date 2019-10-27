@@ -17,7 +17,11 @@ export var bootstrap4Theme = AbstractTheme.extend({
     '.jsoneditor-twbs4-text-button': 'background: none;padding: 0;border: 0;color: currentColor;',
     'td>.form-group': 'margin-bottom: 0',
     '.json-editor-btn-upload': 'margin-top: 1rem',
-    '.je-noindent .card': 'padding: 0; border: 0' // Option: object_indent
+    '.je-noindent .card': 'padding: 0; border: 0', // Option: object_indent
+
+    // bring select2 input size to default twbs4 size (only matched size for input_size: normal)
+    '.select2-container--default .select2-selection--single, .select2-container--default .select2-selection--single .select2-selection__arrow': 'height: calc(1.5em + .75rem + 2px)',
+    '.select2-container--default .select2-selection--single .select2-selection__rendered': 'line-height: calc(1.5em + .75rem + 2px);'
   },
 
   getSelectInput: function (options, multiple) {
