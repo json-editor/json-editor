@@ -5,13 +5,15 @@ export var bootstrap4Theme = AbstractTheme.extend({
   options: {
     disable_theme_rules: false,
     input_size: 'normal', // Size of input and select elements. "small", "normal", "large"
-    custom_forms: false // use twbs custom form stylings
+    custom_forms: false, // use twbs custom form stylings
+    object_indent: true // Indent nested object elements (use nested .card layout).
   },
   /* Custom stylesheet rules. format: "selector" : "CSS rules" */
   rules: {
     '.jsoneditor-twbs4-text-button': 'background: none;padding: 0;border: 0',
     'td>.form-group': 'margin-bottom: 0',
-    '.json-editor-btn-upload': 'margin-top: 1rem'
+    '.json-editor-btn-upload': 'margin-top: 1rem',
+    '.je-noindent .card': 'padding: 0; border: 0' // Option: object_indent
   },
 
   getSelectInput: function (options, multiple) {
@@ -28,6 +30,12 @@ export var bootstrap4Theme = AbstractTheme.extend({
       if (this.options.input_size === 'large') el.classList.add('custom-select-lg')
     }
 
+    return el
+  },
+
+  getContainer: function () {
+    var el = document.createElement('div')
+    if (!this.options.object_indent) el.classList.add('je-noindent')
     return el
   },
 
