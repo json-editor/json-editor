@@ -116,6 +116,7 @@ export var spectreTheme = AbstractTheme.extend({
   getFormButtonHolder: function (buttonAlign) {
     var el = this._super()
     el.classList.remove('btn-group')
+    el.classList.add('d-block')
     if (buttonAlign === 'center') el.classList.add('text-center')
     else if (buttonAlign === 'right') el.classList.add('text-right')
     else el.classList.add('text-left')
