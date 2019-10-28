@@ -345,7 +345,6 @@ export var bootstrap4Theme = AbstractTheme.extend({
     if (typeof text === 'string') {
       el.textContent = text
     } else {
-      text.classList.add('pr-3')
       el.appendChild(text)
     }
 
@@ -359,11 +358,8 @@ export var bootstrap4Theme = AbstractTheme.extend({
     return el
   },
   getButtonHolder: function () {
-    // todo: we dont want to use div.btn-group until we can wrap all buttons inside it
-    // single button inside a group get's it's corners cut off
     var el = document.createElement('span')
-    // el.classList.add('btn-group')
-    // el.classList.add('ml-2')
+    el.classList.add('btn-group')
     return el
   },
 
@@ -379,7 +375,7 @@ export var bootstrap4Theme = AbstractTheme.extend({
 
   getButton: function (text, icon, title) {
     var el = this._super(text, icon, title)
-    el.classList.add('btn', 'btn-secondary', 'btn-sm', 'mr-2')
+    el.classList.add('btn', 'btn-secondary', 'btn-sm')
     return el
   },
 
