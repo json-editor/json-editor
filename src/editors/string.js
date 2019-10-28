@@ -232,17 +232,38 @@ export var StringEditor = AbstractEditor.extend({
     // iMask config format is not JSON friendly, so function and regex based mask
     // properties have to be adjusted from string to the correct format
     for (var prop in obj) {
-      if (obj[prop] === Object(obj[prop])) obj[prop] = this.ajustIMaskOptions(obj[prop])
-      else if (prop === 'mask') {
-        var regExMatch = obj[prop].match(/^\/(.*)\/([gimsuy]*)$/)
-        if (regExMatch) obj[prop] = new RegExp(regExMatch[1], regExMatch[2])
-        else {
-          var i = ['Date', 'Number', 'IMask.MaskedEnum', 'IMask.MaskedRange'].indexOf(obj[prop])
-          if (i > -1) obj[prop] = [window.Date, window.Number, window.IMask.MaskedEnum, window.IMask.MaskedRange][i]
+      if (obj.hasOwnProperty(prop)) {
+        if (obj[prop] === Object(obj[prop])) obj[prop] = this.ajustIMaskOptions(obj[prop])
+        else if (prop === 'mask') {
+          var regExMatch = obj[prop].match(/^\/(.*)\/([gimsuy]*)$/)
+          if (regExMatch) {
+            try {
+              var re = new RegExp(regExMatch[1], regExMatch[2])
+              if (re.toString() === obj[prop]) obj[prop] = re
+            } catch (e) {
+            }
+          } else obj[prop] = this.getGlobalPropertyFromString(obj[prop])
         }
       }
     }
     return obj
+  },
+  getGlobalPropertyFromString: function (strValue) {
+    if (strValue.indexOf('.') === -1) {
+      if (typeof window[strValue] !== 'undefined') {
+        return window[strValue]
+      }
+    } else {
+      var arrParts = strValue.split('.')
+      var obj = arrParts[0]
+      var prop = arrParts[1]
+
+      if (typeof window[obj] !== 'undefined' && typeof window[obj][prop] !== 'undefined') {
+        return window[obj][prop]
+      }
+    }
+    // just a string
+    return strValue
   },
   getValue: function () {
     if (this.imask_instance && this.dependenciesFulfilled && this.options.imask.returnUnmasked) {
