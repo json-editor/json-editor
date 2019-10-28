@@ -17,7 +17,7 @@ export var ScEditor = StringEditor.extend({
       // Get options, either global options from "this.defaults.options.sceditor" or
       // single property options from schema "options.sceditor"
       var options = this.expandCallbacks('sceditor', $extend({}, {
-        format: this.input_type === 'html' ? 'xhtml' : 'bbcode',
+        format: this.input_type,
         emoticonsEnabled: false,
         width: '100%',
         height: 300,
