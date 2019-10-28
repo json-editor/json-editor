@@ -120,7 +120,7 @@ var jseditor, jedata = {schema:{
       "options": {
         "grid_columns": 6,
         "imask": {
-          "mask": "/^\\d+$/"
+          "mask": "regex:/^\\d+$/"
         }
       }
     },
@@ -166,7 +166,7 @@ var jseditor, jedata = {schema:{
             }
           },
             {
-              "mask": "/^#[0-9a-f]{0,6}$/i"
+              "mask": "regex:/^#[0-9a-f]{0,6}$/i"
             }]
         }
       }
