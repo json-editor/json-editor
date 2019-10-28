@@ -7,13 +7,18 @@ export var jqueryuiIconlib = AbstractIconLib.extend({
     'delete': 'trash',
     edit: 'pencil',
     add: 'plusthick',
+    subtract: 'minusthick',
     cancel: 'closethick',
     save: 'disk',
     moveup: 'arrowthick-1-n',
+    moveright: 'arrowthick-1-e',
     movedown: 'arrowthick-1-s',
+    moveleft: 'arrowthick-1-w',
+    copy: 'copy',
     clear: 'circle-close',
     time: 'time',
-    calendar: 'calendar'
+    calendar: 'calendar',
+    edit_properties: 'note'
   },
   icon_prefix: 'ui-icon ui-icon-'
 })

@@ -12,6 +12,11 @@ var matchKey = (function () {
 })()
 
 export var AbstractTheme = Class.extend({
+
+  init: function (jsoneditor) {
+    this.jsoneditor = jsoneditor
+  },
+
   /* Theme config options that allows changing various aspects of the output */
   options: {
     'disable_theme_rules': false
@@ -280,7 +285,7 @@ export var AbstractTheme = Class.extend({
       label.insertBefore(input, label.firstChild)
       if (infoText) label.appendChild(infoText)
     } else {
-      if (infoText) label.appendChild(infoText)
+      if (infoText && label) label.appendChild(infoText)
       el.appendChild(input)
     }
 
@@ -318,7 +323,7 @@ export var AbstractTheme = Class.extend({
     return this.getDescription(text)
   },
   getButtonHolder: function () {
-    return document.createElement('div')
+    return document.createElement('span')
   },
   getHeaderButtonHolder: function () {
     return this.getButtonHolder()
@@ -344,9 +349,11 @@ export var AbstractTheme = Class.extend({
       button.appendChild(icon)
       text = ' ' + text
     }
-    var spanEl = document.createElement('span')
-    spanEl.appendChild(document.createTextNode(text))
-    button.appendChild(spanEl)
+    if (!this.jsoneditor.options.iconlib || !this.jsoneditor.options.remove_button_labels || !icon) {
+      var spanEl = document.createElement('span')
+      spanEl.appendChild(document.createTextNode(text))
+      button.appendChild(spanEl)
+    }
     if (title) button.setAttribute('title', title)
   },
 
