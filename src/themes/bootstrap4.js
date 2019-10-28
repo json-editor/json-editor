@@ -561,6 +561,7 @@ export var bootstrap4Theme = AbstractTheme.extend({
 
   getBlockLink: function () {
     var link = document.createElement('a')
+    link.classList.add('mb-3', 'd-inline-block')
     return link
   },
 
@@ -569,7 +570,6 @@ export var bootstrap4Theme = AbstractTheme.extend({
    */
   getLinksHolder: function () {
     var el = document.createElement('div')
-    el.classList.add('form-group')
     return el
   },
 
