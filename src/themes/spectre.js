@@ -23,8 +23,8 @@ export var spectreTheme = AbstractTheme.extend({
     'h4>label+.btn-group': 'margin-left:1rem', // Add margin between header and top buttons
     '.text-right>button': 'margin-right: 0 !important', // Remove right margin on right-aligned button
     '.text-left>button': 'margin-left: 0 !important', // Remove left margin on left-aligned button
-    '.json-editor-btntype-properties+div>.property-selector': 'font-size: .7rem;font-weight: normal; max-height:260px!important;width:395px!important', // Fix fontsize in Properties modal and increase size of modal box
-    '.json-editor-btntype-properties+div>.property-selector .form-checkbox': 'margin:0', // Remove checkbox margins in Properties modal
+    '.property-selector': 'font-size: .7rem;font-weight: normal; max-height:260px!important;width:395px!important', // Fix fontsize in Properties modal and increase size of modal box
+    '.property-selector .form-checkbox': 'margin:0', // Remove checkbox margins in Properties modal
     'textarea': 'width:100%;min-height: 2rem;resize:vertical', // Prevent textarea from being resized horizontally
     'table': 'border-collapse: collapse;', // Remove gap between table element borders
     '.table td': 'padding: .4rem .4rem;', // reduce table padding
