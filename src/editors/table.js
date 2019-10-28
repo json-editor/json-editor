@@ -392,8 +392,9 @@ export var TableEditor = ArrayEditor.extend({
     this.collapsed = false
     this.toggle_button = this.getButton('', 'collapse', this.translate('button_collapse'))
     this.toggle_button.classList.add('json-editor-btntype-toggle')
+    this.toggle_button.style.margin = '0 10px 0 0'
     if (this.title_controls) {
-      this.title_controls.appendChild(this.toggle_button)
+      this.title.insertBefore(this.toggle_button, this.title.childNodes[0])
       this.toggle_button.addEventListener('click', function (e) {
         e.preventDefault()
         e.stopPropagation()
@@ -437,7 +438,7 @@ export var TableEditor = ArrayEditor.extend({
     })
     self.controls.appendChild(this.add_row_button)
 
-    this.delete_last_row_button = this.getButton(this.translate('button_delete_last', [this.getItemTitle()]), 'delete', this.translate('button_delete_last_title', [this.getItemTitle()]))
+    this.delete_last_row_button = this.getButton(this.translate('button_delete_last', [this.getItemTitle()]), 'subtract', this.translate('button_delete_last_title', [this.getItemTitle()]))
     this.delete_last_row_button.classList.add('json-editor-btntype-deletelast')
     this.delete_last_row_button.addEventListener('click', function (e) {
       e.preventDefault()

@@ -22,8 +22,9 @@ export var barebonesTheme = AbstractTheme.extend({
     input.errmsg.appendChild(document.createTextNode(text))
   },
   removeInputError: function (input) {
-    input.style.borderColor = ''
+    if (input.style) {
+      input.style.borderColor = ''
+    }
     if (input.errmsg) input.errmsg.style.display = 'none'
   }
-
 })

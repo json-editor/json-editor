@@ -189,7 +189,7 @@ JSONEditor.prototype = {
 
     this.schema = this.options.schema
     // eslint-disable-next-line new-cap
-    this.theme = new themeClass()
+    this.theme = new themeClass(this)
 
     this.element.setAttribute('data-theme', themeName)
     if (!this.theme.options.disable_theme_rules) this.addNewStyleRules(themeName, this.theme.rules)
