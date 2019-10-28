@@ -366,6 +366,17 @@ export var bootstrap4Theme = AbstractTheme.extend({
     // el.classList.add('ml-2')
     return el
   },
+
+  getFormButtonHolder: function (buttonAlign) {
+    var el = this.getButtonHolder()
+    el.classList.add('d-block')
+
+    if (buttonAlign === 'center') el.classList.add('text-center')
+    else if (buttonAlign === 'right') el.classList.add('text-right')
+
+    return el
+  },
+
   getButton: function (text, icon, title) {
     var el = this._super(text, icon, title)
     el.classList.add('btn', 'btn-secondary', 'btn-sm', 'mr-2')
