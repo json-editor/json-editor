@@ -235,11 +235,10 @@ export var StringEditor = AbstractEditor.extend({
       if (obj.hasOwnProperty(prop)) {
         if (obj[prop] === Object(obj[prop])) obj[prop] = this.ajustIMaskOptions(obj[prop])
         else if (prop === 'mask') {
-          var regExMatch = obj[prop].match(/^\/(.*)\/([gimsuy]*)$/)
-          if (regExMatch) {
+          var regExMatch = obj[prop].match(/^regex:\/(.*)\/([gimsuy]*)$/)
+          if (regExMatch !== null) {
             try {
-              var re = new RegExp(regExMatch[1], regExMatch[2])
-              if (re.toString() === obj[prop]) obj[prop] = re
+              obj[prop] = new RegExp(regExMatch[1], regExMatch[2])
             } catch (e) {
             }
           } else obj[prop] = this.getGlobalPropertyFromString(obj[prop])

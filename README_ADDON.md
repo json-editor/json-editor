@@ -189,7 +189,46 @@ For configuration options, see the [IMask homepage](https://imask.js.org/).
 **Special options:** ``returnUnmasked`` when true, returns the unmasked value<br>
 **Source:** src/editors/string.js
 
-IMask configuration format is not "JSON friendly" as it is possible to set the mask to an object ("Date", "Number", "IMask.MaskedEnum" and "IMask.MaskedRange") or a regular expression. In order for those to work, you will have to enclose them in quotes. 
+IMask configuration format is not "JSON friendly" as it is possible to set the mask to an object ("Date", "Number", "IMask.MaskedEnum" and "IMask.MaskedRange") or a regular expression. In order for those to work, you will have to enclose them in quotes. And for regular expressions, you will also have to prefix the quoted regular expression with the keyword "regex:"
+
+
+Example of an iMask mask config:
+````javascript
+  mask: [
+    {
+      mask: 'RGB,RGB,RGB',
+      blocks: {
+        RGB: {
+          mask: IMask.MaskedRange,
+          from: 0,
+          to: 255
+        }
+      }
+    },
+    {
+      mask: /^#[0-9a-f]{0,6}$/i
+    }
+  ]
+````
+The same config "converted" to JSON-Editor format:
+
+````javascript
+  "mask": [{
+    "mask": "RGB,RGB,RGB",
+    "blocks": {
+      "RGB": {
+        "mask": "IMask.MaskedRange",
+        "from": 0,
+        "to": 255
+      }
+    }
+  },
+    {
+      "mask": "regex:/^#[0-9a-f]{0,6}$/i"
+    }]
+````
+
+
 <br>
 
 ### Flatpickr
