@@ -352,7 +352,7 @@ export var bootstrap4Theme = AbstractTheme.extend({
 
     return el
   },
-  
+
   getHeaderButtonHolder: function () {
     var el = this.getButtonHolder()
 
