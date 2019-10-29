@@ -52,6 +52,7 @@ import { StringEditor } from './editors/string'
 import { TableEditor } from './editors/table'
 import { UploadEditor } from './editors/upload'
 import { UuidEditor } from './editors/uuid'
+import {ColorEditor} from './editors/colorpicker'
 
 import { defaultTemplate } from './templates/default'
 import { ejsTemplate } from './templates/ejs'
@@ -143,6 +144,7 @@ var assignDefaultEditors = function (editors) {
   editors.table = TableEditor
   editors.upload = UploadEditor
   editors.uuid = UuidEditor
+  editors.colorpicker = ColorEditor
 }
 
 var assignTemplates = function (templates) {
