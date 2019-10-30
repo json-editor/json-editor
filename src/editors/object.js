@@ -627,6 +627,15 @@ export var ObjectEditor = AbstractEditor.extend({
           self.onChange(true)
         }
       })
+      this.addproperty_input.addEventListener('input', function (e) {
+        e.target.previousSibling.childNodes.forEach(function (value) {
+          if (value.innerText.indexOf(e.target.value) >= 0) {
+            value.style.display = ''
+          } else {
+            value.style.display = 'none'
+          }
+        })
+      })
       this.addproperty_holder.appendChild(this.addproperty_list)
       this.addproperty_holder.appendChild(this.addproperty_input)
       this.addproperty_holder.appendChild(this.addproperty_add)
