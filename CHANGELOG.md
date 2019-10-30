@@ -1,8 +1,13 @@
-### Current 2.x-dev
+### Current 2.0.0-dev
+
+  - Improved IMask support for `Date`, `Number`, `IMask.MaskedEnum`, `IMask.MaskedRange` and regular expression masks. #591
+  - Added support for recursive callback options.
+
+### 2.0.0-alpha-1
 
   - Added remove_button_labels option.
   - Added Spectre Theme styling for `anyOf`, `oneOf` and `allOf` selectbox.
-  - Added filter to remove duplicate error messages. Duplicate error messages are now displayed as single error message with error count. (Duplicate error messages can occur when using `not`, `anyOf`, `oneOf` and `allOf` due to these are **conditions**, not properties.) 
+  - Added filter to remove duplicate error messages. Duplicate error messages are now displayed as single error message with error count. (Duplicate error messages can occur when using `not`, `anyOf`, `oneOf` and `allOf` due to these are **conditions**, not properties.)
   - Added new 2.x Theme "Spectre".
   - Updated Theme "Tailwind" to 2.x format.
   - Added sort option for dynamic enumSource.
