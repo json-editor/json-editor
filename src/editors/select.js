@@ -297,7 +297,7 @@ export var SelectEditor = AbstractEditor.extend({
 
       // If the previous value is still in the new select options
       // or if global option "enum_source_value_auto_select" is true, stick with it
-      if (selectOptions.indexOf(prevValue) !== -1 && !this.jsoneditor.options.enum_source_value_auto_select) {
+      if (selectOptions.indexOf(prevValue) !== -1 || this.jsoneditor.options.enum_source_value_auto_select !== false) {
         this.input.value = prevValue
         this.value = prevValue
       // Otherwise, set the value to the first select option
