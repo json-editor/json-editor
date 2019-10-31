@@ -37,6 +37,12 @@ export var SimplemdeEditor = StringEditor.extend({
         self.onChange(true)
       })
 
+      // This will prevent SimpleMDE content from being hidden until focus in Chrome
+      // if SimpleMDE is not visible (Like when placed inside Tabs)
+      if (options.autorefresh) {
+        this.startListening(this.simplemde_instance.codemirror, this.simplemde_instance.codemirror.state.autoRefresh = {delay: 250})
+      }
+
       this.theme.afterInputReady(self.input)
     } else this._super() // Library not loaded, so just treat this as a string
   },
@@ -57,5 +63,31 @@ export var SimplemdeEditor = StringEditor.extend({
       this.simplemde_instance = null
     }
     this._super()
+  },
+  // Ported from https://codemirror.net/addon/display/autorefresh.js
+  startListening: function (cm, state) {
+    var self = this
+    function check () {
+      if (cm.display.wrapper.offsetHeight) {
+        self.stopListening(cm, state)
+        if (cm.display.lastWrapHeight !== cm.display.wrapper.clientHeight) {
+          cm.refresh()
+        }
+      } else {
+        state.timeout = window.setTimeout(check, state.delay)
+      }
+    }
+    state.timeout = window.setTimeout(check, state.delay)
+    state.hurry = function () {
+      window.clearTimeout(state.timeout)
+      state.timeout = window.setTimeout(check, 50)
+    }
+    cm.on(window, 'mouseup', state.hurry)
+    cm.on(window, 'keyup', state.hurry)
+  },
+  stopListening: function (cm, state) {
+    window.clearTimeout(state.timeout)
+    cm.off(window, 'mouseup', state.hurry)
+    cm.off(window, 'keyup', state.hurry)
   }
 })

@@ -396,7 +396,6 @@ export function getDefaults () {
           return 'choices'
         }
         return 'select'
-      // return (JSONEditor.plugins.selectize.enable) ? 'selectize' : 'select';
       }
     }
   })
@@ -524,30 +523,11 @@ export function getDefaults () {
   JSONEditor.defaults.resolvers.unshift(function (schema) {
     if (schema.type === 'string' && ['ip', 'ipv4', 'ipv6', 'hostname'].indexOf(schema.format) !== -1) return 'ip'
   })
+  JSONEditor.defaults.resolvers.unshift(function (schema) {
+    if (schema.type === 'string' && schema.format === 'color') {
+      return 'colorpicker'
+    }
+  })
 
   return JSONEditor.defaults
-};
-
-// Miscellaneous Plugin Settings
-// Obsolete - Can be removed. Now replaced with global + schema options
-// DS: Actually it can't without breaking tests :-D
-export function getPlugins () {
-  return {
-    ace: {
-      theme: ''
-    },
-    choices: {
-    },
-    SimpleMDE: {
-
-    },
-    sceditor: {
-
-    },
-    select2: {
-
-    },
-    selectize: {
-    }
-  }
 };
