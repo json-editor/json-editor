@@ -7,6 +7,7 @@ Scenario('test validation & delete', (I) => {
     I.see('valid', '#valid_indicator');
     I.fillField('root[0][location][city]', 'Stuttgart');
     I.waitForValue("[name='root[0][location][city]']", 'Stuttgart');
+    I.amAcceptingPopups();
     I.click('.json-editor-btntype-deletelast');
     I.acceptPopup();
 });
