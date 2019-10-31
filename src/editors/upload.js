@@ -1,4 +1,5 @@
 import { AbstractEditor } from '../editor'
+import { $extend } from '../utilities'
 
 export var UploadEditor = AbstractEditor.extend({
 
@@ -8,6 +9,11 @@ export var UploadEditor = AbstractEditor.extend({
   build: function () {
     var self = this
     this.title = this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
+
+    // Editor options
+    var options = this.expandCallbacks('fileupload', $extend({}, {
+      'title': 'Browse'
+    }, this.defaults.options.fileupload || {}, this.options.fileupload || {}))
 
     // Input that holds the base64 string
     this.input = this.theme.getFormInputField('hidden')
@@ -19,14 +25,28 @@ export var UploadEditor = AbstractEditor.extend({
 
       // File uploader
       this.uploader = this.theme.getFormInputField('file')
+      this.uploader.style.display = 'none'
 
+      // Browse button
+      this.browseButton = this.theme.getFormButton(options.title, null, options.title)
+      // this.container.appendChild(this.browseButton)
+
+      // Display field
+      this.fileDisplay = this.theme.getFormInputField('input')
+      this.fileDisplay.setAttribute('readonly', true)
+      this.fileDisplay.value = 'No file selected.'
+      // this.container.appendChild(this.fileDisplay)
+
+      this.container.appendChild(this.theme.getInputGroup(this.fileDisplay, [this.browseButton]))
+
+      // Triggered after file have been selected
       this.uploader.addEventListener('change', function (e) {
         e.preventDefault()
         e.stopPropagation()
 
         if (this.files && this.files.length) {
-          // eslint-disable-next-line no-undef
-          var fr = new FileReader()
+          self.fileDisplay.value = this.files.length > 1 ? this.files.length + ' files.' : this.files[0].name
+          var fr = new window.FileReader()
           fr.onload = function (evt) {
             self.preview_value = evt.target.result
             self.refreshPreview()
@@ -35,6 +55,15 @@ export var UploadEditor = AbstractEditor.extend({
           }
           fr.readAsDataURL(this.files[0])
         }
+      })
+
+      // Pass click to this.uploader element
+      this.browseButton.addEventListener('click', function (e) {
+        self.uploader.dispatchEvent(new window.MouseEvent('click', {
+          'view': window,
+          'bubbles': true,
+          'cancelable': false
+        }))
       })
     }
 
