@@ -36,35 +36,72 @@ export var UploadEditor = AbstractEditor.extend({
       this.fileDisplay.setAttribute('readonly', true)
       this.fileDisplay.value = 'No file selected.'
       // this.container.appendChild(this.fileDisplay)
+      this.fileUploadGroup = this.theme.getInputGroup(this.fileDisplay, [this.browseButton])
+      this.container.appendChild(this.fileUploadGroup)
 
-      this.container.appendChild(this.theme.getInputGroup(this.fileDisplay, [this.browseButton]))
+      this.dropZone = this.container // this.fileDisplay
+      this.dropZone.classList.add('upload-dropzone')
 
       // Triggered after file have been selected
-      this.uploader.addEventListener('change', function (e) {
+      this.uploadHandler = function (e) {
         e.preventDefault()
         e.stopPropagation()
-
-        if (this.files && this.files.length) {
-          self.fileDisplay.value = this.files.length > 1 ? this.files.length + ' files.' : this.files[0].name
+        var files = e.target.files || e.dataTransfer.files
+        if (files && files.length) {
+          self.fileDisplay.value = files.length > 1 ? files.length + ' files.' : files[0].name
           var fr = new window.FileReader()
           fr.onload = function (evt) {
             self.preview_value = evt.target.result
-            self.refreshPreview()
+            self.refreshPreview(e)
             self.onChange(true)
             fr = null
           }
-          fr.readAsDataURL(this.files[0])
+          fr.readAsDataURL(files[0])
         }
-      })
+      }
+
+      this.uploader.addEventListener('change', this.uploadHandler)
 
       // Pass click to this.uploader element
-      this.browseButton.addEventListener('click', function (e) {
+      this.clickHandler = function (e) {
         self.uploader.dispatchEvent(new window.MouseEvent('click', {
           'view': window,
           'bubbles': true,
           'cancelable': false
         }))
-      })
+      }
+      this.browseButton.addEventListener('click', this.clickHandler)
+
+      this.handleInvalidDrop = function (e) {
+        var validZone = e.currentTarget.classList && e.currentTarget.classList.contains('upload-dropzone')
+        if (!validZone) {
+          e.dataTransfer.dropEffect = 'none'
+          e.preventDefault()
+        }
+      }
+
+      this.dragHandler = function (e) {
+        var validZone = e.currentTarget.classList && e.currentTarget.classList.contains('upload-dropzone')
+        switch (e.type) {
+          case 'dragenter':
+            if (validZone) e.dataTransfer.dropEffect = 'copy'
+            break
+          case 'dragover':
+            if (validZone) e.dataTransfer.dropEffect = 'copy'
+            break
+          case 'drop':
+            if (validZone) self.uploadHandler(e)
+            break
+        }
+        if (!validZone) e.preventDefault()
+      }
+
+      window.addEventListener('dragover', this.handleInvalidDrop, true)
+      window.addEventListener('drop', this.handleInvalidDrop, true)
+
+      this.dropZone.addEventListener('dragenter', this.dragHandler, true)
+      this.dropZone.addEventListener('dragover', this.dragHandler, true)
+      this.dropZone.addEventListener('drop', this.dragHandler, true)
     }
 
     var description = this.schema.description
@@ -97,7 +134,7 @@ export var UploadEditor = AbstractEditor.extend({
     }
     self.theme.afterInputReady(self.input)
   },
-  refreshPreview: function () {
+  refreshPreview: function (e) {
     if (this.last_preview === this.preview_value) return
     this.last_preview = this.preview_value
 
@@ -111,7 +148,8 @@ export var UploadEditor = AbstractEditor.extend({
     if (mime) mime = mime[1]
     if (!mime) mime = 'unknown'
 
-    var file = this.uploader.files[0]
+    var files = e.target.files || e.dataTransfer.files
+    var file = files[0]
 
     this.preview.innerHTML = '<strong>Type:</strong> ' + mime + ', <strong>Size:</strong> ' + file.size + ' bytes'
     if (mime.substr(0, 5) === 'image') {
@@ -186,10 +224,26 @@ export var UploadEditor = AbstractEditor.extend({
     }
   },
   destroy: function () {
+    if (this.uploader && this.uploader.parentNode) {
+      this.uploader.removeEventListener('change', this.uploadHandler)
+      this.uploader.parentNode.removeChild(this.uploader)
+
+      this.browseButton.removeEventListener('click', this.clickHandler)
+      this.browseButton.parentNode.removeChild(this.browseButton)
+
+      this.fileDisplay.parentNode.removeChild(this.fileDisplay)
+
+      this.fileUploadGroup.parentNode.removeChild(this.fileUploadGroup)
+
+      window.removeEventListener('dragover', this.handleInvalidDrop, true)
+      window.removeEventListener('drop', this.handleInvalidDrop, true)
+      this.dropZone.addEventListener('dragenter', this.dragHandler, true)
+      this.dropZone.addEventListener('dragover', this.dragHandler, true)
+      this.dropZone.addEventListener('drop', this.dragHandler, true)
+    }
     if (this.preview && this.preview.parentNode) this.preview.parentNode.removeChild(this.preview)
     if (this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title)
     if (this.input && this.input.parentNode) this.input.parentNode.removeChild(this.input)
-    if (this.uploader && this.uploader.parentNode) this.uploader.parentNode.removeChild(this.uploader)
 
     this._super()
   }
