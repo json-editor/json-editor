@@ -70,6 +70,7 @@ If you learn best by example, check these out:
 *  Cleave.js Editor Example - https://json-editor.github.io/json-editor/cleave.html
 *  Datetime Editor Example - https://json-editor.github.io/json-editor/datetime.html
 *  DescribedBy Hyperlink Editor Example - https://json-editor.github.io/json-editor/describedby.html
+*  iMask.js Editor Example - https://json-editor.github.io/json-editor/imask.html
 *  Radio Button JSON Editor Example - https://json-editor.github.io/json-editor/radio.html
 *  Recursive JSON Editor Example - https://json-editor.github.io/json-editor/recursive.html
 *  Select2 Editor Example - https://json-editor.github.io/json-editor/select2.html
@@ -187,6 +188,11 @@ Here are all the available options:
     <td>The icon library to use for the editor.  See the <strong>CSS Integration</strong> section below for more info.</td>
     <td><code>null</code></td>
   </tr>
+  <tr>
+      <td>remove_button_labels</td>
+      <td>Display only icons in buttons. This works only if iconlib is set.</td>
+      <td><code>false</code></td>
+    </tr>
   <tr>
     <td>no_additional_properties</td>
     <td>If <code>true</code>, objects can only contain properties defined with the <code>properties</code> keyword.</td>

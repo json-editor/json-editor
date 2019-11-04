@@ -52,6 +52,7 @@ import { StringEditor } from './editors/string'
 import { TableEditor } from './editors/table'
 import { UploadEditor } from './editors/upload'
 import { UuidEditor } from './editors/uuid'
+import {ColorEditor} from './editors/colorpicker'
 
 import { defaultTemplate } from './templates/default'
 import { ejsTemplate } from './templates/ejs'
@@ -143,6 +144,7 @@ var assignDefaultEditors = function (editors) {
   editors.table = TableEditor
   editors.upload = UploadEditor
   editors.uuid = UuidEditor
+  editors.colorpicker = ColorEditor
 }
 
 var assignTemplates = function (templates) {
@@ -187,7 +189,7 @@ JSONEditor.prototype = {
 
     this.schema = this.options.schema
     // eslint-disable-next-line new-cap
-    this.theme = new themeClass()
+    this.theme = new themeClass(this)
 
     this.element.setAttribute('data-theme', themeName)
     if (!this.theme.options.disable_theme_rules) this.addNewStyleRules(themeName, this.theme.rules)

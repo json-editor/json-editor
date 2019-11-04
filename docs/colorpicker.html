@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Colorpicker editor Example</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsive viewport -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+  <!-- Bootstrap3 -->
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <!-- Latest compiled and minified JavaScript -->
+
+  <!-- JSON-Editor -->
+  <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+  <!-- JSON-Editor -->
+  <script src="https://unpkg.com/vanilla-picker@2"></script>
+  <style type="text/css">
+  body {
+    margin: 1em;
+  }
+
+  </style>
+  </head>
+  <body>
+    <h1>Colorpicker editor Example</h1>
+
+    <div id='editor_holder'></div>
+    <button id='submit'>Submit (console.log)</button>
+    <button id='enable'>Disable</button>
+
+
+    <script>
+
+      // Initialize the editor
+      var editor = new JSONEditor(document.getElementById('editor_holder'), {
+        theme: "html",
+        iconlib: "bootstrap3",
+        disable_collapse: true,
+        disable_edit_json: true,
+        disable_properties: true,
+        //no_additional_properties: true,
+        schema: {
+          'type': 'object',
+          'title': 'color input use colorpicker',
+          'format': 'grid',
+          'properties': {
+            'rgb': {
+              'title': 'use rgb format',
+              'type': 'string',
+              'format': 'color',
+              'default': 'rgb(0,0,0)',
+              'options': {
+                'colorpicker': {
+                  'editorFormat': 'rgb'
+                }
+              }
+            },
+            'rgba': {
+              'title': 'use rgba format',
+              'type': 'string',
+              'format': 'color',
+              'default': 'rgba(0,0,0,1)',
+              'options': {
+                'colorpicker': {
+                  'editorFormat': 'rgb',
+                  'alpha': true
+                }
+              }
+            },
+            'hsl': {
+              'title': 'use hsl format',
+              'type': 'string',
+              'format': 'color',
+              'default': 'hsl(0,0,0)',
+              'options': {
+                'colorpicker': {
+                  'editorFormat': 'hsl'
+                }
+              }
+            },
+            'hsla': {
+              'title': 'use hsla format',
+              'type': 'string',
+              'format': 'color',
+              'default': 'hsl(0,0,0,1)',
+              'options': {
+                'colorpicker': {
+                  'editorFormat': 'hsl',
+                  'alpha': true
+                }
+              }
+            },
+            'hex': {
+              'title': 'use hex format',
+              'type': 'string',
+              'format': 'color',
+              'default': '#000000'
+            },
+            'hexa': {
+              'title': 'use hexa format',
+              'type': 'string',
+              'format': 'color',
+              'default': '#000000',
+              'options': {
+                'colorpicker': {
+                  'alpha': true
+                }
+              }
+            },
+            'inline': {
+              'title': 'inline colorpicker',
+              'type': 'string',
+              'format': 'color',
+              'default': '#000000',
+              'options': {
+                'colorpicker': {
+                  'popup': false
+                }
+              }
+            },
+            'top': {
+              'title': 'position: top',
+              'type': 'string',
+              'format': 'color',
+              'default': '#000000',
+              'options': {
+                'colorpicker': {
+                  'popup': 'top'
+                }
+              }
+            },
+            'right': {
+              'title': 'position: right',
+              'type': 'string',
+              'format': 'color',
+              'default': '#000000',
+              'options': {
+                'colorpicker': {
+                  'popup': 'right'
+                }
+              }
+            },
+            'left': {
+              'title': 'position: left',
+              'type': 'string',
+              'format': 'color',
+              'default': '#000000',
+              'options': {
+                'colorpicker': {
+                  'popup': 'left'
+                }
+              }
+            }
+          }
+        }
+      });
+
+      function validate() {
+          var errors = editor.validate();
+          console.log(editor.getValue());
+          if(errors.length) {
+            // errors is an array of objects, each with a `path`, `property`, and `message` parameter
+            // `property` is the schema keyword that triggered the validation error (e.g. "minLength")
+            // `path` is a dot separated path into the JSON object (e.g. "root.path.to.field")
+            editor.root.showValidationErrors(errors);
+            console.log('ERRORS', errors);
+          }
+          else {
+            // It's valid!
+            console.log('OK');
+          }
+      }
+
+      // Hook up the submit button to log to the console
+      document.getElementById('submit').addEventListener('click',function() {
+        // Get the value from the editor
+        validate();
+      });
+      document.getElementById('enable').addEventListener('click',function(e) {
+        // Get the value from the editor
+        if(e.target.innerText == 'Disable') {
+          e.target.innerText = "Enable"
+          editor.disable()
+        } else {
+          e.target.innerText = 'Disable'
+          editor.enable()
+        }
+
+
+      });
+    </script>
+  </body>
+</html>

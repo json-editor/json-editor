@@ -570,7 +570,7 @@ export var ArrayEditor = AbstractEditor.extend({
     }
 
     if (i && !self.hide_move_buttons) {
-      self.rows[i].moveup_button = this.getButton('', 'moveup', this.translate('button_move_up_title'))
+      self.rows[i].moveup_button = this.getButton('', (this.schema.format === 'tabs-top' ? 'moveleft' : 'moveup'), this.translate('button_move_up_title'))
       self.rows[i].moveup_button.classList.add('moveup', 'json-editor-btntype-move')
       self.rows[i].moveup_button.setAttribute('data-i', i)
       self.rows[i].moveup_button.addEventListener('click', function (e) {
@@ -599,7 +599,7 @@ export var ArrayEditor = AbstractEditor.extend({
     }
 
     if (!self.hide_move_buttons) {
-      self.rows[i].movedown_button = this.getButton('', 'movedown', this.translate('button_move_down_title'))
+      self.rows[i].movedown_button = this.getButton('', (this.schema.format === 'tabs-top' ? 'moveright' : 'movedown'), this.translate('button_move_down_title'))
       self.rows[i].movedown_button.classList.add('movedown', 'json-editor-btntype-move')
       self.rows[i].movedown_button.setAttribute('data-i', i)
       self.rows[i].movedown_button.addEventListener('click', function (e) {
@@ -637,7 +637,9 @@ export var ArrayEditor = AbstractEditor.extend({
     this.collapsed = false
     this.toggle_button = this.getButton('', 'collapse', this.translate('button_collapse'))
     this.toggle_button.classList.add('json-editor-btntype-toggle')
-    this.title_controls.appendChild(this.toggle_button)
+    this.toggle_button.style.margin = '0 10px 0 0'
+    this.title.insertBefore(this.toggle_button, this.title.childNodes[0])
+
     var rowHolderDisplay = self.row_holder.style.display
     var controlsDisplay = self.controls.style.display
     this.toggle_button.addEventListener('click', function (e) {
@@ -697,7 +699,7 @@ export var ArrayEditor = AbstractEditor.extend({
     })
     self.controls.appendChild(this.add_row_button)
 
-    this.delete_last_row_button = this.getButton(this.translate('button_delete_last', [this.getItemTitle()]), 'delete', this.translate('button_delete_last_title', [this.getItemTitle()]))
+    this.delete_last_row_button = this.getButton(this.translate('button_delete_last', [this.getItemTitle()]), 'subtract', this.translate('button_delete_last_title', [this.getItemTitle()]))
     this.delete_last_row_button.classList.add('json-editor-btntype-deletelast')
     this.delete_last_row_button.addEventListener('click', function (e) {
       e.preventDefault()

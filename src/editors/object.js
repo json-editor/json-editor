@@ -31,7 +31,7 @@ export var ObjectEditor = AbstractEditor.extend({
   },
   enable: function () {
     if (!this.always_disabled) {
-      if (this.editjson_button) this.editjson_button.disabled = false
+      if (this.editjson_control) this.editjson_control.disabled = false
       if (this.addproperty_button) this.addproperty_button.disabled = false
 
       this._super()
@@ -48,7 +48,7 @@ export var ObjectEditor = AbstractEditor.extend({
   },
   disable: function (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
-    if (this.editjson_button) this.editjson_button.disabled = true
+    if (this.editjson_control) this.editjson_control.disabled = true
     if (this.addproperty_button) this.addproperty_button.disabled = true
     this.hideEditJSON()
 
@@ -555,7 +555,11 @@ export var ObjectEditor = AbstractEditor.extend({
         this.header.textContent = this.getTitle()
       }
       this.title = this.theme.getHeader(this.header)
+      this.controls = this.theme.getButtonHolder()
+      this.controls.style.margin = '0 0 0 10px'
+
       this.container.appendChild(this.title)
+      this.title.appendChild(this.controls)
       this.container.style.position = 'relative'
 
       // Edit JSON modal
@@ -622,6 +626,15 @@ export var ObjectEditor = AbstractEditor.extend({
           }
           self.onChange(true)
         }
+      })
+      this.addproperty_input.addEventListener('input', function (e) {
+        e.target.previousSibling.childNodes.forEach(function (value) {
+          if (value.innerText.indexOf(e.target.value) >= 0) {
+            value.style.display = ''
+          } else {
+            value.style.display = 'none'
+          }
+        })
       })
       this.addproperty_holder.appendChild(this.addproperty_list)
       this.addproperty_holder.appendChild(this.addproperty_input)
@@ -703,73 +716,68 @@ export var ObjectEditor = AbstractEditor.extend({
         $trigger(this.rows[0].tab, 'click')
       }
 
-      // Control buttons
-      this.title_controls = this.theme.getHeaderButtonHolder()
-      this.editjson_controls = this.theme.getHeaderButtonHolder()
-      this.addproperty_controls = this.theme.getHeaderButtonHolder()
-      this.title.appendChild(this.title_controls)
-      this.title.appendChild(this.editjson_controls)
-      this.title.appendChild(this.addproperty_controls)
-
       // Show/Hide button
       this.collapsed = false
-      this.toggle_button = this.getButton('', 'collapse', this.translate('button_collapse'))
-      this.toggle_button.classList.add('json-editor-btntype-toggle')
-      this.title_controls.appendChild(this.toggle_button)
-      this.toggle_button.addEventListener('click', function (e) {
+      this.collapse_control = this.getButton('', 'collapse', this.translate('button_collapse'))
+      this.collapse_control.style.margin = '0 10px 0 0'
+      this.collapse_control.classList.add('json-editor-btntype-toggle')
+      this.title.insertBefore(this.collapse_control, this.title.childNodes[0])
+
+      this.collapse_control.addEventListener('click', function (e) {
         e.preventDefault()
         e.stopPropagation()
         if (self.collapsed) {
           self.editor_holder.style.display = ''
           self.collapsed = false
-          self.setButtonText(self.toggle_button, '', 'collapse', self.translate('button_collapse'))
+          self.setButtonText(self.collapse_control, '', 'collapse', self.translate('button_collapse'))
         } else {
           self.editor_holder.style.display = 'none'
           self.collapsed = true
-          self.setButtonText(self.toggle_button, '', 'expand', self.translate('button_expand'))
+          self.setButtonText(self.collapse_control, '', 'expand', self.translate('button_expand'))
         }
       })
 
       // If it should start collapsed
       if (this.options.collapsed) {
-        $trigger(this.toggle_button, 'click')
+        $trigger(this.collapse_control, 'click')
       }
 
       // Collapse button disabled
       if (this.schema.options && typeof this.schema.options.disable_collapse !== 'undefined') {
-        if (this.schema.options.disable_collapse) this.title_controls.style.display = 'none'
+        if (this.schema.options.disable_collapse) this.collapse_control.style.display = 'none'
       } else if (this.jsoneditor.options.disable_collapse) {
-        this.title_controls.style.display = 'none'
+        this.collapse_control.style.display = 'none'
       }
 
       // Edit JSON Button
-      this.editjson_button = this.getButton('JSON', 'edit', 'Edit JSON')
-      this.editjson_button.classList.add('json-editor-btntype-editjson')
-      this.editjson_button.addEventListener('click', function (e) {
+      this.editjson_control = this.getButton('JSON', 'edit', 'Edit JSON')
+      this.editjson_control.classList.add('json-editor-btntype-editjson')
+      this.editjson_control.addEventListener('click', function (e) {
         e.preventDefault()
         e.stopPropagation()
         self.toggleEditJSON()
       })
-      this.editjson_controls.appendChild(this.editjson_button)
-      this.editjson_controls.appendChild(this.editjson_holder)
+      this.controls.appendChild(this.editjson_control)
+      this.controls.insertBefore(this.editjson_holder, this.controls.childNodes[1])
 
       // Edit JSON Buttton disabled
       if (this.schema.options && typeof this.schema.options.disable_edit_json !== 'undefined') {
-        if (this.schema.options.disable_edit_json) this.editjson_controls.style.display = 'none'
+        if (this.schema.options.disable_edit_json) this.editjson_control.style.display = 'none'
       } else if (this.jsoneditor.options.disable_edit_json) {
-        this.editjson_controls.style.display = 'none'
+        this.editjson_control.style.display = 'none'
       }
 
       // Object Properties Button
-      this.addproperty_button = this.getButton('Properties', 'edit', self.translate('button_object_properties'))
+      this.addproperty_button = this.getButton('Properties', 'edit_properties', self.translate('button_object_properties'))
       this.addproperty_button.classList.add('json-editor-btntype-properties')
       this.addproperty_button.addEventListener('click', function (e) {
         e.preventDefault()
         e.stopPropagation()
         self.toggleAddProperty()
       })
-      this.addproperty_controls.appendChild(this.addproperty_button)
-      this.addproperty_controls.appendChild(this.addproperty_holder)
+      this.controls.appendChild(this.addproperty_button)
+      this.controls.insertBefore(this.addproperty_holder, this.controls.childNodes[1])
+
       this.refreshAddProperties()
 
       // non required properties start deactivated
@@ -807,8 +815,8 @@ export var ObjectEditor = AbstractEditor.extend({
 
     // Position the form directly beneath the button
     // TODO: edge detection
-    this.editjson_holder.style.left = this.editjson_button.offsetLeft + 'px'
-    this.editjson_holder.style.top = this.editjson_button.offsetTop + this.editjson_button.offsetHeight + 'px'
+    this.editjson_holder.style.left = this.editjson_control.offsetLeft + 'px'
+    this.editjson_holder.style.top = this.editjson_control.offsetTop + this.editjson_control.offsetHeight + 'px'
 
     // Start the textarea with the current value
     this.editjson_textarea.value = JSON.stringify(this.getValue(), null, 2)
@@ -817,7 +825,7 @@ export var ObjectEditor = AbstractEditor.extend({
     this.disable()
 
     this.editjson_holder.style.display = ''
-    this.editjson_button.disabled = false
+    this.editjson_control.disabled = false
     this.editing_json = true
   },
   hideEditJSON: function () {
@@ -1069,7 +1077,7 @@ export var ObjectEditor = AbstractEditor.extend({
   },
   refreshAddProperties: function () {
     if (this.options.disable_properties || (this.options.disable_properties !== false && this.jsoneditor.options.disable_properties)) {
-      this.addproperty_controls.style.display = 'none'
+      this.addproperty_button.style.display = 'none'
       return
     }
 
@@ -1129,7 +1137,7 @@ export var ObjectEditor = AbstractEditor.extend({
     // If no editors can be added or removed, hide the modal button
     if (!showModal) {
       this.hideAddProperty()
-      this.addproperty_controls.style.display = 'none'
+      this.addproperty_button.style.display = 'none'
     // If additional properties are disabled
     } else if (!this.canHaveAdditionalProperties()) {
       this.addproperty_add.style.display = 'none'
