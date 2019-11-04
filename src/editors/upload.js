@@ -1,5 +1,5 @@
 import { AbstractEditor } from '../editor'
-import { $extend } from '../utilities'
+import { $extend, $each } from '../utilities'
 
 export var UploadEditor = AbstractEditor.extend({
 
@@ -21,6 +21,7 @@ export var UploadEditor = AbstractEditor.extend({
       'drop_zone_top': false, // Position of dropzone. true=before button input, false=after button input
       'alt_drop_zone_id': '', // Alternate DropZone ID (Can be created inside another property)
       'mime_type': '', // If set, restricts to mime type(s). Can be either a string or an array
+      'max_upload_size': 0, // Maximum file size allowed. 0 = no limit
       'upload_handler': function (jseditor, type, file, cbs) {
         // Default dummy test upload handler
         window.alert('No upload_handler defined for "' + jseditor.path + '". You must create your own handler to enable upload to server')
@@ -92,16 +93,38 @@ export var UploadEditor = AbstractEditor.extend({
         e.preventDefault()
         e.stopPropagation()
         var files = e.target.files || e.dataTransfer.files
-        if (files && files.length && (self.options.mime_type.length === 0 || self.isValidMimeType(files[0].type, self.options.mime_type))) {
-          if (self.fileDisplay) self.fileDisplay.value = files[0].name
-          var fr = new window.FileReader()
-          fr.onload = function (evt) {
-            self.preview_value = evt.target.result
-            self.refreshPreview(e)
-            self.onChange(true)
-            fr = null
+        if (files && files.length) {
+          var errors = []
+          // size of uploaded file is too big
+          if (self.options.max_upload_size !== 0 && files[0].size > self.options.max_upload_size) {
+            errors.push({
+              path: self.path,
+              property: 'size',
+              message: 'Filesize too large. Max size is ' + self.options.max_upload_size
+            })
           }
-          fr.readAsDataURL(files[0])
+          // wrong file/mime type
+          if (self.options.mime_type.length !== 0 && !self.isValidMimeType(files[0].type, self.options.mime_type)) {
+            errors.push({
+              path: self.path,
+              property: 'format',
+              message: 'Wrong file format. Allowed format(s): ' + self.options.mime_type.toString()
+            })
+          }
+          if (errors.length > 0) {
+            self.is_dirty = true
+            self.showValidationErrors(errors)
+          } else {
+            if (self.fileDisplay) self.fileDisplay.value = files[0].name
+            var fr = new window.FileReader()
+            fr.onload = function (evt) {
+              self.preview_value = evt.target.result
+              self.refreshPreview(e)
+              self.onChange(true)
+              fr = null
+            }
+            fr.readAsDataURL(files[0])
+          }
         }
       }
 
@@ -310,5 +333,28 @@ export var UploadEditor = AbstractEditor.extend({
     return mimeTypesList.reduce(function (a, v) {
       return a || new RegExp(v.replace(/\*/g, '.*'), 'gi').test(mimeType)
     }, false)
+  },
+  showValidationErrors: function (errors) {
+    var self = this
+    if (this.jsoneditor.options.show_errors === 'always') {
+    } else if (!this.is_dirty && this.previous_error_setting === this.jsoneditor.options.show_errors) {
+      return
+    }
+
+    this.previous_error_setting = this.jsoneditor.options.show_errors
+
+    var messages = []
+    $each(errors, function (i, error) {
+      if (error.path === self.path) {
+        messages.push(error.message)
+      }
+    })
+    this.input.controlgroup = this.control
+
+    if (messages.length) {
+      this.theme.addInputError(this.input, messages.join('. ') + '.')
+    } else {
+      this.theme.removeInputError(this.input)
+    }
   }
 })
