@@ -7,6 +7,7 @@ services:
 
 stages:
   - unit
+  - test
 
 env:
   - SELENIUM_BROWSER=chrome
@@ -14,22 +15,23 @@ env:
   - SELENIUM_BROWSER=chrome DIST_SUB_PATH=nonmin
   - SELENIUM_BROWSER=firefox DIST_SUB_PATH=nonmin
 
-before_script:
-  - npm install
-  - cd tests
-  - docker-compose run --rm node npm run build
-  - docker-compose up -d $SELENIUM_BROWSER
-
-#script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
-script:
-  - echo "skipping tests"
-after_script:
-  - docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --grep '@optional'
+#after_script:
+#  - docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --grep '@optional'
 
 jobs:
   include:
     - stage: unit
-      name: "Unit Tests"
+      name: "Unit"
       before_script:
         - npm install
       script: npm run test-headless
+      after_script:
+        - echo "end"
+    - stage: test
+      name: "Test"
+      before_script:
+        - npm install
+        - cd tests
+        - docker-compose run --rm node npm run build
+        - docker-compose up -d $SELENIUM_BROWSER
+      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
