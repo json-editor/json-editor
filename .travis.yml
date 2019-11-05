@@ -9,6 +9,12 @@ stages:
   - unit
   - e2e
 
+env:
+  - SELENIUM_BROWSER=chrome
+  - SELENIUM_BROWSER=firefox
+  - SELENIUM_BROWSER=chrome DIST_SUB_PATH=nonmin
+  - SELENIUM_BROWSER=firefox DIST_SUB_PATH=nonmin
+
 jobs:
   include:
     - stage: unit
@@ -18,11 +24,6 @@ jobs:
       script: npm run test-headless
     - stage: e2e
       name: "E2E Tests"
-      env:
-        - SELENIUM_BROWSER=chrome
-        - SELENIUM_BROWSER=firefox
-        - SELENIUM_BROWSER=chrome DIST_SUB_PATH=nonmin
-        - SELENIUM_BROWSER=firefox DIST_SUB_PATH=nonmin
       before_script:
         - cd tests
         - docker-compose run --rm node npm run build
