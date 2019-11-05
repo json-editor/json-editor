@@ -19,7 +19,7 @@ jobs:
     - stage: e2e
       name: "E2E Tests"
         matrix:
-          include
+          include:
             - SELENIUM_BROWSER=chrome
             - SELENIUM_BROWSER=firefox
             - SELENIUM_BROWSER=chrome DIST_SUB_PATH=nonmin
