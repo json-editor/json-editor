@@ -10,7 +10,6 @@ stages:
   - e2e
   - e2e-optional
 
-
 env:
   - SELENIUM_BROWSER=chrome
   - SELENIUM_BROWSER=firefox
