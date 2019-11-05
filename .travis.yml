@@ -9,12 +9,6 @@ stages:
   - unit
   - test
 
-env:
-  - SELENIUM_BROWSER=chrome
-  - SELENIUM_BROWSER=firefox
-  - SELENIUM_BROWSER=chrome DIST_SUB_PATH=nonmin
-  - SELENIUM_BROWSER=firefox DIST_SUB_PATH=nonmin
-
 #after_script:
 #  - docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --grep '@optional'
 
@@ -25,10 +19,15 @@ jobs:
       before_script:
         - npm install
       script: npm run test-headless
-      after_script:
-        - echo "end"
+#      after_script:
+#        - echo "end"
     - stage: test
-      name: "Test"
+      name: "E2E"
+      env:
+        - SELENIUM_BROWSER=chrome
+        - SELENIUM_BROWSER=firefox
+        - SELENIUM_BROWSER=chrome DIST_SUB_PATH=nonmin
+        - SELENIUM_BROWSER=firefox DIST_SUB_PATH=nonmin
       before_script:
         - npm install
         - cd tests
