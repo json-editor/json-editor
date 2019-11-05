@@ -51,6 +51,7 @@ The following are not required, but can improve the style and usability of JSON 
 *  [Selectize](https://selectize.github.io/selectize.js/) for nicer Select & Array boxes
 *  [Flatpickr](https://flatpickr.js.org/) lightweight and powerful datetime picker
 *  [Signature Pad](https://github.com/szimek/signature_pad) HTML5 canvas based smooth signature drawing
+*  [Vanilla Picker](https://vanilla-picker.js.org/) A simple, easy to use vanilla JS color picker with alpha selection
 *  [Cleave.js](https://github.com/nosir/cleave.js) for formatting your **&lt;input/&gt;** content while you are typing
 *  [IMask.js](https://imask.js.org/) vanilla javascript input mask
 *  [math.js](http://mathjs.org/) for more accurate floating point math (multipleOf, divisibleBy, etc.)
@@ -68,6 +69,7 @@ If you learn best by example, check these out:
 *  Base64 Editor Example (Muiltple Upload) - https://json-editor.github.io/json-editor/multiple_upload_base64.html
 *  Choices Editor Example - https://json-editor.github.io/json-editor/choices.html
 *  Cleave.js Editor Example - https://json-editor.github.io/json-editor/cleave.html
+*  Colorpicker Editor Example - https://json-editor.github.io/json-editor/colorpicker.html
 *  Datetime Editor Example - https://json-editor.github.io/json-editor/datetime.html
 *  DescribedBy Hyperlink Editor Example - https://json-editor.github.io/json-editor/describedby.html
 *  iMask.js Editor Example - https://json-editor.github.io/json-editor/imask.html
@@ -80,6 +82,7 @@ If you learn best by example, check these out:
 *  Upload Editor Example - https://json-editor.github.io/json-editor/upload.html
 *  WYSIWYG Editor Example - https://json-editor.github.io/json-editor/wysiwyg.html
 
+More examples can be found at the [JSON-Editor Interactive Playground](https://pmk65.github.io/jedemov2/dist/demo.html)
 
 The rest of this README contains detailed documentation about every aspect of JSON Editor.  For more [under-the-hood documentation](https://github.com/json-editor/json-editor/wiki), check the wiki.
 

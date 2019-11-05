@@ -432,3 +432,48 @@ window.JSONEditor.defaults.callbacks.cleave = {
 
 <br>
 
+
+
+#Themes
+
+Themes have own options for changing various aspects of the display.
+
+##Bootstrap 4
+
+| Option           | Default | Description
+| ------------- | ------ | -----
+| `input_size`    | `normal` | Changes `input` size, can be `normal`, `small` or `large`
+| `custom_forms`  | `false` | Apply Bootstrap custom forms
+| `object_indent`  | `true` | Indent nested object elements (use nested `.card` layout)
+| `object_background`  | `bg-light` | Bootstrap 4 card background [modifier class](https://getbootstrap.com/docs/4.1/getting-started/introduction/)
+| `object_text`  | `''` | Bootstrap 4 card text color modifier class [modifier class](https://getbootstrap.com/docs/4.1/getting-started/introduction/)
+| `table_border`  | `false` | Add border to array "table" row and cells
+| `table_zebrastyle`  | `false` | Add "zebra style" to array "table" rows
+| `tooltip`  | `bootstrap` | how to display tooltips (infoText). Can be `browser` for native `[title]`, `css` for simple CSS Styling, or `bootstrap` for TWBS/Popper.js handling
+
+##Spectre
+
+| Option           | Default | Description
+| ------------- | ------ | -----
+| `input_size`    | `normal` | Changes `input` size, can be `normal`, `small` or `large`
+| `label_bold`  | `true` | Labels in bold
+| `object_indent`  | `false` | Indent nested object elements
+| `object_border`  | `false` |Add border around object elements
+| `align_bottom`  | `false` | Align elements to bottom of flex container
+| `table_border`  | `false` | Add border to array "table" row and cells
+| `table_zebrastyle`  | `false` | Add "zebra style" to array "table" rows
+
+##Tailwind
+
+| Option           | Default | Description
+| ------------- | ------ | -----
+| `input_size`    | `normal` | Changes `input` size, can be `normal`, `small` or `large`
+| `label_bold`  | `false` | Labels in bold
+| `object_panel_default`    | `true` | Indicates whether to use rules as default or alternate style
+| `object_indent`  | `false` | Indent nested object elements
+| `object_border`  | `false` |Add border around object elements
+| `align_bottom`  | `false` | Align elements to bottom of flex container
+| `table_border`  | `false` | Add border to array "table" row and cells
+| `table_hdiv`  | `false` | Add bottom-border to array "table" cells
+| `table_zebrastyle`  | `false` | Add "zebra style" to array "table" rows
+
