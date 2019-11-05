@@ -310,8 +310,9 @@ Upload files to server.
 | drop_zone_top    | boolean      | Position of dropzone. **true**=before button input, **false**=after button input   | false
 | drop_zone_text   | string       | Text displayed in dropzone box                                                     | "Drag & Drop file here"
 | alt_drop_zone_id | string       | Alternate DropZone ID (Can be created inside another property)                     |
-| mime_type        | string/array | If set, restrict upload to mime type(s).                                           |
-| upload_handler   | function     | Callback function for handling uploads to server.                                  |
+| mime_type        | string/array | If set, restrict upload to mime type(s)                                            |
+| max_upload_size  | integer      | Maximum file size allowed. 0 = no limit                                            | 0
+| upload_handler   | function     | Callback function for handling uploads to server                                   |
 <br>
 
 
