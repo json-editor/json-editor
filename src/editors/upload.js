@@ -36,7 +36,7 @@ export var UploadEditor = AbstractEditor.extend({
     this.container.appendChild(this.input)
 
     // Don't show uploader if this is readonly
-    if ((!this.schema.readOnly && !this.schema.readonly) || this.options.allow_reupload) {
+    if ((!this.schema.readOnly && !this.schema.readonly) || this.options.allow_reupload === true) {
       if (typeof this.options.upload_handler !== 'function') throw new Error('Upload handler required for upload editor')
 
       // File uploader
