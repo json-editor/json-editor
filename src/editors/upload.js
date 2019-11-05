@@ -22,6 +22,7 @@ export var UploadEditor = AbstractEditor.extend({
       'alt_drop_zone_id': '', // Alternate DropZone ID (Can be created inside another property)
       'mime_type': '', // If set, restricts to mime type(s). Can be either a string or an array
       'max_upload_size': 0, // Maximum file size allowed. 0 = no limit
+      'allow_reupload': false, // Allow reupload of file (prevents property from being readonly)
       'upload_handler': function (jseditor, type, file, cbs) {
         // Default dummy test upload handler
         window.alert('No upload_handler defined for "' + jseditor.path + '". You must create your own handler to enable upload to server')
@@ -35,7 +36,7 @@ export var UploadEditor = AbstractEditor.extend({
     this.container.appendChild(this.input)
 
     // Don't show uploader if this is readonly
-    if (!this.schema.readOnly && !this.schema.readonly) {
+    if (!this.schema.readOnly && !this.schema.readonly || this.options.allow_reupload) {
       if (typeof this.options.upload_handler !== 'function') throw new Error('Upload handler required for upload editor')
 
       // File uploader
