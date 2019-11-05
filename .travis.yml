@@ -18,7 +18,8 @@ jobs:
       script: npm run test-headless
     - stage: e2e
       name: "E2E Tests"
-      matrix:
+      env:
+        matrix:
         - SELENIUM_BROWSER=chrome
         - SELENIUM_BROWSER=firefox
         - SELENIUM_BROWSER=chrome DIST_SUB_PATH=nonmin
