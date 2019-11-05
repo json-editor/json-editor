@@ -39,17 +39,21 @@ JSON Editor has no dependencies. It only needs a modern browser (tested in Chrom
 The following are not required, but can improve the style and usability of JSON Editor when present.
 
 *  A compatible JS template engine (Mustache, Underscore, Hogan, Handlebars, Lodash, Swig, Markup, or EJS)
-*  A compatible CSS framework for styling (bootstrap 2/3/4, foundation 3/4/5/6, materialize or jqueryui)
-*  A compatible icon library (bootstrap 2/3 glyphicons, foundation icons 2/3, jqueryui, materialicons or font awesome 3/4)
+*  A compatible CSS framework for styling (Spectre, Tailwind, Bootstrap 2/3/4, Foundation 3/4/5/6, Materialize or jQueryUI)
+*  A compatible icon library (Bootstrap 2/3 glyphicons, Foundation icons 2/3, jQueryUI, Materialicons or Font Awesome 3/4)
 *  [SCEditor](http://www.sceditor.com/) for WYSIWYG editing of HTML or BBCode content
 *  [SimpleMDE](https://simplemde.com/) for editing of Markdown content
 *  [Ace Editor](http://ace.c9.io/) for editing code
+*  [Jodit](https://xdsoft.net/jodit/) Open Source WYSIWYG editor
+*  [Autocomplete](https://autocomplete.trevoreyre.com/#/javascript-component) Accessible autocomplete component
 *  [Choices](https://github.com/jshjohnson/Choices) for nicer Select & Array boxes
 *  [Select2](http://ivaynberg.github.io/select2/) for nicer Select boxes
 *  [Selectize](https://selectize.github.io/selectize.js/) for nicer Select & Array boxes
 *  [Flatpickr](https://flatpickr.js.org/) lightweight and powerful datetime picker
 *  [Signature Pad](https://github.com/szimek/signature_pad) HTML5 canvas based smooth signature drawing
+*  [Vanilla Picker](https://vanilla-picker.js.org/) A simple, easy to use vanilla JS color picker with alpha selection
 *  [Cleave.js](https://github.com/nosir/cleave.js) for formatting your **&lt;input/&gt;** content while you are typing
+*  [IMask.js](https://imask.js.org/) vanilla javascript input mask
 *  [math.js](http://mathjs.org/) for more accurate floating point math (multipleOf, divisibleBy, etc.)
 *  [DOMPurify](https://github.com/cure53/DOMPurify) DOM-only, super-fast, uber-tolerant XSS sanitizer. (If you want to use HTML format in titles/headers and descriptions.)
 
@@ -65,8 +69,10 @@ If you learn best by example, check these out:
 *  Base64 Editor Example (Muiltple Upload) - https://json-editor.github.io/json-editor/multiple_upload_base64.html
 *  Choices Editor Example - https://json-editor.github.io/json-editor/choices.html
 *  Cleave.js Editor Example - https://json-editor.github.io/json-editor/cleave.html
+*  Colorpicker Editor Example - https://json-editor.github.io/json-editor/colorpicker.html
 *  Datetime Editor Example - https://json-editor.github.io/json-editor/datetime.html
 *  DescribedBy Hyperlink Editor Example - https://json-editor.github.io/json-editor/describedby.html
+*  iMask.js Editor Example - https://json-editor.github.io/json-editor/imask.html
 *  Radio Button JSON Editor Example - https://json-editor.github.io/json-editor/radio.html
 *  Recursive JSON Editor Example - https://json-editor.github.io/json-editor/recursive.html
 *  Select2 Editor Example - https://json-editor.github.io/json-editor/select2.html
@@ -76,6 +82,7 @@ If you learn best by example, check these out:
 *  Upload Editor Example - https://json-editor.github.io/json-editor/upload.html
 *  WYSIWYG Editor Example - https://json-editor.github.io/json-editor/wysiwyg.html
 
+More examples can be found at the [JSON-Editor Interactive Playground](https://pmk65.github.io/jedemov2/dist/demo.html)
 
 The rest of this README contains detailed documentation about every aspect of JSON Editor.  For more [under-the-hood documentation](https://github.com/json-editor/json-editor/wiki), check the wiki.
 
@@ -184,6 +191,11 @@ Here are all the available options:
     <td>The icon library to use for the editor.  See the <strong>CSS Integration</strong> section below for more info.</td>
     <td><code>null</code></td>
   </tr>
+  <tr>
+      <td>remove_button_labels</td>
+      <td>Display only icons in buttons. This works only if iconlib is set.</td>
+      <td><code>false</code></td>
+    </tr>
   <tr>
     <td>no_additional_properties</td>
     <td>If <code>true</code>, objects can only contain properties defined with the <code>properties</code> keyword.</td>
@@ -690,11 +702,6 @@ __SCEditor__ provides WYSIWYG editing of HTML and BBCode.  To use it, set the fo
 }
 ```
 
-You can configure SCEditor by setting configuration options in `JSONEditor.plugins.sceditor`.  Here's an example:
-
-```js
-JSONEditor.plugins.sceditor.emoticonsEnabled = false;
-```
 
 __SimpleMDE__ is a simple Markdown editor with live preview.  To use it, set the format to `markdown`:
 
@@ -775,11 +782,6 @@ You can use the hyper-schema keyword `media` instead of `format` too if you pref
 }
 ```
 
-You can override the default Ace theme by setting the `JSONEditor.plugins.ace.theme` variable.
-
-```js
-JSONEditor.plugins.ace.theme = 'twilight';
-```
 
 You can enable [Ace editor options](https://github.com/ajaxorg/ace/wiki/Configuring-Ace) individually by setting the `options.ace` in schema.
 
@@ -1552,18 +1554,6 @@ The possibilities are endless.  Some ideas:
 *  Better editor for arrays of strings (tag editor)
 *  Canvas based image editor that produces Base64 data URLs
 
-Choices, Select2 & Selectize Support
-----------------
-JSON editor checks in order if Choices or Select2 is loaded and will use the detected library by default.
-
-Selectize support is enabled via the following snippet:
-```js
-JSONEditor.plugins.selectize.enable = true;
-```
-See the demo for an example of the `array` and `select` editor with Selectize support enabled.
-
-To disable Select2/Selectize for a single property, you can set the boolean option `disable_selectize` or `disable_select2` in the schema property options.
-
 Custom Validation
 ----------------
 
@@ -1589,26 +1579,3 @@ JSONEditor.defaults.custom_validators.push(function(schema, value, path) {
 });
 ```
 
-jQuery Integration
--------------------
-
-__*WARNING__: This style of usage is deprecated and may not be supported in future versions.
-
-When jQuery (or Zepto) is loaded on the page, you can use JSON Editor like a normal jQuery plugin if you prefer.
-
-```js
-$("#editor_holder")
-  .jsoneditor({
-    schema: {},
-    theme: 'bootstrap3'
-  })
-  .on('ready', function() {
-    // Get the value
-    var value = $(this).jsoneditor('value');
-
-    value.name = "John Smith";
-
-    // Set the value
-    $(this).jsoneditor('value',value);
-  });
-```

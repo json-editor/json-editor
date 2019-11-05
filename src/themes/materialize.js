@@ -51,7 +51,7 @@ export var materializeTheme = AbstractTheme.extend(
    */
     getButton: function (text, icon, title) {
       // Prepare icon.
-      if (text) {
+      if (icon) {
         icon.classList.add('left')
         icon.style.marginRight = '5px'
       }
@@ -74,7 +74,7 @@ export var materializeTheme = AbstractTheme.extend(
         label = input.parentElement.previousSibling
       }
 
-      if (input.value || (input.dataset.containerFor && input.dataset.containerFor === 'radio')) {
+      if (input.value || (input.dataset && input.dataset.containerFor && input.dataset.containerFor === 'radio')) {
         if (label && label.localName === 'label') {
           label.classList.add('active')
         }
@@ -116,9 +116,6 @@ export var materializeTheme = AbstractTheme.extend(
       // Anything else gets wrapped in divs.
       ctrl = this._super(label, input, description, infoText)
 
-      // Not .input-field for select wrappers.
-      if (!type || !type.startsWith('select')) { ctrl.classList.add('input-field') }
-
       // Color needs special attention.
       if (type && type === 'color') {
         input.style.height = '3rem'
@@ -140,7 +137,7 @@ export var materializeTheme = AbstractTheme.extend(
     getDescription: function (text) {
       var el = document.createElement('div')
       el.classList.add('grey-text')
-      el.style.marginTop = '-15px'
+      // el.style.marginTop = '-15px'
       if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text)
       else el.textContent = this.cleanText(text)
       return el
