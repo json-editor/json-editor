@@ -20,8 +20,9 @@ before_script:
   - docker-compose run --rm node npm run build
   - docker-compose up -d $SELENIUM_BROWSER
 
-script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
-
+#script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
+script:
+  - echo "skipping tests"
 after_script:
   - docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --grep '@optional'
 
