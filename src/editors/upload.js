@@ -133,7 +133,7 @@ export var UploadEditor = AbstractEditor.extend({
       // Drag&Drop Event Handler
       this.dragHandler = function (e) {
         var files = e.dataTransfer.items || e.dataTransfer.files
-        var validType = files && (self.options.mime_type.length === 0 || self.isValidMimeType(files[0].type, self.options.mime_type))
+        var validType = files && files.length && (self.options.mime_type.length === 0 || self.isValidMimeType(files[0].type, self.options.mime_type))
         var validZone = e.currentTarget.classList && e.currentTarget.classList.contains('upload-dropzone') && validType
         switch ((this === window ? 'w_' : 'e_') + e.type) {
           case 'w_drop':
