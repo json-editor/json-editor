@@ -626,8 +626,8 @@ JSONEditor.prototype = {
           }
         }
       }
-      if (this.refs[ref] && this.refs[ref]['extends']) {
-        this.refs[ref] = this.expandSchema(this.refs[ref])
+      if (this.refs[ref] && (this.refs[ref]['extends'] || this.refs[ref]['oneOf'] || this.refs[ref]['allOf'])) {
+        schema = this.expandSchema(this.refs[ref])
       }
       schema = this.extendSchemas(schema, $extend({}, this.refs[ref]))
     }
