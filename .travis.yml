@@ -7,7 +7,7 @@ services:
 
 stages:
   - unit
-  - e2e
+  - test
 
 env:
   - SELENIUM_BROWSER=chrome
@@ -22,7 +22,7 @@ jobs:
       before_script:
         - npm install
       script: npm run test-headless
-    - stage: e2e
+    - stage: test
       name: "E2E Tests"
       before_script:
         - cd tests
