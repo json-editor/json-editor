@@ -8,16 +8,6 @@ services:
 stages:
   - unit
   - e2e
-  - e2e-optional
-
-env:
-  - SELENIUM_BROWSER=chrome
-  - SELENIUM_BROWSER=firefox
-  - SELENIUM_BROWSER=chrome DIST_SUB_PATH=nonmin
-  - SELENIUM_BROWSER=firefox DIST_SUB_PATH=nonmin
-
-script:
-  - echo "skipping travis default tests"
 
 jobs:
   include:
@@ -26,14 +16,15 @@ jobs:
         - npm install
       script: npm run test-headless
     - stage: e2e
+      env:
+        - SELENIUM_BROWSER=chrome
+        - SELENIUM_BROWSER=firefox
+        - SELENIUM_BROWSER=chrome DIST_SUB_PATH=nonmin
+        - SELENIUM_BROWSER=firefox DIST_SUB_PATH=nonmin
       before_script:
         - cd tests
         - docker-compose run --rm node npm run build
         - docker-compose up -d $SELENIUM_BROWSER
       script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
-    - stage: e2e-optional
-      before_script:
-        - cd tests
-        - docker-compose run --rm node npm run build
-        - docker-compose up -d $SELENIUM_BROWSER
-      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --grep '@optional'
+      after_script:
+        - docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --grep '@optional'
