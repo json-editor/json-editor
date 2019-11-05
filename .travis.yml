@@ -16,6 +16,9 @@ env:
   - SELENIUM_BROWSER=chrome DIST_SUB_PATH=nonmin
   - SELENIUM_BROWSER=firefox DIST_SUB_PATH=nonmin
 
+script:
+  - echo "skipping travis default tests"
+
 jobs:
   include:
     - stage: unit
