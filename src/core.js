@@ -625,10 +625,8 @@ JSONEditor.prototype = {
           }
         }
       }
-      if (this.refs[ref] && (this.refs[ref]['extends'] || this.refs[ref]['oneOf'] || this.refs[ref]['allOf'])) {
-        schema = this.expandSchema(this.refs[ref])
-      }
-      schema = this.extendSchemas(schema, $extend({}, this.refs[ref]))
+      schema = this.extendSchemas(schema, this.expandSchema(this.refs[ref]))
+      // schema = this.extendSchemas(schema, $extend({}, this.refs[ref]))
     }
     return schema
   },
@@ -711,11 +709,10 @@ JSONEditor.prototype = {
     if (schema.oneOf) {
       var tmp = $extend({}, extended)
       delete tmp.oneOf
-      for (i = 0; i < schema.oneOf.length; i++) {
-        extended.oneOf[i] = this.extendSchemas(this.expandSchema(schema.oneOf[i]), tmp)
-      }
+      extended.oneOf = schema.oneOf.map(function (one) {
+        return self.extendSchemas(self.expandSchema(one), tmp)
+      })
     }
-
     return this.expandRefs(extended)
   },
   extendSchemas: function (obj1, obj2) {
