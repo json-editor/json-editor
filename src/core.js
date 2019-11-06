@@ -617,12 +617,14 @@ JSONEditor.prototype = {
       }
       var ref = fetchUrl + refObj.$ref
       if (!this.refs[ref]) ref = fetchUrl + decodeURIComponent(refObj.$ref)
+      if (!this.refs[ref]) {
+        console.warn("reference:'" + ref + "' not found!")
+      }
       if (recurseAllOf) {
         if (this.refs[ref].hasOwnProperty('allOf')) {
-          var allOf = this.refs[ref].allOf
-          for (var i = 0; i < allOf.length; i++) {
-            allOf[i] = this.expandRefs(allOf[i], true)
-          }
+          this.refs[ref].allOf = this.refs[ref].allOf.map(function (one) {
+            return this.expandRefs(one, true)
+          })
         }
       }
       schema = this.extendSchemas(schema, this.expandSchema(this.refs[ref]))
