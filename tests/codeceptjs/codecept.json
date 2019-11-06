@@ -6,6 +6,7 @@
     "WebDriver": {
       "url": "http://node:9001/tests/pages/",
       "browser": "firefox",
+      "restart": false,
       "host": "firefox",
       "smartWait": 5000
     },
