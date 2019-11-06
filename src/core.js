@@ -607,7 +607,7 @@ JSONEditor.prototype = {
   },
   expandRefs: function (schema, recurseAllOf) {
     schema = $extend({}, schema)
-
+    var self = this
     while (schema.$ref) {
       var refObj = this.refs_with_info[schema.$ref]
       delete schema.$ref
@@ -624,7 +624,7 @@ JSONEditor.prototype = {
       if (recurseAllOf) {
         if (this.refs[ref].hasOwnProperty('allOf')) {
           this.refs[ref].allOf = this.refs[ref].allOf.map(function (one) {
-            return this.expandRefs(one, true)
+            return self.expandRefs(one, true)
           })
         }
       }
