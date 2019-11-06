@@ -617,8 +617,9 @@ JSONEditor.prototype = {
       }
       var ref = fetchUrl + refObj.$ref
       if (!this.refs[ref]) ref = fetchUrl + decodeURIComponent(refObj.$ref)
-      if (!this.refs[ref]) {
+      if (!this.refs[ref]) { // if reference not found
         console.warn("reference:'" + ref + "' not found!")
+        break
       }
       if (recurseAllOf) {
         if (this.refs[ref].hasOwnProperty('allOf')) {
