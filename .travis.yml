@@ -43,6 +43,12 @@ jobs:
         - cd tests
         - docker-compose run --rm node npm run build
         - docker-compose up -d $SELENIUM_BROWSER
-      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --grep '@optional'
-      after_script:
-        - echo "end"
+      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:chrome --grep '@optional'
+    - stage: optional
+      name: "Optional"
+      before_script:
+        - npm install
+        - cd tests
+        - docker-compose run --rm node npm run build
+        - docker-compose up -d $SELENIUM_BROWSER
+      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:firefox --grep '@optional'
