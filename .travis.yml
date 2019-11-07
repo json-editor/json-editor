@@ -7,12 +7,18 @@ services:
 
 stages:
   - unit
-  - optional
   - test
+  - optional
 
 matrix:
   allow_failures:
     - env: TEST_TYPE=optional
+
+before_script_reference: &before_script_reference
+  - npm install
+  - cd tests
+  - docker-compose run --rm node npm run build
+  - docker-compose up -d SELENIUM_BROWSER
 
 jobs:
   include:
@@ -25,58 +31,46 @@ jobs:
 
     - stage: test
       name: "E2E Chrome"
-      before_script:
-        - npm install
-        - cd tests
-        - docker-compose run --rm node npm run build
-        - docker-compose up -d chrome
-      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:chrome --invert --grep  '@optional'
+      env:
+        - SELENIUM_BROWSER=chrome
+      before_script: *before_script_reference
+      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:SELENIUM_BROWSER --invert --grep  '@optional'
 
     - stage: test
       name: "E2E Firefox"
-      before_script:
-        - npm install
-        - cd tests
-        - docker-compose run --rm node npm run build
-        - docker-compose up -d firefox
-      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:firefox --invert --grep  '@optional'
+      env:
+        - SELENIUM_BROWSER=firefox
+      before_script: *before_script_reference
+      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:SELENIUM_BROWSER --invert --grep  '@optional'
 
     - stage: test
       name: "E2E Chrome nonmin"
-      env: DIST_SUB_PATH=nonmin
-      before_script:
-        - npm install
-        - cd tests
-        - docker-compose run --rm node npm run build
-        - docker-compose up -d chrome
-      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:chrome --invert --grep  '@optional'
+      env:
+        - SELENIUM_BROWSER=chrome
+        - DIST_SUB_PATH=nonmin
+      before_script: *before_script_reference
+      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:SELENIUM_BROWSER --invert --grep  '@optional'
 
     - stage: test
       name: "E2E Firefox nonmin"
-      env: DIST_SUB_PATH=nonmin
-      before_script:
-        - npm install
-        - cd tests
-        - docker-compose run --rm node npm run build
-        - docker-compose up -d firefox
-      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:firefox --invert --grep  '@optional'
+      env:
+        - SELENIUM_BROWSER=firefox
+        - DIST_SUB_PATH=nonmin
+      before_script: *before_script_reference
+      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:SELENIUM_BROWSER --invert --grep  '@optional'
 
     - stage: optional
       name: "E2E Chrome Optional"
-      env: TEST_TYPE=optional
-      before_script:
-        - npm install
-        - cd tests
-        - docker-compose run --rm node npm run build
-        - docker-compose up -d chrome
-      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:chrome --grep '@optional'
+      env:
+        - SELENIUM_BROWSER=chrome
+        - TEST_TYPE=optional
+      before_script: *before_script_reference
+      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:SELENIUM_BROWSER --grep '@optional'
 
     - stage: optional
       name: "E2E Firefox Optional"
-      env: TEST_TYPE=optional
-      before_script:
-        - npm install
-        - cd tests
-        - docker-compose run --rm node npm run build
-        - docker-compose up -d firefox
-      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:firefox --grep '@optional'
+      env:
+        - SELENIUM_BROWSER=firefox
+        - TEST_TYPE=optional
+      before_script: *before_script_reference
+      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:SELENIUM_BROWSER --grep '@optional'
