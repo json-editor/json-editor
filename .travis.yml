@@ -34,14 +34,14 @@ jobs:
       env:
         - SELENIUM_BROWSER=chrome
       before_script: *before_script_reference
-      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:SELENIUM_BROWSER --invert --grep  '@optional'
+      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
 
     - stage: test
       name: "E2E Firefox"
       env:
         - SELENIUM_BROWSER=firefox
       before_script: *before_script_reference
-      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:SELENIUM_BROWSER --invert --grep  '@optional'
+      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
 
     - stage: test
       name: "E2E Chrome nonmin"
@@ -49,7 +49,7 @@ jobs:
         - SELENIUM_BROWSER=chrome
         - DIST_SUB_PATH=nonmin
       before_script: *before_script_reference
-      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:SELENIUM_BROWSER --invert --grep  '@optional'
+      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
 
     - stage: test
       name: "E2E Firefox nonmin"
@@ -57,7 +57,7 @@ jobs:
         - SELENIUM_BROWSER=firefox
         - DIST_SUB_PATH=nonmin
       before_script: *before_script_reference
-      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:SELENIUM_BROWSER --invert --grep  '@optional'
+      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
 
     - stage: optional
       name: "E2E Chrome Optional"
@@ -65,7 +65,7 @@ jobs:
         - SELENIUM_BROWSER=chrome
         - TEST_TYPE=optional
       before_script: *before_script_reference
-      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:SELENIUM_BROWSER --grep '@optional'
+      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --grep '@optional'
 
     - stage: optional
       name: "E2E Firefox Optional"
@@ -73,4 +73,4 @@ jobs:
         - SELENIUM_BROWSER=firefox
         - TEST_TYPE=optional
       before_script: *before_script_reference
-      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:SELENIUM_BROWSER --grep '@optional'
+      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --grep '@optional'
