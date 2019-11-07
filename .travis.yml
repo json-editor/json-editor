@@ -8,6 +8,7 @@ services:
 stages:
   - unit
   - test
+  - optional
 
 env:
   - SELENIUM_BROWSER=chrome
@@ -23,8 +24,8 @@ before_script:
 
 script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
 
-after_script:
-  - docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --grep '@optional'
+#after_script:
+#  - docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --grep '@optional'
 
 jobs:
   include:
@@ -33,5 +34,15 @@ jobs:
       before_script:
         - npm install
       script: npm run test-headless
+      after_script:
+        - echo "end"
+    - stage: optional
+      name: "Optional"
+      before_script:
+        - npm install
+        - cd tests
+        - docker-compose run --rm node npm run build
+        - docker-compose up -d $SELENIUM_BROWSER
+      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --grep '@optional'
       after_script:
         - echo "end"
