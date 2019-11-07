@@ -7,7 +7,6 @@ services:
 
 stages:
   - unit
-  - optional
   - test
 
 matrix:
@@ -54,13 +53,13 @@ jobs:
       before_script: *before_script_reference
       script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
 
-    - stage: optional
+    - stage: test
       name: "E2E Chrome Optional"
       env: TEST_TYPE=optional SELENIUM_BROWSER=chrome
       before_script: *before_script_reference
       script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --grep '@optional'
 
-    - stage: optional
+    - stage: test
       name: "E2E Firefox Optional"
       env: TEST_TYPE=optional SELENIUM_BROWSER=firefox
       before_script: *before_script_reference
