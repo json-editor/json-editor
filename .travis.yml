@@ -12,7 +12,8 @@ stages:
 
 matrix:
   allow_failures:
-    - env: TEST_TYPE=optional
+    - env: TEST_TYPE=optional SELENIUM_BROWSER=chrome
+    - env: TEST_TYPE=optional SELENIUM_BROWSER=firefox
 
 before_script_reference: &before_script_reference
   - npm install
