@@ -10,15 +10,28 @@ stages:
   - test
   - optional
 
+env:
+  - SELENIUM_BROWSER=chrome
+  - SELENIUM_BROWSER=firefox
+  - SELENIUM_BROWSER=chrome DIST_SUB_PATH=nonmin
+  - SELENIUM_BROWSER=firefox DIST_SUB_PATH=nonmin
+
 matrix:
   allow_failures:
     - env: TEST_TYPE=optional
 
-before_script_reference: &before_script_reference
+# default test stage
+
+before_script: &before_script_reference
   - npm install
+  - npm run test-headless # Run unit tests in headless chrome
   - cd tests
   - docker-compose run --rm node npm run build
-  - docker-compose up -d SELENIUM_BROWSER
+  - docker-compose up -d $SELENIUM_BROWSER
+
+script:
+  - docker-compose ps
+  - docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
 
 jobs:
   include:
@@ -28,36 +41,6 @@ jobs:
       before_script:
         - npm install
       script: npm run test-headless
-
-    - stage: test
-      name: "E2E Chrome"
-      env:
-        - SELENIUM_BROWSER=chrome
-      before_script: *before_script_reference
-      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
-
-    - stage: test
-      name: "E2E Firefox"
-      env:
-        - SELENIUM_BROWSER=firefox
-      before_script: *before_script_reference
-      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
-
-    - stage: test
-      name: "E2E Chrome nonmin"
-      env:
-        - SELENIUM_BROWSER=chrome
-        - DIST_SUB_PATH=nonmin
-      before_script: *before_script_reference
-      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
-
-    - stage: test
-      name: "E2E Firefox nonmin"
-      env:
-        - SELENIUM_BROWSER=firefox
-        - DIST_SUB_PATH=nonmin
-      before_script: *before_script_reference
-      script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
 
     - stage: optional
       name: "E2E Chrome Optional"
