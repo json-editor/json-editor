@@ -7,8 +7,8 @@ services:
 
 stages:
   - unit
+  -optional
   - test
-  - optional
 
 matrix:
   allow_failures:
@@ -32,46 +32,36 @@ jobs:
 
     - stage: test
       name: "E2E Chrome"
-      env:
-        - SELENIUM_BROWSER=chrome
+      env: SELENIUM_BROWSER=chrome
       before_script: *before_script_reference
       script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
 
     - stage: test
       name: "E2E Firefox"
-      env:
-        - SELENIUM_BROWSER=firefox
+      env: SELENIUM_BROWSER=firefox
       before_script: *before_script_reference
       script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
 
     - stage: test
       name: "E2E Chrome nonmin"
-      env:
-        - SELENIUM_BROWSER=chrome
-        - DIST_SUB_PATH=nonmin
+      env: SELENIUM_BROWSER=chrome DIST_SUB_PATH=nonmin
       before_script: *before_script_reference
       script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
 
     - stage: test
       name: "E2E Firefox nonmin"
-      env:
-        - SELENIUM_BROWSER=firefox
-        - DIST_SUB_PATH=nonmin
+      env: SELENIUM_BROWSER=firefox DIST_SUB_PATH=nonmin
       before_script: *before_script_reference
       script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
 
     - stage: optional
       name: "E2E Chrome Optional"
-      env:
-        - SELENIUM_BROWSER=chrome
-        - TEST_TYPE=optional
+      env: TEST_TYPE=optional SELENIUM_BROWSER=chrome
       before_script: *before_script_reference
       script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --grep '@optional'
 
     - stage: optional
       name: "E2E Firefox Optional"
-      env:
-        - SELENIUM_BROWSER=firefox
-        - TEST_TYPE=optional
+      env: TEST_TYPE=optional SELENIUM_BROWSER=firefox
       before_script: *before_script_reference
       script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --grep '@optional'
