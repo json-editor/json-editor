@@ -7,7 +7,7 @@ services:
 
 stages:
   - unit
-  -optional
+  - optional
   - test
 
 matrix:
