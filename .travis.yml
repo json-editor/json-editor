@@ -7,16 +7,22 @@ services:
 
 stages:
   - unit
-  - test
   - optional
+  - test
+
+matrix:
+  allow_failures:
+    - env: TEST_TYPE=optional
 
 jobs:
   include:
+
     - stage: unit
       name: "Unit"
       before_script:
         - npm install
       script: npm run test-headless
+
     - stage: test
       name: "E2E Chrome"
       before_script:
@@ -25,6 +31,7 @@ jobs:
         - docker-compose run --rm node npm run build
         - docker-compose up -d chrome
       script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:chrome --invert --grep  '@optional'
+
     - stage: test
       name: "E2E Firefox"
       before_script:
@@ -33,6 +40,7 @@ jobs:
         - docker-compose run --rm node npm run build
         - docker-compose up -d firefox
       script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:firefox --invert --grep  '@optional'
+
     - stage: test
       name: "E2E Chrome nonmin"
       env: DIST_SUB_PATH=nonmin
@@ -42,6 +50,7 @@ jobs:
         - docker-compose run --rm node npm run build
         - docker-compose up -d chrome
       script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:chrome --invert --grep  '@optional'
+
     - stage: test
       name: "E2E Firefox nonmin"
       env: DIST_SUB_PATH=nonmin
@@ -54,14 +63,17 @@ jobs:
 
     - stage: optional
       name: "E2E Chrome Optional"
+      env: TEST_TYPE=optional
       before_script:
         - npm install
         - cd tests
         - docker-compose run --rm node npm run build
         - docker-compose up -d chrome
       script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:chrome --grep '@optional'
+
     - stage: optional
       name: "E2E Firefox Optional"
+      env: TEST_TYPE=optional
       before_script:
         - npm install
         - cd tests
