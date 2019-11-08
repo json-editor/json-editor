@@ -347,11 +347,12 @@ Upload files to server.
 |--|--|--|--|
 | title            | string       | Title of the Browse button                                                         | "Browse"
 | auto_upload      | boolean      | Trigger file upload button automatically                                           | false
+| allow_reupload   | boolean      | Allow reupload of file (overrides the readonly state)                              | false
 | hide_input       | boolean      | Hide the Browse button and name display (Only works if 'enable_drag_drop' is true) | false
 | enable_drag_drop | boolean      | Enable Drag&Drop uploading.                                                        | false
 | drop_zone_top    | boolean      | Position of dropzone. **true**=before button input, **false**=after button input   | false
 | drop_zone_text   | string       | Text displayed in dropzone box                                                     | "Drag & Drop file here"
-| alt_drop_zone_id | string       | Alternate DropZone ID (Can be created inside another property)                     |
+| alt_drop_zone    | string       | Alternate DropZone DOM Selector (Can be created inside another property)           |
 | mime_type        | string/array | If set, restrict upload to mime type(s)                                            |
 | max_upload_size  | integer      | Maximum file size allowed. 0 = no limit                                            | 0
 | upload_handler   | function     | Callback function for handling uploads to server                                   |
