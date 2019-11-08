@@ -8,7 +8,9 @@ export var UploadEditor = AbstractEditor.extend({
   },
   build: function () {
     var self = this
-    this.title = this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
+    if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
+    if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
+    if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText)
 
     // Editor options
     this.options = this.expandCallbacks('upload', $extend({}, {
@@ -19,7 +21,7 @@ export var UploadEditor = AbstractEditor.extend({
       'enable_drag_drop': false, // Enable Drag&Drop uploading
       'drop_zone_text': 'Drag & Drop file here', // Text displayed in dropzone box
       'drop_zone_top': false, // Position of dropzone. true=before button input, false=after button input
-      'alt_drop_zone_id': '', // Alternate DropZone ID (Can be created inside another property)
+      'alt_drop_zone': '', // Alternate DropZone DOM selector (Can be created inside another property)
       'mime_type': '', // If set, restricts to mime type(s). Can be either a string or an array
       'max_upload_size': 0, // Maximum file size allowed. 0 = no limit
       'allow_reupload': false, // Allow reupload of file (prevents property from being readonly)
@@ -70,14 +72,14 @@ export var UploadEditor = AbstractEditor.extend({
       // Drag&Drop upload enabled
       if (this.options.enable_drag_drop === true) {
         // Alternate DropZone defined
-        if (this.options.alt_drop_zone_id !== '') {
-          if (this.options.alt_drop_zone_id.substr(0, 1) !== '#') this.options.alt_drop_zone_id = '#' + this.options.alt_drop_zone_id
-          this.dropZone = document.querySelector(this.options.alt_drop_zone_id)
+        if (this.options.alt_drop_zone !== '') {
+          this.altDropZone = document.querySelector(this.options.alt_drop_zone)
+          if (this.altDropZone) this.dropZone = this.altDropZone
         } else {
           this.dropZone = document.createElement('div')
           this.dropZone.classList.add('je-dropzone')
           this.dropZone.setAttribute('data-text', this.options.drop_zone_text)
-          this.container.appendChild(this.dropZone)
+          // this.container.appendChild(this.dropZone)
 
           // The Style Rules should be placed in theme once we have theme functions to render the dropzone
           this.jsoneditor.addNewStyleRules(this.jsoneditor.options.theme || window.JSONEditor.defaults.theme, {
@@ -86,7 +88,10 @@ export var UploadEditor = AbstractEditor.extend({
             '.je-dropzone.active-dropzone': 'background:green'
           })
         }
-        if (this.dropZone) this.dropZone.classList.add('upload-dropzone')
+        if (this.dropZone) {
+          this.dropZone.classList.add('upload-dropzone')
+          this.dropZone.addEventListener('dblclick', this.clickHandler)
+        }
       }
 
       // Triggered after file have been selected
@@ -178,19 +183,20 @@ export var UploadEditor = AbstractEditor.extend({
       }
     }
 
-    var description = this.schema.description || ''
+    this.preview = document.createElement('div')
 
-    this.preview = this.theme.getFormInputDescription(description)
-
-    this.control = this.theme.getFormControl(this.label, this.uploader || this.input, this.preview)
-    this.input.controlgroup = this.control
+    this.control = this.input.controlgroup = this.theme.getFormControl(this.label, this.uploader || this.input, this.description, this.infoButton)
     if (this.uploader) this.uploader.controlgroup = this.control
+    var inputNode = this.uploader || this.input
+    var elements = document.createElement('div')
+
+    if (this.dropZone && !this.altDropZone && this.options.drop_zone_top === true) elements.appendChild(this.dropZone)
+    if (this.fileUploadGroup) elements.appendChild(this.fileUploadGroup)
+    if (this.dropZone && !this.altDropZone && this.options.drop_zone_top !== true) elements.appendChild(this.dropZone)
+    elements.appendChild(this.preview)
+    inputNode.parentNode.insertBefore(elements, inputNode.nextSibling)
 
     this.container.appendChild(this.control)
-    if (this.dropZone && this.options.alt_drop_zone_id === '' && this.options.drop_zone_top === true) this.container.appendChild(this.dropZone)
-    if (this.fileUploadGroup) this.container.appendChild(this.fileUploadGroup)
-    if (this.dropZone && this.options.alt_drop_zone_id === '' && this.options.drop_zone_top !== true) this.container.appendChild(this.dropZone)
-    this.container.appendChild(this.preview)
 
     // Any special formatting that needs to happen after the input is added to the dom
     window.requestAnimationFrame(function () {
@@ -303,6 +309,18 @@ export var UploadEditor = AbstractEditor.extend({
   },
   destroy: function () {
     var self = this
+    // Remove Drag'n'Drop handlers
+    if (this.options.enable_drag_drop === true) {
+      ['dragover', 'drop'].forEach(function (ev) {
+        window.removeEventListener(ev, self.dragHandler, true)
+      });
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(function (ev) {
+        self.dropZone.removeEventListener(ev, self.dragHandler, true)
+      })
+      this.dropZone.removeEventListener('dblclick', this.clickHandler)
+      if (this.dropZone && this.dropZone.parentNode) this.dropZone.parentNode.removeChild(this.dropZone)
+    }
+
     if (this.uploader && this.uploader.parentNode) {
       this.uploader.removeEventListener('change', this.uploadHandler)
       this.uploader.parentNode.removeChild(this.uploader)
@@ -316,19 +334,8 @@ export var UploadEditor = AbstractEditor.extend({
       this.fileDisplay.parentNode.removeChild(this.fileDisplay)
     }
     if (this.fileUploadGroup && this.fileUploadGroup.parentNode) this.fileUploadGroup.parentNode.removeChild(this.fileUploadGroup)
-
-    // Remove Drag'n'Drop handlers
-    if (this.options.enable_drag_drop === true) {
-      ['dragover', 'drop'].forEach(function (ev) {
-        window.removeEventListener(ev, self.dragHandler, true)
-      });
-      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(function (ev) {
-        self.dropZone.removeEventListener(ev, self.dragHandler, true)
-      })
-    }
-
     if (this.preview && this.preview.parentNode) this.preview.parentNode.removeChild(this.preview)
-    if (this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title)
+    if (this.header && this.header.parentNode) this.header.parentNode.removeChild(this.header)
     if (this.input && this.input.parentNode) this.input.parentNode.removeChild(this.input)
 
     this._super()
