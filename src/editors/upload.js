@@ -183,6 +183,9 @@ export var UploadEditor = AbstractEditor.extend({
     this.preview = this.theme.getFormInputDescription(description)
 
     this.control = this.theme.getFormControl(this.label, this.uploader || this.input, this.preview)
+    this.input.controlgroup = this.control
+    if (this.uploader) this.uploader.controlgroup = this.control
+
     this.container.appendChild(this.control)
     if (this.dropZone && this.options.alt_drop_zone_id === '' && this.options.drop_zone_top === true) this.container.appendChild(this.dropZone)
     if (this.fileUploadGroup) this.container.appendChild(this.fileUploadGroup)
@@ -350,7 +353,6 @@ export var UploadEditor = AbstractEditor.extend({
         messages.push(error.message)
       }
     })
-    this.input.controlgroup = this.control
 
     if (messages.length) {
       this.theme.addInputError(this.input, messages.join('. ') + '.')
