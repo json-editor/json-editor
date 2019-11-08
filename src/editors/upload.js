@@ -1,5 +1,5 @@
 import { AbstractEditor } from '../editor'
-import { $extend, $each } from '../utilities'
+import { $extend } from '../utilities'
 
 export var UploadEditor = AbstractEditor.extend({
 
@@ -74,17 +74,18 @@ export var UploadEditor = AbstractEditor.extend({
         if (this.options.alt_drop_zone !== '') {
           this.altDropZone = document.querySelector(this.options.alt_drop_zone)
           if (this.altDropZone) this.dropZone = this.altDropZone
+          else throw new Error('Error: alt_drop_zone selector "' + this.options.alt_drop_zone + '" not found!')
         } else {
           this.dropZone = document.createElement('div')
           this.dropZone.classList.add('je-dropzone')
           this.dropZone.setAttribute('data-text', this.options.drop_zone_text)
-          // this.container.appendChild(this.dropZone)
 
           // The Style Rules should be placed in theme once we have theme functions to render the dropzone
           this.jsoneditor.addNewStyleRules(this.jsoneditor.options.theme || window.JSONEditor.defaults.theme, {
             '.je-dropzone': 'position:relative;margin:0.5rem 0;border 2px dashed black;width:100%;height:60px;background:teal;transition: all 0.5s',
-            '.je-dropzone:before': 'position:absolute;content:attr(data-text);left:50%;top:50%;transform: translate(-50%,-50%)',
-            '.je-dropzone.active-dropzone': 'background:green'
+            '.je-dropzone:before': 'position:absolute;content:attr(data-text);color:rgba(0,0,0,0.6);left:50%;top:50%;transform: translate(-50%,-50%)',
+            '.je-dropzone.valid-dropzone': 'background:green',
+            '.je-dropzone.invalid-dropzone': 'background:red'
           })
         }
         if (this.dropZone) {
@@ -99,26 +100,10 @@ export var UploadEditor = AbstractEditor.extend({
         e.stopPropagation()
         var files = e.target.files || e.dataTransfer.files
         if (files && files.length) {
-          var errors = []
-          // size of uploaded file is too big
           if (self.options.max_upload_size !== 0 && files[0].size > self.options.max_upload_size) {
-            errors.push({
-              path: self.path,
-              property: 'size',
-              message: 'Filesize too large. Max size is ' + self.options.max_upload_size
-            })
-          }
-          // wrong file/mime type
-          if (self.options.mime_type.length !== 0 && !self.isValidMimeType(files[0].type, self.options.mime_type)) {
-            errors.push({
-              path: self.path,
-              property: 'format',
-              message: 'Wrong file format. Allowed format(s): ' + self.options.mime_type.toString()
-            })
-          }
-          if (errors.length > 0) {
-            self.is_dirty = true
-            self.showValidationErrors(errors)
+            self.theme.addInputError(self.uploader, 'Filesize too large. Max size is ' + self.options.max_upload_size)
+          } else if (self.options.mime_type.length !== 0 && !self.isValidMimeType(files[0].type, self.options.mime_type)) {
+            self.theme.addInputError(self.uploader, 'Wrong file format. Allowed format(s): ' + self.options.mime_type.toString())
           } else {
             if (self.fileDisplay) self.fileDisplay.value = files[0].name
             var fr = new window.FileReader()
@@ -143,28 +128,26 @@ export var UploadEditor = AbstractEditor.extend({
         switch ((this === window ? 'w_' : 'e_') + e.type) {
           case 'w_drop':
           case 'w_dragover':
+            // prevent default browser action if dropped outside dropzone
             if (!validZone) e.dataTransfer.dropEffect = 'none'
             break
           case 'e_dragenter': {
             if (validZone) {
-              self.dropZone.classList.add('active-dropzone')
+              self.dropZone.classList.add('valid-dropzone')
               e.dataTransfer.dropEffect = 'copy'
-            }
+            } else self.dropZone.classList.add('invalid-dropzone')
+            break
+          }
+          case 'e_dragover': {
+            if (validZone) e.dataTransfer.dropEffect = 'copy'
             break
           }
           case 'e_dragleave':
-            if (validZone) self.dropZone.classList.remove('active-dropzone')
+            self.dropZone.classList.remove('valid-dropzone', 'invalid-dropzone')
             break
-          case 'e_dragover': {
-            if (validZone) {
-              e.dataTransfer.dropEffect = 'copy'
-              self.dropZone.classList.add('active-dropzone')
-            }
-            break
-          }
           case 'e_drop': {
+            self.dropZone.classList.remove('valid-dropzone', 'invalid-dropzone')
             if (validZone) self.uploadHandler(e)
-            self.dropZone.classList.remove('active-dropzone')
             break
           }
         }
@@ -234,8 +217,14 @@ export var UploadEditor = AbstractEditor.extend({
 
     var files = e.target.files || e.dataTransfer.files
     var file = files[0]
+    var size = '0 Bytes'
+    if (file.size > 0) {
+      // Format bytes as KB/MB etc. with 2 decimals
+      var i = Math.floor(Math.log(file.size) / Math.log(1024))
+      size = parseFloat((file.size / Math.pow(1024, i)).toFixed(2)) + ' ' + ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'][i]
+    }
 
-    this.preview.innerHTML = '<strong>Type:</strong> ' + mime + ', <strong>Size:</strong> ' + file.size + ' bytes'
+    this.preview.innerHTML = '<strong>Name:</strong> ' + file.name + ',<strong>Type:</strong> ' + mime + ', <strong>Size:</strong> ' + size
     if (mime.substr(0, 5) === 'image') {
       this.preview.innerHTML += '<br>'
       var img = document.createElement('img')
@@ -343,27 +332,5 @@ export var UploadEditor = AbstractEditor.extend({
     return mimeTypesList.reduce(function (a, v) {
       return a || new RegExp(v.replace(/\*/g, '.*'), 'gi').test(mimeType)
     }, false)
-  },
-  showValidationErrors: function (errors) {
-    var self = this
-    if (this.jsoneditor.options.show_errors === 'always') {
-    } else if (!this.is_dirty && this.previous_error_setting === this.jsoneditor.options.show_errors) {
-      return
-    }
-
-    this.previous_error_setting = this.jsoneditor.options.show_errors
-
-    var messages = []
-    $each(errors, function (i, error) {
-      if (error.path === self.path) {
-        messages.push(error.message)
-      }
-    })
-
-    if (messages.length) {
-      this.theme.addInputError(this.input, messages.join('. ') + '.')
-    } else {
-      this.theme.removeInputError(this.input)
-    }
   }
 })
