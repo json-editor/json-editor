@@ -42,7 +42,7 @@ export var spectreTheme = AbstractTheme.extend({
     '.required:after': 'content: " *";color: red;font:inherit', // Red * after label if field is required
     '.je-align-bottom': 'margin-top: auto', // option: align_bottom
     '.je-desc': 'font-size: smaller;margin: .2rem 0;', // Description
-    '.je-upload-preview img': 'float:left;margin:0 0.5rem 0.5rem 0;max-width:100%;max-height:5rem', // Upload editor preview
+    '.je-upload-preview img': 'float:left;margin:0 0.5rem 0.5rem 0;max-width:100%;max-height:5rem;border: 3px solid white;box-shadow: 0px 0px 8px rgba(0,0,0,.3);box-sizing: border-box', // Upload editor preview image
     /*    '.columns': 'border:1px solid rgba(255,0,0,.5);',
     '.columns .columns': 'border:1px solid rgba(0,255,0,.5);', */
     '.columns .container.je-noindent': 'padding-left:0;padding-right:0;', // Option: object_indent
@@ -369,7 +369,6 @@ export var spectreTheme = AbstractTheme.extend({
     if (typeof row.rowPane !== 'undefined') row.rowPane.style.display = 'none'
     else row.container.style.display = 'none'
   },
-
   afterInputReady: function (input) {
     if (input.localName === 'select') {
       // Selectize adjustments
