@@ -22,7 +22,9 @@ export var AbstractTheme = Class.extend({
     'disable_theme_rules': false
   },
   /* Custom stylesheet rules. format: "selector" : "CSS rules" */
-  rules: {},
+  rules: {
+    '.je-upload-preview img': 'float:left;margin:0 0.5rem 0.5rem 0;max-width:100%;max-height:100px'
+  },
   getContainer: function () {
     return document.createElement('div')
   },
@@ -545,9 +547,10 @@ export var AbstractTheme = Class.extend({
   // file is an object with properties: name, type, mimeType, size amd formattedSize
   getUploadPreview: function (file, uploadButton, data) {
     var preview = document.createElement('div')
+    preview.classList.add('je-upload-preview')
+
     if (file.mimeType.substr(0, 5) === 'image') {
       var img = document.createElement('img')
-      img.setAttribute('style', 'float:left;margin: 0 0.5rem 0.5rem 0;max-width:100%;max-height:100px')
       img.src = data
       preview.appendChild(img)
     }

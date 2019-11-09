@@ -54,7 +54,8 @@ export var tailwindTheme = AbstractTheme.extend({
     '.json-editor-btn-back': 'color: white; margin:.3rem; padding: 0.3rem .8rem; background-color: #2B6CB0; box-shadow: 3px 3px 5px 1px rgba(4,4,4,0.2);-webkit-box-shadow: 3px 3px 5px 1px rgba(4,4,4,0.2);-moz-box-shadow: 3px 3px 5px 1px rgba(4,4,4,0.2);',
     '.json-editor-btntype-delete': 'color: #E53E3E; background-color: rgba(218,222,228,.1);margin:.03rem; padding: 0.1rem;',
     '.json-editor-btntype-move': 'color: #000000; background-color: rgba(218,222,228,.1);margin:.03rem; padding: 0.1rem;',
-    '.json-editor-btn-collapse': 'padding: 0em .8rem;font-size:1.3rem;color: #E53E3E;background-color: rgba(218,222,228,.1);'
+    '.json-editor-btn-collapse': 'padding: 0em .8rem;font-size:1.3rem;color: #E53E3E;background-color: rgba(218,222,228,.1);',
+    '.je-upload-preview img': 'float:left;margin:0 0.5rem 0.5rem 0;max-width:100%;max-height:5rem' // Upload Editor preview image
   },
 
   getGridContainer: function () {

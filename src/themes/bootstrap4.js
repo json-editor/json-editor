@@ -31,7 +31,10 @@ export var bootstrap4Theme = AbstractTheme.extend({
 
     // selectize
     '.selectize-control.form-control': 'padding: 0',
-    '.selectize-dropdown.form-control': 'padding: 0;height: auto' // this cut off options can also be prohibited by setting `copyClassesToDropdown: true` in the slectize options
+    '.selectize-dropdown.form-control': 'padding: 0;height: auto', // this cut off options can also be prohibited by setting `copyClassesToDropdown: true` in the slectize options
+
+    // Upload Editor
+    '.je-upload-preview img': 'float:left;margin:0 0.5rem 0.5rem 0;max-width:100%;max-height:5rem' // Preview image
   },
 
   getSelectInput: function (options, multiple) {
