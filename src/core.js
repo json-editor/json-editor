@@ -759,12 +759,7 @@ JSONEditor.prototype = {
           // Remove the type property if it's empty
             delete extended.type
           }
-        } else if (typeof val === 'object' && Array.isArray(val)) {
-          // All other arrays should be intersected (enum, etc.)
-          extended[prop] = val.filter(function (n) {
-            return obj2[prop].indexOf(n) !== -1
-          })
-        } else if (typeof val === 'object' && val !== null) {
+        } else if (typeof val === 'object' && !Array.isArray(val) && val !== null) {
         // Objects should be recursively merged
           extended[prop] = self.extendSchemas(val, obj2[prop])
         } else {
