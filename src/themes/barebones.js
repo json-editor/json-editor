@@ -7,6 +7,7 @@ export var barebonesTheme = AbstractTheme.extend({
   },
   /* Custom stylesheet rules. format: "selector" : "CSS rules" */
   rules: {
+    '.je-upload-preview img': 'float:left;margin:0 0.5rem 0.5rem 0;max-width:100%;max-height:5rem' // Upload Editor preview image 
   },
   addInputError: function (input, text) {
     if (!input.errmsg) {
