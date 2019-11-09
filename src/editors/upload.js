@@ -217,24 +217,22 @@ export var UploadEditor = AbstractEditor.extend({
 
     var files = e.target.files || e.dataTransfer.files
     var file = files[0]
-    var size = '0 Bytes'
     if (file.size > 0) {
       // Format bytes as KB/MB etc. with 2 decimals
       var i = Math.floor(Math.log(file.size) / Math.log(1024))
-      size = parseFloat((file.size / Math.pow(1024, i)).toFixed(2)) + ' ' + ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'][i]
-    }
+      file.formattedSize = parseFloat((file.size / Math.pow(1024, i)).toFixed(2)) + ' ' + ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'][i]
+    } else file.formattedSize = '0 Bytes'
 
-    this.preview.innerHTML = '<strong>Name:</strong> ' + file.name + ',<strong>Type:</strong> ' + mime + ', <strong>Size:</strong> ' + size
+    // Preview should be generated from theme function. With parameters like: getUploadPreview(file, image, uploadbutton)
+    // where file is the file object (Contains name, type and size + formattedSize), image is this.preview_value or empty, uploadbutton is the button element
+    this.preview.innerHTML = ''
     if (mime.substr(0, 5) === 'image') {
-      this.preview.innerHTML += '<br>'
-      var img = document.createElement('img')
-      img.style.maxWidth = '100%'
-      img.style.maxHeight = '100px'
+      this.preview.innerHTML += '<div style="float:left;margin: 0 0.5rem 0.5rem 0"><img style="max-width:100%;max-height:100px"></div>'
+      var img = this.preview.querySelector('img')
       img.src = this.preview_value
-      this.preview.appendChild(img)
     }
+    this.preview.innerHTML += '<div><strong>Name:</strong> ' + file.name + '<br><strong>Type:</strong> ' + mime + '<br><strong>Size:</strong> ' + file.formattedSize + '</div><br>'
 
-    this.preview.innerHTML += '<br>'
     var uploadButton = this.getButton('Upload', 'upload', 'Upload')
     this.preview.appendChild(uploadButton)
     uploadButton.addEventListener('click', function (event) {

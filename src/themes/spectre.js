@@ -315,7 +315,12 @@ export var spectreTheme = AbstractTheme.extend({
     if (this.options.table_zebrastyle) el.classList.add('table-striped')
     return el
   },
-
+  // Function for rendering progressbar
+  getProgressBar: function () {
+    var progressBar = this._super()
+    progressBar.classList.add('progress')
+    return progressBar
+  },
   // Containers for array with format: "tab"
   getTabHolder: function (propertyName) {
     var pName = typeof propertyName === 'undefined' ? '' : propertyName
