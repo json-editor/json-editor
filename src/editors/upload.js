@@ -211,30 +211,20 @@ export var UploadEditor = AbstractEditor.extend({
 
     var self = this
 
-    var mime = this.preview_value.match(/^data:([^;,]+)[;,]/)
-    if (mime) mime = mime[1]
-    if (!mime) mime = 'unknown'
-
     var files = e.target.files || e.dataTransfer.files
     var file = files[0]
+
+    // mime type extracted from file data. More exact than the one in the file object
+    var mime = this.preview_value.match(/^data:([^;,]+)[;,]/)
+    file.mimeType = mime ? mime[1] : 'unknown'
+
     if (file.size > 0) {
       // Format bytes as KB/MB etc. with 2 decimals
       var i = Math.floor(Math.log(file.size) / Math.log(1024))
       file.formattedSize = parseFloat((file.size / Math.pow(1024, i)).toFixed(2)) + ' ' + ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'][i]
     } else file.formattedSize = '0 Bytes'
 
-    // Preview should be generated from theme function. With parameters like: getUploadPreview(file, image, uploadbutton)
-    // where file is the file object (Contains name, type and size + formattedSize), image is this.preview_value or empty, uploadbutton is the button element
-    this.preview.innerHTML = ''
-    if (mime.substr(0, 5) === 'image') {
-      this.preview.innerHTML += '<div style="float:left;margin: 0 0.5rem 0.5rem 0"><img style="max-width:100%;max-height:100px"></div>'
-      var img = this.preview.querySelector('img')
-      img.src = this.preview_value
-    }
-    this.preview.innerHTML += '<div><strong>Name:</strong> ' + file.name + '<br><strong>Type:</strong> ' + mime + '<br><strong>Size:</strong> ' + file.formattedSize + '</div><br>'
-
     var uploadButton = this.getButton('Upload', 'upload', 'Upload')
-    this.preview.appendChild(uploadButton)
     uploadButton.addEventListener('click', function (event) {
       event.preventDefault()
 
@@ -269,6 +259,8 @@ export var UploadEditor = AbstractEditor.extend({
         }
       })
     })
+
+    this.preview.appendChild(this.theme.getUploadPreview(file, uploadButton, this.preview_value))
 
     if (this.options.auto_upload) {
       uploadButton.dispatchEvent(new window.MouseEvent('click'))
