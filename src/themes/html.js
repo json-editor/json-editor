@@ -13,7 +13,7 @@ export var htmlTheme = AbstractTheme.extend({
     'je-child-editor-holder': 'margin-bottom:8px;',
     'je-header-button-holder': 'display:inline-block;margin-left:10px;font-size:.8em;vertical-align:middle;',
     'je-table': 'margin-bottom:5px;border-bottom:1px solid #ccc;',
-    '.je-upload-preview img': 'float:left;margin:0 0.5rem 0.5rem 0;max-width:100%;max-height:5rem' // Upload Editor preview image 
+    '.je-upload-preview img': 'float:left;margin:0 0.5rem 0.5rem 0;max-width:100%;max-height:5rem' // Upload Editor preview image
   },
   getFormInputLabel: function (text, req) {
     var el = this._super(text, req)
