@@ -66,6 +66,12 @@ export var UploadEditor = AbstractEditor.extend({
         this.fileDisplay.addEventListener('dblclick', this.clickHandler)
 
         this.fileUploadGroup = this.theme.getInputGroup(this.fileDisplay, [this.browseButton])
+        if (!this.fileUploadGroup) {
+          // Themes that doesn't support input grouping
+          this.fileUploadGroup = document.createElement('div')
+          this.fileUploadGroup.appendChild(this.fileDisplay)
+          this.fileUploadGroup.appendChild(this.browseButton)
+        }
       }
 
       // Drag&Drop upload enabled
