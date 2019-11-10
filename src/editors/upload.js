@@ -75,19 +75,8 @@ export var UploadEditor = AbstractEditor.extend({
           this.altDropZone = document.querySelector(this.options.alt_drop_zone)
           if (this.altDropZone) this.dropZone = this.altDropZone
           else throw new Error('Error: alt_drop_zone selector "' + this.options.alt_drop_zone + '" not found!')
-        } else {
-          this.dropZone = document.createElement('div')
-          this.dropZone.classList.add('je-dropzone')
-          this.dropZone.setAttribute('data-text', this.options.drop_zone_text)
+        } else this.dropZone = this.theme.getDropZone(this.options.drop_zone_text)
 
-          // The Style Rules should be placed in theme once we have theme functions to render the dropzone
-          this.jsoneditor.addNewStyleRules(this.jsoneditor.options.theme || window.JSONEditor.defaults.theme, {
-            '.je-dropzone': 'position:relative;margin:0.5rem 0;border 2px dashed black;width:100%;height:60px;background:teal;transition: all 0.5s',
-            '.je-dropzone:before': 'position:absolute;content:attr(data-text);color:rgba(0,0,0,0.6);left:50%;top:50%;transform: translate(-50%,-50%)',
-            '.je-dropzone.valid-dropzone': 'background:green',
-            '.je-dropzone.invalid-dropzone': 'background:red'
-          })
-        }
         if (this.dropZone) {
           this.dropZone.classList.add('upload-dropzone')
           this.dropZone.addEventListener('dblclick', this.clickHandler)

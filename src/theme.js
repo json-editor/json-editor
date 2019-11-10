@@ -544,6 +544,12 @@ export var AbstractTheme = Class.extend({
     tmp.innerHTML = txt
     return (tmp.textContent || tmp.innerText)
   },
+  getDropZone: function (text) {
+    var el = document.createElement('div')
+    el.setAttribute('data-text', text)
+    el.classList.add('je-dropzone')
+    return el
+  },
   // file is an object with properties: name, type, mimeType, size amd formattedSize
   getUploadPreview: function (file, uploadButton, data) {
     var preview = document.createElement('div')
