@@ -320,5 +320,8 @@ export var MultipleEditor = AbstractEditor.extend({
         editor.showValidationErrors(errors)
       })
     }
+  },
+  addLinks: function () {
+    // multiple editor itself don't create links
   }
 })
