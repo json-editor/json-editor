@@ -261,6 +261,11 @@ Here are all the available options:
     <td>The default value of `format` for objects. If set to <code>table</code> for example, objects will use table layout if `format` is not specified.</td>
     <td><code>normal</code></td>
   </tr>
+  <tr>
+    <td>enum_source_value_auto_select</td>
+    <td>Preserve value at Move Up or Down.(No value is selected automatically upon deletion.)</td>
+    <td><code>true</code></td>
+  </tr>
   </tbody>
 </table>
 
