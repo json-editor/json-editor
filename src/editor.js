@@ -352,16 +352,18 @@ export var AbstractEditor = Class.extend({
         link.textContent = rel || url
         media.setAttribute('src', url)
       })
-    // Text links
+    // Text links or blank link
     } else {
       link = holder = this.theme.getBlockLink()
       holder.setAttribute('target', '_blank')
       holder.textContent = data.rel
+      holder.style.display = 'none' // Prevent blank links from showing up when using custom view
 
       // When a watched field changes, update the url
       this.link_watchers.push(function (vars) {
         var url = href(vars)
         var rel = relTemplate(vars)
+        if (url) holder.style.display = ''
         holder.setAttribute('href', url)
         holder.textContent = rel || url
       })

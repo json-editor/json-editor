@@ -12,7 +12,12 @@ export var htmlTheme = AbstractTheme.extend({
     'je-indented-panel': 'padding:5px;margin:10px;border-radius:3px;border:1px solid #ddd;',
     'je-child-editor-holder': 'margin-bottom:8px;',
     'je-header-button-holder': 'display:inline-block;margin-left:10px;font-size:.8em;vertical-align:middle;',
-    'je-table': 'margin-bottom:5px;border-bottom:1px solid #ccc;'
+    'je-table': 'margin-bottom:5px;border-bottom:1px solid #ccc;',
+    '.je-upload-preview img': 'float:left;margin:0 0.5rem 0.5rem 0;max-width:100%;max-height:5rem', // Upload Editor preview image
+    '.je-dropzone': 'position:relative;margin:0.5rem 0;border 2px dashed black;width:100%;height:60px;background:teal;transition: all 0.5s',
+    '.je-dropzone:before': 'position:absolute;content:attr(data-text);color:rgba(0,0,0,0.6);left:50%;top:50%;transform: translate(-50%,-50%)',
+    '.je-dropzone.valid-dropzone': 'background:green',
+    '.je-dropzone.invalid-dropzone': 'background:red'
   },
   getFormInputLabel: function (text, req) {
     var el = this._super(text, req)

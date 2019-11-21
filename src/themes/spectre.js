@@ -42,6 +42,11 @@ export var spectreTheme = AbstractTheme.extend({
     '.required:after': 'content: " *";color: red;font:inherit', // Red * after label if field is required
     '.je-align-bottom': 'margin-top: auto', // option: align_bottom
     '.je-desc': 'font-size: smaller;margin: .2rem 0;', // Description
+    '.je-upload-preview img': 'float:left;margin:0 0.5rem 0.5rem 0;max-width:100%;max-height:5rem;border: 3px solid white;box-shadow: 0px 0px 8px rgba(0,0,0,.3);box-sizing: border-box', // Upload editor preview image
+    '.je-dropzone': 'position:relative;margin:0.5rem 0;border 2px dashed black;width:100%;height:60px;background:teal;transition: all 0.5s',
+    '.je-dropzone:before': 'position:absolute;content:attr(data-text);color:rgba(0,0,0,0.6);left:50%;top:50%;transform: translate(-50%,-50%)',
+    '.je-dropzone.valid-dropzone': 'background:green',
+    '.je-dropzone.invalid-dropzone': 'background:red',
     /*    '.columns': 'border:1px solid rgba(255,0,0,.5);',
     '.columns .columns': 'border:1px solid rgba(0,255,0,.5);', */
     '.columns .container.je-noindent': 'padding-left:0;padding-right:0;', // Option: object_indent
@@ -315,7 +320,12 @@ export var spectreTheme = AbstractTheme.extend({
     if (this.options.table_zebrastyle) el.classList.add('table-striped')
     return el
   },
-
+  // Function for rendering progressbar
+  getProgressBar: function () {
+    var progressBar = this._super()
+    progressBar.classList.add('progress')
+    return progressBar
+  },
   // Containers for array with format: "tab"
   getTabHolder: function (propertyName) {
     var pName = typeof propertyName === 'undefined' ? '' : propertyName
@@ -363,7 +373,6 @@ export var spectreTheme = AbstractTheme.extend({
     if (typeof row.rowPane !== 'undefined') row.rowPane.style.display = 'none'
     else row.container.style.display = 'none'
   },
-
   afterInputReady: function (input) {
     if (input.localName === 'select') {
       // Selectize adjustments

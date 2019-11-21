@@ -261,6 +261,11 @@ Here are all the available options:
     <td>The default value of `format` for objects. If set to <code>table</code> for example, objects will use table layout if `format` is not specified.</td>
     <td><code>normal</code></td>
   </tr>
+  <tr>
+    <td>enum_source_value_auto_select</td>
+    <td>Preserve value at Move Up or Down.(No value is selected automatically upon deletion.)</td>
+    <td><code>true</code></td>
+  </tr>
   </tbody>
 </table>
 
@@ -408,9 +413,15 @@ The currently supported themes are:
 
 *  barebones
 *  html (the default)
+*  bootstrap4
+*  spectre
+*  tailwind
+
+Note: The following themes have NOT been updated to 2.x format and will be removed in final version unless there's someone willing to update those.
+Old 1.x themes displays the message **"This is an old JSON-Editor 1.x Theme and might not display elements correctly when used with the 2.x version"** at the bottom of the form output.
+
 *  bootstrap2
 *  bootstrap3
-*  bootstrap4
 *  foundation3
 *  foundation4
 *  foundation5

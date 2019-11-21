@@ -22,7 +22,9 @@ export var AbstractTheme = Class.extend({
     'disable_theme_rules': false
   },
   /* Custom stylesheet rules. format: "selector" : "CSS rules" */
-  rules: {},
+  rules: {
+    '.je-upload-preview img': 'float:left;margin:0 0.5rem 0.5rem 0;max-width:100%;max-height:100px'
+  },
   getContainer: function () {
     return document.createElement('div')
   },
@@ -541,6 +543,34 @@ export var AbstractTheme = Class.extend({
     var tmp = document.createElement('div')
     tmp.innerHTML = txt
     return (tmp.textContent || tmp.innerText)
+  },
+  getDropZone: function (text) {
+    var el = document.createElement('div')
+    el.setAttribute('data-text', text)
+    el.classList.add('je-dropzone')
+    return el
+  },
+  // file is an object with properties: name, type, mimeType, size amd formattedSize
+  getUploadPreview: function (file, uploadButton, data) {
+    var preview = document.createElement('div')
+    preview.classList.add('je-upload-preview')
+
+    if (file.mimeType.substr(0, 5) === 'image') {
+      var img = document.createElement('img')
+      img.src = data
+      preview.appendChild(img)
+    }
+    var info = document.createElement('div')
+    info.innerHTML += '<strong>Name:</strong> ' + file.name + '<br><strong>Type:</strong> ' + file.type + '<br><strong>Size:</strong> ' + file.formattedSize
+    preview.appendChild(info)
+
+    preview.appendChild(uploadButton)
+
+    var clear = document.createElement('div')
+    clear.style.clear = 'left'
+    preview.appendChild(clear)
+
+    return preview
   },
   getProgressBar: function () {
     var max = 100; var start = 0

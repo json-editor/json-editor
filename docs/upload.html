@@ -16,29 +16,31 @@
       JSONEditor.defaults.options.theme = 'html';
 
       // Specify upload handler
-      JSONEditor.defaults.options.upload = function(type, file, cbs) {
-        if (type === 'root.upload_fail') cbs.failure('Upload failed');
-        else {
-          var tick = 0;
+      JSONEditor.defaults.callbacks.upload = {
+        "testUploadHandler" : function(jseditor, type, file, cbs) {
+          if (type === 'root.upload_fail') cbs.failure('Upload failed');
+          else {
+            var tick = 0;
 
-          var tickFunction = function() {
-            tick += 1;
-            console.log('progress: ' + tick);
+            var tickFunction = function() {
+              tick += 1;
+              console.log('progress: ' + tick);
 
-            if (tick < 100) {
-              cbs.updateProgress(tick);
-              window.setTimeout(tickFunction, 50)
-            } else if (tick == 100) {
-              cbs.updateProgress();
-              window.setTimeout(tickFunction, 500)
-            } else {
-              cbs.success('http://www.example.com/images/' + file.name);
-            }
-          };
+              if (tick < 100) {
+                cbs.updateProgress(tick);
+                window.setTimeout(tickFunction, 50)
+              } else if (tick == 100) {
+                cbs.updateProgress();
+                window.setTimeout(tickFunction, 500)
+              } else {
+                cbs.success('http://www.example.com/images/' + file.name);
+              }
+            };
 
-          window.setTimeout(tickFunction)
+            window.setTimeout(tickFunction)
+          }
         }
-      };
+      }
 
       // Initialize the editor with a JSON schema
       var editor = new JSONEditor(document.getElementById('editor_holder'),{
@@ -50,7 +52,9 @@
               type: "string",
               format: "url",
               options: {
-                upload: true
+                upload: {
+                  upload_handler: "testUploadHandler"
+                }
               },
               "links": [
                 {
@@ -62,7 +66,9 @@
               type: "string",
               format: "url",
               options: {
-                upload: true
+                upload: {
+                  upload_handler: "testUploadHandler"
+                }
               },
               "links": [
                 {
@@ -76,7 +82,9 @@
               type: "string",
               format: "url",
               options: {
-                upload: true
+                upload: {
+                  upload_handler: "testUploadHandler"
+                }
               },
               "links": [
                 {
@@ -88,7 +96,9 @@
               type: "string",
               format: "url",
               options: {
-                upload: true
+                upload: {
+                  upload_handler: "testUploadHandler"
+                }
               },
               "links": [
                 {
