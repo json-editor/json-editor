@@ -4,6 +4,7 @@
   "description": "JSON Schema based editor",
   "version": "2.0.0-alpha.0",
   "main": "dist/jsoneditor.js",
+  "module": "dist/jsoneditor.commonjs2.js",
   "author": {
     "name": "Jeremy Dorn",
     "email": "jeremy@jeremydorn.com",
