@@ -517,6 +517,10 @@ export var bootstrap4Theme = AbstractTheme.extend({
     }
   },
 
+  insertBasicTopTab: function (tab, newTabsHolder) {
+    newTabsHolder.children[0].children[0].insertBefore(tab, newTabsHolder.children[0].children[0].firstChild)
+  },
+  
   addTopTab: function (holder, tab) {
     holder.children[0].children[0].appendChild(tab)
   },
