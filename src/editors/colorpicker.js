@@ -9,6 +9,13 @@ import { StringEditor } from './string'
 import { $extend } from '../utilities'
 
 export var ColorEditor = StringEditor.extend({
+  setValue: function (value, initial, fromTemplate) {
+    var res = this._super(value, initial, fromTemplate)
+    if (this.picker_instance && this.picker_instance.domElement && res && res.changed) {
+      this.picker_instance.setColor(res.value, true)
+    }
+    return res
+  },
   afterInputReady: function () {
     this._super()
     this.createPicker(true)
