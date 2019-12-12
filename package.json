@@ -37,7 +37,7 @@
     "docker-test": "cd tests && docker-compose run --rm node npm run build && docker-compose up -d && docker-compose ps && docker-compose run --rm codeceptjs codeceptjs run-multiple basic --invert --grep  @optional",
     "preversion": "npm run test-headless && npm run docker-test",
     "postversion": "git push && git push --tags && npm publish ./ --access public",
-    "winserver": "cd tests && start cmd /c npm run server-test .",
+    "winserver": "cd tests && start cmd /c npm run serve-test .",
     "cp:test": "codeceptjs run --steps --invert --grep  @optional",
     "cp:testmocha": "codeceptjs run --steps --reporter mochawesome --invert --grep  @optional",
     "cp:fulltest": "codeceptjs run --steps",
