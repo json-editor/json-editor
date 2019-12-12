@@ -4,6 +4,7 @@
    * Added better enable/disable methods.
    * Removed "onChange" function from list of required options so it can be overidden using schema options.
    * Changed the update method (Otherwise buttons have no meaning). Now updating is done in "onDone" function, except if inline element. Then updating is done using "onChange" function.
+  - Fix of #629 - BS4 theme bug where basic tab was placed outside tabs container.
   - Improved IMask support for `Date`, `Number`, `IMask.MaskedEnum`, `IMask.MaskedRange` and regular expression masks. #591
   - Added support for recursive callback options.
 
