@@ -9,12 +9,18 @@ import { StringEditor } from './string'
 import { $extend } from '../utilities'
 
 export var ColorEditor = StringEditor.extend({
+  postBuild: function () {
+    if (window.Picker) this.input.type = 'text'
+  },
   setValue: function (value, initial, fromTemplate) {
     var res = this._super(value, initial, fromTemplate)
     if (this.picker_instance && this.picker_instance.domElement && res && res.changed) {
       this.picker_instance.setColor(res.value, true)
     }
     return res
+  },
+  getNumColumns: function () {
+    return 2
   },
   afterInputReady: function () {
     this._super()
@@ -70,7 +76,6 @@ export var ColorEditor = StringEditor.extend({
         if (!options.popup && typeof options.onChange !== 'function') options.onChange = updateHandler
         else if (options.popup && typeof options.onDone !== 'function') options.onDone = updateHandler
 
-        this.input.type = 'text'
         this.picker_instance = new window.Picker(options)
         // this.picker_instance.openHandler()
         if (!options.popup) { // use inline colorPicker
