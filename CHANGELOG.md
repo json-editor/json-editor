@@ -1,6 +1,7 @@
 ### Current 2.0.0-dev
 
   - Fix of #618 - links are placed AFTER the description. Now places the link BEFORE description (if available) or at bottom of container
+  - Fix of #629 - BS4 theme bug where basic tab was placed outside tabs container.
   - Improved IMask support for `Date`, `Number`, `IMask.MaskedEnum`, `IMask.MaskedRange` and regular expression masks. #591
   - Added support for recursive callback options.
 
