@@ -40,6 +40,22 @@ class customHelpers extends Helper {
     }
   }
 
+  // Custom seeCheckedAttribute function.
+  // Evaluates true if xpath is checked
+  async seeCheckedAttribute (xpath) {
+    const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
+    let res = await helper.grabAttributeFrom(xpath, 'checked')
+    return assert.ok(res !== null && res.toString().toLowerCase() === 'true', "\x1b[31mexpected element '\x1b[91m" + xpath + "\x1b[31m' to be checked")
+  }
+
+  // Custom dontSeeCheckedAttribute function.
+  // Evaluates true if xpath is not checked
+  async dontSeeCheckedAttribute (xpath) {
+    const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
+    let res = await helper.grabAttributeFrom(xpath, 'checked')
+    return assert.ok(!(res !== null && res.toString().toLowerCase() === 'true'), "\x1b[31mexpected element '\x1b[91m" + xpath + "\x1b[31m' NOT to be checked")
+  }
+
   // Custom seeDisabledAttribute function.
   // Evaluates true if xpath is disabled
   async seeDisabledAttribute (xpath) {
