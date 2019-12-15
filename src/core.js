@@ -617,6 +617,10 @@ JSONEditor.prototype = {
       }
       var ref = fetchUrl + refObj.$ref
       if (!this.refs[ref]) ref = fetchUrl + decodeURIComponent(refObj.$ref)
+      if (!this.refs[ref]) { // if reference not found
+        console.warn("reference:'" + ref + "' not found!")
+        break
+      }
       if (recurseAllOf) {
         if (this.refs[ref].hasOwnProperty('allOf')) {
           var allOf = this.refs[ref].allOf
@@ -625,7 +629,8 @@ JSONEditor.prototype = {
           }
         }
       }
-      schema = this.extendSchemas(schema, $extend({}, this.refs[ref]))
+      schema = this.extendSchemas(schema, this.expandSchema(this.refs[ref]))
+      // schema = this.extendSchemas(schema, $extend({}, this.refs[ref]))
     }
     return schema
   },
@@ -754,12 +759,7 @@ JSONEditor.prototype = {
           // Remove the type property if it's empty
             delete extended.type
           }
-        } else if (typeof val === 'object' && Array.isArray(val)) {
-          // All other arrays should be intersected (enum, etc.)
-          extended[prop] = val.filter(function (n) {
-            return obj2[prop].indexOf(n) !== -1
-          })
-        } else if (typeof val === 'object' && val !== null) {
+        } else if (typeof val === 'object' && !Array.isArray(val) && val !== null) {
         // Objects should be recursively merged
           extended[prop] = self.extendSchemas(val, obj2[prop])
         } else {

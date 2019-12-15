@@ -59,7 +59,7 @@ export var DescribedByEditor = AbstractEditor.extend({
     // var ref = this.template(vars);
     var ref = document.location.origin + document.location.pathname + this.template(vars)
 
-    if (this.jsoneditor.refs.hasOwnProperty(ref) && !this.editors[this.refs[ref]]) {
+    if (!this.editors[this.refs[ref]]) {
       this.buildChildEditor(ref)
     }
 

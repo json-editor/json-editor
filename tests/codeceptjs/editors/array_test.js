@@ -16,6 +16,7 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
   value = await I.grabValueFrom('.debug');
   assert.equal(value, '["A","B"]');
 
+  I.amAcceptingPopups();
   I.click('.json-editor-btn-moveup');
   I.seeInPopup('moveRow');
   I.acceptPopup();
@@ -23,6 +24,7 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
   value = await I.grabValueFrom('.debug');
   assert.equal(value, '["B","A"]');
 
+  I.amAcceptingPopups();
   I.click('.json-editor-btn-movedown');
   I.seeInPopup('moveRow');
   I.acceptPopup();
@@ -30,6 +32,7 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
   value = await I.grabValueFrom('.debug');
   assert.equal(value, '["A","B"]');
 
+  I.amAcceptingPopups();
   I.click('.json-editor-btntype-add');
   I.seeInPopup('addRow');
   I.acceptPopup();
@@ -37,18 +40,28 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
   value = await I.grabValueFrom('.debug');
   assert.equal(value, '["A","B",""]');
 
+  // This test will fail when using Puppeteer due to the way Puppeteer handles popups.
+  // Puppeteer apparently only sees the text in the last popup, so it doesn't see the
+  // 'Are you sure you want to remove this node?' popup text.
+  // ToDo: Change test so instead of using popup for test values like 'deleteRow', use a
+  // form field. Similar to the '.debug' field.
+  I.amAcceptingPopups();
   I.click('.json-editor-btntype-deletelast');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
+  I.amAcceptingPopups();
   I.seeInPopup('deleteRow');
   I.acceptPopup();
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
   assert.equal(value, '["A","B"]');
 
+  // This test will fail when using Puppeteer due to the way Puppeteer handles popups.
+  I.amAcceptingPopups();
   I.click('.json-editor-btntype-deleteall');
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
+  I.amAcceptingPopups();
   I.seeInPopup('deleteAllRows');
   I.acceptPopup();
   I.click('.get-value');

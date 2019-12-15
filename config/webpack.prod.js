@@ -62,5 +62,6 @@ function createConfig (target) {
 
 module.exports = [
   createConfig('var'),
-  createConfig('amd')
+  createConfig('amd'),
+  createConfig('commonjs2')
 ]

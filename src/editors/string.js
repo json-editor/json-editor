@@ -225,8 +225,50 @@ export var StringEditor = AbstractEditor.extend({
     // Enable imask.js support if library is loaded and config is available
     var options = this.expandCallbacks('imask', $extend({}, this.defaults.options.imask || {}, this.options.imask || {}))
     if (typeof options === 'object' && Object.keys(options).length > 0) {
-      this.imask_instance = window.IMask(el, options)
+      this.imask_instance = window.IMask(el, this.ajustIMaskOptions(options))
     }
+  },
+  ajustIMaskOptions: function (obj) {
+    // iMask config format is not JSON friendly, so function and regex based mask
+    // properties have to be adjusted from string to the correct format
+    for (var prop in obj) {
+      if (obj.hasOwnProperty(prop)) {
+        if (obj[prop] === Object(obj[prop])) obj[prop] = this.ajustIMaskOptions(obj[prop])
+        else if (prop === 'mask') {
+          if (obj[prop].substr(0, 6) === 'regex:') {
+            var regExMatch = obj[prop].match(/^regex:\/(.*)\/([gimsuy]*)$/)
+            if (regExMatch !== null) {
+              try {
+                obj[prop] = new RegExp(regExMatch[1], regExMatch[2])
+              } catch (e) { }
+            }
+          } else obj[prop] = this.getGlobalPropertyFromString(obj[prop])
+        }
+      }
+    }
+    return obj
+  },
+  getGlobalPropertyFromString: function (strValue) {
+    if (strValue.indexOf('.') === -1) {
+      if (typeof window[strValue] !== 'undefined') {
+        return window[strValue]
+      }
+    } else {
+      var arrParts = strValue.split('.')
+      var obj = arrParts[0]
+      var prop = arrParts[1]
+
+      if (typeof window[obj] !== 'undefined' && typeof window[obj][prop] !== 'undefined') {
+        return window[obj][prop]
+      }
+    }
+    // just a string
+    return strValue
+  },
+  getValue: function () {
+    if (this.imask_instance && this.dependenciesFulfilled && this.options.imask.returnUnmasked) {
+      return this.imask_instance.unmaskedValue
+    } else return this._super()
   },
   enable: function () {
     if (!this.always_disabled) {
@@ -243,7 +285,7 @@ export var StringEditor = AbstractEditor.extend({
     var self = this
     self.theme.afterInputReady(self.input)
     if (window.Cleave && !self.cleave_instance) self.setupCleave(self.input)
-    if (window.IMask && !self.imask_instance) self.setupImask(self.input)
+    else if (window.IMask && !self.imask_instance) self.setupImask(self.input)
   },
   refreshValue: function () {
     this.value = this.input.value

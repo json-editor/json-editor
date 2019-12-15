@@ -4,3 +4,4 @@
 /e2e/
 /tests/codeceptjs/output
 .vscode
+.env

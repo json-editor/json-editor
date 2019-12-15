@@ -1,0 +1,192 @@
+<html lang="en">
+  <head>
+<title>JSON-Editor Form</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<style>
+body {margin:0;padding:0;font: normal .9em/1.2 Arial;background-color:#02577a !important;}
+.inner-row {height: 100vh;background-color: #fff;position: relative;max-width: 1200px;left:50%;transform: translate(-50%,0);padding: 1rem 2rem;box-shadow: 2px 0 5px rgba(0,0,0,.2);}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/css/jsoneditor.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/nonmin/jsoneditor.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/spectre.css@latest/dist/spectre.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/spectre.css@latest/dist/spectre-exp.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
+<script src="https://cdn.jsdelivr.net/npm/imask@latest/dist/imask.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@latest/dist/purify.min.js"></script>
+<script>JSONEditor.defaults.options["theme"] = "spectre";
+JSONEditor.defaults.options["iconlib"] = "fontawesome4";
+JSONEditor.defaults.options["object_layout"] = "normal";
+JSONEditor.defaults.options["template"] = "default";
+JSONEditor.defaults.options["show_errors"] = "always";
+JSONEditor.defaults.options["required_by_default"] = 1;
+JSONEditor.defaults.options["no_additional_properties"] = 0;
+JSONEditor.defaults.options["display_required_only"] = 0;
+JSONEditor.defaults.options["remove_empty_properties"] = 0;
+JSONEditor.defaults.options["keep_oneof_values"] = 1;
+JSONEditor.defaults.options["ajax"] = 0;
+JSONEditor.defaults.options["ajaxCredentials"] = 0;
+JSONEditor.defaults.options["show_opt_in"] = 0;
+JSONEditor.defaults.options["disable_edit_json"] = 0;
+JSONEditor.defaults.options["disable_collapse"] = 0;
+JSONEditor.defaults.options["disable_properties"] = 0;
+JSONEditor.defaults.options["disable_array_add"] = 0;
+JSONEditor.defaults.options["disable_array_reorder"] = 0;
+JSONEditor.defaults.options["disable_array_delete"] = 0;
+JSONEditor.defaults.options["enable_array_copy"] = 0;
+JSONEditor.defaults.options["array_controls_top"] = 0;
+JSONEditor.defaults.options["disable_array_delete_all_rows"] = 0;
+JSONEditor.defaults.options["disable_array_delete_last_row"] = 0;
+JSONEditor.defaults.options["prompt_before_delete"] = 1;
+</script>
+</head>
+<body >
+<div class="inner-row"><div id="json-editor-form"></div></div>
+<script>
+
+var jseditor, jedata = {schema:{
+  "title": "Imask.js editor examples",
+  "id": "test",
+  "type": "object",
+  "format": "grid",
+  "options": {
+    "disable_edit_json": false,
+    "disable_properties": false
+  },
+  "properties": {
+    "_header": {
+      "type": "info",
+      "title": "Example showing how to use Imask.js to format your &lt;input/&gt; content when you are typing.",
+      "description": "<p>For documentation on the Imask.js options, look at <a href=\"https://imask.js.org/\" target=\"_blank\" title=\"Imask.js Homepage\">IMask.js</a> homepage.</p>",
+      "options": {
+        "compact": true,
+        "grid_columns": 12
+      }
+    },
+    "phone": {
+      "type": "string",
+      "title": "Phone number",
+      "description": "Phone number formatting with prefix and placeholder chars",
+      "options": {
+        "grid_columns": 6,
+        "imask": {
+          "returnUnmasked": true,
+          "mask": "+{7}(000)000-00-00",
+          "lazy": false,
+          "placeholderChar": "#"
+        }
+      }
+    },
+    "number": {
+      "type": "string",
+      "title": "Number",
+      "description": "Advanced number formatting",
+      "options": {
+        "grid_columns": 6,
+        "imask": {
+          "mask": "Number",
+          "scale": 2,
+          "signed": false,
+          "thousandsSeparator": "",
+          "padFractionalZeros": false,
+          "normalizeZeros": true,
+          "radix": ",",
+          "mapToRadix": [
+            "."
+          ]
+        }
+      }
+    },
+    "currency": {
+      "type": "string",
+      "title": "Currency",
+      "description": "Currency with prefix and thousands separator",
+      "options": {
+        "grid_columns": 6,
+        "imask": {
+          "mask": "$num",
+          "blocks": {
+            "num": {
+              "mask": "Number",
+              "thousandsSeparator": " "
+            }
+          }
+        }
+      }
+    },
+    "regex": {
+      "type": "string",
+      "title": "Regular Expression",
+      "description": "Numeric digits only",
+      "options": {
+        "grid_columns": 6,
+        "imask": {
+          "mask": "regex:/^\\d+$/"
+        }
+      }
+    },
+    "func": {
+      "type": "string",
+      "title": "Callback Function",
+      "description": "Numeric digits only and next digit must be higher than previous",
+      "options": {
+        "grid_columns": 6,
+        "imask": {
+          "mask": "testFunction"
+        }
+      }
+    },
+    "range": {
+      "type": "string",
+      "title": "Masked Range",
+      "description": "Numeric value between 10 and 30",
+      "options": {
+        "grid_columns": 6,
+        "imask": {
+          "mask": "IMask.MaskedRange",
+          "from": 10,
+          "to": 30
+        }
+      }
+    },
+    "dynamic": {
+      "type": "string",
+      "title": "Dynamic Mask",
+      "description": "RGB - 3 numeric values between 0 and 255 separated by commas",
+      "options": {
+        "grid_columns": 6,
+        "imask": {
+          "mask": [{
+            "mask": "RGB,RGB,RGB",
+            "blocks": {
+              "RGB": {
+                "mask": "IMask.MaskedRange",
+                "from": 0,
+                "to": 255
+              }
+            }
+          },
+            {
+              "mask": "regex:/^#[0-9a-f]{0,6}$/i"
+            }]
+        }
+      }
+    }
+  }
+}};
+window.JSONEditor.defaults.callbacks.imask = {
+  "testFunction": function(jseditor, value) {
+    return /^\d*$/.test(value) &&
+      value.split('').every(function(ch, i) {
+        var prevCh = value[i-1];
+        return !prevCh || prevCh < ch;
+      });
+  }
+};
+
+if (jseditor instanceof window.JSONEditor) jseditor.destroy();
+jseditor = new window.JSONEditor(document.querySelector("#json-editor-form"), jedata);
+
+</script>
+
+</body>
+</html>

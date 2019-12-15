@@ -349,16 +349,18 @@ export var AbstractEditor = Class.extend({
         link.textContent = rel || url
         media.setAttribute('src', url)
       })
-    // Text links
+    // Text links or blank link
     } else {
       link = holder = this.theme.getBlockLink()
       holder.setAttribute('target', '_blank')
       holder.textContent = data.rel
+      holder.style.display = 'none' // Prevent blank links from showing up when using custom view
 
       // When a watched field changes, update the url
       this.link_watchers.push(function (vars) {
         var url = href(vars)
         var rel = relTemplate(vars)
+        if (url) holder.style.display = ''
         holder.setAttribute('href', url)
         holder.textContent = rel || url
       })
@@ -615,7 +617,9 @@ export var AbstractEditor = Class.extend({
   },
   expandCallbacks: function (scope, options) {
     for (var i in options) {
-      if (options.hasOwnProperty(i) && typeof options[i] === 'string' && typeof this.defaults.callbacks[scope] === 'object' && typeof this.defaults.callbacks[scope][options[i]] === 'function') {
+      if (options.hasOwnProperty(i) && options[i] === Object(options[i])) {
+        options[i] = this.expandCallbacks(scope, options[i])
+      } else if (options.hasOwnProperty(i) && typeof options[i] === 'string' && typeof this.defaults.callbacks[scope] === 'object' && typeof this.defaults.callbacks[scope][options[i]] === 'function') {
         options[i] = this.defaults.callbacks[scope][options[i]].bind(null, this)// .bind(this);
       }
     }

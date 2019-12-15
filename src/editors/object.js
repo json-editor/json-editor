@@ -627,6 +627,15 @@ export var ObjectEditor = AbstractEditor.extend({
           self.onChange(true)
         }
       })
+      this.addproperty_input.addEventListener('input', function (e) {
+        e.target.previousSibling.childNodes.forEach(function (value) {
+          if (value.innerText.indexOf(e.target.value) >= 0) {
+            value.style.display = ''
+          } else {
+            value.style.display = 'none'
+          }
+        })
+      })
       this.addproperty_holder.appendChild(this.addproperty_list)
       this.addproperty_holder.appendChild(this.addproperty_input)
       this.addproperty_holder.appendChild(this.addproperty_add)
@@ -1038,7 +1047,14 @@ export var ObjectEditor = AbstractEditor.extend({
     if (this.jsoneditor.options.remove_empty_properties || this.options.remove_empty_properties) {
       for (var i in result) {
         if (result.hasOwnProperty(i)) {
-          if ((typeof result[i] === 'undefined' || result[i] === '' || result[i] === Object(result[i])) && Object.keys(result[i]).length === 0 && result[i].constructor === Object) {
+          if (
+            typeof result[i] === 'undefined' ||
+            result[i] === '' ||
+            (
+              result[i] === Object(result[i]) &&
+              Object.keys(result[i]).length === 0 &&
+              result[i].constructor === Object
+            )) {
             delete result[i]
           }
         }

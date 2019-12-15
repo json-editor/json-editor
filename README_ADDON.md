@@ -186,7 +186,49 @@ For configuration options, see the [IMask homepage](https://imask.js.org/).
 **Schema options:** ``options.imask``<br>
 **Options callback** ``JSONEditor.defaults.callbacks.imask``<br>
 **Required options:** none<br>
+**Special options:** ``returnUnmasked`` when true, returns the unmasked value<br>
 **Source:** src/editors/string.js
+
+IMask configuration format is not "JSON friendly" as it is possible to set the mask to an object ("Date", "Number", "IMask.MaskedEnum" and "IMask.MaskedRange") or a regular expression. In order for those to work, you will have to enclose them in quotes. And for regular expressions, you will also have to prefix the quoted regular expression with the keyword "regex:"
+
+
+Example of an iMask mask config:
+````javascript
+  mask: [
+    {
+      mask: 'RGB,RGB,RGB',
+      blocks: {
+        RGB: {
+          mask: IMask.MaskedRange,
+          from: 0,
+          to: 255
+        }
+      }
+    },
+    {
+      mask: /^#[0-9a-f]{0,6}$/i
+    }
+  ]
+````
+The same config "converted" to JSON-Editor format:
+
+````javascript
+  "mask": [{
+    "mask": "RGB,RGB,RGB",
+    "blocks": {
+      "RGB": {
+        "mask": "IMask.MaskedRange",
+        "from": 0,
+        "to": 255
+      }
+    }
+  },
+    {
+      "mask": "regex:/^#[0-9a-f]{0,6}$/i"
+    }]
+````
+
+
 <br>
 
 ### Flatpickr
@@ -286,6 +328,36 @@ Star based rating.
 **Required options:**  none<br>
 **Source:** src/editors/starrating.js
 <br>
+
+### Upload
+**Description**
+Upload files to server.
+
+**Trigger:** ``"format": "upload"``<br>
+**Supported Types:** string<br>
+**Global options:** ``JSONEditor.defaults.options.upload<br>
+**Schema options:** ``options.upload<br>
+**Options callback** ``JSONEditor.defaults.callbacks.upload<br>
+**Required options:**  ``upload_handler``<br>
+**Source:** src/editors/upload.js
+<br>
+
+
+| Option          | Type | Description | Default value  |
+|--|--|--|--|
+| title            | string       | Title of the Browse button                                                         | "Browse"
+| auto_upload      | boolean      | Trigger file upload button automatically                                           | false
+| allow_reupload   | boolean      | Allow reupload of file (overrides the readonly state)                              | false
+| hide_input       | boolean      | Hide the Browse button and name display (Only works if 'enable_drag_drop' is true) | false
+| enable_drag_drop | boolean      | Enable Drag&Drop uploading.                                                        | false
+| drop_zone_top    | boolean      | Position of dropzone. **true**=before button input, **false**=after button input   | false
+| drop_zone_text   | string       | Text displayed in dropzone box                                                     | "Drag & Drop file here"
+| alt_drop_zone    | string       | Alternate DropZone DOM Selector (Can be created inside another property)           |
+| mime_type        | string/array | If set, restrict upload to mime type(s)                                            |
+| max_upload_size  | integer      | Maximum file size allowed. 0 = no limit                                            | 0
+| upload_handler   | function     | Callback function for handling uploads to server                                   |
+<br>
+
 
 ### UUID
 **Description**
@@ -389,4 +461,49 @@ window.JSONEditor.defaults.callbacks.cleave = {
 </details>
 
 <br>
+
+
+
+#Themes
+
+Themes have own options for changing various aspects of the display.
+
+##Bootstrap 4
+
+| Option           | Default | Description
+| ------------- | ------ | -----
+| `input_size`    | `normal` | Changes `input` size, can be `normal`, `small` or `large`
+| `custom_forms`  | `false` | Apply Bootstrap custom forms
+| `object_indent`  | `true` | Indent nested object elements (use nested `.card` layout)
+| `object_background`  | `bg-light` | Bootstrap 4 card background [modifier class](https://getbootstrap.com/docs/4.1/getting-started/introduction/)
+| `object_text`  | `''` | Bootstrap 4 card text color modifier class [modifier class](https://getbootstrap.com/docs/4.1/getting-started/introduction/)
+| `table_border`  | `false` | Add border to array "table" row and cells
+| `table_zebrastyle`  | `false` | Add "zebra style" to array "table" rows
+| `tooltip`  | `bootstrap` | how to display tooltips (infoText). Can be `browser` for native `[title]`, `css` for simple CSS Styling, or `bootstrap` for TWBS/Popper.js handling
+
+##Spectre
+
+| Option           | Default | Description
+| ------------- | ------ | -----
+| `input_size`    | `normal` | Changes `input` size, can be `normal`, `small` or `large`
+| `label_bold`  | `true` | Labels in bold
+| `object_indent`  | `false` | Indent nested object elements
+| `object_border`  | `false` |Add border around object elements
+| `align_bottom`  | `false` | Align elements to bottom of flex container
+| `table_border`  | `false` | Add border to array "table" row and cells
+| `table_zebrastyle`  | `false` | Add "zebra style" to array "table" rows
+
+##Tailwind
+
+| Option           | Default | Description
+| ------------- | ------ | -----
+| `input_size`    | `normal` | Changes `input` size, can be `normal`, `small` or `large`
+| `label_bold`  | `false` | Labels in bold
+| `object_panel_default`    | `true` | Indicates whether to use rules as default or alternate style
+| `object_indent`  | `false` | Indent nested object elements
+| `object_border`  | `false` |Add border around object elements
+| `align_bottom`  | `false` | Align elements to bottom of flex container
+| `table_border`  | `false` | Add border to array "table" row and cells
+| `table_hdiv`  | `false` | Add bottom-border to array "table" cells
+| `table_zebrastyle`  | `false` | Add "zebra style" to array "table" rows
 

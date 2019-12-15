@@ -51,6 +51,7 @@ The following are not required, but can improve the style and usability of JSON 
 *  [Selectize](https://selectize.github.io/selectize.js/) for nicer Select & Array boxes
 *  [Flatpickr](https://flatpickr.js.org/) lightweight and powerful datetime picker
 *  [Signature Pad](https://github.com/szimek/signature_pad) HTML5 canvas based smooth signature drawing
+*  [Vanilla Picker](https://vanilla-picker.js.org/) A simple, easy to use vanilla JS color picker with alpha selection
 *  [Cleave.js](https://github.com/nosir/cleave.js) for formatting your **&lt;input/&gt;** content while you are typing
 *  [IMask.js](https://imask.js.org/) vanilla javascript input mask
 *  [math.js](http://mathjs.org/) for more accurate floating point math (multipleOf, divisibleBy, etc.)
@@ -68,8 +69,10 @@ If you learn best by example, check these out:
 *  Base64 Editor Example (Muiltple Upload) - https://json-editor.github.io/json-editor/multiple_upload_base64.html
 *  Choices Editor Example - https://json-editor.github.io/json-editor/choices.html
 *  Cleave.js Editor Example - https://json-editor.github.io/json-editor/cleave.html
+*  Colorpicker Editor Example - https://json-editor.github.io/json-editor/colorpicker.html
 *  Datetime Editor Example - https://json-editor.github.io/json-editor/datetime.html
 *  DescribedBy Hyperlink Editor Example - https://json-editor.github.io/json-editor/describedby.html
+*  iMask.js Editor Example - https://json-editor.github.io/json-editor/imask.html
 *  Radio Button JSON Editor Example - https://json-editor.github.io/json-editor/radio.html
 *  Recursive JSON Editor Example - https://json-editor.github.io/json-editor/recursive.html
 *  Select2 Editor Example - https://json-editor.github.io/json-editor/select2.html
@@ -79,6 +82,7 @@ If you learn best by example, check these out:
 *  Upload Editor Example - https://json-editor.github.io/json-editor/upload.html
 *  WYSIWYG Editor Example - https://json-editor.github.io/json-editor/wysiwyg.html
 
+More examples can be found at the [JSON-Editor Interactive Playground](https://pmk65.github.io/jedemov2/dist/demo.html)
 
 The rest of this README contains detailed documentation about every aspect of JSON Editor.  For more [under-the-hood documentation](https://github.com/json-editor/json-editor/wiki), check the wiki.
 
@@ -257,6 +261,11 @@ Here are all the available options:
     <td>The default value of `format` for objects. If set to <code>table</code> for example, objects will use table layout if `format` is not specified.</td>
     <td><code>normal</code></td>
   </tr>
+  <tr>
+    <td>enum_source_value_auto_select</td>
+    <td>Preserve value at Move Up or Down.(No value is selected automatically upon deletion.)</td>
+    <td><code>true</code></td>
+  </tr>
   </tbody>
 </table>
 
@@ -404,9 +413,15 @@ The currently supported themes are:
 
 *  barebones
 *  html (the default)
+*  bootstrap4
+*  spectre
+*  tailwind
+
+Note: The following themes have NOT been updated to 2.x format and will be removed in final version unless there's someone willing to update those.
+Old 1.x themes displays the message **"This is an old JSON-Editor 1.x Theme and might not display elements correctly when used with the 2.x version"** at the bottom of the form output.
+
 *  bootstrap2
 *  bootstrap3
-*  bootstrap4
 *  foundation3
 *  foundation4
 *  foundation5

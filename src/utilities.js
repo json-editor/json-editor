@@ -22,6 +22,10 @@ export var $isplainobject = function (obj) {
   return true
 }
 
+export var deepcopy = function (target) {
+  return $isplainobject(target) ? $extend({}, target) : Array.isArray(target) ? target.map(deepcopy) : target
+}
+
 export var $extend = function (destination) {
   var source, i, property
   for (i = 1; i < arguments.length; i++) {
@@ -31,6 +35,8 @@ export var $extend = function (destination) {
       if (source[property] && $isplainobject(source[property])) {
         if (!destination.hasOwnProperty(property)) destination[property] = {}
         $extend(destination[property], source[property])
+      } else if (Array.isArray(source[property])) {
+        destination[property] = deepcopy(source[property])
       } else {
         destination[property] = source[property]
       }
