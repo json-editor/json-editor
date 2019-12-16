@@ -4,7 +4,7 @@
 
 ### Option `description`
 
-In oreder to display HTML in descriptions, include "purify" ahead of "jsoneditor". With CDN eg:
+In order to display HTML in descriptions, include "purify" ahead of "jsoneditor". With CDN eg:
 
 ```
 <script src="https://cdn.jsdelivr.net/npm/dompurify@latest/dist/purify.min.js</script>
