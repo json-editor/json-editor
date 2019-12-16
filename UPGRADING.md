@@ -2,7 +2,7 @@
 
 ## From 1.x to 2.x
 
-### Option `Description`
+### Option `description`
 
 In oreder to display HTML in descriptions, include "purify" ahead of "jsoneditor". With CDN eg:
 
