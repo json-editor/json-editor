@@ -433,7 +433,7 @@ Scenario('It should hide button Labels: null | spectre', async (I) => {
   I.dontSee('Move down')
   I.dontSee('Move up')
 
-  I.click('Collapse')
+  I.click('.json-editor-btn-collapse')
   I.seeElementInDOM('i.icon.icon-arrow-down')
   I.seeElementInDOM('i.icon.icon-arrow-right')
   I.seeElementInDOM('i.icon.icon-delete')
@@ -466,7 +466,7 @@ Scenario('It should hide button Labels: spectre | spectre', async (I) => {
   I.dontSee('Move down')
   I.dontSee('Move up')
 
-  I.click('Collapse')
+  I.click('.json-editor-btn-collapse')
   I.seeElementInDOM('i.icon.icon-arrow-down')
   I.seeElementInDOM('i.icon.icon-arrow-right')
   I.seeElementInDOM('i.icon.icon-delete')
