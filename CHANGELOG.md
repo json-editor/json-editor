@@ -1,5 +1,6 @@
 ### Current 2.0.0-dev
 
+  - Removed Themes and IconSets that have not been updated to 2.0 format.
   - Fix of #618 - links are placed AFTER the description. Now places the link BEFORE description (if available) or at bottom of container
   - Changes to Vallilla Colorpicker editor.
    * Added support for 'setValue'
