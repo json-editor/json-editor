@@ -256,7 +256,10 @@ export var AbstractEditor = Class.extend({
     // Add links
     if (!this.no_link_holder) {
       this.link_holder = this.theme.getLinksHolder()
-      this.container.appendChild(this.link_holder)
+      // if description element exists, insert the link before
+      if (typeof this.description !== 'undefined') this.description.parentNode.insertBefore(this.link_holder, this.description)
+      // otherwise just insert link at bottom of container
+      else this.container.appendChild(this.link_holder)
       if (this.schema.links) {
         for (var i = 0; i < this.schema.links.length; i++) {
           this.addLink(this.getLink(this.schema.links[i]))

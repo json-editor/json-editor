@@ -18,7 +18,8 @@ Scenario('test ColorPicker Editor  using vanilla-picker', async (I) => {
   await I.dragAndDrop('[data-schemapath="root.colorpicker"] .picker_wrapper .picker_sl .picker_selector', '[data-schemapath="root.colorpicker"] .picker_wrapper .picker_sl')
   await I.dragAndDrop('[data-schemapath="root.colorpicker"] .picker_wrapper .picker_hue .picker_selector', '[data-schemapath="root.colorpicker"] .picker_wrapper .picker_hue')
   await I.dragAndDrop('[data-schemapath="root.colorpicker"] .picker_wrapper .picker_alpha .picker_selector', '[data-schemapath="root.colorpicker"] .picker_wrapper .picker_alpha')
-  I.click('.get-value');
+  I.click('.picker_done button')
+  // I.click('.get-value');
   I.click('.get-value');
   const color = await I.grabValueFrom('.debug')
   const reg = /\{"colorpicker":"rgba\(6\d,19\d,19\d,0.5\d*\)"\}/;
