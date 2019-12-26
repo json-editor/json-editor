@@ -5,6 +5,7 @@ import { getDefaults } from './defaults'
 import { Validator } from './validator'
 import { $extend, $each } from './utilities'
 
+import { AbstractTheme } from './theme'
 import { htmlTheme } from './themes/html'
 // import { bootstrap2Theme } from './themes/bootstrap2'
 // import { bootstrap3Theme } from './themes/bootstrap3'
@@ -812,6 +813,7 @@ JSONEditor.prototype = {
 JSONEditor.defaults = getDefaults()
 assignThemes(JSONEditor.defaults.themes)
 JSONEditor.AbstractEditor = AbstractEditor
+JSONEditor.AbstractTheme = AbstractTheme
 assignDefaultEditors(JSONEditor.defaults.editors)
 assignTemplates(JSONEditor.defaults.templates)
 assignIconlibs(JSONEditor.defaults.iconlibs)
