@@ -5,14 +5,15 @@ import { getDefaults } from './defaults'
 import { Validator } from './validator'
 import { $extend, $each } from './utilities'
 
+import { AbstractTheme } from './theme'
 import { htmlTheme } from './themes/html'
-import { bootstrap2Theme } from './themes/bootstrap2'
-import { bootstrap3Theme } from './themes/bootstrap3'
+// import { bootstrap2Theme } from './themes/bootstrap2'
+// import { bootstrap3Theme } from './themes/bootstrap3'
 import { bootstrap4Theme } from './themes/bootstrap4'
-import { foundationTheme, foundation3Theme, foundation4Theme, foundation5Theme, foundation6Theme } from './themes/foundation'
+// import { foundationTheme, foundation3Theme, foundation4Theme, foundation5Theme, foundation6Theme } from './themes/foundation'
 import { jqueryuiTheme } from './themes/jqueryui'
 import { barebonesTheme } from './themes/barebones'
-import { materializeTheme } from './themes/materialize'
+// import { materializeTheme } from './themes/materialize'
 import { spectreTheme } from './themes/spectre'
 import { tailwindTheme } from './themes/tailwind'
 
@@ -64,43 +65,43 @@ import { mustacheTemplate } from './templates/mustache'
 import { swigTemplate } from './templates/swig'
 import { underscoreTemplate } from './templates/underscore'
 
-import { bootstrap2Iconlib } from './iconlibs/bootstrap2'
-import { bootstrap3Iconlib } from './iconlibs/bootstrap3'
+// import { bootstrap2Iconlib } from './iconlibs/bootstrap2'
+// import { bootstrap3Iconlib } from './iconlibs/bootstrap3'
 import { fontawesome3Iconlib } from './iconlibs/fontawesome3'
 import { fontawesome4Iconlib } from './iconlibs/fontawesome4'
 import { fontawesome5Iconlib } from './iconlibs/fontawesome5'
-import { foundation2Iconlib } from './iconlibs/foundation2'
-import { foundation3Iconlib } from './iconlibs/foundation3'
+// import { foundation2Iconlib } from './iconlibs/foundation2'
+// import { foundation3Iconlib } from './iconlibs/foundation3'
 import { jqueryuiIconlib } from './iconlibs/jqueryui'
-import { materialiconsIconlib } from './iconlibs/materialicons'
+// import { materialiconsIconlib } from './iconlibs/materialicons'
 import { spectreIconlib } from './iconlibs/spectre'
 
 var assignIconlibs = function (iconlibs) {
-  iconlibs.bootstrap2 = bootstrap2Iconlib
-  iconlibs.bootstrap3 = bootstrap3Iconlib
+  // iconlibs.bootstrap2 = bootstrap2Iconlib
+  // iconlibs.bootstrap3 = bootstrap3Iconlib
   iconlibs.fontawesome3 = fontawesome3Iconlib
   iconlibs.fontawesome4 = fontawesome4Iconlib
   iconlibs.fontawesome5 = fontawesome5Iconlib
-  iconlibs.foundation2 = foundation2Iconlib
-  iconlibs.foundation3 = foundation3Iconlib
+  // iconlibs.foundation2 = foundation2Iconlib
+  // iconlibs.foundation3 = foundation3Iconlib
   iconlibs.jqueryui = jqueryuiIconlib
-  iconlibs.materialicons = materialiconsIconlib
+  // iconlibs.materialicons = materialiconsIconlib
   iconlibs.spectre = spectreIconlib
 }
 
 var assignThemes = function (themes) {
   themes.html = htmlTheme
-  themes.bootstrap2 = bootstrap2Theme
-  themes.bootstrap3 = bootstrap3Theme
+  // themes.bootstrap2 = bootstrap2Theme
+  // themes.bootstrap3 = bootstrap3Theme
   themes.bootstrap4 = bootstrap4Theme
-  themes.foundation = foundationTheme
-  themes.foundation3 = foundation3Theme
-  themes.foundation4 = foundation4Theme
-  themes.foundation5 = foundation5Theme
-  themes.foundation6 = foundation6Theme
+  // themes.foundation = foundationTheme
+  // themes.foundation3 = foundation3Theme
+  // themes.foundation4 = foundation4Theme
+  // themes.foundation5 = foundation5Theme
+  // themes.foundation6 = foundation6Theme
   themes.jqueryui = jqueryuiTheme
   themes.barebones = barebonesTheme
-  themes.materialize = materializeTheme
+  // themes.materialize = materializeTheme
   themes.spectre = spectreTheme
   themes.tailwind = tailwindTheme
 }
@@ -812,6 +813,7 @@ JSONEditor.prototype = {
 JSONEditor.defaults = getDefaults()
 assignThemes(JSONEditor.defaults.themes)
 JSONEditor.AbstractEditor = AbstractEditor
+JSONEditor.AbstractTheme = AbstractTheme
 assignDefaultEditors(JSONEditor.defaults.editors)
 assignTemplates(JSONEditor.defaults.templates)
 assignIconlibs(JSONEditor.defaults.iconlibs)
