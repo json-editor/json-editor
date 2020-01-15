@@ -1,17 +1,46 @@
-var webpack = require('webpack')
-var webpackMerge = require('webpack-merge')
-const TerserJSPlugin = require('terser-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const webpack = require('webpack')
+const webpackMerge = require('webpack-merge')
 const RemoveStrictPlugin = require('remove-strict-webpack-plugin')
-var commonConfig = require('./webpack.common.js')
-var helpers = require('./helpers')
+const commonConfig = require('./webpack.common.js')
+const helpers = require('./helpers')
 
-const ENV = process.env.NODE_ENV = process.env.ENV = 'production'
+const ENV = (process.env.NODE_ENV = process.env.ENV = 'production')
 
 function createConfig (target) {
-  filenameInsert = target === 'var' ? '.' : '.' + target + '.'
+  filenameInsert = target === 'var' ? '.' : '.' + target + '.';
+  commonConfig.module.rules = [
+    {
+      enforce: 'pre',
+      test: /\.js$/,
+      exclude: /node_modules/,
+      loader: `eslint-loader`
+    },
+    {
+      test: /\.css$/,
+      use: [
+        'style-loader',
+        {
+          loader: 'css-loader',
+          options: {
+            url: false,
+            importLoaders: 1
+          }
+        },
+        {
+          loader: 'postcss-loader',
+          options: {
+            sourceMap: true,
+            plugins: [
+              require('cssnano')({
+                preset: 'default'
+              })
+            ]
+          }
+        }
+      ]
+    }
+  ]
+
   return webpackMerge(commonConfig, {
     mode: 'production',
     output: {
@@ -29,23 +58,10 @@ function createConfig (target) {
     plugins: [
       new RemoveStrictPlugin(), // I have put this in to avoid IE throwing error Assignment to read-only properties is not allowed in strict mode
       // This doesn't seem to actually be minimising the CSS!
-      new OptimizeCSSAssetsPlugin({
-        cssProcessor: require('cssnano'),
-        cssProcessorPluginOptions: {
-          preset: ['default', { discardComments: { removeAll: true } }]
-        }
-      }),
       new webpack.NoEmitOnErrorsPlugin(),
-      new MiniCssExtractPlugin({
-        // Options similar to the same options in webpackOptions.output
-        // all options are optional
-        filename: '[name].[hash].css',
-        chunkFilename: '[id].css',
-        ignoreOrder: false // Enable to remove warnings about conflicting order
-      }),
       new webpack.DefinePlugin({
         'process.env': {
-          'ENV': JSON.stringify(ENV)
+          ENV: JSON.stringify(ENV)
         }
       })
     ],
@@ -56,7 +72,6 @@ function createConfig (target) {
       stats: 'minimal',
       port: 8080
     }
-
   })
 }
 

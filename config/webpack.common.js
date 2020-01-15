@@ -1,7 +1,6 @@
+const webpack = require('webpack')
 
-var webpack = require('webpack')
-
-var bannerText = `/**
+const bannerText = `/**
 * @name JSON Editor
 * @description JSON Schema Based Editor
 * This library is the continuation of jdorn's great work (see also https://github.com/jdorn/json-editor/issues/800)
@@ -14,14 +13,12 @@ var bannerText = `/**
 */`
 module.exports = {
   entry: {
-    // 'polyfills': './src/polyfills.ts',
-    'jsoneditor': './src/core.js'
+    jsoneditor: './src/core.js'
   },
   resolve: {
     extensions: ['.js']
   },
   module: {
-
     rules: [
       {
         enforce: 'pre',
@@ -31,14 +28,16 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader'
-        ]
+        use: ['style-loader', 'css-loader']
       }
     ]
   },
   plugins: [
-    new webpack.BannerPlugin(bannerText.replace('{{ VERSION }}', JSON.stringify(require('../package.json').version)))
+    new webpack.BannerPlugin(
+      bannerText.replace(
+        '{{ VERSION }}',
+        JSON.stringify(require('../package.json').version)
+      )
+    )
   ]
 }
