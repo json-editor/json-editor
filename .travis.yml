@@ -1,5 +1,4 @@
-sudo: required
-
+version: ~> 1.0
 language: generic
 
 services:
@@ -9,12 +8,7 @@ stages:
   - unit
   - test
 
-matrix:
-  allow_failures:
-    - env: TEST_TYPE=optional SELENIUM_BROWSER=chrome
-    - env: TEST_TYPE=optional SELENIUM_BROWSER=firefox
-
-before_script_reference: &before_script_reference
+_before_script_reference: &before_script_reference
   - npm install
   - cd tests
   - docker-compose run --rm node npm run build
@@ -64,3 +58,7 @@ jobs:
       env: TEST_TYPE=optional SELENIUM_BROWSER=firefox
       before_script: *before_script_reference
       script: docker-compose run --rm codeceptjs codeceptjs run-multiple basic:$SELENIUM_BROWSER --grep '@optional'
+
+  allow_failures:
+    - env: TEST_TYPE=optional SELENIUM_BROWSER=chrome
+    - env: TEST_TYPE=optional SELENIUM_BROWSER=firefox
