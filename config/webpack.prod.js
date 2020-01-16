@@ -20,13 +20,6 @@ function createConfig (target) {
       use: [
         'style-loader',
         {
-          loader: 'css-loader',
-          options: {
-            url: false,
-            importLoaders: 1
-          }
-        },
-        {
           loader: 'postcss-loader',
           options: {
             sourceMap: true,
