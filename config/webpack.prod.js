@@ -7,7 +7,7 @@ const helpers = require('./helpers')
 const ENV = (process.env.NODE_ENV = process.env.ENV = 'production')
 
 function createConfig (target) {
-  filenameInsert = target === 'var' ? '.' : '.' + target + '.';
+  filenameInsert = target === 'var' ? '.' : '.' + target + '.'
   commonConfig.module.rules = [
     {
       enforce: 'pre',

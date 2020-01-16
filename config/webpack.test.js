@@ -1,5 +1,4 @@
-var webpack = require('webpack')
-var helpers = require('./helpers')
+const helpers = require('./helpers')
 
 module.exports = {
   devtool: 'inline-source-map',
