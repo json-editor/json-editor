@@ -1,4 +1,5 @@
 const webpack = require('webpack')
+const CssToJSON = require('../build/CssToJson')
 
 const bannerText = `/**
 * @name JSON Editor
@@ -28,6 +29,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
+        exclude: /(node_modules)|(src\/themes)/,
         use: ['style-loader', 'css-loader']
       }
     ]
@@ -38,6 +40,10 @@ module.exports = {
         '{{ VERSION }}',
         JSON.stringify(require('../package.json').version)
       )
-    )
+    ),
+    new CssToJSON({
+      pattern: './src/themes/*.css',
+      jsonPattern: './src/themes/*.json'
+    })
   ]
 }
