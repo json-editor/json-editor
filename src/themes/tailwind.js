@@ -1,4 +1,5 @@
 import { AbstractTheme } from '../theme'
+import rules from './tailwind.json'
 
 export var tailwindTheme = AbstractTheme.extend({
   // Config options that allows changing various aspects of the output
@@ -16,51 +17,7 @@ export var tailwindTheme = AbstractTheme.extend({
   },
   // Custom stylesheet rules. (Does not suppert comma separated selectors)
   //  Will create a stylesheet in document head with the id "theme-spectre" if not exists.
-  rules: {
-    '.slider': '-webkit-appearance: none;-moz-appearance: none;appearance: none;background: transparent;display: block;border: none;height: 1.2rem;width: 100%;',
-    '.slider:focus': 'box-shadow: 0 0 0 0 rgba(87, 85, 217, .2); outline: none;',
-    '.slider.tooltip:not([data-tooltip])::after': 'content: attr(value);',
-    '.slider::-webkit-slider-thumb': '-webkit-appearance: none;background: #F17405;border-radius: 100%;height: .6rem;margin-top: -.25rem;transition: transform .2s;width: .6rem;',
-    '.slider:active::-webkit-slider-thumb': 'transform: scale(1.25); outline: none;',
-    '.slider::-webkit-slider-runnable-track': 'background: #B2B4B6;border-radius: .1rem;height: .1rem;width: 100%;',
-
-    'a.tooltips': 'position: relative;display: inline;',
-    'a.tooltips span': 'position: absolute; white-space: nowrap; width:auto;padding-left:1rem;padding-right:1rem;color: #FFFFFF;background: rgba(56, 56, 56, 0.85);height:1.5rem;line-height: 1.5rem;text-align: center;visibility: hidden;border-radius: 3px;',
-    'a.tooltips span:after': "content: '';position: absolute;top: 50%;left: 100%;margin-top: -5px;width: 0; height: 0;border-left: 5px solid rgba(56, 56, 56, 0.85);border-top: 5px solid transparent;border-bottom: 5px solid transparent;",
-    'a:hover.tooltips span': 'visibility: visible;opacity: 0.9;font-size:0.8rem;right: 100%;top: 50%;margin-top: -12px;margin-right: 10px;z-index: 999;',
-
-    '.json-editor-btntype-properties+div': 'font-size: .8rem;font-weight: normal;', // Fix fontsize in Properties modal
-    textarea: 'width:100%;min-height: 2rem;resize:vertical', // Prevent textarea from being resized horizontally
-    table: 'width:100%;border-collapse: collapse;', // Remove gap between table element borders
-    '.table td': 'padding: .0rem .0rem;', // reduce table padding
-    'div[data-schematype]:not([data-schematype="object"])': 'transition:.5s',
-    'div[data-schematype]:not([data-schematype="object"]):hover': 'background-color: #E6F4FE',
-    'div[data-schemaid="root"]': 'position: relative;width:inherit;display:inherit;overflow-x: hidden;z-index:10',
-    'select[multiple]': 'height:auto;',
-    'select[multiple].from-select': 'height:auto;',
-    '.je-table-zebra:nth-child(even)': 'background-color: #f2f2f2;',
-    '.je-table-border': 'border: 0.5px solid black;',
-    '.je-table-hdiv': 'border-bottom: 1px solid black;',
-    '.je-border': 'border:.05rem solid #3182CE',
-    '.je-panel': 'width:inherit; padding:.2rem;margin:.2rem;background-color: rgba(218,222,228,.1)',
-    '.je-panel-top': 'width:100%; padding:.2rem;margin:.2rem;background-color: rgba(218,222,228,.1)',
-    '.required:after': 'content: " *";color: red;font:inherit;font-weight: bold;',
-    '.je-desc': 'font-size: smaller;margin: .2rem 0;',
-    '.container-xl.je-noindent': 'padding-left:0;padding-right:0;',
-    '.json-editor-btntype-add': 'color: white; margin:.3rem; padding: 0.3rem .8rem; background-color: #4299E1; box-shadow: 3px 3px 5px 1px rgba(4,4,4,0.2);-webkit-box-shadow: 3px 3px 5px 1px rgba(4,4,4,0.2);-moz-box-shadow: 3px 3px 5px 1px rgba(4,4,4,0.2);',
-    '.json-editor-btntype-deletelast': 'color: white;margin:.3rem; padding: 0.3rem .8rem; background-color: #E53E3E; box-shadow: 3px 3px 5px 1px rgba(4,4,4,0.2);-webkit-box-shadow: 3px 3px 5px 1px rgba(4,4,4,0.2);-moz-box-shadow: 3px 3px 5px 1px rgba(4,4,4,0.2);',
-    '.json-editor-btntype-deleteall': 'color: white;margin:.3rem; padding: 0.3rem .8rem; background-color: #000000; box-shadow: 3px 3px 5px 1px rgba(4,4,4,0.2);-webkit-box-shadow: 3px 3px 5px 1px rgba(4,4,4,0.2);-moz-box-shadow: 3px 3px 5px 1px rgba(4,4,4,0.2);',
-    '.json-editor-btn-save': 'float:right; color: white; margin: 0.3rem; padding: 0.3rem .8rem; background-color: #2B6CB0; box-shadow: 3px 3px 5px 1px rgba(4,4,4,0.2);-webkit-box-shadow: 3px 3px 5px 1px rgba(4,4,4,0.2);-moz-box-shadow: 3px 3px 5px 1px rgba(4,4,4,0.2);',
-    '.json-editor-btn-back': 'color: white; margin:.3rem; padding: 0.3rem .8rem; background-color: #2B6CB0; box-shadow: 3px 3px 5px 1px rgba(4,4,4,0.2);-webkit-box-shadow: 3px 3px 5px 1px rgba(4,4,4,0.2);-moz-box-shadow: 3px 3px 5px 1px rgba(4,4,4,0.2);',
-    '.json-editor-btntype-delete': 'color: #E53E3E; background-color: rgba(218,222,228,.1);margin:.03rem; padding: 0.1rem;',
-    '.json-editor-btntype-move': 'color: #000000; background-color: rgba(218,222,228,.1);margin:.03rem; padding: 0.1rem;',
-    '.json-editor-btn-collapse': 'padding: 0em .8rem;font-size:1.3rem;color: #E53E3E;background-color: rgba(218,222,228,.1);',
-    '.je-upload-preview img': 'float:left;margin:0 0.5rem 0.5rem 0;max-width:100%;max-height:5rem', // Upload Editor preview image
-    '.je-dropzone': 'position:relative;margin:0.5rem 0;border 2px dashed black;width:100%;height:60px;background:teal;transition: all 0.5s',
-    '.je-dropzone:before': 'position:absolute;content:attr(data-text);color:rgba(0,0,0,0.6);left:50%;top:50%;transform: translate(-50%,-50%)',
-    '.je-dropzone.valid-dropzone': 'background:green',
-    '.je-dropzone.invalid-dropzone': 'background:red'
-  },
+  rules: rules,
 
   getGridContainer: function () {
     var el = document.createElement('div')
