@@ -90,7 +90,7 @@ export const SchemaLoader = Class.extend({
       self.refs[url] = 'loading'
       waiting++
 
-      var fetchUrl = this._isLocalUrl(fileBase, url) ? fileBase + url : url
+      var fetchUrl = self._isLocalUrl(fileBase, url) ? fileBase + url : url
 
       // eslint-disable-next-line no-undef
       var r = new XMLHttpRequest()
