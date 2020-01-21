@@ -62,10 +62,10 @@ export const SchemaLoader = Class.extend({
     }
     return refs
   },
-  _getFileBase: function () {
+  _getFileBase: function (location) {
     var fileBase = this.options.ajaxBase
     if (typeof fileBase === 'undefined') {
-      fileBase = this._getFileBaseFromFileLocation(document.location.toString())
+      fileBase = this._getFileBaseFromFileLocation(location)
     }
     return fileBase
   },
