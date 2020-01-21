@@ -74,6 +74,11 @@ export const SchemaLoader = Class.extend({
     pathItems.pop()
     return pathItems.join('/') + '/'
   },
+  _isLocalUrl: function (url, fileBase) {
+    return fileBase !== url.substr(0, fileBase.length) &&
+      url.substr(0, 4) !== 'http' &&
+      url.substr(0, 1) !== '/'
+  },
   _loadExternalRefs: function (schema, callback, fetchUrl, fileBase) {
     var self = this
     var refs = this._getExternalRefs(schema, fetchUrl)
@@ -85,8 +90,7 @@ export const SchemaLoader = Class.extend({
       self.refs[url] = 'loading'
       waiting++
 
-      var fetchUrl = url
-      if (fileBase !== url.substr(0, fileBase.length) && url.substr(0, 4) !== 'http' && url.substr(0, 1) !== '/') fetchUrl = fileBase + url
+      var fetchUrl = this._isLocalUrl(fileBase, url) ? fileBase + url : url
 
       // eslint-disable-next-line no-undef
       var r = new XMLHttpRequest()
@@ -167,34 +171,14 @@ export const SchemaLoader = Class.extend({
 
     // Version 3 `type`
     if (typeof schema.type === 'object') {
-      // Array of types
-      if (Array.isArray(schema.type)) {
-        $each(schema.type, function (key, value) {
-          // Schema
-          if (typeof value === 'object') {
-            schema.type[key] = self.expandSchema(value)
-          }
-        })
-      } else {
-        // Schema
-        schema.type = self.expandSchema(schema.type)
-      }
+      schema.type = this._expandSubSchema(schema.type)
     }
+
     // Version 3 `disallow`
     if (typeof schema.disallow === 'object') {
-      // Array of types
-      if (Array.isArray(schema.disallow)) {
-        $each(schema.disallow, function (key, value) {
-          // Schema
-          if (typeof value === 'object') {
-            schema.disallow[key] = self.expandSchema(value)
-          }
-        })
-      } else {
-        // Schema
-        schema.disallow = self.expandSchema(schema.disallow)
-      }
+      schema.disallow = this._expandSubSchema(schema.disallow)
     }
+
     // Version 4 `anyOf`
     if (schema.anyOf) {
       $each(schema.anyOf, function (key, value) {
@@ -245,6 +229,21 @@ export const SchemaLoader = Class.extend({
     }
 
     return this.expandRefs(extended)
+  },
+  _expandSubSchema: function (subschema) {
+    // Array of types
+    if (Array.isArray(subschema)) {
+      var self = this
+      var mapped = subschema.map(function (m) {
+        return typeof value === 'object'
+          ? self.expandSchema(m)
+          : m
+      })
+      return mapped
+    } else {
+      // Schema
+      return this.expandSchema(subschema)
+    }
   },
   extendSchemas: function (obj1, obj2) {
     obj1 = $extend({}, obj1)
