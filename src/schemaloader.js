@@ -136,33 +136,30 @@ export const SchemaLoader = Class.extend({
     }
   },
   expandRefs: function (schema, recurseAllOf) {
-    schema = $extend({}, schema)
+    var _schema = $extend({}, schema)
+    if (!_schema.$ref) return _schema
 
-    while (schema.$ref) {
-      var refObj = this.refs_with_info[schema.$ref]
-      delete schema.$ref
-      var fetchUrl = ''
-      if (refObj.$ref.startsWith('#')) {
-        fetchUrl = refObj.fetchUrl
+    var refObj = this.refs_with_info[_schema.$ref]
+    delete _schema.$ref
+    var fetchUrl = refObj.$ref.startsWith('#')
+      ? refObj.fetchUrl
+      : ''
+    var ref = this._getRef(fetchUrl, refObj)
+    if (!this.refs[ref]) { // if reference not found
+      console.warn("reference:'" + ref + "' not found!")
+    } else if (recurseAllOf && this.refs[ref].hasOwnProperty('allOf')) {
+      var allOf = this.refs[ref].allOf
+      for (var i = 0; i < allOf.length; i++) {
+        allOf[i] = this.expandRefs(allOf[i], true)
       }
-      var ref = fetchUrl + refObj.$ref
-      if (!this.refs[ref]) ref = fetchUrl + decodeURIComponent(refObj.$ref)
-      if (!this.refs[ref]) { // if reference not found
-        console.warn("reference:'" + ref + "' not found!")
-        break
-      }
-      if (recurseAllOf) {
-        if (this.refs[ref].hasOwnProperty('allOf')) {
-          var allOf = this.refs[ref].allOf
-          for (var i = 0; i < allOf.length; i++) {
-            allOf[i] = this.expandRefs(allOf[i], true)
-          }
-        }
-      }
-      schema = this.extendSchemas(schema, this.expandSchema(this.refs[ref]))
-      // schema = this.extendSchemas(schema, $extend({}, this.refs[ref]))
     }
-    return schema
+    return this.extendSchemas(_schema, this.expandSchema(this.refs[ref]))
+  },
+  _getRef: function (fetchUrl, refObj) {
+    var ref = fetchUrl + refObj
+    return this.refs[ref]
+      ? ref
+      : fetchUrl + decodeURIComponent(refObj.$ref)
   },
   expandSchema: function (schema, fileBase) {
     var self = this
