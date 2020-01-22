@@ -17,6 +17,113 @@ export const SchemaLoader = Class.extend({
       callback(self.expandRefs(schema))
     }, fetchUrl, self._getFileBase(location))
   },
+  expandRefs: function (schema, recurseAllOf) {
+    var _schema = $extend({}, schema)
+    if (!_schema.$ref) return _schema
+
+    var refObj = this.refs_with_info[_schema.$ref]
+    delete _schema.$ref
+    var fetchUrl = refObj.$ref.startsWith('#')
+      ? refObj.fetchUrl
+      : ''
+    var ref = this._getRef(fetchUrl, refObj)
+    if (!this.refs[ref]) { // if reference not found
+      console.warn("reference:'" + ref + "' not found!")
+    } else if (recurseAllOf && this.refs[ref].hasOwnProperty('allOf')) {
+      var allOf = this.refs[ref].allOf
+      for (var i = 0; i < allOf.length; i++) {
+        allOf[i] = this.expandRefs(allOf[i], true)
+      }
+    }
+    return this.extendSchemas(_schema, this.expandSchema(this.refs[ref]))
+  },
+  expandSchema: function (schema, fileBase) {
+    var self = this
+    var extended = $extend({}, schema)
+    var i
+
+    // Version 3 `type`
+    if (typeof schema.type === 'object') {
+      schema.type = this._expandSubSchema(schema.type)
+    }
+
+    // Version 3 `disallow`
+    if (typeof schema.disallow === 'object') {
+      schema.disallow = this._expandSubSchema(schema.disallow)
+    }
+
+    // Version 4 `anyOf`
+    if (schema.anyOf) {
+      $each(schema.anyOf, function (key, value) {
+        schema.anyOf[key] = self.expandSchema(value)
+      })
+    }
+    // Version 4 `dependencies` (schema dependencies)
+    if (schema.dependencies) {
+      $each(schema.dependencies, function (key, value) {
+        if (typeof value === 'object' && !(Array.isArray(value))) {
+          schema.dependencies[key] = self.expandSchema(value)
+        }
+      })
+    }
+    // Version 4 `not`
+    if (schema.not) {
+      schema.not = this.expandSchema(schema.not)
+    }
+
+    // allOf schemas should be merged into the parent
+    if (schema.allOf) {
+      for (i = 0; i < schema.allOf.length; i++) {
+        schema.allOf[i] = this.expandRefs(schema.allOf[i], true)
+        extended = this.extendSchemas(extended, this.expandSchema(schema.allOf[i]))
+      }
+      delete extended.allOf
+    }
+    // extends schemas should be merged into parent
+    if (schema.extends) {
+      // If extends is a schema
+      if (!(Array.isArray(schema.extends))) {
+        extended = this.extendSchemas(extended, this.expandSchema(schema.extends))
+      } else {
+        // If extends is an array of schemas
+        for (i = 0; i < schema.extends.length; i++) {
+          extended = this.extendSchemas(extended, this.expandSchema(schema.extends[i]))
+        }
+      }
+      delete extended.extends
+    }
+    // parent should be merged into oneOf schemas
+    if (schema.oneOf) {
+      var tmp = $extend({}, extended)
+      delete tmp.oneOf
+      for (i = 0; i < schema.oneOf.length; i++) {
+        extended.oneOf[i] = this.extendSchemas(this.expandSchema(schema.oneOf[i]), tmp)
+      }
+    }
+
+    return this.expandRefs(extended)
+  },
+  _getRef: function (fetchUrl, refObj) {
+    var ref = fetchUrl + refObj
+    return this.refs[ref]
+      ? ref
+      : fetchUrl + decodeURIComponent(refObj.$ref)
+  },
+  _expandSubSchema: function (subschema) {
+    // Array of types
+    if (Array.isArray(subschema)) {
+      var self = this
+      var mapped = subschema.map(function (m) {
+        return typeof value === 'object'
+          ? self.expandSchema(m)
+          : m
+      })
+      return mapped
+    } else {
+      // Schema
+      return this.expandSchema(subschema)
+    }
+  },
   _getDefinitions: function (schema, path) {
     if (schema.definitions) {
       for (var i in schema.definitions) {
@@ -133,113 +240,6 @@ export const SchemaLoader = Class.extend({
 
     if (!waiting) {
       callback()
-    }
-  },
-  expandRefs: function (schema, recurseAllOf) {
-    var _schema = $extend({}, schema)
-    if (!_schema.$ref) return _schema
-
-    var refObj = this.refs_with_info[_schema.$ref]
-    delete _schema.$ref
-    var fetchUrl = refObj.$ref.startsWith('#')
-      ? refObj.fetchUrl
-      : ''
-    var ref = this._getRef(fetchUrl, refObj)
-    if (!this.refs[ref]) { // if reference not found
-      console.warn("reference:'" + ref + "' not found!")
-    } else if (recurseAllOf && this.refs[ref].hasOwnProperty('allOf')) {
-      var allOf = this.refs[ref].allOf
-      for (var i = 0; i < allOf.length; i++) {
-        allOf[i] = this.expandRefs(allOf[i], true)
-      }
-    }
-    return this.extendSchemas(_schema, this.expandSchema(this.refs[ref]))
-  },
-  _getRef: function (fetchUrl, refObj) {
-    var ref = fetchUrl + refObj
-    return this.refs[ref]
-      ? ref
-      : fetchUrl + decodeURIComponent(refObj.$ref)
-  },
-  expandSchema: function (schema, fileBase) {
-    var self = this
-    var extended = $extend({}, schema)
-    var i
-
-    // Version 3 `type`
-    if (typeof schema.type === 'object') {
-      schema.type = this._expandSubSchema(schema.type)
-    }
-
-    // Version 3 `disallow`
-    if (typeof schema.disallow === 'object') {
-      schema.disallow = this._expandSubSchema(schema.disallow)
-    }
-
-    // Version 4 `anyOf`
-    if (schema.anyOf) {
-      $each(schema.anyOf, function (key, value) {
-        schema.anyOf[key] = self.expandSchema(value)
-      })
-    }
-    // Version 4 `dependencies` (schema dependencies)
-    if (schema.dependencies) {
-      $each(schema.dependencies, function (key, value) {
-        if (typeof value === 'object' && !(Array.isArray(value))) {
-          schema.dependencies[key] = self.expandSchema(value)
-        }
-      })
-    }
-    // Version 4 `not`
-    if (schema.not) {
-      schema.not = this.expandSchema(schema.not)
-    }
-
-    // allOf schemas should be merged into the parent
-    if (schema.allOf) {
-      for (i = 0; i < schema.allOf.length; i++) {
-        schema.allOf[i] = this.expandRefs(schema.allOf[i], true)
-        extended = this.extendSchemas(extended, this.expandSchema(schema.allOf[i]))
-      }
-      delete extended.allOf
-    }
-    // extends schemas should be merged into parent
-    if (schema.extends) {
-      // If extends is a schema
-      if (!(Array.isArray(schema.extends))) {
-        extended = this.extendSchemas(extended, this.expandSchema(schema.extends))
-      } else {
-        // If extends is an array of schemas
-        for (i = 0; i < schema.extends.length; i++) {
-          extended = this.extendSchemas(extended, this.expandSchema(schema.extends[i]))
-        }
-      }
-      delete extended.extends
-    }
-    // parent should be merged into oneOf schemas
-    if (schema.oneOf) {
-      var tmp = $extend({}, extended)
-      delete tmp.oneOf
-      for (i = 0; i < schema.oneOf.length; i++) {
-        extended.oneOf[i] = this.extendSchemas(this.expandSchema(schema.oneOf[i]), tmp)
-      }
-    }
-
-    return this.expandRefs(extended)
-  },
-  _expandSubSchema: function (subschema) {
-    // Array of types
-    if (Array.isArray(subschema)) {
-      var self = this
-      var mapped = subschema.map(function (m) {
-        return typeof value === 'object'
-          ? self.expandSchema(m)
-          : m
-      })
-      return mapped
-    } else {
-      // Schema
-      return this.expandSchema(subschema)
     }
   },
   extendSchemas: function (obj1, obj2) {
