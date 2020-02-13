@@ -7,7 +7,7 @@
 In order to display HTML in descriptions, include "purify" ahead of "jsoneditor". With CDN eg:
 
 ```
-<script src="https://cdn.jsdelivr.net/npm/dompurify@latest/dist/purify.min.js</script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@latest/dist/purify.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
 ```
 
