@@ -1,4 +1,5 @@
 import { SchemaLoader } from '../../src/schemaloader'
+import * as sinon from 'sinon'
 
 describe('SchemaLoader', () => {
   let loader
@@ -6,9 +7,9 @@ describe('SchemaLoader', () => {
   let fileBase
 
   beforeEach(() => {
-    loader = new SchemaLoader()
+    loader = new SchemaLoader({}, { ajax: true })
     fetchUrl =
-            document.location.origin + document.location.pathname.toString()
+      document.location.origin + document.location.pathname.toString()
     fileBase = loader._getFileBase(document.location.toString())
   })
 
@@ -46,5 +47,29 @@ describe('SchemaLoader', () => {
     }, fetchUrl, fileBase)
     const urls = Object.keys(loader.refs)
     expect(urls.length).toEqual(1)
+  })
+
+  it('load remote schema', (done) => {
+    const response = {
+      type: 'string',
+      minLength: 4
+    }
+    const server = sinon.fakeServer.create()
+    server.autoRespond = true
+    window.XMLHttpRequest = server.xhr
+    server.respondWith([200, { 'Content-Type': 'application/json' }, JSON.stringify(response)])
+    const schema = {
+      type: 'object',
+      properties: {
+        fname: { $ref: '/string.json' },
+        lname: { $ref: '/string.json' }
+      }
+    }
+    loader.load(schema, (schema) => {
+      const urls = Object.keys(loader.refs)
+      expect(urls.length).toEqual(1)
+      done()
+      server.restore()
+    }, fetchUrl, fileBase)
   })
 })
