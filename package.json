@@ -69,6 +69,7 @@
     "karma-jasmine-html-reporter": "^1.4.2",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^4.0.2",
+    "mathjs": "^6.6.0",
     "mini-css-extract-plugin": "^0.8.0",
     "mocha": "^6.2.0",
     "mochawesome": "^4.1.0",
