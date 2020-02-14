@@ -8,7 +8,7 @@ Some pull requests added from the original repo.
 ![JSON Schema -> HTML Editor -> JSON](./docs/images/jsoneditor.png)
 
 JSON Editor takes a JSON Schema and uses it to generate an HTML form.
-It has full support for JSON Schema version 3 and 4 and can integrate with several popular CSS frameworks (bootstrap, foundation, and jQueryUI).
+It has full support for JSON Schema version 3 and 4 and can integrate with several popular CSS frameworks (bootstrap, spectre, tailwind).
 
 Check out an interactive demo: https://json-editor.github.io/json-editor/
 
@@ -39,8 +39,8 @@ JSON Editor has no dependencies. It only needs a modern browser (tested in Chrom
 The following are not required, but can improve the style and usability of JSON Editor when present.
 
 *  A compatible JS template engine (Mustache, Underscore, Hogan, Handlebars, Lodash, Swig, Markup, or EJS)
-*  A compatible CSS framework for styling (Spectre, Tailwind, Bootstrap 2/3/4, Foundation 3/4/5/6, Materialize or jQueryUI)
-*  A compatible icon library (Bootstrap 2/3 glyphicons, Foundation icons 2/3, jQueryUI, Materialicons or Font Awesome 3/4)
+*  A compatible CSS framework for styling (Spectre, Tailwind, Bootstrap4)
+*  A compatible icon library (Spectre, jQueryUI, Font Awesome 3/4/5)
 *  [SCEditor](http://www.sceditor.com/) for WYSIWYG editing of HTML or BBCode content
 *  [SimpleMDE](https://simplemde.com/) for editing of Markdown content
 *  [Ace Editor](http://ace.c9.io/) for editing code
@@ -100,12 +100,12 @@ Options can be set globally or on a per-instance basis during instantiation.
 
 ```js
 // Set an option globally
-JSONEditor.defaults.options.theme = 'bootstrap2';
+JSONEditor.defaults.options.theme = 'bootstrap4';
 
 // Set an option during instantiation
 const editor = new JSONEditor(element, {
   //...
-  theme: 'bootstrap2'
+  theme: 'bootstrap4'
 });
 ```
 
@@ -435,7 +435,7 @@ This default can be changed by setting the `JSONEditor.defaults.options.theme` v
 If you want to specify your own styles with CSS, you can use `barebones`, which includes almost no classes or inline styles.
 
 ```javascript
-JSONEditor.defaults.options.theme = 'foundation5';
+JSONEditor.defaults.options.theme = 'spectre';
 ```
 
 You can override this default on a per-instance basis by passing a `theme` parameter in when initializing:
@@ -443,7 +443,7 @@ You can override this default on a per-instance basis by passing a `theme` param
 ```js
 const editor = new JSONEditor(element,{
   schema: schema,
-  theme: 'jqueryui'
+  theme: 'tailwind'
 });
 ```
 
@@ -453,21 +453,17 @@ JSON Editor also supports several popular icon libraries.  The icon library must
 
 The supported icon libs are:
 
-*  bootstrap2 (glyphicons)
-*  bootstrap3 (glyphicons)
-*  foundation2
-*  foundation3
 *  jqueryui
 *  fontawesome3
 *  fontawesome4
 *  fontawesome5
-*  materialicons
+*  spectre
 
 By default, no icons are used. Just like the CSS theme, you can set the icon lib globally or when initializing:
 
 ```js
 // Set the global default
-JSONEditor.defaults.options.iconlib = "bootstrap2";
+JSONEditor.defaults.options.iconlib = "spectre";
 
 // Set the icon lib during initialization
 const editor = new JSONEditor(element,{
