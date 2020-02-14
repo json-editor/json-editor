@@ -126,17 +126,17 @@ export var SelectEditor = AbstractEditor.extend({
       // Walk through this array and fix up the values
       for (i = 0; i < this.enumSource.length; i++) {
         if (this.enumSource[i].value) {
-          callback = this.expandCallbacks('template', {template: this.enumSource[i].value})
+          callback = this.expandCallbacks('template', { template: this.enumSource[i].value })
           if (typeof callback.template === 'function') this.enumSource[i].value = callback.template
           else this.enumSource[i].value = this.jsoneditor.compileTemplate(this.enumSource[i].value, this.template_engine)
         }
         if (this.enumSource[i].title) {
-          callback = this.expandCallbacks('template', {template: this.enumSource[i].title})
+          callback = this.expandCallbacks('template', { template: this.enumSource[i].title })
           if (typeof callback.template === 'function') this.enumSource[i].title = callback.template
           else this.enumSource[i].title = this.jsoneditor.compileTemplate(this.enumSource[i].title, this.template_engine)
         }
         if (this.enumSource[i].filter && this.enumSource[i].value) {
-          callback = this.expandCallbacks('template', {template: this.enumSource[i].filter})
+          callback = this.expandCallbacks('template', { template: this.enumSource[i].filter })
           if (typeof callback.template === 'function') this.enumSource[i].filter = callback.template
           else this.enumSource[i].filter = this.jsoneditor.compileTemplate(this.enumSource[i].filter, this.template_engine)
         }
@@ -236,7 +236,7 @@ export var SelectEditor = AbstractEditor.extend({
             if (this.enumSource[i].filter) {
               var newItems = []
               for (j = 0; j < items.length; j++) {
-                if (this.enumSource[i].filter({i: j, item: items[j], watched: vars})) newItems.push(items[j])
+                if (this.enumSource[i].filter({ i: j, item: items[j], watched: vars })) newItems.push(items[j])
               }
               items = newItems
             }

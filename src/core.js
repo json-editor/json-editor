@@ -54,7 +54,7 @@ import { StringEditor } from './editors/string'
 import { TableEditor } from './editors/table'
 import { UploadEditor } from './editors/upload'
 import { UuidEditor } from './editors/uuid'
-import {ColorEditor} from './editors/colorpicker'
+import { ColorEditor } from './editors/colorpicker'
 
 import { defaultTemplate } from './templates/default'
 import { ejsTemplate } from './templates/ejs'

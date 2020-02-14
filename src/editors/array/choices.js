@@ -75,7 +75,7 @@ export var ArrayChoicesEditor = MultiSelectEditor.extend({
     // Update Schema enum to prevent triggering "Value must be one of the enumerated values"
     this.schema.items.enum.push(value)
     // Add new value and label to choices
-    this.choices_instance.setChoices([{value: value + '', label: value + ''}], 'value', 'label', false)
+    this.choices_instance.setChoices([{ value: value + '', label: value + '' }], 'value', 'label', false)
 
     return true
   },

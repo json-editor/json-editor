@@ -97,7 +97,7 @@ export var TableEditor = ArrayEditor.extend({
     this._super()
   },
   getItemDefault: function () {
-    return $extend({}, {'default': this.item_default})['default']
+    return $extend({}, { 'default': this.item_default })['default']
   },
   getItemTitle: function () {
     return this.item_title
