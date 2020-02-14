@@ -33,7 +33,9 @@ export const Validator = Class.extend({
         }
       }
     }
-    return {match: matchedProperties, extra: extraProperties}
+    return {
+      match: matchedProperties, extra: extraProperties
+    }
   },
   validate: function (value) {
     return this._validateSchema(this.schema, value)

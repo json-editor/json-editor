@@ -44,7 +44,7 @@ export var StringEditor = AbstractEditor.extend({
     this.onChange(changed)
 
     // Return object with changed state and sanitized value for use in editors that extend this
-    return {changed: changed, value: sanitized}
+    return { changed: changed, value: sanitized }
   },
   getNumColumns: function () {
     var min = Math.ceil(Math.max(this.getTitle().length, this.schema.maxLength || 0, this.schema.minLength || 0) / 5)
@@ -206,7 +206,7 @@ export var StringEditor = AbstractEditor.extend({
 
     // Compile and store the template
     if (this.schema.template) {
-      var callback = this.expandCallbacks('template', {template: this.schema.template})
+      var callback = this.expandCallbacks('template', { template: this.schema.template })
       if (typeof callback.template === 'function') this.template = callback.template
       else this.template = this.jsoneditor.compileTemplate(this.schema.template, this.template_engine)
       this.refreshValue()

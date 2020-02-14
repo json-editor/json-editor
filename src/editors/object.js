@@ -406,7 +406,7 @@ export var ObjectEditor = AbstractEditor.extend({
         if (this.jsoneditor.options.display_required_only || this.options.display_required_only) {
           this.schema.defaultProperties = []
           $each(this.schema.properties, function (k, s) {
-            if (self.isRequiredObject({key: k, schema: s})) {
+            if (self.isRequiredObject({ key: k, schema: s })) {
               self.schema.defaultProperties.push(k)
             }
           })

@@ -35,7 +35,7 @@
     "test": "karma start config/karma.conf.js --browsers Chrome --log-level debug",
     "test-headless": "karma start config/karma.conf.js --singleRun true --browsers ChromeHeadless",
     "serve-test": "http-server --p 9001",
-    "docker-test": "cd tests && docker-compose run --rm node npm run build && docker-compose up -d && docker-compose ps && docker-compose run --rm codeceptjs codeceptjs run-multiple basic --invert --grep  @optional",
+    "docker-test": "cd tests && docker-compose run --rm node npm install && docker-compose run --rm node npm run build && docker-compose up -d && docker-compose ps && docker-compose run --rm codeceptjs codeceptjs run-multiple basic --invert --grep  @optional",
     "preversion": "npm run test-headless && npm run docker-test",
     "postversion": "git push && git push --tags && npm publish ./ --access public",
     "winserver": "cd tests && start cmd /c npm run serve-test .",

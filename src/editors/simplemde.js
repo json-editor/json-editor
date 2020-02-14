@@ -40,7 +40,7 @@ export var SimplemdeEditor = StringEditor.extend({
       // This will prevent SimpleMDE content from being hidden until focus in Chrome
       // if SimpleMDE is not visible (Like when placed inside Tabs)
       if (options.autorefresh) {
-        this.startListening(this.simplemde_instance.codemirror, this.simplemde_instance.codemirror.state.autoRefresh = {delay: 250})
+        this.startListening(this.simplemde_instance.codemirror, this.simplemde_instance.codemirror.state.autoRefresh = { delay: 250 })
       }
 
       this.theme.afterInputReady(self.input)
