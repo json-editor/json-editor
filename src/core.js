@@ -208,8 +208,7 @@ JSONEditor.prototype = {
 
     // Fetch all external refs via ajax
     var fetchUrl = document.location.origin + document.location.pathname.toString()
-    var refs = self.options.refs || {}
-    var loader = new SchemaLoader(refs, self.options)
+    var loader = new SchemaLoader(self.options)
     var location = document.location.toString()
 
     this.expandSchema = function (schema, fileBase) { return loader.expandSchema(schema, fileBase) }

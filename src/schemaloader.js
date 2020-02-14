@@ -2,12 +2,12 @@ import { Class } from './class'
 import { $each, $extend } from './utilities'
 
 export const SchemaLoader = Class.extend({
-  init: function (refs, options) {
+  init: function (options) {
+    this.options = options || {}
+    this.refs = this.options.refs || {}
     this.refs_with_info = {}
     this.refs_prefix = '#/counter/'
     this.refs_counter = 1
-    this.options = options || {}
-    this.refs = refs || {}
   },
 
   load: function (schema, callback, fetchUrl, location) {
