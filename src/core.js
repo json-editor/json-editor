@@ -7,6 +7,7 @@ import { SchemaLoader } from './schemaloader'
 import { $extend, $each } from './utilities'
 
 import { AbstractTheme } from './theme'
+import { AbstractIconLib } from './iconlib'
 import { htmlTheme } from './themes/html'
 // import { bootstrap2Theme } from './themes/bootstrap2'
 // import { bootstrap3Theme } from './themes/bootstrap3'
@@ -523,6 +524,7 @@ JSONEditor.defaults = getDefaults()
 assignThemes(JSONEditor.defaults.themes)
 JSONEditor.AbstractEditor = AbstractEditor
 JSONEditor.AbstractTheme = AbstractTheme
+JSONEditor.AbstractIconLib = AbstractIconLib
 assignDefaultEditors(JSONEditor.defaults.editors)
 assignTemplates(JSONEditor.defaults.templates)
 assignIconlibs(JSONEditor.defaults.iconlibs)

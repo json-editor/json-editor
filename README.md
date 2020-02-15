@@ -8,7 +8,7 @@ Some pull requests added from the original repo.
 ![JSON Schema -> HTML Editor -> JSON](./docs/images/jsoneditor.png)
 
 JSON Editor takes a JSON Schema and uses it to generate an HTML form.
-It has full support for JSON Schema version 3 and 4 and can integrate with several popular CSS frameworks (bootstrap, foundation, and jQueryUI).
+It has full support for JSON Schema version 3 and 4 and can integrate with several popular CSS frameworks (bootstrap, spectre, tailwind).
 
 Check out an interactive demo: https://json-editor.github.io/json-editor/
 
@@ -39,8 +39,8 @@ JSON Editor has no dependencies. It only needs a modern browser (tested in Chrom
 The following are not required, but can improve the style and usability of JSON Editor when present.
 
 *  A compatible JS template engine (Mustache, Underscore, Hogan, Handlebars, Lodash, Swig, Markup, or EJS)
-*  A compatible CSS framework for styling (Spectre, Tailwind, Bootstrap 2/3/4, Foundation 3/4/5/6, Materialize or jQueryUI)
-*  A compatible icon library (Bootstrap 2/3 glyphicons, Foundation icons 2/3, jQueryUI, Materialicons or Font Awesome 3/4)
+*  A compatible CSS framework for styling (Spectre, Tailwind, Bootstrap4)
+*  A compatible icon library (Spectre, jQueryUI, Font Awesome 3/4/5)
 *  [SCEditor](http://www.sceditor.com/) for WYSIWYG editing of HTML or BBCode content
 *  [SimpleMDE](https://simplemde.com/) for editing of Markdown content
 *  [Ace Editor](http://ace.c9.io/) for editing code
@@ -89,9 +89,9 @@ The rest of this README contains detailed documentation about every aspect of JS
 ### Initialize
 
 ```js
-var element = document.getElementById('editor_holder');
+const element = document.getElementById('editor_holder');
 
-var editor = new JSONEditor(element, options);
+const editor = new JSONEditor(element, options);
 ```
 
 #### Options
@@ -100,12 +100,12 @@ Options can be set globally or on a per-instance basis during instantiation.
 
 ```js
 // Set an option globally
-JSONEditor.defaults.options.theme = 'bootstrap2';
+JSONEditor.defaults.options.theme = 'bootstrap4';
 
 // Set an option during instantiation
-var editor = new JSONEditor(element, {
+const editor = new JSONEditor(element, {
   //...
-  theme: 'bootstrap2'
+  theme: 'bootstrap4'
 });
 ```
 
@@ -273,7 +273,7 @@ __*Note__ If the `ajax` property is `true` and JSON Editor needs to fetch an ext
 Listen for the `ready` event before calling them.
 
 ```js
-editor.on('ready',function() {
+editor.on('ready',() => {
   // Now the api methods will be available
   editor.validate();
 });
@@ -284,7 +284,7 @@ editor.on('ready',function() {
 ```js
 editor.setValue({name: "John Smith"});
 
-var value = editor.getValue();
+const value = editor.getValue();
 console.log(value.name) // Will log "John Smith"
 ```
 
@@ -292,10 +292,10 @@ Instead of getting/setting the value of the entire editor, you can also work on 
 
 ```js
 // Get a reference to a node within the editor
-var name = editor.getEditor('root.name');
+const name = editor.getEditor('root.name');
 
 // `getEditor` will return null if the path is invalid
-if(name) {
+if (name) {
   name.setValue("John Smith");
 
   console.log(name.getValue());
@@ -314,9 +314,9 @@ You can use the `validate` method to check if the data is valid or not.
 
 ```javascript
 // Validate the editor's current value against the schema
-var errors = editor.validate();
+const errors = editor.validate();
 
-if(errors.length) {
+if (errors.length) {
   // errors is an array of objects, each with a `path`, `property`, and `message` parameter
   // `property` is the schema keyword that triggered the validation error (e.g. "minLength")
   // `path` is a dot separated path into the JSON object (e.g. "root.path.to.field")
@@ -333,7 +333,7 @@ If you want to use a different value, you can pass it in as a parameter.
 
 ```javascript
 // Validate an arbitrary value against the editor's schema
-var errors = editor.validate({
+const errors = editor.validate({
   value: {
     to: "test"
   }
@@ -345,7 +345,7 @@ var errors = editor.validate({
 The `change` event is fired whenever the editor's value changes.
 
 ```javascript
-editor.on('change',function() {
+editor.on('change',() => {
   // Do something
 });
 
@@ -355,7 +355,7 @@ editor.off('change',function_reference);
 You can also watch a specific field for changes:
 
 ```javascript
-editor.watch('path.to.field',function() {
+editor.watch('path.to.field',() => {
   // Do something
 });
 
@@ -365,11 +365,11 @@ editor.unwatch('path.to.field',function_reference);
 Or watch all fields (Similar to the "onchange" event, but tracks the field changed)
 
 ```javascript
-var watcherCallback = function(path) {
-  console.log("field with path: [" + path + "] changed to [" + JSON.stringify(this.getEditor(path).getValue()) + "]");
+const watcherCallback = function (path) {
+  console.log(`field with path: [${path}] changed to [${JSON.stringify(this.getEditor(path).getValue())}]`);
   // Do something
 }
-for (var key in editor.editors) {
+for (let key in editor.editors) {
   if (editor.editors.hasOwnProperty(key) && key !== 'root') {
     editor.watch(key, watcherCallback.bind(editor, key));
   }
@@ -435,15 +435,15 @@ This default can be changed by setting the `JSONEditor.defaults.options.theme` v
 If you want to specify your own styles with CSS, you can use `barebones`, which includes almost no classes or inline styles.
 
 ```javascript
-JSONEditor.defaults.options.theme = 'foundation5';
+JSONEditor.defaults.options.theme = 'spectre';
 ```
 
 You can override this default on a per-instance basis by passing a `theme` parameter in when initializing:
 
 ```js
-var editor = new JSONEditor(element,{
+const editor = new JSONEditor(element,{
   schema: schema,
-  theme: 'jqueryui'
+  theme: 'tailwind'
 });
 ```
 
@@ -453,24 +453,20 @@ JSON Editor also supports several popular icon libraries.  The icon library must
 
 The supported icon libs are:
 
-*  bootstrap2 (glyphicons)
-*  bootstrap3 (glyphicons)
-*  foundation2
-*  foundation3
 *  jqueryui
 *  fontawesome3
 *  fontawesome4
 *  fontawesome5
-*  materialicons
+*  spectre
 
 By default, no icons are used. Just like the CSS theme, you can set the icon lib globally or when initializing:
 
 ```js
 // Set the global default
-JSONEditor.defaults.options.iconlib = "bootstrap2";
+JSONEditor.defaults.options.iconlib = "spectre";
 
 // Set the icon lib during initialization
-var editor = new JSONEditor(element,{
+const editor = new JSONEditor(element,{
   schema: schema,
   iconlib: "fontawesome4"
 });
@@ -883,16 +879,16 @@ You can override this default by passing in a format:
 When an array item is added, removed, moved up, moved or removed the json editor will trigger a relative event.
 
 ```javascript
-editor.on('moveRow', function (editor) {
+editor.on('moveRow', editor => {
   console.log('moveRow', editor)
 });
-editor.on('addRow', function (editor) {
+editor.on('addRow', editor => {
   console.log('addRow', editor)
 });
-editor.on('deleteRow', function (editor) {
+editor.on('deleteRow', editor => {
   console.log('deleteRow', editor)
 });
-editor.on('deleteAllRows', function (editor) {
+editor.on('deleteAllRows', editor => {
   console.log('deleteAllRows', editor)
 });
 ```
@@ -1157,7 +1153,7 @@ JSONEditor.defaults.options.template = 'handlebars';
 You can set the template engine on a per-instance basis as well:
 
 ```js
-var editor = new JSONEditor(element,{
+const editor = new JSONEditor(element,{
   schema: schema,
   template: 'hogan'
 });
@@ -1215,7 +1211,7 @@ Example Schema:
  Example Callback function:
 ```js+jinja
 window.JSONEditor.defaults.callbacks.template = {
-  "callbackFunction": function(jseditor,e) {
+  "callbackFunction": (jseditor,e) => {
     return e.fname + " " + e.lname;
   }
 };
@@ -1395,16 +1391,12 @@ It is also possible to use JavaScript callback functions instead of templates fo
 **Example JavaScript callbacks:**
 ````javascript
 window.JSONEditor.defaults.callbacks.template = {
-  "enumFilterCB": function(jseditor, e) {
+  "enumFilterCB": (jseditor, e) => {
     if (e.item.text.toLowerCase() == 'red') return ""; // "red" is not allowed
     return e.item.text;
   },
-  "enumTitleCB": function(jseditor, e) {
-    return e.item.text.toUpperCase();
-  },
-  "enumValueCB": function(jseditor, e) {
-    return e.item.text.toLowerCase();
-  }
+  "enumTitleCB": (jseditor, e) => e.item.text.toUpperCase(),
+  "enumValueCB": (jseditor, e) => e.item.text.toLowerCase()
 };
 ````
 
@@ -1444,22 +1436,21 @@ If one of the included template engines isn't sufficient,
 you can use any custom template engine with a `compile` method.  For example:
 
 ```js
-var myengine = {
-  compile: function(template) {
+const myengine = {
+  compile: template =>
     // Compile should return a render function
-    return function(vars) {
+    vars => {
       // A real template engine would render the template here
-      var result = template;
+      const result = template;
       return result;
     }
-  }
 };
 
 // Set globally
 JSONEditor.defaults.options.template = myengine;
 
 // Set on a per-instance basis
-var editor = new JSONEditor(element,{
+const editor = new JSONEditor(element,{
   schema: schema,
   template: myengine
 });
@@ -1526,7 +1517,7 @@ Let's say you make a custom `location` editor for editing geo data.  You can add
 ```js
 // Add a resolver function to the beginning of the resolver list
 // This will make it run before any other ones
-JSONEditor.defaults.resolvers.unshift(function(schema) {
+JSONEditor.defaults.resolvers.unshift(schema => {
   if(schema.type === "object" && schema.format === "location") {
     return "location";
   }
@@ -1574,10 +1565,10 @@ Let's say you want to force all schemas with `format` set to `date` to match the
 
 ```js
 // Custom validators must return an array of errors or an empty array if valid
-JSONEditor.defaults.custom_validators.push(function(schema, value, path) {
-  var errors = [];
-  if(schema.format==="date") {
-    if(!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(value)) {
+JSONEditor.defaults.custom_validators.push((schema, value, path) => {
+  const errors = [];
+  if (schema.format==="date") {
+    if (!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(value)) {
       // Errors must be an object with `path`, `property`, and `message`
       errors.push({
         path: path,
@@ -1590,3 +1581,12 @@ JSONEditor.defaults.custom_validators.push(function(schema, value, path) {
 });
 ```
 
+Support Legacy Browser (not tested)
+----------------------
+
+JSON Editor can be used with browsers that support ES5, but in order to use it with older browsers such as IE, it is necessary to use "core-js" as a polyfill.
+
+```
+<script src="https://unpkg.com/core-js-bundle@latest/minified.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+```

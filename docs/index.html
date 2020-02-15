@@ -1,88 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <title>JSON Editor Interactive Example</title>
-
-    <!-- Favicon -->
     <link href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACbElEQVQ4jbWTz0sqcRTFT/WGFj6KguohuolWqVSEhI5IDTkh4kA/XH0dGCHMTdhPqJ1gRFjBrEyIQohAaNEioloE/QFBtMnd6x+IkCAiks5bZDH0erR6B87m3ns+cOFe4D+oHYAAsAFgv+aNWq39u7AiSdK+w+G49vl89+Pj4y+Li4svpmneJ5PJ65aWln0Ayj/DjY2Nx263uyLLMgcHB6mqKjVNoxCCW1tbLJVKFYfDcfwVpEOSpJLH46nIssyhoSGGQiH29vbS6/UyHo8zlUqxWCyyUChUmpqaSgA6rADD6XTeBINBhkIhJhIJGoZR7u7udvX09Lg0TSsvLCwwm81yZ2eHkUjkBoBhBeR9Pl8lHA5zcnKSZ2dnnJmZCb83VVUNZzIZrq2tcWVlhfPz8xUAeSvgaHR0tBqLxVgsFnl6espYLNb63hwZGWldX1+naZqcnp7m3NxcFcCRFXCi63o1kUjw8PCQBwcHfwHy+TxzuRyFENR1vQrgxArYjcfjD+l0mnt7e9ze3ubExMTHCkKIcKFQoGEYjEQiDAaDDwB2rYCU3++/zWQyNE2TuVyOuq6XvV6vKxqNupLJZFkIQUVRKMsy7Xb7LYCUFWC32WznS0tLj5ubm1xeXubU1BT9fj/7+/s5PDzMQCDAvr4+dnZ2PjY0NJwDsH++hWhbW9tVNpt9Wl1dpa7r1DSNiqJwYGCAbrebTqfzSZKkKwDRz+F3jdlstktN0+5mZ2efhRCvgUDgtaur67m5ufmurq7uEsDYV8EfeLssFwAVb89zAeB3zRe1mgrAA+BXLfOhegA/8fZt9m/cUZutB4A/Qyb7hzbvy7sAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
-
-    <!-- placeholders for the theme switcher -->
     <link rel='stylesheet' id='theme_stylesheet'>
     <link rel='stylesheet' id='icon_stylesheet'>
-    <style>[class*="foundicon-"] {font-family: GeneralFoundicons;font-style: normal;}</style>
-
-    <!-- JSON Editor -->
+    <style>[class*="foundicon-"] {font-family: GeneralFoundicons, serif;font-style: normal;}</style>
     <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
-
-    <!-- LZString compression library - Used to create direct links to the demo - NOT REQUIRED for JSON Editor -->
+    <!--<script src="../dist/nonmin/jsoneditor.js"></script>-->
     <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
-
 </head>
-
 <body>
-<p>&nbsp;</p>
 <div class='container'>
-    <div class='row'>
-        <div class='span8 col-md-8 columns eight large-8 col s8'>
-            <h2>Editor</h2>
+    <div class='row columns md:flex'>
+        <div class='col-8 col-md-8 w-8/12'>
+            <h1>Editor</h1>
             <p>Below is the editor generated from the JSON Schema.</p>
-
             <div id='editor'></div>
         </div>
-        <div class='span4 col-md-4 columns four large-4 col s4'>
+        <div class='col-4 col-md-4 w-4/12'>
             <div>
-                <a href='#' id='direct_link'>Direct Link</a> (preserves schema, value, and options)
+                <a href='#' id='direct_link'>Direct Link</a>
+                <span>(preserves schema, value, and options)</span>
             </div>
-
             <h2>JSON Output</h2>
-            <p>You can also make changes to the JSON here and set the value in the editor by clicking <button class='btn btn-primary' id='setvalue'>Update Form</button></p>
+            <p>You can also make changes to the JSON here and set the value in the editor by clicking</p>
+            <button class='btn btn-primary' id='setvalue'>Update Form</button>
+            <label for="output"></label>
             <textarea id='output' style='width: 100%; height: 300px; font-family: monospace;' class='form-control'></textarea>
-
             <h2>Options</h2>
             <div id='options_holder'>
                 <div>
-                    <label>CSS Framework</label>
+                    <label for="theme_switcher">CSS Framework</label>
                     <select id='theme_switcher' class='form-control browser-default'>
                         <option value='barebones'>Barebones</option>
                         <option value='html'>HTML</option>
+                        <option value='bootstrap4'>Bootstrap 4</option>
                         <option value='spectre'>Spectre</option>
                         <option value='tailwind'>Tailwind</option>
-                        <option value='jqueryui'>jQuery UI</option>
-                        <option value='bootstrap2'>Bootstrap 2</option>
-                        <option value='bootstrap3'>Bootstrap 3</option>
-                        <option value='bootstrap4'>Bootstrap 4</option>
-                        <option value='foundation3'>Foundation 3</option>
-                        <option value='foundation4'>Foundation 4</option>
-                        <option value='foundation5'>Foundation 5</option>
-                        <option value='foundation6'>Foundation 6</option>
-                        <option value='materialize'>Materialize</option>
                     </select>
                 </div>
                 <div>
-                    <label>Icon Library</label>
+                    <label for="icon_switcher">Icon Library</label>
                     <select id='icon_switcher' class='form-control browser-default'>
                         <option value=''>None</option>
-                        <option value='jqueryui'>jQuery UI</option>
-                        <option value='bootstrap2'>Bootstrap 2 Glyphicons</option>
-                        <option value='bootstrap3'>Bootstrap 3 Glyphicons</option>
-                        <option value='foundation2'>Foundicons 2</option>
-                        <option value='foundation3'>Foundicons 3</option>
                         <option value='fontawesome3'>FontAwesome 3</option>
                         <option value='fontawesome4'>FontAwesome 4</option>
                         <option value='fontawesome5'>FontAwesome 5</option>
-                        <option value='materialicons'>Material Icons</option>
+                        <option value='jqueryui'>jQuery UI</option>
+                        <option value='spectre'>Spectre</option>
                     </select>
                 </div>
                 <div>
-                    <label>Object Layout</label>
+                    <label for="object_layout">Object Layout</label>
                     <select id='object_layout' class='form-control browser-default'>
                         <option value='normal'>normal</option>
                         <option value='grid'>grid</option>
                     </select>
                 </div>
                 <div>
-                    <label>Show Errors</label>
+                    <label for="show_errors">Show Errors</label>
                     <select id='show_errors' class='form-control browser-default'>
                         <option value='interaction'>On Interaction</option>
                         <option value='change'>On Field Change</option>
@@ -91,7 +69,7 @@
                     </select>
                 </div>
                 <div>
-                    <label>Boolean options</label>
+                    <label for="boolean_options">Boolean options</label>
                     <select multiple size="9" id="boolean_options" style="width: 100%; height: inherit;" class="form-control browser-default">
                         <option value='required_by_default'>Object properties required by default</option>
                         <option value='display_required_only'>Only show required properties by default</option>
@@ -126,64 +104,23 @@
                     </select>
                 </div>
             </div>
-
             <h2>Validation</h2>
-            <p>This will update whenever the form changes to show validation errors if there are any.</p>
+            <label for="validate">This will update whenever the form changes to show validation errors if there are any.</label>
             <textarea id='validate' style='width: 100%; height: 100px; font-family: monospace;' readonly disabled class='form-control'></textarea>
         </div>
     </div>
-    <div class='row'>
-        <div class='row'>
-            <div class='span12 col-md-12 columns twelve large-12 col s12'>
-                <h2>Schema</h2>
-                <p>You can change the schema and see how the generated form looks.  After you make changes, click <button class='btn btn-primary' id='setschema'>Update Schema</button></p>
-
-                <textarea id='schema' style='width: 100%; height: 450px; font-family: monospace;' class='form-control'></textarea>
-            </div>
-        </div>
-        <div class='row' style='display:none'>
-            <div class='span12 col-md-12 columns twelve large-12 col s12'>
-                <h2>Code</h2>
-      <pre><code>// Set default options
-JSONEditor.defaults.options.theme = 'bootstrap2';
-
-// Initialize the editor
-var editor = new JSONEditor(document.getElementById("editor_holder"),{
-  schema: {
-      type: "object",
-      properties: {
-          name: { "type": "string" }
-      }
-  }
-});
-
-// Set the value
-editor.setValue({
-    name: "John Smith"
-});
-
-// Get the value
-var data = editor.getValue();
-console.log(data.name); // "John Smith"
-
-// Validate
-var errors = editor.validate();
-if(errors.length) {
-  // Not valid
-}
-
-// Listen for changes
-editor.on("change",  function() {
-  // Do something...
-});</code></pre>
-            </div>
+    <div class='row columns'>
+        <div class='col-12 col-md-12 w-12/12'>
+            <h2>Schema</h2>
+            <label for="schema">You can change the schema and see how the generated form looks.  After you make changes, click <button class='btn btn-primary' id='setschema'>Update Schema</button></label>
+            <textarea id='schema' style='width: 100%; height: 450px; font-family: monospace;' class='form-control'></textarea>
         </div>
     </div>
 </div>
-<p>&nbsp;</p>
 <script>
+  /* global LZString */
 (function() {
-    var schema;
+    let schema;
     if(window.location.href.match('[?&]schema=([^&]+)')) {
         try {
             schema = JSON.parse(LZString.decompressFromBase64(window.location.href.match('[?&]schema=([^&]+)')[1]));
@@ -293,38 +230,38 @@ editor.on("change",  function() {
     }
 
     // Divs/textareas on the page
-    var $schema = document.getElementById('schema');
-    var $output = document.getElementById('output');
-    var $editor = document.getElementById('editor');
-    var $validate = document.getElementById('validate');
+    let $schema = document.getElementById('schema');
+    let $output = document.getElementById('output');
+    let $editor = document.getElementById('editor');
+    let $validate = document.getElementById('validate');
 
     // Buttons
-    var $set_schema_button = document.getElementById('setschema');
-    var $set_value_button = document.getElementById('setvalue');
+    let $set_schema_button = document.getElementById('setschema');
+    let $set_value_button = document.getElementById('setvalue');
 
-    var jsoneditor;
+    let jsoneditor;
 
     // Function for loading external javascript(s) during runtime
-    var loadScripts = function(urls, lib) {
+    let loadScripts = function(urls, lib) {
 
-      var head = document.getElementsByTagName('head')[0],
+      let head = document.getElementsByTagName('head')[0],
           scripts = Array.prototype.slice.call(head.getElementsByTagName('script')).map(function(key) {return key.src.toLowerCase();})
 
       if (typeof urls == 'string') urls = [urls];
 
       return new Promise(
-        function(resolve, reject) {
-          for (var i=0;i<urls.length;i++) {
+        function(resolve) {
+          for (let i = 0; i < urls.length; i++) {
 
-            if (scripts.indexOf(urls[i].toLowerCase()) == -1) {
-              var script = document.createElement('script');
+            if (scripts.indexOf(urls[i].toLowerCase()) === -1) {
+              let script = document.createElement('script');
               script.classList.add('external_' + lib)
               script.type = 'text/javascript';
               script.src = urls[i];
               script.async = false;
 
               // If last script, bind the callback event to resolve
-              if (i == urls.length-1) {
+              if (i === urls.length-1) {
                   // Multiple binding for browser compatibility
                   script.onreadystatechange = resolve;
                   script.onload = resolve;
@@ -333,38 +270,39 @@ editor.on("change",  function() {
               // Fire the loading
               head.appendChild(script);
             }
-
           }
         }
       );
     }
 
-    var updateDirectLink = function() {
-        var url = window.location.href.replace(/\?.*/,'');
+    let updateDirectLink = function() {
+        let url = window.location.href.replace(/\?.*/,'');
 
         url += '?schema='+LZString.compressToBase64(JSON.stringify(schema));
         url += '&value='+LZString.compressToBase64(JSON.stringify(jsoneditor.getValue()));
         //url += JSONEditor.plugins.selectize.enable ? '&enable_selectize=1':'';
 
-        var libs = document.getElementById('lib_switcher').querySelectorAll(':checked');
-        var result = Object.keys(libs).map(function(key) {return libs[key].value;});
+        let libs = document.getElementById('lib_switcher').querySelectorAll(':checked');
+        let result = Object.keys(libs).map(function(key) {return libs[key].value;});
         url += '&lib_switcher=' + result.join(',');
 
-        for(var i in JSONEditor.defaults.options) {
-            if(!JSONEditor.defaults.options.hasOwnProperty(i)) continue;
-            if(JSONEditor.defaults.options[i]===false) continue;
-            else if(JSONEditor.defaults.options[i]===true) {
-                url += '&'+i;
+        for(let i in JSONEditor.defaults.options) {
+            if(!JSONEditor.defaults.options.hasOwnProperty(i)) {
+              continue;
             }
-            else {
-                url += '&'+i+'='+JSONEditor.defaults.options[i];
+            if(JSONEditor.defaults.options[i] === false) {
+              continue;
+            } else if(JSONEditor.defaults.options[i] === true) {
+                url += '&' + i;
+            } else {
+                url += '&' + i + '=' + JSONEditor.defaults.options[i];
             }
         }
         document.getElementById('direct_link').href = url;
     };
 
-    var reload = function(keep_value) {
-        var startval = (jsoneditor && keep_value)? jsoneditor.getValue() : window.startval;
+    let reload = function(keep_value) {
+        let startval = (jsoneditor && keep_value)? jsoneditor.getValue() : window.startval;
         window.startval = undefined;
 
         if(jsoneditor) jsoneditor.destroy();
@@ -376,11 +314,11 @@ editor.on("change",  function() {
 
         // When the value of the editor changes, update the JSON output and validation message
         jsoneditor.on('change',function() {
-            var json = jsoneditor.getValue();
+            let json = jsoneditor.getValue();
 
             $output.value = JSON.stringify(json,null,2);
 
-            var validation_errors = jsoneditor.validate();
+            let validation_errors = jsoneditor.validate();
             // Show validation errors if there are any
             if(validation_errors.length) {
                 $validate.value = JSON.stringify(validation_errors,null,2);
@@ -420,42 +358,36 @@ editor.on("change",  function() {
     });
 
     // Set the theme by loading the right stylesheets
-    var setTheme = function(theme,no_reload) {
+    let setTheme = function(theme,no_reload) {
         theme = theme || '';
 
-        var mapping = {
+        let mapping = {
             barebones: '',
             html: '',
-            bootstrap2: 'https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css',
-            bootstrap3: 'https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',
             bootstrap4: 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
-            foundation3: 'https://cdnjs.cloudflare.com/ajax/libs/foundation/3.2.5/stylesheets/foundation.css',
-            foundation4: 'https://cdnjs.cloudflare.com/ajax/libs/foundation/4.3.2/css/foundation.min.css',
-            foundation5: 'https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/css/foundation.min.css',
-            foundation6: 'https://cdnjs.cloudflare.com/ajax/libs/foundation/6.2.4/foundation.min.css',
-            jqueryui: 'https://code.jquery.com/ui/1.10.3/themes/south-street/jquery-ui.css',
-            materialize: 'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css'
+            spectre: 'https://unpkg.com/spectre.css/dist/spectre.min.css',
+            tailwind: 'https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css'
         };
 
         if(typeof mapping[theme] === 'undefined') {
-            theme = 'bootstrap3';
+            theme = 'bootstrap4';
             document.getElementById('theme_switcher').value = theme;
         }
 
-        var scriptMapping = {
+        let scriptMapping = {
             materialize: [
                 'https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js',
                 'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js'
             ]
         }
 
-        var themeScripts = scriptMapping[theme],
+        let themeScripts = scriptMapping[theme],
             head = document.getElementsByTagName('head')[0],
             script;
 
         if (typeof themeScripts == 'string') { themeScripts = [themeScripts]; }
         if (Array.isArray(themeScripts)) {
-            for (var i = 0; i < themeScripts.length; i++) {
+            for (let i = 0; i < themeScripts.length; i++) {
                 script = document.createElement('script');
                 script.type = 'text/javascript';
                 script.src = themeScripts[i];
@@ -472,15 +404,14 @@ editor.on("change",  function() {
     };
 
     // Set the icontheme by loading the right stylesheets
-    var setIconlib = function(iconlib,no_reload) {
+    let setIconlib = function(iconlib,no_reload) {
         iconlib = iconlib || '';
-        var mapping = {
-            foundation2: 'https://cdnjs.cloudflare.com/ajax/libs/foundicons/2.0/stylesheets/general_foundicons.css',
-            foundation3: 'https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css',
+        let mapping = {
             fontawesome3: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.css',
             fontawesome4: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css',
             fontawesome5: 'https://use.fontawesome.com/releases/v5.6.1/css/all.css',
-            materialicons: 'https://fonts.googleapis.com/icon?family=Material+Icons'
+            jqueryui: 'https://code.jquery.com/ui/1.10.3/themes/south-street/jquery-ui.css',
+            spectre: 'https://unpkg.com/spectre.css/dist/spectre-icons.min.css'
         };
 
         JSONEditor.defaults.options.iconlib = iconlib;
@@ -492,11 +423,11 @@ editor.on("change",  function() {
     };
 
     // Set the external library inclusion
-    var setExternalLib = function(lib_name, no_reload) {
+    let setExternalLib = function(lib_name, no_reload) {
 
         lib_name = lib_name || '';
 
-        var scriptMapping = {
+        let scriptMapping = {
           ace_editor: "https://cdn.jsdelivr.net/npm/ace-editor-builds@1.2.4/src-min-noconflict/ace.js",
           choices: "https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js",
           cleavejs: "https://cdn.jsdelivr.net/npm/cleave.js@1.4.7/dist/cleave.min.js",
@@ -517,7 +448,7 @@ editor.on("change",  function() {
           mathjs: "https://cdn.jsdelivr.net/npm/mathjs@5.3.1/dist/math.min.js"
         }
 
-        var styleMapping = {
+        let styleMapping = {
           choices: "https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css",
           sceditor: "https://cdn.jsdelivr.net/npm/sceditor@2.1.3/minified/themes/default.min.css",
           select2: "https://cdn.jsdelivr.net/npm/select2@4.0.6-rc.1/dist/css/select2.min.css",
@@ -529,14 +460,14 @@ editor.on("change",  function() {
           flatpickr: "https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
         }
 
-        var libScripts = scriptMapping[lib_name],
-            libStyles = styleMapping[lib_name],
-            head = document.getElementsByTagName('head')[0],
-            script,style;
+        let libScripts = scriptMapping[lib_name]
+        let libStyles = styleMapping[lib_name]
+        let head = document.getElementsByTagName('head')[0]
+        let style;
 
         if (typeof libStyles == 'string') { libStyles = [libStyles]; }
         if (Array.isArray(libStyles)) {
-            for (var i = 0; i < libStyles.length; i++) {
+            for (let i = 0; i < libStyles.length; i++) {
                 style = document.createElement('link');
                 style.setAttribute('rel', 'stylesheet');
                 style.setAttribute('type', 'text/css');
@@ -548,13 +479,15 @@ editor.on("change",  function() {
 
         if (libScripts !== undefined) {
           loadScripts(libScripts, lib_name).then(
-            function(val) {
+            function() {
               switch (lib_name) {
                 case 'selectize':
                   JSONEditor.plugins.selectize.enable = true;
                   break;
+                case 'whatever':
+                  JSONEditor.plugins.selectize.enable = true;
+                  break;
               }
-
               if(!no_reload) {
                 reload(true);
               }
@@ -567,9 +500,9 @@ editor.on("change",  function() {
         }
     }
 
-    var refreshBooleanOptions = function(no_reload) {
-        var boolean_options = document.getElementById('boolean_options').children;
-        for(var i=0; i<boolean_options.length; i++) {
+    let refreshBooleanOptions = function(no_reload) {
+        let boolean_options = document.getElementById('boolean_options').children;
+        for(let i = 0; i < boolean_options.length; i++) {
             JSONEditor.defaults.options[boolean_options[i].value] = boolean_options[i].selected;
         }
         if(!no_reload) reload(true);
@@ -583,19 +516,19 @@ editor.on("change",  function() {
         setIconlib(this.value);
     });
     document.getElementById('lib_switcher').addEventListener('change',function() {
-      var selected = this.querySelectorAll(':checked'),
+      let selected = this.querySelectorAll(':checked'),
           unselected = this.querySelectorAll(':not(:checked)');
 
-      for (var i=0;i<unselected.length;i++) {
-        var els = document.getElementsByTagName('head')[0].getElementsByClassName('external_' + unselected[i].value);
-        for (var j=els.length-1;j>=0;j--) {
-          if (unselected[i].value == 'selectize') JSONEditor.plugins.selectize.enable = false;
+      for (let i=0; i<unselected.length; i++) {
+        let els = document.getElementsByTagName('head')[0].getElementsByClassName('external_' + unselected[i].value);
+        for (let j = els.length-1;j >= 0; j--) {
+          if (unselected[i].value === 'selectize') JSONEditor.plugins.selectize.enable = false;
           els[j].parentNode.removeChild(els[j]);
         }
       }
 
-      for (var i=0;i<selected.length;i++) {
-        if (selected[i].value == 'selectize') JSONEditor.plugins.selectize.enable = true;
+      for (let i = 0; i < selected.length; i++) {
+        if (selected[i].value === 'selectize') JSONEditor.plugins.selectize.enable = true;
         setExternalLib(selected[i].value);
       }
     });
@@ -627,24 +560,23 @@ editor.on("change",  function() {
     document.getElementById('show_errors').value = (window.location.href.match(/[?&]show_errors=([^&]+)/)||[])[1] || 'interaction';
     JSONEditor.defaults.options.show_errors = document.getElementById('show_errors').value;
 
-    var lib_switcher = document.getElementById('lib_switcher');
-    var lib_switcher_values = ((window.location.href.match(/[?&]lib_switcher=([^&]+)/)||[])[1] || '');
-    if (lib_switcher_values != '') {
+    let lib_switcher = document.getElementById('lib_switcher');
+    let lib_switcher_values = ((window.location.href.match(/[?&]lib_switcher=([^&]+)/)||[])[1] || '');
+    if (lib_switcher_values !== '') {
       lib_switcher_values = lib_switcher_values.split(',');
-      for (var i=0;i< lib_switcher.options.length;i++) {
+      for (let i=0;i< lib_switcher.options.length;i++) {
         lib_switcher.options[i].selected = (lib_switcher_values.indexOf(lib_switcher.options[i].value)>-1);
         if (lib_switcher.options[i].selected) setExternalLib(lib_switcher.options[i].value);
       }
     }
 
-    var boolean_options = document.getElementById('boolean_options').children;
-    for(var i=0; i<boolean_options.length; i++) {
+    let boolean_options = document.getElementById('boolean_options').children;
+    for(let i=0; i<boolean_options.length; i++) {
         if(window.location.href.match(new RegExp('[?&]'+boolean_options[i].getAttribute('value')+'([&=]|$)'))) {
             boolean_options[i].selected = true;
         }
     }
     refreshBooleanOptions(true);
-
     reload();
 })();
 </script>

@@ -36,7 +36,7 @@ export var ChoicesEditor = SelectEditor.extend({
   onWatchedFieldChange: function () {
     this._super()
     if (this.choices_instance) {
-      var self = this; var choicesList = this.enum_options.map(function (v, i) { return {value: v, label: self.enum_display[i]} })
+      var self = this; var choicesList = this.enum_options.map(function (v, i) { return { value: v, label: self.enum_display[i] } })
       this.choices_instance.setChoices(choicesList, 'value', 'label', true)
       this.choices_instance.setChoiceByValue(this.value + '') // Set new selection
     }

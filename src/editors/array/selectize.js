@@ -75,7 +75,7 @@ export var ArraySelectizeEditor = MultiSelectEditor.extend({
     // Update Schema enum to prevent triggering "Value must be one of the enumerated values"
     this.schema.items.enum.push(value)
     // Add new value and label to selectize
-    this.selectize_instance.addOption({text: value, value: value})
+    this.selectize_instance.addOption({ text: value, value: value })
 
     return true
   },
