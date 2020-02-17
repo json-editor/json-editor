@@ -73,195 +73,34 @@ export const Validator = Class.extend({
     // Number Specific Validation
     if (typeof value === 'number') {
       // `multipleOf` and `divisibleBy`
-      if (schema.multipleOf || schema.divisibleBy) {
-        var divisor = schema.multipleOf || schema.divisibleBy
-        // Vanilla JS, prone to floating point rounding errors (e.g. 1.14 / .01 == 113.99999)
-        valid = (value / divisor === Math.floor(value / divisor))
-
-        // Use math.js is available
-        if (window.math) {
-          valid = window.math.mod(window.math.bignumber(value), window.math.bignumber(divisor)).equals(0)
-        } else if (window.Decimal) {
-          // Use decimal.js is available
-          valid = (new window.Decimal(value)).mod(new window.Decimal(divisor)).equals(0)
-        }
-
-        if (!valid) {
-          errors.push({
-            path: path,
-            property: schema.multipleOf ? 'multipleOf' : 'divisibleBy',
-            message: this.translate('error_multipleOf', [divisor])
-          })
-        }
-      }
-
       // `maximum`
-      if (schema.hasOwnProperty('maximum')) {
-        // Vanilla JS, prone to floating point rounding errors (e.g. .999999999999999 == 1)
-        valid = schema.exclusiveMaximum ? (value < schema.maximum) : (value <= schema.maximum)
-
-        // Use math.js is available
-        if (window.math) {
-          valid = window.math[schema.exclusiveMaximum ? 'smaller' : 'smallerEq'](
-            window.math.bignumber(value),
-            window.math.bignumber(schema.maximum)
-          )
-        } else if (window.Decimal) {
-          // Use Decimal.js if available
-          valid = (new window.Decimal(value))[schema.exclusiveMaximum ? 'lt' : 'lte'](new window.Decimal(schema.maximum))
-        }
-
-        if (!valid) {
-          errors.push({
-            path: path,
-            property: 'maximum',
-            message: this.translate(
-              (schema.exclusiveMaximum ? 'error_maximum_excl' : 'error_maximum_incl'),
-              [schema.maximum]
-            )
-          })
-        }
-      }
-
       // `minimum`
-      if (schema.hasOwnProperty('minimum')) {
-        // Vanilla JS, prone to floating point rounding errors (e.g. .999999999999999 == 1)
-        valid = schema.exclusiveMinimum ? (value > schema.minimum) : (value >= schema.minimum)
-
-        // Use math.js is available
-        if (window.math) {
-          valid = window.math[schema.exclusiveMinimum ? 'larger' : 'largerEq'](
-            window.math.bignumber(value),
-            window.math.bignumber(schema.minimum)
-          )
-        // Use Decimal.js if available
-        } else if (window.Decimal) {
-          valid = (new window.Decimal(value))[schema.exclusiveMinimum ? 'gt' : 'gte'](new window.Decimal(schema.minimum))
+      Object.keys(schema).forEach(key => {
+        if (this._validateNumberSubSchema[key]) {
+          errors.push(...this._validateNumberSubSchema[key].call(self, schema, value, path))
         }
-
-        if (!valid) {
-          errors.push({
-            path: path,
-            property: 'minimum',
-            message: this.translate(
-              (schema.exclusiveMinimum ? 'error_minimum_excl' : 'error_minimum_incl'),
-              [schema.minimum]
-            )
-          })
-        }
-      }
+      })
     // String specific validation
     } else if (typeof value === 'string') {
       // `maxLength`
-      if (schema.maxLength) {
-        if ((value + '').length > schema.maxLength) {
-          errors.push({
-            path: path,
-            property: 'maxLength',
-            message: this.translate('error_maxLength', [schema.maxLength])
-          })
-        }
-      }
-
       // `minLength`
-      if (schema.minLength) {
-        if ((value + '').length < schema.minLength) {
-          errors.push({
-            path: path,
-            property: 'minLength',
-            message: this.translate((schema.minLength === 1 ? 'error_notempty' : 'error_minLength'), [schema.minLength])
-          })
-        }
-      }
-
       // `pattern`
-      if (schema.pattern) {
-        if (!(new RegExp(schema.pattern)).test(value)) {
-          errors.push({
-            path: path,
-            property: 'pattern',
-            message: (schema.options && schema.options.patternmessage) ? schema.options.patternmessage : this.translate('error_pattern', [schema.pattern])
-          })
+      Object.keys(schema).forEach(key => {
+        if (this._validateStringSubSchema[key]) {
+          errors.push(...this._validateStringSubSchema[key].call(self, schema, value, path))
         }
-      }
+      })
     // Array specific validation
     } else if (typeof value === 'object' && value !== null && Array.isArray(value)) {
       // `items` and `additionalItems`
-      if (schema.items) {
-        // `items` is an array
-        if (Array.isArray(schema.items)) {
-          for (i = 0; i < value.length; i++) {
-            // If this item has a specific schema tied to it
-            // Validate against it
-            if (schema.items[i]) {
-              errors = errors.concat(this._validateSchema(schema.items[i], value[i], path + '.' + i))
-            // If all additional items are allowed
-            } else if (schema.additionalItems === true) {
-              break
-            // If additional items is a schema
-            // TODO: Incompatibility between version 3 and 4 of the spec
-            } else if (schema.additionalItems) {
-              errors = errors.concat(this._validateSchema(schema.additionalItems, value[i], path + '.' + i))
-            // If no additional items are allowed
-            } else if (schema.additionalItems === false) {
-              errors.push({
-                path: path,
-                property: 'additionalItems',
-                message: this.translate('error_additionalItems')
-              })
-              break
-            // Default for `additionalItems` is an empty schema
-            } else {
-              break
-            }
-          }
-        // `items` is a schema
-        } else {
-          // Each item in the array must validate against the schema
-          for (i = 0; i < value.length; i++) {
-            errors = errors.concat(this._validateSchema(schema.items, value[i], path + '.' + i))
-          }
-        }
-      }
-
       // `maxItems`
-      if (schema.maxItems) {
-        if (value.length > schema.maxItems) {
-          errors.push({
-            path: path,
-            property: 'maxItems',
-            message: this.translate('error_maxItems', [schema.maxItems])
-          })
-        }
-      }
-
       // `minItems`
-      if (schema.minItems) {
-        if (value.length < schema.minItems) {
-          errors.push({
-            path: path,
-            property: 'minItems',
-            message: this.translate('error_minItems', [schema.minItems])
-          })
-        }
-      }
-
       // `uniqueItems`
-      if (schema.uniqueItems) {
-        var seen = {}
-        for (i = 0; i < value.length; i++) {
-          valid = JSON.stringify(value[i])
-          if (seen[valid]) {
-            errors.push({
-              path: path,
-              property: 'uniqueItems',
-              message: this.translate('error_uniqueItems')
-            })
-            break
-          }
-          seen[valid] = true
+      Object.keys(schema).forEach(key => {
+        if (this._validateArraySubSchema[key]) {
+          errors.push(...this._validateArraySubSchema[key].call(self, schema, value, path))
         }
-      }
+      })
     // Object specific validation
     } else if (typeof value === 'object' && value !== null) {
       // `maxProperties`
@@ -671,6 +510,211 @@ export const Validator = Class.extend({
             message: this.translate('error_disallow', [schema.disallow])
           })
         }
+      }
+      return errors
+    }
+  },
+  _validateNumberSubSchema: {
+    multipleOf: function (schema, value, path) { return this._validateNumberSubSchemaMultipleDivisible(schema, value, path) },
+    divisibleBy: function (schema, value, path) { return this._validateNumberSubSchemaMultipleDivisible(schema, value, path) },
+    maximum: function (schema, value, path) {
+      // Vanilla JS, prone to floating point rounding errors (e.g. .999999999999999 == 1)
+      let valid = schema.exclusiveMaximum ? (value < schema.maximum) : (value <= schema.maximum)
+      const errors = []
+
+      // Use math.js is available
+      if (window.math) {
+        valid = window.math[schema.exclusiveMaximum ? 'smaller' : 'smallerEq'](
+          window.math.bignumber(value),
+          window.math.bignumber(schema.maximum)
+        )
+      } else if (window.Decimal) {
+        // Use Decimal.js if available
+        valid = (new window.Decimal(value))[schema.exclusiveMaximum ? 'lt' : 'lte'](new window.Decimal(schema.maximum))
+      }
+
+      if (!valid) {
+        errors.push({
+          path: path,
+          property: 'maximum',
+          message: this.translate(
+            (schema.exclusiveMaximum ? 'error_maximum_excl' : 'error_maximum_incl'),
+            [schema.maximum]
+          )
+        })
+      }
+      return errors
+    },
+    minimum: function (schema, value, path) {
+      // Vanilla JS, prone to floating point rounding errors (e.g. .999999999999999 == 1)
+      let valid = schema.exclusiveMinimum ? (value > schema.minimum) : (value >= schema.minimum)
+      const errors = []
+
+      // Use math.js is available
+      if (window.math) {
+        valid = window.math[schema.exclusiveMinimum ? 'larger' : 'largerEq'](
+          window.math.bignumber(value),
+          window.math.bignumber(schema.minimum)
+        )
+        // Use Decimal.js if available
+      } else if (window.Decimal) {
+        valid = (new window.Decimal(value))[schema.exclusiveMinimum ? 'gt' : 'gte'](new window.Decimal(schema.minimum))
+      }
+
+      if (!valid) {
+        errors.push({
+          path: path,
+          property: 'minimum',
+          message: this.translate(
+            (schema.exclusiveMinimum ? 'error_minimum_excl' : 'error_minimum_incl'),
+            [schema.minimum]
+          )
+        })
+      }
+      return errors
+    }
+  },
+  _validateNumberSubSchemaMultipleDivisible: function (schema, value, path) {
+    const divisor = schema.multipleOf || schema.divisibleBy
+    const errors = []
+    // Vanilla JS, prone to floating point rounding errors (e.g. 1.14 / .01 == 113.99999)
+    let valid = (value / divisor === Math.floor(value / divisor))
+
+    // Use math.js is available
+    if (window.math) {
+      valid = window.math.mod(window.math.bignumber(value), window.math.bignumber(divisor)).equals(0)
+    } else if (window.Decimal) {
+      // Use decimal.js is available
+      valid = (new window.Decimal(value)).mod(new window.Decimal(divisor)).equals(0)
+    }
+
+    if (!valid) {
+      errors.push({
+        path: path,
+        property: schema.multipleOf ? 'multipleOf' : 'divisibleBy',
+        message: this.translate('error_multipleOf', [divisor])
+      })
+    }
+    return errors
+  },
+  _validateStringSubSchema: {
+    maxLength: function (schema, value, path) {
+      const errors = []
+      if (schema.maxLength) {
+        if ((value + '').length > schema.maxLength) {
+          errors.push({
+            path: path,
+            property: 'maxLength',
+            message: this.translate('error_maxLength', [schema.maxLength])
+          })
+        }
+      }
+      return errors
+    },
+    // `minLength`
+    minLength: function (schema, value, path) {
+      const errors = []
+      if (schema.minLength) {
+        if ((value + '').length < schema.minLength) {
+          errors.push({
+            path: path,
+            property: 'minLength',
+            message: this.translate((schema.minLength === 1 ? 'error_notempty' : 'error_minLength'), [schema.minLength])
+          })
+        }
+      }
+      return errors
+    },
+    // `pattern`
+    pattern: function (schema, value, path) {
+      const errors = []
+      if (schema.pattern) {
+        if (!(new RegExp(schema.pattern)).test(value)) {
+          errors.push({
+            path: path,
+            property: 'pattern',
+            message: (schema.options && schema.options.patternmessage) ? schema.options.patternmessage : this.translate('error_pattern', [schema.pattern])
+          })
+        }
+      }
+      return errors
+    }
+  },
+  _validateArraySubSchema: {
+    items: function (schema, value, path) {
+      const errors = []
+      if (Array.isArray(schema.items)) {
+        for (let i = 0; i < value.length; i++) {
+          // If this item has a specific schema tied to it
+          // Validate against it
+          if (schema.items[i]) {
+            errors.push(...this._validateSchema(schema.items[i], value[i], path + '.' + i))
+          // If all additional items are allowed
+          } else if (schema.additionalItems === true) {
+            break
+          // If additional items is a schema
+          // TODO: Incompatibility between version 3 and 4 of the spec
+          } else if (schema.additionalItems) {
+            errors.push(...this._validateSchema(schema.additionalItems, value[i], path + '.' + i))
+          // If no additional items are allowed
+          } else if (schema.additionalItems === false) {
+            errors.push({
+              path: path,
+              property: 'additionalItems',
+              message: this.translate('error_additionalItems')
+            })
+            break
+          // Default for `additionalItems` is an empty schema
+          } else {
+            break
+          }
+        }
+      // `items` is a schema
+      } else {
+        // Each item in the array must validate against the schema
+        for (let i = 0; i < value.length; i++) {
+          errors.push(...this._validateSchema(schema.items, value[i], path + '.' + i))
+        }
+      }
+      return errors
+    },
+    maxItems: function (schema, value, path) {
+      const errors = []
+      if (value.length > schema.maxItems) {
+        errors.push({
+          path: path,
+          property: 'maxItems',
+          message: this.translate('error_maxItems', [schema.maxItems])
+        })
+      }
+      return errors
+    },
+    minItems: function (schema, value, path) {
+      const errors = []
+      if (value.length < schema.minItems) {
+        errors.push({
+          path: path,
+          property: 'minItems',
+          message: this.translate('error_minItems', [schema.minItems])
+        })
+      }
+      return errors
+    },
+    uniqueItems: function (schema, value, path) {
+      const errors = []
+      const seen = {}
+      let valid
+      for (let i = 0; i < value.length; i++) {
+        valid = JSON.stringify(value[i])
+        if (seen[valid]) {
+          errors.push({
+            path: path,
+            property: 'uniqueItems',
+            message: this.translate('error_uniqueItems')
+          })
+          break
+        }
+        seen[valid] = true
       }
       return errors
     }
