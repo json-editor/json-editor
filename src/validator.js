@@ -43,7 +43,6 @@ export const Validator = Class.extend({
   _validateSchema: function (schema, value, path) {
     const self = this
     const errors = []
-
     path = path || 'root'
 
     // Work on a copy of the schema
@@ -52,7 +51,6 @@ export const Validator = Class.extend({
     /*
      * Type Agnostic Validation
      */
-
     // Version 3 `required` and `required_by_default`
     if (typeof value === 'undefined') {
       return this._validateV3Required(schema, value, path)
@@ -67,79 +65,12 @@ export const Validator = Class.extend({
     /*
      * Type Specific Validation
      */
-
-    // Number Specific Validation
-    if (typeof value === 'number') {
-      // `multipleOf` and `divisibleBy`
-      // `maximum`
-      // `minimum`
-      Object.keys(schema).forEach(key => {
-        if (this._validateNumberSubSchema[key]) {
-          errors.push(...this._validateNumberSubSchema[key].call(self, schema, value, path))
-        }
-      })
-    // String specific validation
-    } else if (typeof value === 'string') {
-      // `maxLength`
-      // `minLength`
-      // `pattern`
-      Object.keys(schema).forEach(key => {
-        if (this._validateStringSubSchema[key]) {
-          errors.push(...this._validateStringSubSchema[key].call(self, schema, value, path))
-        }
-      })
-    // Array specific validation
-    } else if (typeof value === 'object' && value !== null && Array.isArray(value)) {
-      // `items` and `additionalItems`
-      // `maxItems`
-      // `minItems`
-      // `uniqueItems`
-      Object.keys(schema).forEach(key => {
-        if (this._validateArraySubSchema[key]) {
-          errors.push(...this._validateArraySubSchema[key].call(self, schema, value, path))
-        }
-      })
-    // Object specific validation
-    } else if (typeof value === 'object' && value !== null) {
-      const validatedProperties = {}
-      // `maxProperties`
-      // `minProperties`
-      //  Version 4 `required`
-      // `properties`
-      // `patternProperties`
-      Object.keys(schema).forEach(key => {
-        if (this._validateObjectSubSchema[key]) {
-          errors.push(...this._validateObjectSubSchema[key].call(self, schema, value, path, validatedProperties))
-        }
-      })
-
-      // The no_additional_properties option currently doesn't work with extended schemas that use oneOf or anyOf
-      if (typeof schema.additionalProperties === 'undefined' && this.jsoneditor.options.no_additional_properties && !schema.oneOf && !schema.anyOf) {
-        schema.additionalProperties = false
-      }
-
-      // `additionalProperties`
-      // `dependencies`
-      Object.keys(schema).forEach(key => {
-        if (typeof this._validateObjectSubSchema2[key] !== 'undefined') {
-          errors.push(...this._validateObjectSubSchema2[key].call(self, schema, value, path, validatedProperties))
-        }
-      })
-    }
+    errors.push(...this._validateByValueType(schema, value, path))
 
     if (schema.links) {
       for (let m = 0; m < schema.links.length; m++) {
         if (schema.links[m].rel && schema.links[m].rel.toLowerCase() === 'describedby') {
-          const href = schema.links[m].href
-          const data = this.jsoneditor.root.getValue()
-          // var template = new UriTemplate(href); //preprocessURI(href));
-          // var ref = template.fillFromObject(data);
-          const template = this.jsoneditor.compileTemplate(href, this.jsoneditor.template)
-          const ref = document.location.origin + document.location.pathname + template(data)
-
-          schema.links = schema.links.slice(0, m).concat(schema.links.slice(m + 1))
-          schema = $extend({}, schema, this.jsoneditor.refs[ref])
-
+          schema = this._expandSchemaLink(schema, m)
           errors.push(...this._validateSchema(schema, value, path, this.translate))
         }
       }
@@ -150,22 +81,22 @@ export const Validator = Class.extend({
       errors.push(...this._validateDateTimeSubSchema.call(self, schema, value, path))
     }
 
-    // Internal validators using the custom validator format
-    errors.push(...ipValidator.call(self, schema, value, path, self.translate))
-
-    // Custom type validation (global)
-    $each(self.defaults.custom_validators, function (i, validator) {
-      errors.push(...validator.call(self, schema, value, path))
-    })
-    // Custom type validation (instance specific)
-    if (this.options.custom_validators) {
-      $each(this.options.custom_validators, function (i, validator) {
-        errors.push(...validator.call(self, schema, value, path))
-      })
-    }
+    // custom validator
+    errors.push(...this._validateCustomValidator(schema, value, path))
 
     // Remove duplicate errors and add "errorcount" property
     return this._removeDuplicateErrors(errors)
+  },
+  _expandSchemaLink: function (schema, m) {
+    const href = schema.links[m].href
+    const data = this.jsoneditor.root.getValue()
+    // var template = new UriTemplate(href); //preprocessURI(href));
+    // var ref = template.fillFromObject(data);
+    const template = this.jsoneditor.compileTemplate(href, this.jsoneditor.template)
+    const ref = document.location.origin + document.location.pathname + template(data)
+
+    schema.links = schema.links.slice(0, m).concat(schema.links.slice(m + 1))
+    return $extend({}, schema, this.jsoneditor.refs[ref])
   },
   _validateV3Required: function (schema, value, path) {
     const errors = []
@@ -335,6 +266,70 @@ export const Validator = Class.extend({
       }
       return errors
     }
+  },
+  _validateByValueType: function (schema, value, path) {
+    const errors = []
+    const self = this
+    if (value === null) return errors
+    // Number Specific Validation
+    if (typeof value === 'number') {
+      // `multipleOf` and `divisibleBy`
+      // `maximum`
+      // `minimum`
+      Object.keys(schema).forEach(key => {
+        if (this._validateNumberSubSchema[key]) {
+          errors.push(...this._validateNumberSubSchema[key].call(self, schema, value, path))
+        }
+      })
+    // String specific validation
+    } else if (typeof value === 'string') {
+      // `maxLength`
+      // `minLength`
+      // `pattern`
+      Object.keys(schema).forEach(key => {
+        if (this._validateStringSubSchema[key]) {
+          errors.push(...this._validateStringSubSchema[key].call(self, schema, value, path))
+        }
+      })
+    // Array specific validation
+    } else if (Array.isArray(value)) {
+      // `items` and `additionalItems`
+      // `maxItems`
+      // `minItems`
+      // `uniqueItems`
+      Object.keys(schema).forEach(key => {
+        if (this._validateArraySubSchema[key]) {
+          errors.push(...this._validateArraySubSchema[key].call(self, schema, value, path))
+        }
+      })
+    // Object specific validation
+    } else if (typeof value === 'object') {
+      const validatedProperties = {}
+      // `maxProperties`
+      // `minProperties`
+      //  Version 4 `required`
+      // `properties`
+      // `patternProperties`
+      Object.keys(schema).forEach(key => {
+        if (this._validateObjectSubSchema[key]) {
+          errors.push(...this._validateObjectSubSchema[key].call(self, schema, value, path, validatedProperties))
+        }
+      })
+
+      // The no_additional_properties option currently doesn't work with extended schemas that use oneOf or anyOf
+      if (typeof schema.additionalProperties === 'undefined' && this.jsoneditor.options.no_additional_properties && !schema.oneOf && !schema.anyOf) {
+        schema.additionalProperties = false
+      }
+
+      // `additionalProperties`
+      // `dependencies`
+      Object.keys(schema).forEach(key => {
+        if (typeof this._validateObjectSubSchema2[key] !== 'undefined') {
+          errors.push(...this._validateObjectSubSchema2[key].call(self, schema, value, path, validatedProperties))
+        }
+      })
+    }
+    return errors
   },
   _validateNumberSubSchema: {
     multipleOf: function (schema, value, path) { return this._validateNumberSubSchemaMultipleDivisible(schema, value, path) },
@@ -754,6 +749,24 @@ export const Validator = Class.extend({
     } else if (ed) {
       // Flatpickr validation
       errors.push(..._validateFlatPicker(schema, value, path, ed))
+    }
+    return errors
+  },
+  _validateCustomValidator: function (schema, value, path) {
+    const errors = []
+    const self = this
+    // Internal validators using the custom validator format
+    errors.push(...ipValidator.call(self, schema, value, path, self.translate))
+
+    // Custom type validation (global)
+    $each(self.defaults.custom_validators, function (i, validator) {
+      errors.push(...validator.call(self, schema, value, path))
+    })
+    // Custom type validation (instance specific)
+    if (this.options.custom_validators) {
+      $each(this.options.custom_validators, function (i, validator) {
+        errors.push(...validator.call(self, schema, value, path))
+      })
     }
     return errors
   },
