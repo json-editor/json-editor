@@ -12,30 +12,30 @@ export const Validator = Class.extend({
   },
   fitTest: function (value, givenSchema, weight) {
     weight = typeof weight === 'undefined' ? 10000000 : weight
-    var matchedProperties = 0
-    var extraProperties = 0
+    const fit = { match: 0, extra: 0 }
     if (typeof value === 'object' && value !== null) {
       // Work on a copy of the schema
-      var schema = typeof givenSchema === 'undefined' ? $extend({}, this.jsoneditor.expandRefs(this.schema)) : givenSchema
+      const properties = this._getSchema(givenSchema).properties
 
-      for (var i in schema.properties) {
-        if (!schema.properties.hasOwnProperty(i)) {
-          extraProperties += weight
+      for (const i in properties) {
+        if (!properties.hasOwnProperty(i)) {
+          fit.extra += weight
           continue
         }
-        if (typeof value[i] === 'object' && typeof schema.properties[i] === 'object' && typeof schema.properties[i].properties === 'object') {
-          var result = this.fitTest(value[i], schema.properties[i], weight / 100)
-          matchedProperties += result.match
-          extraProperties += result.extra
+        if (typeof value[i] === 'object' && typeof properties[i] === 'object' && typeof properties[i].properties === 'object') {
+          const result = this.fitTest(value[i], properties[i], weight / 100)
+          fit.match += result.match
+          fit.extra += result.extra
         }
         if (typeof value[i] !== 'undefined') {
-          matchedProperties += weight
+          fit.match += weight
         }
       }
     }
-    return {
-      match: matchedProperties, extra: extraProperties
-    }
+    return fit
+  },
+  _getSchema: function (schema) {
+    return typeof schema === 'undefined' ? $extend({}, this.jsoneditor.expandRefs(this.schema)) : schema
   },
   validate: function (value) {
     return this._validateSchema(this.schema, value)
@@ -111,12 +111,9 @@ export const Validator = Class.extend({
   },
   _validateSubSchema: {
     enum: function (schema, value, path) {
-      let valid = false
       const stringified = JSON.stringify(value)
       const errors = []
-      for (let i = 0; i < schema['enum'].length; i++) {
-        if (stringified === JSON.stringify(schema['enum'][i])) valid = true
-      }
+      const valid = schema.enum.some(e => stringified === JSON.stringify(e))
       if (!valid) {
         errors.push({
           path: path,
@@ -127,28 +124,22 @@ export const Validator = Class.extend({
       return errors
     },
     extends: function (schema, value, path) {
-      const errors = []
-      for (let i = 0; i < schema['extends'].length; i++) {
-        errors.push(...this._validateSchema(schema['extends'][i], value, path))
+      const validate = (errors, e) => {
+        errors.push(...this._validateSchema(e, value, path))
+        return errors
       }
-      return errors
+      return schema.extends.reduce(validate, [])
     },
     allOf: function (schema, value, path) {
-      const errors = []
-      for (let i = 0; i < schema.allOf.length; i++) {
-        errors.push(...this._validateSchema(schema.allOf[i], value, path))
+      const validate = (errors, e) => {
+        errors.push(...this._validateSchema(e, value, path))
+        return errors
       }
-      return errors
+      return schema.allOf.reduce(validate, [])
     },
     anyOf: function (schema, value, path) {
-      let valid = false
       const errors = []
-      for (let i = 0; i < schema.anyOf.length; i++) {
-        if (!this._validateSchema(schema.anyOf[i], value, path).length) {
-          valid = true
-          break
-        }
-      }
+      const valid = schema.anyOf.some(e => !this._validateSchema(e, value, path).length)
       if (!valid) {
         errors.push({
           path: path,
@@ -162,18 +153,18 @@ export const Validator = Class.extend({
       let valid = 0
       const oneofErrors = []
       const errors = []
-      for (let i = 0; i < schema.oneOf.length; i++) {
+      schema.oneOf.forEach((o, i) => {
         // Set the error paths to be path.oneOf[i].rest.of.path
-        const tmp = this._validateSchema(schema.oneOf[i], value, path)
+        const tmp = this._validateSchema(o, value, path)
         if (!tmp.length) {
           valid++
         }
 
-        for (let j = 0; j < tmp.length; j++) {
-          tmp[j].path = path + '.oneOf[' + i + ']' + tmp[j].path.substr(path.length)
-        }
+        tmp.forEach(e => {
+          e.path = `${path}.oneOf[${i}]${e.path.substr(path.length)}`
+        })
         oneofErrors.push(...tmp)
-      }
+      })
       if (valid !== 1) {
         errors.push({
           path: path,
@@ -200,13 +191,7 @@ export const Validator = Class.extend({
       let valid
       // Union type
       if (Array.isArray(schema.type)) {
-        valid = false
-        for (let i = 0; i < schema.type.length; i++) {
-          if (this._checkType(schema.type[i], value)) {
-            valid = true
-            break
-          }
-        }
+        valid = schema.type.some(e => this._checkType(e, value))
         if (!valid) {
           errors.push({
             path: path,
@@ -240,14 +225,8 @@ export const Validator = Class.extend({
       const errors = []
       // Union type
       if (Array.isArray(schema.disallow)) {
-        let valid = true
-        for (let i = 0; i < schema.disallow.length; i++) {
-          if (this._checkType(schema.disallow[i], value)) {
-            valid = false
-            break
-          }
-        }
-        if (!valid) {
+        const invalid = schema.disallow.some(e => this._checkType(e, value))
+        if (invalid) {
           errors.push({
             path: path,
             property: 'disallow',
