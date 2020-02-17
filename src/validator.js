@@ -396,42 +396,36 @@ export const Validator = Class.extend({
   _validateStringSubSchema: {
     maxLength: function (schema, value, path) {
       const errors = []
-      if (schema.maxLength) {
-        if ((value + '').length > schema.maxLength) {
-          errors.push({
-            path: path,
-            property: 'maxLength',
-            message: this.translate('error_maxLength', [schema.maxLength])
-          })
-        }
+      if ((value + '').length > schema.maxLength) {
+        errors.push({
+          path: path,
+          property: 'maxLength',
+          message: this.translate('error_maxLength', [schema.maxLength])
+        })
       }
       return errors
     },
     // `minLength`
     minLength: function (schema, value, path) {
       const errors = []
-      if (schema.minLength) {
-        if ((value + '').length < schema.minLength) {
-          errors.push({
-            path: path,
-            property: 'minLength',
-            message: this.translate((schema.minLength === 1 ? 'error_notempty' : 'error_minLength'), [schema.minLength])
-          })
-        }
+      if ((value + '').length < schema.minLength) {
+        errors.push({
+          path: path,
+          property: 'minLength',
+          message: this.translate((schema.minLength === 1 ? 'error_notempty' : 'error_minLength'), [schema.minLength])
+        })
       }
       return errors
     },
     // `pattern`
     pattern: function (schema, value, path) {
       const errors = []
-      if (schema.pattern) {
-        if (!(new RegExp(schema.pattern)).test(value)) {
-          errors.push({
-            path: path,
-            property: 'pattern',
-            message: (schema.options && schema.options.patternmessage) ? schema.options.patternmessage : this.translate('error_pattern', [schema.pattern])
-          })
-        }
+      if (!(new RegExp(schema.pattern)).test(value)) {
+        errors.push({
+          path: path,
+          property: 'pattern',
+          message: (schema.options && schema.options.patternmessage) ? schema.options.patternmessage : this.translate('error_pattern', [schema.pattern])
+        })
       }
       return errors
     }
@@ -468,9 +462,9 @@ export const Validator = Class.extend({
       // `items` is a schema
       } else {
         // Each item in the array must validate against the schema
-        for (let i = 0; i < value.length; i++) {
-          errors.push(...this._validateSchema(schema.items, value[i], path + '.' + i))
-        }
+        value.forEach((e, i) => {
+          errors.push(...this._validateSchema(schema.items, e, path + '.' + i))
+        })
       }
       return errors
     },
@@ -499,9 +493,8 @@ export const Validator = Class.extend({
     uniqueItems: function (schema, value, path) {
       const errors = []
       const seen = {}
-      let valid
       for (let i = 0; i < value.length; i++) {
-        valid = JSON.stringify(value[i])
+        const valid = JSON.stringify(value[i])
         if (seen[valid]) {
           errors.push({
             path: path,
@@ -518,12 +511,7 @@ export const Validator = Class.extend({
   _validateObjectSubSchema: {
     maxProperties: function (schema, value, path) {
       const errors = []
-      let valid = 0
-      for (let i in value) {
-        if (!value.hasOwnProperty(i)) continue
-        valid++
-      }
-      if (valid > schema.maxProperties) {
+      if (Object.keys(value).length > schema.maxProperties) {
         errors.push({
           path: path,
           property: 'maxProperties',
@@ -534,12 +522,7 @@ export const Validator = Class.extend({
     },
     minProperties: function (schema, value, path) {
       const errors = []
-      let valid = 0
-      for (let i in value) {
-        if (!value.hasOwnProperty(i)) continue
-        valid++
-      }
-      if (valid < schema.minProperties) {
+      if (Object.keys(value).length < schema.minProperties) {
         errors.push({
           path: path,
           property: 'minProperties',
@@ -551,45 +534,41 @@ export const Validator = Class.extend({
     required: function (schema, value, path) {
       const errors = []
       if (Array.isArray(schema.required)) {
-        for (let i = 0; i < schema.required.length; i++) {
-          if (typeof value[schema.required[i]] === 'undefined') {
-            var editor = this.jsoneditor.getEditor(path + '.' + schema.required[i])
+        schema.required.forEach(e => {
+          if (typeof value[e] === 'undefined') {
+            var editor = this.jsoneditor.getEditor(path + '.' + e)
             // Ignore required error if editor is of type "button" or "info"
-            if (editor && ['button', 'info'].indexOf(editor.schema.format || editor.schema.type) !== -1) continue
+            if (editor && ['button', 'info'].indexOf(editor.schema.format || editor.schema.type) !== -1) return
             errors.push({
               path: path,
               property: 'required',
-              message: this.translate('error_required', [schema.required[i]])
+              message: this.translate('error_required', [e])
             })
           }
-        }
+        })
       }
       return errors
     },
     properties: function (schema, value, path, validatedProperties) {
       const errors = []
-      for (let i in schema.properties) {
-        if (!schema.properties.hasOwnProperty(i)) continue
-        validatedProperties[i] = true
-        errors.push(...this._validateSchema(schema.properties[i], value[i], path + '.' + i))
-      }
+      Object.entries(schema.properties).forEach(([key, prop]) => {
+        validatedProperties[key] = true
+        errors.push(...this._validateSchema(prop, value[key], path + '.' + key))
+      })
       return errors
     },
     patternProperties: function (schema, value, path, validatedProperties) {
       const errors = []
-      for (let i in schema.patternProperties) {
-        if (!schema.patternProperties.hasOwnProperty(i)) continue
-        var regex = new RegExp(i)
-
+      Object.entries(schema.patternProperties).forEach(([i, prop]) => {
+        const regex = new RegExp(i)
         // Check which properties match
-        for (let j in value) {
-          if (!value.hasOwnProperty(j)) continue
+        Object.entries(value).forEach(([j, v]) => {
           if (regex.test(j)) {
             validatedProperties[j] = true
-            errors.push(...this._validateSchema(schema.patternProperties[i], value[j], path + '.' + j))
+            errors.push(...this._validateSchema(prop, v, path + '.' + j))
           }
-        }
-      }
+        })
+      })
       return errors
     }
   },
@@ -621,28 +600,26 @@ export const Validator = Class.extend({
     },
     dependencies: function (schema, value, path) {
       const errors = []
-      for (let i in schema.dependencies) {
-        if (!schema.dependencies.hasOwnProperty(i)) continue
-
+      Object.entries(schema.dependencies).forEach(([i, dep]) => {
         // Doesn't need to meet the dependency
-        if (typeof value[i] === 'undefined') continue
+        if (typeof value[i] === 'undefined') return
 
         // Property dependency
-        if (Array.isArray(schema.dependencies[i])) {
-          for (let j = 0; j < schema.dependencies[i].length; j++) {
-            if (typeof value[schema.dependencies[i][j]] === 'undefined') {
+        if (Array.isArray(dep)) {
+          dep.forEach(d => {
+            if (typeof value[d] === 'undefined') {
               errors.push({
                 path: path,
                 property: 'dependencies',
-                message: this.translate('error_dependency', [schema.dependencies[i][j]])
+                message: this.translate('error_dependency', [d])
               })
             }
-          }
+          })
         // Schema dependency
         } else {
-          errors.push(...this._validateSchema(schema.dependencies[i], value, path))
+          errors.push(...this._validateSchema(dep, value, path))
         }
-      }
+      })
       return errors
     }
   },
@@ -671,12 +648,12 @@ export const Validator = Class.extend({
     const _validateFlatPicker = (schema, value, path, editor) => {
       const errors = []
       if (value !== '') {
-        var compareValue
+        let compareValue
         if (editor.flatpickr.config.mode !== 'single') {
-          var seperator = editor.flatpickr.config.mode === 'range' ? editor.flatpickr.l10n.rangeSeparator : ', '
-          var selectedDates = editor.flatpickr.selectedDates.map(function (val) {
-            return editor.flatpickr.formatDate(val, editor.flatpickr.config.dateFormat)
-          })
+          const seperator = editor.flatpickr.config.mode === 'range' ? editor.flatpickr.l10n.rangeSeparator : ', '
+          const selectedDates = editor.flatpickr.selectedDates.map(val =>
+            editor.flatpickr.formatDate(val, editor.flatpickr.config.dateFormat)
+          )
           compareValue = selectedDates.join(seperator)
         }
 
@@ -689,7 +666,7 @@ export const Validator = Class.extend({
             throw new Error('mismatch')
           }
         } catch (err) {
-          var errorDateFormat = editor.flatpickr.config.errorDateFormat !== undefined ? editor.flatpickr.config.errorDateFormat : editor.flatpickr.config.dateFormat
+          const errorDateFormat = editor.flatpickr.config.errorDateFormat !== undefined ? editor.flatpickr.config.errorDateFormat : editor.flatpickr.config.dateFormat
           errors.push({
             path: path,
             property: 'format',
@@ -700,23 +677,23 @@ export const Validator = Class.extend({
       return errors
     }
 
-    var validatorRx = {
+    const validatorRx = {
       'date': /^(\d{4}\D\d{2}\D\d{2})?$/,
       'time': /^(\d{2}:\d{2}(?::\d{2})?)?$/,
       'datetime-local': /^(\d{4}\D\d{2}\D\d{2}[ T]\d{2}:\d{2}(?::\d{2})?)?$/
     }
-    var format = {
+    const format = {
       'date': '"YYYY-MM-DD"',
       'time': '"HH:MM"',
       'datetime-local': '"YYYY-MM-DD HH:MM"'
     }
 
-    var ed = this.jsoneditor.getEditor(path)
-    var dateFormat = (ed && ed.flatpickr) ? ed.flatpickr.config.dateFormat : format[schema.format]
+    const editor = this.jsoneditor.getEditor(path)
+    const dateFormat = (editor && editor.flatpickr) ? editor.flatpickr.config.dateFormat : format[schema.format]
 
     if (schema.type === 'integer') {
       errors.push(..._validateInteger(schema, value, path))
-    } else if (!ed || !ed.flatpickr) {
+    } else if (!editor || !editor.flatpickr) {
       // Standard string input, without flatpickr
       if (!validatorRx[schema.format].test(value)) {
         errors.push({
@@ -725,9 +702,9 @@ export const Validator = Class.extend({
           message: this.translate('error_' + schema.format.replace(/-/g, '_'), [dateFormat])
         })
       }
-    } else if (ed) {
+    } else if (editor) {
       // Flatpickr validation
-      errors.push(..._validateFlatPicker(schema, value, path, ed))
+      errors.push(..._validateFlatPicker(schema, value, path, editor))
     }
     return errors
   },
@@ -750,10 +727,10 @@ export const Validator = Class.extend({
     return errors
   },
   _removeDuplicateErrors: function (errors) {
-    return errors.reduce(function (err, obj) {
-      var first = true
+    return errors.reduce((err, obj) => {
+      let first = true
       if (!err) err = []
-      err.forEach(function (a) {
+      err.forEach(a => {
         if (a.message === obj.message && a.path === obj.path && a.property === obj.property) {
           a.errorcount++
           first = false
