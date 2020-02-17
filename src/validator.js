@@ -41,10 +41,8 @@ export const Validator = Class.extend({
     return this._validateSchema(this.schema, value)
   },
   _validateSchema: function (schema, value, path) {
-    var self = this
-    var errors = []
-    var valid, i, j
-    var stringified = JSON.stringify(value)
+    const self = this
+    const errors = []
 
     path = path || 'root'
 
@@ -130,116 +128,44 @@ export const Validator = Class.extend({
     }
 
     if (schema.links) {
-      for (var m = 0; m < schema.links.length; m++) {
+      for (let m = 0; m < schema.links.length; m++) {
         if (schema.links[m].rel && schema.links[m].rel.toLowerCase() === 'describedby') {
-          var href = schema.links[m].href
-          var data = this.jsoneditor.root.getValue()
+          const href = schema.links[m].href
+          const data = this.jsoneditor.root.getValue()
           // var template = new UriTemplate(href); //preprocessURI(href));
           // var ref = template.fillFromObject(data);
-          var template = this.jsoneditor.compileTemplate(href, this.jsoneditor.template)
-          var ref = document.location.origin + document.location.pathname + template(data)
+          const template = this.jsoneditor.compileTemplate(href, this.jsoneditor.template)
+          const ref = document.location.origin + document.location.pathname + template(data)
 
           schema.links = schema.links.slice(0, m).concat(schema.links.slice(m + 1))
-
           schema = $extend({}, schema, this.jsoneditor.refs[ref])
 
-          errors = errors.concat(this._validateSchema(schema, value, path, this.translate))
+          errors.push(...this._validateSchema(schema, value, path, this.translate))
         }
       }
     }
 
     // date, time and datetime-local validation
     if (['date', 'time', 'datetime-local'].indexOf(schema.format) !== -1) {
-      var validatorRx = {
-        'date': /^(\d{4}\D\d{2}\D\d{2})?$/,
-        'time': /^(\d{2}:\d{2}(?::\d{2})?)?$/,
-        'datetime-local': /^(\d{4}\D\d{2}\D\d{2}[ T]\d{2}:\d{2}(?::\d{2})?)?$/
-      }
-      var format = {
-        'date': '"YYYY-MM-DD"',
-        'time': '"HH:MM"',
-        'datetime-local': '"YYYY-MM-DD HH:MM"'
-      }
-
-      var ed = this.jsoneditor.getEditor(path)
-      var dateFormat = (ed && ed.flatpickr) ? ed.flatpickr.config.dateFormat : format[schema.format]
-
-      if (schema.type === 'integer') {
-        // The value is a timestamp
-        if (value * 1 < 1) {
-          // If value is less than 1, then it's an invalid epoch date before 00:00:00 UTC Thursday, 1 January 1970
-          errors.push({
-            path: path,
-            property: 'format',
-            message: this.translate('error_invalid_epoch')
-          })
-        } else if (value !== Math.abs(parseInt(value))) {
-          // not much to check for, so we assume value is ok if it's a positive number
-          errors.push({
-            path: path,
-            property: 'format',
-            message: this.translate('error_' + schema.format.replace(/-/g, '_'), [dateFormat])
-          })
-        }
-      } else if (!ed || !ed.flatpickr) {
-        // Standard string input, without flatpickr
-        if (!validatorRx[schema.format].test(value)) {
-          errors.push({
-            path: path,
-            property: 'format',
-            message: this.translate('error_' + schema.format.replace(/-/g, '_'), [dateFormat])
-          })
-        }
-      } else if (ed) {
-        // Flatpickr validation
-        if (value !== '') {
-          var compareValue
-          if (ed.flatpickr.config.mode !== 'single') {
-            var seperator = ed.flatpickr.config.mode === 'range' ? ed.flatpickr.l10n.rangeSeparator : ', '
-            var selectedDates = ed.flatpickr.selectedDates.map(function (val) {
-              return ed.flatpickr.formatDate(val, ed.flatpickr.config.dateFormat)
-            })
-            compareValue = selectedDates.join(seperator)
-          }
-
-          try {
-            if (compareValue) {
-              // Not the best validation method, but range and multiple mode are special
-              // Optimal solution would be if it is possible to change the return format from string/integer to array
-              if (compareValue !== value) throw new Error(ed.flatpickr.config.mode + ' mismatch')
-            } else if (ed.flatpickr.formatDate(ed.flatpickr.parseDate(value, ed.flatpickr.config.dateFormat), ed.flatpickr.config.dateFormat) !== value) {
-              throw new Error('mismatch')
-            }
-          } catch (err) {
-            var errorDateFormat = ed.flatpickr.config.errorDateFormat !== undefined ? ed.flatpickr.config.errorDateFormat : ed.flatpickr.config.dateFormat
-            errors.push({
-              path: path,
-              property: 'format',
-              message: this.translate('error_' + ed.format.replace(/-/g, '_'), [errorDateFormat])
-            })
-          }
-        }
-      }
+      errors.push(...this._validateDateTimeSubSchema.call(self, schema, value, path))
     }
 
     // Internal validators using the custom validator format
-    errors = errors.concat(ipValidator.call(self, schema, value, path, self.translate))
+    errors.push(...ipValidator.call(self, schema, value, path, self.translate))
 
     // Custom type validation (global)
     $each(self.defaults.custom_validators, function (i, validator) {
-      errors = errors.concat(validator.call(self, schema, value, path))
+      errors.push(...validator.call(self, schema, value, path))
     })
     // Custom type validation (instance specific)
     if (this.options.custom_validators) {
       $each(this.options.custom_validators, function (i, validator) {
-        errors = errors.concat(validator.call(self, schema, value, path))
+        errors.push(...validator.call(self, schema, value, path))
       })
     }
 
     // Remove duplicate errors and add "errorcount" property
-    errors = this._removeDuplicateErrors(errors)
-
-    return errors
+    return this._removeDuplicateErrors(errors)
   },
   _validateV3Required: function (schema, value, path) {
     const errors = []
@@ -745,6 +671,91 @@ export const Validator = Class.extend({
       }
       return errors
     }
+  },
+  _validateDateTimeSubSchema: function (schema, value, path) {
+    const errors = []
+    const _validateInteger = (schema, value, path) => {
+      const errors = []
+      // The value is a timestamp
+      if (value * 1 < 1) {
+        // If value is less than 1, then it's an invalid epoch date before 00:00:00 UTC Thursday, 1 January 1970
+        errors.push({
+          path: path,
+          property: 'format',
+          message: this.translate('error_invalid_epoch')
+        })
+      } else if (value !== Math.abs(parseInt(value))) {
+        // not much to check for, so we assume value is ok if it's a positive number
+        errors.push({
+          path: path,
+          property: 'format',
+          message: this.translate('error_' + schema.format.replace(/-/g, '_'), [dateFormat])
+        })
+      }
+      return errors
+    }
+    const _validateFlatPicker = (schema, value, path, editor) => {
+      const errors = []
+      if (value !== '') {
+        var compareValue
+        if (editor.flatpickr.config.mode !== 'single') {
+          var seperator = editor.flatpickr.config.mode === 'range' ? editor.flatpickr.l10n.rangeSeparator : ', '
+          var selectedDates = editor.flatpickr.selectedDates.map(function (val) {
+            return editor.flatpickr.formatDate(val, editor.flatpickr.config.dateFormat)
+          })
+          compareValue = selectedDates.join(seperator)
+        }
+
+        try {
+          if (compareValue) {
+            // Not the best validation method, but range and multiple mode are special
+            // Optimal solution would be if it is possible to change the return format from string/integer to array
+            if (compareValue !== value) throw new Error(editor.flatpickr.config.mode + ' mismatch')
+          } else if (editor.flatpickr.formatDate(editor.flatpickr.parseDate(value, editor.flatpickr.config.dateFormat), editor.flatpickr.config.dateFormat) !== value) {
+            throw new Error('mismatch')
+          }
+        } catch (err) {
+          var errorDateFormat = editor.flatpickr.config.errorDateFormat !== undefined ? editor.flatpickr.config.errorDateFormat : editor.flatpickr.config.dateFormat
+          errors.push({
+            path: path,
+            property: 'format',
+            message: this.translate('error_' + editor.format.replace(/-/g, '_'), [errorDateFormat])
+          })
+        }
+      }
+      return errors
+    }
+
+    var validatorRx = {
+      'date': /^(\d{4}\D\d{2}\D\d{2})?$/,
+      'time': /^(\d{2}:\d{2}(?::\d{2})?)?$/,
+      'datetime-local': /^(\d{4}\D\d{2}\D\d{2}[ T]\d{2}:\d{2}(?::\d{2})?)?$/
+    }
+    var format = {
+      'date': '"YYYY-MM-DD"',
+      'time': '"HH:MM"',
+      'datetime-local': '"YYYY-MM-DD HH:MM"'
+    }
+
+    var ed = this.jsoneditor.getEditor(path)
+    var dateFormat = (ed && ed.flatpickr) ? ed.flatpickr.config.dateFormat : format[schema.format]
+
+    if (schema.type === 'integer') {
+      errors.push(..._validateInteger(schema, value, path))
+    } else if (!ed || !ed.flatpickr) {
+      // Standard string input, without flatpickr
+      if (!validatorRx[schema.format].test(value)) {
+        errors.push({
+          path: path,
+          property: 'format',
+          message: this.translate('error_' + schema.format.replace(/-/g, '_'), [dateFormat])
+        })
+      }
+    } else if (ed) {
+      // Flatpickr validation
+      errors.push(..._validateFlatPicker(schema, value, path, ed))
+    }
+    return errors
   },
   _removeDuplicateErrors: function (errors) {
     return errors.reduce(function (err, obj) {
