@@ -57,170 +57,14 @@ export const Validator = Class.extend({
 
     // Version 3 `required` and `required_by_default`
     if (typeof value === 'undefined') {
-      if ((typeof schema.required !== 'undefined' && schema.required === true) || (typeof schema.required === 'undefined' && this.jsoneditor.options.required_by_default === true)) {
-        errors.push({
-          path: path,
-          property: 'required',
-          message: this.translate('error_notset')
-        })
-      }
-
-      return errors
+      return this._validateV3Required(schema, value, path)
     }
 
-    // `enum`
-    if (schema['enum']) {
-      valid = false
-      for (i = 0; i < schema['enum'].length; i++) {
-        if (stringified === JSON.stringify(schema['enum'][i])) valid = true
+    Object.keys(schema).forEach(key => {
+      if (this._validateSubSchema[key]) {
+        errors.push(...this._validateSubSchema[key].call(self, schema, value, path))
       }
-      if (!valid) {
-        errors.push({
-          path: path,
-          property: 'enum',
-          message: this.translate('error_enum')
-        })
-      }
-    }
-
-    // `extends` (version 3)
-    if (schema['extends']) {
-      for (i = 0; i < schema['extends'].length; i++) {
-        errors = errors.concat(this._validateSchema(schema['extends'][i], value, path))
-      }
-    }
-
-    // `allOf`
-    if (schema.allOf) {
-      for (i = 0; i < schema.allOf.length; i++) {
-        errors = errors.concat(this._validateSchema(schema.allOf[i], value, path))
-      }
-    }
-
-    // `anyOf`
-    if (schema.anyOf) {
-      valid = false
-      for (i = 0; i < schema.anyOf.length; i++) {
-        if (!this._validateSchema(schema.anyOf[i], value, path).length) {
-          valid = true
-          break
-        }
-      }
-      if (!valid) {
-        errors.push({
-          path: path,
-          property: 'anyOf',
-          message: this.translate('error_anyOf')
-        })
-      }
-    }
-
-    // `oneOf`
-    if (schema.oneOf) {
-      valid = 0
-      var oneofErrors = []
-      for (i = 0; i < schema.oneOf.length; i++) {
-        // Set the error paths to be path.oneOf[i].rest.of.path
-        var tmp = this._validateSchema(schema.oneOf[i], value, path)
-        if (!tmp.length) {
-          valid++
-        }
-
-        for (j = 0; j < tmp.length; j++) {
-          tmp[j].path = path + '.oneOf[' + i + ']' + tmp[j].path.substr(path.length)
-        }
-        oneofErrors = oneofErrors.concat(tmp)
-      }
-      if (valid !== 1) {
-        errors.push({
-          path: path,
-          property: 'oneOf',
-          message: this.translate('error_oneOf', [valid])
-        })
-        errors = errors.concat(oneofErrors)
-      }
-    }
-
-    // `not`
-    if (schema.not) {
-      if (!this._validateSchema(schema.not, value, path).length) {
-        errors.push({
-          path: path,
-          property: 'not',
-          message: this.translate('error_not')
-        })
-      }
-    }
-
-    // `type` (both Version 3 and Version 4 support)
-    if (schema.type) {
-      // Union type
-      if (Array.isArray(schema.type)) {
-        valid = false
-        for (i = 0; i < schema.type.length; i++) {
-          if (this._checkType(schema.type[i], value)) {
-            valid = true
-            break
-          }
-        }
-        if (!valid) {
-          errors.push({
-            path: path,
-            property: 'type',
-            message: this.translate('error_type_union')
-          })
-        }
-      } else {
-      // Simple type
-        if (['date', 'time', 'datetime-local'].indexOf(schema.format) !== -1 && schema.type === 'integer') {
-          // Hack to get validator to validate as string even if value is integer
-          // As validation of 'date', 'time', 'datetime-local' is done in separate validator
-          if (!this._checkType('string', '' + value)) {
-            errors.push({
-              path: path,
-              property: 'type',
-              message: this.translate('error_type', [schema.format])
-            })
-          }
-        } else if (!this._checkType(schema.type, value)) {
-          errors.push({
-            path: path,
-            property: 'type',
-            message: this.translate('error_type', [schema.type])
-          })
-        }
-      }
-    }
-
-    // `disallow` (version 3)
-    if (schema.disallow) {
-      // Union type
-      if (Array.isArray(schema.disallow)) {
-        valid = true
-        for (i = 0; i < schema.disallow.length; i++) {
-          if (this._checkType(schema.disallow[i], value)) {
-            valid = false
-            break
-          }
-        }
-        if (!valid) {
-          errors.push({
-            path: path,
-            property: 'disallow',
-            message: this.translate('error_disallow_union')
-          })
-        }
-      } else {
-        // Simple type
-        if (this._checkType(schema.disallow, value)) {
-          errors.push({
-            path: path,
-            property: 'disallow',
-            message: this.translate('error_disallow', [schema.disallow])
-          })
-        }
-      }
-    }
+    })
 
     /*
      * Type Specific Validation
@@ -661,6 +505,175 @@ export const Validator = Class.extend({
     errors = this._removeDuplicateErrors(errors)
 
     return errors
+  },
+  _validateV3Required: function (schema, value, path) {
+    const errors = []
+    if ((typeof schema.required !== 'undefined' && schema.required === true) || (typeof schema.required === 'undefined' && this.jsoneditor.options.required_by_default === true)) {
+      errors.push({
+        path: path,
+        property: 'required',
+        message: this.translate('error_notset')
+      })
+    }
+    return errors
+  },
+  _validateSubSchema: {
+    enum: function (schema, value, path) {
+      let valid = false
+      const stringified = JSON.stringify(value)
+      const errors = []
+      for (let i = 0; i < schema['enum'].length; i++) {
+        if (stringified === JSON.stringify(schema['enum'][i])) valid = true
+      }
+      if (!valid) {
+        errors.push({
+          path: path,
+          property: 'enum',
+          message: this.translate('error_enum')
+        })
+      }
+      return errors
+    },
+    extends: function (schema, value, path) {
+      const errors = []
+      for (let i = 0; i < schema['extends'].length; i++) {
+        errors.push(...this._validateSchema(schema['extends'][i], value, path))
+      }
+      return errors
+    },
+    allOf: function (schema, value, path) {
+      const errors = []
+      for (let i = 0; i < schema.allOf.length; i++) {
+        errors.push(...this._validateSchema(schema.allOf[i], value, path))
+      }
+      return errors
+    },
+    anyOf: function (schema, value, path) {
+      let valid = false
+      const errors = []
+      for (let i = 0; i < schema.anyOf.length; i++) {
+        if (!this._validateSchema(schema.anyOf[i], value, path).length) {
+          valid = true
+          break
+        }
+      }
+      if (!valid) {
+        errors.push({
+          path: path,
+          property: 'anyOf',
+          message: this.translate('error_anyOf')
+        })
+      }
+      return errors
+    },
+    oneOf: function (schema, value, path) {
+      let valid = 0
+      const oneofErrors = []
+      const errors = []
+      for (let i = 0; i < schema.oneOf.length; i++) {
+        // Set the error paths to be path.oneOf[i].rest.of.path
+        const tmp = this._validateSchema(schema.oneOf[i], value, path)
+        if (!tmp.length) {
+          valid++
+        }
+
+        for (let j = 0; j < tmp.length; j++) {
+          tmp[j].path = path + '.oneOf[' + i + ']' + tmp[j].path.substr(path.length)
+        }
+        oneofErrors.push(...tmp)
+      }
+      if (valid !== 1) {
+        errors.push({
+          path: path,
+          property: 'oneOf',
+          message: this.translate('error_oneOf', [valid])
+        })
+        errors.push(...oneofErrors)
+      }
+      return errors
+    },
+    not: function (schema, value, path) {
+      const errors = []
+      if (!this._validateSchema(schema.not, value, path).length) {
+        errors.push({
+          path: path,
+          property: 'not',
+          message: this.translate('error_not')
+        })
+      }
+      return errors
+    },
+    type: function (schema, value, path) {
+      const errors = []
+      let valid
+      // Union type
+      if (Array.isArray(schema.type)) {
+        valid = false
+        for (let i = 0; i < schema.type.length; i++) {
+          if (this._checkType(schema.type[i], value)) {
+            valid = true
+            break
+          }
+        }
+        if (!valid) {
+          errors.push({
+            path: path,
+            property: 'type',
+            message: this.translate('error_type_union')
+          })
+        }
+      } else {
+      // Simple type
+        if (['date', 'time', 'datetime-local'].indexOf(schema.format) !== -1 && schema.type === 'integer') {
+          // Hack to get validator to validate as string even if value is integer
+          // As validation of 'date', 'time', 'datetime-local' is done in separate validator
+          if (!this._checkType('string', '' + value)) {
+            errors.push({
+              path: path,
+              property: 'type',
+              message: this.translate('error_type', [schema.format])
+            })
+          }
+        } else if (!this._checkType(schema.type, value)) {
+          errors.push({
+            path: path,
+            property: 'type',
+            message: this.translate('error_type', [schema.type])
+          })
+        }
+      }
+      return errors
+    },
+    disallow: function (schema, value, path) {
+      const errors = []
+      // Union type
+      if (Array.isArray(schema.disallow)) {
+        let valid = true
+        for (let i = 0; i < schema.disallow.length; i++) {
+          if (this._checkType(schema.disallow[i], value)) {
+            valid = false
+            break
+          }
+        }
+        if (!valid) {
+          errors.push({
+            path: path,
+            property: 'disallow',
+            message: this.translate('error_disallow_union')
+          })
+        }
+      } else {
+        // Simple type
+        if (this._checkType(schema.disallow, value)) {
+          errors.push({
+            path: path,
+            property: 'disallow',
+            message: this.translate('error_disallow', [schema.disallow])
+          })
+        }
+      }
+      return errors
+    }
   },
   _removeDuplicateErrors: function (errors) {
     return errors.reduce(function (err, obj) {
