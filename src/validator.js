@@ -103,78 +103,17 @@ export const Validator = Class.extend({
       })
     // Object specific validation
     } else if (typeof value === 'object' && value !== null) {
+      const validatedProperties = {}
       // `maxProperties`
-      if (schema.maxProperties) {
-        valid = 0
-        for (i in value) {
-          if (!value.hasOwnProperty(i)) continue
-          valid++
-        }
-        if (valid > schema.maxProperties) {
-          errors.push({
-            path: path,
-            property: 'maxProperties',
-            message: this.translate('error_maxProperties', [schema.maxProperties])
-          })
-        }
-      }
-
       // `minProperties`
-      if (schema.minProperties) {
-        valid = 0
-        for (i in value) {
-          if (!value.hasOwnProperty(i)) continue
-          valid++
-        }
-        if (valid < schema.minProperties) {
-          errors.push({
-            path: path,
-            property: 'minProperties',
-            message: this.translate('error_minProperties', [schema.minProperties])
-          })
-        }
-      }
-
-      // Version 4 `required`
-      if (typeof schema.required !== 'undefined' && Array.isArray(schema.required)) {
-        for (i = 0; i < schema.required.length; i++) {
-          if (typeof value[schema.required[i]] === 'undefined') {
-            var editor = this.jsoneditor.getEditor(path + '.' + schema.required[i])
-            // Ignore required error if editor is of type "button" or "info"
-            if (editor && ['button', 'info'].indexOf(editor.schema.format || editor.schema.type) !== -1) continue
-            errors.push({
-              path: path,
-              property: 'required',
-              message: this.translate('error_required', [schema.required[i]])
-            })
-          }
-        }
-      }
-
+      //  Version 4 `required`
       // `properties`
-      var validatedProperties = {}
-      for (i in schema.properties) {
-        if (!schema.properties.hasOwnProperty(i)) continue
-        validatedProperties[i] = true
-        errors = errors.concat(this._validateSchema(schema.properties[i], value[i], path + '.' + i))
-      }
-
       // `patternProperties`
-      if (schema.patternProperties) {
-        for (i in schema.patternProperties) {
-          if (!schema.patternProperties.hasOwnProperty(i)) continue
-          var regex = new RegExp(i)
-
-          // Check which properties match
-          for (j in value) {
-            if (!value.hasOwnProperty(j)) continue
-            if (regex.test(j)) {
-              validatedProperties[j] = true
-              errors = errors.concat(this._validateSchema(schema.patternProperties[i], value[j], path + '.' + j))
-            }
-          }
+      Object.keys(schema).forEach(key => {
+        if (this._validateObjectSubSchema[key]) {
+          errors.push(...this._validateObjectSubSchema[key].call(self, schema, value, path, validatedProperties))
         }
-      }
+      })
 
       // The no_additional_properties option currently doesn't work with extended schemas that use oneOf or anyOf
       if (typeof schema.additionalProperties === 'undefined' && this.jsoneditor.options.no_additional_properties && !schema.oneOf && !schema.anyOf) {
@@ -182,55 +121,12 @@ export const Validator = Class.extend({
       }
 
       // `additionalProperties`
-      if (typeof schema.additionalProperties !== 'undefined') {
-        for (i in value) {
-          if (!value.hasOwnProperty(i)) continue
-          if (!validatedProperties[i]) {
-            // No extra properties allowed
-            if (!schema.additionalProperties) {
-              errors.push({
-                path: path,
-                property: 'additionalProperties',
-                message: this.translate('error_additional_properties', [i])
-              })
-              break
-            // Allowed
-            } else if (schema.additionalProperties === true) {
-              break
-            // Must match schema
-            // TODO: incompatibility between version 3 and 4 of the spec
-            } else {
-              errors = errors.concat(this._validateSchema(schema.additionalProperties, value[i], path + '.' + i))
-            }
-          }
-        }
-      }
-
       // `dependencies`
-      if (schema.dependencies) {
-        for (i in schema.dependencies) {
-          if (!schema.dependencies.hasOwnProperty(i)) continue
-
-          // Doesn't need to meet the dependency
-          if (typeof value[i] === 'undefined') continue
-
-          // Property dependency
-          if (Array.isArray(schema.dependencies[i])) {
-            for (j = 0; j < schema.dependencies[i].length; j++) {
-              if (typeof value[schema.dependencies[i][j]] === 'undefined') {
-                errors.push({
-                  path: path,
-                  property: 'dependencies',
-                  message: this.translate('error_dependency', [schema.dependencies[i][j]])
-                })
-              }
-            }
-          // Schema dependency
-          } else {
-            errors = errors.concat(this._validateSchema(schema.dependencies[i], value, path))
-          }
+      Object.keys(schema).forEach(key => {
+        if (typeof this._validateObjectSubSchema2[key] !== 'undefined') {
+          errors.push(...this._validateObjectSubSchema2[key].call(self, schema, value, path, validatedProperties))
         }
-      }
+      })
     }
 
     if (schema.links) {
@@ -715,6 +611,137 @@ export const Validator = Class.extend({
           break
         }
         seen[valid] = true
+      }
+      return errors
+    }
+  },
+  _validateObjectSubSchema: {
+    maxProperties: function (schema, value, path) {
+      const errors = []
+      let valid = 0
+      for (let i in value) {
+        if (!value.hasOwnProperty(i)) continue
+        valid++
+      }
+      if (valid > schema.maxProperties) {
+        errors.push({
+          path: path,
+          property: 'maxProperties',
+          message: this.translate('error_maxProperties', [schema.maxProperties])
+        })
+      }
+      return errors
+    },
+    minProperties: function (schema, value, path) {
+      const errors = []
+      let valid = 0
+      for (let i in value) {
+        if (!value.hasOwnProperty(i)) continue
+        valid++
+      }
+      if (valid < schema.minProperties) {
+        errors.push({
+          path: path,
+          property: 'minProperties',
+          message: this.translate('error_minProperties', [schema.minProperties])
+        })
+      }
+      return errors
+    },
+    required: function (schema, value, path) {
+      const errors = []
+      if (Array.isArray(schema.required)) {
+        for (let i = 0; i < schema.required.length; i++) {
+          if (typeof value[schema.required[i]] === 'undefined') {
+            var editor = this.jsoneditor.getEditor(path + '.' + schema.required[i])
+            // Ignore required error if editor is of type "button" or "info"
+            if (editor && ['button', 'info'].indexOf(editor.schema.format || editor.schema.type) !== -1) continue
+            errors.push({
+              path: path,
+              property: 'required',
+              message: this.translate('error_required', [schema.required[i]])
+            })
+          }
+        }
+      }
+      return errors
+    },
+    properties: function (schema, value, path, validatedProperties) {
+      const errors = []
+      for (let i in schema.properties) {
+        if (!schema.properties.hasOwnProperty(i)) continue
+        validatedProperties[i] = true
+        errors.push(...this._validateSchema(schema.properties[i], value[i], path + '.' + i))
+      }
+      return errors
+    },
+    patternProperties: function (schema, value, path, validatedProperties) {
+      const errors = []
+      for (let i in schema.patternProperties) {
+        if (!schema.patternProperties.hasOwnProperty(i)) continue
+        var regex = new RegExp(i)
+
+        // Check which properties match
+        for (let j in value) {
+          if (!value.hasOwnProperty(j)) continue
+          if (regex.test(j)) {
+            validatedProperties[j] = true
+            errors.push(...this._validateSchema(schema.patternProperties[i], value[j], path + '.' + j))
+          }
+        }
+      }
+      return errors
+    }
+  },
+  _validateObjectSubSchema2: {
+    additionalProperties: function (schema, value, path, validatedProperties) {
+      const errors = []
+      for (let i in value) {
+        if (!value.hasOwnProperty(i)) continue
+        if (!validatedProperties[i]) {
+          // No extra properties allowed
+          if (!schema.additionalProperties) {
+            errors.push({
+              path: path,
+              property: 'additionalProperties',
+              message: this.translate('error_additional_properties', [i])
+            })
+            break
+          // Allowed
+          } else if (schema.additionalProperties === true) {
+            break
+          // Must match schema
+          // TODO: incompatibility between version 3 and 4 of the spec
+          } else {
+            errors.push(...this._validateSchema(schema.additionalProperties, value[i], path + '.' + i))
+          }
+        }
+      }
+      return errors
+    },
+    dependencies: function (schema, value, path) {
+      const errors = []
+      for (let i in schema.dependencies) {
+        if (!schema.dependencies.hasOwnProperty(i)) continue
+
+        // Doesn't need to meet the dependency
+        if (typeof value[i] === 'undefined') continue
+
+        // Property dependency
+        if (Array.isArray(schema.dependencies[i])) {
+          for (let j = 0; j < schema.dependencies[i].length; j++) {
+            if (typeof value[schema.dependencies[i][j]] === 'undefined') {
+              errors.push({
+                path: path,
+                property: 'dependencies',
+                message: this.translate('error_dependency', [schema.dependencies[i][j]])
+              })
+            }
+          }
+        // Schema dependency
+        } else {
+          errors.push(...this._validateSchema(schema.dependencies[i], value, path))
+        }
       }
       return errors
     }
