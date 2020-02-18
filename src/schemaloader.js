@@ -1,5 +1,5 @@
 import { Class } from './class'
-import { $each, $extend } from './utilities'
+import { $extend } from './utilities'
 
 export const SchemaLoader = Class.extend({
   init: function (options) {
@@ -11,29 +11,28 @@ export const SchemaLoader = Class.extend({
   },
 
   load: function (schema, callback, fetchUrl, location) {
-    var self = this
-    this._loadExternalRefs(schema, function () {
-      self._getDefinitions(schema, fetchUrl + '#/definitions/')
-      callback(self.expandRefs(schema))
-    }, fetchUrl, self._getFileBase(location))
+    this._loadExternalRefs(schema, () => {
+      this._getDefinitions(schema, fetchUrl + '#/definitions/')
+      callback(this.expandRefs(schema))
+    }, fetchUrl, this._getFileBase(location))
   },
   expandRefs: function (schema, recurseAllOf) {
-    var _schema = $extend({}, schema)
+    const _schema = $extend({}, schema)
     if (!_schema.$ref) return _schema
 
-    var refObj = this.refs_with_info[_schema.$ref]
+    const refObj = this.refs_with_info[_schema.$ref]
     delete _schema.$ref
-    var fetchUrl = refObj.$ref.startsWith('#')
+    const fetchUrl = refObj.$ref.startsWith('#')
       ? refObj.fetchUrl
       : ''
-    var ref = this._getRef(fetchUrl, refObj)
+    const ref = this._getRef(fetchUrl, refObj)
     if (!this.refs[ref]) { // if reference not found
       console.warn("reference:'" + ref + "' not found!")
     } else if (recurseAllOf && this.refs[ref].hasOwnProperty('allOf')) {
-      var allOf = this.refs[ref].allOf
-      for (var i = 0; i < allOf.length; i++) {
-        allOf[i] = this.expandRefs(allOf[i], true)
-      }
+      const allOf = this.refs[ref].allOf
+      Object.keys(allOf).forEach(key => {
+        allOf[key] = this.expandRefs(allOf[key], true)
+      })
     }
     return this.extendSchemas(_schema, this.expandSchema(this.refs[ref]))
   },
@@ -69,13 +68,13 @@ export const SchemaLoader = Class.extend({
     },
     // Version 4 `anyOf`
     anyOf: function (schema) {
-      $each(schema.anyOf, (key, value) => {
+      Object.entries(schema.anyOf).forEach(([key, value]) => {
         schema.anyOf[key] = this.expandSchema(value)
       })
     },
     // Version 4 `dependencies` (schema dependencies)
     dependencies: function (schema) {
-      $each(schema.dependencies, (key, value) => {
+      Object.entries(schema.dependencies).forEach(([key, value]) => {
         if (typeof value === 'object' && !(Array.isArray(value))) {
           schema.dependencies[key] = this.expandSchema(value)
         }
@@ -90,10 +89,10 @@ export const SchemaLoader = Class.extend({
     // allOf schemas should be merged into the parent
     allOf: function (schema, extended) {
       let _extended = $extend({}, extended)
-      for (let i = 0; i < schema.allOf.length; i++) {
-        schema.allOf[i] = this.expandRefs(schema.allOf[i], true)
-        _extended = this.extendSchemas(_extended, this.expandSchema(schema.allOf[i]))
-      }
+      Object.entries(schema.allOf).forEach(([key, value]) => {
+        schema.allOf[key] = this.expandRefs(value, true)
+        _extended = this.extendSchemas(_extended, this.expandSchema(value))
+      })
       delete _extended.allOf
       return _extended
     },
@@ -124,7 +123,7 @@ export const SchemaLoader = Class.extend({
     }
   },
   _getRef: function (fetchUrl, refObj) {
-    var ref = fetchUrl + refObj
+    const ref = fetchUrl + refObj
     return this.refs[ref]
       ? ref
       : fetchUrl + decodeURIComponent(refObj.$ref)
@@ -132,13 +131,10 @@ export const SchemaLoader = Class.extend({
   _expandSubSchema: function (subschema) {
     // Array of types
     if (Array.isArray(subschema)) {
-      var self = this
-      var mapped = subschema.map(function (m) {
-        return typeof value === 'object'
-          ? self.expandSchema(m)
-          : m
-      })
-      return mapped
+      return subschema.map(m =>
+        typeof value === 'object'
+          ? this.expandSchema(m)
+          : m)
     } else {
       // Schema
       return this.expandSchema(subschema)
@@ -146,27 +142,24 @@ export const SchemaLoader = Class.extend({
   },
   _getDefinitions: function (schema, path) {
     if (schema.definitions) {
-      for (var i in schema.definitions) {
-        if (!schema.definitions.hasOwnProperty(i)) continue
+      Object.keys(schema.definitions).forEach(i => {
         this.refs[path + i] = schema.definitions[i]
         if (schema.definitions[i].definitions) {
           this._getDefinitions(schema.definitions[i], path + i + '/definitions/')
         }
-      }
+      })
     }
   },
   _getExternalRefs: function (schema, fetchUrl) {
-    var refs = {}
-    var mergeRefs = function (newrefs) {
-      for (var i in newrefs) {
-        if (newrefs.hasOwnProperty(i)) {
-          refs[i] = true
-        }
-      }
+    const refs = {}
+    const mergeRefs = newrefs => {
+      Object.keys(newrefs).forEach(i => {
+        refs[i] = true
+      })
     }
 
     if (schema.$ref && typeof schema.$ref !== 'object') {
-      var refCounter = this.refs_prefix + this.refs_counter++
+      const refCounter = this.refs_prefix + this.refs_counter++
       if (schema.$ref.substr(0, 1) !== '#' && !this.refs[schema.$ref]) {
         refs[schema.$ref] = true
       }
@@ -174,30 +167,29 @@ export const SchemaLoader = Class.extend({
       schema.$ref = refCounter
     }
 
-    for (var i in schema) {
-      if (!schema.hasOwnProperty(i)) continue
-      if (!schema[i] || typeof schema[i] !== 'object') continue
-      if (Array.isArray(schema[i])) {
-        for (var j = 0; j < schema[i].length; j++) {
-          if (schema[i][j] && typeof schema[i][j] === 'object') {
-            mergeRefs(this._getExternalRefs(schema[i][j], fetchUrl))
+    Object.values(schema).forEach(value => {
+      if (!value || typeof value !== 'object') return
+      if (Array.isArray(value)) {
+        Object.values(value).forEach(e => {
+          if (e && typeof e === 'object') {
+            mergeRefs(this._getExternalRefs(e, fetchUrl))
           }
-        }
+        })
       } else {
-        mergeRefs(this._getExternalRefs(schema[i], fetchUrl))
+        mergeRefs(this._getExternalRefs(value, fetchUrl))
       }
-    }
+    })
     return refs
   },
   _getFileBase: function (location) {
-    var fileBase = this.options.ajaxBase
+    let fileBase = this.options.ajaxBase
     if (typeof fileBase === 'undefined') {
       fileBase = this._getFileBaseFromFileLocation(location)
     }
     return fileBase
   },
   _getFileBaseFromFileLocation: function (fileLocationString) {
-    var pathItems = fileLocationString.split('/')
+    const pathItems = fileLocationString.split('/')
     pathItems.pop()
     return pathItems.join('/') + '/'
   },
@@ -207,28 +199,27 @@ export const SchemaLoader = Class.extend({
       url.substr(0, 1) !== '/'
   },
   _loadExternalRefs: function (schema, callback, fetchUrl, fileBase) {
-    var self = this
-    var refs = this._getExternalRefs(schema, fetchUrl)
-    var done = 0; var waiting = 0; var callbackFired = false
+    const refs = this._getExternalRefs(schema, fetchUrl)
+    let done = 0; let waiting = 0; let callbackFired = false
 
-    $each(refs, function (url) {
-      if (self.refs[url]) return
-      if (!self.options.ajax) throw new Error('Must set ajax option to true to load external ref ' + url)
-      self.refs[url] = 'loading'
+    Object.keys(refs).forEach(url => {
+      if (this.refs[url]) return
+      if (!this.options.ajax) throw new Error('Must set ajax option to true to load external ref ' + url)
+      this.refs[url] = 'loading'
       waiting++
 
-      var fetchUrl = self._isLocalUrl(fileBase, url) ? fileBase + url : url
+      const fetchUrl = this._isLocalUrl(fileBase, url) ? fileBase + url : url
 
       // eslint-disable-next-line no-undef
-      var r = new XMLHttpRequest()
+      const r = new XMLHttpRequest()
       r.overrideMimeType('application/json')
       r.open('GET', fetchUrl, true)
-      if (self.options.ajaxCredentials) r.withCredentials = self.options.ajaxCredentials
-      r.onreadystatechange = function () {
+      if (this.options.ajaxCredentials) r.withCredentials = this.options.ajaxCredentials
+      r.onreadystatechange = () => {
         if (r.readyState !== 4) return
         // Request succeeded
         if (r.status === 200) {
-          var response
+          let response
           try {
             response = JSON.parse(r.responseText)
           } catch (e) {
@@ -239,10 +230,10 @@ export const SchemaLoader = Class.extend({
             throw new Error('External ref does not contain a valid schema - ' + fetchUrl)
           }
 
-          self.refs[url] = response
-          var fileBase = self._getFileBaseFromFileLocation(fetchUrl)
-          self._getDefinitions(response, fetchUrl + '#/definitions/')
-          self._loadExternalRefs(response, function () {
+          this.refs[url] = response
+          const fileBase = this._getFileBaseFromFileLocation(fetchUrl)
+          this._getDefinitions(response, fetchUrl + '#/definitions/')
+          this._loadExternalRefs(response, () => {
             done++
             if (done >= waiting && !callbackFired) {
               callbackFired = true
@@ -308,7 +299,7 @@ export const SchemaLoader = Class.extend({
         delete extended.type
       }
     }
-    $each(obj1, (prop, val) => {
+    Object.entries(obj1).forEach(([prop, val]) => {
       // If this key is also defined in obj2, merge them
       if (typeof obj2[prop] !== 'undefined') {
         merge(prop, val)
@@ -318,7 +309,7 @@ export const SchemaLoader = Class.extend({
       }
     })
     // Properties in obj2 that aren't in obj1
-    $each(obj2, (prop, val) => {
+    Object.entries(obj2).forEach(([prop, val]) => {
       if (typeof obj1[prop] === 'undefined') {
         extended[prop] = val
       }
