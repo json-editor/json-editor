@@ -1,6 +1,6 @@
 import { Class } from './class'
 import { ipValidator } from './validators/ip-validator'
-import { $extend, $each } from './utilities'
+import { $extend } from './utilities'
 
 export const Validator = Class.extend({
   init: function (jsoneditor, schema, options, defaults) {
@@ -41,7 +41,6 @@ export const Validator = Class.extend({
     return this._validateSchema(this.schema, value)
   },
   _validateSchema: function (schema, value, path) {
-    const self = this
     const errors = []
     path = path || 'root'
 
@@ -58,7 +57,7 @@ export const Validator = Class.extend({
 
     Object.keys(schema).forEach(key => {
       if (this._validateSubSchema[key]) {
-        errors.push(...this._validateSubSchema[key].call(self, schema, value, path))
+        errors.push(...this._validateSubSchema[key].call(this, schema, value, path))
       }
     })
 
@@ -68,17 +67,17 @@ export const Validator = Class.extend({
     errors.push(...this._validateByValueType(schema, value, path))
 
     if (schema.links) {
-      for (let m = 0; m < schema.links.length; m++) {
-        if (schema.links[m].rel && schema.links[m].rel.toLowerCase() === 'describedby') {
+      schema.links.forEach((s, m) => {
+        if (s.rel && s.rel.toLowerCase() === 'describedby') {
           schema = this._expandSchemaLink(schema, m)
           errors.push(...this._validateSchema(schema, value, path, this.translate))
         }
-      }
+      })
     }
 
     // date, time and datetime-local validation
     if (['date', 'time', 'datetime-local'].indexOf(schema.format) !== -1) {
-      errors.push(...this._validateDateTimeSubSchema.call(self, schema, value, path))
+      errors.push(...this._validateDateTimeSubSchema(schema, value, path))
     }
 
     // custom validator
@@ -90,8 +89,6 @@ export const Validator = Class.extend({
   _expandSchemaLink: function (schema, m) {
     const href = schema.links[m].href
     const data = this.jsoneditor.root.getValue()
-    // var template = new UriTemplate(href); //preprocessURI(href));
-    // var ref = template.fillFromObject(data);
     const template = this.jsoneditor.compileTemplate(href, this.jsoneditor.template)
     const ref = document.location.origin + document.location.pathname + template(data)
 
@@ -99,29 +96,27 @@ export const Validator = Class.extend({
     return $extend({}, schema, this.jsoneditor.refs[ref])
   },
   _validateV3Required: function (schema, value, path) {
-    const errors = []
     if ((typeof schema.required !== 'undefined' && schema.required === true) || (typeof schema.required === 'undefined' && this.jsoneditor.options.required_by_default === true)) {
-      errors.push({
+      return [{
         path: path,
         property: 'required',
         message: this.translate('error_notset')
-      })
+      }]
     }
-    return errors
+    return []
   },
   _validateSubSchema: {
     enum: function (schema, value, path) {
       const stringified = JSON.stringify(value)
-      const errors = []
       const valid = schema.enum.some(e => stringified === JSON.stringify(e))
       if (!valid) {
-        errors.push({
+        return [{
           path: path,
           property: 'enum',
           message: this.translate('error_enum')
-        })
+        }]
       }
-      return errors
+      return []
     },
     extends: function (schema, value, path) {
       const validate = (errors, e) => {
@@ -138,21 +133,19 @@ export const Validator = Class.extend({
       return schema.allOf.reduce(validate, [])
     },
     anyOf: function (schema, value, path) {
-      const errors = []
       const valid = schema.anyOf.some(e => !this._validateSchema(e, value, path).length)
       if (!valid) {
-        errors.push({
+        return [{
           path: path,
           property: 'anyOf',
           message: this.translate('error_anyOf')
-        })
+        }]
       }
-      return errors
+      return []
     },
     oneOf: function (schema, value, path) {
       let valid = 0
       const oneofErrors = []
-      const errors = []
       schema.oneOf.forEach((o, i) => {
         // Set the error paths to be path.oneOf[i].rest.of.path
         const tmp = this._validateSchema(o, value, path)
@@ -165,6 +158,7 @@ export const Validator = Class.extend({
         })
         oneofErrors.push(...tmp)
       })
+      const errors = []
       if (valid !== 1) {
         errors.push({
           path: path,
@@ -176,28 +170,25 @@ export const Validator = Class.extend({
       return errors
     },
     not: function (schema, value, path) {
-      const errors = []
       if (!this._validateSchema(schema.not, value, path).length) {
-        errors.push({
+        return [{
           path: path,
           property: 'not',
           message: this.translate('error_not')
-        })
+        }]
       }
-      return errors
+      return []
     },
     type: function (schema, value, path) {
-      const errors = []
-      let valid
       // Union type
       if (Array.isArray(schema.type)) {
-        valid = schema.type.some(e => this._checkType(e, value))
+        const valid = schema.type.some(e => this._checkType(e, value))
         if (!valid) {
-          errors.push({
+          return [{
             path: path,
             property: 'type',
             message: this.translate('error_type_union')
-          })
+          }]
         }
       } else {
       // Simple type
@@ -205,45 +196,44 @@ export const Validator = Class.extend({
           // Hack to get validator to validate as string even if value is integer
           // As validation of 'date', 'time', 'datetime-local' is done in separate validator
           if (!this._checkType('string', '' + value)) {
-            errors.push({
+            return [{
               path: path,
               property: 'type',
               message: this.translate('error_type', [schema.format])
-            })
+            }]
           }
         } else if (!this._checkType(schema.type, value)) {
-          errors.push({
+          return [{
             path: path,
             property: 'type',
             message: this.translate('error_type', [schema.type])
-          })
+          }]
         }
       }
-      return errors
+      return []
     },
     disallow: function (schema, value, path) {
-      const errors = []
       // Union type
       if (Array.isArray(schema.disallow)) {
         const invalid = schema.disallow.some(e => this._checkType(e, value))
         if (invalid) {
-          errors.push({
+          return [{
             path: path,
             property: 'disallow',
             message: this.translate('error_disallow_union')
-          })
+          }]
         }
       } else {
         // Simple type
         if (this._checkType(schema.disallow, value)) {
-          errors.push({
+          return [{
             path: path,
             property: 'disallow',
             message: this.translate('error_disallow', [schema.disallow])
-          })
+          }]
         }
       }
-      return errors
+      return []
     }
   },
   _validateByValueType: function (schema, value, path) {
@@ -316,7 +306,6 @@ export const Validator = Class.extend({
     maximum: function (schema, value, path) {
       // Vanilla JS, prone to floating point rounding errors (e.g. .999999999999999 == 1)
       let valid = schema.exclusiveMaximum ? (value < schema.maximum) : (value <= schema.maximum)
-      const errors = []
 
       // Use math.js is available
       if (window.math) {
@@ -330,21 +319,20 @@ export const Validator = Class.extend({
       }
 
       if (!valid) {
-        errors.push({
+        return [{
           path: path,
           property: 'maximum',
           message: this.translate(
             (schema.exclusiveMaximum ? 'error_maximum_excl' : 'error_maximum_incl'),
             [schema.maximum]
           )
-        })
+        }]
       }
-      return errors
+      return []
     },
     minimum: function (schema, value, path) {
       // Vanilla JS, prone to floating point rounding errors (e.g. .999999999999999 == 1)
       let valid = schema.exclusiveMinimum ? (value > schema.minimum) : (value >= schema.minimum)
-      const errors = []
 
       // Use math.js is available
       if (window.math) {
@@ -358,21 +346,20 @@ export const Validator = Class.extend({
       }
 
       if (!valid) {
-        errors.push({
+        return [{
           path: path,
           property: 'minimum',
           message: this.translate(
             (schema.exclusiveMinimum ? 'error_minimum_excl' : 'error_minimum_incl'),
             [schema.minimum]
           )
-        })
+        }]
       }
-      return errors
+      return []
     }
   },
   _validateNumberSubSchemaMultipleDivisible: function (schema, value, path) {
     const divisor = schema.multipleOf || schema.divisibleBy
-    const errors = []
     // Vanilla JS, prone to floating point rounding errors (e.g. 1.14 / .01 == 113.99999)
     let valid = (value / divisor === Math.floor(value / divisor))
 
@@ -385,13 +372,13 @@ export const Validator = Class.extend({
     }
 
     if (!valid) {
-      errors.push({
+      return [{
         path: path,
         property: schema.multipleOf ? 'multipleOf' : 'divisibleBy',
         message: this.translate('error_multipleOf', [divisor])
-      })
+      }]
     }
-    return errors
+    return []
   },
   _validateStringSubSchema: {
     maxLength: function (schema, value, path) {
@@ -407,27 +394,25 @@ export const Validator = Class.extend({
     },
     // `minLength`
     minLength: function (schema, value, path) {
-      const errors = []
       if ((value + '').length < schema.minLength) {
-        errors.push({
+        return [{
           path: path,
           property: 'minLength',
           message: this.translate((schema.minLength === 1 ? 'error_notempty' : 'error_minLength'), [schema.minLength])
-        })
+        }]
       }
-      return errors
+      return []
     },
     // `pattern`
     pattern: function (schema, value, path) {
-      const errors = []
       if (!(new RegExp(schema.pattern)).test(value)) {
-        errors.push({
+        return [{
           path: path,
           property: 'pattern',
           message: (schema.options && schema.options.patternmessage) ? schema.options.patternmessage : this.translate('error_pattern', [schema.pattern])
-        })
+        }]
       }
-      return errors
+      return []
     }
   },
   _validateArraySubSchema: {
@@ -469,82 +454,75 @@ export const Validator = Class.extend({
       return errors
     },
     maxItems: function (schema, value, path) {
-      const errors = []
       if (value.length > schema.maxItems) {
-        errors.push({
+        return [{
           path: path,
           property: 'maxItems',
           message: this.translate('error_maxItems', [schema.maxItems])
-        })
+        }]
       }
-      return errors
+      return []
     },
     minItems: function (schema, value, path) {
-      const errors = []
       if (value.length < schema.minItems) {
-        errors.push({
+        return [{
           path: path,
           property: 'minItems',
           message: this.translate('error_minItems', [schema.minItems])
-        })
+        }]
       }
-      return errors
+      return []
     },
     uniqueItems: function (schema, value, path) {
-      const errors = []
       const seen = {}
       for (let i = 0; i < value.length; i++) {
         const valid = JSON.stringify(value[i])
         if (seen[valid]) {
-          errors.push({
+          return [{
             path: path,
             property: 'uniqueItems',
             message: this.translate('error_uniqueItems')
-          })
-          break
+          }]
         }
         seen[valid] = true
       }
-      return errors
+      return []
     }
   },
   _validateObjectSubSchema: {
     maxProperties: function (schema, value, path) {
-      const errors = []
       if (Object.keys(value).length > schema.maxProperties) {
-        errors.push({
+        return [{
           path: path,
           property: 'maxProperties',
           message: this.translate('error_maxProperties', [schema.maxProperties])
-        })
+        }]
       }
-      return errors
+      return []
     },
     minProperties: function (schema, value, path) {
-      const errors = []
       if (Object.keys(value).length < schema.minProperties) {
-        errors.push({
+        return [{
           path: path,
           property: 'minProperties',
           message: this.translate('error_minProperties', [schema.minProperties])
-        })
+        }]
       }
-      return errors
+      return []
     },
     required: function (schema, value, path) {
       const errors = []
       if (Array.isArray(schema.required)) {
         schema.required.forEach(e => {
-          if (typeof value[e] === 'undefined') {
-            var editor = this.jsoneditor.getEditor(path + '.' + e)
-            // Ignore required error if editor is of type "button" or "info"
-            if (editor && ['button', 'info'].indexOf(editor.schema.format || editor.schema.type) !== -1) return
-            errors.push({
-              path: path,
-              property: 'required',
-              message: this.translate('error_required', [e])
-            })
-          }
+          if (typeof value[e] !== 'undefined') return
+          const editor = this.jsoneditor.getEditor(path + '.' + e)
+          // Ignore required error if editor is of type "button" or "info"
+          if (editor && ['button', 'info'].indexOf(editor.schema.format || editor.schema.type) !== -1) return
+          errors.push({
+            path: path,
+            property: 'required',
+            message: this.translate('error_required', [e])
+          })
         })
       }
       return errors
@@ -624,29 +602,26 @@ export const Validator = Class.extend({
     }
   },
   _validateDateTimeSubSchema: function (schema, value, path) {
-    const errors = []
     const _validateInteger = (schema, value, path) => {
-      const errors = []
       // The value is a timestamp
       if (value * 1 < 1) {
         // If value is less than 1, then it's an invalid epoch date before 00:00:00 UTC Thursday, 1 January 1970
-        errors.push({
+        return [{
           path: path,
           property: 'format',
           message: this.translate('error_invalid_epoch')
-        })
+        }]
       } else if (value !== Math.abs(parseInt(value))) {
         // not much to check for, so we assume value is ok if it's a positive number
-        errors.push({
+        return [{
           path: path,
           property: 'format',
           message: this.translate('error_' + schema.format.replace(/-/g, '_'), [dateFormat])
-        })
+        }]
       }
-      return errors
+      return []
     }
     const _validateFlatPicker = (schema, value, path, editor) => {
-      const errors = []
       if (value !== '') {
         let compareValue
         if (editor.flatpickr.config.mode !== 'single') {
@@ -667,14 +642,14 @@ export const Validator = Class.extend({
           }
         } catch (err) {
           const errorDateFormat = editor.flatpickr.config.errorDateFormat !== undefined ? editor.flatpickr.config.errorDateFormat : editor.flatpickr.config.dateFormat
-          errors.push({
+          return [{
             path: path,
             property: 'format',
             message: this.translate('error_' + editor.format.replace(/-/g, '_'), [errorDateFormat])
-          })
+          }]
         }
       }
-      return errors
+      return []
     }
 
     const validatorRx = {
@@ -692,37 +667,35 @@ export const Validator = Class.extend({
     const dateFormat = (editor && editor.flatpickr) ? editor.flatpickr.config.dateFormat : format[schema.format]
 
     if (schema.type === 'integer') {
-      errors.push(..._validateInteger(schema, value, path))
+      return _validateInteger(schema, value, path)
     } else if (!editor || !editor.flatpickr) {
       // Standard string input, without flatpickr
       if (!validatorRx[schema.format].test(value)) {
-        errors.push({
+        return [{
           path: path,
           property: 'format',
           message: this.translate('error_' + schema.format.replace(/-/g, '_'), [dateFormat])
-        })
+        }]
       }
     } else if (editor) {
       // Flatpickr validation
-      errors.push(..._validateFlatPicker(schema, value, path, editor))
+      return _validateFlatPicker(schema, value, path, editor)
     }
-    return errors
+    return []
   },
   _validateCustomValidator: function (schema, value, path) {
     const errors = []
-    const self = this
     // Internal validators using the custom validator format
-    errors.push(...ipValidator.call(self, schema, value, path, self.translate))
+    errors.push(...ipValidator.call(this, schema, value, path, this.translate))
 
+    const validate = validator => {
+      errors.push(...validator.call(this, schema, value, path))
+    }
     // Custom type validation (global)
-    $each(self.defaults.custom_validators, function (i, validator) {
-      errors.push(...validator.call(self, schema, value, path))
-    })
+    this.defaults.custom_validators.forEach(validate)
     // Custom type validation (instance specific)
     if (this.options.custom_validators) {
-      $each(this.options.custom_validators, function (i, validator) {
-        errors.push(...validator.call(self, schema, value, path))
-      })
+      this.options.custom_validators.forEach(validate)
     }
     return errors
   },
