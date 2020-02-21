@@ -7,8 +7,8 @@
     <link rel='stylesheet' id='theme_stylesheet'>
     <link rel='stylesheet' id='icon_stylesheet'>
     <style>[class*="foundicon-"] {font-family: GeneralFoundicons, serif;font-style: normal;}</style>
-    <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
-    <!--<script src="../dist/nonmin/jsoneditor.js"></script>-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>-->
+    <script src="../dist/nonmin/jsoneditor.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
 </head>
 <body>
@@ -284,7 +284,9 @@
 
         let libs = document.getElementById('lib_switcher').querySelectorAll(':checked');
         let result = Object.keys(libs).map(function(key) {return libs[key].value;});
-        url += '&lib_switcher=' + result.join(',');
+      console.log(result)
+
+      url += '&lib_switcher=' + result.join(',');
 
         for(let i in JSONEditor.defaults.options) {
             if(!JSONEditor.defaults.options.hasOwnProperty(i)) {
