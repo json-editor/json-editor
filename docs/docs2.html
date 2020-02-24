@@ -121,35 +121,9 @@
     </div>
 </div>
 <script>
+
   const defaultSchema = {
-    'title': 'Person',
-    'type': 'object',
-    'required': [
-      'location'
-    ],
-    'default': {
-      'location': {
-        'city': 'My city'
-      }
-    },
-    'properties': {
-      'location': {
-        'type': 'object',
-        'title': 'Location',
-        'defaultProperties': [
-          'city'
-        ],
-        'properties': {
-          'city': {
-            'type': 'string',
-            'minLength': 3
-          },
-          'state': {
-            'type': 'string'
-          }
-        }
-      }
-    }
+    "$ref": "./json/example2.json"
   }
 
   // parse url -> merge options -> refreshUI() -> initJsoneditor() -> direct link
@@ -159,6 +133,7 @@
   let data = {}
 
   let defaultOptions = {
+    ajax: true,
     iconlib: 'fontawesome5',
     object_layout: 'normal',
     schema: defaultSchema,
