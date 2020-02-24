@@ -1,0 +1,30 @@
+{
+  "title": "Person",
+  "type": "object",
+  "required": [
+    "location"
+  ],
+  "default": {
+    "location": {
+      "city": "My city"
+    }
+  },
+  "properties": {
+    "location": {
+      "type": "object",
+      "title": "Location",
+      "defaultProperties": [
+        "city"
+      ],
+      "properties": {
+        "city": {
+          "type": "string",
+          "minLength": 3
+        },
+        "state": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
