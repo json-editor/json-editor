@@ -156,19 +156,18 @@
 
   /* ------------------------------------------------------------------- data */
 
+  let data = {}
+
   let defaultOptions = {
     iconlib: 'fontawesome5',
     object_layout: 'normal',
     schema: defaultSchema,
     show_errors: 'interaction',
-    theme: 'bootstrap4',
+    theme: 'bootstrap4'
   }
-  let queryOptions = {}
-  let options = {}
+
   let jsoneditor = null
   let directLink = document.querySelector('#direct-link')
-  let selectedLibs = []
-  let unselectedLibs = []
 
   const booleanOptionsSelect = document.querySelector('#boolean-options-select')
   const head = document.getElementsByTagName('head')[0]
@@ -196,32 +195,18 @@
     if (queryParamsString.length) {
       queryParams.forEach((queryParam) => {
         const splittedParam = queryParam.split('=')
+        const param = splittedParam[0]
+        const value = splittedParam[1]
 
-        const property = splittedParam[0]
-        let value = splittedParam[1]
-
-        // cast boolean values to boolean
-
-        if (value === 'true') {
-          value = true
+        // data query param
+        if (param === 'data') {
+          // compress schema and value
+          try {
+            data = JSON.parse(LZString.decompressFromBase64(value))
+          } catch (reason) {
+          }
         }
-
-        if (value === 'false') {
-          value = false
-        }
-
-        queryOptions[property] = value
       })
-
-      // compress schema and value
-      try {
-        queryOptions.schema = JSON.parse(LZString.decompressFromBase64(queryOptions.schema))
-      } catch (e) {
-      }
-
-      if (queryOptions.hasOwnProperty('value')) {
-        queryOptions.value = JSON.parse(LZString.decompressFromBase64(queryOptions.value))
-      }
     }
 
     mergeOptions()
@@ -230,8 +215,7 @@
   /* ----------------------------------------------------------- mergeOptions */
 
   const mergeOptions = () => {
-    options = Object.assign(defaultOptions, queryOptions)
-    console.table(options)
+    data.options = Object.assign(defaultOptions, data.options)
     refreshUI()
   }
 
@@ -239,7 +223,7 @@
 
   const refreshUI = () => {
     // schema
-    schemaTextarea.value = JSON.stringify(options.schema, null, 2)
+    schemaTextarea.value = JSON.stringify(data.options.schema, null, 2)
 
     // theme
     const themeMap = {
@@ -249,8 +233,8 @@
       spectre: 'https://unpkg.com/spectre.css/dist/spectre.min.css',
       tailwind: 'https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css'
     }
-    themeLink.href = themeMap[options.theme]
-    themeSelect.value = options.theme
+    themeLink.href = themeMap[data.options.theme]
+    themeSelect.value = data.options.theme
 
     // iconlLib
     const iconLibMap = {
@@ -260,20 +244,20 @@
       jqueryui: 'https://code.jquery.com/ui/1.10.3/themes/south-street/jquery-ui.css',
       spectre: 'https://unpkg.com/spectre.css/dist/spectre-icons.min.css'
     }
-    iconlibLink.href = iconLibMap[options.iconlib]
-    iconlibSelect.value = options.iconlib
+    iconlibLink.href = iconLibMap[data.options.iconlib]
+    iconlibSelect.value = data.options.iconlib
 
     // object_layout
-    objectLayoutSelect.value = options.object_layout
+    objectLayoutSelect.value = data.options.object_layout
 
     // show_errors
-    showErrorsSelect.value = options.show_errors
+    showErrorsSelect.value = data.options.show_errors
 
     // boolean values
     let booleanOptions = booleanOptionsSelect.children
     for (let i = 0; i < booleanOptions.length; i++) {
       const booleanValue = booleanOptions[i]
-      if (options[booleanValue.value]) {
+      if (data.options[booleanValue.value]) {
         booleanValue.selected = true
       }
     }
@@ -359,43 +343,56 @@
       },
     }
 
-    // remove libraries
-    unselectedLibs.forEach((selectedLib) => {
-      console.log(selectedLib)
-      const concat = libMapping[selectedLib].js.concat(libMapping[selectedLib].css)
-      concat.forEach(() => {
-        const className ='.external_' + selectedLib
-        const toRemove = head.querySelector(className)
-        if (toRemove) {
-          console.log('js toRemove', toRemove)
-          toRemove.parentNode.removeChild(toRemove)
-        }
-      })
-    })
+    if (data.selectedLibs || data.unselectedLibs) {
 
-    // add libraries
-    selectedLibs.forEach((selectedLib) => {
-      console.log(selectedLib)
-      // add js
-      libMapping[selectedLib].js.forEach((js) => {
-        console.log(js)
-        let scriptElement = document.createElement('script')
-        scriptElement.type = 'text/javascript'
-        scriptElement.src = js
-        scriptElement.async = false
-        scriptElement.classList.add('external_' + selectedLib)
-        head.appendChild(scriptElement)
+      let booleanOptions = booleanOptionsSelect.children
+      for (let i = 0; i < booleanOptions.length; i++) {
+        const booleanValue = booleanOptions[i]
+        if (data.options[booleanValue.value]) {
+          booleanValue.selected = true
+        }
+      }
+
+      const libSelectChildren = libSelect.children
+      for (let i = 0; i < libSelectChildren.length; i++) {
+        const child = libSelectChildren[i]
+        child.selected = data.selectedLibs.includes(child.value)
+      }
+
+      // remove libraries
+      data.unselectedLibs.forEach((selectedLib) => {
+        const concat = libMapping[selectedLib].js.concat(libMapping[selectedLib].css)
+        concat.forEach(() => {
+          const className = '.external_' + selectedLib
+          const toRemove = head.querySelector(className)
+          if (toRemove) {
+            toRemove.parentNode.removeChild(toRemove)
+          }
+        })
       })
-      // add css
-      libMapping[selectedLib].css.forEach((css) => {
-        const linkElement = document.createElement('link')
-        linkElement.setAttribute('rel', 'stylesheet')
-        linkElement.setAttribute('type', 'text/css')
-        linkElement.setAttribute('href', css)
-        linkElement.classList.add('external_' + selectedLib)
-        head.appendChild(linkElement)
+
+      // add libraries
+      data.selectedLibs.forEach((selectedLib) => {
+        // add js
+        libMapping[selectedLib].js.forEach((js) => {
+          let scriptElement = document.createElement('script')
+          scriptElement.type = 'text/javascript'
+          scriptElement.src = js
+          scriptElement.async = false
+          scriptElement.classList.add('external_' + selectedLib)
+          head.appendChild(scriptElement)
+        })
+        // add css
+        libMapping[selectedLib].css.forEach((css) => {
+          const linkElement = document.createElement('link')
+          linkElement.setAttribute('rel', 'stylesheet')
+          linkElement.setAttribute('type', 'text/css')
+          linkElement.setAttribute('href', css)
+          linkElement.classList.add('external_' + selectedLib)
+          head.appendChild(linkElement)
+        })
       })
-    })
+    }
 
     initJsoneditor()
   }
@@ -409,7 +406,7 @@
     }
 
     // new instance of JSONEditor
-    jsoneditor = new window.JSONEditor(jsonEditorForm, options)
+    jsoneditor = new window.JSONEditor(jsonEditorForm, data.options)
 
     // listen for changes
     jsoneditor.on('change', function () {
@@ -432,20 +429,9 @@
   /* ------------------------------------------------------- updateDirectLink */
 
   const updateDirectLink = () => {
-    // the url without the query string part
     let url = window.location.href.replace(/\?.*/, '')
-    url += '?'
-    for (let option in options) {
-      url += option
-      url += '='
-      if (option === 'schema') {
-        url += LZString.compressToBase64(JSON.stringify(options[option]))
-      } else {
-        url += options[option]
-      }
-      url += '&'
-    }
-    url = url.substring(0, url.length - 1)
+    url += '?data='
+    url += LZString.compressToBase64(JSON.stringify(data))
     directLink.href = url
   }
 
@@ -457,7 +443,7 @@
 
   setSchema.addEventListener('click', function () {
     try {
-      options.schema = JSON.parse(schemaTextarea.value)
+      data.options.schema = JSON.parse(schemaTextarea.value)
     } catch (e) {
       alert('Invalid Schema: ' + e.message)
       return
@@ -466,44 +452,44 @@
   })
 
   themeSelect.addEventListener('change', function () {
-    options.theme = this.value || ''
+    data.options.theme = this.value || ''
     refreshUI()
   })
 
   iconlibSelect.addEventListener('change', function () {
-    options.iconlib = this.value || ''
+    data.options.iconlib = this.value || ''
     refreshUI()
   })
 
   objectLayoutSelect.addEventListener('change', function () {
-    options.object_layout = this.value || ''
+    data.options.object_layout = this.value || ''
     refreshUI()
   })
 
   showErrorsSelect.addEventListener('change', function () {
-    options.show_errors = this.value || ''
+    data.options.show_errors = this.value || ''
     refreshUI()
   })
 
   booleanOptionsSelect.addEventListener('change', function () {
     let booleanOptions = this.children
     for (let i = 0; i < booleanOptions.length; i++) {
-      options[booleanOptions[i].value] = booleanOptions[i].selected
+      data.options[booleanOptions[i].value] = booleanOptions[i].selected
     }
     refreshUI()
   })
 
   libSelect.addEventListener('change', function () {
-    selectedLibs = []
-    unselectedLibs = []
+    data.selectedLibs = []
+    data.unselectedLibs = []
 
     const libs = this.children
 
     for (let i = 0; i < libs.length; i++) {
       if (libs[i].selected) {
-        selectedLibs.push(libs[i].value)
+        data.selectedLibs.push(libs[i].value)
       } else {
-        unselectedLibs.push(libs[i].value)
+        data.unselectedLibs.push(libs[i].value)
       }
     }
     refreshUI()
