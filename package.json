@@ -63,7 +63,7 @@
     "cssnano": "^4.1.10",
     "eslint": "^6.8.0",
     "eslint-loader": "^2.2.1",
-    "http-server": "^0.11.1",
+    "http-server": "^0.12.1",
     "jasmine": "^3.5.0",
     "jasmine-core": "^3.5.0",
     "jodit": "^3.3.24",
