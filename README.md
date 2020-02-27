@@ -395,6 +395,12 @@ editor.getEditor('root.location').enable();
 
 // Check if form is currently enabled
 if(editor.isEnabled()) alert("It's editable!");
+
+// Activate part of the form
+editor.activate();
+
+// Deactivate part of the form
+editor.deactivate();
 ```
 
 ### Destroy
