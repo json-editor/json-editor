@@ -5,3 +5,4 @@
 /tests/codeceptjs/output
 .vscode
 .env
+/src/themes/*.json

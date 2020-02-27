@@ -1,7 +1,7 @@
+const webpack = require('webpack')
+const CssToJSON = require('../build/CssToJson')
 
-var webpack = require('webpack')
-
-var bannerText = `/**
+const bannerText = `/**
 * @name JSON Editor
 * @description JSON Schema Based Editor
 * This library is the continuation of jdorn's great work (see also https://github.com/jdorn/json-editor/issues/800)
@@ -14,14 +14,12 @@ var bannerText = `/**
 */`
 module.exports = {
   entry: {
-    // 'polyfills': './src/polyfills.ts',
-    'jsoneditor': './src/core.js'
+    jsoneditor: './src/core.js'
   },
   resolve: {
     extensions: ['.js']
   },
   module: {
-
     rules: [
       {
         enforce: 'pre',
@@ -45,14 +43,21 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader'
-        ]
+        exclude: /(node_modules)|(src\/themes)/,
+        use: ['style-loader', 'css-loader']
       }
     ]
   },
   plugins: [
-    new webpack.BannerPlugin(bannerText.replace('{{ VERSION }}', JSON.stringify(require('../package.json').version)))
+    new webpack.BannerPlugin(
+      bannerText.replace(
+        '{{ VERSION }}',
+        JSON.stringify(require('../package.json').version)
+      )
+    ),
+    new CssToJSON({
+      pattern: './src/themes/*.css',
+      jsonPattern: './src/themes/*.json'
+    })
   ]
 }
