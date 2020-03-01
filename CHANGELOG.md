@@ -1,5 +1,13 @@
 ### Current 2.0.0-dev
-
+  - Fix of #643 - Allow use of themes not compiled directly into the build
+  - Removed Themes and IconSets that have not been updated to 2.0 format.
+  - Fix of #618 - links are placed AFTER the description. Now places the link BEFORE description (if available) or at bottom of container
+  - Changes to Vallilla Colorpicker editor.
+   * Added support for 'setValue'
+   * Added better enable/disable methods.
+   * Removed "onChange" function from list of required options so it can be overidden using schema options.
+   * Changed the update method (Otherwise buttons have no meaning). Now updating is done in "onDone" function, except if inline element. Then updating is done using "onChange" function.
+  - Fix of #629 - BS4 theme bug where basic tab was placed outside tabs container.
   - Improved IMask support for `Date`, `Number`, `IMask.MaskedEnum`, `IMask.MaskedRange` and regular expression masks. #591
   - Added support for recursive callback options.
 

@@ -1,4 +1,5 @@
 import { AbstractTheme } from '../theme'
+import rules from './barebones.json'
 
 export var barebonesTheme = AbstractTheme.extend({
   /* Theme config options that allows changing various aspects of the output */
@@ -6,8 +7,7 @@ export var barebonesTheme = AbstractTheme.extend({
     'disable_theme_rules': false
   },
   /* Custom stylesheet rules. format: "selector" : "CSS rules" */
-  rules: {
-  },
+  rules: rules,
   addInputError: function (input, text) {
     if (!input.errmsg) {
       var group = this.closest(input, '.form-control')

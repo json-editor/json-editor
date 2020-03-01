@@ -256,7 +256,10 @@ export var AbstractEditor = Class.extend({
     // Add links
     if (!this.no_link_holder) {
       this.link_holder = this.theme.getLinksHolder()
-      this.container.appendChild(this.link_holder)
+      // if description element exists, insert the link before
+      if (typeof this.description !== 'undefined') this.description.parentNode.insertBefore(this.link_holder, this.description)
+      // otherwise just insert link at bottom of container
+      else this.container.appendChild(this.link_holder)
       if (this.schema.links) {
         for (var i = 0; i < this.schema.links.length; i++) {
           this.addLink(this.getLink(this.schema.links[i]))
@@ -349,16 +352,18 @@ export var AbstractEditor = Class.extend({
         link.textContent = rel || url
         media.setAttribute('src', url)
       })
-    // Text links
+    // Text links or blank link
     } else {
       link = holder = this.theme.getBlockLink()
       holder.setAttribute('target', '_blank')
       holder.textContent = data.rel
+      holder.style.display = 'none' // Prevent blank links from showing up when using custom view
 
       // When a watched field changes, update the url
       this.link_watchers.push(function (vars) {
         var url = href(vars)
         var rel = relTemplate(vars)
+        if (url) holder.style.display = ''
         holder.setAttribute('href', url)
         holder.textContent = rel || url
       })

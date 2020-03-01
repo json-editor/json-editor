@@ -1,4 +1,5 @@
 import { AbstractTheme } from '../theme'
+import rules from './bootstrap4.json'
 
 export var bootstrap4Theme = AbstractTheme.extend({
   /* Theme config options that allows changing various aspects of the output */
@@ -14,25 +15,7 @@ export var bootstrap4Theme = AbstractTheme.extend({
     tooltip: 'bootstrap' // how to display tooltips (infoText). Can be `browser` for native `title`, `css` for simple CSS Styling, or `bootstrap` for TWBS/Popper.js handling
   },
   /* Custom stylesheet rules. format: "selector" : "CSS rules" */
-  rules: {
-    '.jsoneditor-twbs4-text-button': 'background: none;padding: 0;border: 0;color: currentColor;',
-    'td>.form-group': 'margin-bottom: 0',
-    '.json-editor-btn-upload': 'margin-top: 1rem',
-    '.je-noindent .card': 'padding: 0; border: 0', // Option: object_indent
-
-    // no-js handling of tooltips. Option: tooltip = 'css'
-
-    '.je-tooltip:hover::before, .je-tooltip:hover::after': 'display:block;position:absolute;font-size:0.8em;color:#fff',
-    '.je-tooltip:hover::before': 'border-radius:0.2em; content:attr(title);background-color:#000; margin-top:-2.5em;padding:0.3em',
-
-    // bring select2 input size to default twbs4 size (only matched size for input_size: normal)
-    '.select2-container--default .select2-selection--single, .select2-container--default .select2-selection--single .select2-selection__arrow': 'height: calc(1.5em + .75rem + 2px)',
-    '.select2-container--default .select2-selection--single .select2-selection__rendered': 'line-height: calc(1.5em + .75rem + 2px);',
-
-    // selectize
-    '.selectize-control.form-control': 'padding: 0',
-    '.selectize-dropdown.form-control': 'padding: 0;height: auto' // this cut off options can also be prohibited by setting `copyClassesToDropdown: true` in the slectize options
-  },
+  rules: rules,
 
   getSelectInput: function (options, multiple) {
     var el = this._super(options)
@@ -508,6 +491,10 @@ export var bootstrap4Theme = AbstractTheme.extend({
     } else {
       row.container.classList.remove('active')
     }
+  },
+
+  insertBasicTopTab: function (tab, newTabsHolder) {
+    newTabsHolder.children[0].children[0].insertBefore(tab, newTabsHolder.children[0].children[0].firstChild)
   },
 
   addTopTab: function (holder, tab) {

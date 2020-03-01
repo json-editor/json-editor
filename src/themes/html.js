@@ -1,4 +1,5 @@
 import { AbstractTheme } from '../theme'
+import rules from './html.json'
 
 export var htmlTheme = AbstractTheme.extend({
   /* Theme config options that allows changing various aspects of the output */
@@ -6,14 +7,7 @@ export var htmlTheme = AbstractTheme.extend({
     'disable_theme_rules': false
   },
   /* Custom stylesheet rules. format: "selector" : "CSS rules" */
-  rules: {
-    'je-form-input-label': 'display:block;margin-bottom:3px;font-weight:bold;',
-    'je-form-input-description': 'display:inline-block;margin:0;font-size:.8em;font-style:italic;',
-    'je-indented-panel': 'padding:5px;margin:10px;border-radius:3px;border:1px solid #ddd;',
-    'je-child-editor-holder': 'margin-bottom:8px;',
-    'je-header-button-holder': 'display:inline-block;margin-left:10px;font-size:.8em;vertical-align:middle;',
-    'je-table': 'margin-bottom:5px;border-bottom:1px solid #ccc;'
-  },
+  rules: rules,
   getFormInputLabel: function (text, req) {
     var el = this._super(text, req)
     el.classList.add('je-form-input-label')

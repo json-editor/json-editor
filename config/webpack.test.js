@@ -1,5 +1,5 @@
-var webpack = require('webpack')
-var helpers = require('./helpers')
+const helpers = require('./helpers')
+const CssToJSON = require('../build/CssToJson')
 
 module.exports = {
   devtool: 'inline-source-map',
@@ -26,5 +26,11 @@ module.exports = {
 
       }
     ]
-  }
+  },
+  plugins: [
+    new CssToJSON({
+      pattern: './src/themes/*.css',
+      jsonPattern: './src/themes/*.json'
+    })
+  ]
 }

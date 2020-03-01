@@ -406,7 +406,7 @@ export var ObjectEditor = AbstractEditor.extend({
         if (this.jsoneditor.options.display_required_only || this.options.display_required_only) {
           this.schema.defaultProperties = []
           $each(this.schema.properties, function (k, s) {
-            if (self.isRequired({key: k, schema: s})) {
+            if (self.isRequiredObject({ key: k, schema: s })) {
               self.schema.defaultProperties.push(k)
             }
           })
@@ -803,7 +803,7 @@ export var ObjectEditor = AbstractEditor.extend({
     // the show_opt_in editor option is for backward compatibility
     if (this.jsoneditor.options.show_opt_in || this.options.show_opt_in) {
       $each(this.editors, function (key, editor) {
-        if (!self.isRequired(editor)) {
+        if (!self.isRequiredObject(editor)) {
           self.editors[key].deactivate()
         }
       })
@@ -1103,7 +1103,7 @@ export var ObjectEditor = AbstractEditor.extend({
 
       this.addPropertyCheckbox(i)
 
-      if (this.isRequired(this.cached_editors[i]) && i in this.editors) {
+      if (this.isRequiredObject(this.cached_editors[i]) && i in this.editors) {
         this.addproperty_checkboxes[i].disabled = true
       }
 
@@ -1150,7 +1150,7 @@ export var ObjectEditor = AbstractEditor.extend({
       this.addproperty_add.disabled = false
     }
   },
-  isRequired: function (editor) {
+  isRequiredObject: function (editor) {
     if (!editor) {
       return
     }
@@ -1172,7 +1172,7 @@ export var ObjectEditor = AbstractEditor.extend({
         self.addObjectProperty(i)
         editor.setValue(value[i], initial)
       // Otherwise, remove value unless this is the initial set or it's required
-      } else if (!initial && !self.isRequired(editor)) {
+      } else if (!initial && !self.isRequiredObject(editor)) {
         self.removeObjectProperty(i)
       // Otherwise, set the value to the default
       } else {
