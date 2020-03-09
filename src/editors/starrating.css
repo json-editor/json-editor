@@ -1,0 +1,52 @@
+.starrating {
+  direction: rtl;
+  display: inline-block;
+  white-space:nowrap;
+}
+
+.starrating > input {
+  display: none;
+}
+
+/* Remove radio buttons */
+
+.starrating > label:before {
+  content: '\2606'; /* Empty Star */
+  margin: 1px;
+  font-size: 18px;
+  font-style:normal;
+  font-weight:400;
+  line-height:1;
+  font-family: 'Arial';
+  display: inline-block;
+}
+
+.starrating > label {
+  color: #888; /* Start color when not clicked */
+  cursor: pointer;
+  margin: 0;
+  margin: 8px 0 2px 0;
+}
+
+.starrating > label.starrating-display-enabled {
+  margin: 1px 0 0 0;
+}
+
+.starrating > input:checked ~ label,
+.starrating:not(.readonly) > input:hover ~ label {
+  color: #ffca08; /* Set yellow color when star checked/hover */
+}
+
+.starrating > input:checked ~ label:before,
+.starrating:not(.readonly) > input:hover ~ label:before {
+  content: '\2605'; /* Filled Star when star checked/hover */
+  text-shadow: 0 0 1px rgba(0,20,20,1);
+}
+
+.starrating .starrating-display {
+  position: relative;
+  direction: rtl;
+  text-align: center;
+  font-size: 10px;
+  line-height: 0px;
+}

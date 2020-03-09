@@ -6,4 +6,4 @@
 .vscode
 .env
 /src/themes/*.css.js
-/src/themes/*.css.js
+/src/editors/*.css.js
