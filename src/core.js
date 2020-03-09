@@ -5,7 +5,7 @@ import { editors } from './editors/index.js'
 import { templates } from './templates/index.js'
 import { iconlibs } from './iconlibs/index.js'
 import { themes } from './themes/index.js'
-import { extend, each } from './utilities.js'
+import { extend, each, getShadowParent } from './utilities.js'
 
 export class JSONEditor {
   constructor(element, options = {}) {
@@ -25,13 +25,17 @@ export class JSONEditor {
 
     /* Load editors and selected theme style rules */
     if (!themeClass) throw new Error(`Unknown theme ${themeName}`)
-    this.theme = new themeClass(this)
-
     this.element.setAttribute('data-theme', themeName)
-    const themeRules = this.theme.options.disable_theme_rules ? {} : themeClass.rules
-    const editorsRules = this.getEditorsRules()
-    const rules = extend(themeRules, editorsRules)
-    if(Object.keys(rules).length > 0) this.addNewStyleRules(themeName, rules)
+    this.theme = new themeClass(this)
+    const rules = extend(themeClass.rules, this.getEditorsRules())
+
+    if (!this.theme.options.disable_theme_rules) {
+      /* Attempt to locate a shadowRoot parent (i.e. in Web Components) */
+      const shadowRoot = getShadowParent(this.element)
+
+      /* Call addNewStyleRulesToShadowRoot if shadowRoot is found, otherwise call addNewStyleRules */
+      this[shadowRoot ? 'addNewStyleRulesToShadowRoot' : 'addNewStyleRules'](themeName, rules, shadowRoot)
+    }
 
     /* Init icon class */
     const iconClass = JSONEditor.defaults.iconlibs[this.options.iconlib || JSONEditor.defaults.iconlib]
@@ -50,7 +54,7 @@ export class JSONEditor {
     this.refs = loader.refs
 
     loader.load(this.schema, schema => {
-      const validatorOptions = this.options.custom_validators ? {custom_validators: this.options.custom_validators } : {}
+      const validatorOptions = this.options.custom_validators ? { custom_validators: this.options.custom_validators } : {}
 
       this.validator = new Validator(this, null, validatorOptions, JSONEditor.defaults)
 
@@ -375,8 +379,24 @@ export class JSONEditor {
       // all browsers, except IE before version 9
       if (sheet.insertRule) sheet.insertRule(sel + ' {' + decodeURIComponent(rules[selector]) + '}', 0)
       // Internet Explorer before version 9
-      else if (sheet.addRule) sheet.addRule(sel, rules[selector], 0)
+      else if (sheet.addRule) sheet.addRule(sel, decodeURIComponent(rules[selector]), 0)
     }
+  }
+
+  addNewStyleRulesToShadowRoot(themeName, rules, shadowRoot) {
+    const qualifier = this.element.nodeName.toLowerCase()
+    let cssText = ''
+
+    for (var selector in rules) {
+      if (!rules.hasOwnProperty(selector)) continue
+      var sel = qualifier + '[data-theme="' + themeName + '"] ' + selector
+
+      cssText += sel + ' {' + decodeURIComponent(rules[selector]) + '}' + '\n'
+    }
+
+    const styleSheet = new CSSStyleSheet()
+    styleSheet.replaceSync(cssText)
+    shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, styleSheet]
   }
 }
 

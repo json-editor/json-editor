@@ -10,6 +10,7 @@
     - Written manually.
 - Cleaned src/defaults.js and move resolvers to a separate module, src/resolvers.js
 - Cleaned how default themes, iconlibs, editors and templates are imported to JSONEditor
+- Added ability to attache editors and themes style rules to the shadowRoot if the editor is inside a Web Component.
 
 ### 2.0.0-dev
   - Fix of #643 - Allow use of themes not compiled directly into the build

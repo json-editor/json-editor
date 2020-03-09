@@ -1,6 +1,7 @@
 /node_modules/
 /.idea/
 /dist/
+/www/
 /e2e/
 /tests/codeceptjs/output
 .vscode

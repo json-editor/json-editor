@@ -71,3 +71,12 @@ export function trigger(el, event) {
   e.initEvent(event, true, true)
   el.dispatchEvent(e)
 }
+
+/**
+ * Helper function to locate a shadowRoot parent if at all
+ *
+ * @param {Element} node - Node
+ */
+export function getShadowParent(node) {
+  return node && (node.toString() === "[object ShadowRoot]" ? node : getShadowParent(node.parentNode))
+}
