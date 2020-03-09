@@ -1,11 +1,9 @@
-export var mustacheTemplate = function () {
+export const mustacheTemplate = () => {
   if (!window.Mustache) return false
 
   return {
-    compile: function (template) {
-      return function (view) {
-        return window.Mustache.render(template, view)
-      }
+    compile(template) {
+      return view => window.Mustache.render(template, view);
     }
-  }
-}
+  };
+};

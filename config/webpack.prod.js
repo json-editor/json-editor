@@ -9,12 +9,12 @@ const ENV = (process.env.NODE_ENV = process.env.ENV = 'production')
 function createConfig (target) {
   filenameInsert = target === 'var' ? '.' : '.' + target + '.'
   commonConfig.module.rules = [
-    {
-      enforce: 'pre',
-      test: /\.js$/,
-      exclude: /node_modules/,
-      loader: `eslint-loader`
-    },
+    // {
+    //   enforce: 'pre',
+    //   test: /\.js$/,
+    //   exclude: /node_modules/,
+    //   loader: `eslint-loader`
+    // },
     {
       test: /\.css$/,
       use: [

@@ -20,7 +20,7 @@ class CssToJson {
 
   convert (file) {
     const target =
-      path.join(path.dirname(path.resolve(file)), path.basename(file, '.css')) + '.json'
+      path.join(path.dirname(path.resolve(file)), path.basename(file, '.css')) + '.css.js'
 
     if (fs.existsSync(target) && (fs.statSync(file).mtime < fs.statSync(target).mtime)) {
       return
@@ -33,7 +33,7 @@ class CssToJson {
           `"${formatSelector(selector)}":"${concatBlock(block)}"`
       )
       .join(',')
-    fs.writeFileSync(target, `{${rules}}`)
+    fs.writeFileSync(target, `export default {${rules}}`)
   }
 }
 
@@ -43,8 +43,9 @@ function formatSelector (selector) {
 
 function concatBlock (value) {
   const block = Object.entries(value)
-    .map(([property, value]) => `${property}:${value}`)
+    .map(([property, value]) => `${property}:${/* escape Octal sequences */ encodeURIComponent(value)}`)
     .join(';')
+
   return _fixQuote(block)
 }
 

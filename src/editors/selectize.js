@@ -1,13 +1,13 @@
-import { SelectEditor } from './select'
-import { $extend } from '../utilities'
-export var SelectizeEditor = SelectEditor.extend({
+import  { SelectEditor } from  './select.js'
+import  { extend } from  '../utilities.js'
 
-  setValue: function (value, initial) {
+export class SelectizeEditor extends SelectEditor {
+  setValue(value, initial) {
     if (this.selectize_instance) {
       if (initial) this.is_dirty = false
       else if (this.jsoneditor.options.show_errors === 'change') this.is_dirty = true
 
-      var sanitized = this.updateValue(value) // Sets this.value to sanitized value
+      const sanitized = this.updateValue(value); /* Sets this.value to sanitized value */
 
       this.input.value = sanitized
 
@@ -15,92 +15,99 @@ export var SelectizeEditor = SelectEditor.extend({
       this.selectize_instance.setValue(sanitized)
 
       this.onChange(true)
-    } else this._super(value, initial)
-  },
-  afterInputReady: function () {
-    if (window.jQuery && window.jQuery.fn && window.jQuery.fn.selectize && !this.selectize_instance) {
-      // Get options, either global options from "this.defaults.options.selectize" or
-      // single property options from schema "options.selectize"
-      var self = this; var options = this.expandCallbacks('selectize', $extend({}, this.defaults.options.selectize || {}, this.options.selectize || {}))
+    } else super.setValue(value, initial)
+  }
 
-      // New items are allowed if option "create" is true and type is "string"
+  afterInputReady() {
+    if (window.jQuery && window.jQuery.fn && window.jQuery.fn.selectize && !this.selectize_instance) {
+      /* Get options, either global options from "this.defaults.options.selectize" or */
+      /* single property options from schema "options.selectize" */
+      const self = this; const options = this.expandCallbacks('selectize', extend({}, this.defaults.options.selectize || {}, this.options.selectize || {}));
+
+      /* New items are allowed if option "create" is true and type is "string" */
       this.newEnumAllowed = options.create = !!options.create && this.schema.type === 'string'
 
       this.selectize_instance = (window.jQuery(this.input).selectize(options))[0].selectize
 
-      // Remove change handler set in parent class (src/multiselect.js)
+      /* Remove change handler set in parent class (src/multiselect.js) */
       this.control.removeEventListener('change', this.multiselectChangeHandler)
 
-      // Create a new change handler
-      this.multiselectChangeHandler = function (value) {
-        // var value = self.selectize_instance.getValue(true);
-        // self.value = value;
+      /* Create a new change handler */
+      this.multiselectChangeHandler = value => {
+        /* var value = self.selectize_instance.getValue(true); */
+        /* self.value = value; */
         self.updateValue(value)
         self.onChange(true)
       }
 
-      // Add new event handler.
-      // Note: Must use the "on()" method and not addEventListener()
+      /* Add new event handler. */
+      /* Note: Must use the "on()" method and not addEventListener() */
       this.selectize_instance.on('change', this.multiselectChangeHandler)
     }
-    this._super()
-  },
-  updateValue: function (value) {
-    var sanitized = this.enum_values[0]
+    super.afterInputReady()
+  }
+
+  updateValue(value) {
+    let sanitized = this.enum_values[0];
     value = this.typecast(value || '')
-    if (this.enum_values.indexOf(value) === -1) {
+    if (!this.enum_values.includes(value)) {
       if (this.newEnumAllowed) {
         sanitized = this.addNewOption(value) ? value : sanitized
       }
     } else sanitized = value
     this.value = sanitized
     return sanitized
-  },
-  addNewOption: function (value) {
-    var sanitized = this.typecast(value); var res = false
+  }
 
-    if (this.enum_values.indexOf(sanitized) < 0 && sanitized !== '') {
-      // Add to list of valid enum values
-      this.enum_options.push('' + sanitized)
-      this.enum_display.push('' + sanitized)
+  addNewOption(value) {
+    const sanitized = this.typecast(value); let res = false;
+
+    if (!this.enum_values.includes(sanitized) && sanitized !== '') {
+      /* Add to list of valid enum values */
+      this.enum_options.push(`${sanitized}`)
+      this.enum_display.push(`${sanitized}`)
       this.enum_values.push(sanitized)
-      // Update Schema enum to prevent triggering error
-      // "Value must be one of the enumerated values"
+      /* Update Schema enum to prevent triggering error */
+      /* "Value must be one of the enumerated values" */
       this.schema.enum.push(sanitized)
 
-      // Add selectize item
+      /* Add selectize item */
       this.selectize_instance.addItem(sanitized)
       this.selectize_instance.refreshOptions(false)
 
       res = true
     }
     return res
-  },
-  onWatchedFieldChange: function () {
-    this._super()
+  }
+
+  onWatchedFieldChange() {
+    super.onWatchedFieldChange()
     if (this.selectize_instance) {
-      var self = this
-      this.selectize_instance.clear(true) // Clear selection
-      this.selectize_instance.clearOptions(true) // Remove all options
-      this.enum_options.forEach(function (value, i) {
-        self.selectize_instance.addOption({ value: value, text: self.enum_display[i] })
+      const self = this;
+      this.selectize_instance.clear(true) /* Clear selection */
+      this.selectize_instance.clearOptions(true) /* Remove all options */
+      this.enum_options.forEach((value, i) => {
+        self.selectize_instance.addOption({ value, text: self.enum_display[i] })
       })
-      this.selectize_instance.addItem(this.value + '', true) // Set new selection
+      this.selectize_instance.addItem(`${this.value}`, true) /* Set new selection */
     }
-  },
-  enable: function () {
+  }
+
+  enable() {
     if (!this.always_disabled && this.selectize_instance) this.selectize_instance.unlock()
-    this._super()
-  },
-  disable: function (alwaysDisabled) {
+    super.enable()
+  }
+
+  disable(alwaysDisabled) {
     if (this.selectize_instance) this.selectize_instance.lock()
-    this._super(alwaysDisabled)
-  },
-  destroy: function () {
+    super.disable(alwaysDisabled)
+  }
+
+  destroy() {
     if (this.selectize_instance) {
       this.selectize_instance.destroy()
       this.selectize_instance = null
     }
-    this._super()
+    super.destroy()
   }
-})
+}

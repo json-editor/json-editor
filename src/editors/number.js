@@ -1,12 +1,11 @@
-import { StringEditor } from './string'
+import { StringEditor } from './string.js'
 
-export var NumberEditor = StringEditor.extend({
-
-  build: function () {
-    this._super()
+export class NumberEditor extends StringEditor {
+  build() {
+    super.build()
 
     if (typeof this.schema.minimum !== 'undefined') {
-      var minimum = this.schema.minimum
+      let minimum = this.schema.minimum
 
       if (typeof this.schema.exclusiveMinimum !== 'undefined') {
         minimum += 1
@@ -16,7 +15,7 @@ export var NumberEditor = StringEditor.extend({
     }
 
     if (typeof this.schema.maximum !== 'undefined') {
-      var maximum = this.schema.maximum
+      let maximum = this.schema.maximum
 
       if (typeof this.schema.exclusiveMaximum !== 'undefined') {
         maximum -= 1
@@ -26,25 +25,26 @@ export var NumberEditor = StringEditor.extend({
     }
 
     if (typeof this.schema.step !== 'undefined') {
-      var step = this.schema.step || 1
+      const step = this.schema.step || 1
       this.input.setAttribute('step', step)
     }
 
-    // Set custom attributes on input element. Parameter is array of protected keys. Empty array if none.
+    /* Set custom attributes on input element. Parameter is array of protected keys. Empty array if none. */
     this.setInputAttributes(['maxlength', 'pattern', 'readonly', 'min', 'max', 'step'])
-  },
-  sanitize: function (value) {
-    // eslint says the first escape is useless but removing it breaks e2e tests
-    // eslint-disable-next-line no-useless-escape
-    return (value + '').replace(/[^0-9\.\-eE]/g, '')
-  },
-  getNumColumns: function () {
+  }
+
+  sanitize(value) {
+    return (`${value}`).replace(/[^0-9\.\-eE]/g, '')
+  }
+
+  getNumColumns() {
     return 2
-  },
-  getValue: function () {
+  }
+
+  getValue() {
     if (!this.dependenciesFulfilled) {
       return undefined
     }
     return this.value === '' ? undefined : this.value * 1
   }
-})
+}

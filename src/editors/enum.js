@@ -1,12 +1,13 @@
-// Enum Editor (used for objects and arrays with enumerated values)
-import { AbstractEditor } from '../editor'
-import { $each } from '../utilities'
+/* Enum Editor (used for objects and arrays with enumerated values) */
+import { AbstractEditor } from '../editor.js'
+import { each } from '../utilities.js'
 
-export var EnumEditor = AbstractEditor.extend({
-  getNumColumns: function () {
+export class EnumEditor extends AbstractEditor {
+  getNumColumns() {
     return 4
-  },
-  build: function () {
+  }
+
+  build() {
     this.title = this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     this.container.appendChild(this.title)
 
@@ -17,17 +18,17 @@ export var EnumEditor = AbstractEditor.extend({
     this.select_options = []
     this.html_values = []
 
-    var self = this
-    for (var i = 0; i < this['enum'].length; i++) {
-      this.select_options[i] = this.options.enum_titles[i] || 'Value ' + (i + 1)
+    const self = this
+    for (let i = 0; i < this['enum'].length; i++) {
+      this.select_options[i] = this.options.enum_titles[i] || `Value ${i + 1}`
       this.html_values[i] = this.getHTML(this['enum'][i])
     }
 
-    // Switcher
+    /* Switcher */
     this.switcher = this.theme.getSwitcher(this.select_options)
     this.container.appendChild(this.switcher)
 
-    // Display area
+    /* Display area */
     this.display_area = this.theme.getIndentedPanel()
     this.container.appendChild(this.display_area)
 
@@ -43,12 +44,13 @@ export var EnumEditor = AbstractEditor.extend({
     this.refreshValue()
 
     if (this['enum'].length === 1) this.switcher.style.display = 'none'
-  },
-  refreshValue: function () {
-    var self = this
+  }
+
+  refreshValue() {
+    const self = this
     self.selected = -1
-    var stringified = JSON.stringify(this.value)
-    $each(this['enum'], function (i, el) {
+    const stringified = JSON.stringify(this.value)
+    each(this['enum'], (i, el) => {
       if (stringified === JSON.stringify(el)) {
         self.selected = i
         return false
@@ -62,68 +64,73 @@ export var EnumEditor = AbstractEditor.extend({
 
     this.switcher.value = this.select_options[this.selected]
     this.display_area.innerHTML = this.html_values[this.selected]
-  },
-  enable: function () {
+  }
+
+  enable() {
     if (!this.always_disabled) {
       this.switcher.disabled = false
-      this._super()
+      super.enable()
     }
-  },
-  disable: function (alwaysDisabled) {
+  }
+
+  disable(alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     this.switcher.disabled = true
-    this._super()
-  },
-  getHTML: function (el) {
-    var self = this
+    super.disable()
+  }
+
+  getHTML(el) {
+    const self = this
 
     if (el === null) {
       return '<em>null</em>'
-    // Array or Object
+      /* Array or Object */
     } else if (typeof el === 'object') {
-      // TODO: use theme
-      var ret = ''
+      /* TODO: use theme */
+      let ret = ''
 
-      $each(el, function (i, child) {
-        var html = self.getHTML(child)
+      each(el, (i, child) => {
+        let html = self.getHTML(child)
 
-        // Add the keys to object children
+        /* Add the keys to object children */
         if (!(Array.isArray(el))) {
-          // TODO: use theme
-          html = '<div><em>' + i + '</em>: ' + html + '</div>'
+          /* TODO: use theme */
+          html = `<div><em>${i}</em>: ${html}</div>`
         }
 
-        // TODO: use theme
-        ret += '<li>' + html + '</li>'
+        /* TODO: use theme */
+        ret += `<li>${html}</li>`
       })
 
-      if (Array.isArray(el)) ret = '<ol>' + ret + '</ol>'
-      else ret = "<ul style='margin-top:0;margin-bottom:0;padding-top:0;padding-bottom:0;'>" + ret + '</ul>'
+      if (Array.isArray(el)) ret = `<ol>${ret}</ol>`
+      else ret = `<ul style='margin-top:0;margin-bottom:0;padding-top:0;padding-bottom:0;'>${ret}</ul>`
 
       return ret
-    // Boolean
+      /* Boolean */
     } else if (typeof el === 'boolean') {
       return el ? 'true' : 'false'
-    // String
+      /* String */
     } else if (typeof el === 'string') {
       return el.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    // Number
+      /* Number */
     } else {
       return el
     }
-  },
-  setValue: function (val) {
+  }
+
+  setValue(val) {
     if (this.value !== val) {
       this.value = val
       this.refreshValue()
       this.onChange()
     }
-  },
-  destroy: function () {
+  }
+
+  destroy() {
     if (this.display_area && this.display_area.parentNode) this.display_area.parentNode.removeChild(this.display_area)
     if (this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title)
     if (this.switcher && this.switcher.parentNode) this.switcher.parentNode.removeChild(this.switcher)
 
-    this._super()
+    super.destroy()
   }
-})
+}

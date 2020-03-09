@@ -1,56 +1,52 @@
-export var defaultTemplate = function () {
-  return {
-    compile: function (template) {
-      var matches = template.match(/{{\s*([a-zA-Z0-9\-_ .]+)\s*}}/g)
-      var l = matches && matches.length
+export const defaultTemplate = () => ({
+  compile(template) {
+    const matches = template.match(/{{\s*([a-zA-Z0-9\-_ .]+)\s*}}/g);
+    const l = matches && matches.length;
 
-      // Shortcut if the template contains no variables
-      if (!l) return function () { return template }
+    /* Shortcut if the template contains no variables */
+    if (!l) return () => template;
 
-      // Pre-compute the search/replace functions
-      // This drastically speeds up template execution
-      var replacements = []
-      var getReplacement = function (i) {
-        var p = matches[i].replace(/[{}]+/g, '').trim().split('.')
-        var n = p.length
-        var func
+    /* Pre-compute the search/replace functions */
+    /* This drastically speeds up template execution */
+    const replacements = [];
+    const getReplacement = i => {
+      let p = matches[i].replace(/[{}]+/g, '').trim().split('.');
+      const n = p.length;
+      let func;
 
-        if (n > 1) {
-          var cur
-          func = function (vars) {
-            cur = vars
-            for (i = 0; i < n; i++) {
-              cur = cur[p[i]]
-              if (!cur) break
-            }
-            return cur
+      if (n > 1) {
+        let cur;
+        func = vars => {
+          cur = vars
+          for (i = 0; i < n; i++) {
+            cur = cur[p[i]]
+            if (!cur) break
           }
-        } else {
-          p = p[0]
-          func = function (vars) {
-            return vars[p]
-          }
+          return cur
         }
-
-        replacements.push({
-          s: matches[i],
-          r: func
-        })
-      }
-      for (var i = 0; i < l; i++) {
-        getReplacement(i)
+      } else {
+        p = p[0]
+        func = vars => vars[p]
       }
 
-      // The compiled function
-      return function (vars) {
-        var ret = template + ''
-        var r
-        for (i = 0; i < l; i++) {
-          r = replacements[i]
-          ret = ret.replace(r.s, r.r(vars))
-        }
-        return ret
-      }
+      replacements.push({
+        s: matches[i],
+        r: func
+      })
+    };
+    for (var i = 0; i < l; i++) {
+      getReplacement(i)
     }
+
+    /* The compiled function */
+    return vars => {
+      let ret = `${template}`;
+      let r;
+      for (i = 0; i < l; i++) {
+        r = replacements[i]
+        ret = ret.replace(r.s, r.r(vars))
+      }
+      return ret
+    };
   }
-}
+});

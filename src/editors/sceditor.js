@@ -1,22 +1,24 @@
-import { StringEditor } from './string'
-import { $extend } from '../utilities'
-export var ScEditor = StringEditor.extend({
+import { StringEditor } from './string.js'
+import { extend } from '../utilities.js'
 
-  setValue: function (value, initial, fromTemplate) {
-    var res = this._super(value, initial, fromTemplate)
+export class ScEditor extends StringEditor {
+  setValue(value, initial, fromTemplate) {
+    const res = super.setValue(value, initial, fromTemplate)
     if (res !== undefined && res.changed && this.sceditor_instance) this.sceditor_instance.val(res.value)
-  },
-  build: function () {
-    this.options.format = 'textarea' // Force format into "textarea"
-    this._super()
-    this.input_type = this.schema.format // Restore original format
+  }
+
+  build() {
+    this.options.format = 'textarea' /* Force format into "textarea" */
+    super.build()
+    this.input_type = this.schema.format /* Restore original format */
     this.input.setAttribute('data-schemaformat', this.input_type)
-  },
-  afterInputReady: function () {
+  }
+
+  afterInputReady() {
     if (window.sceditor) {
-      // Get options, either global options from "this.defaults.options.sceditor" or
-      // single property options from schema "options.sceditor"
-      var options = this.expandCallbacks('sceditor', $extend({}, {
+      /* Get options, either global options from "this.defaults.options.sceditor" or */
+      /* single property options from schema "options.sceditor" */
+      const options = this.expandCallbacks('sceditor', extend({}, {
         format: this.input_type,
         emoticonsEnabled: false,
         width: '100%',
@@ -26,41 +28,45 @@ export var ScEditor = StringEditor.extend({
         element: this.input
       }))
 
-      var instance = window.sceditor.instance(this.input)
+      const instance = window.sceditor.instance(this.input)
 
       if (instance === undefined) {
-        window.sceditor.create(this.input, options) // Create doesn't return instance.
+        window.sceditor.create(this.input, options) /* Create doesn't return instance. */
       }
 
       this.sceditor_instance = instance || window.sceditor.instance(this.input)
 
-      // Listen for changes
-      this.sceditor_instance.blur(function () {
+      /* Listen for changes */
+      this.sceditor_instance.blur(() => {
         this.value = this.sceditor_instance.val()
         this.sceditor_instance.updateOriginal()
         this.is_dirty = true
         this.onChange(true)
-      }.bind(this))
+      })
 
       this.theme.afterInputReady(this.input)
-    } else this._super() // Library not loaded, so just treat this as a string
-  },
-  getNumColumns: function () {
+    } else super.afterInputReady() /* Library not loaded, so just treat this as a string */
+  }
+
+  getNumColumns() {
     return 6
-  },
-  enable: function () {
+  }
+
+  enable() {
     if (!this.always_disabled && this.sceditor_instance) this.sceditor_instance.readOnly(false)
-    this._super()
-  },
-  disable: function (alwaysDisabled) {
+    super.enable()
+  }
+
+  disable(alwaysDisabled) {
     if (this.sceditor_instance) this.sceditor_instance.readOnly(true)
-    this._super(alwaysDisabled)
-  },
-  destroy: function () {
+    super.disable(alwaysDisabled)
+  }
+
+  destroy() {
     if (this.sceditor_instance) {
       this.sceditor_instance.destroy()
       this.sceditor_instance = null
     }
-    this._super()
+    super.destroy()
   }
-})
+}

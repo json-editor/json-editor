@@ -1,15 +1,13 @@
-export var ejsTemplate = function () {
+export const ejsTemplate = () => {
   if (!window.EJS) return false
 
   return {
-    compile: function (template) {
-      var compiled = new window.EJS({
+    compile(template) {
+      const compiled = new window.EJS({
         text: template
-      })
+      });
 
-      return function (context) {
-        return compiled.render(context)
-      }
+      return context => compiled.render(context);
     }
-  }
-}
+  };
+};

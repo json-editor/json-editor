@@ -1,54 +1,59 @@
-import { AbstractEditor } from '../editor'
-import { $each } from '../utilities'
+import { AbstractEditor } from '../editor.js'
+import { each } from '../utilities.js'
 
-export var MultiSelectEditor = AbstractEditor.extend({
-  onInputChange: function () {
+export class MultiSelectEditor extends AbstractEditor {
+  onInputChange() {
     this.value = this.input.value
     this.onChange(true)
-  },
-  register: function () {
-    this._super()
+  }
+
+  register() {
+    super.register()
     if (!this.input) return
     this.input.setAttribute('name', this.formname)
-  },
-  unregister: function () {
-    this._super()
+  }
+
+  unregister() {
+    super.unregister()
     if (!this.input) return
     this.input.removeAttribute('name')
-  },
-  getNumColumns: function () {
-    var longestText = this.getTitle().length
-    for (var i in this.select_values) {
+  }
+
+  getNumColumns() {
+    let longestText = this.getTitle().length
+    for (const i in this.select_values) {
       if (!this.select_values.hasOwnProperty(i)) continue
-      longestText = Math.max(longestText, (this.select_values[i] + '').length + 4)
+      longestText = Math.max(longestText, (`${this.select_values[i]}`).length + 4)
     }
 
     return Math.min(12, Math.max(longestText / 7, 2))
-  },
-  preBuild: function () {
-    this._super()
+  }
+
+  preBuild() {
+    super.preBuild()
 
     this.select_options = {}
     this.select_values = {}
     this.option_keys = []
     this.option_titles = []
 
-    var i
-    var itemsSchema = this.jsoneditor.expandRefs(this.schema.items || {})
-    var e = itemsSchema['enum'] || []
-    var t = itemsSchema.options ? itemsSchema.options.enum_titles || [] : []
+    let i
+    const itemsSchema = this.jsoneditor.expandRefs(this.schema.items || {})
+    const e = itemsSchema['enum'] || []
+    const t = itemsSchema.options ? itemsSchema.options.enum_titles || [] : []
 
     for (i = 0; i < e.length; i++) {
-      // If the sanitized value is different from the enum value, don't include it
+      /* If the sanitized value is different from the enum value, don't include it */
       if (this.sanitize(e[i]) !== e[i]) continue
 
-      this.option_keys.push(e[i] + '')
-      this.option_titles.push((t[i] || e[i]) + '')
-      this.select_values[e[i] + ''] = e[i]
+      this.option_keys.push(`${e[i]}`)
+      this.option_titles.push(`${t[i] || e[i]}`)
+      this.select_values[`${e[i]}`] = e[i]
     }
-  },
-  build: function () {
-    var self = this; var i
+  }
+
+  build() {
+    const self = this; let i
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
     if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText)
@@ -62,17 +67,17 @@ export var MultiSelectEditor = AbstractEditor.extend({
       for (i = 0; i < this.option_keys.length; i++) {
         this.inputs[this.option_keys[i]] = this.theme.getCheckbox()
         this.select_options[this.option_keys[i]] = this.inputs[this.option_keys[i]]
-        var label = this.theme.getCheckboxLabel(this.option_titles[i])
+        const label = this.theme.getCheckboxLabel(this.option_titles[i])
         this.controls[this.option_keys[i]] = this.theme.getFormControl(label, this.inputs[this.option_keys[i]])
       }
 
       this.control = this.theme.getMultiCheckboxHolder(this.controls, this.label, this.description, this.infoButton)
-      this.inputs.controlgroup = this.inputs.controls = this.control // Enable error messages for checkboxes
+      this.inputs.controlgroup = this.inputs.controls = this.control /* Enable error messages for checkboxes */
     } else {
       this.input_type = 'select'
       this.input = this.theme.getSelectInput(this.option_keys, true)
       this.theme.setSelectOptions(this.input, this.option_keys, this.option_titles)
-      // this.input.multiple = true;
+      /* this.input.multiple = true; */
       this.input.setAttribute('multiple', 'multiple')
       this.input.size = Math.min(10, this.option_keys.length)
       for (i = 0; i < this.option_keys.length; i++) {
@@ -86,8 +91,8 @@ export var MultiSelectEditor = AbstractEditor.extend({
 
     this.container.appendChild(this.control)
 
-    this.multiselectChangeHandler = function (e) {
-      var newValue = []
+    this.multiselectChangeHandler = e => {
+      const newValue = []
       for (i = 0; i < self.option_keys.length; i++) {
         if (self.select_options[self.option_keys[i]] && (self.select_options[self.option_keys[i]].selected || self.select_options[self.option_keys[i]].checked)) newValue.push(self.select_values[self.option_keys[i]])
       }
@@ -97,112 +102,124 @@ export var MultiSelectEditor = AbstractEditor.extend({
 
     this.control.addEventListener('change', this.multiselectChangeHandler, false)
 
-    // Any special formatting that needs to happen after the input is added to the dom
-    window.requestAnimationFrame(function () {
+    /* Any special formatting that needs to happen after the input is added to the dom */
+    window.requestAnimationFrame(() => {
       self.afterInputReady()
     })
-  },
-  postBuild: function () {
-    this._super()
-    // this.theme.afterInputReady(this.input || this.inputs);
-  },
-  afterInputReady: function () {
-    var self = this
+  }
+
+  postBuild() {
+    super.postBuild()
+    /* this.theme.afterInputReady(this.input || this.inputs); */
+  }
+
+  afterInputReady() {
+    const self = this
     this.theme.afterInputReady(self.input || self.inputs)
-  },
-  setValue: function (value, initial) {
-    var i
+  }
+
+  setValue(value, initial) {
+    let i
     value = value || []
     if (!(Array.isArray(value))) value = [value]
 
-    // Make sure we are dealing with an array of strings so we can check for strict equality
-    value = value.map(function (e) { return e + '' })
+    /* Make sure we are dealing with an array of strings so we can check for strict equality */
+    value = value.map(e => `${e}`)
 
-    // Update selected status of options
+    /* Update selected status of options */
     for (i in this.select_options) {
       if (!this.select_options.hasOwnProperty(i)) continue
-      this.select_options[i][this.input_type === 'select' ? 'selected' : 'checked'] = (value.indexOf(i) !== -1)
+      this.select_options[i][this.input_type === 'select' ? 'selected' : 'checked'] = (value.includes(i))
     }
 
     this.updateValue(value)
     this.onChange(true)
-  },
-  removeValue: function (value) {
-    // Remove from existing value(s)
+  }
+
+  removeValue(value) {
+    /* Remove from existing value(s) */
     value = [].concat(value)
-    this.setValue(this.getValue().filter(function (item) { return value.indexOf(item) === -1 }))
-  },
-  addValue: function (value) {
-    // Add to existing value(s)
+    this.setValue(this.getValue().filter(item => !value.includes(item)))
+  }
+
+  addValue(value) {
+    /* Add to existing value(s) */
     this.setValue(this.getValue().concat(value))
-  },
-  updateValue: function (value) {
-    var changed = false
-    var newValue = []
-    for (var i = 0; i < value.length; i++) {
-      if (!this.select_options[value[i] + '']) {
+  }
+
+  updateValue(value) {
+    let changed = false
+    const newValue = []
+    for (let i = 0; i < value.length; i++) {
+      if (!this.select_options[`${value[i]}`]) {
         changed = true
         continue
       }
-      var sanitized = this.sanitize(this.select_values[value[i]])
+      const sanitized = this.sanitize(this.select_values[value[i]])
       newValue.push(sanitized)
       if (sanitized !== value[i]) changed = true
     }
     this.value = newValue
 
     return changed
-  },
-  sanitize: function (value) {
+  }
+
+  sanitize(value) {
     if (this.schema.items.type === 'boolean') return !!value
     else if (this.schema.items.type === 'number') return 1 * value || 0
     else if (this.schema.items.type === 'integer') return Math.floor(value * 1 || 0)
-    else return '' + value
-  },
-  enable: function () {
+    else return `${value}`
+  }
+
+  enable() {
     if (!this.always_disabled) {
       if (this.input) {
         this.input.disabled = false
       } else if (this.inputs) {
-        for (var i in this.inputs) {
+        for (const i in this.inputs) {
           if (!this.inputs.hasOwnProperty(i)) continue
           this.inputs[i].disabled = false
         }
       }
-      this._super()
+      super.enable()
     }
-  },
-  disable: function (alwaysDisabled) {
+  }
+
+  disable(alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     if (this.input) {
       this.input.disabled = true
     } else if (this.inputs) {
-      for (var i in this.inputs) {
+      for (const i in this.inputs) {
         if (!this.inputs.hasOwnProperty(i)) continue
         this.inputs[i].disabled = true
       }
     }
-    this._super()
-  },
-  destroy: function () {
-    this._super()
-  },
-  escapeRegExp: function (string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-  },
-  showValidationErrors: function (errors) {
-    var regexPath = new RegExp('^' + this.escapeRegExp(this.path) + '(\\.\\d+)?$')
-    var messages = []
+    super.disable()
+  }
 
-    $each(errors, function (i, error) {
+  destroy() {
+    super.destroy()
+  }
+
+  escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  }
+
+  showValidationErrors(errors) {
+    const regexPath = new RegExp(`^${this.escapeRegExp(this.path)}(\\.\\d+)?$`)
+    const messages = []
+
+    each(errors, (i, error) => {
       if (error.path.match(regexPath)) {
         messages.push(error.message)
       }
     })
 
     if (messages.length) {
-      this.theme.addInputError(this.input || this.inputs, messages.join('. ') + '.')
+      this.theme.addInputError(this.input || this.inputs, `${messages.join('. ')}.`)
     } else {
       this.theme.removeInputError(this.input || this.inputs)
     }
   }
-})
+}

@@ -1,58 +1,56 @@
-import { AbstractTheme } from '../theme'
+import { AbstractTheme } from '../theme.js'
 
-export var bootstrap3Theme = AbstractTheme.extend({
-  /* Theme config options that allows changing various aspects of the output */
-  options: {
-    'disable_theme_rules': false
-  },
-  /* Custom stylesheet rules. format: "selector" : "CSS rules" */
-  rules: {
-    'div[data-schemaid="root"]:after': 'position:relative;color:red;margin:10px 0;font-weight:600;display:block;width:100%;text-align:center;content:"This is an old JSON-Editor 1.x Theme and might not display elements correctly when used with the 2.x version"'
-  },
-  getSelectInput: function (options, multiple) {
-    var el = this._super(options)
+export class bootstrap3Theme extends AbstractTheme {
+  getSelectInput(options, multiple) {
+    const el = super.getSelectInput(options)
     el.classList.add('form-control')
-    // el.style.width = 'auto';
+    /* el.style.width = 'auto'; */
     return el
-  },
-  setGridColumnSize: function (el, size, offset) {
-    el.classList.add('col-md-' + size)
+  }
+
+  setGridColumnSize(el, size, offset) {
+    el.classList.add(`col-md-${size}`)
     if (offset) {
-      el.classList.add('col-md-offset-' + offset)
+      el.classList.add(`col-md-offset-${offset}`)
     }
-  },
-  afterInputReady: function (input) {
+  }
+
+  afterInputReady(input) {
     if (input.controlgroup) return
     input.controlgroup = this.closest(input, '.form-group')
     if (this.closest(input, '.compact')) {
       input.controlgroup.style.marginBottom = 0
     }
     if (this.queuedInputErrorText) {
-      var text = this.queuedInputErrorText
+      const text = this.queuedInputErrorText
       delete this.queuedInputErrorText
       this.addInputError(input, text)
     }
 
-    // TODO: use bootstrap slider
-  },
-  getTextareaInput: function () {
-    var el = document.createElement('textarea')
+    /* TODO: use bootstrap slider */
+  }
+
+  getTextareaInput() {
+    const el = document.createElement('textarea')
     el.classList.add('form-control')
     return el
-  },
-  getRangeInput: function (min, max, step) {
-    // TODO: use better slider
-    return this._super(min, max, step)
-  },
-  getFormInputField: function (type) {
-    var el = this._super(type)
+  }
+
+  getRangeInput(min, max, step) {
+    /* TODO: use better slider */
+    return super.getRangeInput(min, max, step)
+  }
+
+  getFormInputField(type) {
+    const el = super.getFormInputField(type)
     if (type !== 'checkbox' && type !== 'radio') {
       el.classList.add('form-control')
     }
     return el
-  },
-  getFormControl: function (label, input, description) {
-    var group = document.createElement('div')
+  }
+
+  getFormControl(label, input, description) {
+    const group = document.createElement('div')
 
     if (label && (input.type === 'checkbox' || input.type === 'radio')) {
       group.classList.add(input.type)
@@ -70,21 +68,23 @@ export var bootstrap3Theme = AbstractTheme.extend({
     if (description) group.appendChild(description)
 
     return group
-  },
-  getIndentedPanel: function () {
-    var el = document.createElement('div')
+  }
+
+  getIndentedPanel() {
+    const el = document.createElement('div')
     el.classList.add('well', 'well-sm')
     el.style.paddingBottom = 0
     return el
-  },
-  getInfoButton: function (text) {
-    var icon = document.createElement('span')
+  }
+
+  getInfoButton(text) {
+    const icon = document.createElement('span')
     icon.classList.add('glyphicon', 'glyphicon-info-sign', 'pull-right')
     icon.style.padding = '.25rem'
     icon.style.position = 'relative'
     icon.style.display = 'inline-block'
 
-    var tooltip = document.createElement('span')
+    const tooltip = document.createElement('span')
     tooltip.style['font-family'] = 'sans-serif'
     tooltip.style.visibility = 'hidden'
     tooltip.style['background-color'] = 'rgba(50, 50, 50, .75)'
@@ -96,48 +96,53 @@ export var bootstrap3Theme = AbstractTheme.extend({
     tooltip.style.transform = 'translateX(-27rem) translateY(-.5rem)'
     tooltip.style.position = 'absolute'
     tooltip.innerText = text
-    icon.onmouseover = function () {
+    icon.onmouseover = () => {
       tooltip.style.visibility = 'visible'
     }
-    icon.onmouseleave = function () {
+    icon.onmouseleave = () => {
       tooltip.style.visibility = 'hidden'
     }
 
     icon.appendChild(tooltip)
 
     return icon
-  },
-  getFormInputDescription: function (text) {
-    var el = document.createElement('p')
+  }
+
+  getFormInputDescription(text) {
+    const el = document.createElement('p')
     el.classList.add('help-block')
     if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text)
     else el.textContent = this.cleanText(text)
     return el
-  },
-  getHeaderButtonHolder: function () {
-    var el = this.getButtonHolder()
+  }
+
+  getHeaderButtonHolder() {
+    const el = this.getButtonHolder()
     el.style.marginLeft = '10px'
     return el
-  },
-  getButtonHolder: function () {
-    var el = document.createElement('span')
+  }
+
+  getButtonHolder() {
+    const el = document.createElement('span')
     el.classList.add('btn-group')
     return el
-  },
-  getButton: function (text, icon, title) {
-    var el = this._super(text, icon, title)
+  }
+
+  getButton(text, icon, title) {
+    const el = super.getButton(text, icon, title)
     el.classList.add('btn', 'btn-default')
     return el
-  },
-  getTable: function () {
-    var el = document.createElement('table')
+  }
+
+  getTable() {
+    const el = document.createElement('table')
     el.classList.add('table', 'table-bordered')
     el.style.width = 'auto'
     el.style.maxWidth = 'none'
     return el
-  },
+  }
 
-  addInputError: function (input, text) {
+  addInputError(input, text) {
     if (!input.controlgroup) {
       this.queuedInputErrorText = text
       return
@@ -152,66 +157,72 @@ export var bootstrap3Theme = AbstractTheme.extend({
     }
 
     input.errmsg.textContent = text
-  },
-  removeInputError: function (input) {
+  }
+
+  removeInputError(input) {
     if (!input.controlgroup) {
       delete this.queuedInputErrorText
     }
     if (!input.errmsg) return
     input.errmsg.style.display = 'none'
     input.controlgroup.classList.remove('has-error')
-  },
-  getTabHolder: function (propertyName) {
-    var pName = (typeof propertyName === 'undefined') ? '' : propertyName
-    var el = document.createElement('div')
-    el.innerHTML = "<ul class='col-md-2 nav nav-pills nav-stacked' id='" + pName + "' role='tablist'></ul>" +
-      "<div class='col-md-10 tab-content well well-small'  id='" + pName + "'></div>"
+  }
+
+  getTabHolder(propertyName) {
+    const pName = (typeof propertyName === 'undefined') ? '' : propertyName
+    const el = document.createElement('div')
+    el.innerHTML = `<ul class='col-md-2 nav nav-pills nav-stacked' id='${pName}' role='tablist'></ul><div class='col-md-10 tab-content well well-small'  id='${pName}'></div>`
     return el
-  },
-  getTopTabHolder: function (propertyName) {
-    var pName = (typeof propertyName === 'undefined') ? '' : propertyName
-    var el = document.createElement('div')
-    el.innerHTML = "<ul class='nav nav-tabs' id='" + pName + "' role='tablist'></ul>" +
-      "<div class='tab-content well well-small'  id='" + pName + "'></div>"
+  }
+
+  getTopTabHolder(propertyName) {
+    const pName = (typeof propertyName === 'undefined') ? '' : propertyName
+    const el = document.createElement('div')
+    el.innerHTML = `<ul class='nav nav-tabs' id='${pName}' role='tablist'></ul><div class='tab-content well well-small'  id='${pName}'></div>`
     return el
-  },
-  getTab: function (text, tabId) {
-    var li = document.createElement('li')
+  }
+
+  getTab(text, tabId) {
+    const li = document.createElement('li')
     li.setAttribute('role', 'presentation')
-    var a = document.createElement('a')
-    a.setAttribute('href', '#' + tabId)
+    const a = document.createElement('a')
+    a.setAttribute('href', `#${tabId}`)
     a.appendChild(text)
     a.setAttribute('aria-controls', tabId)
     a.setAttribute('role', 'tab')
     a.setAttribute('data-toggle', 'tab')
     li.appendChild(a)
     return li
-  },
-  getTopTab: function (text, tabId) {
-    var li = document.createElement('li')
+  }
+
+  getTopTab(text, tabId) {
+    const li = document.createElement('li')
     li.setAttribute('role', 'presentation')
-    var a = document.createElement('a')
-    a.setAttribute('href', '#' + tabId)
+    const a = document.createElement('a')
+    a.setAttribute('href', `#${tabId}`)
     a.appendChild(text)
     a.setAttribute('aria-controls', tabId)
     a.setAttribute('role', 'tab')
     a.setAttribute('data-toggle', 'tab')
     li.appendChild(a)
     return li
-  },
-  getTabContent: function () {
-    var el = document.createElement('div')
+  }
+
+  getTabContent() {
+    const el = document.createElement('div')
     el.classList.add('tab-pane')
     el.setAttribute('role', 'tabpanel')
     return el
-  },
-  getTopTabContent: function () {
-    var el = document.createElement('div')
+  }
+
+  getTopTabContent() {
+    const el = document.createElement('div')
     el.classList.add('tab-pane')
     el.setAttribute('role', 'tabpanel')
     return el
-  },
-  markTabActive: function (row) {
+  }
+
+  markTabActive(row) {
     row.tab.classList.add('active')
 
     if (typeof row.rowPane !== 'undefined') {
@@ -219,8 +230,9 @@ export var bootstrap3Theme = AbstractTheme.extend({
     } else {
       row.container.classList.add('active')
     }
-  },
-  markTabInactive: function (row) {
+  }
+
+  markTabInactive(row) {
     row.tab.classList.remove('active')
 
     if (typeof row.rowPane !== 'undefined') {
@@ -228,57 +240,64 @@ export var bootstrap3Theme = AbstractTheme.extend({
     } else {
       row.container.classList.remove('active')
     }
-  },
-  getProgressBar: function () {
-    var min = 0; var max = 100; var start = 0
+  }
 
-    var container = document.createElement('div')
+  getProgressBar() {
+    const min = 0; const max = 100; const start = 0
+
+    const container = document.createElement('div')
     container.classList.add('progress')
 
-    var bar = document.createElement('div')
+    const bar = document.createElement('div')
     bar.classList.add('progress-bar')
     bar.setAttribute('role', 'progressbar')
     bar.setAttribute('aria-valuenow', start)
     bar.setAttribute('aria-valuemin', min)
     bar.setAttribute('aria-valuenax', max)
-    bar.innerHTML = start + '%'
+    bar.innerHTML = `${start}%`
     container.appendChild(bar)
 
     return container
-  },
-  updateProgressBar: function (progressBar, progress) {
+  }
+
+  updateProgressBar(progressBar, progress) {
     if (!progressBar) return
 
-    var bar = progressBar.firstChild
-    var percentage = progress + '%'
+    const bar = progressBar.firstChild
+    const percentage = `${progress}%`
     bar.setAttribute('aria-valuenow', progress)
     bar.style.width = percentage
     bar.innerHTML = percentage
-  },
-  updateProgressBarUnknown: function (progressBar) {
+  }
+
+  updateProgressBarUnknown(progressBar) {
     if (!progressBar) return
 
-    var bar = progressBar.firstChild
+    const bar = progressBar.firstChild
     progressBar.classList.add('progress', 'progress-striped', 'active')
     bar.removeAttribute('aria-valuenow')
     bar.style.width = '100%'
     bar.innerHTML = ''
-  },
-  getInputGroup: function (input, buttons) {
+  }
+
+  getInputGroup(input, buttons) {
     if (!input) return
 
-    var inputGroupContainer = document.createElement('div')
+    const inputGroupContainer = document.createElement('div')
     inputGroupContainer.classList.add('input-group')
     inputGroupContainer.appendChild(input)
 
-    var inputGroup = document.createElement('div')
+    const inputGroup = document.createElement('div')
     inputGroup.classList.add('input-group-btn')
     inputGroupContainer.appendChild(inputGroup)
 
-    for (var i = 0; i < buttons.length; i++) {
+    for (let i = 0; i < buttons.length; i++) {
       inputGroup.appendChild(buttons[i])
     }
 
     return inputGroupContainer
   }
-})
+}
+
+/* Custom stylesheet rules. format: "selector" : "CSS rules" */
+bootstrap3Theme.rules = { 'div[data-schemaid="root"]:after': 'position:relative;color:red;margin:10px 0;font-weight:600;display:block;width:100%;text-align:center;content:"This is an old JSON-Editor 1.x Theme and might not display elements correctly when used with the 2.x version"' }

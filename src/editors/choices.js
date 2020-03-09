@@ -1,13 +1,14 @@
-import { SelectEditor } from './select'
-import { $extend } from '../utilities'
-export var ChoicesEditor = SelectEditor.extend({
+import { SelectEditor } from './select.js'
+import { extend } from '../utilities.js'
+import rules from './choices.css.js'
 
-  setValue: function (value, initial) {
+export class ChoicesEditor extends SelectEditor {
+  setValue(value, initial) {
     if (this.choices_instance) {
-      // Sanitize value before setting it
-      var sanitized = this.typecast(value || '')
+      /* Sanitize value before setting it */
+      let sanitized = this.typecast(value || '')
 
-      if (this.enum_values.indexOf(sanitized) < 0) sanitized = this.enum_values[0]
+      if (!this.enum_values.includes(sanitized)) sanitized = this.enum_values[0]
 
       if (this.value === sanitized) return
 
@@ -20,40 +21,50 @@ export var ChoicesEditor = SelectEditor.extend({
 
       this.value = sanitized
       this.onChange()
-    } else this._super(value, initial)
-  },
-  afterInputReady: function () {
+    } else super.setValue(value, initial)
+  }
+
+  afterInputReady() {
     if (window.Choices && !this.choices_instance) {
-      var options
-      // Get options, either global options from "this.defaults.options.choices" or
-      // single property options from schema "options.choices"
-      options = this.expandCallbacks('choices', $extend({}, this.defaults.options.choices || {}, this.options.choices || {}))
+      let options
+      /* Get options, either global options from "this.defaults.options.choices" or */
+      /* single property options from schema "options.choices" */
+      options = this.expandCallbacks('choices', extend({}, this.defaults.options.choices || {}, this.options.choices || {}))
 
       this.choices_instance = new window.Choices(this.input, options)
     }
-    this._super()
-  },
-  onWatchedFieldChange: function () {
-    this._super()
+    super.afterInputReady()
+  }
+
+  onWatchedFieldChange() {
+    super.onWatchedFieldChange()
     if (this.choices_instance) {
-      var self = this; var choicesList = this.enum_options.map(function (v, i) { return { value: v, label: self.enum_display[i] } })
+      const self = this; const choicesList = this.enum_options.map((v, i) => ({
+        value: v,
+        label: self.enum_display[i]
+      }))
       this.choices_instance.setChoices(choicesList, 'value', 'label', true)
-      this.choices_instance.setChoiceByValue(this.value + '') // Set new selection
+      this.choices_instance.setChoiceByValue(`${this.value}`) /* Set new selection */
     }
-  },
-  enable: function () {
+  }
+
+  enable() {
     if (!this.always_disabled && this.choices_instance) this.choices_instance.enable()
-    this._super()
-  },
-  disable: function (alwaysDisabled) {
+    super.enable()
+  }
+
+  disable(alwaysDisabled) {
     if (this.choices_instance) this.choices_instance.disable()
-    this._super(alwaysDisabled)
-  },
-  destroy: function () {
+    super.disable(alwaysDisabled)
+  }
+
+  destroy() {
     if (this.choices_instance) {
       this.choices_instance.destroy()
       this.choices_instance = null
     }
-    this._super()
+    super.destroy()
   }
-})
+}
+
+ChoicesEditor.rules = rules

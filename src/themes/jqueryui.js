@@ -1,46 +1,43 @@
-import { AbstractTheme } from '../theme'
+import { AbstractTheme } from '../theme.js'
 
-export var jqueryuiTheme = AbstractTheme.extend({
-  /* Theme config options that allows changing various aspects of the output */
-  options: {
-    'disable_theme_rules': false
-  },
-  /* Custom stylesheet rules. format: "selector" : "CSS rules" */
-  rules: {
-    'div[data-schemaid="root"]:after': 'position:relative;color:red;margin:10px 0;font-weight:600;display:block;width:100%;text-align:center;content:"This is an old JSON-Editor 1.x Theme and might not display elements correctly when used with the 2.x version"'
-  },
-  getTable: function () {
-    var el = this._super()
+export class jqueryuiTheme extends AbstractTheme {
+  getTable() {
+    const el = super.getTable()
     el.setAttribute('cellpadding', 5)
     el.setAttribute('cellspacing', 0)
     return el
-  },
-  getTableHeaderCell: function (text) {
-    var el = this._super(text)
+  }
+
+  getTableHeaderCell(text) {
+    const el = super.getTableHeaderCell(text)
     el.classList.add('ui-state-active')
     el.style.fontWeight = 'bold'
     return el
-  },
-  getTableCell: function () {
-    var el = this._super()
+  }
+
+  getTableCell() {
+    const el = super.getTableCell()
     el.classList.add('ui-widget-content')
     return el
-  },
-  getHeaderButtonHolder: function () {
-    var el = this.getButtonHolder()
+  }
+
+  getHeaderButtonHolder() {
+    const el = this.getButtonHolder()
     el.style.marginLeft = '10px'
     el.style.fontSize = '.6em'
     el.style.display = 'inline-block'
     return el
-  },
-  getFormInputDescription: function (text) {
-    var el = this.getDescription(text)
+  }
+
+  getFormInputDescription(text) {
+    const el = this.getDescription(text)
     el.style.marginLeft = '10px'
     el.style.display = 'inline-block'
     return el
-  },
-  getFormControl: function (label, input, description, infoText) {
-    var el = this._super(label, input, description, infoText)
+  }
+
+  getFormControl(label, input, description, infoText) {
+    const el = super.getFormControl(label, input, description, infoText)
     if (input.type === 'checkbox') {
       el.style.lineHeight = '25px'
 
@@ -49,49 +46,53 @@ export var jqueryuiTheme = AbstractTheme.extend({
       el.style.padding = '4px 0 8px 0'
     }
     return el
-  },
-  getDescription: function (text) {
-    var el = document.createElement('span')
+  }
+
+  getDescription(text) {
+    const el = document.createElement('span')
     el.style.fontSize = '.8em'
     el.style.fontStyle = 'italic'
     if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text)
     else el.textContent = this.cleanText(text)
     return el
-  },
-  getButtonHolder: function () {
-    var el = document.createElement('div')
+  }
+
+  getButtonHolder() {
+    const el = document.createElement('div')
     el.classList.add('ui-buttonset')
     el.style.fontSize = '.7em'
     return el
-  },
-  getFormInputLabel: function (text, req) {
-    var el = document.createElement('label')
+  }
+
+  getFormInputLabel(text, req) {
+    const el = document.createElement('label')
     el.style.fontWeight = 'bold'
     el.style.display = 'block'
     el.textContent = text
     if (req) el.classList.add('required')
     return el
-  },
-  getButton: function (text, icon, title) {
-    var button = document.createElement('button')
+  }
+
+  getButton(text, icon, title) {
+    const button = document.createElement('button')
     button.classList.add('ui-button', 'ui-widget', 'ui-state-default', 'ui-corner-all')
 
-    // Icon only
+    /* Icon only */
     if (icon && !text) {
       button.classList.add('ui-button-icon-only')
       icon.classList.add('ui-button-icon-primary', 'ui-icon-primary')
       button.appendChild(icon)
-    // Icon and Text
+      /* Icon and Text */
     } else if (icon) {
       button.classList.add('ui-button-text-icon-primary')
       icon.classList.add('ui-button-icon-primary', 'ui-icon-primary')
       button.appendChild(icon)
-    // Text only
+      /* Text only */
     } else {
       button.classList.add('ui-button-text-only')
     }
 
-    var el = document.createElement('span')
+    const el = document.createElement('span')
     el.classList.add('ui-button-text')
     el.textContent = text || title || '.'
     button.appendChild(el)
@@ -99,50 +100,54 @@ export var jqueryuiTheme = AbstractTheme.extend({
     button.setAttribute('title', title)
 
     return button
-  },
-  setButtonText: function (button, text, icon, title) {
+  }
+
+  setButtonText(button, text, icon, title) {
     button.innerHTML = ''
     button.classList.add('ui-button', 'ui-widget', 'ui-state-default', 'ui-corner-all')
 
-    // Icon only
+    /* Icon only */
     if (icon && !text) {
       button.classList.add('ui-button-icon-only')
       icon.classList.add('ui-button-icon-primary', 'ui-icon-primary')
       button.appendChild(icon)
-    // Icon and Text
+      /* Icon and Text */
     } else if (icon) {
       button.classList.add('ui-button-text-icon-primary')
       icon.classList.add('ui-button-icon-primary', 'ui-icon-primary')
       button.appendChild(icon)
-    // Text only
+      /* Text only */
     } else {
       button.classList.add('ui-button-text-only')
     }
 
-    var el = document.createElement('span')
+    const el = document.createElement('span')
     el.classList.add('ui-button-text')
     el.textContent = text || title || '.'
     button.appendChild(el)
 
     button.setAttribute('title', title)
-  },
-  getIndentedPanel: function () {
-    var el = document.createElement('div')
+  }
+
+  getIndentedPanel() {
+    const el = document.createElement('div')
     el.classList.add('ui-widget-content', 'ui-corner-all')
     el.style.padding = '1em 1.4em'
     el.style.marginBottom = '20px'
     return el
-  },
-  afterInputReady: function (input) {
+  }
+
+  afterInputReady(input) {
     if (input.controls) return
     input.controls = this.closest(input, '.form-control')
     if (this.queuedInputErrorText) {
-      var text = this.queuedInputErrorText
+      const text = this.queuedInputErrorText
       delete this.queuedInputErrorText
       this.addInputError(input, text)
     }
-  },
-  addInputError: function (input, text) {
+  }
+
+  addInputError(input, text) {
     if (!input.controls) {
       this.queuedInputErrorText = text
       return
@@ -156,15 +161,17 @@ export var jqueryuiTheme = AbstractTheme.extend({
     }
 
     input.errmsg.textContent = text
-  },
-  removeInputError: function (input) {
+  }
+
+  removeInputError(input) {
     if (!input.controls) {
       delete this.queuedInputErrorText
     }
     if (!input.errmsg) return
     input.errmsg.style.display = 'none'
-  },
-  markTabActive: function (row) {
+  }
+
+  markTabActive(row) {
     row.tab.classList.remove('ui-widget-header')
     row.tab.classList.add('ui-state-active')
 
@@ -173,8 +180,9 @@ export var jqueryuiTheme = AbstractTheme.extend({
     } else {
       row.container.style.display = ''
     }
-  },
-  markTabInactive: function (row) {
+  }
+
+  markTabInactive(row) {
     row.tab.classList.add('ui-widget-header')
     row.tab.classList.remove('ui-state-active')
 
@@ -184,4 +192,7 @@ export var jqueryuiTheme = AbstractTheme.extend({
       row.container.style.display = 'none'
     }
   }
-})
+}
+
+/* Custom stylesheet rules. format: "selector" : "CSS rules" */
+jqueryuiTheme.rules = { 'div[data-schemaid="root"]:after': 'position:relative;color:red;margin:10px 0;font-weight:600;display:block;width:100%;text-align:center;content:"This is an old JSON-Editor 1.x Theme and might not display elements correctly when used with the 2.x version"' }

@@ -1,19 +1,20 @@
-// Non-Active editor for displaying text blocks in form
-import { ButtonEditor } from './button'
+/* Non-Active editor for displaying text blocks in form */
+import { ButtonEditor } from './button.js'
 
-export var InfoEditor = ButtonEditor.extend({
-
-  build: function () {
+export class InfoEditor extends ButtonEditor {
+  build() {
     this.options.compact = false
     this.header = this.label = this.theme.getFormInputLabel(this.getTitle())
     this.description = this.theme.getDescription(this.schema.description || '')
     this.control = this.theme.getFormControl(this.label, this.description, null)
     this.container.appendChild(this.control)
-  },
-  getTitle: function () {
+  }
+
+  getTitle() {
     return this.schema.title
-  },
-  getNumColumns: function () {
+  }
+
+  getNumColumns() {
     return 12
   }
-})
+}

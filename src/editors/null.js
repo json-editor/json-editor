@@ -1,17 +1,18 @@
-import { AbstractEditor } from '../editor'
+import { AbstractEditor } from '../editor.js'
 
-export var NullEditor = AbstractEditor.extend({
-
-  getValue: function () {
+export class NullEditor extends AbstractEditor {
+  getValue() {
     if (!this.dependenciesFulfilled) {
       return undefined
     }
     return null
-  },
-  setValue: function () {
+  }
+
+  setValue() {
     this.onChange()
-  },
-  getNumColumns: function () {
+  }
+
+  getNumColumns() {
     return 2
   }
-})
+}

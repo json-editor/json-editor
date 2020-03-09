@@ -1,46 +1,49 @@
-import { AbstractIconLib } from '../iconlib'
+import  { AbstractIconLib } from  '../iconlib.js'
 
-export var materialiconsIconlib = AbstractIconLib.extend({
-  mapping: {
-    collapse: 'arrow_drop_up',
-    expand: 'arrow_drop_down',
-    'delete': 'delete',
-    edit: 'edit',
-    add: 'add',
-    subtract: 'remove',
-    cancel: 'cancel',
-    save: 'save',
-    moveup: 'arrow_upward',
-    movedown: 'arrow_downward',
-    moveright: 'arrow_forward',
-    moveleft: 'arrow_back',
-    copy: 'content_copy',
-    clear: 'highlight_off',
-    time: 'access_time',
-    calendar: 'calendar_today',
-    upload: 'cloud_upload',
-    edit_properties: 'list'
-  },
+const icon_class = 'material-icons'
+const icon_prefix = ''
+const mapping = {
+  collapse: 'arrow_drop_up',
+  expand: 'arrow_drop_down',
+  'delete': 'delete',
+  edit: 'edit',
+  add: 'add',
+  subtract: 'remove',
+  cancel: 'cancel',
+  save: 'save',
+  moveup: 'arrow_upward',
+  movedown: 'arrow_downward',
+  moveright: 'arrow_forward',
+  moveleft: 'arrow_back',
+  copy: 'content_copy',
+  clear: 'highlight_off',
+  time: 'access_time',
+  calendar: 'calendar_today',
+  upload: 'cloud_upload',
+  edit_properties: 'list'
+}
 
-  icon_class: 'material-icons',
-  icon_prefix: '',
+export class materialiconsIconlib extends AbstractIconLib {
+  constructor(){
+    super(icon_prefix, mapping)
+    this.icon_class = icon_class
+  }
 
-  getIconClass: function (key) {
-    // This method is unused.
-
+  getIconClass(key) {
+    /* This method is unused. */
     return this.icon_class
-  },
+  }
 
-  getIcon: function (key) {
-    // Get the mapping.
-    var mapping = this.mapping[key]
+  getIcon(key) {
+    /* Get the mapping. */
+    const mapping = this.mapping[key];
     if (!mapping) return null
 
-    // @see http://materializecss.com/icons.html
-    var i = document.createElement('i')
+    /* @see http://materializecss.com/icons.html */
+    const i = document.createElement('i');
     i.classList.add(this.icon_class)
-    var t = document.createTextNode(mapping)
+    const t = document.createTextNode(mapping);
     i.appendChild(t)
     return i
   }
-})
+}

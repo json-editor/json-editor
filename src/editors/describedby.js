@@ -1,11 +1,11 @@
-// hyper-link describeBy Editor
-import { AbstractEditor } from '../editor'
-import { $extend, $each } from '../utilities'
-export var DescribedByEditor = AbstractEditor.extend({
+/* hyper-link describeBy Editor */
+import { AbstractEditor } from '../editor.js'
+import { extend, each } from '../utilities.js'
 
-  register: function () {
+export class DescribedByEditor extends AbstractEditor {
+  register() {
     if (this.editors) {
-      for (var i = 0; i < this.editors.length; i++) {
+      for (let i = 0; i < this.editors.length; i++) {
         if (!this.editors[i]) continue
         this.editors[i].unregister()
       }
@@ -13,51 +13,56 @@ export var DescribedByEditor = AbstractEditor.extend({
       if (this.editors[this.currentEditor]) this.editors[this.currentEditor].register()
     }
 
-    this._super()
-  },
-  unregister: function () {
-    this._super()
+    super.register()
+  }
+
+  unregister() {
+    super.unregister()
 
     if (this.editors) {
-      for (var i = 0; i < this.editors.length; i++) {
+      for (let i = 0; i < this.editors.length; i++) {
         if (!this.editors[i]) continue
         this.editors[i].unregister()
       }
     }
-  },
-  getNumColumns: function () {
+  }
+
+  getNumColumns() {
     if (!this.editors[this.currentEditor]) return 4
     return Math.max(this.editors[this.currentEditor].getNumColumns(), 4)
-  },
-  enable: function () {
+  }
+
+  enable() {
     if (this.editors) {
-      for (var i = 0; i < this.editors.length; i++) {
+      for (let i = 0; i < this.editors.length; i++) {
         if (!this.editors[i]) continue
         this.editors[i].enable()
       }
     }
 
-    this._super()
-  },
-  disable: function () {
+    super.enable()
+  }
+
+  disable() {
     if (this.editors) {
-      for (var i = 0; i < this.editors.length; i++) {
+      for (let i = 0; i < this.editors.length; i++) {
         if (!this.editors[i]) continue
         this.editors[i].disable()
       }
     }
 
-    this._super()
-  },
-  switchEditor: function () {
-    var self = this
-    var vars = this.getWatchedFieldValues()
+    super.disable()
+  }
+
+  switchEditor() {
+    const self = this
+    const vars = this.getWatchedFieldValues()
 
     if (!vars) return
 
-    // var ref = this.template.fillFromObject(vars);
-    // var ref = this.template(vars);
-    var ref = document.location.origin + document.location.pathname + this.template(vars)
+    /* var ref = this.template.fillFromObject(vars); */
+    /* var ref = this.template(vars); */
+    const ref = document.location.origin + document.location.pathname + this.template(vars)
 
     if (!this.editors[this.refs[ref]]) {
       this.buildChildEditor(ref)
@@ -67,7 +72,7 @@ export var DescribedByEditor = AbstractEditor.extend({
 
     this.register()
 
-    $each(this.editors, function (ref, editor) {
+    each(this.editors, (ref, editor) => {
       if (!editor) return
       if (self.currentEditor === ref) {
         editor.container.style.display = ''
@@ -78,20 +83,21 @@ export var DescribedByEditor = AbstractEditor.extend({
 
     this.refreshValue()
     this.onChange(true)
-  },
-  buildChildEditor: function (ref) {
+  }
+
+  buildChildEditor(ref) {
     this.refs[ref] = this.editors.length
 
-    var holder = this.theme.getChildEditorHolder()
+    const holder = this.theme.getChildEditorHolder()
     this.editor_holder.appendChild(holder)
 
-    var schema = $extend({}, this.schema, this.jsoneditor.refs[ref])
+    const schema = extend({}, this.schema, this.jsoneditor.refs[ref])
 
-    var editorClass = this.jsoneditor.getEditorClass(schema, this.jsoneditor)
+    const editorClass = this.jsoneditor.getEditorClass(schema, this.jsoneditor)
 
-    var editor = this.jsoneditor.createEditor(editorClass, {
+    const editor = this.jsoneditor.createEditor(editorClass, {
       jsoneditor: this.jsoneditor,
-      schema: schema,
+      schema,
       container: holder,
       path: this.path,
       parent: this,
@@ -104,15 +110,16 @@ export var DescribedByEditor = AbstractEditor.extend({
     editor.preBuild()
     editor.build()
     editor.postBuild()
-  },
-  preBuild: function () {
+  }
+
+  preBuild() {
     this.refs = {}
     this.editors = []
     this.currentEditor = ''
-    var i
+    let i
     for (i = 0; i < this.schema.links.length; i++) {
       if (this.schema.links[i].rel.toLowerCase() === 'describedby') {
-        // this.template = new UriTemplate(this.schema.links[i].href);
+        /* this.template = new UriTemplate(this.schema.links[i].href); */
         this.template = this.jsoneditor.compileTemplate(this.schema.links[i].href, this.template_engine)
         break
       }
@@ -126,37 +133,43 @@ export var DescribedByEditor = AbstractEditor.extend({
 
     this.schema.links = this.schema.links.slice(0, i).concat(this.schema.links.slice(i + 1))
     if (this.schema.links.length === 0) delete this.schema.links
-    this.baseSchema = $extend({}, this.schema)
-  },
-  build: function () {
+    this.baseSchema = extend({}, this.schema)
+  }
+
+  build() {
     this.editor_holder = document.createElement('div')
     this.container.appendChild(this.editor_holder)
     this.switchEditor()
-  },
-  onWatchedFieldChange: function () {
+  }
+
+  onWatchedFieldChange() {
     this.switchEditor()
-  },
-  onChildEditorChange: function (editor) {
+  }
+
+  onChildEditorChange(editor) {
     if (this.editors[this.currentEditor]) {
       this.refreshValue()
     }
 
-    this._super(editor)
-  },
-  refreshValue: function () {
+    super.onChildEditorChange(editor)
+  }
+
+  refreshValue() {
     if (this.editors[this.currentEditor]) {
       this.value = this.editors[this.currentEditor].getValue()
     }
-  },
-  setValue: function (val, initial) {
+  }
+
+  setValue(val, initial) {
     if (this.editors[this.currentEditor]) {
       this.editors[this.currentEditor].setValue(val, initial)
       this.refreshValue()
       this.onChange()
     }
-  },
-  destroy: function () {
-    $each(this.editors, function (i, editor) {
+  }
+
+  destroy() {
+    each(this.editors, (i, editor) => {
       if (editor) editor.destroy()
     })
 
@@ -164,12 +177,13 @@ export var DescribedByEditor = AbstractEditor.extend({
       this.editor_holder.parentNode.removeChild(this.editor_holder)
     }
 
-    this._super()
-  },
-  showValidationErrors: function (errors) {
-    $each(this.editors, function (i, editor) {
+    super.destroy()
+  }
+
+  showValidationErrors(errors) {
+    each(this.editors, (i, editor) => {
       if (!editor) return
       editor.showValidationErrors(errors)
     })
   }
-})
+}

@@ -1,24 +1,26 @@
-import { StringEditor } from './string'
-import { $extend } from '../utilities'
-export var JoditEditor = StringEditor.extend({
+import { StringEditor } from './string.js'
+import { extend } from '../utilities.js'
 
-  setValue: function (value, initial, fromTemplate) {
-    var res = this._super(value, initial, fromTemplate)
+export class JoditEditor extends StringEditor {
+  setValue(value, initial, fromTemplate) {
+    const res = super.setValue(value, initial, fromTemplate)
     if (res !== undefined && res.changed && this.jodit_instance) this.jodit_instance.setEditorValue(res.value)
-  },
-  build: function () {
-    this.options.format = 'textarea' // Force format into "textarea"
-    this._super()
-    this.input_type = this.schema.format // Restore original format
+  }
+
+  build() {
+    this.options.format = 'textarea' /* Force format into "textarea" */
+    super.build()
+    this.input_type = this.schema.format /* Restore original format */
     this.input.setAttribute('data-schemaformat', this.input_type)
-  },
-  afterInputReady: function () {
-    var self = this; var options
+  }
+
+  afterInputReady() {
+    const self = this; let options
 
     if (window.Jodit) {
-      // Get options, either global options from "this.defaults.options.jodit" or
-      // single property options from schema "options.jodit"
-      options = this.expandCallbacks('jodit', $extend({}, {
+      /* Get options, either global options from "this.defaults.options.jodit" or */
+      /* single property options from schema "options.jodit" */
+      options = this.expandCallbacks('jodit', extend({}, {
         height: 300
       }, this.defaults.options.jodit || {}, this.options.jodit || {}))
 
@@ -28,31 +30,35 @@ export var JoditEditor = StringEditor.extend({
         this.jodit_instance.setReadOnly(true)
       }
 
-      this.jodit_instance.events.on('change', function () {
+      this.jodit_instance.events.on('change', () => {
         self.value = self.jodit_instance.getEditorValue()
         self.is_dirty = true
         self.onChange(true)
       })
 
       this.theme.afterInputReady(self.input)
-    } else this._super() // Library not loaded, so just treat this as a string
-  },
-  getNumColumns: function () {
+    } else super.afterInputReady() /* Library not loaded, so just treat this as a string */
+  }
+
+  getNumColumns() {
     return 6
-  },
-  enable: function () {
+  }
+
+  enable() {
     if (!this.always_disabled && this.jodit_instance) this.jodit_instance.setReadOnly(false)
-    this._super()
-  },
-  disable: function (alwaysDisabled) {
+    super.enable()
+  }
+
+  disable(alwaysDisabled) {
     if (this.jodit_instance) this.jodit_instance.setReadOnly(true)
-    this._super(alwaysDisabled)
-  },
-  destroy: function () {
+    super.disable(alwaysDisabled)
+  }
+
+  destroy() {
     if (this.jodit_instance) {
       this.jodit_instance.destruct()
       this.jodit_instance = null
     }
-    this._super()
+    super.destroy()
   }
-})
+}

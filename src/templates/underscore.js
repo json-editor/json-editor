@@ -1,11 +1,9 @@
-export var underscoreTemplate = function () {
+export const underscoreTemplate = () => {
   if (!window._) return false
 
   return {
-    compile: function (template) {
-      return function (context) {
-        return window._.template(template)(context)
-      }
+    compile(template) {
+      return context => window._.template(template)(context);
     }
-  }
-}
+  };
+};
