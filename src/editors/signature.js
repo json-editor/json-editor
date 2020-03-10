@@ -5,7 +5,7 @@ import { StringEditor } from './string.js'
 import { each } from '../utilities.js'
 
 export class SignatureEditor extends StringEditor {
-  build() {
+  build () {
     const self = this
 
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
@@ -28,7 +28,7 @@ export class SignatureEditor extends StringEditor {
       signatureContainer.appendChild(canvas)
 
       self.signaturePad = new window.SignaturePad(canvas, {
-        onEnd() {
+        onEnd () {
           /* check if the signature is not empty before setting a value */
           if (!self.signaturePad.isEmpty()) {
             self.input.value = self.signaturePad.toDataURL()
@@ -63,7 +63,7 @@ export class SignatureEditor extends StringEditor {
         })
       }
       /* add listener to the clear button. when clicked, trigger a canvas change after emptying the canvas */
-      clearButton.addEventListener('click', e => {
+      clearButton.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
         self.signaturePad.clear()
@@ -89,7 +89,7 @@ export class SignatureEditor extends StringEditor {
     }
   }
 
-  setValue(val) {
+  setValue (val) {
     const self = this
     if (typeof SignaturePad === 'function') {
       const sanitized = this.sanitize(val)
@@ -109,7 +109,7 @@ export class SignatureEditor extends StringEditor {
     }
   }
 
-  destroy() {
+  destroy () {
     const self = this
     self.signaturePad.off()
     delete self.signaturePad

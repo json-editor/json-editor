@@ -2,7 +2,7 @@
 import { ButtonEditor } from './button.js'
 
 export class InfoEditor extends ButtonEditor {
-  build() {
+  build () {
     this.options.compact = false
     this.header = this.label = this.theme.getFormInputLabel(this.getTitle())
     this.description = this.theme.getDescription(this.schema.description || '')
@@ -10,11 +10,11 @@ export class InfoEditor extends ButtonEditor {
     this.container.appendChild(this.control)
   }
 
-  getTitle() {
+  getTitle () {
     return this.schema.title
   }
 
-  getNumColumns() {
+  getNumColumns () {
     return 12
   }
 }

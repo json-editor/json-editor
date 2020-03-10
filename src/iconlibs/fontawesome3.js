@@ -1,10 +1,10 @@
-import  { AbstractIconLib } from  '../iconlib.js'
+import { AbstractIconLib } from '../iconlib.js'
 
 const icon_prefix = 'icon-'
 const mapping = {
   collapse: 'chevron-down',
   expand: 'chevron-right',
-  'delete': 'trash',
+  delete: 'trash',
   edit: 'pencil',
   add: 'plus',
   subtract: 'minus',
@@ -22,7 +22,7 @@ const mapping = {
 }
 
 export class fontawesome3Iconlib extends AbstractIconLib {
-  constructor(){
+  constructor () {
     super(icon_prefix, mapping)
   }
 }

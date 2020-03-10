@@ -3,7 +3,7 @@ import { AbstractEditor } from '../editor.js'
 import { extend, each } from '../utilities.js'
 
 export class DescribedByEditor extends AbstractEditor {
-  register() {
+  register () {
     if (this.editors) {
       for (let i = 0; i < this.editors.length; i++) {
         if (!this.editors[i]) continue
@@ -16,7 +16,7 @@ export class DescribedByEditor extends AbstractEditor {
     super.register()
   }
 
-  unregister() {
+  unregister () {
     super.unregister()
 
     if (this.editors) {
@@ -27,12 +27,12 @@ export class DescribedByEditor extends AbstractEditor {
     }
   }
 
-  getNumColumns() {
+  getNumColumns () {
     if (!this.editors[this.currentEditor]) return 4
     return Math.max(this.editors[this.currentEditor].getNumColumns(), 4)
   }
 
-  enable() {
+  enable () {
     if (this.editors) {
       for (let i = 0; i < this.editors.length; i++) {
         if (!this.editors[i]) continue
@@ -43,7 +43,7 @@ export class DescribedByEditor extends AbstractEditor {
     super.enable()
   }
 
-  disable() {
+  disable () {
     if (this.editors) {
       for (let i = 0; i < this.editors.length; i++) {
         if (!this.editors[i]) continue
@@ -54,7 +54,7 @@ export class DescribedByEditor extends AbstractEditor {
     super.disable()
   }
 
-  switchEditor() {
+  switchEditor () {
     const self = this
     const vars = this.getWatchedFieldValues()
 
@@ -85,7 +85,7 @@ export class DescribedByEditor extends AbstractEditor {
     this.onChange(true)
   }
 
-  buildChildEditor(ref) {
+  buildChildEditor (ref) {
     this.refs[ref] = this.editors.length
 
     const holder = this.theme.getChildEditorHolder()
@@ -112,7 +112,7 @@ export class DescribedByEditor extends AbstractEditor {
     editor.postBuild()
   }
 
-  preBuild() {
+  preBuild () {
     this.refs = {}
     this.editors = []
     this.currentEditor = ''
@@ -136,17 +136,17 @@ export class DescribedByEditor extends AbstractEditor {
     this.baseSchema = extend({}, this.schema)
   }
 
-  build() {
+  build () {
     this.editor_holder = document.createElement('div')
     this.container.appendChild(this.editor_holder)
     this.switchEditor()
   }
 
-  onWatchedFieldChange() {
+  onWatchedFieldChange () {
     this.switchEditor()
   }
 
-  onChildEditorChange(editor) {
+  onChildEditorChange (editor) {
     if (this.editors[this.currentEditor]) {
       this.refreshValue()
     }
@@ -154,13 +154,13 @@ export class DescribedByEditor extends AbstractEditor {
     super.onChildEditorChange(editor)
   }
 
-  refreshValue() {
+  refreshValue () {
     if (this.editors[this.currentEditor]) {
       this.value = this.editors[this.currentEditor].getValue()
     }
   }
 
-  setValue(val, initial) {
+  setValue (val, initial) {
     if (this.editors[this.currentEditor]) {
       this.editors[this.currentEditor].setValue(val, initial)
       this.refreshValue()
@@ -168,7 +168,7 @@ export class DescribedByEditor extends AbstractEditor {
     }
   }
 
-  destroy() {
+  destroy () {
     each(this.editors, (i, editor) => {
       if (editor) editor.destroy()
     })
@@ -180,7 +180,7 @@ export class DescribedByEditor extends AbstractEditor {
     super.destroy()
   }
 
-  showValidationErrors(errors) {
+  showValidationErrors (errors) {
     each(this.editors, (i, editor) => {
       if (!editor) return
       editor.showValidationErrors(errors)

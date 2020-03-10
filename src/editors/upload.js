@@ -2,11 +2,11 @@ import { AbstractEditor } from '../editor.js'
 import { extend } from '../utilities.js'
 
 export class UploadEditor extends AbstractEditor {
-  getNumColumns() {
+  getNumColumns () {
     return 4
   }
 
-  build() {
+  build () {
     const self = this
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
@@ -14,17 +14,17 @@ export class UploadEditor extends AbstractEditor {
 
     /* Editor options */
     this.options = this.expandCallbacks('upload', extend({}, {
-      'title': 'Browse',
-      'icon': '',
-      'auto_upload': false, /* Trigger file upload button automatically */
-      'hide_input': false, /* Hide the Browse button and name display (Only works if 'enable_drag_drop' is true) */
-      'enable_drag_drop': false, /* Enable Drag&Drop uploading */
-      'drop_zone_text': 'Drag & Drop file here', /* Text displayed in dropzone box */
-      'drop_zone_top': false, /* Position of dropzone. true=before button input, false=after button input */
-      'alt_drop_zone': '', /* Alternate DropZone DOM selector (Can be created inside another property) */
-      'mime_type': '', /* If set, restricts to mime type(s). Can be either a string or an array */
-      'max_upload_size': 0, /* Maximum file size allowed. 0 = no limit */
-      'upload_handler': (jseditor, type, file, cbs) => {
+      title: 'Browse',
+      icon: '',
+      auto_upload: false, /* Trigger file upload button automatically */
+      hide_input: false, /* Hide the Browse button and name display (Only works if 'enable_drag_drop' is true) */
+      enable_drag_drop: false, /* Enable Drag&Drop uploading */
+      drop_zone_text: 'Drag & Drop file here', /* Text displayed in dropzone box */
+      drop_zone_top: false, /* Position of dropzone. true=before button input, false=after button input */
+      alt_drop_zone: '', /* Alternate DropZone DOM selector (Can be created inside another property) */
+      mime_type: '', /* If set, restricts to mime type(s). Can be either a string or an array */
+      max_upload_size: 0, /* Maximum file size allowed. 0 = no limit */
+      upload_handler: (jseditor, type, file, cbs) => {
         /* Default dummy test upload handler */
         window.alert(`No upload_handler defined for "${jseditor.path}". You must create your own handler to enable upload to server`)
       }
@@ -47,11 +47,11 @@ export class UploadEditor extends AbstractEditor {
 
       if (!(this.options.enable_drag_drop === true && this.options.hide_input === true)) {
         /* Pass click to this.uploader element */
-        this.clickHandler = e => {
+        this.clickHandler = (e) => {
           self.uploader.dispatchEvent(new window.MouseEvent('click', {
-            'view': window,
-            'bubbles': true,
-            'cancelable': false
+            view: window,
+            bubbles: true,
+            cancelable: false
           }))
         }
 
@@ -90,7 +90,7 @@ export class UploadEditor extends AbstractEditor {
       }
 
       /* Triggered after file have been selected */
-      this.uploadHandler = e => {
+      this.uploadHandler = (e) => {
         e.preventDefault()
         e.stopPropagation()
         const files = e.target.files || e.dataTransfer.files
@@ -102,7 +102,7 @@ export class UploadEditor extends AbstractEditor {
           } else {
             if (self.fileDisplay) self.fileDisplay.value = files[0].name
             let fr = new window.FileReader()
-            fr.onload = evt => {
+            fr.onload = (evt) => {
               self.preview_value = evt.target.result
               self.refreshPreview(e)
               self.onChange(true)
@@ -151,10 +151,10 @@ export class UploadEditor extends AbstractEditor {
 
       /* Set Drag'n'Drop handlers */
       if (this.options.enable_drag_drop === true) {
-        ['dragover', 'drop'].forEach(ev => {
+        ['dragover', 'drop'].forEach((ev) => {
           window.addEventListener(ev, self.dragHandler, true)
         });
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(ev => {
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((ev) => {
           self.dropZone.addEventListener(ev, self.dragHandler, true)
         })
       }
@@ -181,13 +181,13 @@ export class UploadEditor extends AbstractEditor {
     })
   }
 
-  afterInputReady() {
+  afterInputReady () {
     const self = this
     if (self.value) {
       const img = document.createElement('img')
       img.style.maxWidth = '100%'
       img.style.maxHeight = '100px'
-      img.onload = event => {
+      img.onload = (event) => {
         self.preview.appendChild(img)
       }
       img.onerror = function (error) {
@@ -198,7 +198,7 @@ export class UploadEditor extends AbstractEditor {
     self.theme.afterInputReady(self.input)
   }
 
-  refreshPreview(e) {
+  refreshPreview (e) {
     if (this.last_preview === this.preview_value) return
     this.last_preview = this.preview_value
 
@@ -222,7 +222,7 @@ export class UploadEditor extends AbstractEditor {
     } else file.formattedSize = '0 Bytes'
 
     const uploadButton = this.getButton('Upload', 'upload', 'Upload')
-    uploadButton.addEventListener('click', event => {
+    uploadButton.addEventListener('click', (event) => {
       event.preventDefault()
 
       uploadButton.setAttribute('disabled', 'disabled')
@@ -234,7 +234,7 @@ export class UploadEditor extends AbstractEditor {
       }
 
       self.options.upload_handler(self.path, file, {
-        success(url) {
+        success (url) {
           self.setValue(url)
 
           if (self.parent) self.parent.onChildEditorChange(self)
@@ -243,12 +243,12 @@ export class UploadEditor extends AbstractEditor {
           if (self.progressBar) self.preview.removeChild(self.progressBar)
           uploadButton.removeAttribute('disabled')
         },
-        failure(error) {
+        failure (error) {
           self.theme.addInputError(self.uploader, error)
           if (self.progressBar) self.preview.removeChild(self.progressBar)
           uploadButton.removeAttribute('disabled')
         },
-        updateProgress(progress) {
+        updateProgress (progress) {
           if (self.progressBar) {
             if (progress) self.theme.updateProgressBar(self.progressBar, progress)
             else self.theme.updateProgressBarUnknown(self.progressBar)
@@ -265,20 +265,20 @@ export class UploadEditor extends AbstractEditor {
     }
   }
 
-  enable() {
+  enable () {
     if (!this.always_disabled) {
       if (this.uploader) this.uploader.disabled = false
       super.enable()
     }
   }
 
-  disable(alwaysDisabled) {
+  disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     if (this.uploader) this.uploader.disabled = true
     super.disable()
   }
 
-  setValue(val) {
+  setValue (val) {
     if (this.value !== val) {
       this.value = val
       this.input.value = this.value
@@ -286,14 +286,14 @@ export class UploadEditor extends AbstractEditor {
     }
   }
 
-  destroy() {
+  destroy () {
     const self = this
     /* Remove Drag'n'Drop handlers */
     if (this.options.enable_drag_drop === true) {
-      ['dragover', 'drop'].forEach(ev => {
+      ['dragover', 'drop'].forEach((ev) => {
         window.removeEventListener(ev, self.dragHandler, true)
       });
-      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(ev => {
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((ev) => {
         self.dropZone.removeEventListener(ev, self.dragHandler, true)
       })
       this.dropZone.removeEventListener('dblclick', this.clickHandler)
@@ -320,7 +320,7 @@ export class UploadEditor extends AbstractEditor {
     super.destroy()
   }
 
-  isValidMimeType(mimeType, mimeTypesList) {
+  isValidMimeType (mimeType, mimeTypesList) {
     return mimeTypesList.reduce((a, v) => a || new RegExp(v.replace(/\*/g, '.*'), 'gi').test(mimeType), false)
   }
 }

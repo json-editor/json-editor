@@ -2,7 +2,7 @@ import { StringEditor } from './string.js'
 import { extend } from '../utilities.js'
 
 export class AutocompleteEditor extends StringEditor {
-  postBuild() {
+  postBuild () {
     if (window.Autocomplete) {
       /* create wrapper container */
       this.autocomplete_wrapper = document.createElement('div')
@@ -22,18 +22,18 @@ export class AutocompleteEditor extends StringEditor {
     super.postBuild()
   }
 
-  afterInputReady() {
+  afterInputReady () {
     let options
 
     if (window.Autocomplete && !this.autocomplete_instance) {
       /* Get options, either global options from "this.defaults.options.autocomplete" or */
       /* single property options from schema "options.autocomplete" */
       options = this.expandCallbacks('autocomplete', extend({}, {
-        'search': (jseditor, input) => {
+        search: (jseditor, input) => {
           console.log(`No "search" callback defined for autocomplete in property "${jseditor.key}"`)
           return []
         },
-        'baseClass': 'autocomplete'
+        baseClass: 'autocomplete'
       }, this.defaults.options.autocomplete || {}, this.options.autocomplete || {}))
 
       this.autocomplete_wrapper.classList.add(options.baseClass)
@@ -45,7 +45,7 @@ export class AutocompleteEditor extends StringEditor {
     super.afterInputReady()
   }
 
-  destroy() {
+  destroy () {
     if (this.autocomplete_instance) {
       if (this.input && this.input.parentNode) this.input.parentNode.removeChild(this.input)
       if (this.autocomplete_dropdown && this.autocomplete_dropdown.parentNode) this.autocomplete_dropdown.parentNode.removeChild(this.autocomplete_dropdown)

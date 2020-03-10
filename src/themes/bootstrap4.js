@@ -15,11 +15,11 @@ const options = {
 }
 
 export class bootstrap4Theme extends AbstractTheme {
-  constructor(jsoneditor) {
+  constructor (jsoneditor) {
     super(jsoneditor, options)
   }
 
-  getSelectInput(options, multiple) {
+  getSelectInput (options, multiple) {
     const el = super.getSelectInput(options)
     el.classList.add('form-control')
 
@@ -36,13 +36,13 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
-  getContainer() {
+  getContainer () {
     const el = document.createElement('div')
     if (!this.options.object_indent) el.classList.add('je-noindent')
     return el
   }
 
-  setGridColumnSize(el, size, offset) {
+  setGridColumnSize (el, size, offset) {
     el.classList.add(`col-md-${size}`)
 
     if (offset) {
@@ -50,7 +50,7 @@ export class bootstrap4Theme extends AbstractTheme {
     }
   }
 
-  afterInputReady(input) {
+  afterInputReady (input) {
     if (input.controlgroup) return
 
     /* set id/for */
@@ -66,7 +66,7 @@ export class bootstrap4Theme extends AbstractTheme {
     input.controlgroup = this.closest(input, '.form-group')
   }
 
-  getTextareaInput() {
+  getTextareaInput () {
     const el = document.createElement('textarea')
     el.classList.add('form-control')
     if (this.options.input_size === 'small') el.classList.add('form-control-sm')
@@ -74,7 +74,7 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
-  getRangeInput(min, max, step) {
+  getRangeInput (min, max, step) {
     const el = super.getRangeInput(min, max, step)
 
     if (this.options.custom_forms === true) {
@@ -85,7 +85,7 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
-  getFormInputField(type) {
+  getFormInputField (type) {
     const el = super.getFormInputField(type)
     if (type !== 'checkbox' && type !== 'radio' && type !== 'file') {
       el.classList.add('form-control')
@@ -103,7 +103,7 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
-  getFormControl(label, input, description, infoText) {
+  getFormControl (label, input, description, infoText) {
     const group = document.createElement('div')
     group.classList.add('form-group')
 
@@ -148,7 +148,7 @@ export class bootstrap4Theme extends AbstractTheme {
     return group
   }
 
-  getInfoButton(text) {
+  getInfoButton (text) {
     const button = document.createElement('button') /* shoud be a <button> but no fitting tbws style... */
     button.type = 'button'
     button.classList.add('ml-3', 'jsoneditor-twbs4-text-button')
@@ -177,7 +177,7 @@ export class bootstrap4Theme extends AbstractTheme {
    *
    * Overwriten from master theme to get rid of inline styles.
    */
-  getCheckbox() {
+  getCheckbox () {
     const el = this.getFormInputField('checkbox')
     return el
   }
@@ -186,7 +186,7 @@ export class bootstrap4Theme extends AbstractTheme {
    * Multiple checkboxes in a row.
    *
    */
-  getMultiCheckboxHolder(controls, label, description, infoText) {
+  getMultiCheckboxHolder (controls, label, description, infoText) {
     const el = document.createElement('div')
     el.classList.add('form-group')
 
@@ -230,7 +230,7 @@ export class bootstrap4Theme extends AbstractTheme {
   /**
    * Single radio element
    */
-  getFormRadio(attributes) {
+  getFormRadio (attributes) {
     const el = this.getFormInputField('radio')
 
     for (const key in attributes) {
@@ -250,7 +250,7 @@ export class bootstrap4Theme extends AbstractTheme {
    * Add the <label> for the single radio from getFormRadio()
    *
    */
-  getFormRadioLabel(text, req) {
+  getFormRadioLabel (text, req) {
     const el = document.createElement('label')
 
     if (this.options.custom_forms === false) {
@@ -267,7 +267,7 @@ export class bootstrap4Theme extends AbstractTheme {
    * Stack the radios from getFormRadio()/getFormRadioLabel()
    *
    */
-  getFormRadioControl(label, input, compact) {
+  getFormRadioControl (label, input, compact) {
     const el = document.createElement('div')
 
     if (this.options.custom_forms === false) {
@@ -290,7 +290,7 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
-  getIndentedPanel() {
+  getIndentedPanel () {
     const el = document.createElement('div')
     el.classList.add('card', 'card-body', 'mb-3')
 
@@ -307,7 +307,7 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
-  getFormInputDescription(text) {
+  getFormInputDescription (text) {
     const el = document.createElement('small')
     el.classList.add('form-text')
 
@@ -320,7 +320,7 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
-  getHeader(text) {
+  getHeader (text) {
     /* var cardHeader = document.createElement('div') */
     /* cardHeader.classList.add('card-header') */
 
@@ -338,18 +338,18 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
-  getHeaderButtonHolder() {
+  getHeaderButtonHolder () {
     const el = this.getButtonHolder()
 
     return el
   }
-  getButtonHolder() {
+  getButtonHolder () {
     const el = document.createElement('span')
     el.classList.add('btn-group')
     return el
   }
 
-  getFormButtonHolder(buttonAlign) {
+  getFormButtonHolder (buttonAlign) {
     const el = this.getButtonHolder()
     el.classList.add('d-block')
 
@@ -359,13 +359,13 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
-  getButton(text, icon, title) {
+  getButton (text, icon, title) {
     const el = super.getButton(text, icon, title)
     el.classList.add('btn', 'btn-secondary', 'btn-sm')
     return el
   }
 
-  getTable() {
+  getTable () {
     const el = document.createElement('table')
     el.classList.add('table', 'table-sm')
 
@@ -380,7 +380,7 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
-  getErrorMessage(text) {
+  getErrorMessage (text) {
     const el = document.createElement('div')
     el.classList.add('alert', 'alert-danger')
     el.setAttribute('role', 'alert')
@@ -391,7 +391,7 @@ export class bootstrap4Theme extends AbstractTheme {
   /**
    * input validation on <input>
    */
-  addInputError(input, text) {
+  addInputError (input, text) {
     if (!input.controlgroup) return
 
     input.classList.add('is-invalid')
@@ -406,13 +406,13 @@ export class bootstrap4Theme extends AbstractTheme {
 
     input.errmsg.textContent = text
   }
-  removeInputError(input) {
+  removeInputError (input) {
     if (!input.errmsg) return
     input.errmsg.style.display = 'none'
     input.classList.remove('is-invalid')
   }
 
-  getTabHolder(propertyName) {
+  getTabHolder (propertyName) {
     const el = document.createElement('div')
     const pName = (typeof propertyName === 'undefined') ? '' : propertyName
     el.innerHTML = `<div class='col-md-2' id='${pName}'><ul class='nav flex-column nav-pills'></ul></div><div class='col-md-10'><div class='tab-content' id='${pName}'></div></div>`
@@ -420,15 +420,15 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
-  addTab(holder, tab) {
+  addTab (holder, tab) {
     holder.children[0].children[0].appendChild(tab)
   }
 
-  getTabContentHolder(tabHolder) {
+  getTabContentHolder (tabHolder) {
     return tabHolder.children[1].children[0]
   }
 
-  getTopTabHolder(propertyName) {
+  getTopTabHolder (propertyName) {
     const pName = (typeof propertyName === 'undefined') ? '' : propertyName
 
     const el = document.createElement('div')
@@ -439,7 +439,7 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
-  getTab(text, tabId) {
+  getTab (text, tabId) {
     const liel = document.createElement('li')
     liel.classList.add('nav-item')
 
@@ -454,7 +454,7 @@ export class bootstrap4Theme extends AbstractTheme {
     return liel
   }
 
-  getTopTab(text, tabId) {
+  getTopTab (text, tabId) {
     const el = document.createElement('li')
     el.classList.add('nav-item')
 
@@ -469,21 +469,21 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
-  getTabContent() {
+  getTabContent () {
     const el = document.createElement('div')
     el.classList.add('tab-pane')
     el.setAttribute('role', 'tabpanel')
     return el
   }
 
-  getTopTabContent() {
+  getTopTabContent () {
     const el = document.createElement('div')
     el.classList.add('tab-pane')
     el.setAttribute('role', 'tabpanel')
     return el
   }
 
-  markTabActive(row) {
+  markTabActive (row) {
     row.tab.firstChild.classList.add('active')
 
     if (typeof row.rowPane !== 'undefined') {
@@ -493,7 +493,7 @@ export class bootstrap4Theme extends AbstractTheme {
     }
   }
 
-  markTabInactive(row) {
+  markTabInactive (row) {
     row.tab.firstChild.classList.remove('active')
 
     if (typeof row.rowPane !== 'undefined') {
@@ -503,19 +503,19 @@ export class bootstrap4Theme extends AbstractTheme {
     }
   }
 
-  insertBasicTopTab(tab, newTabsHolder) {
+  insertBasicTopTab (tab, newTabsHolder) {
     newTabsHolder.children[0].children[0].insertBefore(tab, newTabsHolder.children[0].children[0].firstChild)
   }
 
-  addTopTab(holder, tab) {
+  addTopTab (holder, tab) {
     holder.children[0].children[0].appendChild(tab)
   }
 
-  getTopTabContentHolder(tabHolder) {
+  getTopTabContentHolder (tabHolder) {
     return tabHolder.children[1].children[0]
   }
 
-  getProgressBar() {
+  getProgressBar () {
     const min = 0
     const max = 100
     const start = 0
@@ -534,7 +534,7 @@ export class bootstrap4Theme extends AbstractTheme {
 
     return container
   }
-  updateProgressBar(progressBar, progress) {
+  updateProgressBar (progressBar, progress) {
     if (!progressBar) return
 
     const bar = progressBar.firstChild
@@ -544,7 +544,7 @@ export class bootstrap4Theme extends AbstractTheme {
     bar.innerHTML = percentage
   }
 
-  updateProgressBarUnknown(progressBar) {
+  updateProgressBarUnknown (progressBar) {
     if (!progressBar) return
 
     const bar = progressBar.firstChild
@@ -554,7 +554,7 @@ export class bootstrap4Theme extends AbstractTheme {
     bar.innerHTML = ''
   }
 
-  getBlockLink() {
+  getBlockLink () {
     const link = document.createElement('a')
     link.classList.add('mb-3', 'd-inline-block')
     return link
@@ -563,12 +563,12 @@ export class bootstrap4Theme extends AbstractTheme {
   /**
    * Link after successfull upload
    */
-  getLinksHolder() {
+  getLinksHolder () {
     const el = document.createElement('div')
     return el
   }
 
-  getInputGroup(input, buttons) {
+  getInputGroup (input, buttons) {
     if (!input) return
 
     const inputGroupContainer = document.createElement('div')

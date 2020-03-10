@@ -2,19 +2,19 @@ import { StringEditor } from './string.js'
 import { extend } from '../utilities.js'
 
 export class JoditEditor extends StringEditor {
-  setValue(value, initial, fromTemplate) {
+  setValue (value, initial, fromTemplate) {
     const res = super.setValue(value, initial, fromTemplate)
     if (res !== undefined && res.changed && this.jodit_instance) this.jodit_instance.setEditorValue(res.value)
   }
 
-  build() {
+  build () {
     this.options.format = 'textarea' /* Force format into "textarea" */
     super.build()
     this.input_type = this.schema.format /* Restore original format */
     this.input.setAttribute('data-schemaformat', this.input_type)
   }
 
-  afterInputReady() {
+  afterInputReady () {
     const self = this; let options
 
     if (window.Jodit) {
@@ -40,21 +40,21 @@ export class JoditEditor extends StringEditor {
     } else super.afterInputReady() /* Library not loaded, so just treat this as a string */
   }
 
-  getNumColumns() {
+  getNumColumns () {
     return 6
   }
 
-  enable() {
+  enable () {
     if (!this.always_disabled && this.jodit_instance) this.jodit_instance.setReadOnly(false)
     super.enable()
   }
 
-  disable(alwaysDisabled) {
+  disable (alwaysDisabled) {
     if (this.jodit_instance) this.jodit_instance.setReadOnly(true)
     super.disable(alwaysDisabled)
   }
 
-  destroy() {
+  destroy () {
     if (this.jodit_instance) {
       this.jodit_instance.destruct()
       this.jodit_instance = null

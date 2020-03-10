@@ -9,11 +9,11 @@ import { StringEditor } from './string.js'
 import { extend } from '../utilities.js'
 
 export class ColorEditor extends StringEditor {
-  postBuild() {
+  postBuild () {
     if (window.Picker) this.input.type = 'text'
   }
 
-  setValue(value, initial, fromTemplate) {
+  setValue (value, initial, fromTemplate) {
     const res = super.setValue(value, initial, fromTemplate)
     if (this.picker_instance && this.picker_instance.domElement && res && res.changed) {
       this.picker_instance.setColor(res.value, true)
@@ -21,16 +21,16 @@ export class ColorEditor extends StringEditor {
     return res
   }
 
-  getNumColumns() {
+  getNumColumns () {
     return 2
   }
 
-  afterInputReady() {
+  afterInputReady () {
     super.afterInputReady()
     this.createPicker(true)
   }
 
-  disable() {
+  disable () {
     super.disable()
     if (this.picker_instance && this.picker_instance.domElement) {
       /* Disable picker cursor dragging */
@@ -43,7 +43,7 @@ export class ColorEditor extends StringEditor {
     }
   }
 
-  enable() {
+  enable () {
     super.enable()
     if (this.picker_instance && this.picker_instance.domElement) {
       /* Enable picker cursor dragging */
@@ -56,13 +56,13 @@ export class ColorEditor extends StringEditor {
     }
   }
 
-  destroy() {
+  destroy () {
     this.createPicker(false)
     super.destroy()
   }
 
   /* helper functions */
-  createPicker(create) {
+  createPicker (create) {
     if (create) { /* create vanilla-picker */
       if (window.Picker && !this.picker_instance) { /* do when vanilla-picker loaded */
         const self = this

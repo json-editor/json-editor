@@ -2,19 +2,19 @@ import { StringEditor } from './string.js'
 import { extend } from '../utilities.js'
 
 export class ScEditor extends StringEditor {
-  setValue(value, initial, fromTemplate) {
+  setValue (value, initial, fromTemplate) {
     const res = super.setValue(value, initial, fromTemplate)
     if (res !== undefined && res.changed && this.sceditor_instance) this.sceditor_instance.val(res.value)
   }
 
-  build() {
+  build () {
     this.options.format = 'textarea' /* Force format into "textarea" */
     super.build()
     this.input_type = this.schema.format /* Restore original format */
     this.input.setAttribute('data-schemaformat', this.input_type)
   }
 
-  afterInputReady() {
+  afterInputReady () {
     if (window.sceditor) {
       /* Get options, either global options from "this.defaults.options.sceditor" or */
       /* single property options from schema "options.sceditor" */
@@ -48,21 +48,21 @@ export class ScEditor extends StringEditor {
     } else super.afterInputReady() /* Library not loaded, so just treat this as a string */
   }
 
-  getNumColumns() {
+  getNumColumns () {
     return 6
   }
 
-  enable() {
+  enable () {
     if (!this.always_disabled && this.sceditor_instance) this.sceditor_instance.readOnly(false)
     super.enable()
   }
 
-  disable(alwaysDisabled) {
+  disable (alwaysDisabled) {
     if (this.sceditor_instance) this.sceditor_instance.readOnly(true)
     super.disable(alwaysDisabled)
   }
 
-  destroy() {
+  destroy () {
     if (this.sceditor_instance) {
       this.sceditor_instance.destroy()
       this.sceditor_instance = null

@@ -1,8 +1,8 @@
-import  { StringEditor } from  './string.js'
-import  { extend } from  '../utilities.js'
+import { StringEditor } from './string.js'
+import { extend } from '../utilities.js'
 
 export class IpEditor extends StringEditor {
-  preBuild() {
+  preBuild () {
     super.preBuild()
 
     /* Create schema options object if deesn't exist */

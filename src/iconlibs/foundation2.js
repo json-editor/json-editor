@@ -1,10 +1,10 @@
-import  { AbstractIconLib } from  '../iconlib.js'
+import { AbstractIconLib } from '../iconlib.js'
 
 const icon_prefix = 'foundicon-'
 const mapping = {
   collapse: 'minus',
   expand: 'plus',
-  'delete': 'remove',
+  delete: 'remove',
   edit: 'edit',
   add: 'add-doc',
   cancel: 'error',
@@ -18,7 +18,7 @@ const mapping = {
 }
 
 export class foundation2Iconlib extends AbstractIconLib {
-  constructor(){
+  constructor () {
     super(icon_prefix, mapping)
   }
 }

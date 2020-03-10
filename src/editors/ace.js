@@ -2,7 +2,7 @@ import { StringEditor } from './string.js'
 import { extend } from '../utilities.js'
 
 export class AceEditor extends StringEditor {
-  setValue(value, initial, fromTemplate) {
+  setValue (value, initial, fromTemplate) {
     const res = super.setValue(value, initial, fromTemplate)
     if (res !== undefined && res.changed && this.ace_editor_instance) {
       this.ace_editor_instance.setValue(res.value)
@@ -11,15 +11,16 @@ export class AceEditor extends StringEditor {
     }
   }
 
-  build() {
+  build () {
     this.options.format = 'textarea' /* Force format into "textarea" */
     super.build()
     this.input_type = this.schema.format /* Restore original format */
     this.input.setAttribute('data-schemaformat', this.input_type)
   }
 
-  afterInputReady() {
-    const self = this; let options
+  afterInputReady () {
+    const self = this
+    let options
 
     if (window.ace) {
       let mode = this.input_type
@@ -65,21 +66,21 @@ export class AceEditor extends StringEditor {
     } else super.afterInputReady() /* Library not loaded, so just treat this as a string */
   }
 
-  getNumColumns() {
+  getNumColumns () {
     return 6
   }
 
-  enable() {
+  enable () {
     if (!this.always_disabled && this.ace_editor_instance) this.ace_editor_instance.setReadOnly(false)
     super.enable()
   }
 
-  disable(alwaysDisabled) {
+  disable (alwaysDisabled) {
     if (this.ace_editor_instance) this.ace_editor_instance.setReadOnly(true)
     super.disable(alwaysDisabled)
   }
 
-  destroy() {
+  destroy () {
     if (this.ace_editor_instance) {
       this.ace_editor_instance.destroy()
       this.ace_editor_instance = null

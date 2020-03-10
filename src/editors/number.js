@@ -1,11 +1,11 @@
 import { StringEditor } from './string.js'
 
 export class NumberEditor extends StringEditor {
-  build() {
+  build () {
     super.build()
 
     if (typeof this.schema.minimum !== 'undefined') {
-      let minimum = this.schema.minimum
+      let { minimum } = this.schema
 
       if (typeof this.schema.exclusiveMinimum !== 'undefined') {
         minimum += 1
@@ -15,7 +15,7 @@ export class NumberEditor extends StringEditor {
     }
 
     if (typeof this.schema.maximum !== 'undefined') {
-      let maximum = this.schema.maximum
+      let { maximum } = this.schema
 
       if (typeof this.schema.exclusiveMaximum !== 'undefined') {
         maximum -= 1
@@ -33,15 +33,15 @@ export class NumberEditor extends StringEditor {
     this.setInputAttributes(['maxlength', 'pattern', 'readonly', 'min', 'max', 'step'])
   }
 
-  sanitize(value) {
+  sanitize (value) {
     return (`${value}`).replace(/[^0-9\.\-eE]/g, '')
   }
 
-  getNumColumns() {
+  getNumColumns () {
     return 2
   }
 
-  getValue() {
+  getValue () {
     if (!this.dependenciesFulfilled) {
       return undefined
     }

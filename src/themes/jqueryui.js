@@ -1,27 +1,27 @@
 import { AbstractTheme } from '../theme.js'
 
 export class jqueryuiTheme extends AbstractTheme {
-  getTable() {
+  getTable () {
     const el = super.getTable()
     el.setAttribute('cellpadding', 5)
     el.setAttribute('cellspacing', 0)
     return el
   }
 
-  getTableHeaderCell(text) {
+  getTableHeaderCell (text) {
     const el = super.getTableHeaderCell(text)
     el.classList.add('ui-state-active')
     el.style.fontWeight = 'bold'
     return el
   }
 
-  getTableCell() {
+  getTableCell () {
     const el = super.getTableCell()
     el.classList.add('ui-widget-content')
     return el
   }
 
-  getHeaderButtonHolder() {
+  getHeaderButtonHolder () {
     const el = this.getButtonHolder()
     el.style.marginLeft = '10px'
     el.style.fontSize = '.6em'
@@ -29,14 +29,14 @@ export class jqueryuiTheme extends AbstractTheme {
     return el
   }
 
-  getFormInputDescription(text) {
+  getFormInputDescription (text) {
     const el = this.getDescription(text)
     el.style.marginLeft = '10px'
     el.style.display = 'inline-block'
     return el
   }
 
-  getFormControl(label, input, description, infoText) {
+  getFormControl (label, input, description, infoText) {
     const el = super.getFormControl(label, input, description, infoText)
     if (input.type === 'checkbox') {
       el.style.lineHeight = '25px'
@@ -48,7 +48,7 @@ export class jqueryuiTheme extends AbstractTheme {
     return el
   }
 
-  getDescription(text) {
+  getDescription (text) {
     const el = document.createElement('span')
     el.style.fontSize = '.8em'
     el.style.fontStyle = 'italic'
@@ -57,14 +57,14 @@ export class jqueryuiTheme extends AbstractTheme {
     return el
   }
 
-  getButtonHolder() {
+  getButtonHolder () {
     const el = document.createElement('div')
     el.classList.add('ui-buttonset')
     el.style.fontSize = '.7em'
     return el
   }
 
-  getFormInputLabel(text, req) {
+  getFormInputLabel (text, req) {
     const el = document.createElement('label')
     el.style.fontWeight = 'bold'
     el.style.display = 'block'
@@ -73,7 +73,7 @@ export class jqueryuiTheme extends AbstractTheme {
     return el
   }
 
-  getButton(text, icon, title) {
+  getButton (text, icon, title) {
     const button = document.createElement('button')
     button.classList.add('ui-button', 'ui-widget', 'ui-state-default', 'ui-corner-all')
 
@@ -102,7 +102,7 @@ export class jqueryuiTheme extends AbstractTheme {
     return button
   }
 
-  setButtonText(button, text, icon, title) {
+  setButtonText (button, text, icon, title) {
     button.innerHTML = ''
     button.classList.add('ui-button', 'ui-widget', 'ui-state-default', 'ui-corner-all')
 
@@ -129,7 +129,7 @@ export class jqueryuiTheme extends AbstractTheme {
     button.setAttribute('title', title)
   }
 
-  getIndentedPanel() {
+  getIndentedPanel () {
     const el = document.createElement('div')
     el.classList.add('ui-widget-content', 'ui-corner-all')
     el.style.padding = '1em 1.4em'
@@ -137,7 +137,7 @@ export class jqueryuiTheme extends AbstractTheme {
     return el
   }
 
-  afterInputReady(input) {
+  afterInputReady (input) {
     if (input.controls) return
     input.controls = this.closest(input, '.form-control')
     if (this.queuedInputErrorText) {
@@ -147,7 +147,7 @@ export class jqueryuiTheme extends AbstractTheme {
     }
   }
 
-  addInputError(input, text) {
+  addInputError (input, text) {
     if (!input.controls) {
       this.queuedInputErrorText = text
       return
@@ -163,7 +163,7 @@ export class jqueryuiTheme extends AbstractTheme {
     input.errmsg.textContent = text
   }
 
-  removeInputError(input) {
+  removeInputError (input) {
     if (!input.controls) {
       delete this.queuedInputErrorText
     }
@@ -171,7 +171,7 @@ export class jqueryuiTheme extends AbstractTheme {
     input.errmsg.style.display = 'none'
   }
 
-  markTabActive(row) {
+  markTabActive (row) {
     row.tab.classList.remove('ui-widget-header')
     row.tab.classList.add('ui-state-active')
 
@@ -182,7 +182,7 @@ export class jqueryuiTheme extends AbstractTheme {
     }
   }
 
-  markTabInactive(row) {
+  markTabInactive (row) {
     row.tab.classList.add('ui-widget-header')
     row.tab.classList.remove('ui-state-active')
 

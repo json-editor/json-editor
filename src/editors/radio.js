@@ -1,12 +1,12 @@
 import { SelectEditor } from './select.js'
 
 export class RadioEditor extends SelectEditor {
-  preBuild() {
+  preBuild () {
     this.schema.required = true /* force editor into required mode to prevent creation of empty radio button */
     super.preBuild()
   }
 
-  build() {
+  build () {
     const self = this
     this.label = ''
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
@@ -69,7 +69,7 @@ export class RadioEditor extends SelectEditor {
     })
   }
 
-  enable() {
+  enable () {
     if (!this.always_disabled) {
       for (let i = 0; i < this.radioGroup.length; i++) {
         this.radioGroup[i].disabled = false
@@ -79,7 +79,7 @@ export class RadioEditor extends SelectEditor {
     }
   }
 
-  disable(alwaysDisabled) {
+  disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     for (let i = 0; i < this.radioGroup.length; i++) {
       this.radioGroup[i].disabled = true
@@ -88,18 +88,18 @@ export class RadioEditor extends SelectEditor {
     super.disable()
   }
 
-  destroy() {
+  destroy () {
     if (this.radioContainer.parentNode && this.radioContainer.parentNode.parentNode) this.radioContainer.parentNode.parentNode.removeChild(this.radioContainer.parentNode)
     if (this.label && this.label.parentNode) this.label.parentNode.removeChild(this.label)
     if (this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description)
     super.destroy()
   }
 
-  getNumColumns() {
+  getNumColumns () {
     return 2
   }
 
-  setValue(val) {
+  setValue (val) {
     for (let i = 0; i < this.radioGroup.length; i++) {
       if (this.radioGroup[i].value === val) {
         this.radioGroup[i].checked = true

@@ -20,11 +20,11 @@ ToDo:
 import { StringEditor } from './string.js'
 
 export class DatetimeEditor extends StringEditor {
-  constructor(options, defaults) {
+  constructor (options, defaults) {
     super(options, defaults)
   }
 
-  build() {
+  build () {
     super.build()
     if (!this.input) return
 
@@ -39,7 +39,7 @@ export class DatetimeEditor extends StringEditor {
       /* Attribute for flatpicker */
       this.input.setAttribute('data-input', '')
 
-      let input = this.input
+      let { input } = this
 
       if (this.options.flatpickr.wrap === true) {
         /* Create buttons for input group */
@@ -58,7 +58,7 @@ export class DatetimeEditor extends StringEditor {
         }
 
         /* Save position of input field */
-        const parentNode = this.input.parentNode; const nextSibling = this.input.nextSibling
+        const { parentNode } = this.input; const { nextSibling } = this.input
 
         const buttonContainer = this.theme.getInputGroup(this.input, buttons)
         if (buttonContainer !== undefined) {
@@ -82,7 +82,7 @@ export class DatetimeEditor extends StringEditor {
     }
   }
 
-  getValue() {
+  getValue () {
     if (!this.dependenciesFulfilled) {
       return undefined
     }
@@ -97,7 +97,7 @@ export class DatetimeEditor extends StringEditor {
     return parseInt(new Date(value).getTime() / 1000)
   }
 
-  setValue(value, initial, fromTemplate) {
+  setValue (value, initial, fromTemplate) {
     if (this.schema.type === 'string') {
       super.setValue(value, initial, fromTemplate)
       if (this.flatpickr) this.flatpickr.setDate(value)
@@ -122,14 +122,14 @@ export class DatetimeEditor extends StringEditor {
     }
   }
 
-  destroy() {
+  destroy () {
     if (this.flatpickr) this.flatpickr.destroy()
     this.flatpickr = null
     super.destroy()
   }
 
   /* helper function */
-  zeroPad(value) {
+  zeroPad (value) {
     return (`0${value}`).slice(-2)
   }
 }

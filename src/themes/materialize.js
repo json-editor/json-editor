@@ -8,7 +8,7 @@ export class materializeTheme extends AbstractTheme {
    * @param {Integer} size The grid column size.
    * @see http://materializecss.com/grid.html
    */
-  setGridColumnSize(el, size) {
+  setGridColumnSize (el, size) {
     el.classList.add('col')
     el.classList.add(`s${size}`)
   }
@@ -18,7 +18,7 @@ export class materializeTheme extends AbstractTheme {
    *
    * @returns {HTMLElement} The wrapped button element.
    */
-  getHeaderButtonHolder() {
+  getHeaderButtonHolder () {
     return this.getButtonHolder()
   }
 
@@ -27,7 +27,7 @@ export class materializeTheme extends AbstractTheme {
    *
    * @returns {HTMLElement} The wrapped button element.
    */
-  getButtonHolder() {
+  getButtonHolder () {
     return document.createElement('span')
   }
 
@@ -40,7 +40,7 @@ export class materializeTheme extends AbstractTheme {
    * @returns {HTMLElement} The button object.
    * @see http://materializecss.com/buttons.html
    */
-  getButton(text, icon, title) {
+  getButton (text, icon, title) {
     /* Prepare icon. */
     if (icon) {
       icon.classList.add('left')
@@ -58,7 +58,7 @@ export class materializeTheme extends AbstractTheme {
     return el
   }
 
-  afterInputReady(input) {
+  afterInputReady (input) {
     let label = input.previousSibling
 
     if (input.type && input.type === 'range') {
@@ -82,9 +82,9 @@ export class materializeTheme extends AbstractTheme {
    * @returns {HTMLElement} The assembled DOM element.
    * @see http://materializecss.com/forms.html
    */
-  getFormControl(label, input, description, infoText) {
+  getFormControl (label, input, description, infoText) {
     let ctrl
-    const type = input.type
+    const { type } = input
 
     /* Checkboxes get wrapped in p elements. */
     if (type && (type === 'checkbox' || type === 'radio')) {
@@ -125,7 +125,7 @@ export class materializeTheme extends AbstractTheme {
     return ctrl
   }
 
-  getDescription(text) {
+  getDescription (text) {
     const el = document.createElement('div')
     el.classList.add('grey-text')
     /* el.style.marginTop = '-15px' */
@@ -140,7 +140,7 @@ export class materializeTheme extends AbstractTheme {
    * @param {string|HTMLElement} text The header text or element.
    * @returns {HTMLElement} The header element.
    */
-  getHeader(text) {
+  getHeader (text) {
     const el = document.createElement('h5')
 
     if (typeof text === 'string') {
@@ -152,44 +152,44 @@ export class materializeTheme extends AbstractTheme {
     return el
   }
 
-  getChildEditorHolder() {
+  getChildEditorHolder () {
     const el = document.createElement('div')
     el.marginBottom = '10px'
     return el
   }
 
-  getIndentedPanel() {
+  getIndentedPanel () {
     const el = document.createElement('div')
     el.classList.add('card-panel')
     return el
   }
 
-  getTable() {
+  getTable () {
     const el = document.createElement('table')
     el.classList.add('striped', 'bordered')
     el.style.marginBottom = '10px'
     return el
   }
 
-  getTableRow() {
+  getTableRow () {
     return document.createElement('tr')
   }
 
-  getTableHead() {
+  getTableHead () {
     return document.createElement('thead')
   }
 
-  getTableBody() {
+  getTableBody () {
     return document.createElement('tbody')
   }
 
-  getTableHeaderCell(text) {
+  getTableHeaderCell (text) {
     const el = document.createElement('th')
     el.textContent = text
     return el
   }
 
-  getTableCell() {
+  getTableCell () {
     const el = document.createElement('td')
     return el
   }
@@ -200,7 +200,7 @@ export class materializeTheme extends AbstractTheme {
    * @returns {HTMLElement} The tab holder component.
    * @see https://github.com/Dogfalo/materialize/issues/2542#issuecomment-233458602
    */
-  getTabHolder() {
+  getTabHolder () {
     const html = [
       '<div class="col s2">',
       '   <ul class="tabs" style="height: auto; margin-top: 0.82rem; -ms-flex-direction: column; -webkit-flex-direction: column; flex-direction: column; display: -webkit-flex; display: flex;">',
@@ -222,7 +222,7 @@ export class materializeTheme extends AbstractTheme {
  * @param {HTMLElement} holder The tab holder element.
  * @param {HTMLElement} tab The tab to add.
  */
-  addTab(holder, tab) {
+  addTab (holder, tab) {
     holder.children[0].children[0].appendChild(tab)
   }
 
@@ -233,7 +233,7 @@ export class materializeTheme extends AbstractTheme {
    * @returns {HTMLElement} The tab element.
    * @see https://github.com/Dogfalo/materialize/issues/2542#issuecomment-233458602
    */
-  getTab(span) {
+  getTab (span) {
     const el = document.createElement('li')
     el.classList.add('tab')
     el.style = el.style || {}
@@ -257,7 +257,7 @@ export class materializeTheme extends AbstractTheme {
    * @returns {HTMLElement} The tab element.
    * @see https://github.com/Dogfalo/materialize/issues/2542#issuecomment-233458602
    */
-  markTabActive(tab) {
+  markTabActive (tab) {
     tab.style = tab.style || {}
     this.applyStyles(tab,
       {
@@ -280,7 +280,7 @@ export class materializeTheme extends AbstractTheme {
    * @returns {HTMLElement} The tab element.
    * @see https://github.com/Dogfalo/materialize/issues/2542#issuecomment-233458602
    */
-  markTabInactive(tab) {
+  markTabInactive (tab) {
     tab.style = tab.style || {}
     this.applyStyles(tab,
       {
@@ -301,7 +301,7 @@ export class materializeTheme extends AbstractTheme {
    * @param {HTMLElement} tabHolder The full tab holder element.
    * @returns {HTMLElement} The content element inside specified tab holder.
    */
-  getTabContentHolder(tabHolder) {
+  getTabContentHolder (tabHolder) {
     return tabHolder.children[1]
   }
 
@@ -310,7 +310,7 @@ export class materializeTheme extends AbstractTheme {
    *
    * @returns {HTMLElement} The new tab content element.
    */
-  getTabContent() {
+  getTabContent () {
     return document.createElement('div')
   }
 
@@ -320,7 +320,7 @@ export class materializeTheme extends AbstractTheme {
    * @param {HTMLElement} input The input element that caused the error.
    * @param {string} text The error message.
    */
-  addInputError(input, text) {
+  addInputError (input, text) {
     /* Get the parent element. Should most likely be a <div class="input-field" ... />. */
     const parent = input.parentNode
     let el
@@ -342,7 +342,7 @@ export class materializeTheme extends AbstractTheme {
    *
    * @param {HTMLElement} input The input element that previously caused the error.
    */
-  removeInputError(input) {
+  removeInputError (input) {
     /* Get the parent element. Should most likely be a <div class="input-field" ... />. */
     const parent = input.parentElement
     let els
@@ -354,10 +354,10 @@ export class materializeTheme extends AbstractTheme {
     for (let i = 0; i < els.length; i++) { parent.removeChild(els[i]) }
   }
 
-  addTableRowError(row) {
+  addTableRowError (row) {
   }
 
-  removeTableRowError(row) {
+  removeTableRowError (row) {
   }
 
   /**
@@ -367,7 +367,7 @@ export class materializeTheme extends AbstractTheme {
    * @return {HTMLElement} The DOM element.
    * @see http://materializecss.com/forms.html#select
    */
-  getSelectInput(options, multiple) {
+  getSelectInput (options, multiple) {
     const select = super.getSelectInput(options)
     select.classList.add('browser-default')
     return select
@@ -379,7 +379,7 @@ export class materializeTheme extends AbstractTheme {
    * @returns {HTMLElement} The DOM element.
    * @see http://materializecss.com/forms.html#textarea
    */
-  getTextareaInput() {
+  getTextareaInput () {
     const el = document.createElement('textarea')
     el.style.marginBottom = '5px'
     el.style.fontSize = '1rem'
@@ -387,7 +387,7 @@ export class materializeTheme extends AbstractTheme {
     return el
   }
 
-  getCheckbox() {
+  getCheckbox () {
     const el = this.getFormInputField('checkbox')
     el.id = this.createUuid()
     return el
@@ -399,7 +399,7 @@ export class materializeTheme extends AbstractTheme {
    * @returns {HTMLElement} The modal DOM element.
    * @see http://materializecss.com/cards.html
    */
-  getModal() {
+  getModal () {
     const el = document.createElement('div')
     el.classList.add('card-panel', 'z-depth-3')
     el.style.padding = '5px'
@@ -415,8 +415,8 @@ export class materializeTheme extends AbstractTheme {
    * @returns {string} A GUID.
    * @see https://stackoverflow.com/a/2117523
    */
-  createUuid() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+  createUuid () {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
       const r = Math.random() * 16 | 0; const v = c === 'x' ? r : (r & 0x3 | 0x8)
       return v.toString(16)
     }

@@ -2,13 +2,13 @@
 import { AbstractTheme } from '../theme.js'
 
 export class foundationTheme extends AbstractTheme {
-  getChildEditorHolder() {
+  getChildEditorHolder () {
     const el = document.createElement('div')
     el.style.marginBottom = '15px'
     return el
   }
 
-  getSelectInput(options, multiple) {
+  getSelectInput (options, multiple) {
     const el = super.getSelectInput(options)
     el.style.minWidth = 'none'
     el.style.padding = '5px'
@@ -16,13 +16,13 @@ export class foundationTheme extends AbstractTheme {
     return el
   }
 
-  getSwitcher(options) {
+  getSwitcher (options) {
     const el = super.getSwitcher(options)
     el.style.paddingRight = '8px'
     return el
   }
 
-  afterInputReady(input) {
+  afterInputReady (input) {
     if (input.group) return
     if (this.closest(input, '.compact')) {
       input.style.marginBottom = 0
@@ -35,20 +35,20 @@ export class foundationTheme extends AbstractTheme {
     }
   }
 
-  getFormInputLabel(text, req) {
+  getFormInputLabel (text, req) {
     const el = super.getFormInputLabel(text, req)
     el.style.display = 'inline-block'
     return el
   }
 
-  getFormInputField(type) {
+  getFormInputField (type) {
     const el = super.getFormInputField(type)
     el.style.width = '100%'
     el.style.marginBottom = (type === 'checkbox' || type === 'radio') ? '0' : '12px'
     return el
   }
 
-  getFormInputDescription(text) {
+  getFormInputDescription (text) {
     const el = document.createElement('p')
     if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text)
     else el.textContent = this.cleanText(text)
@@ -57,14 +57,14 @@ export class foundationTheme extends AbstractTheme {
     return el
   }
 
-  getIndentedPanel() {
+  getIndentedPanel () {
     const el = document.createElement('div')
     el.classList.add('panel')
     el.style.paddingBottom = 0
     return el
   }
 
-  getHeaderButtonHolder() {
+  getHeaderButtonHolder () {
     const el = this.getButtonHolder()
     el.style.display = 'inline-block'
     el.style.marginLeft = '10px'
@@ -72,19 +72,19 @@ export class foundationTheme extends AbstractTheme {
     return el
   }
 
-  getButtonHolder() {
+  getButtonHolder () {
     const el = document.createElement('span')
     el.classList.add('button-group')
     return el
   }
 
-  getButton(text, icon, title) {
+  getButton (text, icon, title) {
     const el = super.getButton(text, icon, title)
     el.classList.add('small', 'button')
     return el
   }
 
-  addInputError(input, text) {
+  addInputError (input, text) {
     if (!input.group) {
       this.queuedInputErrorText = text
       return
@@ -101,7 +101,7 @@ export class foundationTheme extends AbstractTheme {
     input.errmsg.textContent = text
   }
 
-  removeInputError(input) {
+  removeInputError (input) {
     if (!input.group) {
       delete this.queuedInputErrorText
     }
@@ -110,7 +110,7 @@ export class foundationTheme extends AbstractTheme {
     input.errmsg.style.display = 'none'
   }
 
-  getProgressBar() {
+  getProgressBar () {
     const progressBar = document.createElement('div')
     progressBar.classList.add('progress')
 
@@ -121,17 +121,17 @@ export class foundationTheme extends AbstractTheme {
     return progressBar
   }
 
-  updateProgressBar(progressBar, progress) {
+  updateProgressBar (progressBar, progress) {
     if (!progressBar) return
     progressBar.firstChild.style.width = `${progress}%`
   }
 
-  updateProgressBarUnknown(progressBar) {
+  updateProgressBarUnknown (progressBar) {
     if (!progressBar) return
     progressBar.firstChild.style.width = '100%'
   }
 
-  getInputGroup(input, buttons) {
+  getInputGroup (input, buttons) {
     if (!input) return undefined
 
     const inputGroupContainer = document.createElement('div')
@@ -154,19 +154,19 @@ export class foundationTheme extends AbstractTheme {
 
 /* Foundation 3 Specific Theme */
 export class foundation3Theme extends foundationTheme {
-  getHeaderButtonHolder() {
+  getHeaderButtonHolder () {
     const el = super.getHeaderButtonHolder()
     el.style.fontSize = '.6em'
     return el
   }
 
-  getFormInputLabel(text, req) {
+  getFormInputLabel (text, req) {
     const el = super.getFormInputLabel(text, req)
     el.style.fontWeight = 'bold'
     return el
   }
 
-  getTabHolder(propertyName) {
+  getTabHolder (propertyName) {
     const pName = (typeof propertyName === 'undefined') ? '' : propertyName
     const el = document.createElement('div')
     el.classList.add('row')
@@ -174,7 +174,7 @@ export class foundation3Theme extends foundationTheme {
     return el
   }
 
-  getTopTabHolder(propertyName) {
+  getTopTabHolder (propertyName) {
     const pName = (typeof propertyName === 'undefined') ? '' : propertyName
     const el = document.createElement('div')
     el.classList.add('row')
@@ -182,7 +182,7 @@ export class foundation3Theme extends foundationTheme {
     return el
   }
 
-  setGridColumnSize(el, size, offset) {
+  setGridColumnSize (el, size, offset) {
     const sizes = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve']
     el.classList.add('columns', sizes[size])
     if (offset && offset < 11) {
@@ -190,7 +190,7 @@ export class foundation3Theme extends foundationTheme {
     }
   }
 
-  getTab(text, tabId) {
+  getTab (text, tabId) {
     const el = document.createElement('dd')
     const a = document.createElement('a')
     a.setAttribute('href', `#${tabId}`)
@@ -199,7 +199,7 @@ export class foundation3Theme extends foundationTheme {
     return el
   }
 
-  getTopTab(text, tabId) {
+  getTopTab (text, tabId) {
     const el = document.createElement('dd')
     const a = document.createElement('a')
     a.setAttribute('href', `#${tabId}`)
@@ -208,29 +208,29 @@ export class foundation3Theme extends foundationTheme {
     return el
   }
 
-  getTabContentHolder(tabHolder) {
+  getTabContentHolder (tabHolder) {
     return tabHolder.children[1]
   }
 
-  getTopTabContentHolder(tabHolder) {
+  getTopTabContentHolder (tabHolder) {
     return tabHolder.children[1]
   }
 
-  getTabContent() {
+  getTabContent () {
     const el = document.createElement('div')
     el.classList.add('content', 'active')
     el.style.paddingLeft = '5px'
     return el
   }
 
-  getTopTabContent() {
+  getTopTabContent () {
     const el = document.createElement('div')
     el.classList.add('content', 'active')
     el.style.paddingLeft = '5px'
     return el
   }
 
-  markTabActive(row) {
+  markTabActive (row) {
     row.tab.classList.add('active')
 
     if (typeof row.rowPane !== 'undefined') {
@@ -240,7 +240,7 @@ export class foundation3Theme extends foundationTheme {
     }
   }
 
-  markTabInactive(row) {
+  markTabInactive (row) {
     row.tab.classList.remove('active')
 
     if (typeof row.rowPane !== 'undefined') {
@@ -250,37 +250,37 @@ export class foundation3Theme extends foundationTheme {
     }
   }
 
-  addTab(holder, tab) {
+  addTab (holder, tab) {
     holder.children[0].appendChild(tab)
   }
 
-  addTopTab(holder, tab) {
+  addTopTab (holder, tab) {
     holder.children[0].appendChild(tab)
   }
 }
 
 /* Foundation 4 Specific Theme */
 export class foundation4Theme extends foundationTheme {
-  getHeaderButtonHolder() {
+  getHeaderButtonHolder () {
     const el = super.getHeaderButtonHolder()
     el.style.fontSize = '.6em'
     return el
   }
 
-  setGridColumnSize(el, size, offset) {
+  setGridColumnSize (el, size, offset) {
     el.classList.add('columns', `large-${size}`)
     if (offset) {
       el.classList.add(`large-offset-${offset}`)
     }
   }
 
-  getFormInputDescription(text) {
+  getFormInputDescription (text) {
     const el = super.getFormInputDescription(text)
     el.style.fontSize = '.8rem'
     return el
   }
 
-  getFormInputLabel(text, req) {
+  getFormInputLabel (text, req) {
     const el = super.getFormInputLabel(text, req)
     el.style.fontWeight = 'bold'
     return el
@@ -289,33 +289,33 @@ export class foundation4Theme extends foundationTheme {
 
 /* Foundation 5 Specific Theme */
 export class foundation5Theme extends foundationTheme {
-  getFormInputDescription(text) {
+  getFormInputDescription (text) {
     const el = super.getFormInputDescription(text)
     el.style.fontSize = '.8rem'
     return el
   }
 
-  setGridColumnSize(el, size, offset) {
+  setGridColumnSize (el, size, offset) {
     el.classList.add('columns', `medium-${size}`)
     if (offset) {
       el.classList.add(`medium-offset-${offset}`)
     }
   }
 
-  getButton(text, icon, title) {
+  getButton (text, icon, title) {
     const el = super.getButton(text, icon, title)
     el.className = `${el.className.replace(/\s*small/g, '')} tiny`
     return el
   }
 
-  getTabHolder(propertyName) {
+  getTabHolder (propertyName) {
     const pName = (typeof propertyName === 'undefined') ? '' : propertyName
     const el = document.createElement('div')
     el.innerHTML = `<dl class="tabs vertical" id="${pName}"></dl><div class="tabs-content vertical" id="${pName}"></div>`
     return el
   }
 
-  getTopTabHolder(propertyName) {
+  getTopTabHolder (propertyName) {
     const pName = (typeof propertyName === 'undefined') ? '' : propertyName
     const el = document.createElement('div')
     el.classList.add('row')
@@ -323,7 +323,7 @@ export class foundation5Theme extends foundationTheme {
     return el
   }
 
-  getTab(text, tabId) {
+  getTab (text, tabId) {
     const el = document.createElement('dd')
     const a = document.createElement('a')
     a.setAttribute('href', `#${tabId}`)
@@ -332,7 +332,7 @@ export class foundation5Theme extends foundationTheme {
     return el
   }
 
-  getTopTab(text, tabId) {
+  getTopTab (text, tabId) {
     const el = document.createElement('dd')
     const a = document.createElement('a')
     a.setAttribute('href', `#${tabId}`)
@@ -341,29 +341,29 @@ export class foundation5Theme extends foundationTheme {
     return el
   }
 
-  getTabContentHolder(tabHolder) {
+  getTabContentHolder (tabHolder) {
     return tabHolder.children[1]
   }
 
-  getTopTabContentHolder(tabHolder) {
+  getTopTabContentHolder (tabHolder) {
     return tabHolder.children[1]
   }
 
-  getTabContent() {
+  getTabContent () {
     const el = document.createElement('div')
     el.classList.add('tab-content', 'active')
     el.style.paddingLeft = '5px'
     return el
   }
 
-  getTopTabContent() {
+  getTopTabContent () {
     const el = document.createElement('div')
     el.classList.add('tab-content', 'active')
     el.style.paddingLeft = '5px'
     return el
   }
 
-  markTabActive(row) {
+  markTabActive (row) {
     row.tab.classList.add('active')
 
     if (typeof row.rowPane !== 'undefined') {
@@ -373,7 +373,7 @@ export class foundation5Theme extends foundationTheme {
     }
   }
 
-  markTabInactive(row) {
+  markTabInactive (row) {
     row.tab.classList.remove('active')
 
     if (typeof row.rowPane !== 'undefined') {
@@ -383,37 +383,37 @@ export class foundation5Theme extends foundationTheme {
     }
   }
 
-  addTab(holder, tab) {
+  addTab (holder, tab) {
     holder.children[0].appendChild(tab)
   }
 
-  addTopTab(holder, tab) {
+  addTopTab (holder, tab) {
     holder.children[0].appendChild(tab)
   }
 }
 
 export class foundation6Theme extends foundation5Theme {
-  getIndentedPanel() {
+  getIndentedPanel () {
     const el = document.createElement('div')
     el.classList.add('callout', 'secondary')
     el.style = 'padding-left: 10px; margin-left: 10px;'
     return el
   }
 
-  getButtonHolder() {
+  getButtonHolder () {
     const el = document.createElement('span')
     el.classList.add('button-group', 'tiny')
     el.style.marginBottom = 0
     return el
   }
 
-  getFormInputLabel(text, req) {
+  getFormInputLabel (text, req) {
     const el = super.getFormInputLabel(text, req)
     el.style.display = 'block'
     return el
   }
 
-  getFormControl(label, input, description, infoText) {
+  getFormControl (label, input, description, infoText) {
     const el = document.createElement('div')
     el.classList.add('form-control')
     if (label) el.appendChild(label)
@@ -432,7 +432,7 @@ export class foundation6Theme extends foundation5Theme {
     return el
   }
 
-  addInputError(input, text) {
+  addInputError (input, text) {
     if (!input.group) return
     input.group.classList.add('error')
 
@@ -452,7 +452,7 @@ export class foundation6Theme extends foundation5Theme {
     input.errmsg.textContent = text
   }
 
-  removeInputError(input) {
+  removeInputError (input) {
     if (!input.errmsg) return
     input.classList.remove('is-invalid-input')
     if (input.errmsg.parentNode) {
@@ -460,7 +460,7 @@ export class foundation6Theme extends foundation5Theme {
     }
   }
 
-  getTabHolder(propertyName) {
+  getTabHolder (propertyName) {
     const pName = (typeof propertyName === 'undefined') ? '' : propertyName
     const el = document.createElement('div')
     el.classList.add('grid-x')
@@ -468,7 +468,7 @@ export class foundation6Theme extends foundation5Theme {
     return el
   }
 
-  getTopTabHolder(propertyName) {
+  getTopTabHolder (propertyName) {
     const pName = (typeof propertyName === 'undefined') ? '' : propertyName
     const el = document.createElement('div')
     el.classList.add('grid-y')
@@ -476,11 +476,11 @@ export class foundation6Theme extends foundation5Theme {
     return el
   }
 
-  insertBasicTopTab(tab, newTabsHolder) {
+  insertBasicTopTab (tab, newTabsHolder) {
     newTabsHolder.firstChild.firstChild.insertBefore(tab, newTabsHolder.firstChild.firstChild.firstChild)
   }
 
-  getTab(text, tabId) {
+  getTab (text, tabId) {
     const el = document.createElement('li')
     el.classList.add('tabs-title')
     const a = document.createElement('a')
@@ -490,7 +490,7 @@ export class foundation6Theme extends foundation5Theme {
     return el
   }
 
-  getTopTab(text, tabId) {
+  getTopTab (text, tabId) {
     const el = document.createElement('li')
     el.classList.add('tabs-title')
     const a = document.createElement('a')
@@ -500,29 +500,29 @@ export class foundation6Theme extends foundation5Theme {
     return el
   }
 
-  getTabContentHolder(tabHolder) {
+  getTabContentHolder (tabHolder) {
     return tabHolder.children[1].firstChild
   }
 
-  getTopTabContentHolder(tabHolder) {
+  getTopTabContentHolder (tabHolder) {
     return tabHolder.firstChild.children[1]
   }
 
-  getTabContent() {
+  getTabContent () {
     const el = document.createElement('div')
     el.classList.add('tabs-panel')
     el.style.paddingLeft = '5px'
     return el
   }
 
-  getTopTabContent() {
+  getTopTabContent () {
     const el = document.createElement('div')
     el.classList.add('tabs-panel')
     el.style.paddingLeft = '5px'
     return el
   }
 
-  markTabActive(row) {
+  markTabActive (row) {
     row.tab.classList.add('is-active')
     row.tab.firstChild.setAttribute('aria-selected', 'true')
 
@@ -535,7 +535,7 @@ export class foundation6Theme extends foundation5Theme {
     }
   }
 
-  markTabInactive(row) {
+  markTabInactive (row) {
     row.tab.classList.remove('is-active')
     row.tab.firstChild.removeAttribute('aria-selected')
 
@@ -548,15 +548,15 @@ export class foundation6Theme extends foundation5Theme {
     }
   }
 
-  addTab(holder, tab) {
+  addTab (holder, tab) {
     holder.children[0].firstChild.appendChild(tab)
   }
 
-  addTopTab(holder, tab) {
+  addTopTab (holder, tab) {
     holder.firstChild.children[0].appendChild(tab)
   }
 
-  getFirstTab(holder) {
+  getFirstTab (holder) {
     return holder.firstChild.firstChild.firstChild
   }
 }

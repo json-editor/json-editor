@@ -1,10 +1,10 @@
-import  { AbstractIconLib } from  '../iconlib.js'
+import { AbstractIconLib } from '../iconlib.js'
 
 const icon_prefix = 'ui-icon ui-icon-'
 const mapping = {
   collapse: 'triangle-1-s',
   expand: 'triangle-1-e',
-  'delete': 'trash',
+  delete: 'trash',
   edit: 'pencil',
   add: 'plusthick',
   subtract: 'minusthick',
@@ -22,7 +22,7 @@ const mapping = {
 }
 
 export class jqueryuiIconlib extends AbstractIconLib {
-  constructor(){
+  constructor () {
     super(icon_prefix, mapping)
   }
 }

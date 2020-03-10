@@ -2,19 +2,19 @@ import { AbstractEditor } from '../editor.js'
 import { extend, each } from '../utilities.js'
 
 export class StringEditor extends AbstractEditor {
-  register() {
+  register () {
     super.register()
     if (!this.input) return
     this.input.setAttribute('name', this.formname)
   }
 
-  unregister() {
+  unregister () {
     super.unregister()
     if (!this.input) return
     this.input.removeAttribute('name')
   }
 
-  setValue(value, initial, fromTemplate) {
+  setValue (value, initial, fromTemplate) {
     if (this.template && !fromTemplate) return
 
     if (value === null || typeof value === 'undefined') value = ''
@@ -46,7 +46,7 @@ export class StringEditor extends AbstractEditor {
     return { changed, value: sanitized }
   }
 
-  getNumColumns() {
+  getNumColumns () {
     const min = Math.ceil(Math.max(this.getTitle().length, this.schema.maxLength || 0, this.schema.minLength || 0) / 5)
     let num
 
@@ -57,7 +57,7 @@ export class StringEditor extends AbstractEditor {
     return Math.min(12, Math.max(min, num))
   }
 
-  build() {
+  build () {
     const self = this
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
@@ -114,9 +114,7 @@ export class StringEditor extends AbstractEditor {
 
     if (this.options.compact) {
       this.container.classList.add('compact')
-    } else {
-      if (this.options.input_width) this.input.style.width = this.options.input_width
-    }
+    } else if (this.options.input_width) this.input.style.width = this.options.input_width
 
     if (this.schema.readOnly || this.schema.readonly || this.schema.template) {
       this.always_disabled = true
@@ -153,7 +151,7 @@ export class StringEditor extends AbstractEditor {
 
     if (this.options.input_height) this.input.style.height = this.options.input_height
     if (this.options.expand_height) {
-      this.adjust_height = el => {
+      this.adjust_height = (el) => {
         if (!el) return
         let i; let ch = el.offsetHeight
         /* Input too short */
@@ -188,7 +186,7 @@ export class StringEditor extends AbstractEditor {
 
     if (this.format) this.input.setAttribute('data-schemaformat', this.format)
 
-    let input = this.input
+    let { input } = this
     if (this.format === 'range') {
       input = this.theme.getRangeControl(this.input, this.theme.getRangeOutput(this.input, this.schema.default || Math.max(this.schema.minimum || 0, 0)))
     }
@@ -216,7 +214,7 @@ export class StringEditor extends AbstractEditor {
     }
   }
 
-  setupCleave(el) {
+  setupCleave (el) {
     /* Enable cleave.js support if library is loaded and config is available */
     const options = this.expandCallbacks('cleave', extend({}, this.defaults.options.cleave || {}, this.options.cleave || {}))
     if (typeof options === 'object' && Object.keys(options).length > 0) {
@@ -224,7 +222,7 @@ export class StringEditor extends AbstractEditor {
     }
   }
 
-  setupImask(el) {
+  setupImask (el) {
     /* Enable imask.js support if library is loaded and config is available */
     const options = this.expandCallbacks('imask', extend({}, this.defaults.options.imask || {}, this.options.imask || {}))
     if (typeof options === 'object' && Object.keys(options).length > 0) {
@@ -232,7 +230,7 @@ export class StringEditor extends AbstractEditor {
     }
   }
 
-  ajustIMaskOptions(obj) {
+  ajustIMaskOptions (obj) {
     /* iMask config format is not JSON friendly, so function and regex based mask */
     /* properties have to be adjusted from string to the correct format */
     for (const prop in obj) {
@@ -253,7 +251,7 @@ export class StringEditor extends AbstractEditor {
     return obj
   }
 
-  getGlobalPropertyFromString(strValue) {
+  getGlobalPropertyFromString (strValue) {
     if (!strValue.includes('.')) {
       if (typeof window[strValue] !== 'undefined') {
         return window[strValue]
@@ -271,39 +269,39 @@ export class StringEditor extends AbstractEditor {
     return strValue
   }
 
-  getValue() {
+  getValue () {
     if (this.imask_instance && this.dependenciesFulfilled && this.options.imask.returnUnmasked) {
       return this.imask_instance.unmaskedValue
-    } else return super.getValue()
+    } return super.getValue()
   }
 
-  enable() {
+  enable () {
     if (!this.always_disabled) {
       this.input.disabled = false
       super.enable()
     }
   }
 
-  disable(alwaysDisabled) {
+  disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     this.input.disabled = true
     super.disable()
   }
 
-  afterInputReady() {
+  afterInputReady () {
     const self = this
     self.theme.afterInputReady(self.input)
     if (window.Cleave && !self.cleave_instance) self.setupCleave(self.input)
     else if (window.IMask && !self.imask_instance) self.setupImask(self.input)
   }
 
-  refreshValue() {
+  refreshValue () {
     this.value = this.input.value
     if (typeof this.value !== 'string') this.value = ''
     this.serialized = this.value
   }
 
-  destroy() {
+  destroy () {
     if (this.cleave_instance) this.cleave_instance.destroy()
     if (this.imask_instance) this.imask_instance.destroy()
 
@@ -318,14 +316,14 @@ export class StringEditor extends AbstractEditor {
   /**
    * This is overridden in derivative editors
    */
-  sanitize(value) {
+  sanitize (value) {
     return value
   }
 
   /**
    * Re-calculates the value if needed
    */
-  onWatchedFieldChange() {
+  onWatchedFieldChange () {
     let vars
 
     /* If this editor needs to be rendered by a macro template */
@@ -337,7 +335,7 @@ export class StringEditor extends AbstractEditor {
     super.onWatchedFieldChange()
   }
 
-  showValidationErrors(errors) {
+  showValidationErrors (errors) {
     const self = this
 
     if (this.jsoneditor.options.show_errors === 'always') { } else if (!this.is_dirty && this.previous_error_setting === this.jsoneditor.options.show_errors) return
@@ -358,4 +356,3 @@ export class StringEditor extends AbstractEditor {
     }
   }
 }
-

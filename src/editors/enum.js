@@ -3,25 +3,25 @@ import { AbstractEditor } from '../editor.js'
 import { each } from '../utilities.js'
 
 export class EnumEditor extends AbstractEditor {
-  getNumColumns() {
+  getNumColumns () {
     return 4
   }
 
-  build() {
+  build () {
     this.title = this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     this.container.appendChild(this.title)
 
     this.options.enum_titles = this.options.enum_titles || []
 
-    this['enum'] = this.schema['enum']
+    this.enum = this.schema.enum
     this.selected = 0
     this.select_options = []
     this.html_values = []
 
     const self = this
-    for (let i = 0; i < this['enum'].length; i++) {
+    for (let i = 0; i < this.enum.length; i++) {
       this.select_options[i] = this.options.enum_titles[i] || `Value ${i + 1}`
-      this.html_values[i] = this.getHTML(this['enum'][i])
+      this.html_values[i] = this.getHTML(this.enum[i])
     }
 
     /* Switcher */
@@ -36,21 +36,21 @@ export class EnumEditor extends AbstractEditor {
 
     this.switcher.addEventListener('change', function () {
       self.selected = self.select_options.indexOf(this.value)
-      self.value = self['enum'][self.selected]
+      self.value = self.enum[self.selected]
       self.refreshValue()
       self.onChange(true)
     })
-    this.value = this['enum'][0]
+    this.value = this.enum[0]
     this.refreshValue()
 
-    if (this['enum'].length === 1) this.switcher.style.display = 'none'
+    if (this.enum.length === 1) this.switcher.style.display = 'none'
   }
 
-  refreshValue() {
+  refreshValue () {
     const self = this
     self.selected = -1
     const stringified = JSON.stringify(this.value)
-    each(this['enum'], (i, el) => {
+    each(this.enum, (i, el) => {
       if (stringified === JSON.stringify(el)) {
         self.selected = i
         return false
@@ -58,7 +58,7 @@ export class EnumEditor extends AbstractEditor {
     })
 
     if (self.selected < 0) {
-      self.setValue(self['enum'][0])
+      self.setValue(self.enum[0])
       return
     }
 
@@ -66,20 +66,20 @@ export class EnumEditor extends AbstractEditor {
     this.display_area.innerHTML = this.html_values[this.selected]
   }
 
-  enable() {
+  enable () {
     if (!this.always_disabled) {
       this.switcher.disabled = false
       super.enable()
     }
   }
 
-  disable(alwaysDisabled) {
+  disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     this.switcher.disabled = true
     super.disable()
   }
 
-  getHTML(el) {
+  getHTML (el) {
     const self = this
 
     if (el === null) {
@@ -113,12 +113,11 @@ export class EnumEditor extends AbstractEditor {
     } else if (typeof el === 'string') {
       return el.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
       /* Number */
-    } else {
-      return el
     }
+    return el
   }
 
-  setValue(val) {
+  setValue (val) {
     if (this.value !== val) {
       this.value = val
       this.refreshValue()
@@ -126,7 +125,7 @@ export class EnumEditor extends AbstractEditor {
     }
   }
 
-  destroy() {
+  destroy () {
     if (this.display_area && this.display_area.parentNode) this.display_area.parentNode.removeChild(this.display_area)
     if (this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title)
     if (this.switcher && this.switcher.parentNode) this.switcher.parentNode.removeChild(this.switcher)

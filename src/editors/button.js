@@ -3,7 +3,7 @@ import { AbstractEditor } from '../editor.js'
 import { extend } from '../utilities.js'
 
 export class ButtonEditor extends AbstractEditor {
-  constructor(options, defaults) {
+  constructor (options, defaults) {
     super(options, defaults)
     this.active = false
 
@@ -19,17 +19,17 @@ export class ButtonEditor extends AbstractEditor {
     }
   }
 
-  build() {
+  build () {
     this.options.compact = true
 
     /* Get options, either global options from "this.defaults.options.button" or */
     /* single property options from schema "options.button" */
     const title = this.schema.title || this.key
     const options = this.expandCallbacks('button', extend({}, {
-      'icon': '',
-      'validated': false,
-      'align': 'left',
-      'action': (jseditor, e) => {
+      icon: '',
+      validated: false,
+      align: 'left',
+      action: (jseditor, e) => {
         window.alert(`No button action defined for "${jseditor.path}"`)
       }
     }, this.defaults.options.button || {}, this.options.button || {}))
@@ -60,29 +60,29 @@ export class ButtonEditor extends AbstractEditor {
     if (options.validated) this.jsoneditor.on('change', this.changeHandler)
   }
 
-  enable() {
+  enable () {
     if (!this.always_disabled) {
       this.input.disabled = false
       super.enable()
     }
   }
 
-  disable(alwaysDisabled) {
+  disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     this.input.disabled = true
     super.disable()
   }
 
-  getNumColumns() {
+  getNumColumns () {
     return 2
   }
 
-  activate() {
+  activate () {
     this.active = false
     this.enable()
   }
 
-  deactivate() {
+  deactivate () {
     /* only non required properties can be deactivated. */
     if (!this.isRequired()) {
       this.active = false
@@ -90,7 +90,7 @@ export class ButtonEditor extends AbstractEditor {
     }
   }
 
-  destroy() {
+  destroy () {
     this.jsoneditor.off('change', this.changeHandler)
     this.changeHandler = null
     super.destroy()

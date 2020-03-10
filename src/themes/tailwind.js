@@ -15,36 +15,36 @@ const options = {
 }
 
 export class tailwindTheme extends AbstractTheme {
-  constructor(jsoneditor) {
+  constructor (jsoneditor) {
     super(jsoneditor, options)
   }
 
-  getGridContainer() {
+  getGridContainer () {
     const el = document.createElement('div')
     el.classList.add('flex', 'flex-col', 'w-full')
     if (!this.options.object_indent) el.classList.add('je-noindent')
     return el
   }
 
-  getGridRow() {
+  getGridRow () {
     const el = document.createElement('div')
     el.classList.add('flex', 'flex-wrap', 'w-full')
     return el
   }
 
-  getGridColumn() {
+  getGridColumn () {
     const el = document.createElement('div')
     el.classList.add('flex', 'flex-col')
     return el
   }
 
-  setGridColumnSize(el, size, offset) {
+  setGridColumnSize (el, size, offset) {
     if (size > 0 && size < 12) { el.classList.add(`w-${size}/12`, 'px-1') } else el.classList.add('w-full', 'px-1')
 
     if (offset) el.style.marginLeft = `${(100 / 12) * offset}%`
   }
 
-  getIndentedPanel() {
+  getIndentedPanel () {
     const el = document.createElement('div')
     if (this.options.object_panel_default) { el.classList.add('w-full', 'p-1') } else { el.classList.add('relative', 'flex', 'flex-col', 'rounded', 'break-words', 'border', 'bg-white', 'border-0', 'border-blue-400', 'p-1', 'shadow-md') }
     if (this.options.object_border) el.classList.add('je-border')
@@ -52,18 +52,18 @@ export class tailwindTheme extends AbstractTheme {
   }
 
   /* Used for "type: array" with "format: tabs-top" */
-  getTopIndentedPanel() {
+  getTopIndentedPanel () {
     const el = document.createElement('div')
     if (this.options.object_panel_default) { el.classList.add('w-full', 'm-2') } else { el.classList.add('relative', 'flex', 'flex-col', 'rounded', 'break-words', 'border', 'bg-white', 'border-0', 'border-blue-400', 'p-1', 'shadow-md') }
     if (this.options.object_border) el.classList.add('je-border')
     return el
   }
 
-  getTitle() {
+  getTitle () {
     return this.schema.title
   }
 
-  getSelectInput(options, multiple) {
+  getSelectInput (options, multiple) {
     const el = super.getSelectInput(options)
     if (multiple) el.classList.add('form-multiselect', 'block', 'py-0', 'h-auto', 'w-full', 'px-1', 'text-sm', 'text-black', 'leading-normal', 'bg-white', 'border', 'border-grey', 'rounded')
     else el.classList.add('form-select', 'block', 'py-0', 'h-6', 'w-full', 'px-1', 'text-sm', 'text-black', 'leading-normal', 'bg-white', 'border', 'border-grey', 'rounded')
@@ -71,7 +71,7 @@ export class tailwindTheme extends AbstractTheme {
     return el
   }
 
-  afterInputReady(input) {
+  afterInputReady (input) {
     if (input.controlgroup) return
     input.controlgroup = this.closest(input, '.form-group')
     if (this.closest(input, '.compact')) {
@@ -79,7 +79,7 @@ export class tailwindTheme extends AbstractTheme {
     }
   }
 
-  getTextareaInput() {
+  getTextareaInput () {
     const el = super.getTextareaInput()
     el.classList.add('block', 'w-full', 'px-1', 'text-sm', 'leading-normal', 'bg-white', 'text-black', 'border', 'border-grey', 'rounded')
     if (this.options.enable_compact) el.classList.add('compact')
@@ -88,7 +88,7 @@ export class tailwindTheme extends AbstractTheme {
   }
 
   /* Create input field for type="range" */
-  getRangeInput(min, max, step) {
+  getRangeInput (min, max, step) {
     const el = this.getFormInputField('range')
     el.classList.add('slider')
     if (this.options.enable_compact) el.classList.add('compact')
@@ -99,39 +99,39 @@ export class tailwindTheme extends AbstractTheme {
     return el
   }
 
-  getRangeControl(input, output) {
+  getRangeControl (input, output) {
     const el = super.getRangeControl(input, output)
     el.classList.add('text-center', 'text-black')
     return el
   }
 
   /* Checkbox elements */
-  getCheckbox() {
+  getCheckbox () {
     const el = this.getFormInputField('checkbox')
     el.classList.add('form-checkbox', 'text-red-600')
     return el
   }
 
-  getCheckboxLabel(text, req) {
+  getCheckboxLabel (text, req) {
     const el = super.getCheckboxLabel(text, req)
     el.classList.add('inline-flex', 'items-center')
     return el
   }
 
-  getFormCheckboxControl(label, input, compact) {
+  getFormCheckboxControl (label, input, compact) {
     label.insertBefore(input, label.firstChild) /* Move input into label element */
     if (compact) label.classList.add('inline-flex flex-row')
     return label
   }
 
-  getMultiCheckboxHolder(controls, label, description, infoText) {
+  getMultiCheckboxHolder (controls, label, description, infoText) {
     const el = super.getMultiCheckboxHolder(controls, label, description, infoText)
     el.classList.add('inline-flex', 'flex-col')
     return el
   }
 
   /* Radio elements */
-  getFormRadio(attributes) {
+  getFormRadio (attributes) {
     const el = this.getFormInputField('radio')
     el.classList.add('form-radio', 'text-red-600')
     for (const key in attributes) {
@@ -140,40 +140,40 @@ export class tailwindTheme extends AbstractTheme {
     return el
   }
 
-  getFormRadioLabel(text, req) {
+  getFormRadioLabel (text, req) {
     const el = super.getFormRadioLabel(text, req)
     el.classList.add('inline-flex', 'items-center', 'mr-2')
     return el
   }
 
-  getFormRadioControl(label, input, compact) {
+  getFormRadioControl (label, input, compact) {
     label.insertBefore(input, label.firstChild) /* Move input into label element */
     if (compact) label.classList.add('form-radio')
     return label
   }
 
-  getRadioHolder(schema, controls, label, description, infoText) {
+  getRadioHolder (schema, controls, label, description, infoText) {
     const el = super.getRadioHolder(controls, label, description, infoText)
     if (schema.options.layout === 'h') el.classList.add('inline-flex', 'flex-row')
     else el.classList.add('inline-flex', 'flex-col')
     return el
   }
 
-  getFormInputLabel(text, req) {
+  getFormInputLabel (text, req) {
     const el = super.getFormInputLabel(text, req)
     if (this.options.label_bold) el.classList.add('font-bold')
     else el.classList.add('required')
     return el
   }
 
-  getFormInputField(type) {
+  getFormInputField (type) {
     const el = super.getFormInputField(type)
     if (!['checkbox', 'radio'].includes(type)) el.classList.add('block', 'w-full', 'px-1', 'text-black', 'text-sm', 'leading-normal', 'bg-white', 'border', 'border-grey', 'rounded')
     if (this.options.enable_compact) el.classList.add('compact')
     return el
   }
 
-  getFormInputDescription(text) {
+  getFormInputDescription (text) {
     const el = document.createElement('p')
     el.classList.add('block', 'mt-1', 'text-xs')
     if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text)
@@ -181,7 +181,7 @@ export class tailwindTheme extends AbstractTheme {
     return el
   }
 
-  getFormControl(label, input, description, infoText) {
+  getFormControl (label, input, description, infoText) {
     const group = document.createElement('div')
     group.classList.add('form-group', 'mb-1', 'w-full')
     if (label) {
@@ -214,26 +214,26 @@ export class tailwindTheme extends AbstractTheme {
     return group
   }
 
-  getHeaderButtonHolder() {
+  getHeaderButtonHolder () {
     const el = this.getButtonHolder()
     el.classList.add('text-sm')
     return el
   }
 
-  getButtonHolder() {
+  getButtonHolder () {
     const el = document.createElement('div')
     el.classList.add('flex', 'relative', 'inline-flex', 'align-middle')
     return el
   }
 
-  getButton(text, icon, title) {
+  getButton (text, icon, title) {
     const el = super.getButton(text, icon, title)
     el.classList.add('inline-block', 'align-middle', 'text-center', 'text-sm', 'bg-blue-700', 'text-white', 'py-1', 'pr-1', 'm-2', 'shadow', 'select-none', 'whitespace-no-wrap', 'rounded')
     return el
   }
 
   /* Button for displaying infotext tooltip */
-  getInfoButton(text) {
+  getInfoButton (text) {
     const tooltip = document.createElement('a')
     tooltip.classList.add('tooltips', 'float-right')
     tooltip.innerHTML = 'ⓘ'
@@ -244,21 +244,21 @@ export class tailwindTheme extends AbstractTheme {
     return tooltip
   }
 
-  getTable() {
+  getTable () {
     const el = super.getTable()
     if (this.options.table_border) el.classList.add('je-table-border')
     else el.classList.add('table', 'border', 'p-0')
     return el
   }
 
-  getTableRow() {
+  getTableRow () {
     const el = super.getTableRow()
     if (this.options.table_border) el.classList.add('je-table-border')
     if (this.options.table_zebrastyle) el.classList.add('je-table-zebra')
     return el
   }
 
-  getTableHeaderCell(text) {
+  getTableHeaderCell (text) {
     const el = super.getTableHeaderCell(text)
     if (this.options.table_border) el.classList.add('je-table-border')
     else if (this.options.table_hdiv) el.classList.add('je-table-hdiv')
@@ -266,7 +266,7 @@ export class tailwindTheme extends AbstractTheme {
     return el
   }
 
-  getTableCell() {
+  getTableCell () {
     const el = super.getTableCell()
     if (this.options.table_border) el.classList.add('je-table-border')
     else if (this.options.table_hdiv) el.classList.add('je-table-hdiv')
@@ -274,7 +274,7 @@ export class tailwindTheme extends AbstractTheme {
     return el
   }
 
-  addInputError(input, text) {
+  addInputError (input, text) {
     if (!input.controlgroup) return
     input.controlgroup.classList.add('has-error')
     input.classList.add('bg-red-600')
@@ -288,14 +288,14 @@ export class tailwindTheme extends AbstractTheme {
     input.errmsg.textContent = text
   }
 
-  removeInputError(input) {
+  removeInputError (input) {
     if (!input.errmsg) return
     input.errmsg.style.display = 'none'
     input.classList.remove('bg-red-600')
     input.controlgroup.classList.remove('has-error')
   }
 
-  getTabHolder(propertyName) {
+  getTabHolder (propertyName) {
     const el = document.createElement('div')
     const pName = typeof propertyName === 'undefined' ? '' : propertyName
     el.innerHTML = `<div class='w-2/12' id='${pName}'><ul class='list-reset pl-0 mb-0'></ul></div><div class='w-10/12' id='${pName}'></div>`
@@ -303,18 +303,18 @@ export class tailwindTheme extends AbstractTheme {
     return el
   }
 
-  addTab(holder, tab) {
+  addTab (holder, tab) {
     holder.children[0].children[0].appendChild(tab)
   }
 
-  getTopTabHolder(propertyName) {
+  getTopTabHolder (propertyName) {
     const pName = typeof propertyName === 'undefined' ? '' : propertyName
     const el = document.createElement('div')
     el.innerHTML = `<ul class='nav-tabs flex list-reset pl-0 mb-0 border-b border-grey-light' id='${pName}'></ul><div class='p-6 block' id='${pName}'></div>`
     return el
   }
 
-  getTab(text, tabId) {
+  getTab (text, tabId) {
     const liel = document.createElement('li')
     liel.classList.add('nav-item', 'flex-col', 'text-center', 'text-white', 'bg-blue-500', 'shadow-md', 'border', 'p-2', 'mb-2', 'mr-2', 'hover:bg-blue-400', 'rounded')
     const ael = document.createElement('a')
@@ -326,7 +326,7 @@ export class tailwindTheme extends AbstractTheme {
     return liel
   }
 
-  getTopTab(text, tabId) {
+  getTopTab (text, tabId) {
     const el = document.createElement('li')
     el.classList.add('nav-item', 'flex', 'border-l', 'border-t', 'border-r')
     const a = document.createElement('a')
@@ -338,19 +338,19 @@ export class tailwindTheme extends AbstractTheme {
     return el
   }
 
-  getTabContent() {
+  getTabContent () {
     const el = document.createElement('div')
     el.setAttribute('role', 'tabpanel')
     return el
   }
 
-  getTopTabContent() {
+  getTopTabContent () {
     const el = document.createElement('div')
     el.setAttribute('role', 'tabpanel')
     return el
   }
 
-  markTabActive(row) {
+  markTabActive (row) {
     row.tab.firstChild.classList.add('block')
     if (row.tab.firstChild.classList.contains('border-b') === true) {
       row.tab.firstChild.classList.add('border-b-0')
@@ -366,7 +366,7 @@ export class tailwindTheme extends AbstractTheme {
     }
   }
 
-  markTabInactive(row) {
+  markTabInactive (row) {
     if (row.tab.firstChild.classList.contains('border-b-0') === true) {
       row.tab.firstChild.classList.add('border-b')
       row.tab.firstChild.classList.remove('border-b-0')
@@ -379,7 +379,7 @@ export class tailwindTheme extends AbstractTheme {
     }
   }
 
-  getProgressBar() {
+  getProgressBar () {
     const min = 0
     const max = 100
     const start = 0
@@ -399,7 +399,7 @@ export class tailwindTheme extends AbstractTheme {
     return container
   }
 
-  updateProgressBar(progressBar, progress) {
+  updateProgressBar (progressBar, progress) {
     if (!progressBar) return
 
     const bar = progressBar.firstChild
@@ -409,7 +409,7 @@ export class tailwindTheme extends AbstractTheme {
     bar.innerHTML = percentage
   }
 
-  updateProgressBarUnknown(progressBar) {
+  updateProgressBarUnknown (progressBar) {
     if (!progressBar) return
 
     const bar = progressBar.firstChild
@@ -419,7 +419,7 @@ export class tailwindTheme extends AbstractTheme {
     bar.innerHTML = ''
   }
 
-  getInputGroup(input, buttons) {
+  getInputGroup (input, buttons) {
     if (!input) return
 
     const inputGroupContainer = document.createElement('div')

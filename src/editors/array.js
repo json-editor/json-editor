@@ -2,7 +2,7 @@ import { AbstractEditor } from '../editor.js'
 import { extend, each, trigger } from '../utilities.js'
 
 export class ArrayEditor extends AbstractEditor {
-  askConfirmation() {
+  askConfirmation () {
     if (this.jsoneditor.options.prompt_before_delete === true) {
       if (window.confirm('Are you sure you want to remove this node?') === false) {
         return false
@@ -11,11 +11,11 @@ export class ArrayEditor extends AbstractEditor {
     return true
   }
 
-  getDefault() {
-    return this.schema['default'] || []
+  getDefault () {
+    return this.schema.default || []
   }
 
-  register() {
+  register () {
     super.register()
     if (this.rows) {
       for (let i = 0; i < this.rows.length; i++) {
@@ -24,7 +24,7 @@ export class ArrayEditor extends AbstractEditor {
     }
   }
 
-  unregister() {
+  unregister () {
     super.unregister()
     if (this.rows) {
       for (let i = 0; i < this.rows.length; i++) {
@@ -33,17 +33,16 @@ export class ArrayEditor extends AbstractEditor {
     }
   }
 
-  getNumColumns() {
+  getNumColumns () {
     const info = this.getItemInfo(0)
     /* Tabs require extra horizontal space */
     if (this.tabs_holder && this.schema.format !== 'tabs-top') {
       return Math.max(Math.min(12, info.width + 2), 4)
-    } else {
-      return info.width
     }
+    return info.width
   }
 
-  enable() {
+  enable () {
     if (!this.always_disabled) {
       if (this.add_row_button) this.add_row_button.disabled = false
       if (this.remove_all_rows_button) this.remove_all_rows_button.disabled = false
@@ -72,7 +71,7 @@ export class ArrayEditor extends AbstractEditor {
     }
   }
 
-  disable(alwaysDisabled) {
+  disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     if (this.add_row_button) this.add_row_button.disabled = true
     if (this.remove_all_rows_button) this.remove_all_rows_button.disabled = true
@@ -100,7 +99,7 @@ export class ArrayEditor extends AbstractEditor {
     super.disable()
   }
 
-  preBuild() {
+  preBuild () {
     super.preBuild()
 
     this.rows = []
@@ -115,7 +114,7 @@ export class ArrayEditor extends AbstractEditor {
     this.array_controls_top = this.options.array_controls_top || this.jsoneditor.options.array_controls_top
   }
 
-  build() {
+  build () {
     if (!this.options.compact) {
       this.header = document.createElement('label')
       this.header.textContent = this.getTitle()
@@ -176,13 +175,13 @@ export class ArrayEditor extends AbstractEditor {
     this.addControls()
   }
 
-  onChildEditorChange(editor) {
+  onChildEditorChange (editor) {
     this.refreshValue()
     this.refreshTabs(true)
     super.onChildEditorChange(editor)
   }
 
-  getItemTitle() {
+  getItemTitle () {
     if (!this.item_title) {
       if (this.schema.items && !Array.isArray(this.schema.items)) {
         const tmp = this.jsoneditor.expandRefs(this.schema.items)
@@ -194,7 +193,7 @@ export class ArrayEditor extends AbstractEditor {
     return this.cleanText(this.item_title)
   }
 
-  getItemSchema(i) {
+  getItemSchema (i) {
     if (Array.isArray(this.schema.items)) {
       if (i >= this.schema.items.length) {
         if (this.schema.additionalItems === true) {
@@ -212,7 +211,7 @@ export class ArrayEditor extends AbstractEditor {
     }
   }
 
-  getItemInfo(i) {
+  getItemInfo (i) {
     let schema = this.getItemSchema(i)
 
     /* Check if it's cached */
@@ -225,7 +224,7 @@ export class ArrayEditor extends AbstractEditor {
 
     this.item_info[stringified] = {
       title: schema.title || this.translate('default_array_item_title'),
-      'default': schema['default'],
+      default: schema.default,
       width: 12,
       child_editors: schema.properties || schema.items
     }
@@ -233,7 +232,7 @@ export class ArrayEditor extends AbstractEditor {
     return this.item_info[stringified]
   }
 
-  getElementEditor(i) {
+  getElementEditor (i) {
     const itemInfo = this.getItemInfo(i)
     let schema = this.getItemSchema(i)
     schema = this.jsoneditor.expandRefs(schema)
@@ -277,7 +276,7 @@ export class ArrayEditor extends AbstractEditor {
     return ret
   }
 
-  destroy() {
+  destroy () {
     this.empty(true)
     if (this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title)
     if (this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description)
@@ -290,7 +289,7 @@ export class ArrayEditor extends AbstractEditor {
     super.destroy()
   }
 
-  empty(hard) {
+  empty (hard) {
     if (!this.rows) return
     const self = this
     each(this.rows, (i, row) => {
@@ -305,7 +304,7 @@ export class ArrayEditor extends AbstractEditor {
     if (hard) self.row_cache = []
   }
 
-  destroyRow(row, hard) {
+  destroyRow (row, hard) {
     const holder = row.container
     if (hard) {
       row.destroy()
@@ -318,32 +317,29 @@ export class ArrayEditor extends AbstractEditor {
     }
   }
 
-  getMax() {
+  getMax () {
     if ((Array.isArray(this.schema.items)) && this.schema.additionalItems === false) {
       return Math.min(this.schema.items.length, this.schema.maxItems || Infinity)
-    } else {
-      return this.schema.maxItems || Infinity
     }
+    return this.schema.maxItems || Infinity
   }
 
-  refreshTabs(refreshHeaders) {
+  refreshTabs (refreshHeaders) {
     const self = this
     each(this.rows, (i, row) => {
       if (!row.tab) return
 
       if (refreshHeaders) {
         row.tab_text.textContent = row.getHeaderText()
+      } else if (row.tab === self.active_tab) {
+        self.theme.markTabActive(row)
       } else {
-        if (row.tab === self.active_tab) {
-          self.theme.markTabActive(row)
-        } else {
-          self.theme.markTabInactive(row)
-        }
+        self.theme.markTabInactive(row)
       }
     })
   }
 
-  setValue(value = [], initial) {
+  setValue (value = [], initial) {
     if (!(Array.isArray(value))) value = [value]
 
     const serialized = JSON.stringify(value)
@@ -352,7 +348,7 @@ export class ArrayEditor extends AbstractEditor {
     /* Make sure value has between minItems and maxItems items in it */
     if (this.schema.minItems) {
       while (value.length < this.schema.minItems) {
-        value.push(this.getItemInfo(value.length)['default'])
+        value.push(this.getItemInfo(value.length).default)
       }
     }
     if (this.getMax() && value.length > this.getMax()) {
@@ -404,7 +400,7 @@ export class ArrayEditor extends AbstractEditor {
     /* TODO: sortable */
   }
 
-  refreshValue(force) {
+  refreshValue (force) {
     const self = this
     const oldi = this.value ? this.value.length : 0
     this.value = []
@@ -488,7 +484,7 @@ export class ArrayEditor extends AbstractEditor {
     }
   }
 
-  addRow(value, initial) {
+  addRow (value, initial) {
     const self = this
     const i = this.rows.length
 
@@ -505,7 +501,7 @@ export class ArrayEditor extends AbstractEditor {
         self.rows[i].tab = self.theme.getTab(self.rows[i].tab_text, this.getValidId(self.rows[i].path))
         self.theme.addTab(self.tabs_holder, self.rows[i].tab)
       }
-      self.rows[i].tab.addEventListener('click', e => {
+      self.rows[i].tab.addEventListener('click', (e) => {
         self.active_tab = self.rows[i].tab
         self.refreshTabs()
         e.preventDefault()
@@ -651,7 +647,7 @@ export class ArrayEditor extends AbstractEditor {
     return self.rows[i]
   }
 
-  addControls() {
+  addControls () {
     const self = this
 
     this.collapsed = false
@@ -697,7 +693,7 @@ export class ArrayEditor extends AbstractEditor {
     /* Add "new row" and "delete last" buttons below editor */
     this.add_row_button = this.getButton(this.getItemTitle(), 'add', this.translate('button_add_row_title', [this.getItemTitle()]))
     this.add_row_button.classList.add('json-editor-btntype-add')
-    this.add_row_button.addEventListener('click', e => {
+    this.add_row_button.addEventListener('click', (e) => {
       e.preventDefault()
       e.stopPropagation()
       const i = self.rows.length
@@ -721,7 +717,7 @@ export class ArrayEditor extends AbstractEditor {
 
     this.delete_last_row_button = this.getButton(this.translate('button_delete_last', [this.getItemTitle()]), 'subtract', this.translate('button_delete_last_title', [this.getItemTitle()]))
     this.delete_last_row_button.classList.add('json-editor-btntype-deletelast')
-    this.delete_last_row_button.addEventListener('click', e => {
+    this.delete_last_row_button.addEventListener('click', (e) => {
       e.preventDefault()
       e.stopPropagation()
 
@@ -752,7 +748,7 @@ export class ArrayEditor extends AbstractEditor {
 
     this.remove_all_rows_button = this.getButton(this.translate('button_delete_all'), 'delete', this.translate('button_delete_all_title'))
     this.remove_all_rows_button.classList.add('json-editor-btntype-deleteall')
-    this.remove_all_rows_button.addEventListener('click', e => {
+    this.remove_all_rows_button.addEventListener('click', (e) => {
       e.preventDefault()
       e.stopPropagation()
 
@@ -782,7 +778,7 @@ export class ArrayEditor extends AbstractEditor {
     }
   }
 
-  showValidationErrors(errors) {
+  showValidationErrors (errors) {
     const self = this
 
     /* Get all the errors that pertain to this editor */

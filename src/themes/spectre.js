@@ -16,30 +16,30 @@ const options = {
 }
 
 export class spectreTheme extends AbstractTheme {
-  constructor(jsoneditor) {
+  constructor (jsoneditor) {
     super(jsoneditor, options)
   }
 
   /* Functions for setting up the grid container, row and columns */
-  setGridColumnSize(el, size, offset) {
+  setGridColumnSize (el, size, offset) {
     el.classList.add(`col-${size}`)
     if (offset) el.classList.add('col-mx-auto')
   }
 
-  getGridContainer() {
+  getGridContainer () {
     const el = document.createElement('div')
     el.classList.add('container')
     if (!this.options.object_indent) el.classList.add('je-noindent')
     return el
   }
 
-  getGridRow() {
+  getGridRow () {
     const el = document.createElement('div')
     el.classList.add('columns')
     return el
   }
 
-  getGridColumn() {
+  getGridColumn () {
     const el = document.createElement('div')
     el.classList.add('column')
     if (this.options.align_bottom) el.classList.add('je-align-bottom')
@@ -47,7 +47,7 @@ export class spectreTheme extends AbstractTheme {
   }
 
   /* Used for "type: object" or "type: array" (except if "format: tabs-top") */
-  getIndentedPanel() {
+  getIndentedPanel () {
     const el = document.createElement('div')
     el.classList.add('je-panel')
     if (this.options.object_border) el.classList.add('je-border')
@@ -55,7 +55,7 @@ export class spectreTheme extends AbstractTheme {
   }
 
   /* Used for "type: array" with "format: tabs-top" */
-  getTopIndentedPanel() {
+  getTopIndentedPanel () {
     const el = document.createElement('div')
     el.classList.add('je-panel-top')
     if (this.options.object_border) el.classList.add('je-border')
@@ -63,19 +63,19 @@ export class spectreTheme extends AbstractTheme {
   }
 
   /* Button functions */
-  getHeaderButtonHolder() {
+  getHeaderButtonHolder () {
     const el = this.getButtonHolder()
     return el
   }
 
   /* Button holder for the buttons */
-  getButtonHolder() {
+  getButtonHolder () {
     const el = super.getButtonHolder()
     el.classList.add('btn-group')
     return el
   }
 
-  getFormButtonHolder(buttonAlign) {
+  getFormButtonHolder (buttonAlign) {
     const el = super.getFormButtonHolder()
     el.classList.remove('btn-group')
     el.classList.add('d-block')
@@ -85,7 +85,7 @@ export class spectreTheme extends AbstractTheme {
     return el
   }
 
-  getFormButton(text, icon, title) {
+  getFormButton (text, icon, title) {
     const el = super.getFormButton(text, icon, title)
     el.classList.add('btn', 'btn-primary', 'mx-2', 'my-1')
     if (this.options.input_size !== 'small') el.classList.remove('btn-sm')
@@ -93,13 +93,13 @@ export class spectreTheme extends AbstractTheme {
     return el
   }
 
-  getButton(text, icon, title) {
+  getButton (text, icon, title) {
     const el = super.getButton(text, icon, title)
     el.classList.add('btn', 'btn-sm', 'btn-primary', 'mr-2', 'my-1')
     return el
   }
 
-  getHeader(text) {
+  getHeader (text) {
     const el = document.createElement('h4')
     if (typeof text === 'string') {
       el.textContent = text
@@ -110,14 +110,14 @@ export class spectreTheme extends AbstractTheme {
     return el
   }
 
-  getFormInputDescription(text) {
+  getFormInputDescription (text) {
     const el = super.getFormInputDescription(text)
     el.classList.add('je-desc', 'hide-sm')
     return el
   }
 
   /* Label for all elements except checkbox and radio */
-  getFormInputLabel(text, req) {
+  getFormInputLabel (text, req) {
     const el = super.getFormInputLabel(text, req)
     if (this.options.label_bold) el.classList.add('je-label')
     return el
@@ -125,12 +125,12 @@ export class spectreTheme extends AbstractTheme {
 
   /* Checkbox elements */
   /* ToDo: Rename function names for consistency */
-  getCheckbox() {
+  getCheckbox () {
     const el = this.getFormInputField('checkbox')
     return el
   }
 
-  getCheckboxLabel(text, req) {
+  getCheckboxLabel (text, req) {
     const el = super.getCheckboxLabel(text, req); const icon = document.createElement('i')
     icon.classList.add('form-icon')
     el.classList.add('form-checkbox', 'mr-5')
@@ -138,19 +138,19 @@ export class spectreTheme extends AbstractTheme {
     return el
   }
 
-  getFormCheckboxControl(label, input, compact) {
+  getFormCheckboxControl (label, input, compact) {
     label.insertBefore(input, label.firstChild) /* Move input into label element */
     if (compact) label.classList.add('form-inline')
     return label
   }
 
-  getMultiCheckboxHolder(controls, label, description, infoText) {
+  getMultiCheckboxHolder (controls, label, description, infoText) {
     console.log('mul')
     return super.getMultiCheckboxHolder(controls, label, description, infoText)
   }
 
   /* Radio elements */
-  getFormRadio(attributes) {
+  getFormRadio (attributes) {
     const el = this.getFormInputField('radio')
     for (const key in attributes) {
       el.setAttribute(key, attributes[key])
@@ -158,7 +158,7 @@ export class spectreTheme extends AbstractTheme {
     return el
   }
 
-  getFormRadioLabel(text, req) {
+  getFormRadioLabel (text, req) {
     const el = super.getFormRadioLabel(text, req); const icon = document.createElement('i')
     icon.classList.add('form-icon')
     el.classList.add('form-radio')
@@ -166,14 +166,14 @@ export class spectreTheme extends AbstractTheme {
     return el
   }
 
-  getFormRadioControl(label, input, compact) {
+  getFormRadioControl (label, input, compact) {
     label.insertBefore(input, label.firstChild) /* Move input into label element */
     if (compact) label.classList.add('form-inline')
     return label
   }
 
   /* Create input field */
-  getFormInputField(type) {
+  getFormInputField (type) {
     const el = super.getFormInputField(type)
     if (!['checkbox', 'radio'].includes(type)) {
       el.classList.add('form-input')
@@ -182,7 +182,7 @@ export class spectreTheme extends AbstractTheme {
   }
 
   /* Create input field for type="range" */
-  getRangeInput(min, max, step) {
+  getRangeInput (min, max, step) {
     const el = this.getFormInputField('range')
     el.classList.add('slider')
     el.classList.remove('form-input')
@@ -193,27 +193,27 @@ export class spectreTheme extends AbstractTheme {
     return el
   }
 
-  getRangeControl(input, output) {
+  getRangeControl (input, output) {
     const el = super.getRangeControl(input, output)
     el.classList.add('text-center')
     return el
   }
 
   /* Create select box field */
-  getSelectInput(options, multiple) {
+  getSelectInput (options, multiple) {
     const el = super.getSelectInput(options)
     el.classList.add('form-select')
     return el
   }
 
   /* Create textarea field */
-  getTextareaInput() {
+  getTextareaInput () {
     const el = document.createElement('textarea')
     el.classList.add('form-input')
     return el
   }
 
-  getFormControl(label, input, description, infoText) {
+  getFormControl (label, input, description, infoText) {
     const group = document.createElement('div')
     group.classList.add('form-group')
 
@@ -236,7 +236,7 @@ export class spectreTheme extends AbstractTheme {
   }
 
   /* Create input group (input field with buttons) */
-  getInputGroup(input, buttons) {
+  getInputGroup (input, buttons) {
     if (!input) return
 
     const inputGroup = document.createElement('div')
@@ -252,7 +252,7 @@ export class spectreTheme extends AbstractTheme {
   }
 
   /* Create button for displaying infotext tooltip */
-  getInfoButton(text) {
+  getInfoButton (text) {
     const popover = document.createElement('div')
     popover.classList.add('popover', 'popover-left', 'float-right')
 
@@ -281,7 +281,7 @@ export class spectreTheme extends AbstractTheme {
   }
 
   /* Functions for rendering array with format: "table" */
-  getTable() {
+  getTable () {
     const el = super.getTable()
     el.classList.add('table', 'table-scroll')
     if (this.options.table_border) el.classList.add('je-table-border')
@@ -290,14 +290,14 @@ export class spectreTheme extends AbstractTheme {
   }
 
   /* Function for rendering progressbar */
-  getProgressBar() {
+  getProgressBar () {
     const progressBar = super.getProgressBar()
     progressBar.classList.add('progress')
     return progressBar
   }
 
   /* Containers for array with format: "tab" */
-  getTabHolder(propertyName) {
+  getTabHolder (propertyName) {
     const pName = typeof propertyName === 'undefined' ? '' : propertyName
     const el = document.createElement('div')
     el.classList.add('columns')
@@ -306,7 +306,7 @@ export class spectreTheme extends AbstractTheme {
   }
 
   /* Containers for array with format: "tab-top" */
-  getTopTabHolder(propertyName) {
+  getTopTabHolder (propertyName) {
     const pName = typeof propertyName === 'undefined' ? '' : propertyName
     const el = document.createElement('div')
     el.innerHTML = `<ul class="tab"></ul><div class="content" id="${pName}"></div>`
@@ -314,7 +314,7 @@ export class spectreTheme extends AbstractTheme {
   }
 
   /* Tab button for array with format: "tab" */
-  getTab(span, tabId) {
+  getTab (span, tabId) {
     const el = document.createElement('a')
     el.classList.add('btn', 'btn-secondary', 'btn-block')
     el.id = tabId
@@ -324,7 +324,7 @@ export class spectreTheme extends AbstractTheme {
   }
 
   /* Tab button for array with format: "tab-top" */
-  getTopTab(span, tabId) {
+  getTopTab (span, tabId) {
     const el = document.createElement('li')
     el.id = tabId
     el.classList.add('tab-item')
@@ -337,19 +337,19 @@ export class spectreTheme extends AbstractTheme {
     return el
   }
 
-  markTabActive(row) {
+  markTabActive (row) {
     row.tab.classList.add('active')
     if (typeof row.rowPane !== 'undefined') row.rowPane.style.display = ''
     else row.container.style.display = ''
   }
 
-  markTabInactive(row) {
+  markTabInactive (row) {
     row.tab.classList.remove('active')
     if (typeof row.rowPane !== 'undefined') row.rowPane.style.display = 'none'
     else row.container.style.display = 'none'
   }
 
-  afterInputReady(input) {
+  afterInputReady (input) {
     if (input.localName === 'select') {
       /* Selectize adjustments */
       if (input.classList.contains('selectized')) {
@@ -378,7 +378,7 @@ export class spectreTheme extends AbstractTheme {
   }
 
   /* Controls output of errormessages displayed in form */
-  addInputError(input, text) {
+  addInputError (input, text) {
     if (!input.controlgroup) return
     input.controlgroup.classList.add('has-error')
     if (!input.errmsg) {
@@ -390,7 +390,7 @@ export class spectreTheme extends AbstractTheme {
     input.errmsg.textContent = text
   }
 
-  removeInputError(input) {
+  removeInputError (input) {
     if (!input.errmsg) return
     input.errmsg.classList.add('d-hide')
     input.controlgroup.classList.remove('has-error')

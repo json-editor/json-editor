@@ -3,7 +3,7 @@ import { extend } from '../utilities.js'
 import rules from './choices.css.js'
 
 export class ChoicesEditor extends SelectEditor {
-  setValue(value, initial) {
+  setValue (value, initial) {
     if (this.choices_instance) {
       /* Sanitize value before setting it */
       let sanitized = this.typecast(value || '')
@@ -24,7 +24,7 @@ export class ChoicesEditor extends SelectEditor {
     } else super.setValue(value, initial)
   }
 
-  afterInputReady() {
+  afterInputReady () {
     if (window.Choices && !this.choices_instance) {
       let options
       /* Get options, either global options from "this.defaults.options.choices" or */
@@ -36,7 +36,7 @@ export class ChoicesEditor extends SelectEditor {
     super.afterInputReady()
   }
 
-  onWatchedFieldChange() {
+  onWatchedFieldChange () {
     super.onWatchedFieldChange()
     if (this.choices_instance) {
       const self = this; const choicesList = this.enum_options.map((v, i) => ({
@@ -48,17 +48,17 @@ export class ChoicesEditor extends SelectEditor {
     }
   }
 
-  enable() {
+  enable () {
     if (!this.always_disabled && this.choices_instance) this.choices_instance.enable()
     super.enable()
   }
 
-  disable(alwaysDisabled) {
+  disable (alwaysDisabled) {
     if (this.choices_instance) this.choices_instance.disable()
     super.disable(alwaysDisabled)
   }
 
-  destroy() {
+  destroy () {
     if (this.choices_instance) {
       this.choices_instance.destroy()
       this.choices_instance = null

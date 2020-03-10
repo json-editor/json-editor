@@ -1,1 +1,1 @@
-export const swigTemplate = () => window.swig;
+export const swigTemplate = () => window.swig

@@ -1,48 +1,48 @@
 import { AbstractTheme } from '../theme.js'
 
 export class bootstrap2Theme extends AbstractTheme {
-  getRangeInput(min, max, step) {
+  getRangeInput (min, max, step) {
     /* TODO: use bootstrap slider */
     return super.getRangeInput(min, max, step)
   }
 
-  getGridContainer() {
+  getGridContainer () {
     const el = document.createElement('div')
     el.classList.add('container-fluid')
     return el
   }
 
-  getGridRow() {
+  getGridRow () {
     const el = document.createElement('div')
     el.classList.add('row-fluid')
     return el
   }
 
-  getFormInputLabel(text, req) {
+  getFormInputLabel (text, req) {
     const el = super.getFormInputLabel(text, req)
     el.style.display = 'inline-block'
     el.style.fontWeight = 'bold'
     return el
   }
 
-  setGridColumnSize(el, size) {
+  setGridColumnSize (el, size) {
     el.classList.add(`span${size}`)
   }
 
-  getSelectInput(options, multiple) {
+  getSelectInput (options, multiple) {
     const input = super.getSelectInput(options)
     input.style.width = 'auto'
     input.style.maxWidth = '98%'
     return input
   }
 
-  getFormInputField(type) {
+  getFormInputField (type) {
     const el = super.getFormInputField(type)
     el.style.width = '98%'
     return el
   }
 
-  afterInputReady(input) {
+  afterInputReady (input) {
     if (input.controlgroup) return
     input.controlgroup = this.closest(input, '.control-group')
     input.controls = this.closest(input, '.controls')
@@ -60,14 +60,14 @@ export class bootstrap2Theme extends AbstractTheme {
     /* TODO: use bootstrap slider */
   }
 
-  getIndentedPanel() {
+  getIndentedPanel () {
     const el = document.createElement('div')
     el.classList.add('well', 'well-small')
     el.style.paddingBottom = 0
     return el
   }
 
-  getInfoButton(text) {
+  getInfoButton (text) {
     const icon = document.createElement('span')
     icon.classList.add('icon-info-sign', 'pull-right')
     icon.style.padding = '.25rem'
@@ -98,7 +98,7 @@ export class bootstrap2Theme extends AbstractTheme {
     return icon
   }
 
-  getFormInputDescription(text) {
+  getFormInputDescription (text) {
     const el = document.createElement('p')
     el.classList.add('help-inline')
     if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text)
@@ -106,7 +106,7 @@ export class bootstrap2Theme extends AbstractTheme {
     return el
   }
 
-  getFormControl(label, input, description, infoText) {
+  getFormControl (label, input, description, infoText) {
     const ret = document.createElement('div')
 
     const controls = document.createElement('div')
@@ -138,25 +138,25 @@ export class bootstrap2Theme extends AbstractTheme {
     return ret
   }
 
-  getHeaderButtonHolder() {
+  getHeaderButtonHolder () {
     const el = this.getButtonHolder()
     el.style.marginLeft = '10px'
     return el
   }
 
-  getButtonHolder() {
+  getButtonHolder () {
     const el = document.createElement('div')
     el.classList.add('btn-group')
     return el
   }
 
-  getButton(text, icon, title) {
+  getButton (text, icon, title) {
     const el = super.getButton(text, icon, title)
     el.classList.add('btn', 'btn-default')
     return el
   }
 
-  getTable() {
+  getTable () {
     const el = document.createElement('table')
     el.classList.add('table', 'table-bordered')
     el.style.width = 'auto'
@@ -164,7 +164,7 @@ export class bootstrap2Theme extends AbstractTheme {
     return el
   }
 
-  addInputError(input, text) {
+  addInputError (input, text) {
     if (!input.controlgroup) {
       this.queuedInputErrorText = text
       return
@@ -182,7 +182,7 @@ export class bootstrap2Theme extends AbstractTheme {
     input.errmsg.textContent = text
   }
 
-  removeInputError(input) {
+  removeInputError (input) {
     if (!input.controlgroup) {
       delete this.queuedInputErrorText
     }
@@ -191,7 +191,7 @@ export class bootstrap2Theme extends AbstractTheme {
     input.controlgroup.classList.remove('error')
   }
 
-  getTabHolder(propertyName) {
+  getTabHolder (propertyName) {
     const pName = (typeof propertyName === 'undefined') ? '' : propertyName
     const el = document.createElement('div')
     el.classList.add('tabbable', 'tabs-left')
@@ -199,7 +199,7 @@ export class bootstrap2Theme extends AbstractTheme {
     return el
   }
 
-  getTopTabHolder(propertyName) {
+  getTopTabHolder (propertyName) {
     const pName = (typeof propertyName === 'undefined') ? '' : propertyName
     const el = document.createElement('div')
     el.classList.add('tabbable', 'tabs-over')
@@ -207,7 +207,7 @@ export class bootstrap2Theme extends AbstractTheme {
     return el
   }
 
-  getTab(text, tabId) {
+  getTab (text, tabId) {
     const el = document.createElement('li')
     el.classList.add('nav-item')
     const a = document.createElement('a')
@@ -217,7 +217,7 @@ export class bootstrap2Theme extends AbstractTheme {
     return el
   }
 
-  getTopTab(text, tabId) {
+  getTopTab (text, tabId) {
     const el = document.createElement('li')
     el.classList.add('nav-item')
     const a = document.createElement('a')
@@ -227,27 +227,27 @@ export class bootstrap2Theme extends AbstractTheme {
     return el
   }
 
-  getTabContentHolder(tabHolder) {
+  getTabContentHolder (tabHolder) {
     return tabHolder.children[1]
   }
 
-  getTopTabContentHolder(tabHolder) {
+  getTopTabContentHolder (tabHolder) {
     return tabHolder.children[1]
   }
 
-  getTabContent() {
+  getTabContent () {
     const el = document.createElement('div')
     el.classList.add('tab-pane')
     return el
   }
 
-  getTopTabContent() {
+  getTopTabContent () {
     const el = document.createElement('div')
     el.classList.add('tab-pane')
     return el
   }
 
-  markTabActive(row) {
+  markTabActive (row) {
     row.tab.classList.add('active')
 
     if (typeof row.rowPane !== 'undefined') {
@@ -257,7 +257,7 @@ export class bootstrap2Theme extends AbstractTheme {
     }
   }
 
-  markTabInactive(row) {
+  markTabInactive (row) {
     row.tab.classList.remove('active')
     if (typeof row.rowPane !== 'undefined') {
       row.rowPane.classList.remove('active')
@@ -266,15 +266,15 @@ export class bootstrap2Theme extends AbstractTheme {
     }
   }
 
-  addTab(holder, tab) {
+  addTab (holder, tab) {
     holder.children[0].appendChild(tab)
   }
 
-  addTopTab(holder, tab) {
+  addTopTab (holder, tab) {
     holder.children[0].appendChild(tab)
   }
 
-  getProgressBar() {
+  getProgressBar () {
     const container = document.createElement('div')
     container.classList.add('progress')
 
@@ -286,20 +286,20 @@ export class bootstrap2Theme extends AbstractTheme {
     return container
   }
 
-  updateProgressBar(progressBar, progress) {
+  updateProgressBar (progressBar, progress) {
     if (!progressBar) return
 
     progressBar.firstChild.style.width = `${progress}%`
   }
 
-  updateProgressBarUnknown(progressBar) {
+  updateProgressBarUnknown (progressBar) {
     if (!progressBar) return
 
     progressBar.classList.add('progress', 'progress-striped', 'active')
     progressBar.firstChild.style.width = '100%'
   }
 
-  getInputGroup(input, buttons) {
+  getInputGroup (input, buttons) {
     if (!input) return
 
     const inputGroupContainer = document.createElement('div')

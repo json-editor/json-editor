@@ -17,7 +17,5 @@ export const templates = {
   markup: markupTemplate,
   mustache: mustacheTemplate,
   swig: swigTemplate,
-  underscore: underscoreTemplate,
+  underscore: underscoreTemplate
 }
-
-

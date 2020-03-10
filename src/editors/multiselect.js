@@ -2,24 +2,24 @@ import { AbstractEditor } from '../editor.js'
 import { each } from '../utilities.js'
 
 export class MultiSelectEditor extends AbstractEditor {
-  onInputChange() {
+  onInputChange () {
     this.value = this.input.value
     this.onChange(true)
   }
 
-  register() {
+  register () {
     super.register()
     if (!this.input) return
     this.input.setAttribute('name', this.formname)
   }
 
-  unregister() {
+  unregister () {
     super.unregister()
     if (!this.input) return
     this.input.removeAttribute('name')
   }
 
-  getNumColumns() {
+  getNumColumns () {
     let longestText = this.getTitle().length
     for (const i in this.select_values) {
       if (!this.select_values.hasOwnProperty(i)) continue
@@ -29,7 +29,7 @@ export class MultiSelectEditor extends AbstractEditor {
     return Math.min(12, Math.max(longestText / 7, 2))
   }
 
-  preBuild() {
+  preBuild () {
     super.preBuild()
 
     this.select_options = {}
@@ -39,7 +39,7 @@ export class MultiSelectEditor extends AbstractEditor {
 
     let i
     const itemsSchema = this.jsoneditor.expandRefs(this.schema.items || {})
-    const e = itemsSchema['enum'] || []
+    const e = itemsSchema.enum || []
     const t = itemsSchema.options ? itemsSchema.options.enum_titles || [] : []
 
     for (i = 0; i < e.length; i++) {
@@ -52,7 +52,7 @@ export class MultiSelectEditor extends AbstractEditor {
     }
   }
 
-  build() {
+  build () {
     const self = this; let i
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
@@ -91,7 +91,7 @@ export class MultiSelectEditor extends AbstractEditor {
 
     this.container.appendChild(this.control)
 
-    this.multiselectChangeHandler = e => {
+    this.multiselectChangeHandler = (e) => {
       const newValue = []
       for (i = 0; i < self.option_keys.length; i++) {
         if (self.select_options[self.option_keys[i]] && (self.select_options[self.option_keys[i]].selected || self.select_options[self.option_keys[i]].checked)) newValue.push(self.select_values[self.option_keys[i]])
@@ -108,17 +108,17 @@ export class MultiSelectEditor extends AbstractEditor {
     })
   }
 
-  postBuild() {
+  postBuild () {
     super.postBuild()
     /* this.theme.afterInputReady(this.input || this.inputs); */
   }
 
-  afterInputReady() {
+  afterInputReady () {
     const self = this
     this.theme.afterInputReady(self.input || self.inputs)
   }
 
-  setValue(value, initial) {
+  setValue (value, initial) {
     let i
     value = value || []
     if (!(Array.isArray(value))) value = [value]
@@ -136,18 +136,18 @@ export class MultiSelectEditor extends AbstractEditor {
     this.onChange(true)
   }
 
-  removeValue(value) {
+  removeValue (value) {
     /* Remove from existing value(s) */
     value = [].concat(value)
     this.setValue(this.getValue().filter(item => !value.includes(item)))
   }
 
-  addValue(value) {
+  addValue (value) {
     /* Add to existing value(s) */
     this.setValue(this.getValue().concat(value))
   }
 
-  updateValue(value) {
+  updateValue (value) {
     let changed = false
     const newValue = []
     for (let i = 0; i < value.length; i++) {
@@ -164,14 +164,14 @@ export class MultiSelectEditor extends AbstractEditor {
     return changed
   }
 
-  sanitize(value) {
+  sanitize (value) {
     if (this.schema.items.type === 'boolean') return !!value
     else if (this.schema.items.type === 'number') return 1 * value || 0
     else if (this.schema.items.type === 'integer') return Math.floor(value * 1 || 0)
-    else return `${value}`
+    return `${value}`
   }
 
-  enable() {
+  enable () {
     if (!this.always_disabled) {
       if (this.input) {
         this.input.disabled = false
@@ -185,7 +185,7 @@ export class MultiSelectEditor extends AbstractEditor {
     }
   }
 
-  disable(alwaysDisabled) {
+  disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     if (this.input) {
       this.input.disabled = true
@@ -198,15 +198,15 @@ export class MultiSelectEditor extends AbstractEditor {
     super.disable()
   }
 
-  destroy() {
+  destroy () {
     super.destroy()
   }
 
-  escapeRegExp(string) {
+  escapeRegExp (string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
   }
 
-  showValidationErrors(errors) {
+  showValidationErrors (errors) {
     const regexPath = new RegExp(`^${this.escapeRegExp(this.path)}(\\.\\d+)?$`)
     const messages = []
 

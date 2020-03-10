@@ -2,7 +2,7 @@ import { StringEditor } from './string.js'
 import rules from './starrating.css.js'
 
 export class StarratingEditor extends StringEditor {
-  build() {
+  build () {
     const self = this
 
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
@@ -79,7 +79,7 @@ export class StarratingEditor extends StringEditor {
     this.refreshValue()
   }
 
-  enable() {
+  enable () {
     if (!this.always_disabled) {
       for (let i = 0; i < this.radioGroup.length; i++) {
         this.radioGroup[i].disabled = false
@@ -89,7 +89,7 @@ export class StarratingEditor extends StringEditor {
     }
   }
 
-  disable(alwaysDisabled) {
+  disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     for (let i = 0; i < this.radioGroup.length; i++) {
       this.radioGroup[i].disabled = true
@@ -98,18 +98,18 @@ export class StarratingEditor extends StringEditor {
     super.disable()
   }
 
-  destroy() {
+  destroy () {
     if (this.ratingContainer.parentNode && this.ratingContainer.parentNode.parentNode) this.ratingContainer.parentNode.parentNode.removeChild(this.ratingContainer.parentNode)
     if (this.label && this.label.parentNode) this.label.parentNode.removeChild(this.label)
     if (this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description)
     super.destroy()
   }
 
-  getNumColumns() {
+  getNumColumns () {
     return 2
   }
 
-  getValue() {
+  getValue () {
     if (!this.dependenciesFulfilled) {
       return undefined
     }
@@ -119,13 +119,13 @@ export class StarratingEditor extends StringEditor {
     return this.value
   }
 
-  setValue(value) {
+  setValue (value) {
     for (let i = 0; i < this.radioGroup.length; i++) {
       if (this.radioGroup[i].value == value) {
         this.radioGroup[i].checked = true
         this.value = value
 
-        if (this.options.displayValue)  this.displayRating.innerHTML = this.value
+        if (this.options.displayValue) this.displayRating.innerHTML = this.value
 
         this.onChange(true)
         break
@@ -135,4 +135,3 @@ export class StarratingEditor extends StringEditor {
 }
 
 StarratingEditor.rules = rules
-

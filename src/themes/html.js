@@ -2,47 +2,47 @@ import { AbstractTheme } from '../theme.js'
 import rules from './html.css.js'
 
 export class htmlTheme extends AbstractTheme {
-  getFormInputLabel(text, req) {
+  getFormInputLabel (text, req) {
     const el = super.getFormInputLabel(text, req)
     el.classList.add('je-form-input-label')
     return el
   }
 
-  getFormInputDescription(text) {
+  getFormInputDescription (text) {
     const el = super.getFormInputDescription(text)
     el.classList.add('je-form-input-label')
     return el
   }
 
-  getIndentedPanel() {
+  getIndentedPanel () {
     const el = super.getIndentedPanel()
     el.classList.add('je-indented-panel')
     return el
   }
 
-  getTopIndentedPanel() {
+  getTopIndentedPanel () {
     return this.getIndentedPanel()
   }
 
-  getChildEditorHolder() {
+  getChildEditorHolder () {
     const el = super.getChildEditorHolder()
     el.classList.add('je-child-editor-holder')
     return el
   }
 
-  getHeaderButtonHolder() {
+  getHeaderButtonHolder () {
     const el = this.getButtonHolder()
     el.classList.add('je-header-button-holder')
     return el
   }
 
-  getTable() {
+  getTable () {
     const el = super.getTable()
     el.classList.add('je-table')
     return el
   }
 
-  addInputError(input, text) {
+  addInputError (input, text) {
     input.style.borderColor = 'red'
 
     if (!input.errmsg) {
@@ -60,7 +60,7 @@ export class htmlTheme extends AbstractTheme {
     input.errmsg.appendChild(document.createTextNode(text))
   }
 
-  removeInputError(input) {
+  removeInputError (input) {
     if (input.style) {
       input.style.borderColor = ''
     }

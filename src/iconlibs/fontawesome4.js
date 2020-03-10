@@ -4,7 +4,7 @@ const icon_prefix = 'fa fa-'
 const mapping = {
   collapse: 'caret-square-o-down',
   expand: 'caret-square-o-right',
-  'delete': 'times',
+  delete: 'times',
   edit: 'pencil',
   add: 'plus',
   subtract: 'minus',
@@ -22,7 +22,7 @@ const mapping = {
 }
 
 export class fontawesome4Iconlib extends AbstractIconLib {
-  constructor() {
+  constructor () {
     super(icon_prefix, mapping)
   }
 }

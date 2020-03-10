@@ -1,13 +1,13 @@
 import { AbstractEditor } from '../editor.js'
 
 export class Base64Editor extends AbstractEditor {
-  getNumColumns() {
+  getNumColumns () {
     return 4
   }
 
-  setFileReaderListener(frMultiple) {
+  setFileReaderListener (frMultiple) {
     const self = this
-    frMultiple.addEventListener('load', event => {
+    frMultiple.addEventListener('load', (event) => {
       if (self.count === self.current_item_index) {
         /* Overwrite existing file by default, leave other properties unchanged */
         self.value[self.count][self.key] = event.target.result
@@ -31,7 +31,7 @@ export class Base64Editor extends AbstractEditor {
     })
   }
 
-  build() {
+  build () {
     const self = this
     this.title = this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText)
@@ -80,7 +80,7 @@ export class Base64Editor extends AbstractEditor {
             }
           } else {
             let fr = new FileReader()
-            fr.onload = evt => {
+            fr.onload = (evt) => {
               self.value = evt.target.result
               self.refreshPreview()
               self.onChange(true)
@@ -99,7 +99,7 @@ export class Base64Editor extends AbstractEditor {
     this.container.appendChild(this.control)
   }
 
-  refreshPreview() {
+  refreshPreview () {
     if (this.last_preview === this.value) return
     this.last_preview = this.value
 
@@ -125,20 +125,20 @@ export class Base64Editor extends AbstractEditor {
     }
   }
 
-  enable() {
+  enable () {
     if (!this.always_disabled) {
       if (this.uploader) this.uploader.disabled = false
       super.enable()
     }
   }
 
-  disable(alwaysDisabled) {
+  disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     if (this.uploader) this.uploader.disabled = true
     super.disable()
   }
 
-  setValue(val) {
+  setValue (val) {
     if (this.value !== val) {
       this.value = val
       this.input.value = this.value
@@ -147,7 +147,7 @@ export class Base64Editor extends AbstractEditor {
     }
   }
 
-  destroy() {
+  destroy () {
     if (this.preview && this.preview.parentNode) this.preview.parentNode.removeChild(this.preview)
     if (this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title)
     if (this.input && this.input.parentNode) this.input.parentNode.removeChild(this.input)

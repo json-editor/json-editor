@@ -26,4 +26,3 @@ export const themes = {
   spectre: spectreTheme,
   tailwind: tailwindTheme
 }
-

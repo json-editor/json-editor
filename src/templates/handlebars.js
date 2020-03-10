@@ -1,1 +1,1 @@
-export const handlebarsTemplate = () => window.Handlebars;
+export const handlebarsTemplate = () => window.Handlebars

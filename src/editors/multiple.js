@@ -4,7 +4,7 @@ import { Validator } from '../validator.js'
 import { extend, each } from '../utilities.js'
 
 export class MultipleEditor extends AbstractEditor {
-  register() {
+  register () {
     if (this.editors) {
       for (let i = 0; i < this.editors.length; i++) {
         if (!this.editors[i]) continue
@@ -15,7 +15,7 @@ export class MultipleEditor extends AbstractEditor {
     super.register()
   }
 
-  unregister() {
+  unregister () {
     super.unregister()
     if (this.editors) {
       for (let i = 0; i < this.editors.length; i++) {
@@ -25,12 +25,12 @@ export class MultipleEditor extends AbstractEditor {
     }
   }
 
-  getNumColumns() {
+  getNumColumns () {
     if (!this.editors[this.type]) return 4
     return Math.max(this.editors[this.type].getNumColumns(), 4)
   }
 
-  enable() {
+  enable () {
     if (!this.always_disabled) {
       if (this.editors) {
         for (let i = 0; i < this.editors.length; i++) {
@@ -43,7 +43,7 @@ export class MultipleEditor extends AbstractEditor {
     }
   }
 
-  disable(alwaysDisabled) {
+  disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     if (this.editors) {
       for (let i = 0; i < this.editors.length; i++) {
@@ -55,7 +55,7 @@ export class MultipleEditor extends AbstractEditor {
     super.disable()
   }
 
-  switchEditor(i) {
+  switchEditor (i) {
     const self = this
 
     if (!this.editors[i]) {
@@ -79,7 +79,7 @@ export class MultipleEditor extends AbstractEditor {
     self.refreshHeaderText()
   }
 
-  buildChildEditor(i) {
+  buildChildEditor (i) {
     const self = this
     const type = this.types[i]
     const holder = self.theme.getChildEditorHolder()
@@ -125,7 +125,7 @@ export class MultipleEditor extends AbstractEditor {
     if (i !== self.type) holder.style.display = 'none'
   }
 
-  preBuild() {
+  preBuild () {
     this.types = []
     this.type = 0
     this.editors = []
@@ -149,7 +149,7 @@ export class MultipleEditor extends AbstractEditor {
 
         /* If any of these primitive types are disallowed */
         if (this.schema.disallow) {
-          let disallow = this.schema.disallow
+          let { disallow } = this.schema
           if (typeof disallow !== 'object' || !(Array.isArray(disallow))) {
             disallow = [disallow]
           }
@@ -170,9 +170,9 @@ export class MultipleEditor extends AbstractEditor {
     this.display_text = this.getDisplayText(this.types)
   }
 
-  build() {
+  build () {
     const self = this
-    const container = this.container
+    const { container } = this
 
     this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     this.container.appendChild(this.header)
@@ -219,7 +219,7 @@ export class MultipleEditor extends AbstractEditor {
     this.switchEditor(0)
   }
 
-  onChildEditorChange(editor) {
+  onChildEditorChange (editor) {
     if (this.editors[this.type]) {
       this.refreshValue()
       this.refreshHeaderText()
@@ -228,18 +228,18 @@ export class MultipleEditor extends AbstractEditor {
     super.onChildEditorChange()
   }
 
-  refreshHeaderText() {
+  refreshHeaderText () {
     const displayText = this.getDisplayText(this.types)
     each(this.switcher_options, (i, option) => {
       option.textContent = displayText[i]
     })
   }
 
-  refreshValue() {
+  refreshValue () {
     this.value = this.editors[this.type].getValue()
   }
 
-  setValue(val, initial) {
+  setValue (val, initial) {
     /* Determine type by getting the first one that validates */
     const self = this
     const prevType = this.type
@@ -299,7 +299,7 @@ export class MultipleEditor extends AbstractEditor {
     self.onChange(typeChanged)
   }
 
-  destroy() {
+  destroy () {
     each(this.editors, (type, editor) => {
       if (editor) editor.destroy()
     })
@@ -308,7 +308,7 @@ export class MultipleEditor extends AbstractEditor {
     super.destroy()
   }
 
-  showValidationErrors(errors) {
+  showValidationErrors (errors) {
     const self = this
 
     /* oneOf and anyOf error paths need to remove the oneOf[i] part before passing to child editors */

@@ -2,7 +2,7 @@ import { AbstractEditor } from '../editor.js'
 import { extend, each } from '../utilities.js'
 
 export class SelectEditor extends AbstractEditor {
-  setValue(value, initial) {
+  setValue (value, initial) {
     /* Sanitize value before setting it */
     let sanitized = this.typecast(value || '')
 
@@ -20,19 +20,19 @@ export class SelectEditor extends AbstractEditor {
     this.change()
   }
 
-  register() {
+  register () {
     super.register()
     if (!this.input) return
     this.input.setAttribute('name', this.formname)
   }
 
-  unregister() {
+  unregister () {
     super.unregister()
     if (!this.input) return
     this.input.removeAttribute('name')
   }
 
-  getNumColumns() {
+  getNumColumns () {
     if (!this.enum_options) return 3
     let longestText = this.getTitle().length
     for (let i = 0; i < this.enum_options.length; i++) {
@@ -41,21 +41,21 @@ export class SelectEditor extends AbstractEditor {
     return Math.min(12, Math.max(longestText / 7, 2))
   }
 
-  typecast(value) {
+  typecast (value) {
     if (this.schema.type === 'boolean') return value === 'undefined' || value === undefined ? undefined : !!value
     else if (this.schema.type === 'number') return 1 * value || 0
     else if (this.schema.type === 'integer') return Math.floor(value * 1 || 0)
-    else return `${value}`
+    return `${value}`
   }
 
-  getValue() {
+  getValue () {
     if (!this.dependenciesFulfilled) {
       return undefined
     }
     return this.typecast(this.value)
   }
 
-  preBuild() {
+  preBuild () {
     const self = this
     this.input_type = 'select'
     this.enum_options = []
@@ -65,10 +65,10 @@ export class SelectEditor extends AbstractEditor {
     let callback
 
     /* Enum options enumerated */
-    if (this.schema['enum']) {
+    if (this.schema.enum) {
       const display = (this.schema.options && this.schema.options.enum_titles) || []
 
-      each(this.schema['enum'], (i, option) => {
+      each(this.schema.enum, (i, option) => {
         self.enum_options[i] = `${option}`
         self.enum_display[i] = `${display[i] || option}`
         self.enum_values[i] = self.typecast(option)
@@ -153,7 +153,7 @@ export class SelectEditor extends AbstractEditor {
     }
   }
 
-  build() {
+  build () {
     const self = this
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
@@ -171,7 +171,7 @@ export class SelectEditor extends AbstractEditor {
     /* Set custom attributes on input element. Parameter is array of protected keys. Empty array if none. */
     this.setInputAttributes([])
 
-    this.input.addEventListener('change', e => {
+    this.input.addEventListener('change', (e) => {
       e.preventDefault()
       e.stopPropagation()
       self.onInputChange()
@@ -188,12 +188,12 @@ export class SelectEditor extends AbstractEditor {
     })
   }
 
-  afterInputReady() {
+  afterInputReady () {
     const self = this
     self.theme.afterInputReady(self.input)
   }
 
-  onInputChange() {
+  onInputChange () {
     const val = this.typecast(this.input.value)
 
     let newVal
@@ -214,7 +214,7 @@ export class SelectEditor extends AbstractEditor {
     this.onChange(true)
   }
 
-  onWatchedFieldChange() {
+  onWatchedFieldChange () {
     let vars; let j
     let selectOptions = []; let selectTitles = []
 
@@ -322,20 +322,20 @@ export class SelectEditor extends AbstractEditor {
     super.onWatchedFieldChange()
   }
 
-  enable() {
+  enable () {
     if (!this.always_disabled) {
       this.input.disabled = false
     }
     super.enable()
   }
 
-  disable(alwaysDisabled) {
+  disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     this.input.disabled = true
     super.disable(alwaysDisabled)
   }
 
-  destroy() {
+  destroy () {
     if (this.label && this.label.parentNode) this.label.parentNode.removeChild(this.label)
     if (this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description)
     if (this.input && this.input.parentNode) this.input.parentNode.removeChild(this.input)
@@ -343,7 +343,7 @@ export class SelectEditor extends AbstractEditor {
     super.destroy()
   }
 
-  showValidationErrors(errors) {
+  showValidationErrors (errors) {
     const self = this
 
     this.previous_error_setting = this.jsoneditor.options.show_errors

@@ -1,21 +1,21 @@
 import { AbstractTheme } from '../theme.js'
 
 export class bootstrap3Theme extends AbstractTheme {
-  getSelectInput(options, multiple) {
+  getSelectInput (options, multiple) {
     const el = super.getSelectInput(options)
     el.classList.add('form-control')
     /* el.style.width = 'auto'; */
     return el
   }
 
-  setGridColumnSize(el, size, offset) {
+  setGridColumnSize (el, size, offset) {
     el.classList.add(`col-md-${size}`)
     if (offset) {
       el.classList.add(`col-md-offset-${offset}`)
     }
   }
 
-  afterInputReady(input) {
+  afterInputReady (input) {
     if (input.controlgroup) return
     input.controlgroup = this.closest(input, '.form-group')
     if (this.closest(input, '.compact')) {
@@ -30,18 +30,18 @@ export class bootstrap3Theme extends AbstractTheme {
     /* TODO: use bootstrap slider */
   }
 
-  getTextareaInput() {
+  getTextareaInput () {
     const el = document.createElement('textarea')
     el.classList.add('form-control')
     return el
   }
 
-  getRangeInput(min, max, step) {
+  getRangeInput (min, max, step) {
     /* TODO: use better slider */
     return super.getRangeInput(min, max, step)
   }
 
-  getFormInputField(type) {
+  getFormInputField (type) {
     const el = super.getFormInputField(type)
     if (type !== 'checkbox' && type !== 'radio') {
       el.classList.add('form-control')
@@ -49,7 +49,7 @@ export class bootstrap3Theme extends AbstractTheme {
     return el
   }
 
-  getFormControl(label, input, description) {
+  getFormControl (label, input, description) {
     const group = document.createElement('div')
 
     if (label && (input.type === 'checkbox' || input.type === 'radio')) {
@@ -70,14 +70,14 @@ export class bootstrap3Theme extends AbstractTheme {
     return group
   }
 
-  getIndentedPanel() {
+  getIndentedPanel () {
     const el = document.createElement('div')
     el.classList.add('well', 'well-sm')
     el.style.paddingBottom = 0
     return el
   }
 
-  getInfoButton(text) {
+  getInfoButton (text) {
     const icon = document.createElement('span')
     icon.classList.add('glyphicon', 'glyphicon-info-sign', 'pull-right')
     icon.style.padding = '.25rem'
@@ -108,7 +108,7 @@ export class bootstrap3Theme extends AbstractTheme {
     return icon
   }
 
-  getFormInputDescription(text) {
+  getFormInputDescription (text) {
     const el = document.createElement('p')
     el.classList.add('help-block')
     if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text)
@@ -116,25 +116,25 @@ export class bootstrap3Theme extends AbstractTheme {
     return el
   }
 
-  getHeaderButtonHolder() {
+  getHeaderButtonHolder () {
     const el = this.getButtonHolder()
     el.style.marginLeft = '10px'
     return el
   }
 
-  getButtonHolder() {
+  getButtonHolder () {
     const el = document.createElement('span')
     el.classList.add('btn-group')
     return el
   }
 
-  getButton(text, icon, title) {
+  getButton (text, icon, title) {
     const el = super.getButton(text, icon, title)
     el.classList.add('btn', 'btn-default')
     return el
   }
 
-  getTable() {
+  getTable () {
     const el = document.createElement('table')
     el.classList.add('table', 'table-bordered')
     el.style.width = 'auto'
@@ -142,7 +142,7 @@ export class bootstrap3Theme extends AbstractTheme {
     return el
   }
 
-  addInputError(input, text) {
+  addInputError (input, text) {
     if (!input.controlgroup) {
       this.queuedInputErrorText = text
       return
@@ -159,7 +159,7 @@ export class bootstrap3Theme extends AbstractTheme {
     input.errmsg.textContent = text
   }
 
-  removeInputError(input) {
+  removeInputError (input) {
     if (!input.controlgroup) {
       delete this.queuedInputErrorText
     }
@@ -168,21 +168,21 @@ export class bootstrap3Theme extends AbstractTheme {
     input.controlgroup.classList.remove('has-error')
   }
 
-  getTabHolder(propertyName) {
+  getTabHolder (propertyName) {
     const pName = (typeof propertyName === 'undefined') ? '' : propertyName
     const el = document.createElement('div')
     el.innerHTML = `<ul class='col-md-2 nav nav-pills nav-stacked' id='${pName}' role='tablist'></ul><div class='col-md-10 tab-content well well-small'  id='${pName}'></div>`
     return el
   }
 
-  getTopTabHolder(propertyName) {
+  getTopTabHolder (propertyName) {
     const pName = (typeof propertyName === 'undefined') ? '' : propertyName
     const el = document.createElement('div')
     el.innerHTML = `<ul class='nav nav-tabs' id='${pName}' role='tablist'></ul><div class='tab-content well well-small'  id='${pName}'></div>`
     return el
   }
 
-  getTab(text, tabId) {
+  getTab (text, tabId) {
     const li = document.createElement('li')
     li.setAttribute('role', 'presentation')
     const a = document.createElement('a')
@@ -195,7 +195,7 @@ export class bootstrap3Theme extends AbstractTheme {
     return li
   }
 
-  getTopTab(text, tabId) {
+  getTopTab (text, tabId) {
     const li = document.createElement('li')
     li.setAttribute('role', 'presentation')
     const a = document.createElement('a')
@@ -208,21 +208,21 @@ export class bootstrap3Theme extends AbstractTheme {
     return li
   }
 
-  getTabContent() {
+  getTabContent () {
     const el = document.createElement('div')
     el.classList.add('tab-pane')
     el.setAttribute('role', 'tabpanel')
     return el
   }
 
-  getTopTabContent() {
+  getTopTabContent () {
     const el = document.createElement('div')
     el.classList.add('tab-pane')
     el.setAttribute('role', 'tabpanel')
     return el
   }
 
-  markTabActive(row) {
+  markTabActive (row) {
     row.tab.classList.add('active')
 
     if (typeof row.rowPane !== 'undefined') {
@@ -232,7 +232,7 @@ export class bootstrap3Theme extends AbstractTheme {
     }
   }
 
-  markTabInactive(row) {
+  markTabInactive (row) {
     row.tab.classList.remove('active')
 
     if (typeof row.rowPane !== 'undefined') {
@@ -242,7 +242,7 @@ export class bootstrap3Theme extends AbstractTheme {
     }
   }
 
-  getProgressBar() {
+  getProgressBar () {
     const min = 0; const max = 100; const start = 0
 
     const container = document.createElement('div')
@@ -260,7 +260,7 @@ export class bootstrap3Theme extends AbstractTheme {
     return container
   }
 
-  updateProgressBar(progressBar, progress) {
+  updateProgressBar (progressBar, progress) {
     if (!progressBar) return
 
     const bar = progressBar.firstChild
@@ -270,7 +270,7 @@ export class bootstrap3Theme extends AbstractTheme {
     bar.innerHTML = percentage
   }
 
-  updateProgressBarUnknown(progressBar) {
+  updateProgressBarUnknown (progressBar) {
     if (!progressBar) return
 
     const bar = progressBar.firstChild
@@ -280,7 +280,7 @@ export class bootstrap3Theme extends AbstractTheme {
     bar.innerHTML = ''
   }
 
-  getInputGroup(input, buttons) {
+  getInputGroup (input, buttons) {
     if (!input) return
 
     const inputGroupContainer = document.createElement('div')

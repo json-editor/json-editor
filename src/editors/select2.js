@@ -2,7 +2,7 @@ import { SelectEditor } from './select.js'
 import { extend } from '../utilities.js'
 
 export class Select2Editor extends SelectEditor {
-  setValue(value, initial) {
+  setValue (value, initial) {
     if (this.select2_instance) {
       if (initial) this.is_dirty = false
       else if (this.jsoneditor.options.show_errors === 'change') this.is_dirty = true
@@ -18,7 +18,7 @@ export class Select2Editor extends SelectEditor {
     } else super.setValue(value, initial)
   }
 
-  afterInputReady() {
+  afterInputReady () {
     if (window.jQuery && window.jQuery.fn && window.jQuery.fn.select2 && !this.select2_instance) {
       /* Get options, either global options from "this.defaults.options.select2" or */
       /* single property options from schema "options.select2" */
@@ -45,7 +45,7 @@ export class Select2Editor extends SelectEditor {
     super.afterInputReady()
   }
 
-  updateValue(value) {
+  updateValue (value) {
     let sanitized = this.enum_values[0]
     value = this.typecast(value || '')
     if (!this.enum_values.includes(value)) {
@@ -57,7 +57,7 @@ export class Select2Editor extends SelectEditor {
     return sanitized
   }
 
-  addNewOption(value) {
+  addNewOption (value) {
     const sanitized = this.typecast(value); let res = false; let optionTag
 
     if (!this.enum_values.includes(sanitized) && sanitized !== '') {
@@ -82,7 +82,7 @@ export class Select2Editor extends SelectEditor {
     return res
   }
 
-  enable() {
+  enable () {
     if (!this.always_disabled) {
       if (this.select2_instance) {
         if (this.select2v4) this.select2_instance.prop('disabled', false)
@@ -92,7 +92,7 @@ export class Select2Editor extends SelectEditor {
     super.enable()
   }
 
-  disable(alwaysDisabled) {
+  disable (alwaysDisabled) {
     if (this.select2_instance) {
       if (this.select2v4) this.select2_instance.prop('disabled', true)
       else this.select2_instance.select2('enable', false)
@@ -100,7 +100,7 @@ export class Select2Editor extends SelectEditor {
     super.disable(alwaysDisabled)
   }
 
-  destroy() {
+  destroy () {
     if (this.select2_instance) {
       this.select2_instance.select2('destroy')
       this.select2_instance = null

@@ -2,7 +2,7 @@ import { AbstractEditor } from '../editor.js'
 import { each } from '../utilities.js'
 
 export class CheckboxEditor extends AbstractEditor {
-  setValue(value, initial) {
+  setValue (value, initial) {
     value = !!value
     const changed = this.getValue() !== value
     this.value = value
@@ -10,23 +10,23 @@ export class CheckboxEditor extends AbstractEditor {
     this.onChange(changed)
   }
 
-  register() {
+  register () {
     super.register()
     if (!this.input) return
     this.input.setAttribute('name', this.formname)
   }
 
-  unregister() {
+  unregister () {
     super.unregister()
     if (!this.input) return
     this.input.removeAttribute('name')
   }
 
-  getNumColumns() {
+  getNumColumns () {
     return Math.min(12, Math.max(this.getTitle().length / 7, 2))
   }
 
-  build() {
+  build () {
     const self = this
     this.label = this.header = this.theme.getCheckboxLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
@@ -51,27 +51,27 @@ export class CheckboxEditor extends AbstractEditor {
     this.container.appendChild(this.control)
   }
 
-  enable() {
+  enable () {
     if (!this.always_disabled) {
       this.input.disabled = false
       super.enable()
     }
   }
 
-  disable(alwaysDisabled) {
+  disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     this.input.disabled = true
     super.disable()
   }
 
-  destroy() {
+  destroy () {
     if (this.label && this.label.parentNode) this.label.parentNode.removeChild(this.label)
     if (this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description)
     if (this.input && this.input.parentNode) this.input.parentNode.removeChild(this.input)
     super.destroy()
   }
 
-  showValidationErrors(errors) {
+  showValidationErrors (errors) {
     const self = this
 
     if (this.jsoneditor.options.show_errors === 'always') { } else if (!this.is_dirty && this.previous_error_setting === this.jsoneditor.options.show_errors) {
