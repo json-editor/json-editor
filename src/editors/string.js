@@ -31,6 +31,13 @@ export var StringEditor = AbstractEditor.extend({
 
     this.input.value = sanitized
 
+    if (this.format === 'range') {
+      var output = this.control.querySelector('output')
+      if (output) {
+        output.value = sanitized
+      }
+    }
+
     var changed = fromTemplate || this.getValue() !== value
 
     this.refreshValue()
