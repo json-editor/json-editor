@@ -4,7 +4,7 @@ import { extend, each } from './utilities.js'
  * All editors should extend from this class
  */
 export class AbstractEditor {
-  constructor(options, defaults) {
+  constructor (options, defaults) {
     this.defaults = defaults
     this.jsoneditor = options.jsoneditor
     this.theme = this.jsoneditor.theme
@@ -31,51 +31,51 @@ export class AbstractEditor {
     this.registerDependencies()
   }
 
-  onChildEditorChange(editor) {
+  onChildEditorChange (editor) {
     this.onChange(true)
   }
 
-  notify() {
+  notify () {
     if (this.path) this.jsoneditor.notifyWatchers(this.path)
   }
 
-  change() {
+  change () {
     if (this.parent) this.parent.onChildEditorChange(this)
     else if (this.jsoneditor) this.jsoneditor.onChange()
   }
 
-  onChange(bubble) {
+  onChange (bubble) {
     this.notify()
     if (this.watch_listener) this.watch_listener()
     if (bubble) this.change()
   }
 
-  register() {
+  register () {
     this.jsoneditor.registerEditor(this)
     this.onChange()
   }
 
-  unregister() {
+  unregister () {
     if (!this.jsoneditor) return
     this.jsoneditor.unregisterEditor(this)
   }
 
-  getNumColumns() {
+  getNumColumns () {
     return 12
   }
 
-  isActive() {
+  isActive () {
     return this.active
   }
 
-  activate() {
+  activate () {
     this.active = true
     this.optInCheckbox.checked = true
     this.enable()
     this.change()
   }
 
-  deactivate() {
+  deactivate () {
     /* only non required properties can be deactivated. */
     if (!this.isRequired()) {
       this.active = false
@@ -85,35 +85,35 @@ export class AbstractEditor {
     }
   }
 
-  registerDependencies() {
+  registerDependencies () {
     this.dependenciesFulfilled = true
-    const deps = this.options.dependencies;
+    const deps = this.options.dependencies
     if (!deps) {
       return
     }
 
-    const self = this;
+    const self = this
     Object.keys(deps).forEach(dependency => {
-      let path = self.path.split('.');
+      let path = self.path.split('.')
       path[path.length - 1] = dependency
       path = path.join('.')
-      const choices = deps[dependency];
+      const choices = deps[dependency]
       self.jsoneditor.watch(path, () => {
         self.checkDependency(path, choices)
       })
     })
   }
 
-  checkDependency(path, choices) {
-    const wrapper = this.container || this.control;
+  checkDependency (path, choices) {
+    const wrapper = this.container || this.control
     if (this.path === path || !wrapper || this.jsoneditor === null) {
       return
     }
 
-    const self = this;
-    const editor = this.jsoneditor.getEditor(path);
-    const value = editor ? editor.getValue() : undefined;
-    const previousStatus = this.dependenciesFulfilled;
+    const self = this
+    const editor = this.jsoneditor.getEditor(path)
+    const value = editor ? editor.getValue() : undefined
+    const previousStatus = this.dependenciesFulfilled
     this.dependenciesFulfilled = false
 
     if (!editor || !editor.dependenciesFulfilled) {
@@ -154,7 +154,7 @@ export class AbstractEditor {
       this.notify()
     }
 
-    const displayMode = this.dependenciesFulfilled ? 'block' : 'none';
+    const displayMode = this.dependenciesFulfilled ? 'block' : 'none'
     if (wrapper.tagName === 'TD') {
       for (const child in wrapper.childNodes) {
         if (wrapper.childNodes.hasOwnProperty(child)) wrapper.childNodes[child].style.display = displayMode
@@ -162,16 +162,16 @@ export class AbstractEditor {
     } else wrapper.style.display = displayMode
   }
 
-  setContainer(container) {
+  setContainer (container) {
     this.container = container
     if (this.schema.id) this.container.setAttribute('data-schemaid', this.schema.id)
     if (this.schema.type && typeof this.schema.type === 'string') this.container.setAttribute('data-schematype', this.schema.type)
     this.container.setAttribute('data-schemapath', this.path)
   }
 
-  setOptInCheckbox(header) {
+  setOptInCheckbox (header) {
     /* the active/deactive checbox control. */
-    const self = this;
+    const self = this
     this.optInCheckbox = document.createElement('input')
     this.optInCheckbox.setAttribute('type', 'checkbox')
     this.optInCheckbox.setAttribute('style', 'margin: 0 10px 0 0;')
@@ -195,15 +195,15 @@ export class AbstractEditor {
     }
   }
 
-  preBuild() {
+  preBuild () {
 
   }
 
-  build() {
+  build () {
 
   }
 
-  postBuild() {
+  postBuild () {
     this.setupWatchListeners()
     this.addLinks()
     this.setValue(this.getDefault(), true)
@@ -212,8 +212,8 @@ export class AbstractEditor {
     this.onWatchedFieldChange()
   }
 
-  setupWatchListeners() {
-    const self = this;
+  setupWatchListeners () {
+    const self = this
 
     /* Watched fields */
     this.watched = {}
@@ -226,8 +226,8 @@ export class AbstractEditor {
     }
 
     if (this.schema.hasOwnProperty('watch')) {
-      let path; let pathParts; let first; let root; let adjustedPath;
-      const myPath = self.container.getAttribute('data-schemapath');
+      let path; let pathParts; let first; let root; let adjustedPath
+      const myPath = self.container.getAttribute('data-schemapath')
 
       for (const name in this.schema.watch) {
         if (!this.schema.watch.hasOwnProperty(name)) continue
@@ -264,7 +264,7 @@ export class AbstractEditor {
     }
   }
 
-  addLinks() {
+  addLinks () {
     /* Add links */
     if (!this.no_link_holder) {
       this.link_holder = this.theme.getLinksHolder()
@@ -280,10 +280,10 @@ export class AbstractEditor {
     }
   }
 
-  onMove() {}
+  onMove () {}
 
-  getButton(text, icon, title) {
-    const btnClass = `json-editor-btn-${icon}`;
+  getButton (text, icon, title) {
+    const btnClass = `json-editor-btn-${icon}`
     if (!this.iconlib) icon = null
     else icon = this.iconlib.getIcon(icon)
 
@@ -292,12 +292,12 @@ export class AbstractEditor {
       title = null
     }
 
-    const btn = this.theme.getButton(text, icon, title);
+    const btn = this.theme.getButton(text, icon, title)
     btn.classList.add(btnClass)
     return btn
   }
 
-  setButtonText(button, text, icon, title) {
+  setButtonText (button, text, icon, title) {
     if (!this.iconlib) icon = null
     else icon = this.iconlib.getIcon(icon)
 
@@ -309,24 +309,24 @@ export class AbstractEditor {
     return this.theme.setButtonText(button, text, icon, title)
   }
 
-  addLink(link) {
+  addLink (link) {
     if (this.link_holder) this.link_holder.appendChild(link)
   }
 
-  getLink(data) {
-    let holder;
-    let link;
+  getLink (data) {
+    let holder
+    let link
 
     /* Get mime type of the link */
-    const mime = data.mediaType || 'application/javascript';
-    const type = mime.split('/')[0];
+    const mime = data.mediaType || 'application/javascript'
+    const type = mime.split('/')[0]
 
     /* Template to generate the link href */
-    const href = this.jsoneditor.compileTemplate(data.href, this.template_engine);
-    const relTemplate = this.jsoneditor.compileTemplate(data.rel ? data.rel : data.href, this.template_engine);
+    const href = this.jsoneditor.compileTemplate(data.href, this.template_engine)
+    const relTemplate = this.jsoneditor.compileTemplate(data.rel ? data.rel : data.href, this.template_engine)
 
     /* Template to generate the link's download attribute */
-    let download = null;
+    let download = null
     if (data.download) download = data.download
 
     if (download && download !== true) {
@@ -338,14 +338,14 @@ export class AbstractEditor {
       holder = this.theme.getBlockLinkHolder()
       link = document.createElement('a')
       link.setAttribute('target', '_blank')
-      const image = document.createElement('img');
+      const image = document.createElement('img')
 
       this.theme.createImageLink(holder, link, image)
 
       /* When a watched field changes, update the url */
       this.link_watchers.push(vars => {
-        const url = href(vars);
-        const rel = relTemplate(vars);
+        const url = href(vars)
+        const rel = relTemplate(vars)
         link.setAttribute('href', url)
         link.setAttribute('title', rel || url)
         image.setAttribute('src', url)
@@ -357,15 +357,15 @@ export class AbstractEditor {
       link = this.theme.getBlockLink()
       link.setAttribute('target', '_blank')
 
-      const media = document.createElement(type);
+      const media = document.createElement(type)
       media.setAttribute('controls', 'controls')
 
       this.theme.createMediaLink(holder, link, media)
 
       /* When a watched field changes, update the url */
       this.link_watchers.push(vars => {
-        const url = href(vars);
-        const rel = relTemplate(vars);
+        const url = href(vars)
+        const rel = relTemplate(vars)
         link.setAttribute('href', url)
         link.textContent = rel || url
         media.setAttribute('src', url)
@@ -379,8 +379,8 @@ export class AbstractEditor {
 
       /* When a watched field changes, update the url */
       this.link_watchers.push(vars => {
-        const url = href(vars);
-        const rel = relTemplate(vars);
+        const url = href(vars)
+        const rel = relTemplate(vars)
         if (url) holder.style.display = ''
         holder.setAttribute('href', url)
         holder.textContent = rel || url
@@ -402,15 +402,15 @@ export class AbstractEditor {
     return holder
   }
 
-  refreshWatchedFieldValues() {
+  refreshWatchedFieldValues () {
     if (!this.watched_values) return
-    const watched = {};
-    let changed = false;
-    const self = this;
+    const watched = {}
+    let changed = false
+    const self = this
 
     if (this.watched) {
-      let val;
-      let editor;
+      let val
+      let editor
       for (const name in this.watched) {
         if (!this.watched.hasOwnProperty(name)) continue
         editor = self.jsoneditor.getEditor(this.watched[name])
@@ -428,13 +428,13 @@ export class AbstractEditor {
     return changed
   }
 
-  getWatchedFieldValues() {
+  getWatchedFieldValues () {
     return this.watched_values
   }
 
-  updateHeaderText() {
+  updateHeaderText () {
     if (this.header) {
-      const headerText = this.getHeaderText();
+      const headerText = this.getHeaderText()
       /* If the header has children, only update the text node's value */
       if (this.header.children.length) {
         for (let i = 0; i < this.header.childNodes.length; i++) {
@@ -451,21 +451,21 @@ export class AbstractEditor {
     }
   }
 
-  getHeaderText(titleOnly) {
+  getHeaderText (titleOnly) {
     if (this.header_text) return this.header_text
     else if (titleOnly) return this.schema.title
     else return this.getTitle()
   }
 
-  cleanText(txt) {
+  cleanText (txt) {
     /* Clean out HTML tags from txt */
-    const tmp = document.createElement('div');
+    const tmp = document.createElement('div')
     tmp.innerHTML = txt
     return (tmp.textContent || tmp.innerText)
   }
 
-  onWatchedFieldChange() {
-    let vars;
+  onWatchedFieldChange () {
+    let vars
     if (this.header_template) {
       vars = extend(this.getWatchedFieldValues(), {
         key: this.key,
@@ -474,7 +474,7 @@ export class AbstractEditor {
         i1: (this.key * 1 + 1),
         title: this.getTitle()
       })
-      const headerText = this.header_template(vars);
+      const headerText = this.header_template(vars)
 
       if (headerText !== this.header_text) {
         this.header_text = headerText
@@ -491,27 +491,27 @@ export class AbstractEditor {
     }
   }
 
-  setValue(value) {
+  setValue (value) {
     this.value = value
   }
 
-  getValue() {
+  getValue () {
     if (!this.dependenciesFulfilled) {
       return undefined
     }
     return this.value
   }
 
-  refreshValue() {
+  refreshValue () {
 
   }
 
-  getChildEditors() {
+  getChildEditors () {
     return false
   }
 
-  destroy() {
-    const self = this;
+  destroy () {
+    const self = this
     this.unregister(this)
     each(this.watched, (name, adjustedPath) => {
       self.jsoneditor.unwatch(adjustedPath, self.watch_listener)
@@ -532,7 +532,7 @@ export class AbstractEditor {
     this.parent = null
   }
 
-  getDefault() {
+  getDefault () {
     if (typeof this.schema['default'] !== 'undefined') {
       return this.schema['default']
     }
@@ -541,7 +541,7 @@ export class AbstractEditor {
       return this.schema['enum'][0]
     }
 
-    let type = this.schema.type || this.schema.oneOf;
+    let type = this.schema.type || this.schema.oneOf
     if (type && Array.isArray(type)) type = type[0]
     if (type && typeof type === 'object') type = type.type
     if (type && Array.isArray(type)) type = type[0]
@@ -558,32 +558,32 @@ export class AbstractEditor {
     return null
   }
 
-  getTitle() {
+  getTitle () {
     return this.schema.title || this.key
   }
 
-  enable() {
+  enable () {
     this.disabled = false
   }
 
-  disable() {
+  disable () {
     this.disabled = true
   }
 
-  isEnabled() {
+  isEnabled () {
     return !this.disabled
   }
 
-  isRequired() {
+  isRequired () {
     if (typeof this.schema.required === 'boolean') return this.schema.required
-    else if (this.parent && this.parent.schema && Array.isArray(this.parent.schema.required)) return this.parent.schema.required.includes(this.key);
+    else if (this.parent && this.parent.schema && Array.isArray(this.parent.schema.required)) return this.parent.schema.required.includes(this.key)
     else if (this.jsoneditor.options.required_by_default) return true
     else return false
   }
 
-  getDisplayText(arr) {
-    const disp = [];
-    const used = {};
+  getDisplayText (arr) {
+    const disp = []
+    const used = {}
 
     /* Determine how many times each attribute name is used. */
     /* This helps us pick the most distinct display text for the schemas. */
@@ -608,7 +608,7 @@ export class AbstractEditor {
 
     /* Determine display text for each element of the array */
     each(arr, (i, el) => {
-      let name;
+      let name
 
       /* If it's a simple string */
       if (typeof el === 'string') name = el
@@ -628,7 +628,7 @@ export class AbstractEditor {
     })
 
     /* Replace identical display text with "text 1", "text 2", etc. */
-    const inc = {};
+    const inc = {}
     each(disp, (i, name) => {
       inc[name] = inc[name] || 0
       inc[name]++
@@ -640,15 +640,15 @@ export class AbstractEditor {
   }
 
   /* Replace space(s) with "-" to create valid id value */
-  getValidId(id) {
+  getValidId (id) {
     id = id === undefined ? '' : id.toString()
     return id.replace(/\s+/g, '-')
   }
 
-  setInputAttributes(inputAttribute) {
+  setInputAttributes (inputAttribute) {
     if (this.schema.options && this.schema.options.inputAttributes) {
-      const inputAttributes = this.schema.options.inputAttributes;
-      const protectedAttributes = ['name', 'type'].concat(inputAttribute);
+      const inputAttributes = this.schema.options.inputAttributes
+      const protectedAttributes = ['name', 'type'].concat(inputAttribute)
       for (const key in inputAttributes) {
         if (inputAttributes.hasOwnProperty(key) && !protectedAttributes.includes(key.toLowerCase())) {
           this.input.setAttribute(key, inputAttributes[key])
@@ -657,7 +657,7 @@ export class AbstractEditor {
     }
   }
 
-  expandCallbacks(scope, options) {
+  expandCallbacks (scope, options) {
     for (const i in options) {
       if (options.hasOwnProperty(i) && options[i] === Object(options[i])) {
         options[i] = this.expandCallbacks(scope, options[i])
@@ -668,7 +668,7 @@ export class AbstractEditor {
     return options
   }
 
-  showValidationErrors(errors) {
+  showValidationErrors (errors) {
 
   }
 }

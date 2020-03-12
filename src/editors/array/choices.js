@@ -2,7 +2,7 @@ import { MultiSelectEditor } from '../multiselect.js'
 import { extend } from '../../utilities.js'
 
 export class ArrayChoicesEditor extends MultiSelectEditor {
-  setValue(value, initial) {
+  setValue (value, initial) {
     if (this.choices_instance) {
       /* Make sure we are dealing with an array of strings so we can check for strict equality */
       value = [].concat(value).map(e => `${e}`)
@@ -16,7 +16,7 @@ export class ArrayChoicesEditor extends MultiSelectEditor {
     } else super.setValue(value, initial)
   }
 
-  afterInputReady() {
+  afterInputReady () {
     if (window.Choices && !this.choices_instance) {
       let options; const self = this
       /* Get options, either global options from "this.defaults.options.choices" or */
@@ -52,7 +52,7 @@ export class ArrayChoicesEditor extends MultiSelectEditor {
     super.afterInputReady()
   }
 
-  updateValue(value) {
+  updateValue (value) {
     value = [].concat(value)
     let changed = false; const newValue = []
     for (let i = 0; i < value.length; i++) {
@@ -71,7 +71,7 @@ export class ArrayChoicesEditor extends MultiSelectEditor {
     return changed
   }
 
-  addNewOption(value) {
+  addNewOption (value) {
     /* Add new value and label */
     this.option_keys.push(`${value}`)
     this.option_titles.push(`${value}`)
@@ -84,17 +84,17 @@ export class ArrayChoicesEditor extends MultiSelectEditor {
     return true
   }
 
-  enable() {
+  enable () {
     if (!this.always_disabled && this.choices_instance) this.choices_instance.enable()
     super.enable()
   }
 
-  disable(alwaysDisabled) {
+  disable (alwaysDisabled) {
     if (this.choices_instance) this.choices_instance.disable()
     super.disable(alwaysDisabled)
   }
 
-  destroy() {
+  destroy () {
     if (this.choices_instance) {
       this.choices_instance.destroy()
       this.choices_instance = null

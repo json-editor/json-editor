@@ -2,7 +2,7 @@ import { MultiSelectEditor } from '../multiselect.js'
 import { extend } from '../../utilities.js'
 
 export class ArraySelect2Editor extends MultiSelectEditor {
-  setValue(value, initial) {
+  setValue (value, initial) {
     if (this.select2_instance) {
       /* Make sure we are dealing with an array of strings so we can check for strict equality */
       value = [].concat(value).map(e => `${e}`)
@@ -16,7 +16,7 @@ export class ArraySelect2Editor extends MultiSelectEditor {
     } else super.setValue(value, initial)
   }
 
-  afterInputReady() {
+  afterInputReady () {
     let options; const self = this
 
     if (window.jQuery && window.jQuery.fn && window.jQuery.fn.select2 && !this.select2_instance) {
@@ -47,7 +47,7 @@ export class ArraySelect2Editor extends MultiSelectEditor {
     super.afterInputReady()
   }
 
-  updateValue(value) {
+  updateValue (value) {
     value = [].concat(value)
     let changed = false; const newValue = []
     for (let i = 0; i < value.length; i++) {
@@ -67,7 +67,7 @@ export class ArraySelect2Editor extends MultiSelectEditor {
     return changed
   }
 
-  addNewOption(value) {
+  addNewOption (value) {
     /* Add new value and label */
     this.option_keys.push(`${value}`)
     this.option_titles.push(`${value}`)
@@ -84,7 +84,7 @@ export class ArraySelect2Editor extends MultiSelectEditor {
     return true
   }
 
-  enable() {
+  enable () {
     if (!this.always_disabled && this.select2_instance) {
       if (this.select2v4) this.select2_instance.prop('disabled', false)
       else this.select2_instance.select2('enable', true)
@@ -92,7 +92,7 @@ export class ArraySelect2Editor extends MultiSelectEditor {
     super.enable()
   }
 
-  disable(alwaysDisabled) {
+  disable (alwaysDisabled) {
     if (this.select2_instance) {
       if (this.select2v4) this.select2_instance.prop('disabled', true)
       else this.select2_instance.select2('enable', false)
@@ -100,7 +100,7 @@ export class ArraySelect2Editor extends MultiSelectEditor {
     super.disable()
   }
 
-  destroy() {
+  destroy () {
     if (this.select2_instance) {
       this.select2_instance.select2('destroy')
       this.select2_instance = null

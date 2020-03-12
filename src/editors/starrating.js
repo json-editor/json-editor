@@ -121,7 +121,7 @@ export class StarratingEditor extends StringEditor {
 
   setValue (value) {
     for (let i = 0; i < this.radioGroup.length; i++) {
-      if (this.radioGroup[i].value == value) {
+      if (this.radioGroup[i].value === value) {
         this.radioGroup[i].checked = true
         this.value = value
 

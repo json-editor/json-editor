@@ -1,6 +1,6 @@
 import { AbstractIconLib } from '../iconlib.js'
 
-const icon_prefix = 'fi-'
+const iconPrefix = 'fi-'
 const mapping = {
   collapse: 'minus',
   expand: 'plus',
@@ -23,6 +23,6 @@ const mapping = {
 
 export class foundation3Iconlib extends AbstractIconLib {
   constructor () {
-    super(icon_prefix, mapping)
+    super(iconPrefix, mapping)
   }
 }

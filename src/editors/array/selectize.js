@@ -1,8 +1,8 @@
-import  { MultiSelectEditor } from  '../multiselect.js'
-import  { extend } from  '../../utilities.js'
+import { MultiSelectEditor } from '../multiselect.js'
+import { extend } from '../../utilities.js'
 
 export class ArraySelectizeEditor extends MultiSelectEditor {
-  setValue(value, initial) {
+  setValue (value, initial) {
     if (this.selectize_instance) {
       /* Make sure we are dealing with an array of strings so we can check for strict equality */
       value = [].concat(value).map(e => `${e}`)
@@ -15,8 +15,8 @@ export class ArraySelectizeEditor extends MultiSelectEditor {
     } else super.setValue(value, initial)
   }
 
-  afterInputReady() {
-    let options; const self = this;
+  afterInputReady () {
+    let options; const self = this
 
     if (window.jQuery && window.jQuery.fn && window.jQuery.fn.selectize && !this.selectize_instance) {
       /* Get options, either global options from "this.defaults.options.selectize" or */
@@ -38,7 +38,7 @@ export class ArraySelectizeEditor extends MultiSelectEditor {
 
       /* Create a new change handler */
       this.multiselectChangeHandler = e => {
-        const value = self.selectize_instance.getValue();
+        const value = self.selectize_instance.getValue()
         self.updateValue(value)
         self.onChange(true)
       }
@@ -50,9 +50,9 @@ export class ArraySelectizeEditor extends MultiSelectEditor {
     super.afterInputReady()
   }
 
-  updateValue(value) {
+  updateValue (value) {
     value = [].concat(value)
-    let changed = false; const newValue = [];
+    let changed = false; const newValue = []
     for (let i = 0; i < value.length; i++) {
       /*      if (!this.select_options[value[i]+'']) { */
       if (!this.select_values[`${value[i]}`]) {
@@ -61,7 +61,7 @@ export class ArraySelectizeEditor extends MultiSelectEditor {
           if (!this.addNewOption(value[i])) continue
         } else continue
       }
-      const sanitized = this.sanitize(this.select_values[value[i]]);
+      const sanitized = this.sanitize(this.select_values[value[i]])
       newValue.push(sanitized)
       if (sanitized !== value[i]) changed = true
     }
@@ -70,7 +70,7 @@ export class ArraySelectizeEditor extends MultiSelectEditor {
     return changed
   }
 
-  addNewOption(value) {
+  addNewOption (value) {
     /* Add new value and label */
     this.option_keys.push(`${value}`)
     this.option_titles.push(`${value}`)
@@ -83,17 +83,17 @@ export class ArraySelectizeEditor extends MultiSelectEditor {
     return true
   }
 
-  enable() {
+  enable () {
     if (!this.always_disabled && this.selectize_instance) this.selectize_instance.unlock()
     super.enable()
   }
 
-  disable(alwaysDisabled) {
+  disable (alwaysDisabled) {
     if (this.selectize_instance) this.selectize_instance.lock()
     super.disable(alwaysDisabled)
   }
 
-  destroy() {
+  destroy () {
     if (this.selectize_instance) {
       this.selectize_instance.destroy()
       this.selectize_instance = null

@@ -33,7 +33,7 @@ class CssToJson {
           `"${formatSelector(selector)}":"${concatBlock(block)}"`
       )
       .join(',')
-    fs.writeFileSync(target, `export default {${rules}}`)
+    fs.writeFileSync(target, `/* eslint-disable */\nexport default {${rules}}\n/* eslint-enable */\n`)
   }
 }
 
@@ -43,7 +43,7 @@ function formatSelector (selector) {
 
 function concatBlock (value) {
   const block = Object.entries(value)
-    .map(([property, value]) => `${property}:${/* escape Octal sequences */ encodeURIComponent(value)}`)
+    .map(([property, value]) => `${property}:${encodeURIComponent(value)}`)
     .join(';')
 
   return _fixQuote(block)

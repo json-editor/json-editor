@@ -1,7 +1,7 @@
 import { AbstractIconLib } from '../iconlib.js'
 
-const icon_class = 'material-icons'
-const icon_prefix = ''
+const iconClass = 'material-icons'
+const iconPrefix = ''
 const mapping = {
   collapse: 'arrow_drop_up',
   expand: 'arrow_drop_down',
@@ -25,8 +25,8 @@ const mapping = {
 
 export class materialiconsIconlib extends AbstractIconLib {
   constructor () {
-    super(icon_prefix, mapping)
-    this.icon_class = icon_class
+    super(iconPrefix, mapping)
+    this.icon_class = iconClass
   }
 
   getIconClass (key) {

@@ -10,7 +10,7 @@
  * @param {Object} obj - Variable name
  * @returns {Boolean}
  */
-export function isPlainObject(obj) {
+export function isPlainObject (obj) {
   if (obj === null) return false
 
   if (typeof obj !== 'object' || obj.nodeType || (obj === obj.window)) return false
@@ -21,11 +21,11 @@ export function isPlainObject(obj) {
   return true
 }
 
-export function deepCopy(target) {
+export function deepCopy (target) {
   return isPlainObject(target) ? extend({}, target) : Array.isArray(target) ? target.map(deepCopy) : target
 }
 
-export function extend(destination, ...args) {
+export function extend (destination, ...args) {
   for (let i = 0; i < args.length; i++) {
     let source = args[i]
     for (let property in source) {
@@ -44,7 +44,7 @@ export function extend(destination, ...args) {
   return destination
 }
 
-export function each(obj, callback) {
+export function each (obj, callback) {
   if (!obj || typeof obj !== 'object') return
   let i
   if (Array.isArray(obj) || (typeof obj.length === 'number' && obj.length > 0 && (obj.length - 1) in obj)) {
@@ -66,7 +66,7 @@ export function each(obj, callback) {
   }
 }
 
-export function trigger(el, event) {
+export function trigger (el, event) {
   const e = document.createEvent('HTMLEvents')
   e.initEvent(event, true, true)
   el.dispatchEvent(e)
@@ -77,6 +77,6 @@ export function trigger(el, event) {
  *
  * @param {Element} node - Node
  */
-export function getShadowParent(node) {
-  return node && (node.toString() === "[object ShadowRoot]" ? node : getShadowParent(node.parentNode))
+export function getShadowParent (node) {
+  return node && (node.toString() === '[object ShadowRoot]' ? node : getShadowParent(node.parentNode))
 }

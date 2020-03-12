@@ -1,6 +1,6 @@
 import { AbstractIconLib } from '../iconlib.js'
 
-const icon_prefix = 'icon-'
+const iconPrefix = 'icon-'
 const mapping = {
   collapse: 'chevron-down',
   expand: 'chevron-up',
@@ -23,6 +23,6 @@ const mapping = {
 
 export class bootstrap2Iconlib extends AbstractIconLib {
   constructor () {
-    super(icon_prefix, mapping)
+    super(iconPrefix, mapping)
   }
 }

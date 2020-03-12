@@ -8,7 +8,7 @@ import { themes } from './themes/index.js'
 import { extend, each, getShadowParent } from './utilities.js'
 
 export class JSONEditor {
-  constructor(element, options = {}) {
+  constructor (element, options = {}) {
     if (!(element instanceof Element)) throw new Error('element should be an instance of Element')
 
     this.element = element
@@ -26,6 +26,7 @@ export class JSONEditor {
     /* Load editors and selected theme style rules */
     if (!themeClass) throw new Error(`Unknown theme ${themeName}`)
     this.element.setAttribute('data-theme', themeName)
+    // eslint-disable-next-line new-cap
     this.theme = new themeClass(this)
     const rules = extend(themeClass.rules, this.getEditorsRules())
 
@@ -39,6 +40,7 @@ export class JSONEditor {
 
     /* Init icon class */
     const iconClass = JSONEditor.defaults.iconlibs[this.options.iconlib || JSONEditor.defaults.iconlib]
+    // eslint-disable-next-line new-cap
     if (iconClass) this.iconlib = new iconClass()
 
     this.root_container = this.theme.getContainer()
@@ -89,20 +91,20 @@ export class JSONEditor {
     }, fetchUrl, location)
   }
 
-  getValue() {
+  getValue () {
     if (!this.ready) throw new Error("JSON Editor not ready yet.  Listen for 'ready' event before getting the value")
 
     return this.root.getValue()
   }
 
-  setValue(value) {
+  setValue (value) {
     if (!this.ready) throw new Error("JSON Editor not ready yet.  Listen for 'ready' event before setting the value")
 
     this.root.setValue(value)
     return this
   }
 
-  validate(value) {
+  validate (value) {
     if (!this.ready) throw new Error("JSON Editor not ready yet.  Listen for 'ready' event before validating")
 
     /* Custom value */
@@ -114,7 +116,7 @@ export class JSONEditor {
     }
   }
 
-  destroy() {
+  destroy () {
     if (this.destroyed) return
     if (!this.ready) return
 
@@ -135,7 +137,7 @@ export class JSONEditor {
     this.destroyed = true
   }
 
-  on(event, callback) {
+  on (event, callback) {
     this.callbacks = this.callbacks || {}
     this.callbacks[event] = this.callbacks[event] || []
     this.callbacks[event].push(callback)
@@ -143,7 +145,7 @@ export class JSONEditor {
     return this
   }
 
-  off(event, callback) {
+  off (event, callback) {
     /* Specific callback */
     if (event && callback) {
       this.callbacks = this.callbacks || {}
@@ -166,7 +168,7 @@ export class JSONEditor {
     return this
   }
 
-  trigger(event, editor) {
+  trigger (event, editor) {
     if (this.callbacks && this.callbacks[event] && this.callbacks[event].length) {
       for (let i = 0; i < this.callbacks[event].length; i++) {
         this.callbacks[event][i].apply(this, [editor])
@@ -176,7 +178,7 @@ export class JSONEditor {
     return this
   }
 
-  setOption(option, value) {
+  setOption (option, value) {
     if (option === 'show_errors') {
       this.options.show_errors = value
       this.onChange()
@@ -188,7 +190,7 @@ export class JSONEditor {
     return this
   }
 
-  getEditorsRules() {
+  getEditorsRules () {
     const rules = {}
 
     each(JSONEditor.defaults.editors, (i, editorClass) => editorClass.rules && extend(rules, editorClass.rules))
@@ -196,8 +198,7 @@ export class JSONEditor {
     return rules
   }
 
-
-  getEditorClass(schema) {
+  getEditorClass (schema) {
     let classname
 
     schema = this.expandSchema(schema)
@@ -216,12 +217,13 @@ export class JSONEditor {
     return JSONEditor.defaults.editors[classname]
   }
 
-  createEditor(editorClass, options) {
+  createEditor (editorClass, options) {
     options = extend({}, editorClass.options || {}, options)
+    // eslint-disable-next-line new-cap
     return new editorClass(options, JSONEditor.defaults)
   }
 
-  onChange() {
+  onChange () {
     if (!this.ready) return
 
     if (this.firing_change) return
@@ -249,7 +251,7 @@ export class JSONEditor {
     return this
   }
 
-  compileTemplate(template, name = JSONEditor.defaults.template) {
+  compileTemplate (template, name = JSONEditor.defaults.template) {
     let engine
 
     /* Specifying a preset engine */
@@ -269,7 +271,7 @@ export class JSONEditor {
     return engine.compile(template)
   }
 
-  _data(el, key, value) {
+  _data (el, key, value) {
     /* Setting data */
     if (arguments.length === 3) {
       let uuid
@@ -290,24 +292,24 @@ export class JSONEditor {
     }
   }
 
-  registerEditor(editor) {
+  registerEditor (editor) {
     this.editors = this.editors || {}
     this.editors[editor.path] = editor
     return this
   }
 
-  unregisterEditor(editor) {
+  unregisterEditor (editor) {
     this.editors = this.editors || {}
     this.editors[editor.path] = null
     return this
   }
 
-  getEditor(path) {
+  getEditor (path) {
     if (!this.editors) return
     return this.editors[path]
   }
 
-  watch(path, callback) {
+  watch (path, callback) {
     this.watchlist = this.watchlist || {}
     this.watchlist[path] = this.watchlist[path] || []
     this.watchlist[path].push(callback)
@@ -315,7 +317,7 @@ export class JSONEditor {
     return this
   }
 
-  unwatch(path, callback) {
+  unwatch (path, callback) {
     if (!this.watchlist || !this.watchlist[path]) return this
     /* If removing all callbacks for a path */
     if (!callback) {
@@ -332,34 +334,34 @@ export class JSONEditor {
     return this
   }
 
-  notifyWatchers(path) {
+  notifyWatchers (path) {
     if (!this.watchlist || !this.watchlist[path]) return this
     for (let i = 0; i < this.watchlist[path].length; i++) {
       this.watchlist[path][i]()
     }
   }
 
-  isEnabled() {
+  isEnabled () {
     return !this.root || this.root.isEnabled()
   }
 
-  enable() {
+  enable () {
     this.root.enable()
   }
 
-  disable() {
+  disable () {
     this.root.disable()
   }
 
-  setCopyClipboardContents(value) {
+  setCopyClipboardContents (value) {
     this.copyClipboard = value
   }
 
-  getCopyClipboardContents() {
+  getCopyClipboardContents () {
     return this.copyClipboard
   }
 
-  addNewStyleRules(themeName, rules) {
+  addNewStyleRules (themeName, rules) {
     let styleTag = document.querySelector(`#theme-${themeName}`)
 
     if (!styleTag) {
@@ -383,7 +385,7 @@ export class JSONEditor {
     }
   }
 
-  addNewStyleRulesToShadowRoot(themeName, rules, shadowRoot) {
+  addNewStyleRulesToShadowRoot (themeName, rules, shadowRoot) {
     const qualifier = this.element.nodeName.toLowerCase()
     let cssText = ''
 

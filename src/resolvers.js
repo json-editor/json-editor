@@ -74,7 +74,7 @@ const arraysOfStrings = schema => {
 }
 
 /* Use the multiple editor for schemas with `oneOf` or `anyOf` set */
-const oneOf = schema => schema.oneOf || schema.anyOf && 'multiple'
+const oneOf = schema => (schema.oneOf || schema.anyOf) && 'multiple'
 
 /* Specialized editor for date, time and datetime-local formats */
 const date = schema => ['string', 'integer'].includes(schema.type) && ['date', 'time', 'datetime-local'].includes(schema.format) && 'datetime'

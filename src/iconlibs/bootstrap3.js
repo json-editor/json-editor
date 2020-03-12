@@ -1,6 +1,6 @@
 import { AbstractIconLib } from '../iconlib.js'
 
-const icon_prefix = 'glyphicon glyphicon-'
+const iconPrefix = 'glyphicon glyphicon-'
 const mapping = {
   collapse: 'chevron-down',
   expand: 'chevron-right',
@@ -23,6 +23,6 @@ const mapping = {
 
 export class bootstrap3Iconlib extends AbstractIconLib {
   constructor () {
-    super(icon_prefix, mapping)
+    super(iconPrefix, mapping)
   }
 }

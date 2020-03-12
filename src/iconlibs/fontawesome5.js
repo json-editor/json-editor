@@ -1,6 +1,6 @@
 import { AbstractIconLib } from '../iconlib.js'
 
-const icon_prefix = 'fas fa-'
+const iconPrefix = 'fas fa-'
 const mapping = {
   collapse: 'caret-down',
   expand: 'caret-right',
@@ -23,6 +23,6 @@ const mapping = {
 
 export class fontawesome5Iconlib extends AbstractIconLib {
   constructor () {
-    super(icon_prefix, mapping)
+    super(iconPrefix, mapping)
   }
 }

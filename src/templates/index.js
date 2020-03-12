@@ -13,7 +13,7 @@ export const templates = {
   ejs: ejsTemplate,
   handlebars: handlebarsTemplate,
   hogan: hoganTemplate,
-  hogan: lodashTemplate,
+  lodash: lodashTemplate,
   markup: markupTemplate,
   mustache: mustacheTemplate,
   swig: swigTemplate,

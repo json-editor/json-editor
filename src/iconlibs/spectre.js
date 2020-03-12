@@ -1,6 +1,6 @@
 import { AbstractIconLib } from '../iconlib.js'
 
-const icon_prefix = 'icon icon-'
+const iconPrefix = 'icon icon-'
 const mapping = {
   collapse: 'arrow-down',
   expand: 'arrow-right',
@@ -23,6 +23,6 @@ const mapping = {
 
 export class spectreIconlib extends AbstractIconLib {
   constructor () {
-    super(icon_prefix, mapping)
+    super(iconPrefix, mapping)
   }
 }

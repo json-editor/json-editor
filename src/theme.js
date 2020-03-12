@@ -6,18 +6,18 @@ const matchKey = [
   'oMatchesSelector'].find(key => key in document.documentElement)
 
 export class AbstractTheme {
-  constructor(jsoneditor, options = { 'disable_theme_rules': false }) {
+  constructor (jsoneditor, options = { 'disable_theme_rules': false }) {
     this.jsoneditor = jsoneditor
 
     /* Theme config options that allows changing various aspects of the output */
     this.options = options
   }
 
-  getContainer() {
+  getContainer () {
     return document.createElement('div')
   }
 
-  getFloatRightLinkHolder() {
+  getFloatRightLinkHolder () {
     const el = document.createElement('div')
     el.style = el.style || {}
     el.style.cssFloat = 'right'
@@ -25,7 +25,7 @@ export class AbstractTheme {
     return el
   }
 
-  getModal() {
+  getModal () {
     const el = document.createElement('div')
     el.style.backgroundColor = 'white'
     el.style.border = '1px solid black'
@@ -36,49 +36,49 @@ export class AbstractTheme {
     return el
   }
 
-  getGridContainer() {
+  getGridContainer () {
     const el = document.createElement('div')
     return el
   }
 
-  getGridRow() {
+  getGridRow () {
     const el = document.createElement('div')
     el.classList.add('row')
     return el
   }
 
-  getGridColumn() {
+  getGridColumn () {
     const el = document.createElement('div')
     return el
   }
 
-  setGridColumnSize(el, size) {
+  setGridColumnSize (el, size) {
   }
 
-  getLink(text) {
+  getLink (text) {
     const el = document.createElement('a')
     el.setAttribute('href', '#')
     el.appendChild(document.createTextNode(text))
     return el
   }
 
-  disableHeader(header) {
+  disableHeader (header) {
     header.style.color = '#ccc'
   }
 
-  disableLabel(label) {
+  disableLabel (label) {
     label.style.color = '#ccc'
   }
 
-  enableHeader(header) {
+  enableHeader (header) {
     header.style.color = ''
   }
 
-  enableLabel(label) {
+  enableLabel (label) {
     label.style.color = ''
   }
 
-  getInfoButton(text) {
+  getInfoButton (text) {
     const icon = document.createElement('span')
     icon.innerText = 'ⓘ'
     icon.style.fontSize = '16px'
@@ -112,14 +112,14 @@ export class AbstractTheme {
     return icon
   }
 
-  getFormInputLabel(text, req) {
+  getFormInputLabel (text, req) {
     const el = document.createElement('label')
     el.appendChild(document.createTextNode(text))
     if (req) el.classList.add('required')
     return el
   }
 
-  getHeader(text) {
+  getHeader (text) {
     const el = document.createElement('h3')
     if (typeof text === 'string') {
       el.textContent = text
@@ -130,21 +130,21 @@ export class AbstractTheme {
     return el
   }
 
-  getCheckbox() {
+  getCheckbox () {
     const el = this.getFormInputField('checkbox')
     el.style.display = 'inline-block'
     el.style.width = 'auto'
     return el
   }
 
-  getCheckboxLabel(text, req) {
+  getCheckboxLabel (text, req) {
     const el = document.createElement('label')
     el.appendChild(document.createTextNode(`\u00A0${text}`))
     if (req) el.classList.add('required')
     return el
   }
 
-  getMultiCheckboxHolder(controls, label, description, infoText) {
+  getMultiCheckboxHolder (controls, label, description, infoText) {
     const el = document.createElement('div')
     el.classList.add('control-group')
 
@@ -166,7 +166,7 @@ export class AbstractTheme {
     return el
   }
 
-  getFormCheckboxControl(label, input, compact) {
+  getFormCheckboxControl (label, input, compact) {
     const el = document.createElement('div')
     el.appendChild(label)
     input.style.width = 'auto'
@@ -181,7 +181,7 @@ export class AbstractTheme {
     return el
   }
 
-  getFormRadio(attributes) {
+  getFormRadio (attributes) {
     const el = this.getFormInputField('radio')
     for (const key in attributes) {
       el.setAttribute(key, attributes[key])
@@ -191,14 +191,14 @@ export class AbstractTheme {
     return el
   }
 
-  getFormRadioLabel(text, req) {
+  getFormRadioLabel (text, req) {
     const el = document.createElement('label')
     el.appendChild(document.createTextNode(`\u00A0${text}`))
     if (req) el.classList.add('required')
     return el
   }
 
-  getFormRadioControl(label, input, compact) {
+  getFormRadioControl (label, input, compact) {
     const el = document.createElement('div')
     el.appendChild(label)
     input.style.width = 'auto'
@@ -213,13 +213,13 @@ export class AbstractTheme {
     return el
   }
 
-  getSelectInput(options, multiple) {
+  getSelectInput (options, multiple) {
     const select = document.createElement('select')
     if (options) this.setSelectOptions(select, options)
     return select
   }
 
-  getSwitcher(options) {
+  getSwitcher (options) {
     const switcher = this.getSelectInput(options, false)
     switcher.style.backgroundColor = 'transparent'
     switcher.style.display = 'inline-block'
@@ -233,15 +233,15 @@ export class AbstractTheme {
     return switcher
   }
 
-  getSwitcherOptions(switcher) {
+  getSwitcherOptions (switcher) {
     return switcher.getElementsByTagName('option')
   }
 
-  setSwitcherOptions(switcher, options, titles) {
+  setSwitcherOptions (switcher, options, titles) {
     this.setSelectOptions(switcher, options, titles)
   }
 
-  setSelectOptions(select, options, titles = []) {
+  setSelectOptions (select, options, titles = []) {
     select.innerHTML = ''
     for (let i = 0; i < options.length; i++) {
       const option = document.createElement('option')
@@ -251,7 +251,7 @@ export class AbstractTheme {
     }
   }
 
-  getTextareaInput() {
+  getTextareaInput () {
     const el = document.createElement('textarea')
     el.style = el.style || {}
     el.style.width = '100%'
@@ -260,7 +260,7 @@ export class AbstractTheme {
     return el
   }
 
-  getRangeInput(min, max, step) {
+  getRangeInput (min, max, step) {
     const el = this.getFormInputField('range')
     el.setAttribute('min', min)
     el.setAttribute('max', max)
@@ -268,7 +268,7 @@ export class AbstractTheme {
     return el
   }
 
-  getRangeOutput(input, startvalue) {
+  getRangeOutput (input, startvalue) {
     const output = document.createElement('output')
     output.value = startvalue || 0
 
@@ -278,7 +278,7 @@ export class AbstractTheme {
     return output
   }
 
-  getRangeControl(input, output) {
+  getRangeControl (input, output) {
     const el = document.createElement('div')
     el.style.textAlign = 'center'
     if (output) el.appendChild(output)
@@ -286,17 +286,17 @@ export class AbstractTheme {
     return el
   }
 
-  getFormInputField(type) {
+  getFormInputField (type) {
     const el = document.createElement('input')
     el.setAttribute('type', type)
     return el
   }
 
-  afterInputReady(input) {
+  afterInputReady (input) {
 
   }
 
-  getFormControl(label, input, description, infoText) {
+  getFormControl (label, input, description, infoText) {
     const el = document.createElement('div')
     el.classList.add('form-control')
     if (label) el.appendChild(label)
@@ -313,7 +313,7 @@ export class AbstractTheme {
     return el
   }
 
-  getIndentedPanel() {
+  getIndentedPanel () {
     const el = document.createElement('div')
     el.style = el.style || {}
     el.style.paddingLeft = '10px'
@@ -322,7 +322,7 @@ export class AbstractTheme {
     return el
   }
 
-  getTopIndentedPanel() {
+  getTopIndentedPanel () {
     const el = document.createElement('div')
     el.style = el.style || {}
     el.style.paddingLeft = '10px'
@@ -330,48 +330,48 @@ export class AbstractTheme {
     return el
   }
 
-  getChildEditorHolder() {
+  getChildEditorHolder () {
     return document.createElement('div')
   }
 
-  getDescription(text) {
+  getDescription (text) {
     const el = document.createElement('p')
     if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text)
     else el.textContent = this.cleanText(text)
     return el
   }
 
-  getCheckboxDescription(text) {
+  getCheckboxDescription (text) {
     return this.getDescription(text)
   }
-  getFormInputDescription(text) {
+  getFormInputDescription (text) {
     return this.getDescription(text)
   }
 
-  getButtonHolder() {
+  getButtonHolder () {
     return document.createElement('span')
   }
 
-  getHeaderButtonHolder() {
+  getHeaderButtonHolder () {
     return this.getButtonHolder()
   }
 
-  getFormButtonHolder(buttonAlign) {
+  getFormButtonHolder (buttonAlign) {
     return this.getButtonHolder()
   }
 
-  getButton(text, icon, title) {
+  getButton (text, icon, title) {
     const el = document.createElement('button')
     el.type = 'button'
     this.setButtonText(el, text, icon, title)
     return el
   }
 
-  getFormButton(text, icon, title) {
+  getFormButton (text, icon, title) {
     return this.getButton(text, icon, title)
   }
 
-  setButtonText(button, text, icon, title) {
+  setButtonText (button, text, icon, title) {
     /* Clear previous contents. https://jsperf.com/innerhtml-vs-removechild/37 */
     while (button.firstChild) {
       button.removeChild(button.firstChild)
@@ -389,34 +389,34 @@ export class AbstractTheme {
   }
 
   /* Table functions */
-  getTable() {
+  getTable () {
     return document.createElement('table')
   }
 
-  getTableRow() {
+  getTableRow () {
     return document.createElement('tr')
   }
 
-  getTableHead() {
+  getTableHead () {
     return document.createElement('thead')
   }
 
-  getTableBody() {
+  getTableBody () {
     return document.createElement('tbody')
   }
 
-  getTableHeaderCell(text) {
+  getTableHeaderCell (text) {
     const el = document.createElement('th')
     el.textContent = text
     return el
   }
 
-  getTableCell() {
+  getTableCell () {
     const el = document.createElement('td')
     return el
   }
 
-  getErrorMessage(text) {
+  getErrorMessage (text) {
     const el = document.createElement('p')
     el.style = el.style || {}
     el.style.color = 'red'
@@ -424,40 +424,40 @@ export class AbstractTheme {
     return el
   }
 
-  addInputError(input, text) {
+  addInputError (input, text) {
   }
 
-  removeInputError(input) {
+  removeInputError (input) {
   }
 
-  addTableRowError(row) {
+  addTableRowError (row) {
   }
 
-  removeTableRowError(row) {
+  removeTableRowError (row) {
   }
 
-  getTabHolder(propertyName) {
+  getTabHolder (propertyName) {
     const pName = (typeof propertyName === 'undefined') ? '' : propertyName
     const el = document.createElement('div')
     el.innerHTML = `<div style='float: left; width: 130px;' class='tabs'></div><div class='content' style='margin-left: 120px;' id='${pName}'></div><div style='clear:both;'></div>`
     return el
   }
 
-  getTopTabHolder(propertyName) {
+  getTopTabHolder (propertyName) {
     const pName = (typeof propertyName === 'undefined') ? '' : propertyName
     const el = document.createElement('div')
     el.innerHTML = `<div class='tabs' style='margin-left: 10px;'></div><div style='clear:both;'></div><div class='content' id='${pName}'></div>`
     return el
   }
 
-  applyStyles(el, styles) {
+  applyStyles (el, styles) {
     for (const i in styles) {
       if (!styles.hasOwnProperty(i)) continue
       el.style[i] = styles[i]
     }
   }
 
-  closest(elem, selector) {
+  closest (elem, selector) {
     while (elem && elem !== document) {
       if (elem[matchKey]) {
         if (elem[matchKey](selector)) {
@@ -472,11 +472,11 @@ export class AbstractTheme {
     return false
   }
 
-  insertBasicTopTab(tab, newTabsHolder) {
+  insertBasicTopTab (tab, newTabsHolder) {
     newTabsHolder.firstChild.insertBefore(tab, newTabsHolder.firstChild.firstChild)
   }
 
-  getTab(span, tabId) {
+  getTab (span, tabId) {
     const el = document.createElement('div')
     el.appendChild(span)
     el.id = tabId
@@ -495,7 +495,7 @@ export class AbstractTheme {
     return el
   }
 
-  getTopTab(span, tabId) {
+  getTopTab (span, tabId) {
     const el = document.createElement('div')
     el.id = tabId
     el.appendChild(span)
@@ -517,23 +517,23 @@ export class AbstractTheme {
     return el
   }
 
-  getTabContentHolder(tabHolder) {
+  getTabContentHolder (tabHolder) {
     return tabHolder.children[1]
   }
 
-  getTopTabContentHolder(tabHolder) {
+  getTopTabContentHolder (tabHolder) {
     return tabHolder.children[1]
   }
 
-  getTabContent() {
+  getTabContent () {
     return this.getIndentedPanel()
   }
 
-  getTopTabContent() {
+  getTopTabContent () {
     return this.getTopIndentedPanel()
   }
 
-  markTabActive(row) {
+  markTabActive (row) {
     this.applyStyles(row.tab, {
       opacity: 1,
       background: 'white'
@@ -545,7 +545,7 @@ export class AbstractTheme {
     }
   }
 
-  markTabInactive(row) {
+  markTabInactive (row) {
     this.applyStyles(row.tab, {
       opacity: 0.5,
       background: ''
@@ -557,57 +557,57 @@ export class AbstractTheme {
     }
   }
 
-  addTab(holder, tab) {
+  addTab (holder, tab) {
     holder.children[0].appendChild(tab)
   }
 
-  addTopTab(holder, tab) {
+  addTopTab (holder, tab) {
     holder.children[0].appendChild(tab)
   }
 
-  getBlockLink() {
+  getBlockLink () {
     const link = document.createElement('a')
     link.style.display = 'block'
     return link
   }
 
-  getBlockLinkHolder() {
+  getBlockLinkHolder () {
     const el = document.createElement('div')
     return el
   }
 
-  getLinksHolder() {
+  getLinksHolder () {
     const el = document.createElement('div')
     return el
   }
 
-  createMediaLink(holder, link, media) {
+  createMediaLink (holder, link, media) {
     holder.appendChild(link)
     media.style.width = '100%'
     holder.appendChild(media)
   }
 
-  createImageLink(holder, link, image) {
+  createImageLink (holder, link, image) {
     holder.appendChild(link)
     link.appendChild(image)
   }
 
-  getFirstTab(holder) {
+  getFirstTab (holder) {
     return holder.firstChild.firstChild
   }
 
-  getInputGroup(input, buttons) {
+  getInputGroup (input, buttons) {
     return undefined
   }
 
-  cleanText(txt) {
+  cleanText (txt) {
     /* Clean out HTML tags from txt */
     const tmp = document.createElement('div')
     tmp.innerHTML = txt
     return (tmp.textContent || tmp.innerText)
   }
 
-  getDropZone(text) {
+  getDropZone (text) {
     const el = document.createElement('div')
     el.setAttribute('data-text', text)
     el.classList.add('je-dropzone')
@@ -615,7 +615,7 @@ export class AbstractTheme {
   }
 
   /* file is an object with properties: name, type, mimeType, size amd formattedSize */
-  getUploadPreview(file, uploadButton, data) {
+  getUploadPreview (file, uploadButton, data) {
     const preview = document.createElement('div')
     preview.classList.add('je-upload-preview')
 
@@ -637,7 +637,7 @@ export class AbstractTheme {
     return preview
   }
 
-  getProgressBar() {
+  getProgressBar () {
     const max = 100; const start = 0
 
     const progressBar = document.createElement('progress')
@@ -646,12 +646,12 @@ export class AbstractTheme {
     return progressBar
   }
 
-  updateProgressBar(progressBar, progress) {
+  updateProgressBar (progressBar, progress) {
     if (!progressBar) return
     progressBar.setAttribute('value', progress)
   }
 
-  updateProgressBarUnknown(progressBar) {
+  updateProgressBarUnknown (progressBar) {
     if (!progressBar) return
     progressBar.removeAttribute('value')
   }

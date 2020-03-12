@@ -34,7 +34,7 @@ export class NumberEditor extends StringEditor {
   }
 
   sanitize (value) {
-    return (`${value}`).replace(/[^0-9\.\-eE]/g, '')
+    return (`${value}`).replace(/[^0-9.\-eE]/g, '')
   }
 
   getNumColumns () {

@@ -15,10 +15,13 @@ const templates = {}
 const iconlibs = {}
 const editors = {}
 const languages = {}
+// eslint-disable-next-line camelcase
 const custom_validators = []
 
 /* Translation strings and default languages */
+// eslint-disable-next-line camelcase
 const default_language = 'en'
+// eslint-disable-next-line camelcase
 const language = default_language
 
 languages.en = {
@@ -249,15 +252,15 @@ languages.en = {
 }
 
 /* Default per-editor options */
-each(editors, (i, editor) => editors[i].options = editor.options || {})
+each(editors, (i, editor) => { editors[i].options = editor.options || {} })
 
 /* Default upload handler */
-function upload(type, file, cbs){
+function upload (type, file, cbs) {
   console.log('Upload handler required for upload editor')
 }
 
 /* String translate function */
-function translate (key, variables){
+function translate (key, variables) {
   const lang = languages[language]
   if (!lang) throw new Error(`Unknown language ${language}`)
 

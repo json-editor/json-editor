@@ -20,10 +20,6 @@ ToDo:
 import { StringEditor } from './string.js'
 
 export class DatetimeEditor extends StringEditor {
-  constructor (options, defaults) {
-    super(options, defaults)
-  }
-
   build () {
     super.build()
     if (!this.input) return

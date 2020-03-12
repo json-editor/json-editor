@@ -2,7 +2,7 @@ import { ipValidator } from './validators/ip-validator.js'
 import { extend } from './utilities.js'
 
 export class Validator {
-  constructor(jsoneditor, schema, options, defaults) {
+  constructor (jsoneditor, schema, options, defaults) {
     this.jsoneditor = jsoneditor
     this.schema = schema || this.jsoneditor.schema
     this.options = options || {}
@@ -10,7 +10,7 @@ export class Validator {
     this.defaults = defaults
 
     this._validateSubSchema = {
-      enum(schema, value, path) {
+      enum (schema, value, path) {
         const stringified = JSON.stringify(value)
         const valid = schema.enum.some(e => stringified === JSON.stringify(e))
         if (!valid) {
@@ -22,21 +22,21 @@ export class Validator {
         }
         return []
       },
-      extends(schema, value, path) {
+      extends (schema, value, path) {
         const validate = (errors, e) => {
           errors.push(...this._validateSchema(e, value, path))
           return errors
         }
         return schema.extends.reduce(validate, [])
       },
-      allOf(schema, value, path) {
+      allOf (schema, value, path) {
         const validate = (errors, e) => {
           errors.push(...this._validateSchema(e, value, path))
           return errors
         }
         return schema.allOf.reduce(validate, [])
       },
-      anyOf(schema, value, path) {
+      anyOf (schema, value, path) {
         const valid = schema.anyOf.some(e => !this._validateSchema(e, value, path).length)
         if (!valid) {
           return [{
@@ -47,7 +47,7 @@ export class Validator {
         }
         return []
       },
-      oneOf(schema, value, path) {
+      oneOf (schema, value, path) {
         let valid = 0
         const oneofErrors = []
         schema.oneOf.forEach((o, i) => {
@@ -73,7 +73,7 @@ export class Validator {
         }
         return errors
       },
-      not(schema, value, path) {
+      not (schema, value, path) {
         if (!this._validateSchema(schema.not, value, path).length) {
           return [{
             path,
@@ -83,7 +83,7 @@ export class Validator {
         }
         return []
       },
-      type(schema, value, path) {
+      type (schema, value, path) {
         /* Union type */
         if (Array.isArray(schema.type)) {
           const valid = schema.type.some(e => this._checkType(e, value))
@@ -116,7 +116,7 @@ export class Validator {
         }
         return []
       },
-      disallow(schema, value, path) {
+      disallow (schema, value, path) {
         /* Union type */
         if (Array.isArray(schema.disallow)) {
           const invalid = schema.disallow.some(e => this._checkType(e, value))
@@ -142,9 +142,9 @@ export class Validator {
     }
 
     this._validateNumberSubSchema = {
-      multipleOf(schema, value, path) { return this._validateNumberSubSchemaMultipleDivisible(schema, value, path) },
-      divisibleBy(schema, value, path) { return this._validateNumberSubSchemaMultipleDivisible(schema, value, path) },
-      maximum(schema, value, path) {
+      multipleOf (schema, value, path) { return this._validateNumberSubSchemaMultipleDivisible(schema, value, path) },
+      divisibleBy (schema, value, path) { return this._validateNumberSubSchemaMultipleDivisible(schema, value, path) },
+      maximum (schema, value, path) {
         /* Vanilla JS, prone to floating point rounding errors (e.g. .999999999999999 == 1) */
         let valid = schema.exclusiveMaximum ? (value < schema.maximum) : (value <= schema.maximum)
 
@@ -171,7 +171,7 @@ export class Validator {
         }
         return []
       },
-      minimum(schema, value, path) {
+      minimum (schema, value, path) {
         /* Vanilla JS, prone to floating point rounding errors (e.g. .999999999999999 == 1) */
         let valid = schema.exclusiveMinimum ? (value > schema.minimum) : (value >= schema.minimum)
 
@@ -201,7 +201,7 @@ export class Validator {
     }
 
     this._validateStringSubSchema = {
-      maxLength(schema, value, path) {
+      maxLength (schema, value, path) {
         const errors = []
         if ((`${value}`).length > schema.maxLength) {
           errors.push({
@@ -213,7 +213,7 @@ export class Validator {
         return errors
       },
       /* `minLength` */
-      minLength(schema, value, path) {
+      minLength (schema, value, path) {
         if ((`${value}`).length < schema.minLength) {
           return [{
             path,
@@ -224,7 +224,7 @@ export class Validator {
         return []
       },
       /* `pattern` */
-      pattern(schema, value, path) {
+      pattern (schema, value, path) {
         if (!(new RegExp(schema.pattern)).test(value)) {
           return [{
             path,
@@ -237,7 +237,7 @@ export class Validator {
     }
 
     this._validateArraySubSchema = {
-      items(schema, value, path) {
+      items (schema, value, path) {
         const errors = []
         if (Array.isArray(schema.items)) {
           for (let i = 0; i < value.length; i++) {
@@ -275,7 +275,7 @@ export class Validator {
         }
         return errors
       },
-      maxItems(schema, value, path) {
+      maxItems (schema, value, path) {
         if (value.length > schema.maxItems) {
           return [{
             path,
@@ -285,7 +285,7 @@ export class Validator {
         }
         return []
       },
-      minItems(schema, value, path) {
+      minItems (schema, value, path) {
         if (value.length < schema.minItems) {
           return [{
             path,
@@ -295,7 +295,7 @@ export class Validator {
         }
         return []
       },
-      uniqueItems(schema, value, path) {
+      uniqueItems (schema, value, path) {
         const seen = {}
         for (let i = 0; i < value.length; i++) {
           const valid = JSON.stringify(value[i])
@@ -313,7 +313,7 @@ export class Validator {
     }
 
     this._validateObjectSubSchema = {
-      maxProperties(schema, value, path) {
+      maxProperties (schema, value, path) {
         if (Object.keys(value).length > schema.maxProperties) {
           return [{
             path,
@@ -323,7 +323,7 @@ export class Validator {
         }
         return []
       },
-      minProperties(schema, value, path) {
+      minProperties (schema, value, path) {
         if (Object.keys(value).length < schema.minProperties) {
           return [{
             path,
@@ -333,7 +333,7 @@ export class Validator {
         }
         return []
       },
-      required(schema, value, path) {
+      required (schema, value, path) {
         const errors = []
         if (Array.isArray(schema.required)) {
           schema.required.forEach(e => {
@@ -350,7 +350,7 @@ export class Validator {
         }
         return errors
       },
-      properties(schema, value, path, validatedProperties) {
+      properties (schema, value, path, validatedProperties) {
         const errors = []
         Object.entries(schema.properties).forEach(([key, prop]) => {
           validatedProperties[key] = true
@@ -358,7 +358,7 @@ export class Validator {
         })
         return errors
       },
-      patternProperties(schema, value, path, validatedProperties) {
+      patternProperties (schema, value, path, validatedProperties) {
         const errors = []
         Object.entries(schema.patternProperties).forEach(([i, prop]) => {
           const regex = new RegExp(i)
@@ -375,7 +375,7 @@ export class Validator {
     }
 
     this._validateObjectSubSchema2 = {
-      additionalProperties(schema, value, path, validatedProperties) {
+      additionalProperties (schema, value, path, validatedProperties) {
         const errors = []
         for (let i in value) {
           if (!value.hasOwnProperty(i)) continue
@@ -400,7 +400,7 @@ export class Validator {
         }
         return errors
       },
-      dependencies(schema, value, path) {
+      dependencies (schema, value, path) {
         const errors = []
         Object.entries(schema.dependencies).forEach(([i, dep]) => {
           /* Doesn't need to meet the dependency */
@@ -427,7 +427,7 @@ export class Validator {
     }
   }
 
-  fitTest(value, givenSchema, weight = 10000000) {
+  fitTest (value, givenSchema, weight = 10000000) {
     const fit = { match: 0, extra: 0 }
     if (typeof value === 'object' && value !== null) {
       /* Work on a copy of the schema */
@@ -451,15 +451,15 @@ export class Validator {
     return fit
   }
 
-  _getSchema(schema) {
+  _getSchema (schema) {
     return typeof schema === 'undefined' ? extend({}, this.jsoneditor.expandRefs(this.schema)) : schema
   }
 
-  validate(value) {
+  validate (value) {
     return this._validateSchema(this.schema, value)
   }
 
-  _validateSchema(schema, value, path) {
+  _validateSchema (schema, value, path) {
     const errors = []
     path = path || 'root'
 
@@ -506,7 +506,7 @@ export class Validator {
     return this._removeDuplicateErrors(errors)
   }
 
-  _expandSchemaLink(schema, m) {
+  _expandSchemaLink (schema, m) {
     const href = schema.links[m].href
     const data = this.jsoneditor.root.getValue()
     const template = this.jsoneditor.compileTemplate(href, this.jsoneditor.template)
@@ -516,7 +516,7 @@ export class Validator {
     return extend({}, schema, this.jsoneditor.refs[ref])
   }
 
-  _validateV3Required(schema, value, path) {
+  _validateV3Required (schema, value, path) {
     if ((typeof schema.required !== 'undefined' && schema.required === true) || (typeof schema.required === 'undefined' && this.jsoneditor.options.required_by_default === true)) {
       return [{
         path,
@@ -527,7 +527,7 @@ export class Validator {
     return []
   }
 
-  _validateByValueType(schema, value, path) {
+  _validateByValueType (schema, value, path) {
     const errors = []
     const self = this
     if (value === null) return errors
@@ -592,7 +592,7 @@ export class Validator {
     return errors
   }
 
-  _validateNumberSubSchemaMultipleDivisible(schema, value, path) {
+  _validateNumberSubSchemaMultipleDivisible (schema, value, path) {
     const divisor = schema.multipleOf || schema.divisibleBy
     /* Vanilla JS, prone to floating point rounding errors (e.g. 1.14 / .01 == 113.99999) */
     let valid = (value / divisor === Math.floor(value / divisor))
@@ -615,7 +615,7 @@ export class Validator {
     return []
   }
 
-  _validateDateTimeSubSchema(schema, value, path) {
+  _validateDateTimeSubSchema (schema, value, path) {
     const _validateInteger = (schema, value, path) => {
       /* The value is a timestamp */
       if (value * 1 < 1) {
@@ -698,7 +698,7 @@ export class Validator {
     return []
   }
 
-  _validateCustomValidator(schema, value, path) {
+  _validateCustomValidator (schema, value, path) {
     const errors = []
     /* Internal validators using the custom validator format */
     errors.push(...ipValidator.call(this, schema, value, path, this.translate))
@@ -715,7 +715,7 @@ export class Validator {
     return errors
   }
 
-  _removeDuplicateErrors(errors) {
+  _removeDuplicateErrors (errors) {
     return errors.reduce((err, obj) => {
       let first = true
       if (!err) err = []
@@ -733,7 +733,7 @@ export class Validator {
     }, [])
   }
 
-  _checkType(type, value) {
+  _checkType (type, value) {
     const types = {
       string: value => typeof value === 'string',
       number: value => typeof value === 'number',

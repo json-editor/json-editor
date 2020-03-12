@@ -2,16 +2,16 @@
 const defaultMapping = { collapse: '', expand: '', 'delete': '', edit: '', add: '', cancel: '', save: '', moveup: '', movedown: '' }
 
 export class AbstractIconLib {
-  constructor(icon_prefix = '', mapping = defaultMapping) {
+  constructor (iconPrefix = '', mapping = defaultMapping) {
     this.mapping = mapping
-    this.icon_prefix = icon_prefix
+    this.icon_prefix = iconPrefix
   }
 
-  getIconClass(key) {
+  getIconClass (key) {
     return this.mapping[key] ? this.icon_prefix + this.mapping[key] : null
   }
 
-  getIcon(key) {
+  getIcon (key) {
     const iconclass = this.getIconClass(key)
 
     if (!iconclass) return null

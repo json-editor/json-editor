@@ -1,7 +1,7 @@
 import { extend } from './utilities.js'
 
 export class SchemaLoader {
-  constructor(options) {
+  constructor (options) {
     this.options = options || {}
     this.refs = this.options.refs || {}
     this.refs_with_info = {}
@@ -10,25 +10,25 @@ export class SchemaLoader {
 
     this._subSchema1 = {
       /* Version 3 `type` */
-      type(schema) {
+      type (schema) {
         if (typeof schema.type === 'object') {
           schema.type = this._expandSubSchema(schema.type)
         }
       },
       /* Version 3 `disallow` */
-      disallow(schema) {
+      disallow (schema) {
         if (typeof schema.disallow === 'object') {
           schema.disallow = this._expandSubSchema(schema.disallow)
         }
       },
       /* Version 4 `anyOf` */
-      anyOf(schema) {
+      anyOf (schema) {
         Object.entries(schema.anyOf).forEach(([key, value]) => {
           schema.anyOf[key] = this.expandSchema(value)
         })
       },
       /* Version 4 `dependencies` (schema dependencies) */
-      dependencies(schema) {
+      dependencies (schema) {
         Object.entries(schema.dependencies).forEach(([key, value]) => {
           if (typeof value === 'object' && !(Array.isArray(value))) {
             schema.dependencies[key] = this.expandSchema(value)
@@ -36,14 +36,14 @@ export class SchemaLoader {
         })
       },
       /* Version 4 `not` */
-      not(schema) {
+      not (schema) {
         schema.not = this.expandSchema(schema.not)
       }
     }
 
     this._subSchema2 = {
       /* allOf schemas should be merged into the parent */
-      allOf(schema, extended) {
+      allOf (schema, extended) {
         let _extended = extend({}, extended)
         Object.entries(schema.allOf).forEach(([key, value]) => {
           schema.allOf[key] = this.expandRefs(value, true)
@@ -53,7 +53,7 @@ export class SchemaLoader {
         return _extended
       },
       /* extends schemas should be merged into parent */
-      extends(schema, extended) {
+      extends (schema, extended) {
         let _extended
         /* If extends is a schema */
         if (!(Array.isArray(schema.extends))) {
@@ -68,7 +68,7 @@ export class SchemaLoader {
         return _extended
       },
       /* parent should be merged into oneOf schemas */
-      oneOf(schema, extended) {
+      oneOf (schema, extended) {
         const tmp = extend({}, extended)
         delete tmp.oneOf
         schema.oneOf.reduce((e, s, i) => {
@@ -78,17 +78,16 @@ export class SchemaLoader {
         return extended
       }
     }
-
   }
 
-  load(schema, callback, fetchUrl, location) {
+  load (schema, callback, fetchUrl, location) {
     this._loadExternalRefs(schema, () => {
       this._getDefinitions(schema, `${fetchUrl}#/definitions/`)
       callback(this.expandRefs(schema))
     }, fetchUrl, this._getFileBase(location))
   }
 
-  expandRefs(schema, recurseAllOf) {
+  expandRefs (schema, recurseAllOf) {
     const _schema = extend({}, schema)
     if (!_schema.$ref) return _schema
 
@@ -110,7 +109,7 @@ export class SchemaLoader {
     return this.extendSchemas(_schema, this.expandSchema(this.refs[ref]))
   }
 
-  expandSchema(schema, fileBase) {
+  expandSchema (schema, fileBase) {
     Object.entries(this._subSchema1).forEach(([key, func]) => {
       if (schema[key]) {
         func.call(this, schema)
@@ -128,13 +127,13 @@ export class SchemaLoader {
     return this.expandRefs(extended)
   }
 
-  _getRef(fetchUrl, refObj) {
+  _getRef (fetchUrl, refObj) {
     const ref = fetchUrl + refObj
 
     return this.refs[ref] ? ref : fetchUrl + decodeURIComponent(refObj.$ref)
   }
 
-  _expandSubSchema(subschema) {
+  _expandSubSchema (subschema) {
     /* Array of types */
     if (Array.isArray(subschema)) return subschema.map(m => typeof value === 'object' ? this.expandSchema(m) : m)
 
@@ -142,7 +141,7 @@ export class SchemaLoader {
     return this.expandSchema(subschema)
   }
 
-  _getDefinitions(schema, path) {
+  _getDefinitions (schema, path) {
     if (schema.definitions) {
       Object.keys(schema.definitions).forEach(i => {
         this.refs[path + i] = schema.definitions[i]
@@ -153,9 +152,9 @@ export class SchemaLoader {
     }
   }
 
-  _getExternalRefs(schema, fetchUrl) {
+  _getExternalRefs (schema, fetchUrl) {
     const refs = {}
-    const mergeRefs = newrefs => Object.keys(newrefs).forEach(i => refs[i] = true)
+    const mergeRefs = newrefs => Object.keys(newrefs).forEach(i => { refs[i] = true })
 
     if (schema.$ref && typeof schema.$ref !== 'object') {
       const refCounter = this.refs_prefix + this.refs_counter++
@@ -181,25 +180,25 @@ export class SchemaLoader {
     return refs
   }
 
-  _getFileBase(location) {
+  _getFileBase (location) {
     const { ajaxBase } = this.options
 
     return typeof ajaxBase === 'undefined' ? this._getFileBaseFromFileLocation(location) : ajaxBase
   }
 
-  _getFileBaseFromFileLocation(fileLocationString) {
+  _getFileBaseFromFileLocation (fileLocationString) {
     const pathItems = fileLocationString.split('/')
     pathItems.pop()
     return `${pathItems.join('/')}/`
   }
 
-  _isLocalUrl(url, fileBase) {
+  _isLocalUrl (url, fileBase) {
     return fileBase !== url.substr(0, fileBase.length) &&
       url.substr(0, 4) !== 'http' &&
       url.substr(0, 1) !== '/'
   }
 
-  _loadExternalRefs(schema, callback, fetchUrl, fileBase) {
+  _loadExternalRefs (schema, callback, fetchUrl, fileBase) {
     const refs = this._getExternalRefs(schema, fetchUrl)
     let done = 0; let waiting = 0; let callbackFired = false
 
@@ -254,7 +253,7 @@ export class SchemaLoader {
     }
   }
 
-  extendSchemas(obj1, obj2) {
+  extendSchemas (obj1, obj2) {
     obj1 = extend({}, obj1)
     obj2 = extend({}, obj2)
 
