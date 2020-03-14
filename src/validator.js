@@ -377,25 +377,25 @@ export class Validator {
     this._validateObjectSubSchema2 = {
       additionalProperties (schema, value, path, validatedProperties) {
         const errors = []
-        for (let i in value) {
-          if (!value.hasOwnProperty(i)) continue
-          if (!validatedProperties[i]) {
-            /* No extra properties allowed */
-            if (!schema.additionalProperties) {
-              errors.push({
-                path,
-                property: 'additionalProperties',
-                message: this.translate('error_additional_properties', [i])
-              })
-              break
-              /* Allowed */
-            } else if (schema.additionalProperties === true) {
-              break
-              /* Must match schema */
-              /* TODO: incompatibility between version 3 and 4 of the spec */
-            } else {
-              errors.push(...this._validateSchema(schema.additionalProperties, value[i], `${path}.${i}`))
-            }
+        const keys = Object.keys(value)
+        for (let i = 0; i < keys.length; i++) {
+          const k = keys[i]
+          if (validatedProperties[k]) continue
+          /* No extra properties allowed */
+          if (!schema.additionalProperties) {
+            errors.push({
+              path,
+              property: 'additionalProperties',
+              message: this.translate('error_additional_properties', [k])
+            })
+            break
+            /* Allowed */
+          } else if (schema.additionalProperties === true) {
+            break
+            /* Must match schema */
+            /* TODO: incompatibility between version 3 and 4 of the spec */
+          } else {
+            errors.push(...this._validateSchema(schema.additionalProperties, value[k], `${path}.${k}`))
           }
         }
         return errors

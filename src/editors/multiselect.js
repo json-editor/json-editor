@@ -21,10 +21,7 @@ export class MultiSelectEditor extends AbstractEditor {
 
   getNumColumns () {
     let longestText = this.getTitle().length
-    for (const i in this.select_values) {
-      if (!this.select_values.hasOwnProperty(i)) continue
-      longestText = Math.max(longestText, (`${this.select_values[i]}`).length + 4)
-    }
+    Object.keys(this.select_values).forEach(i => (longestText = Math.max(longestText, (`${this.select_values[i]}`).length + 4)))
 
     return Math.min(12, Math.max(longestText / 7, 2))
   }
@@ -119,7 +116,6 @@ export class MultiSelectEditor extends AbstractEditor {
   }
 
   setValue (value, initial) {
-    let i
     value = value || []
     if (!(Array.isArray(value))) value = [value]
 
@@ -127,10 +123,9 @@ export class MultiSelectEditor extends AbstractEditor {
     value = value.map(e => `${e}`)
 
     /* Update selected status of options */
-    for (i in this.select_options) {
-      if (!this.select_options.hasOwnProperty(i)) continue
+    Object.keys(this.select_options).forEach(i => {
       this.select_options[i][this.input_type === 'select' ? 'selected' : 'checked'] = (value.includes(i))
-    }
+    })
 
     this.updateValue(value)
     this.onChange(true)
@@ -176,10 +171,7 @@ export class MultiSelectEditor extends AbstractEditor {
       if (this.input) {
         this.input.disabled = false
       } else if (this.inputs) {
-        for (const i in this.inputs) {
-          if (!this.inputs.hasOwnProperty(i)) continue
-          this.inputs[i].disabled = false
-        }
+        Object.keys(this.inputs).forEach(i => (this.inputs[i].disabled = false))
       }
       super.enable()
     }
@@ -190,10 +182,7 @@ export class MultiSelectEditor extends AbstractEditor {
     if (this.input) {
       this.input.disabled = true
     } else if (this.inputs) {
-      for (const i in this.inputs) {
-        if (!this.inputs.hasOwnProperty(i)) continue
-        this.inputs[i].disabled = true
-      }
+      Object.keys(this.inputs).forEach(i => (this.inputs[i].disabled = true))
     }
     super.disable()
   }

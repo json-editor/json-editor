@@ -26,10 +26,8 @@ export function deepCopy (target) {
 }
 
 export function extend (destination, ...args) {
-  for (let i = 0; i < args.length; i++) {
-    let source = args[i]
-    for (let property in source) {
-      if (!source.hasOwnProperty(property)) continue
+  args.forEach(source => {
+    Object.keys(source).forEach(property => {
       if (source[property] && isPlainObject(source[property])) {
         if (!destination.hasOwnProperty(property)) destination[property] = {}
         extend(destination[property], source[property])
@@ -38,8 +36,8 @@ export function extend (destination, ...args) {
       } else {
         destination[property] = source[property]
       }
-    }
-  }
+    })
+  })
 
   return destination
 }
@@ -52,16 +50,9 @@ export function each (obj, callback) {
       if (callback(i, obj[i]) === false) return
     }
   } else {
-    if (Object.keys) {
-      const keys = Object.keys(obj)
-      for (i = 0; i < keys.length; i++) {
-        if (callback(keys[i], obj[keys[i]]) === false) return
-      }
-    } else {
-      for (i in obj) {
-        if (!obj.hasOwnProperty(i)) continue
-        if (callback(i, obj[i]) === false) return
-      }
+    const keys = Object.keys(obj)
+    for (i = 0; i < keys.length; i++) {
+      if (callback(keys[i], obj[keys[i]]) === false) return
     }
   }
 }

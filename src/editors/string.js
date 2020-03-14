@@ -240,21 +240,19 @@ export class StringEditor extends AbstractEditor {
   ajustIMaskOptions (obj) {
     /* iMask config format is not JSON friendly, so function and regex based mask */
     /* properties have to be adjusted from string to the correct format */
-    for (const prop in obj) {
-      if (obj.hasOwnProperty(prop)) {
-        if (obj[prop] === Object(obj[prop])) obj[prop] = this.ajustIMaskOptions(obj[prop])
-        else if (prop === 'mask') {
-          if (obj[prop].substr(0, 6) === 'regex:') {
-            const regExMatch = obj[prop].match(/^regex:\/(.*)\/([gimsuy]*)$/)
-            if (regExMatch !== null) {
-              try {
-                obj[prop] = new RegExp(regExMatch[1], regExMatch[2])
-              } catch (e) { }
-            }
-          } else obj[prop] = this.getGlobalPropertyFromString(obj[prop])
-        }
+    Object.keys(obj).forEach(prop => {
+      if (obj[prop] === Object(obj[prop])) obj[prop] = this.ajustIMaskOptions(obj[prop])
+      else if (prop === 'mask') {
+        if (obj[prop].substr(0, 6) === 'regex:') {
+          const regExMatch = obj[prop].match(/^regex:\/(.*)\/([gimsuy]*)$/)
+          if (regExMatch !== null) {
+            try {
+              obj[prop] = new RegExp(regExMatch[1], regExMatch[2])
+            } catch (e) { }
+          }
+        } else obj[prop] = this.getGlobalPropertyFromString(obj[prop])
       }
-    }
+    })
     return obj
   }
 

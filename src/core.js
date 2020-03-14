@@ -374,28 +374,24 @@ export class JSONEditor {
     const sheet = styleTag.sheet ? styleTag.sheet : styleTag.styleSheet
     const qualifier = this.element.nodeName.toLowerCase()
 
-    for (var selector in rules) {
-      if (!rules.hasOwnProperty(selector)) continue
-      var sel = qualifier + '[data-theme="' + themeName + '"] ' + selector
+    Object.keys(rules).forEach(selector => {
+      const sel = `${qualifier}[data-theme="${themeName}"] ${selector}`
 
       // all browsers, except IE before version 9
       if (sheet.insertRule) sheet.insertRule(sel + ' {' + decodeURIComponent(rules[selector]) + '}', 0)
       // Internet Explorer before version 9
       else if (sheet.addRule) sheet.addRule(sel, decodeURIComponent(rules[selector]), 0)
-    }
+    })
   }
 
   addNewStyleRulesToShadowRoot (themeName, rules, shadowRoot) {
     const qualifier = this.element.nodeName.toLowerCase()
     let cssText = ''
 
-    for (var selector in rules) {
-      if (!rules.hasOwnProperty(selector)) continue
-      var sel = qualifier + '[data-theme="' + themeName + '"] ' + selector
-
+    Object.keys(rules).forEach(selector => {
+      const sel = `${qualifier}[data-theme="${themeName}"] ${selector}`
       cssText += sel + ' {' + decodeURIComponent(rules[selector]) + '}' + '\n'
-    }
-
+    })
     const styleSheet = new CSSStyleSheet()
     styleSheet.replaceSync(cssText)
     shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, styleSheet]

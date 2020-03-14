@@ -154,12 +154,11 @@ export class AbstractTheme {
       if (infoText) label.appendChild(infoText)
     }
 
-    for (const i in controls) {
-      if (!controls.hasOwnProperty(i)) continue
-      controls[i].style.display = 'inline-block'
-      controls[i].style.marginRight = '20px'
-      el.appendChild(controls[i])
-    }
+    Object.values(controls).forEach(control => {
+      control.style.display = 'inline-block'
+      control.style.marginRight = '20px'
+      el.appendChild(control)
+    })
 
     if (description) el.appendChild(description)
 
@@ -451,10 +450,7 @@ export class AbstractTheme {
   }
 
   applyStyles (el, styles) {
-    for (const i in styles) {
-      if (!styles.hasOwnProperty(i)) continue
-      el.style[i] = styles[i]
-    }
+    Object.keys(styles).forEach(i => (el.style[i] = styles[i]))
   }
 
   closest (elem, selector) {

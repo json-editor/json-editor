@@ -13,20 +13,14 @@ export class ObjectEditor extends AbstractEditor {
   register () {
     super.register()
     if (this.editors) {
-      for (const i in this.editors) {
-        if (!this.editors.hasOwnProperty(i)) continue
-        this.editors[i].register()
-      }
+      Object.values(this.editors).forEach(e => e.register())
     }
   }
 
   unregister () {
     super.unregister()
     if (this.editors) {
-      for (const i in this.editors) {
-        if (!this.editors.hasOwnProperty(i)) continue
-        this.editors[i].unregister()
-      }
+      Object.values(this.editors).forEach(e => e.unregister())
     }
   }
 
@@ -41,13 +35,12 @@ export class ObjectEditor extends AbstractEditor {
 
       super.enable()
       if (this.editors) {
-        for (const i in this.editors) {
-          if (!this.editors.hasOwnProperty(i)) continue
-          if (this.editors[i].isActive()) {
-            this.editors[i].enable()
+        Object.values(this.editors).forEach(e => {
+          if (e.isActive()) {
+            e.enable()
           }
-          this.editors[i].optInCheckbox.disabled = false
-        }
+          e.optInCheckbox.disabled = false
+        })
       }
     }
   }
@@ -60,13 +53,12 @@ export class ObjectEditor extends AbstractEditor {
 
     super.disable()
     if (this.editors) {
-      for (const i in this.editors) {
-        if (!this.editors.hasOwnProperty(i)) continue
-        if (this.editors[i].isActive()) {
-          this.editors[i].disable(alwaysDisabled)
+      Object.values(this.editors).forEach(e => {
+        if (e.isActive()) {
+          e.disable(alwaysDisabled)
         }
-        this.editors[i].optInCheckbox.disabled = true
-      }
+        e.optInCheckbox.disabled = true
+      })
     }
   }
 
@@ -351,15 +343,14 @@ export class ObjectEditor extends AbstractEditor {
 
     /* Any matching patternProperties should be merged in */
     if (this.schema.patternProperties) {
-      for (const i in this.schema.patternProperties) {
-        if (!this.schema.patternProperties.hasOwnProperty(i)) continue
+      Object.keys(this.schema.patternProperties).forEach(i => {
         const regex = new RegExp(i)
         if (regex.test(key)) {
           schema.allOf = schema.allOf || []
           schema.allOf.push(this.schema.patternProperties[i])
           matched = true
         }
-      }
+      })
     }
 
     /* Hasn't matched other rules, use additionalProperties schema */
@@ -1077,21 +1068,18 @@ export class ObjectEditor extends AbstractEditor {
       return undefined
     }
     const result = super.getValue()
+    const isEmpty = i => typeof result[i] === 'undefined' || result[i] === '' ||
+    (
+      result[i] === Object(result[i]) &&
+      Object.keys(result[i]).length === 0 &&
+      result[i].constructor === Object
+    )
     if (this.jsoneditor.options.remove_empty_properties || this.options.remove_empty_properties) {
-      for (const i in result) {
-        if (result.hasOwnProperty(i)) {
-          if (
-            typeof result[i] === 'undefined' ||
-            result[i] === '' ||
-            (
-              result[i] === Object(result[i]) &&
-              Object.keys(result[i]).length === 0 &&
-              result[i].constructor === Object
-            )) {
-            delete result[i]
-          }
+      Object.keys(result).forEach(i => {
+        if (isEmpty(i)) {
+          delete result[i]
         }
-      }
+      })
     }
 
     return result
@@ -1100,12 +1088,11 @@ export class ObjectEditor extends AbstractEditor {
   refreshValue () {
     this.value = {}
 
-    for (const i in this.editors) {
-      if (!this.editors.hasOwnProperty(i)) continue
+    Object.keys(this.editors).forEach(i => {
       if (this.editors[i].isActive()) {
         this.value[i] = this.editors[i].getValue()
       }
-    }
+    })
 
     if (this.adding_property) this.refreshAddProperties()
   }
@@ -1116,13 +1103,10 @@ export class ObjectEditor extends AbstractEditor {
       return
     }
 
-    let canAdd = false; let numProps = 0; let i; let showModal = false
+    let canAdd = false; let numProps = 0; let showModal = false
 
     /* Get number of editors */
-    for (i in this.editors) {
-      if (!this.editors.hasOwnProperty(i)) continue
-      numProps++
-    }
+    Object.keys(this.editors).forEach(i => numProps++)
 
     /* Determine if we can add back removed properties */
     canAdd = this.canHaveAdditionalProperties() && !(typeof this.schema.maxProperties !== 'undefined' && numProps >= this.schema.maxProperties)
@@ -1133,9 +1117,7 @@ export class ObjectEditor extends AbstractEditor {
     this.addproperty_checkboxes = {}
 
     /* Check for which editors can't be removed or added back */
-    for (i in this.cached_editors) {
-      if (!this.cached_editors.hasOwnProperty(i)) continue
-
+    Object.keys(this.cached_editors).forEach(i => {
       this.addPropertyCheckbox(i)
 
       if (this.isRequiredObject(this.cached_editors[i]) && i in this.editors) {
@@ -1155,19 +1137,18 @@ export class ObjectEditor extends AbstractEditor {
       } else {
         showModal = true
       }
-    }
+    })
 
     if (this.canHaveAdditionalProperties()) {
       showModal = true
     }
 
     /* Additional addproperty checkboxes not tied to a current editor */
-    for (i in this.schema.properties) {
-      if (!this.schema.properties.hasOwnProperty(i)) continue
-      if (this.cached_editors[i]) continue
+    Object.keys(this.schema.properties).forEach(i => {
+      if (this.cached_editors[i]) return
       showModal = true
       this.addPropertyCheckbox(i)
-    }
+    })
 
     /* If no editors can be added or removed, hide the modal button */
     if (!showModal) {

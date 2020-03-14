@@ -201,14 +201,10 @@ export class bootstrap4Theme extends AbstractTheme {
     /* for inline view we need an container so it doesnt wrap in the "row" of the <label> */
     const container = document.createElement('div')
 
-    for (const i in controls) {
-      if (!controls.hasOwnProperty(i)) {
-        continue
-      }
-
+    Object.values(controls).forEach(c => {
       /* controls are already parsed by getFormControl() so they have an .form-group */
       /* wrapper we need to get rid of... */
-      const ctrl = controls[i].firstChild
+      const ctrl = c.firstChild
 
       /* we don't know if this should be an normal / compact view */
       /* if (this.options.custom_forms === false) {
@@ -216,9 +212,8 @@ export class bootstrap4Theme extends AbstractTheme {
       } else {
         ctrl.classList.add('custom-control-inline')
       } */
-
       container.appendChild(ctrl)
-    }
+    })
 
     el.appendChild(container)
 
