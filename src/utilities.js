@@ -42,21 +42,6 @@ export function extend (destination, ...args) {
   return destination
 }
 
-export function each (obj, callback) {
-  if (!obj || typeof obj !== 'object') return
-  let i
-  if (Array.isArray(obj) || (typeof obj.length === 'number' && obj.length > 0 && (obj.length - 1) in obj)) {
-    for (i = 0; i < obj.length; i++) {
-      if (callback(i, obj[i]) === false) return
-    }
-  } else {
-    const keys = Object.keys(obj)
-    for (i = 0; i < keys.length; i++) {
-      if (callback(keys[i], obj[keys[i]]) === false) return
-    }
-  }
-}
-
 export function trigger (el, event) {
   const e = document.createEvent('HTMLEvents')
   e.initEvent(event, true, true)

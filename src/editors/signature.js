@@ -2,7 +2,6 @@
 /* Credits for the pad itself go to https://github.com/szimek */
 
 import { StringEditor } from './string.js'
-import { each } from '../utilities.js'
 
 export class SignatureEditor extends StringEditor {
   build () {
@@ -57,7 +56,7 @@ export class SignatureEditor extends StringEditor {
 
       if (this.schema.readOnly || this.schema.readonly) {
         this.always_disabled = true
-        each(this.inputs, (i, input) => {
+        Array.from(this.inputs).forEach(input => {
           canvas.setAttribute('readOnly', 'readOnly')
           input.disabled = true
         })

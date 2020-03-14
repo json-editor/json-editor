@@ -1,5 +1,5 @@
 import { AbstractEditor } from '../editor.js'
-import { extend, each, trigger } from '../utilities.js'
+import { extend, trigger } from '../utilities.js'
 
 export class ArrayEditor extends AbstractEditor {
   askConfirmation () {
@@ -292,7 +292,7 @@ export class ArrayEditor extends AbstractEditor {
   empty (hard) {
     if (!this.rows) return
     const self = this
-    each(this.rows, (i, row) => {
+    this.rows.forEach((row, i) => {
       if (hard) {
         if (row.tab && row.tab.parentNode) row.tab.parentNode.removeChild(row.tab)
         self.destroyRow(row, true)
@@ -326,7 +326,7 @@ export class ArrayEditor extends AbstractEditor {
 
   refreshTabs (refreshHeaders) {
     const self = this
-    each(this.rows, (i, row) => {
+    this.rows.forEach(row => {
       if (!row.tab) return
 
       if (refreshHeaders) {
@@ -356,7 +356,7 @@ export class ArrayEditor extends AbstractEditor {
     }
 
     const self = this
-    each(value, (i, val) => {
+    value.forEach((val, i) => {
       if (self.rows[i]) {
         /* TODO: don't set the row's value if it hasn't changed */
         self.rows[i].setValue(val, initial)
@@ -380,13 +380,8 @@ export class ArrayEditor extends AbstractEditor {
     self.rows = self.rows.slice(0, value.length)
 
     /* Set the active tab */
-    let newActiveTab = null
-    each(self.rows, (i, row) => {
-      if (row.tab === self.active_tab) {
-        newActiveTab = row.tab
-        return false
-      }
-    })
+    const row = self.rows.find(row => row.tab === self.active_tab)
+    let newActiveTab = typeof row !== 'undefined' ? row.tab : null
     if (!newActiveTab && self.rows.length) newActiveTab = self.rows[0].tab
 
     self.active_tab = newActiveTab
@@ -403,18 +398,14 @@ export class ArrayEditor extends AbstractEditor {
   refreshValue (force) {
     const self = this
     const oldi = this.value ? this.value.length : 0
-    this.value = []
-
-    each(this.rows, (i, editor) => {
-      /* Get the value for this editor */
-      self.value[i] = editor.getValue()
-    })
+    /* Get the value for this editor */
+    this.value = this.rows.map(editor => editor.getValue())
 
     if (oldi !== this.value.length || force) {
       /* If we currently have minItems items in the array */
       const minItems = this.schema.minItems && this.schema.minItems >= this.rows.length
 
-      each(this.rows, (i, editor) => {
+      this.rows.forEach((editor, i) => {
         /* Hide the move down button for the last row */
         if (editor.movedown_button) {
           if (i === self.rows.length - 1) {
@@ -525,15 +516,8 @@ export class ArrayEditor extends AbstractEditor {
         }
 
         const i = this.getAttribute('data-i') * 1
-        const value = self.getValue()
-        const newval = []
+        const newval = self.getValue().filter((row, j) => j !== i)
         let newActiveTab = null
-
-        each(value, (j, row) => {
-          if (j !== i) {
-            newval.push(row)
-          }
-        })
 
         const editor = self.rows[i]
 
@@ -570,7 +554,7 @@ export class ArrayEditor extends AbstractEditor {
         e.stopPropagation()
         const i = this.getAttribute('data-i') * 1
 
-        each(value, (j, row) => {
+        value.forEach((row, j) => {
           if (j === i) {
             value.push(row)
           }
@@ -784,7 +768,7 @@ export class ArrayEditor extends AbstractEditor {
     /* Get all the errors that pertain to this editor */
     const myErrors = []
     const otherErrors = []
-    each(errors, (i, error) => {
+    errors.forEach(error => {
       if (error.path === self.path) {
         myErrors.push(error)
       } else {
@@ -797,7 +781,7 @@ export class ArrayEditor extends AbstractEditor {
       if (myErrors.length) {
         this.error_holder.innerHTML = ''
         this.error_holder.style.display = ''
-        each(myErrors, (i, error) => {
+        myErrors.forEach(error => {
           self.error_holder.appendChild(self.theme.getErrorMessage(error.message))
         })
         /* Hide error area */
@@ -807,8 +791,8 @@ export class ArrayEditor extends AbstractEditor {
     }
 
     /* Show errors for child editors */
-    each(this.rows, (i, row) => {
+    this.rows.forEach(row =>
       row.showValidationErrors(otherErrors)
-    })
+    )
   }
 }

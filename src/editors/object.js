@@ -1,5 +1,5 @@
 import { AbstractEditor } from '../editor.js'
-import { extend, each, trigger } from '../utilities.js'
+import { extend, trigger } from '../utilities.js'
 
 export class ObjectEditor extends AbstractEditor {
   getDefault () {
@@ -89,7 +89,7 @@ export class ObjectEditor extends AbstractEditor {
       let rowIndex = 0
       row = []
 
-      each(this.property_order, (j, key) => {
+      this.property_order.forEach(key => {
         const editor = self.editors[key]
         if (editor.property_removed) {
           return
@@ -137,7 +137,7 @@ export class ObjectEditor extends AbstractEditor {
         }
       }
     } else if (this.format === 'grid') {
-      each(this.property_order, (j, key) => {
+      this.property_order.forEach(key => {
         const editor = self.editors[key]
         if (editor.property_removed) return
         let found = false
@@ -228,7 +228,7 @@ export class ObjectEditor extends AbstractEditor {
         /* child [1] of previous, stores panes */
         const newTabPanesContainer = this.theme.getTopTabContentHolder(newTabsHolder)
 
-        each(this.property_order, (i, key) => {
+        this.property_order.forEach(key => {
           const editor = self.editors[key]
           if (editor.property_removed) return
           const aPane = self.theme.getTabContent()
@@ -317,7 +317,7 @@ export class ObjectEditor extends AbstractEditor {
         return
         /* Normal layout */
       }
-      each(this.property_order, (i, key) => {
+      this.property_order.forEach(key => {
         const editor = self.editors[key]
         if (editor.property_removed) return
         row = self.theme.getGridRow()
@@ -377,7 +377,7 @@ export class ObjectEditor extends AbstractEditor {
 
     /* If the object should be rendered as a table row */
     if (this.options.table_row) {
-      each(this.schema.properties, (key, schema) => {
+      Object.entries(this.schema.properties).forEach(([key, schema]) => {
         const editor = self.jsoneditor.getEditorClass(schema)
         self.editors[key] = self.jsoneditor.createEditor(editor, {
           jsoneditor: self.jsoneditor,
@@ -403,12 +403,7 @@ export class ObjectEditor extends AbstractEditor {
     } else {
       if (!this.schema.defaultProperties) {
         if (this.jsoneditor.options.display_required_only || this.options.display_required_only) {
-          this.schema.defaultProperties = []
-          each(this.schema.properties, (k, s) => {
-            if (self.isRequiredObject({ key: k, schema: s })) {
-              self.schema.defaultProperties.push(k)
-            }
-          })
+          this.schema.defaultProperties = Object.keys(this.schema.properties).filter(k => self.isRequiredObject({ key: k, schema: this.schema.properties[k] }))
         } else {
           self.schema.defaultProperties = Object.keys(self.schema.properties)
         }
@@ -417,7 +412,7 @@ export class ObjectEditor extends AbstractEditor {
       /* Increase the grid width to account for padding */
       self.maxwidth += 1
 
-      each(this.schema.defaultProperties, (i, key) => {
+      this.schema.defaultProperties.forEach(key => {
         self.addObjectProperty(key, true)
 
         if (self.editors[key]) {
@@ -499,7 +494,7 @@ export class ObjectEditor extends AbstractEditor {
     const basicTabPresent = typeof self.basicTab !== 'undefined'
     let basicTabRefreshed = false
 
-    each(this.rows, (i, row) => {
+    this.rows.forEach(row => {
       /* If it's an orphan row (some property which has been deleted), return */
       if (!row.tab || !row.rowPane || !row.rowPane.parentNode) return
 
@@ -530,7 +525,7 @@ export class ObjectEditor extends AbstractEditor {
     /* If the object should be rendered as a table row */
     if (this.options.table_row) {
       this.editor_holder = this.container
-      each(this.editors, (key, editor) => {
+      Object.entries(this.editors).forEach(([key, editor]) => {
         const holder = self.theme.getTableCell()
         self.editor_holder.appendChild(holder)
 
@@ -676,7 +671,7 @@ export class ObjectEditor extends AbstractEditor {
         this.editor_holder.appendChild(this.row_container)
       }
 
-      each(this.editors, (key, editor) => {
+      Object.values(this.editors).forEach(editor => {
         const aPane = self.theme.getTabContent()
         const holder = self.theme.getGridColumn()
         const isObjOrArray = !!((editor.schema && (editor.schema.type === 'object' || editor.schema.type === 'array')))
@@ -790,7 +785,7 @@ export class ObjectEditor extends AbstractEditor {
     /* Fix table cell ordering */
     if (this.options.table_row) {
       this.editor_holder = this.container
-      each(this.property_order, (i, key) => {
+      this.property_order.forEach(key => {
         self.editor_holder.appendChild(self.editors[key].container)
       })
       /* Layout object editors in grid if needed */
@@ -806,7 +801,7 @@ export class ObjectEditor extends AbstractEditor {
     const self = this
     /* the show_opt_in editor option is for backward compatibility */
     if (this.jsoneditor.options.show_opt_in || this.options.show_opt_in) {
-      each(this.editors, (key, editor) => {
+      Object.entries(this.editors).forEach(([key, editor]) => {
         if (!self.isRequiredObject(editor)) {
           self.editors[key].deactivate()
         }
@@ -1047,9 +1042,7 @@ export class ObjectEditor extends AbstractEditor {
   }
 
   destroy () {
-    each(this.cached_editors, (i, el) => {
-      el.destroy()
-    })
+    Object.values(this.cached_editors).forEach(el => el.destroy())
     if (this.editor_holder) this.editor_holder.innerHTML = ''
     if (this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title)
     if (this.error_holder && this.error_holder.parentNode) this.error_holder.parentNode.removeChild(this.error_holder)
@@ -1184,7 +1177,7 @@ export class ObjectEditor extends AbstractEditor {
     if (typeof value !== 'object' || Array.isArray(value)) value = {}
 
     /* First, set the values for all of the defined properties */
-    each(this.cached_editors, (i, editor) => {
+    Object.entries(this.cached_editors).forEach(([i, editor]) => {
       /* Value explicitly set */
       if (typeof value[i] !== 'undefined') {
         self.addObjectProperty(i)
@@ -1198,7 +1191,7 @@ export class ObjectEditor extends AbstractEditor {
       }
     })
 
-    each(value, (i, val) => {
+    Object.entries(value).forEach(([i, val]) => {
       if (!self.cached_editors[i]) {
         self.addObjectProperty(i)
         if (self.editors[i]) self.editors[i].setValue(val, initial)
@@ -1216,7 +1209,7 @@ export class ObjectEditor extends AbstractEditor {
     /* Get all the errors that pertain to this editor */
     const myErrors = []
     const otherErrors = []
-    each(errors, (i, error) => {
+    errors.forEach(error => {
       if (error.path === self.path) {
         myErrors.push(error)
       } else {
@@ -1229,7 +1222,7 @@ export class ObjectEditor extends AbstractEditor {
       if (myErrors.length) {
         this.error_holder.innerHTML = ''
         this.error_holder.style.display = ''
-        each(myErrors, (i, error) => {
+        myErrors.forEach(error => {
           if (error.errorcount && error.errorcount > 1) error.message += ` (${error.errorcount} errors)`
           self.error_holder.appendChild(self.theme.getErrorMessage(error.message))
         })
@@ -1249,7 +1242,7 @@ export class ObjectEditor extends AbstractEditor {
     }
 
     /* Show errors for child editors */
-    each(this.editors, (i, editor) => {
+    Object.values(this.editors).forEach(editor => {
       editor.showValidationErrors(otherErrors)
     })
   }

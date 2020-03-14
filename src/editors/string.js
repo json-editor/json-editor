@@ -1,5 +1,5 @@
 import { AbstractEditor } from '../editor.js'
-import { extend, each } from '../utilities.js'
+import { extend } from '../utilities.js'
 
 export class StringEditor extends AbstractEditor {
   register () {
@@ -347,12 +347,13 @@ export class StringEditor extends AbstractEditor {
 
     this.previous_error_setting = this.jsoneditor.options.show_errors
 
-    const messages = []
-    each(errors, (i, error) => {
+    const addMessage = (messages, error) => {
       if (error.path === self.path) {
         messages.push(error.message)
       }
-    })
+      return messages
+    }
+    const messages = errors.reduce(addMessage, [])
 
     if (messages.length) {
       this.theme.addInputError(this.input, `${messages.join('. ')}.`)

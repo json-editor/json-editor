@@ -1,5 +1,4 @@
 import { AbstractEditor } from '../editor.js'
-import { each } from '../utilities.js'
 
 export class MultiSelectEditor extends AbstractEditor {
   onInputChange () {
@@ -197,13 +196,14 @@ export class MultiSelectEditor extends AbstractEditor {
 
   showValidationErrors (errors) {
     const regexPath = new RegExp(`^${this.escapeRegExp(this.path)}(\\.\\d+)?$`)
-    const messages = []
-
-    each(errors, (i, error) => {
+    const addMessage = (messages, error) => {
       if (error.path.match(regexPath)) {
         messages.push(error.message)
       }
-    })
+      return messages
+    }
+
+    const messages = errors.reduce(addMessage, [])
 
     if (messages.length) {
       this.theme.addInputError(this.input || this.inputs, `${messages.join('. ')}.`)

@@ -1,6 +1,5 @@
 /* Enum Editor (used for objects and arrays with enumerated values) */
 import { AbstractEditor } from '../editor.js'
-import { each } from '../utilities.js'
 
 export class EnumEditor extends AbstractEditor {
   getNumColumns () {
@@ -50,7 +49,7 @@ export class EnumEditor extends AbstractEditor {
     const self = this
     self.selected = -1
     const stringified = JSON.stringify(this.value)
-    each(this.enum, (i, el) => {
+    this.enum.forEach((el, i) => {
       if (stringified === JSON.stringify(el)) {
         self.selected = i
         return false
@@ -81,6 +80,13 @@ export class EnumEditor extends AbstractEditor {
 
   getHTML (el) {
     const self = this
+    const each = (obj, callback) => {
+      if (Array.isArray(obj) || (typeof obj.length === 'number' && obj.length > 0 && (obj.length - 1) in obj)) {
+        Array.from(obj).forEach((e, i) => callback(i, e))
+      } else {
+        Object.entries(obj).forEach(([key, value]) => callback(key, value))
+      }
+    }
 
     if (el === null) {
       return '<em>null</em>'
@@ -88,19 +94,17 @@ export class EnumEditor extends AbstractEditor {
     } else if (typeof el === 'object') {
       /* TODO: use theme */
       let ret = ''
-
-      each(el, (i, child) => {
+      const callback = (i, child) => {
         let html = self.getHTML(child)
-
         /* Add the keys to object children */
         if (!(Array.isArray(el))) {
           /* TODO: use theme */
           html = `<div><em>${i}</em>: ${html}</div>`
         }
-
         /* TODO: use theme */
         ret += `<li>${html}</li>`
-      })
+      }
+      each(el, callback)
 
       if (Array.isArray(el)) ret = `<ol>${ret}</ol>`
       else ret = `<ul style='margin-top:0;margin-bottom:0;padding-top:0;padding-bottom:0;'>${ret}</ul>`

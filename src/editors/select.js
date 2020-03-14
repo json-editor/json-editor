@@ -1,5 +1,5 @@
 import { AbstractEditor } from '../editor.js'
-import { extend, each } from '../utilities.js'
+import { extend } from '../utilities.js'
 
 export class SelectEditor extends AbstractEditor {
   setValue (value, initial) {
@@ -68,7 +68,7 @@ export class SelectEditor extends AbstractEditor {
     if (this.schema.enum) {
       const display = (this.schema.options && this.schema.options.enum_titles) || []
 
-      each(this.schema.enum, (i, option) => {
+      this.schema.enum.forEach((option, i) => {
         self.enum_options[i] = `${option}`
         self.enum_display[i] = `${display[i] || option}`
         self.enum_values[i] = self.typecast(option)
@@ -348,12 +348,13 @@ export class SelectEditor extends AbstractEditor {
 
     this.previous_error_setting = this.jsoneditor.options.show_errors
 
-    const messages = []
-    each(errors, (i, error) => {
+    const addMessage = (messages, error) => {
       if (error.path === self.path) {
         messages.push(error.message)
       }
-    })
+      return messages
+    }
+    const messages = errors.reduce(addMessage, [])
 
     if (messages.length) {
       this.theme.addInputError(this.input, `${messages.join('. ')}.`)

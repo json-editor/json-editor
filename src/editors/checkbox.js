@@ -1,5 +1,4 @@
 import { AbstractEditor } from '../editor.js'
-import { each } from '../utilities.js'
 
 export class CheckboxEditor extends AbstractEditor {
   setValue (value, initial) {
@@ -80,13 +79,13 @@ export class CheckboxEditor extends AbstractEditor {
 
     this.previous_error_setting = this.jsoneditor.options.show_errors
 
-    const messages = []
-    each(errors, (i, error) => {
+    const addMessage = (messages, error) => {
       if (error.path === self.path) {
         messages.push(error.message)
       }
-    })
-
+      return messages
+    }
+    const messages = errors.reduce(addMessage, [])
     this.input.controlgroup = this.control
 
     if (messages.length) {

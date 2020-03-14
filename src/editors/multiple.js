@@ -1,7 +1,7 @@
 /* Multiple Editor (for when `type` is an array, also when `oneOf` is present) */
 import { AbstractEditor } from '../editor.js'
 import { Validator } from '../validator.js'
-import { extend, each } from '../utilities.js'
+import { extend } from '../utilities.js'
 
 export class MultipleEditor extends AbstractEditor {
   register () {
@@ -68,7 +68,7 @@ export class MultipleEditor extends AbstractEditor {
 
     self.register()
 
-    each(self.editors, (type, editor) => {
+    self.editors.forEach((editor, type) => {
       if (!editor) return
       if (self.type === type) {
         if (self.keep_values) editor.setValue(currentValue, true)
@@ -154,7 +154,7 @@ export class MultipleEditor extends AbstractEditor {
             disallow = [disallow]
           }
           const allowedTypes = []
-          each(this.types, (i, type) => {
+          this.types.forEach(type => {
             if (!disallow.includes(type)) allowedTypes.push(type)
           })
           this.types = allowedTypes
@@ -196,7 +196,7 @@ export class MultipleEditor extends AbstractEditor {
     }
 
     this.switcher_options = this.theme.getSwitcherOptions(this.switcher)
-    each(this.types, (i, type) => {
+    this.types.forEach((type, i) => {
       self.editors[i] = false
 
       let schema
@@ -230,7 +230,7 @@ export class MultipleEditor extends AbstractEditor {
 
   refreshHeaderText () {
     const displayText = this.getDisplayText(this.types)
-    each(this.switcher_options, (i, option) => {
+    Array.from(this.switcher_options).forEach((option, i) => {
       option.textContent = displayText[i]
     })
   }
@@ -253,7 +253,7 @@ export class MultipleEditor extends AbstractEditor {
       match: 0,
       i: null
     }
-    each(this.validators, (i, validator) => {
+    this.validators.forEach((validator, i) => {
       let fitTestResult = null
       if (typeof self.anyOf !== 'undefined' && self.anyOf) {
         fitTestResult = validator.fitTest(val)
@@ -300,7 +300,7 @@ export class MultipleEditor extends AbstractEditor {
   }
 
   destroy () {
-    each(this.editors, (type, editor) => {
+    this.editors.forEach(editor => {
       if (editor) editor.destroy()
     })
     if (this.editor_holder && this.editor_holder.parentNode) this.editor_holder.parentNode.removeChild(this.editor_holder)
@@ -314,22 +314,21 @@ export class MultipleEditor extends AbstractEditor {
     /* oneOf and anyOf error paths need to remove the oneOf[i] part before passing to child editors */
     if (this.oneOf || this.anyOf) {
       const checkPart = this.oneOf ? 'oneOf' : 'anyOf'
-      each(this.editors, (i, editor) => {
+      this.editors.forEach((editor, i) => {
         if (!editor) return
         const check = `${self.path}.${checkPart}[${i}]`
-        const newErrors = []
-        each(errors, (j, error) => {
+        const filterError = (newErrors, error) => {
           if (error.path === check.substr(0, error.path.length)) {
             const newError = extend({}, error)
             newError.path = self.path + newError.path.substr(check.length)
             newErrors.push(newError)
           }
-        })
-
-        editor.showValidationErrors(newErrors)
+          return newErrors
+        }
+        editor.showValidationErrors(errors.reduce(filterError, []))
       })
     } else {
-      each(this.editors, (type, editor) => {
+      this.editors.forEach(editor => {
         if (!editor) return
         editor.showValidationErrors(errors)
       })

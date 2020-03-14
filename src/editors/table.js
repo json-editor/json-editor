@@ -1,5 +1,5 @@
 import { ArrayEditor } from './array.js'
-import { extend, each, trigger } from '../utilities.js'
+import { extend, trigger } from '../utilities.js'
 
 export class TableEditor extends ArrayEditor {
   register () {
@@ -176,7 +176,7 @@ export class TableEditor extends ArrayEditor {
     let numrowsChanged = false
 
     const self = this
-    each(value, (i, val) => {
+    value.forEach((val, i) => {
       if (self.rows[i]) {
         /* TODO: don't set the row's value if it hasn't changed */
         self.rows[i].setValue(val)
@@ -213,7 +213,7 @@ export class TableEditor extends ArrayEditor {
     const minItems = this.schema.minItems && this.schema.minItems >= this.rows.length
 
     let needRowButtons = false
-    each(this.rows, (i, editor) => {
+    this.rows.forEach((editor, i) => {
       /* Hide the move down button for the last row */
       if (editor.movedown_button) {
         if (i === self.rows.length - 1) {
@@ -240,7 +240,7 @@ export class TableEditor extends ArrayEditor {
     })
 
     /* Show/hide controls column in table */
-    each(this.rows, (i, editor) => {
+    this.rows.forEach(editor => {
       if (needRowButtons) {
         editor.controls_cell.style.display = ''
       } else {
@@ -307,7 +307,7 @@ export class TableEditor extends ArrayEditor {
     const self = this
     this.value = []
 
-    each(this.rows, (i, editor) => {
+    this.rows.forEach((editor, i) => {
       /* Get the value for this editor */
       self.value[i] = editor.getValue()
     })
@@ -336,14 +336,7 @@ export class TableEditor extends ArrayEditor {
         }
 
         const i = this.getAttribute('data-i') * 1
-
-        const value = self.getValue()
-
-        const newval = []
-        each(value, (j, row) => {
-          if (j === i) return /* If this is the one we're deleting */
-          newval.push(row)
-        })
+        const newval = self.getValue().filter((row, j) => j !== i) /* If this is the one we're deleting */
         self.setValue(newval)
         self.onChange(true)
         self.jsoneditor.trigger('deleteRow', self.rows[i])

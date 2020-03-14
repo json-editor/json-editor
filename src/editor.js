@@ -1,4 +1,4 @@
-import { extend, each } from './utilities.js'
+import { extend } from './utilities.js'
 
 /**
  * All editors should extend from this class
@@ -506,9 +506,9 @@ export class AbstractEditor {
   destroy () {
     const self = this
     this.unregister(this)
-    each(this.watched, (name, adjustedPath) => {
-      self.jsoneditor.unwatch(adjustedPath, self.watch_listener)
-    })
+    if (this.watched) {
+      Object.values(this.watched).forEach(adjustedPath => self.jsoneditor.unwatch(adjustedPath, self.watch_listener))
+    }
 
     this.watched = null
     this.watched_values = null
@@ -580,7 +580,7 @@ export class AbstractEditor {
 
     /* Determine how many times each attribute name is used. */
     /* This helps us pick the most distinct display text for the schemas. */
-    each(arr, (i, el) => {
+    arr.forEach(el => {
       if (el.title) {
         used[el.title] = used[el.title] || 0
         used[el.title]++
@@ -600,7 +600,7 @@ export class AbstractEditor {
     })
 
     /* Determine display text for each element of the array */
-    each(arr, (i, el) => {
+    arr.forEach(el => {
       let name
 
       /* If it's a simple string */
@@ -622,7 +622,7 @@ export class AbstractEditor {
 
     /* Replace identical display text with "text 1", "text 2", etc. */
     const inc = {}
-    each(disp, (i, name) => {
+    disp.forEach((name, i) => {
       inc[name] = inc[name] || 0
       inc[name]++
 

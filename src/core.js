@@ -5,7 +5,7 @@ import { editors } from './editors/index.js'
 import { templates } from './templates/index.js'
 import { iconlibs } from './iconlibs/index.js'
 import { themes } from './themes/index.js'
-import { extend, each, getShadowParent } from './utilities.js'
+import { extend, getShadowParent } from './utilities.js'
 
 export class JSONEditor {
   constructor (element, options = {}) {
@@ -191,11 +191,8 @@ export class JSONEditor {
   }
 
   getEditorsRules () {
-    const rules = {}
-
-    each(JSONEditor.defaults.editors, (i, editorClass) => editorClass.rules && extend(rules, editorClass.rules))
-
-    return rules
+    const extendRule = (rules, editorClass) => editorClass.rules ? extend(rules, editorClass.rules) : rules
+    return Object.values(JSONEditor.defaults.editors).reduce(extendRule, {})
   }
 
   getEditorClass (schema) {
@@ -203,12 +200,9 @@ export class JSONEditor {
 
     schema = this.expandSchema(schema)
 
-    each(JSONEditor.defaults.resolvers, (i, resolver) => {
-      const tmp = resolver(schema)
-      if (tmp && JSONEditor.defaults.editors[tmp]) {
-        classname = tmp
-        return false
-      }
+    JSONEditor.defaults.resolvers.find(resolver => {
+      classname = resolver(schema)
+      return classname && JSONEditor.defaults.editors[classname]
     })
 
     if (!classname) throw new Error(`Unknown editor for schema ${JSON.stringify(schema)}`)
