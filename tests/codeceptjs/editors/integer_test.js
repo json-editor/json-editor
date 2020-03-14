@@ -66,3 +66,9 @@ Scenario('should be readonly if specified and not disabled', async (I) => {
   I.amOnPage('read-only.html');
   I.seeReadOnlyAttribute('[name="root[integer]"]');
 });
+
+Scenario('should update output when setValue is called', async (I) => {
+  I.amOnPage('integer.html');
+  I.click('.set-value');
+  I.see('2', '[data-schemapath="root.integer_range"] output');
+});

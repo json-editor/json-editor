@@ -30,6 +30,13 @@ export class StringEditor extends AbstractEditor {
 
     this.input.value = sanitized
 
+    if (this.format === 'range') {
+      const output = this.control.querySelector('output')
+      if (output) {
+        output.value = sanitized
+      }
+    }
+
     const changed = fromTemplate || this.getValue() !== value
 
     this.refreshValue()

@@ -9,6 +9,7 @@
 
 <textarea class="value" cols="30" rows="10"></textarea>
 <button class='get-value'>Get Value</button>
+<button class='set-value'>Set Value</button>
 <div class='container'></div>
 
 <script>
@@ -54,6 +55,11 @@
   document.querySelector('.get-value').addEventListener('click', function () {
     value.value = JSON.stringify(editor.getValue());
     console.log(editor.getValue());
+  });
+
+
+  document.querySelector('.set-value').addEventListener('click', function () {
+    editor.setValue({integer_range: 2})
   });
 
 </script>
