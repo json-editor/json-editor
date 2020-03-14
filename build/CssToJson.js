@@ -6,7 +6,6 @@ const css2json = require('css2json')
 class CssToJson {
   constructor (params) {
     this.pattern = params.pattern
-    this.jsonPattern = params.jsonPattern
   }
 
   apply (compiler) {

@@ -56,8 +56,7 @@ module.exports = {
       )
     ),
     new CssToJSON({
-      pattern: './src/**/*.css',
-      jsonPattern: './src/themes/*.json'
+      pattern: './src/**/*.css'
     })
   ]
 }
