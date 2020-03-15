@@ -40,10 +40,10 @@ export class CheckboxEditor extends AbstractEditor {
       this.input.disabled = true
     }
 
-    this.input.addEventListener('change', function (e) {
+    this.input.addEventListener('change', e => {
       e.preventDefault()
       e.stopPropagation()
-      self.value = this.checked
+      self.value = e.currentTarget.checked
       self.onChange(true)
     })
 

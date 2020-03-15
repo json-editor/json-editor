@@ -33,8 +33,8 @@ export class EnumEditor extends AbstractEditor {
 
     if (this.options.hide_display) this.display_area.style.display = 'none'
 
-    this.switcher.addEventListener('change', function () {
-      self.selected = self.select_options.indexOf(this.value)
+    this.switcher.addEventListener('change', e => {
+      self.selected = self.select_options.indexOf(e.currentTarget.value)
       self.value = self.enum[self.selected]
       self.refreshValue()
       self.onChange(true)

@@ -271,7 +271,7 @@ export class AbstractTheme {
     const output = document.createElement('output')
     output.value = startvalue || 0
 
-    const updateOutput = function () { output.value = this.value }
+    const updateOutput = e => { output.value = e.currentTarget.value }
     input.addEventListener('change', updateOutput, false)
     input.addEventListener('input', updateOutput, false)
     return output

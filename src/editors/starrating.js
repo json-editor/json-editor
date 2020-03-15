@@ -23,10 +23,10 @@ export class StarratingEditor extends StringEditor {
 
     this.radioGroup = []
 
-    const radioInputEventhandler = function (e) {
+    const radioInputEventhandler = e => {
       e.preventDefault()
       e.stopPropagation()
-      self.setValue(this.value)
+      self.setValue(e.currentTarget.value)
       self.onChange(true)
     }
 

@@ -55,28 +55,28 @@ export class Base64Editor extends AbstractEditor {
         this.uploader.setAttribute('multiple', '')
       }
 
-      this.uploader.addEventListener('change', function (e) {
+      this.uploader.addEventListener('change', e => {
         e.preventDefault()
         e.stopPropagation()
 
-        if (this.files && this.files.length) {
+        if (e.currentTarget.files && e.currentTarget.files.length) {
           /* Check the amount of files uploaded. */
           /* If 1, use the regular upload, otherwise use the multiple upload method */
-          if (this.files.length > 1 && self.schema.options && self.schema.options.multiple && self.schema.options.multiple === true && self.parent && self.parent.schema.type === 'object' && self.parent.parent && self.parent.parent.schema.type === 'array') {
+          if (e.currentTarget.files.length > 1 && self.schema.options && self.schema.options.multiple && self.schema.options.multiple === true && self.parent && self.parent.schema.type === 'object' && self.parent.parent && self.parent.parent.schema.type === 'array') {
             /* Load editor of parent.parent to get the array */
             self.arrayEditor = self.jsoneditor.getEditor(self.parent.parent.path)
             /* Check the current value of this editor */
             self.value = self.arrayEditor.getValue()
             /* Set variables for amount of files, index of current array item and */
             /* count value containing current status of processed files */
-            self.total = this.files.length
+            self.total = e.currentTarget.files.length
             self.current_item_index = parseInt(self.parent.key)
             self.count = self.current_item_index
 
             for (let i = 0; i < self.total; i++) {
               const frMultiple = new FileReader()
               self.setFileReaderListener(frMultiple)
-              frMultiple.readAsDataURL(this.files[i])
+              frMultiple.readAsDataURL(e.currentTarget.files[i])
             }
           } else {
             let fr = new FileReader()
@@ -86,7 +86,7 @@ export class Base64Editor extends AbstractEditor {
               self.onChange(true)
               fr = null
             }
-            fr.readAsDataURL(this.files[0])
+            fr.readAsDataURL(e.currentTarget.files[0])
           }
         }
       })

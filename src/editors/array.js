@@ -507,7 +507,7 @@ export class ArrayEditor extends AbstractEditor {
       self.rows[i].delete_button = this.getButton(self.getItemTitle(), 'delete', this.translate('button_delete_row_title', [self.getItemTitle()]))
       self.rows[i].delete_button.classList.add('delete', 'json-editor-btntype-delete')
       self.rows[i].delete_button.setAttribute('data-i', i)
-      self.rows[i].delete_button.addEventListener('click', function (e) {
+      self.rows[i].delete_button.addEventListener('click', e => {
         e.preventDefault()
         e.stopPropagation()
 
@@ -515,7 +515,7 @@ export class ArrayEditor extends AbstractEditor {
           return false
         }
 
-        const i = this.getAttribute('data-i') * 1
+        const i = e.currentTarget.getAttribute('data-i') * 1
         const newval = self.getValue().filter((row, j) => j !== i)
         let newActiveTab = null
 
@@ -548,11 +548,11 @@ export class ArrayEditor extends AbstractEditor {
       self.rows[i].copy_button = this.getButton(self.getItemTitle(), 'copy', `Copy ${self.getItemTitle()}`)
       self.rows[i].copy_button.classList.add('copy', 'json-editor-btntype-copy')
       self.rows[i].copy_button.setAttribute('data-i', i)
-      self.rows[i].copy_button.addEventListener('click', function (e) {
+      self.rows[i].copy_button.addEventListener('click', e => {
         const value = self.getValue()
         e.preventDefault()
         e.stopPropagation()
-        const i = this.getAttribute('data-i') * 1
+        const i = e.currentTarget.getAttribute('data-i') * 1
 
         value.forEach((row, j) => {
           if (j === i) {
@@ -572,10 +572,10 @@ export class ArrayEditor extends AbstractEditor {
       self.rows[i].moveup_button = this.getButton('', (this.schema.format === 'tabs-top' ? 'moveleft' : 'moveup'), this.translate('button_move_up_title'))
       self.rows[i].moveup_button.classList.add('moveup', 'json-editor-btntype-move')
       self.rows[i].moveup_button.setAttribute('data-i', i)
-      self.rows[i].moveup_button.addEventListener('click', function (e) {
+      self.rows[i].moveup_button.addEventListener('click', e => {
         e.preventDefault()
         e.stopPropagation()
-        const i = this.getAttribute('data-i') * 1
+        const i = e.currentTarget.getAttribute('data-i') * 1
 
         if (i <= 0) return
         const rows = self.getValue()
@@ -601,10 +601,10 @@ export class ArrayEditor extends AbstractEditor {
       self.rows[i].movedown_button = this.getButton('', (this.schema.format === 'tabs-top' ? 'moveright' : 'movedown'), this.translate('button_move_down_title'))
       self.rows[i].movedown_button.classList.add('movedown', 'json-editor-btntype-move')
       self.rows[i].movedown_button.setAttribute('data-i', i)
-      self.rows[i].movedown_button.addEventListener('click', function (e) {
+      self.rows[i].movedown_button.addEventListener('click', e => {
         e.preventDefault()
         e.stopPropagation()
-        const i = this.getAttribute('data-i') * 1
+        const i = e.currentTarget.getAttribute('data-i') * 1
 
         const rows = self.getValue()
         if (i >= rows.length - 1) return
@@ -642,7 +642,7 @@ export class ArrayEditor extends AbstractEditor {
 
     const rowHolderDisplay = self.row_holder.style.display
     const controlsDisplay = self.controls.style.display
-    this.toggle_button.addEventListener('click', function (e) {
+    this.toggle_button.addEventListener('click', e => {
       e.preventDefault()
       e.stopPropagation()
       if (self.collapsed) {
@@ -651,14 +651,14 @@ export class ArrayEditor extends AbstractEditor {
         self.row_holder.style.display = rowHolderDisplay
         if (self.tabs_holder) self.tabs_holder.style.display = ''
         self.controls.style.display = controlsDisplay
-        self.setButtonText(this, '', 'collapse', self.translate('button_collapse'))
+        self.setButtonText(e.currentTarget, '', 'collapse', self.translate('button_collapse'))
       } else {
         self.collapsed = true
         self.row_holder.style.display = 'none'
         if (self.tabs_holder) self.tabs_holder.style.display = 'none'
         self.controls.style.display = 'none'
         if (self.panel) self.panel.style.display = 'none'
-        self.setButtonText(this, '', 'expand', self.translate('button_expand'))
+        self.setButtonText(e.currentTarget, '', 'expand', self.translate('button_expand'))
       }
     })
 

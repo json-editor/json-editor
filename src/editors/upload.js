@@ -116,11 +116,11 @@ export class UploadEditor extends AbstractEditor {
       this.uploader.addEventListener('change', this.uploadHandler)
 
       /* Drag&Drop Event Handler */
-      this.dragHandler = function (e) {
+      this.dragHandler = e => {
         const files = e.dataTransfer.items || e.dataTransfer.files
         const validType = files && files.length && (self.options.mime_type.length === 0 || self.isValidMimeType(files[0].type, self.options.mime_type))
         const validZone = e.currentTarget.classList && e.currentTarget.classList.contains('upload-dropzone') && validType
-        switch ((this === window ? 'w_' : 'e_') + e.type) {
+        switch ((e.currentTarget === window ? 'w_' : 'e_') + e.type) {
           case 'w_drop':
           case 'w_dragover':
             /* prevent default browser action if dropped outside dropzone */
@@ -190,8 +190,8 @@ export class UploadEditor extends AbstractEditor {
       img.onload = (event) => {
         self.preview.appendChild(img)
       }
-      img.onerror = function (error) {
-        console.error('upload error', error, this)
+      img.onerror = error => {
+        console.error('upload error', error, error.currentTarget)
       }
       img.src = self.container.querySelector('a').href
     }

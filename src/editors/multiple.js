@@ -179,11 +179,11 @@ export class MultipleEditor extends AbstractEditor {
 
     this.switcher = this.theme.getSwitcher(this.display_text)
     container.appendChild(this.switcher)
-    this.switcher.addEventListener('change', function (e) {
+    this.switcher.addEventListener('change', e => {
       e.preventDefault()
       e.stopPropagation()
 
-      self.switchEditor(self.display_text.indexOf(this.value))
+      self.switchEditor(self.display_text.indexOf(e.currentTarget.value))
       self.onChange(true)
     })
 

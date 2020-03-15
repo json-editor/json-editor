@@ -327,7 +327,7 @@ export class TableEditor extends ArrayEditor {
       self.rows[i].delete_button = this.getButton('', 'delete', this.translate('button_delete_row_title_short'))
       self.rows[i].delete_button.classList.add('delete', 'json-editor-btntype-delete')
       self.rows[i].delete_button.setAttribute('data-i', i)
-      self.rows[i].delete_button.addEventListener('click', function (e) {
+      self.rows[i].delete_button.addEventListener('click', e => {
         e.preventDefault()
         e.stopPropagation()
 
@@ -335,7 +335,7 @@ export class TableEditor extends ArrayEditor {
           return false
         }
 
-        const i = this.getAttribute('data-i') * 1
+        const i = e.currentTarget.getAttribute('data-i') * 1
         const newval = self.getValue().filter((row, j) => j !== i) /* If this is the one we're deleting */
         self.setValue(newval)
         self.onChange(true)
@@ -348,10 +348,10 @@ export class TableEditor extends ArrayEditor {
       self.rows[i].moveup_button = this.getButton('', 'moveup', this.translate('button_move_up_title'))
       self.rows[i].moveup_button.classList.add('moveup', 'json-editor-btntype-move')
       self.rows[i].moveup_button.setAttribute('data-i', i)
-      self.rows[i].moveup_button.addEventListener('click', function (e) {
+      self.rows[i].moveup_button.addEventListener('click', e => {
         e.preventDefault()
         e.stopPropagation()
-        const i = this.getAttribute('data-i') * 1
+        const i = e.currentTarget.getAttribute('data-i') * 1
 
         if (i <= 0) return
         const rows = self.getValue()
@@ -370,10 +370,10 @@ export class TableEditor extends ArrayEditor {
       self.rows[i].movedown_button = this.getButton('', 'movedown', this.translate('button_move_down_title'))
       self.rows[i].movedown_button.classList.add('movedown', 'json-editor-btntype-move')
       self.rows[i].movedown_button.setAttribute('data-i', i)
-      self.rows[i].movedown_button.addEventListener('click', function (e) {
+      self.rows[i].movedown_button.addEventListener('click', e => {
         e.preventDefault()
         e.stopPropagation()
-        const i = this.getAttribute('data-i') * 1
+        const i = e.currentTarget.getAttribute('data-i') * 1
         const rows = self.getValue()
         if (i >= rows.length - 1) return
         const tmp = rows[i + 1]
@@ -399,18 +399,18 @@ export class TableEditor extends ArrayEditor {
     this.toggle_button.style.margin = '0 10px 0 0'
     if (this.title_controls) {
       this.title.insertBefore(this.toggle_button, this.title.childNodes[0])
-      this.toggle_button.addEventListener('click', function (e) {
+      this.toggle_button.addEventListener('click', e => {
         e.preventDefault()
         e.stopPropagation()
 
         if (self.collapsed) {
           self.collapsed = false
           self.panel.style.display = ''
-          self.setButtonText(this, '', 'collapse', self.translate('button_collapse'))
+          self.setButtonText(e.currentTarget, '', 'collapse', self.translate('button_collapse'))
         } else {
           self.collapsed = true
           self.panel.style.display = 'none'
-          self.setButtonText(this, '', 'expand', self.translate('button_expand'))
+          self.setButtonText(e.currentTarget, '', 'expand', self.translate('button_expand'))
         }
       })
 

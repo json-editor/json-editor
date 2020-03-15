@@ -18,8 +18,8 @@ export class RadioEditor extends SelectEditor {
 
     this.radioGroup = []
 
-    const radioInputEventhandler = function (e) {
-      self.setValue(this.value)
+    const radioInputEventhandler = e => {
+      self.setValue(e.currentTarget.value)
       self.onChange(true)
     }
 

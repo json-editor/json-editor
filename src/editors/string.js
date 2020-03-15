@@ -132,22 +132,22 @@ export class StringEditor extends AbstractEditor {
     this.setInputAttributes(['maxlength', 'pattern', 'readonly', 'min', 'max', 'step'])
 
     this.input
-      .addEventListener('change', function (e) {
+      .addEventListener('change', e => {
         e.preventDefault()
         e.stopPropagation()
 
         /* Don't allow changing if this field is a template */
         if (self.schema.template) {
-          this.value = self.value
+          e.currentTarget.value = self.value
           return
         }
 
-        const val = this.value
+        const val = e.currentTarget.value
 
         /* sanitize value */
         const sanitized = self.sanitize(val)
         if (val !== sanitized) {
-          this.value = sanitized
+          e.currentTarget.value = sanitized
         }
 
         self.is_dirty = true
@@ -182,11 +182,11 @@ export class StringEditor extends AbstractEditor {
         }
       }
 
-      this.input.addEventListener('keyup', function (e) {
-        self.adjust_height(this)
+      this.input.addEventListener('keyup', e => {
+        self.adjust_height(e.currentTarget)
       })
-      this.input.addEventListener('change', function (e) {
-        self.adjust_height(this)
+      this.input.addEventListener('change', e => {
+        self.adjust_height(e.currentTarget)
       })
       this.adjust_height()
     }
