@@ -7,18 +7,14 @@
   <!-- Enable responsive viewport -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-
-  <!-- Bootstrap3 -->
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <!-- Latest compiled and minified JavaScript -->
+  <!-- fontawesome5 -->
+  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.6.1/css/all.css'>
 
   <!-- JSON-Editor -->
   <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
-  <!-- JSON-Editor -->
-  <script src="https://unpkg.com/vanilla-picker@2"></script>
+
+  <!-- vanilla picker -->
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-picker@2.10.1/dist/vanilla-picker.min.js" integrity="sha256-3fnRmJ7NTcR4T37E9L7tvEHuRHMGBdvnvlGq2CbRw80=" crossorigin="anonymous"></script>
   <style type="text/css">
   body {
     margin: 1em;
@@ -39,7 +35,7 @@
       // Initialize the editor
       var editor = new JSONEditor(document.getElementById('editor_holder'), {
         theme: "html",
-        iconlib: "bootstrap3",
+        iconlib: "fontawesome5",
         disable_collapse: true,
         disable_edit_json: true,
         disable_properties: true,
