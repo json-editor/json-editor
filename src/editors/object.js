@@ -770,7 +770,7 @@ export class ObjectEditor extends AbstractEditor {
         self.toggleEditJSON()
       })
       this.controls.appendChild(this.editjson_control)
-      this.controls.insertBefore(this.editjson_holder, this.controls.childNodes[1])
+      this.controls.insertBefore(this.editjson_holder, this.controls.childNodes[0])
 
       /* Edit JSON Buttton disabled */
       if (this.schema.options && typeof this.schema.options.disable_edit_json !== 'undefined') {
