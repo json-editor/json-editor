@@ -1,5 +1,5 @@
 /* This editor is using the signature pad editor from https://github.com/szimek/signature_pad */
-/* Credits for the pad itthis go to https://github.com/szimek */
+/* Credits for the pad itself go to https://github.com/szimek */
 
 import { StringEditor } from './string.js'
 

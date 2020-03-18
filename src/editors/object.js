@@ -63,7 +63,7 @@ export class ObjectEditor extends AbstractEditor {
   }
 
   layoutEditors () {
-    ; let i; let j
+    let i; let j
 
     if (!this.row_container) return
 

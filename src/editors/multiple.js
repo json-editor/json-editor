@@ -330,6 +330,6 @@ export class MultipleEditor extends AbstractEditor {
   }
 
   addLinks () {
-    // multiple editor itthis don't create links
+    // multiple editor itself don't create links
   }
 }

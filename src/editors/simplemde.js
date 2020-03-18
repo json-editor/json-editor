@@ -15,7 +15,7 @@ export class SimplemdeEditor extends StringEditor {
   }
 
   afterInputReady () {
-    ; let options
+    let options
 
     if (window.SimpleMDE) {
       /* Get options, either global options from "this.defaults.options.simplemde" or */

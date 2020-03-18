@@ -22,7 +22,7 @@ export class Select2Editor extends SelectEditor {
     if (window.jQuery && window.jQuery.fn && window.jQuery.fn.select2 && !this.select2_instance) {
       /* Get options, either global options from "this.defaults.options.select2" or */
       /* single property options from schema "options.select2" */
-      ; const options = this.expandCallbacks('select2', extend({}, this.defaults.options.select2 || {}, this.options.select2 || {}))
+      const options = this.expandCallbacks('select2', extend({}, this.defaults.options.select2 || {}, this.options.select2 || {}))
 
       /* New items are allowed if option "tags" is true and type is "string" */
       this.newEnumAllowed = options.tags = !!options.tags && this.schema.type === 'string'

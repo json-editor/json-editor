@@ -38,7 +38,7 @@ export class ChoicesEditor extends SelectEditor {
   onWatchedFieldChange () {
     super.onWatchedFieldChange()
     if (this.choices_instance) {
-      ; const choicesList = this.enum_options.map((v, i) => ({
+      const choicesList = this.enum_options.map((v, i) => ({
         value: v,
         label: this.enum_display[i]
       }))

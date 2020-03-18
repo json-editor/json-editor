@@ -22,7 +22,7 @@ export class SelectizeEditor extends SelectEditor {
     if (window.jQuery && window.jQuery.fn && window.jQuery.fn.selectize && !this.selectize_instance) {
       /* Get options, either global options from "this.defaults.options.selectize" or */
       /* single property options from schema "options.selectize" */
-      ; const options = this.expandCallbacks('selectize', extend({}, this.defaults.options.selectize || {}, this.options.selectize || {}))
+      const options = this.expandCallbacks('selectize', extend({}, this.defaults.options.selectize || {}, this.options.selectize || {}))
 
       /* New items are allowed if option "create" is true and type is "string" */
       this.newEnumAllowed = options.create = !!options.create && this.schema.type === 'string'

@@ -15,7 +15,7 @@ export class JoditEditor extends StringEditor {
   }
 
   afterInputReady () {
-    ; let options
+    let options
 
     if (window.Jodit) {
       /* Get options, either global options from "this.defaults.options.jodit" or */
