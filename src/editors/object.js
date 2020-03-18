@@ -63,15 +63,15 @@ export class ObjectEditor extends AbstractEditor {
   }
 
   layoutEditors () {
-    const self = this; let i; let j
+    ; let i; let j
 
     if (!this.row_container) return
 
     /* Sort editors by propertyOrder */
     this.property_order = Object.keys(this.editors)
     this.property_order = this.property_order.sort((a, b) => {
-      let ordera = self.editors[a].schema.propertyOrder
-      let orderb = self.editors[b].schema.propertyOrder
+      let ordera = this.editors[a].schema.propertyOrder
+      let orderb = this.editors[b].schema.propertyOrder
       if (typeof ordera !== 'number') ordera = 1000
       if (typeof orderb !== 'number') orderb = 1000
 
@@ -90,7 +90,7 @@ export class ObjectEditor extends AbstractEditor {
       row = []
 
       this.property_order.forEach(key => {
-        const editor = self.editors[key]
+        const editor = this.editors[key]
         if (editor.property_removed) {
           return
         }
@@ -138,7 +138,7 @@ export class ObjectEditor extends AbstractEditor {
       }
     } else if (this.format === 'grid') {
       this.property_order.forEach(key => {
-        const editor = self.editors[key]
+        const editor = this.editors[key]
         if (editor.property_removed) return
         let found = false
         const width = editor.options.hidden ? 0 : (editor.options.grid_columns || editor.getNumColumns())
@@ -229,26 +229,26 @@ export class ObjectEditor extends AbstractEditor {
         const newTabPanesContainer = this.theme.getTopTabContentHolder(newTabsHolder)
 
         this.property_order.forEach(key => {
-          const editor = self.editors[key]
+          const editor = this.editors[key]
           if (editor.property_removed) return
-          const aPane = self.theme.getTabContent()
+          const aPane = this.theme.getTabContent()
           const isObjOrArray = editor.schema && (editor.schema.type === 'object' || editor.schema.type === 'array')
           /* mark the pane */
           aPane.isObjOrArray = isObjOrArray
-          const gridRow = self.theme.getGridRow()
+          const gridRow = this.theme.getGridRow()
 
           /* this happens with added properties, they don't have a tab */
           if (!editor.tab) {
             /* Pass the pane which holds the editor */
-            if (typeof self.basicPane === 'undefined') {
+            if (typeof this.basicPane === 'undefined') {
               /* There is no basicPane yet, so aPane will be it */
-              self.addRow(editor, newTabsHolder, aPane)
+              this.addRow(editor, newTabsHolder, aPane)
             } else {
-              self.addRow(editor, newTabsHolder, self.basicPane)
+              this.addRow(editor, newTabsHolder, this.basicPane)
             }
           }
 
-          aPane.id = self.getValidId(editor.tab_text.textContent)
+          aPane.id = this.getValidId(editor.tab_text.textContent)
 
           /* For simple properties, add them on the same panel (Basic) */
           if (!isObjOrArray) {
@@ -261,7 +261,7 @@ export class ObjectEditor extends AbstractEditor {
                 aPane.appendChild(containerSimple)
                 newTabPanesContainer.insertBefore(aPane, newTabPanesContainer.firstChild)
                 /* Add "Basic" tab */
-                self.theme.insertBasicTopTab(editor.tab, newTabsHolder)
+                this.theme.insertBasicTopTab(editor.tab, newTabsHolder)
                 /* newTabs_holder.firstChild.insertBefore(editor.tab,newTabs_holder.firstChild.firstChild); */
                 /* Update the basicPane */
                 editor.basicPane = aPane
@@ -276,7 +276,7 @@ export class ObjectEditor extends AbstractEditor {
               newTabPanesContainer.appendChild(aPane)
               /* Add "Basic" tab */
               /* newTabs_holder.firstChild.appendChild(editor.tab); */
-              self.theme.addTopTab(newTabsHolder, editor.tab)
+              this.theme.addTopTab(newTabsHolder, editor.tab)
               /* Update the basicPane */
               editor.basicPane = aPane
             }
@@ -285,14 +285,14 @@ export class ObjectEditor extends AbstractEditor {
             aPane.appendChild(gridRow)
             newTabPanesContainer.appendChild(aPane)
             /* newTabs_holder.firstChild.appendChild(editor.tab); */
-            self.theme.addTopTab(newTabsHolder, editor.tab)
+            this.theme.addTopTab(newTabsHolder, editor.tab)
           }
 
           if (editor.options.hidden) editor.container.style.display = 'none'
-          else self.theme.setGridColumnSize(editor.container, 12)
+          else this.theme.setGridColumnSize(editor.container, 12)
           /* Now, add the property editor to the row */
           gridRow.appendChild(editor.container)
-          /* Update the rowPane (same as self.rows[x].rowPane) */
+          /* Update the rowPane (same as this.rows[x].rowPane) */
           editor.rowPane = aPane
         })
 
@@ -318,13 +318,13 @@ export class ObjectEditor extends AbstractEditor {
         /* Normal layout */
       }
       this.property_order.forEach(key => {
-        const editor = self.editors[key]
+        const editor = this.editors[key]
         if (editor.property_removed) return
-        row = self.theme.getGridRow()
+        row = this.theme.getGridRow()
         container.appendChild(row)
 
         if (editor.options.hidden) editor.container.style.display = 'none'
-        else self.theme.setGridColumnSize(editor.container, 12)
+        else this.theme.setGridColumnSize(editor.container, 12)
         row.appendChild(editor.container)
       })
     }
@@ -366,7 +366,6 @@ export class ObjectEditor extends AbstractEditor {
 
     this.editors = {}
     this.cached_editors = {}
-    const self = this
 
     this.format = this.options.layout || this.options.object_layout || this.schema.format || this.jsoneditor.options.object_layout || 'normal'
 
@@ -378,21 +377,21 @@ export class ObjectEditor extends AbstractEditor {
     /* If the object should be rendered as a table row */
     if (this.options.table_row) {
       Object.entries(this.schema.properties).forEach(([key, schema]) => {
-        const editor = self.jsoneditor.getEditorClass(schema)
-        self.editors[key] = self.jsoneditor.createEditor(editor, {
-          jsoneditor: self.jsoneditor,
+        const editor = this.jsoneditor.getEditorClass(schema)
+        this.editors[key] = this.jsoneditor.createEditor(editor, {
+          jsoneditor: this.jsoneditor,
           schema,
-          path: `${self.path}.${key}`,
-          parent: self,
+          path: `${this.path}.${key}`,
+          parent: this,
           compact: true,
           required: true
         })
-        self.editors[key].preBuild()
+        this.editors[key].preBuild()
 
-        const width = self.editors[key].options.hidden ? 0 : (self.editors[key].options.grid_columns || self.editors[key].getNumColumns())
+        const width = this.editors[key].options.hidden ? 0 : (this.editors[key].options.grid_columns || this.editors[key].getNumColumns())
 
-        self.minwidth += width
-        self.maxwidth += width
+        this.minwidth += width
+        this.maxwidth += width
       })
       this.no_link_holder = true
       /* If the object should be rendered as a table */
@@ -403,21 +402,21 @@ export class ObjectEditor extends AbstractEditor {
     } else {
       if (!this.schema.defaultProperties) {
         if (this.jsoneditor.options.display_required_only || this.options.display_required_only) {
-          this.schema.defaultProperties = Object.keys(this.schema.properties).filter(k => self.isRequiredObject({ key: k, schema: this.schema.properties[k] }))
+          this.schema.defaultProperties = Object.keys(this.schema.properties).filter(k => this.isRequiredObject({ key: k, schema: this.schema.properties[k] }))
         } else {
-          self.schema.defaultProperties = Object.keys(self.schema.properties)
+          this.schema.defaultProperties = Object.keys(this.schema.properties)
         }
       }
 
       /* Increase the grid width to account for padding */
-      self.maxwidth += 1
+      this.maxwidth += 1
 
       this.schema.defaultProperties.forEach(key => {
-        self.addObjectProperty(key, true)
+        this.addObjectProperty(key, true)
 
-        if (self.editors[key]) {
-          self.minwidth = Math.max(self.minwidth, (self.editors[key].options.grid_columns || self.editors[key].getNumColumns()))
-          self.maxwidth += (self.editors[key].options.grid_columns || self.editors[key].getNumColumns())
+        if (this.editors[key]) {
+          this.minwidth = Math.max(this.minwidth, (this.editors[key].options.grid_columns || this.editors[key].getNumColumns()))
+          this.maxwidth += (this.editors[key].options.grid_columns || this.editors[key].getNumColumns())
         }
       })
     }
@@ -425,8 +424,8 @@ export class ObjectEditor extends AbstractEditor {
     /* Sort editors by propertyOrder */
     this.property_order = Object.keys(this.editors)
     this.property_order = this.property_order.sort((a, b) => {
-      let ordera = self.editors[a].schema.propertyOrder
-      let orderb = self.editors[b].schema.propertyOrder
+      let ordera = this.editors[a].schema.propertyOrder
+      let orderb = this.editors[b].schema.propertyOrder
       if (typeof ordera !== 'number') ordera = 1000
       if (typeof orderb !== 'number') orderb = 1000
 
@@ -436,20 +435,19 @@ export class ObjectEditor extends AbstractEditor {
 
   /* "Borrow" from arrays code */
   addTab (idx) {
-    const self = this
-    const isObjOrArray = self.rows[idx].schema && (self.rows[idx].schema.type === 'object' || self.rows[idx].schema.type === 'array')
-    if (self.tabs_holder) {
-      self.rows[idx].tab_text = document.createElement('span')
+    const isObjOrArray = this.rows[idx].schema && (this.rows[idx].schema.type === 'object' || this.rows[idx].schema.type === 'array')
+    if (this.tabs_holder) {
+      this.rows[idx].tab_text = document.createElement('span')
 
       if (!isObjOrArray) {
-        self.rows[idx].tab_text.textContent = (typeof self.schema.basicCategoryTitle === 'undefined') ? 'Basic' : self.schema.basicCategoryTitle
+        this.rows[idx].tab_text.textContent = (typeof this.schema.basicCategoryTitle === 'undefined') ? 'Basic' : this.schema.basicCategoryTitle
       } else {
-        self.rows[idx].tab_text.textContent = self.rows[idx].getHeaderText()
+        this.rows[idx].tab_text.textContent = this.rows[idx].getHeaderText()
       }
-      self.rows[idx].tab = self.theme.getTopTab(self.rows[idx].tab_text, this.getValidId(self.rows[idx].tab_text.textContent))
-      self.rows[idx].tab.addEventListener('click', (e) => {
-        self.active_tab = self.rows[idx].tab
-        self.refreshTabs()
+      this.rows[idx].tab = this.theme.getTopTab(this.rows[idx].tab_text, this.getValidId(this.rows[idx].tab_text.textContent))
+      this.rows[idx].tab.addEventListener('click', (e) => {
+        this.active_tab = this.rows[idx].tab
+        this.refreshTabs()
         e.preventDefault()
         e.stopPropagation()
       })
@@ -457,67 +455,63 @@ export class ObjectEditor extends AbstractEditor {
   }
 
   addRow (editor, tabHolder, aPane) {
-    const self = this
     const rowsLen = this.rows.length
     const isObjOrArray = editor.schema.type === 'object' || editor.schema.type === 'array'
 
     /* Add a row */
-    self.rows[rowsLen] = editor
+    this.rows[rowsLen] = editor
     /* rowPane stores the editor corresponding pane to set the display style when refreshing Tabs */
-    self.rows[rowsLen].rowPane = aPane
+    this.rows[rowsLen].rowPane = aPane
 
     if (!isObjOrArray) {
       /* This is the first simple property to be added, */
       /* add a ("Basic") tab for it and save it's row number */
-      if (typeof self.basicTab === 'undefined') {
-        self.addTab(rowsLen)
+      if (typeof this.basicTab === 'undefined') {
+        this.addTab(rowsLen)
         /* Store the index row of the first simple property added */
-        self.basicTab = rowsLen
-        self.basicPane = aPane
-        self.theme.addTopTab(tabHolder, self.rows[rowsLen].tab)
+        this.basicTab = rowsLen
+        this.basicPane = aPane
+        this.theme.addTopTab(tabHolder, this.rows[rowsLen].tab)
       } else {
         /* Any other simple property gets the same tab (and the same pane) as the first one, */
         /* so, when 'click' event is fired from a row, it gets the correct ("Basic") tab */
-        self.rows[rowsLen].tab = self.rows[self.basicTab].tab
-        self.rows[rowsLen].tab_text = self.rows[self.basicTab].tab_text
-        self.rows[rowsLen].rowPane = self.rows[self.basicTab].rowPane
+        this.rows[rowsLen].tab = this.rows[this.basicTab].tab
+        this.rows[rowsLen].tab_text = this.rows[this.basicTab].tab_text
+        this.rows[rowsLen].rowPane = this.rows[this.basicTab].rowPane
       }
     } else {
-      self.addTab(rowsLen)
-      self.theme.addTopTab(tabHolder, self.rows[rowsLen].tab)
+      this.addTab(rowsLen)
+      this.theme.addTopTab(tabHolder, this.rows[rowsLen].tab)
     }
   }
 
   /* Mark the active tab and make visible the corresponding pane, hide others */
   refreshTabs (refreshHeaders) {
-    const self = this
-    const basicTabPresent = typeof self.basicTab !== 'undefined'
+    const basicTabPresent = typeof this.basicTab !== 'undefined'
     let basicTabRefreshed = false
 
     this.rows.forEach(row => {
       /* If it's an orphan row (some property which has been deleted), return */
       if (!row.tab || !row.rowPane || !row.rowPane.parentNode) return
 
-      if (basicTabPresent && row.tab === self.rows[self.basicTab].tab && basicTabRefreshed) return
+      if (basicTabPresent && row.tab === this.rows[this.basicTab].tab && basicTabRefreshed) return
 
       if (refreshHeaders) {
         row.tab_text.textContent = row.getHeaderText()
       } else {
         /* All rows of simple properties point to the same tab, so refresh just once */
-        if (basicTabPresent && row.tab === self.rows[self.basicTab].tab) basicTabRefreshed = true
+        if (basicTabPresent && row.tab === this.rows[this.basicTab].tab) basicTabRefreshed = true
 
-        if (row.tab === self.active_tab) {
-          self.theme.markTabActive(row)
+        if (row.tab === this.active_tab) {
+          this.theme.markTabActive(row)
         } else {
-          self.theme.markTabInactive(row)
+          this.theme.markTabInactive(row)
         }
       }
     })
   }
 
   build () {
-    const self = this
-
     const isCategoriesFormat = (this.format === 'categories')
     this.rows = []
     this.active_tab = null
@@ -526,19 +520,19 @@ export class ObjectEditor extends AbstractEditor {
     if (this.options.table_row) {
       this.editor_holder = this.container
       Object.entries(this.editors).forEach(([key, editor]) => {
-        const holder = self.theme.getTableCell()
-        self.editor_holder.appendChild(holder)
+        const holder = this.theme.getTableCell()
+        this.editor_holder.appendChild(holder)
 
         editor.setContainer(holder)
         editor.build()
         editor.postBuild()
         editor.setOptInCheckbox(editor.header)
 
-        if (self.editors[key].options.hidden) {
+        if (this.editors[key].options.hidden) {
           holder.style.display = 'none'
         }
-        if (self.editors[key].options.input_width) {
-          holder.style.width = self.editors[key].options.input_width
+        if (this.editors[key].options.input_width) {
+          holder.style.width = this.editors[key].options.input_width
         }
       })
       /* If the object should be rendered as a table */
@@ -571,21 +565,21 @@ export class ObjectEditor extends AbstractEditor {
       this.editjson_save.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        self.saveJSON()
+        this.saveJSON()
       })
       this.editjson_copy = this.getButton('Copy', 'copy', 'Copy')
       this.editjson_copy.classList.add('json-editor-btntype-copy')
       this.editjson_copy.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        self.copyJSON()
+        this.copyJSON()
       })
       this.editjson_cancel = this.getButton('Cancel', 'cancel', 'Cancel')
       this.editjson_cancel.classList.add('json-editor-btntype-cancel')
       this.editjson_cancel.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        self.hideEditJSON()
+        this.hideEditJSON()
       })
       this.editjson_holder.appendChild(this.editjson_textarea)
       this.editjson_holder.appendChild(this.editjson_save)
@@ -612,17 +606,17 @@ export class ObjectEditor extends AbstractEditor {
       this.addproperty_add.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        if (self.addproperty_input.value) {
-          if (self.editors[self.addproperty_input.value]) {
+        if (this.addproperty_input.value) {
+          if (this.editors[this.addproperty_input.value]) {
             window.alert('there is already a property with that name')
             return
           }
 
-          self.addObjectProperty(self.addproperty_input.value)
-          if (self.editors[self.addproperty_input.value]) {
-            self.editors[self.addproperty_input.value].disable()
+          this.addObjectProperty(this.addproperty_input.value)
+          if (this.editors[this.addproperty_input.value]) {
+            this.editors[this.addproperty_input.value].disable()
           }
-          self.onChange(true)
+          this.onChange(true)
         }
       })
       this.addproperty_input.addEventListener('input', (e) => {
@@ -672,36 +666,36 @@ export class ObjectEditor extends AbstractEditor {
       }
 
       Object.values(this.editors).forEach(editor => {
-        const aPane = self.theme.getTabContent()
-        const holder = self.theme.getGridColumn()
+        const aPane = this.theme.getTabContent()
+        const holder = this.theme.getGridColumn()
         const isObjOrArray = !!((editor.schema && (editor.schema.type === 'object' || editor.schema.type === 'array')))
         aPane.isObjOrArray = isObjOrArray
 
         if (isCategoriesFormat) {
           if (isObjOrArray) {
-            const singleRowContainer = self.theme.getGridContainer()
+            const singleRowContainer = this.theme.getGridContainer()
             singleRowContainer.appendChild(holder)
             aPane.appendChild(singleRowContainer)
-            self.tabPanesContainer.appendChild(aPane)
-            self.row_container = singleRowContainer
+            this.tabPanesContainer.appendChild(aPane)
+            this.row_container = singleRowContainer
           } else {
-            if (typeof self.row_container_basic === 'undefined') {
-              self.row_container_basic = self.theme.getGridContainer()
-              aPane.appendChild(self.row_container_basic)
-              if (self.tabPanesContainer.childElementCount === 0) {
-                self.tabPanesContainer.appendChild(aPane)
+            if (typeof this.row_container_basic === 'undefined') {
+              this.row_container_basic = this.theme.getGridContainer()
+              aPane.appendChild(this.row_container_basic)
+              if (this.tabPanesContainer.childElementCount === 0) {
+                this.tabPanesContainer.appendChild(aPane)
               } else {
-                self.tabPanesContainer.insertBefore(aPane, self.tabPanesContainer.childNodes[1])
+                this.tabPanesContainer.insertBefore(aPane, this.tabPanesContainer.childNodes[1])
               }
             }
-            self.row_container_basic.appendChild(holder)
+            this.row_container_basic.appendChild(holder)
           }
 
-          self.addRow(editor, self.tabs_holder, aPane)
+          this.addRow(editor, this.tabs_holder, aPane)
 
-          aPane.id = self.getValidId(editor.schema.title) /* editor.schema.path//tab_text.textContent */
+          aPane.id = this.getValidId(editor.schema.title) /* editor.schema.path//tab_text.textContent */
         } else {
-          self.row_container.appendChild(holder)
+          this.row_container.appendChild(holder)
         }
 
         editor.setContainer(holder)
@@ -724,14 +718,14 @@ export class ObjectEditor extends AbstractEditor {
       this.collapse_control.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        if (self.collapsed) {
-          self.editor_holder.style.display = ''
-          self.collapsed = false
-          self.setButtonText(self.collapse_control, '', 'collapse', self.translate('button_collapse'))
+        if (this.collapsed) {
+          this.editor_holder.style.display = ''
+          this.collapsed = false
+          this.setButtonText(this.collapse_control, '', 'collapse', this.translate('button_collapse'))
         } else {
-          self.editor_holder.style.display = 'none'
-          self.collapsed = true
-          self.setButtonText(self.collapse_control, '', 'expand', self.translate('button_expand'))
+          this.editor_holder.style.display = 'none'
+          this.collapsed = true
+          this.setButtonText(this.collapse_control, '', 'expand', this.translate('button_expand'))
         }
       })
 
@@ -753,7 +747,7 @@ export class ObjectEditor extends AbstractEditor {
       this.editjson_control.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        self.toggleEditJSON()
+        this.toggleEditJSON()
       })
       this.controls.appendChild(this.editjson_control)
       this.controls.insertBefore(this.editjson_holder, this.controls.childNodes[0])
@@ -766,12 +760,12 @@ export class ObjectEditor extends AbstractEditor {
       }
 
       /* Object Properties Button */
-      this.addproperty_button = this.getButton('Properties', 'edit_properties', self.translate('button_object_properties'))
+      this.addproperty_button = this.getButton('Properties', 'edit_properties', this.translate('button_object_properties'))
       this.addproperty_button.classList.add('json-editor-btntype-properties')
       this.addproperty_button.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        self.toggleAddProperty()
+        this.toggleAddProperty()
       })
       this.controls.appendChild(this.addproperty_button)
       this.controls.insertBefore(this.addproperty_holder, this.controls.childNodes[1])
@@ -786,7 +780,7 @@ export class ObjectEditor extends AbstractEditor {
     if (this.options.table_row) {
       this.editor_holder = this.container
       this.property_order.forEach(key => {
-        self.editor_holder.appendChild(self.editors[key].container)
+        this.editor_holder.appendChild(this.editors[key].container)
       })
       /* Layout object editors in grid if needed */
     } else {
@@ -798,12 +792,11 @@ export class ObjectEditor extends AbstractEditor {
   }
 
   deactivateNonRequiredProperties () {
-    const self = this
     /* the show_opt_in editor option is for backward compatibility */
     if (this.jsoneditor.options.show_opt_in || this.options.show_opt_in) {
       Object.entries(this.editors).forEach(([key, editor]) => {
-        if (!self.isRequiredObject(editor)) {
-          self.editors[key].deactivate()
+        if (!this.isRequiredObject(editor)) {
+          this.editors[key].deactivate()
         }
       })
     }
@@ -890,17 +883,16 @@ export class ObjectEditor extends AbstractEditor {
   }
 
   addPropertyCheckbox (key) {
-    const self = this
     let labelText
 
-    const checkbox = self.theme.getCheckbox()
+    const checkbox = this.theme.getCheckbox()
     checkbox.style.width = 'auto'
 
     if (this.schema.properties[key] && this.schema.properties[key].title) { labelText = this.schema.properties[key].title } else { labelText = key }
 
-    const label = self.theme.getCheckboxLabel(labelText)
+    const label = this.theme.getCheckboxLabel(labelText)
 
-    const control = self.theme.getFormControl(label, checkbox)
+    const control = this.theme.getFormControl(label, checkbox)
     control.style.paddingBottom = control.style.marginBottom = control.style.paddingTop = control.style.marginTop = 0
     control.style.height = 'auto'
     /* control.style.overflowY = 'hidden'; */
@@ -910,13 +902,13 @@ export class ObjectEditor extends AbstractEditor {
     checkbox.checked = key in this.editors
     checkbox.addEventListener('change', () => {
       if (checkbox.checked) {
-        self.addObjectProperty(key)
+        this.addObjectProperty(key)
       } else {
-        self.removeObjectProperty(key)
+        this.removeObjectProperty(key)
       }
-      self.onChange(true)
+      this.onChange(true)
     })
-    self.addproperty_checkboxes[key] = checkbox
+    this.addproperty_checkboxes[key] = checkbox
 
     return checkbox
   }
@@ -965,8 +957,6 @@ export class ObjectEditor extends AbstractEditor {
   }
 
   addObjectProperty (name, prebuildOnly) {
-    const self = this
-
     /* Property is already added */
     if (this.editors[name]) return
 
@@ -981,40 +971,40 @@ export class ObjectEditor extends AbstractEditor {
         return
       }
 
-      const schema = self.getPropertySchema(name)
+      const schema = this.getPropertySchema(name)
       if (typeof schema.propertyOrder !== 'number') {
         /* if the propertyOrder undefined, then set a smart default value. */
-        schema.propertyOrder = Object.keys(self.editors).length + 1000
+        schema.propertyOrder = Object.keys(this.editors).length + 1000
       }
 
       /* Add the property */
-      const editor = self.jsoneditor.getEditorClass(schema)
+      const editor = this.jsoneditor.getEditorClass(schema)
 
-      self.editors[name] = self.jsoneditor.createEditor(editor, {
-        jsoneditor: self.jsoneditor,
+      this.editors[name] = this.jsoneditor.createEditor(editor, {
+        jsoneditor: this.jsoneditor,
         schema,
-        path: `${self.path}.${name}`,
-        parent: self
+        path: `${this.path}.${name}`,
+        parent: this
       })
-      self.editors[name].preBuild()
+      this.editors[name].preBuild()
 
       if (!prebuildOnly) {
-        const holder = self.theme.getChildEditorHolder()
-        self.editor_holder.appendChild(holder)
-        self.editors[name].setContainer(holder)
-        self.editors[name].build()
-        self.editors[name].postBuild()
-        self.editors[name].setOptInCheckbox(editor.header)
-        self.editors[name].activate()
+        const holder = this.theme.getChildEditorHolder()
+        this.editor_holder.appendChild(holder)
+        this.editors[name].setContainer(holder)
+        this.editors[name].build()
+        this.editors[name].postBuild()
+        this.editors[name].setOptInCheckbox(editor.header)
+        this.editors[name].activate()
       }
 
-      self.cached_editors[name] = self.editors[name]
+      this.cached_editors[name] = this.editors[name]
     }
 
     /* If we're only prebuilding the editors, don't refresh values */
     if (!prebuildOnly) {
-      self.refreshValue()
-      self.layoutEditors()
+      this.refreshValue()
+      this.layoutEditors()
     }
   }
 
@@ -1168,7 +1158,6 @@ export class ObjectEditor extends AbstractEditor {
   }
 
   setValue (value, initial) {
-    const self = this
     value = value || {}
 
     if (typeof value !== 'object' || Array.isArray(value)) value = {}
@@ -1177,11 +1166,11 @@ export class ObjectEditor extends AbstractEditor {
     Object.entries(this.cached_editors).forEach(([i, editor]) => {
       /* Value explicitly set */
       if (typeof value[i] !== 'undefined') {
-        self.addObjectProperty(i)
+        this.addObjectProperty(i)
         editor.setValue(value[i], initial)
         /* Otherwise, remove value unless this is the initial set or it's required */
-      } else if (!initial && !self.isRequiredObject(editor)) {
-        self.removeObjectProperty(i)
+      } else if (!initial && !this.isRequiredObject(editor)) {
+        this.removeObjectProperty(i)
         /* Otherwise, set the value to the default */
       } else {
         editor.setValue(editor.getDefault(), initial)
@@ -1189,9 +1178,9 @@ export class ObjectEditor extends AbstractEditor {
     })
 
     Object.entries(value).forEach(([i, val]) => {
-      if (!self.cached_editors[i]) {
-        self.addObjectProperty(i)
-        if (self.editors[i]) self.editors[i].setValue(val, initial)
+      if (!this.cached_editors[i]) {
+        this.addObjectProperty(i)
+        if (this.editors[i]) this.editors[i].setValue(val, initial)
       }
     })
 
@@ -1201,13 +1190,11 @@ export class ObjectEditor extends AbstractEditor {
   }
 
   showValidationErrors (errors) {
-    const self = this
-
     /* Get all the errors that pertain to this editor */
     const myErrors = []
     const otherErrors = []
     errors.forEach(error => {
-      if (error.path === self.path) {
+      if (error.path === this.path) {
         myErrors.push(error)
       } else {
         otherErrors.push(error)
@@ -1221,7 +1208,7 @@ export class ObjectEditor extends AbstractEditor {
         this.error_holder.style.display = ''
         myErrors.forEach(error => {
           if (error.errorcount && error.errorcount > 1) error.message += ` (${error.errorcount} errors)`
-          self.error_holder.appendChild(self.theme.getErrorMessage(error.message))
+          this.error_holder.appendChild(this.theme.getErrorMessage(error.message))
         })
         /* Hide error area */
       } else {

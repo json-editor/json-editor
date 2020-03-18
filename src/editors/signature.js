@@ -1,12 +1,10 @@
 /* This editor is using the signature pad editor from https://github.com/szimek/signature_pad */
-/* Credits for the pad itself go to https://github.com/szimek */
+/* Credits for the pad itthis go to https://github.com/szimek */
 
 import { StringEditor } from './string.js'
 
 export class SignatureEditor extends StringEditor {
   build () {
-    const self = this
-
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
     const formname = this.formname.replace(/\W/g, '')
@@ -26,21 +24,21 @@ export class SignatureEditor extends StringEditor {
       canvas.classList.add('signature')
       signatureContainer.appendChild(canvas)
 
-      self.signaturePad = new window.SignaturePad(canvas, {
+      this.signaturePad = new window.SignaturePad(canvas, {
         onEnd () {
           /* check if the signature is not empty before setting a value */
-          if (!self.signaturePad.isEmpty()) {
-            self.input.value = self.signaturePad.toDataURL()
+          if (!this.signaturePad.isEmpty()) {
+            this.input.value = this.signaturePad.toDataURL()
           } else {
-            self.input.value = ''
+            this.input.value = ''
           }
 
-          self.is_dirty = true
-          self.refreshValue()
-          self.watch_listener()
-          self.jsoneditor.notifyWatchers(self.path)
-          if (self.parent) self.parent.onChildEditorChange(self)
-          else self.jsoneditor.onChange()
+          this.is_dirty = true
+          this.refreshValue()
+          this.watch_listener()
+          this.jsoneditor.notifyWatchers(this.path)
+          if (this.parent) this.parent.onChildEditorChange(this)
+          else this.jsoneditor.onChange()
         }
       })
 
@@ -65,9 +63,9 @@ export class SignatureEditor extends StringEditor {
       clearButton.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        self.signaturePad.clear()
+        this.signaturePad.clear()
         /* trigger stroke end to let signaturePad update the dataURL */
-        self.signaturePad.strokeEnd()
+        this.signaturePad.strokeEnd()
       })
 
       this.control = this.theme.getFormControl(this.label, signatureContainer, this.description)
@@ -76,8 +74,8 @@ export class SignatureEditor extends StringEditor {
 
       /* signature canvas will stretch to signatureContainer width */
       canvas.width = signatureContainer.offsetWidth
-      if (self.options && self.options.canvas_height) {
-        canvas.height = self.options.canvas_height
+      if (this.options && this.options.canvas_height) {
+        canvas.height = this.options.canvas_height
       } else {
         canvas.height = '300' /* Set to default height of 300px; */
       }
@@ -89,28 +87,26 @@ export class SignatureEditor extends StringEditor {
   }
 
   setValue (val) {
-    const self = this
     if (typeof SignaturePad === 'function') {
       const sanitized = this.sanitize(val)
       if (this.value === sanitized) {
         return
       }
-      self.value = sanitized
-      self.input.value = self.value
-      self.signaturePad.clear()
+      this.value = sanitized
+      this.input.value = this.value
+      this.signaturePad.clear()
       /* only set contents if value != '' */
       if (val && val !== '') {
-        self.signaturePad.fromDataURL(val)
+        this.signaturePad.fromDataURL(val)
       }
-      self.watch_listener()
-      self.jsoneditor.notifyWatchers(self.path)
+      this.watch_listener()
+      this.jsoneditor.notifyWatchers(this.path)
       return false
     }
   }
 
   destroy () {
-    const self = this
-    self.signaturePad.off()
-    delete self.signaturePad
+    this.signaturePad.off()
+    delete this.signaturePad
   }
 }

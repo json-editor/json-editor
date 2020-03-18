@@ -7,7 +7,6 @@ export class RadioEditor extends SelectEditor {
   }
 
   build () {
-    const self = this
     this.label = ''
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
@@ -19,8 +18,8 @@ export class RadioEditor extends SelectEditor {
     this.radioGroup = []
 
     const radioInputEventhandler = e => {
-      self.setValue(e.currentTarget.value)
-      self.onChange(true)
+      this.setValue(e.currentTarget.value)
+      this.onChange(true)
     }
 
     for (let i = 0; i < this.enum_values.length; i++) {
@@ -65,7 +64,7 @@ export class RadioEditor extends SelectEditor {
 
     /* Any special formatting that needs to happen after the input is added to the dom */
     window.requestAnimationFrame(() => {
-      if (self.input.parentNode) self.afterInputReady()
+      if (this.input.parentNode) this.afterInputReady()
     })
   }
 

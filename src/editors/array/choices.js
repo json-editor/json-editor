@@ -18,7 +18,6 @@ export class ArrayChoicesEditor extends MultiSelectEditor {
 
   afterInputReady () {
     if (window.Choices && !this.choices_instance) {
-      const self = this
       /* Get options, either global options from "this.defaults.options.choices" or */
       /* single property options from schema "options.choices" */
       const options = this.expandCallbacks('choices', extend({}, {
@@ -43,9 +42,9 @@ export class ArrayChoicesEditor extends MultiSelectEditor {
 
       /* Create a new change handler */
       this.multiselectChangeHandler = e => {
-        const value = self.choices_instance.getValue(true)
-        self.updateValue(value)
-        self.onChange(true)
+        const value = this.choices_instance.getValue(true)
+        this.updateValue(value)
+        this.onChange(true)
       }
       this.control.addEventListener('change', this.multiselectChangeHandler, false)
     }

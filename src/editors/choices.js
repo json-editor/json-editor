@@ -38,9 +38,9 @@ export class ChoicesEditor extends SelectEditor {
   onWatchedFieldChange () {
     super.onWatchedFieldChange()
     if (this.choices_instance) {
-      const self = this; const choicesList = this.enum_options.map((v, i) => ({
+      ; const choicesList = this.enum_options.map((v, i) => ({
         value: v,
-        label: self.enum_display[i]
+        label: this.enum_display[i]
       }))
       this.choices_instance.setChoices(choicesList, 'value', 'label', true)
       this.choices_instance.setChoiceByValue(`${this.value}`) /* Set new selection */

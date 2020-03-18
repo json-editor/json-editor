@@ -15,7 +15,7 @@ export class JoditEditor extends StringEditor {
   }
 
   afterInputReady () {
-    const self = this; let options
+    ; let options
 
     if (window.Jodit) {
       /* Get options, either global options from "this.defaults.options.jodit" or */
@@ -31,12 +31,12 @@ export class JoditEditor extends StringEditor {
       }
 
       this.jodit_instance.events.on('change', () => {
-        self.value = self.jodit_instance.getEditorValue()
-        self.is_dirty = true
-        self.onChange(true)
+        this.value = this.jodit_instance.getEditorValue()
+        this.is_dirty = true
+        this.onChange(true)
       })
 
-      this.theme.afterInputReady(self.input)
+      this.theme.afterInputReady(this.input)
     } else super.afterInputReady() /* Library not loaded, so just treat this as a string */
   }
 

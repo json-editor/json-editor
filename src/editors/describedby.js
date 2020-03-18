@@ -55,7 +55,6 @@ export class DescribedByEditor extends AbstractEditor {
   }
 
   switchEditor () {
-    const self = this
     const vars = this.getWatchedFieldValues()
 
     if (!vars) return
@@ -74,7 +73,7 @@ export class DescribedByEditor extends AbstractEditor {
 
     this.editors.forEach((editor, ref) => {
       if (!editor) return
-      if (self.currentEditor === ref) {
+      if (this.currentEditor === ref) {
         editor.container.style.display = ''
       } else {
         editor.container.style.display = 'none'
@@ -126,8 +125,8 @@ export class DescribedByEditor extends AbstractEditor {
     }
 
     /* this.template.fill(function(varName) {
-      self.schema.watch = self.schema.watch || {};
-      self.schema.watch[varName] = varName;
+      this.schema.watch = this.schema.watch || {};
+      this.schema.watch[varName] = varName;
       return '';
     }); */
 

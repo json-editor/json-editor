@@ -26,7 +26,6 @@ export class CheckboxEditor extends AbstractEditor {
   }
 
   build () {
-    const self = this
     this.label = this.header = this.theme.getCheckboxLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
     if (this.options.infoText && !this.options.compact) this.infoButton = this.theme.getInfoButton(this.options.infoText)
@@ -43,8 +42,8 @@ export class CheckboxEditor extends AbstractEditor {
     this.input.addEventListener('change', e => {
       e.preventDefault()
       e.stopPropagation()
-      self.value = e.currentTarget.checked
-      self.onChange(true)
+      this.value = e.currentTarget.checked
+      this.onChange(true)
     })
 
     this.container.appendChild(this.control)
@@ -71,8 +70,6 @@ export class CheckboxEditor extends AbstractEditor {
   }
 
   showValidationErrors (errors) {
-    const self = this
-
     if (this.jsoneditor.options.show_errors === 'always') { } else if (!this.is_dirty && this.previous_error_setting === this.jsoneditor.options.show_errors) {
       return
     }
@@ -80,7 +77,7 @@ export class CheckboxEditor extends AbstractEditor {
     this.previous_error_setting = this.jsoneditor.options.show_errors
 
     const addMessage = (messages, error) => {
-      if (error.path === self.path) {
+      if (error.path === this.path) {
         messages.push(error.message)
       }
       return messages

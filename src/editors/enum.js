@@ -17,7 +17,6 @@ export class EnumEditor extends AbstractEditor {
     this.select_options = []
     this.html_values = []
 
-    const self = this
     for (let i = 0; i < this.enum.length; i++) {
       this.select_options[i] = this.options.enum_titles[i] || `Value ${i + 1}`
       this.html_values[i] = this.getHTML(this.enum[i])
@@ -34,10 +33,10 @@ export class EnumEditor extends AbstractEditor {
     if (this.options.hide_display) this.display_area.style.display = 'none'
 
     this.switcher.addEventListener('change', e => {
-      self.selected = self.select_options.indexOf(e.currentTarget.value)
-      self.value = self.enum[self.selected]
-      self.refreshValue()
-      self.onChange(true)
+      this.selected = this.select_options.indexOf(e.currentTarget.value)
+      this.value = this.enum[this.selected]
+      this.refreshValue()
+      this.onChange(true)
     })
     this.value = this.enum[0]
     this.refreshValue()
@@ -46,18 +45,17 @@ export class EnumEditor extends AbstractEditor {
   }
 
   refreshValue () {
-    const self = this
-    self.selected = -1
+    this.selected = -1
     const stringified = JSON.stringify(this.value)
     this.enum.forEach((el, i) => {
       if (stringified === JSON.stringify(el)) {
-        self.selected = i
+        this.selected = i
         return false
       }
     })
 
-    if (self.selected < 0) {
-      self.setValue(self.enum[0])
+    if (this.selected < 0) {
+      this.setValue(this.enum[0])
       return
     }
 
@@ -79,7 +77,6 @@ export class EnumEditor extends AbstractEditor {
   }
 
   getHTML (el) {
-    const self = this
     const each = (obj, callback) => {
       if (Array.isArray(obj) || (typeof obj.length === 'number' && obj.length > 0 && (obj.length - 1) in obj)) {
         Array.from(obj).forEach((e, i) => callback(i, e))
@@ -95,7 +92,7 @@ export class EnumEditor extends AbstractEditor {
       /* TODO: use theme */
       let ret = ''
       const callback = (i, child) => {
-        let html = self.getHTML(child)
+        let html = this.getHTML(child)
         /* Add the keys to object children */
         if (!(Array.isArray(el))) {
           /* TODO: use theme */

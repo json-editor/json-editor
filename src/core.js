@@ -223,23 +223,21 @@ export class JSONEditor {
     if (this.firing_change) return
     this.firing_change = true
 
-    const self = this
-
     window.requestAnimationFrame(() => {
-      self.firing_change = false
-      if (!self.ready) return
+      this.firing_change = false
+      if (!this.ready) return
 
       /* Validate and cache results */
-      self.validation_results = self.validator.validate(self.root.getValue())
+      this.validation_results = this.validator.validate(this.root.getValue())
 
-      if (self.options.show_errors !== 'never') {
-        self.root.showValidationErrors(self.validation_results)
+      if (this.options.show_errors !== 'never') {
+        this.root.showValidationErrors(this.validation_results)
       } else {
-        self.root.showValidationErrors([])
+        this.root.showValidationErrors([])
       }
 
       /* Fire change event */
-      self.trigger('change')
+      this.trigger('change')
     })
 
     return this

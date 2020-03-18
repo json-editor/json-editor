@@ -49,7 +49,7 @@ export class MultiSelectEditor extends AbstractEditor {
   }
 
   build () {
-    const self = this; let i
+    ; let i
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
     if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText)
@@ -89,18 +89,18 @@ export class MultiSelectEditor extends AbstractEditor {
 
     this.multiselectChangeHandler = (e) => {
       const newValue = []
-      for (i = 0; i < self.option_keys.length; i++) {
-        if (self.select_options[self.option_keys[i]] && (self.select_options[self.option_keys[i]].selected || self.select_options[self.option_keys[i]].checked)) newValue.push(self.select_values[self.option_keys[i]])
+      for (i = 0; i < this.option_keys.length; i++) {
+        if (this.select_options[this.option_keys[i]] && (this.select_options[this.option_keys[i]].selected || this.select_options[this.option_keys[i]].checked)) newValue.push(this.select_values[this.option_keys[i]])
       }
-      self.updateValue(newValue)
-      self.onChange(true)
+      this.updateValue(newValue)
+      this.onChange(true)
     }
 
     this.control.addEventListener('change', this.multiselectChangeHandler, false)
 
     /* Any special formatting that needs to happen after the input is added to the dom */
     window.requestAnimationFrame(() => {
-      self.afterInputReady()
+      this.afterInputReady()
     })
   }
 
@@ -110,8 +110,7 @@ export class MultiSelectEditor extends AbstractEditor {
   }
 
   afterInputReady () {
-    const self = this
-    this.theme.afterInputReady(self.input || self.inputs)
+    this.theme.afterInputReady(this.input || this.inputs)
   }
 
   setValue (value, initial) {

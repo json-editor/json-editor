@@ -16,7 +16,7 @@ export class ArraySelectizeEditor extends MultiSelectEditor {
   }
 
   afterInputReady () {
-    let options; const self = this
+    let options
 
     if (window.jQuery && window.jQuery.fn && window.jQuery.fn.selectize && !this.selectize_instance) {
       /* Get options, either global options from "this.defaults.options.selectize" or */
@@ -38,9 +38,9 @@ export class ArraySelectizeEditor extends MultiSelectEditor {
 
       /* Create a new change handler */
       this.multiselectChangeHandler = e => {
-        const value = self.selectize_instance.getValue()
-        self.updateValue(value)
-        self.onChange(true)
+        const value = this.selectize_instance.getValue()
+        this.updateValue(value)
+        this.onChange(true)
       }
 
       /* Add new event handler. */

@@ -65,7 +65,6 @@ export class StringEditor extends AbstractEditor {
   }
 
   build () {
-    const self = this
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
     if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText)
@@ -137,23 +136,23 @@ export class StringEditor extends AbstractEditor {
         e.stopPropagation()
 
         /* Don't allow changing if this field is a template */
-        if (self.schema.template) {
-          e.currentTarget.value = self.value
+        if (this.schema.template) {
+          e.currentTarget.value = this.value
           return
         }
 
         const val = e.currentTarget.value
 
         /* sanitize value */
-        const sanitized = self.sanitize(val)
+        const sanitized = this.sanitize(val)
         if (val !== sanitized) {
           e.currentTarget.value = sanitized
         }
 
-        self.is_dirty = true
+        this.is_dirty = true
 
-        self.refreshValue()
-        self.onChange(true)
+        this.refreshValue()
+        this.onChange(true)
       })
 
     if (this.options.input_height) this.input.style.height = this.options.input_height
@@ -183,10 +182,10 @@ export class StringEditor extends AbstractEditor {
       }
 
       this.input.addEventListener('keyup', e => {
-        self.adjust_height(e.currentTarget)
+        this.adjust_height(e.currentTarget)
       })
       this.input.addEventListener('change', e => {
-        self.adjust_height(e.currentTarget)
+        this.adjust_height(e.currentTarget)
       })
       this.adjust_height()
     }
@@ -206,8 +205,8 @@ export class StringEditor extends AbstractEditor {
       /* Skip in case the input is only a temporary editor, */
       /* otherwise, in the case of an ace_editor creation, */
       /* it will generate an error trying to append it to the missing parentNode */
-      if (self.input.parentNode) self.afterInputReady()
-      if (self.adjust_height) self.adjust_height(self.input)
+      if (this.input.parentNode) this.afterInputReady()
+      if (this.adjust_height) this.adjust_height(this.input)
     })
 
     /* Compile and store the template */
@@ -294,10 +293,9 @@ export class StringEditor extends AbstractEditor {
   }
 
   afterInputReady () {
-    const self = this
-    self.theme.afterInputReady(self.input)
-    if (window.Cleave && !self.cleave_instance) self.setupCleave(self.input)
-    else if (window.IMask && !self.imask_instance) self.setupImask(self.input)
+    this.theme.afterInputReady(this.input)
+    if (window.Cleave && !this.cleave_instance) this.setupCleave(this.input)
+    else if (window.IMask && !this.imask_instance) this.setupImask(this.input)
   }
 
   refreshValue () {
@@ -341,14 +339,12 @@ export class StringEditor extends AbstractEditor {
   }
 
   showValidationErrors (errors) {
-    const self = this
-
     if (this.jsoneditor.options.show_errors === 'always') { } else if (!this.is_dirty && this.previous_error_setting === this.jsoneditor.options.show_errors) return
 
     this.previous_error_setting = this.jsoneditor.options.show_errors
 
     const addMessage = (messages, error) => {
-      if (error.path === self.path) {
+      if (error.path === this.path) {
         messages.push(error.message)
       }
       return messages

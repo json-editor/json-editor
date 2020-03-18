@@ -529,7 +529,6 @@ export class Validator {
 
   _validateByValueType (schema, value, path) {
     const errors = []
-    const self = this
     if (value === null) return errors
     /* Number Specific Validation */
     if (typeof value === 'number') {
@@ -538,7 +537,7 @@ export class Validator {
       /* `minimum` */
       Object.keys(schema).forEach(key => {
         if (this._validateNumberSubSchema[key]) {
-          errors.push(...this._validateNumberSubSchema[key].call(self, schema, value, path))
+          errors.push(...this._validateNumberSubSchema[key].call(this, schema, value, path))
         }
       })
       /* String specific validation */
@@ -548,7 +547,7 @@ export class Validator {
       /* `pattern` */
       Object.keys(schema).forEach(key => {
         if (this._validateStringSubSchema[key]) {
-          errors.push(...this._validateStringSubSchema[key].call(self, schema, value, path))
+          errors.push(...this._validateStringSubSchema[key].call(this, schema, value, path))
         }
       })
       /* Array specific validation */
@@ -559,7 +558,7 @@ export class Validator {
       /* `uniqueItems` */
       Object.keys(schema).forEach(key => {
         if (this._validateArraySubSchema[key]) {
-          errors.push(...this._validateArraySubSchema[key].call(self, schema, value, path))
+          errors.push(...this._validateArraySubSchema[key].call(this, schema, value, path))
         }
       })
       /* Object specific validation */
@@ -572,7 +571,7 @@ export class Validator {
       /* `patternProperties` */
       Object.keys(schema).forEach(key => {
         if (this._validateObjectSubSchema[key]) {
-          errors.push(...this._validateObjectSubSchema[key].call(self, schema, value, path, validatedProperties))
+          errors.push(...this._validateObjectSubSchema[key].call(this, schema, value, path, validatedProperties))
         }
       })
 
@@ -585,7 +584,7 @@ export class Validator {
       /* `dependencies` */
       Object.keys(schema).forEach(key => {
         if (typeof this._validateObjectSubSchema2[key] !== 'undefined') {
-          errors.push(...this._validateObjectSubSchema2[key].call(self, schema, value, path, validatedProperties))
+          errors.push(...this._validateObjectSubSchema2[key].call(this, schema, value, path, validatedProperties))
         }
       })
     }
