@@ -28,7 +28,7 @@ module.exports = {
         loader: `eslint-loader`
       },
       {
-        test: /\.js$/,
+        test: /\.js|\.css.js$/,
         exclude: /node_modules/,
         use: [
           {
@@ -43,7 +43,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        exclude: /(node_modules)|(src\/themes)/,
+        exclude: /(node_modules)|(src\/themes)|(src\/editors)/,
         use: ['style-loader', 'css-loader']
       }
     ]
@@ -56,8 +56,7 @@ module.exports = {
       )
     ),
     new CssToJSON({
-      pattern: './src/themes/*.css',
-      jsonPattern: './src/themes/*.json'
+      pattern: './src/**/*.css'
     })
   ]
 }

@@ -1,16 +1,10 @@
-import { AbstractTheme } from '../theme'
-import rules from './barebones.json'
+import { AbstractTheme } from '../theme.js'
+import rules from './barebones.css.js'
 
-export var barebonesTheme = AbstractTheme.extend({
-  /* Theme config options that allows changing various aspects of the output */
-  options: {
-    'disable_theme_rules': false
-  },
-  /* Custom stylesheet rules. format: "selector" : "CSS rules" */
-  rules: rules,
-  addInputError: function (input, text) {
+export class barebonesTheme extends AbstractTheme {
+  addInputError (input, text) {
     if (!input.errmsg) {
-      var group = this.closest(input, '.form-control')
+      const group = this.closest(input, '.form-control')
       input.errmsg = document.createElement('div')
       input.errmsg.setAttribute('class', 'errmsg')
       group.appendChild(input.errmsg)
@@ -20,11 +14,15 @@ export var barebonesTheme = AbstractTheme.extend({
 
     input.errmsg.innerHTML = ''
     input.errmsg.appendChild(document.createTextNode(text))
-  },
-  removeInputError: function (input) {
+  }
+
+  removeInputError (input) {
     if (input.style) {
       input.style.borderColor = ''
     }
     if (input.errmsg) input.errmsg.style.display = 'none'
   }
-})
+}
+
+/* Custom stylesheet rules. format: "selector" : "CSS rules" */
+barebonesTheme.rules = rules

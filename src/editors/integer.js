@@ -1,13 +1,12 @@
-import { NumberEditor } from './number'
+import { NumberEditor } from './number.js'
 
-export var IntegerEditor = NumberEditor.extend({
+export class IntegerEditor extends NumberEditor {
+  sanitize (value) {
+    value = `${value}`
+    return value.replace(/[^0-9-]/g, '')
+  }
 
-  sanitize: function (value) {
-    value = value + ''
-    // eslint-disable-next-line no-useless-escape
-    return value.replace(/[^0-9\-]/g, '')
-  },
-  getNumColumns: function () {
+  getNumColumns () {
     return 2
   }
-})
+}

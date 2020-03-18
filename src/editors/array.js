@@ -1,99 +1,106 @@
-import { AbstractEditor } from '../editor'
-import { $extend, $each, $trigger } from '../utilities'
-export var ArrayEditor = AbstractEditor.extend({
-  askConfirmation: function () {
+import { AbstractEditor } from '../editor.js'
+import { extend, each, trigger } from '../utilities.js'
+
+export class ArrayEditor extends AbstractEditor {
+  askConfirmation () {
     if (this.jsoneditor.options.prompt_before_delete === true) {
       if (window.confirm('Are you sure you want to remove this node?') === false) {
         return false
       }
     }
     return true
-  },
-  getDefault: function () {
-    return this.schema['default'] || []
-  },
-  register: function () {
-    this._super()
+  }
+
+  getDefault () {
+    return this.schema.default || []
+  }
+
+  register () {
+    super.register()
     if (this.rows) {
-      for (var i = 0; i < this.rows.length; i++) {
+      for (let i = 0; i < this.rows.length; i++) {
         this.rows[i].register()
       }
     }
-  },
-  unregister: function () {
-    this._super()
+  }
+
+  unregister () {
+    super.unregister()
     if (this.rows) {
-      for (var i = 0; i < this.rows.length; i++) {
+      for (let i = 0; i < this.rows.length; i++) {
         this.rows[i].unregister()
       }
     }
-  },
-  getNumColumns: function () {
-    var info = this.getItemInfo(0)
-    // Tabs require extra horizontal space
+  }
+
+  getNumColumns () {
+    const info = this.getItemInfo(0)
+    /* Tabs require extra horizontal space */
     if (this.tabs_holder && this.schema.format !== 'tabs-top') {
       return Math.max(Math.min(12, info.width + 2), 4)
-    } else {
-      return info.width
     }
-  },
-  enable: function () {
+    return info.width
+  }
+
+  enable () {
     if (!this.always_disabled) {
       if (this.add_row_button) this.add_row_button.disabled = false
       if (this.remove_all_rows_button) this.remove_all_rows_button.disabled = false
       if (this.delete_last_row_button) this.delete_last_row_button.disabled = false
       if (this.copy_button) this.copy_button.disabled = false
-      // if(this.toggle_button) this.toggle_button.disabled = false;
+      /* if(this.toggle_button) this.toggle_button.disabled = false; */
       if (this.delete_button) this.delete_button.disabled = false
       if (this.moveup_button) this.moveup_button.disabled = false
       if (this.movedown_button) this.movedown_button.disabled = false
 
       if (this.rows) {
-        for (var i = 0; i < this.rows.length; i++) {
+        for (let i = 0; i < this.rows.length; i++) {
           this.rows[i].enable()
 
           if (this.rows[i].add_row_button) this.rows[i].add_row_button.disabled = false
           if (this.rows[i].remove_all_rows_button) this.rows[i].remove_all_rows_button.disabled = false
           if (this.rows[i].delete_last_row_button) this.rows[i].delete_last_row_button.disabled = false
           if (this.rows[i].copy_button) this.rows[i].copy_button.disabled = false
-          // if(this.rows[i].toggle_button) this.rows[i].toggle_button.disabled = false;
+          /* if(this.rows[i].toggle_button) this.rows[i].toggle_button.disabled = false; */
           if (this.rows[i].delete_button) this.rows[i].delete_button.disabled = false
           if (this.rows[i].moveup_button) this.rows[i].moveup_button.disabled = false
           if (this.rows[i].movedown_button) this.rows[i].movedown_button.disabled = false
         }
       }
-      this._super()
+      super.enable()
     }
-  },
-  disable: function (alwaysDisabled) {
+  }
+
+  disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     if (this.add_row_button) this.add_row_button.disabled = true
     if (this.remove_all_rows_button) this.remove_all_rows_button.disabled = true
     if (this.delete_last_row_button) this.delete_last_row_button.disabled = true
     if (this.copy_button) this.copy_button.disabled = true
-    // if(this.toggle_button) this.toggle_button.disabled = true;
+    /* if(this.toggle_button) this.toggle_button.disabled = true; */
     if (this.delete_button) this.delete_button.disabled = true
     if (this.moveup_button) this.moveup_button.disabled = true
     if (this.movedown_button) this.movedown_button.disabled = true
 
     if (this.rows) {
-      for (var i = 0; i < this.rows.length; i++) {
+      for (let i = 0; i < this.rows.length; i++) {
         this.rows[i].disable(alwaysDisabled)
 
         if (this.rows[i].add_row_button) this.rows[i].add_row_button.disabled = true
         if (this.rows[i].remove_all_rows_button) this.rows[i].remove_all_rows_button.disabled = true
         if (this.rows[i].delete_last_row_button) this.rows[i].delete_last_row_button.disabled = true
         if (this.rows[i].copy_button) this.rows[i].copy_button.disabled = true
-        // if(this.rows[i].toggle_button) this.rows[i].toggle_button.disabled = true;
+        /* if(this.rows[i].toggle_button) this.rows[i].toggle_button.disabled = true; */
         if (this.rows[i].delete_button) this.rows[i].delete_button.disabled = true
         if (this.rows[i].moveup_button) this.rows[i].moveup_button.disabled = true
         if (this.rows[i].movedown_button) this.rows[i].movedown_button.disabled = true
       }
     }
-    this._super()
-  },
-  preBuild: function () {
-    this._super()
+    super.disable()
+  }
+
+  preBuild () {
+    super.preBuild()
 
     this.rows = []
     this.row_cache = []
@@ -105,8 +112,9 @@ export var ArrayEditor = AbstractEditor.extend({
     this.hide_add_button = this.options.disable_array_add || this.jsoneditor.options.disable_array_add
     this.show_copy_button = this.options.enable_array_copy || this.jsoneditor.options.enable_array_copy
     this.array_controls_top = this.options.array_controls_top || this.jsoneditor.options.array_controls_top
-  },
-  build: function () {
+  }
+
+  build () {
     if (!this.options.compact) {
       this.header = document.createElement('label')
       this.header.textContent = this.getTitle()
@@ -150,7 +158,7 @@ export var ArrayEditor = AbstractEditor.extend({
         }
       }
     } else {
-      // compact mode
+      /* compact mode */
       this.title = this.theme.getHeader('')
       this.container.appendChild(this.title)
       this.panel = this.theme.getIndentedPanel()
@@ -163,78 +171,83 @@ export var ArrayEditor = AbstractEditor.extend({
       this.panel.appendChild(this.row_holder)
     }
 
-    // Add controls
+    /* Add controls */
     this.addControls()
-  },
-  onChildEditorChange: function (editor) {
+  }
+
+  onChildEditorChange (editor) {
     this.refreshValue()
     this.refreshTabs(true)
-    this._super(editor)
-  },
-  getItemTitle: function () {
+    super.onChildEditorChange(editor)
+  }
+
+  getItemTitle () {
     if (!this.item_title) {
       if (this.schema.items && !Array.isArray(this.schema.items)) {
-        var tmp = this.jsoneditor.expandRefs(this.schema.items)
+        const tmp = this.jsoneditor.expandRefs(this.schema.items)
         this.item_title = tmp.title || this.translate('default_array_item_title')
       } else {
         this.item_title = this.translate('default_array_item_title')
       }
     }
     return this.cleanText(this.item_title)
-  },
-  getItemSchema: function (i) {
+  }
+
+  getItemSchema (i) {
     if (Array.isArray(this.schema.items)) {
       if (i >= this.schema.items.length) {
         if (this.schema.additionalItems === true) {
           return {}
         } else if (this.schema.additionalItems) {
-          return $extend({}, this.schema.additionalItems)
+          return extend({}, this.schema.additionalItems)
         }
       } else {
-        return $extend({}, this.schema.items[i])
+        return extend({}, this.schema.items[i])
       }
     } else if (this.schema.items) {
-      return $extend({}, this.schema.items)
+      return extend({}, this.schema.items)
     } else {
       return {}
     }
-  },
-  getItemInfo: function (i) {
-    var schema = this.getItemSchema(i)
+  }
 
-    // Check if it's cached
+  getItemInfo (i) {
+    let schema = this.getItemSchema(i)
+
+    /* Check if it's cached */
     this.item_info = this.item_info || {}
-    var stringified = JSON.stringify(schema)
+    const stringified = JSON.stringify(schema)
     if (typeof this.item_info[stringified] !== 'undefined') return this.item_info[stringified]
 
-    // Get the schema for this item
+    /* Get the schema for this item */
     schema = this.jsoneditor.expandRefs(schema)
 
     this.item_info[stringified] = {
       title: schema.title || this.translate('default_array_item_title'),
-      'default': schema['default'],
+      default: schema.default,
       width: 12,
       child_editors: schema.properties || schema.items
     }
 
     return this.item_info[stringified]
-  },
-  getElementEditor: function (i) {
-    var itemInfo = this.getItemInfo(i)
-    var schema = this.getItemSchema(i)
+  }
+
+  getElementEditor (i) {
+    const itemInfo = this.getItemInfo(i)
+    let schema = this.getItemSchema(i)
     schema = this.jsoneditor.expandRefs(schema)
-    schema.title = itemInfo.title + ' ' + (i + 1)
+    schema.title = `${itemInfo.title} ${i + 1}`
 
-    var editor = this.jsoneditor.getEditorClass(schema)
+    const editor = this.jsoneditor.getEditorClass(schema)
 
-    var holder
+    let holder
     if (this.tabs_holder) {
       if (this.schema.format === 'tabs-top') {
         holder = this.theme.getTopTabContent()
       } else {
         holder = this.theme.getTabContent()
       }
-      holder.id = this.path + '.' + i
+      holder.id = `${this.path}.${i}`
     } else if (itemInfo.child_editors) {
       holder = this.theme.getChildEditorHolder()
     } else {
@@ -243,11 +256,11 @@ export var ArrayEditor = AbstractEditor.extend({
 
     this.row_holder.appendChild(holder)
 
-    var ret = this.jsoneditor.createEditor(editor, {
+    const ret = this.jsoneditor.createEditor(editor, {
       jsoneditor: this.jsoneditor,
-      schema: schema,
+      schema,
       container: holder,
-      path: this.path + '.' + i,
+      path: `${this.path}.${i}`,
       parent: this,
       required: true
     })
@@ -261,8 +274,9 @@ export var ArrayEditor = AbstractEditor.extend({
     }
 
     return ret
-  },
-  destroy: function () {
+  }
+
+  destroy () {
     this.empty(true)
     if (this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title)
     if (this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description)
@@ -272,12 +286,13 @@ export var ArrayEditor = AbstractEditor.extend({
 
     this.rows = this.row_cache = this.title = this.description = this.row_holder = this.panel = this.controls = null
 
-    this._super()
-  },
-  empty: function (hard) {
+    super.destroy()
+  }
+
+  empty (hard) {
     if (!this.rows) return
-    var self = this
-    $each(this.rows, function (i, row) {
+    const self = this
+    each(this.rows, (i, row) => {
       if (hard) {
         if (row.tab && row.tab.parentNode) row.tab.parentNode.removeChild(row.tab)
         self.destroyRow(row, true)
@@ -287,9 +302,10 @@ export var ArrayEditor = AbstractEditor.extend({
     })
     self.rows = []
     if (hard) self.row_cache = []
-  },
-  destroyRow: function (row, hard) {
-    var holder = row.container
+  }
+
+  destroyRow (row, hard) {
+    const holder = row.container
     if (hard) {
       row.destroy()
       if (holder.parentNode) holder.parentNode.removeChild(holder)
@@ -299,53 +315,50 @@ export var ArrayEditor = AbstractEditor.extend({
       holder.style.display = 'none'
       row.unregister()
     }
-  },
-  getMax: function () {
+  }
+
+  getMax () {
     if ((Array.isArray(this.schema.items)) && this.schema.additionalItems === false) {
       return Math.min(this.schema.items.length, this.schema.maxItems || Infinity)
-    } else {
-      return this.schema.maxItems || Infinity
     }
-  },
-  refreshTabs: function (refreshHeaders) {
-    var self = this
-    $each(this.rows, function (i, row) {
+    return this.schema.maxItems || Infinity
+  }
+
+  refreshTabs (refreshHeaders) {
+    const self = this
+    each(this.rows, (i, row) => {
       if (!row.tab) return
 
       if (refreshHeaders) {
         row.tab_text.textContent = row.getHeaderText()
+      } else if (row.tab === self.active_tab) {
+        self.theme.markTabActive(row)
       } else {
-        if (row.tab === self.active_tab) {
-          self.theme.markTabActive(row)
-        } else {
-          self.theme.markTabInactive(row)
-        }
+        self.theme.markTabInactive(row)
       }
     })
-  },
-  setValue: function (value, initial) {
-    // Update the array's value, adding/removing rows when necessary
-    value = value || []
+  }
 
+  setValue (value = [], initial) {
     if (!(Array.isArray(value))) value = [value]
 
-    var serialized = JSON.stringify(value)
+    const serialized = JSON.stringify(value)
     if (serialized === this.serialized) return
 
-    // Make sure value has between minItems and maxItems items in it
+    /* Make sure value has between minItems and maxItems items in it */
     if (this.schema.minItems) {
       while (value.length < this.schema.minItems) {
-        value.push(this.getItemInfo(value.length)['default'])
+        value.push(this.getItemInfo(value.length).default)
       }
     }
     if (this.getMax() && value.length > this.getMax()) {
       value = value.slice(0, this.getMax())
     }
 
-    var self = this
-    $each(value, function (i, val) {
+    const self = this
+    each(value, (i, val) => {
       if (self.rows[i]) {
-        // TODO: don't set the row's value if it hasn't changed
+        /* TODO: don't set the row's value if it hasn't changed */
         self.rows[i].setValue(val, initial)
       } else if (self.row_cache[i]) {
         self.rows[i] = self.row_cache[i]
@@ -355,20 +368,20 @@ export var ArrayEditor = AbstractEditor.extend({
         self.rows[i].register()
         self.jsoneditor.trigger('addRow', self.rows[i])
       } else {
-        var editor = self.addRow(val, initial)
+        const editor = self.addRow(val, initial)
         self.jsoneditor.trigger('addRow', editor)
       }
     })
 
-    for (var j = value.length; j < self.rows.length; j++) {
+    for (let j = value.length; j < self.rows.length; j++) {
       self.destroyRow(self.rows[j])
       self.rows[j] = null
     }
     self.rows = self.rows.slice(0, value.length)
 
-    // Set the active tab
-    var newActiveTab = null
-    $each(self.rows, function (i, row) {
+    /* Set the active tab */
+    let newActiveTab = null
+    each(self.rows, (i, row) => {
       if (row.tab === self.active_tab) {
         newActiveTab = row.tab
         return false
@@ -384,24 +397,25 @@ export var ArrayEditor = AbstractEditor.extend({
 
     self.onChange()
 
-    // TODO: sortable
-  },
-  refreshValue: function (force) {
-    var self = this
-    var oldi = this.value ? this.value.length : 0
+    /* TODO: sortable */
+  }
+
+  refreshValue (force) {
+    const self = this
+    const oldi = this.value ? this.value.length : 0
     this.value = []
 
-    $each(this.rows, function (i, editor) {
-      // Get the value for this editor
+    each(this.rows, (i, editor) => {
+      /* Get the value for this editor */
       self.value[i] = editor.getValue()
     })
 
     if (oldi !== this.value.length || force) {
-      // If we currently have minItems items in the array
-      var minItems = this.schema.minItems && this.schema.minItems >= this.rows.length
+      /* If we currently have minItems items in the array */
+      const minItems = this.schema.minItems && this.schema.minItems >= this.rows.length
 
-      $each(this.rows, function (i, editor) {
-        // Hide the move down button for the last row
+      each(this.rows, (i, editor) => {
+        /* Hide the move down button for the last row */
         if (editor.movedown_button) {
           if (i === self.rows.length - 1) {
             editor.movedown_button.style.display = 'none'
@@ -410,7 +424,7 @@ export var ArrayEditor = AbstractEditor.extend({
           }
         }
 
-        // Hide the delete button if we have minItems items
+        /* Hide the delete button if we have minItems items */
         if (editor.delete_button) {
           if (minItems) {
             editor.delete_button.style.display = 'none'
@@ -419,11 +433,11 @@ export var ArrayEditor = AbstractEditor.extend({
           }
         }
 
-        // Get the value for this editor
+        /* Get the value for this editor */
         self.value[i] = editor.getValue()
       })
 
-      var controlsNeeded = false
+      let controlsNeeded = false
 
       if (!this.value.length) {
         this.delete_last_row_button.style.display = 'none'
@@ -431,7 +445,7 @@ export var ArrayEditor = AbstractEditor.extend({
       } else if (this.value.length === 1) {
         this.remove_all_rows_button.style.display = 'none'
 
-        // If there are minItems items in the array, or configured to hide the delete_last_row button, hide the delete button beneath the rows
+        /* If there are minItems items in the array, or configured to hide the delete_last_row button, hide the delete button beneath the rows */
         if (minItems || this.hide_delete_last_row_buttons) {
           this.delete_last_row_button.style.display = 'none'
         } else {
@@ -454,7 +468,7 @@ export var ArrayEditor = AbstractEditor.extend({
         }
       }
 
-      // If there are maxItems in the array, hide the add button beneath the rows
+      /* If there are maxItems in the array, hide the add button beneath the rows */
       if ((this.getMax() && this.getMax() <= this.rows.length) || this.hide_add_button) {
         this.add_row_button.style.display = 'none'
       } else {
@@ -468,10 +482,11 @@ export var ArrayEditor = AbstractEditor.extend({
         this.controls.style.display = 'none'
       }
     }
-  },
-  addRow: function (value, initial) {
-    var self = this
-    var i = this.rows.length
+  }
+
+  addRow (value, initial) {
+    const self = this
+    const i = this.rows.length
 
     self.rows[i] = this.getElementEditor(i)
     self.row_cache[i] = self.rows[i]
@@ -486,7 +501,7 @@ export var ArrayEditor = AbstractEditor.extend({
         self.rows[i].tab = self.theme.getTab(self.rows[i].tab_text, this.getValidId(self.rows[i].path))
         self.theme.addTab(self.tabs_holder, self.rows[i].tab)
       }
-      self.rows[i].tab.addEventListener('click', function (e) {
+      self.rows[i].tab.addEventListener('click', (e) => {
         self.active_tab = self.rows[i].tab
         self.refreshTabs()
         e.preventDefault()
@@ -494,9 +509,9 @@ export var ArrayEditor = AbstractEditor.extend({
       })
     }
 
-    var controlsHolder = self.rows[i].title_controls || self.rows[i].array_controls
+    const controlsHolder = self.rows[i].title_controls || self.rows[i].array_controls
 
-    // Buttons to delete row, move row up, and move row down
+    /* Buttons to delete row, move row up, and move row down */
     if (!self.hide_delete_buttons) {
       self.rows[i].delete_button = this.getButton(self.getItemTitle(), 'delete', this.translate('button_delete_row_title', [self.getItemTitle()]))
       self.rows[i].delete_button.classList.add('delete', 'json-editor-btntype-delete')
@@ -509,18 +524,18 @@ export var ArrayEditor = AbstractEditor.extend({
           return false
         }
 
-        var i = this.getAttribute('data-i') * 1
-        var value = self.getValue()
-        var newval = []
-        var newActiveTab = null
+        const i = this.getAttribute('data-i') * 1
+        const value = self.getValue()
+        const newval = []
+        let newActiveTab = null
 
-        $each(value, function (j, row) {
+        each(value, (j, row) => {
           if (j !== i) {
             newval.push(row)
           }
         })
 
-        var editor = self.rows[i]
+        const editor = self.rows[i]
 
         self.setValue(newval)
 
@@ -544,18 +559,18 @@ export var ArrayEditor = AbstractEditor.extend({
       }
     }
 
-    // Button to copy an array element and add it as last element
+    /* Button to copy an array element and add it as last element */
     if (self.show_copy_button) {
-      self.rows[i].copy_button = this.getButton(self.getItemTitle(), 'copy', 'Copy ' + self.getItemTitle())
+      self.rows[i].copy_button = this.getButton(self.getItemTitle(), 'copy', `Copy ${self.getItemTitle()}`)
       self.rows[i].copy_button.classList.add('copy', 'json-editor-btntype-copy')
       self.rows[i].copy_button.setAttribute('data-i', i)
       self.rows[i].copy_button.addEventListener('click', function (e) {
-        var value = self.getValue()
+        const value = self.getValue()
         e.preventDefault()
         e.stopPropagation()
-        var i = this.getAttribute('data-i') * 1
+        const i = this.getAttribute('data-i') * 1
 
-        $each(value, function (j, row) {
+        each(value, (j, row) => {
           if (j === i) {
             value.push(row)
           }
@@ -576,11 +591,11 @@ export var ArrayEditor = AbstractEditor.extend({
       self.rows[i].moveup_button.addEventListener('click', function (e) {
         e.preventDefault()
         e.stopPropagation()
-        var i = this.getAttribute('data-i') * 1
+        const i = this.getAttribute('data-i') * 1
 
         if (i <= 0) return
-        var rows = self.getValue()
-        var tmp = rows[i - 1]
+        const rows = self.getValue()
+        const tmp = rows[i - 1]
         rows[i - 1] = rows[i]
         rows[i] = tmp
 
@@ -605,11 +620,11 @@ export var ArrayEditor = AbstractEditor.extend({
       self.rows[i].movedown_button.addEventListener('click', function (e) {
         e.preventDefault()
         e.stopPropagation()
-        var i = this.getAttribute('data-i') * 1
+        const i = this.getAttribute('data-i') * 1
 
-        var rows = self.getValue()
+        const rows = self.getValue()
         if (i >= rows.length - 1) return
-        var tmp = rows[i + 1]
+        const tmp = rows[i + 1]
         rows[i + 1] = rows[i]
         rows[i] = tmp
 
@@ -630,9 +645,10 @@ export var ArrayEditor = AbstractEditor.extend({
     self.refreshTabs()
 
     return self.rows[i]
-  },
-  addControls: function () {
-    var self = this
+  }
+
+  addControls () {
+    const self = this
 
     this.collapsed = false
     this.toggle_button = this.getButton('', 'collapse', this.translate('button_collapse'))
@@ -640,8 +656,8 @@ export var ArrayEditor = AbstractEditor.extend({
     this.toggle_button.style.margin = '0 10px 0 0'
     this.title.insertBefore(this.toggle_button, this.title.childNodes[0])
 
-    var rowHolderDisplay = self.row_holder.style.display
-    var controlsDisplay = self.controls.style.display
+    const rowHolderDisplay = self.row_holder.style.display
+    const controlsDisplay = self.controls.style.display
     this.toggle_button.addEventListener('click', function (e) {
       e.preventDefault()
       e.stopPropagation()
@@ -662,26 +678,26 @@ export var ArrayEditor = AbstractEditor.extend({
       }
     })
 
-    // If it should start collapsed
+    /* If it should start collapsed */
     if (this.options.collapsed) {
-      $trigger(this.toggle_button, 'click')
+      trigger(this.toggle_button, 'click')
     }
 
-    // Collapse button disabled
+    /* Collapse button disabled */
     if (this.schema.options && typeof this.schema.options.disable_collapse !== 'undefined') {
       if (this.schema.options.disable_collapse) this.toggle_button.style.display = 'none'
     } else if (this.jsoneditor.options.disable_collapse) {
       this.toggle_button.style.display = 'none'
     }
 
-    // Add "new row" and "delete last" buttons below editor
+    /* Add "new row" and "delete last" buttons below editor */
     this.add_row_button = this.getButton(this.getItemTitle(), 'add', this.translate('button_add_row_title', [this.getItemTitle()]))
     this.add_row_button.classList.add('json-editor-btntype-add')
-    this.add_row_button.addEventListener('click', function (e) {
+    this.add_row_button.addEventListener('click', (e) => {
       e.preventDefault()
       e.stopPropagation()
-      var i = self.rows.length
-      var editor
+      const i = self.rows.length
+      let editor
       if (self.row_cache[i]) {
         editor = self.rows[i] = self.row_cache[i]
         self.rows[i].setValue(self.rows[i].getDefault(), true)
@@ -701,7 +717,7 @@ export var ArrayEditor = AbstractEditor.extend({
 
     this.delete_last_row_button = this.getButton(this.translate('button_delete_last', [this.getItemTitle()]), 'subtract', this.translate('button_delete_last_title', [this.getItemTitle()]))
     this.delete_last_row_button.classList.add('json-editor-btntype-deletelast')
-    this.delete_last_row_button.addEventListener('click', function (e) {
+    this.delete_last_row_button.addEventListener('click', (e) => {
       e.preventDefault()
       e.stopPropagation()
 
@@ -709,10 +725,10 @@ export var ArrayEditor = AbstractEditor.extend({
         return false
       }
 
-      var rows = self.getValue()
-      var newActiveTab = null
+      const rows = self.getValue()
+      let newActiveTab = null
 
-      var editor = rows.pop()
+      const editor = rows.pop()
 
       self.setValue(rows)
 
@@ -732,7 +748,7 @@ export var ArrayEditor = AbstractEditor.extend({
 
     this.remove_all_rows_button = this.getButton(this.translate('button_delete_all'), 'delete', this.translate('button_delete_all_title'))
     this.remove_all_rows_button.classList.add('json-editor-btntype-deleteall')
-    this.remove_all_rows_button.addEventListener('click', function (e) {
+    this.remove_all_rows_button.addEventListener('click', (e) => {
       e.preventDefault()
       e.stopPropagation()
 
@@ -760,14 +776,15 @@ export var ArrayEditor = AbstractEditor.extend({
       this.remove_all_rows_button.style.textAlign = 'left'
       this.remove_all_rows_button.style.marginBottom = '3px'
     }
-  },
-  showValidationErrors: function (errors) {
-    var self = this
+  }
 
-    // Get all the errors that pertain to this editor
-    var myErrors = []
-    var otherErrors = []
-    $each(errors, function (i, error) {
+  showValidationErrors (errors) {
+    const self = this
+
+    /* Get all the errors that pertain to this editor */
+    const myErrors = []
+    const otherErrors = []
+    each(errors, (i, error) => {
       if (error.path === self.path) {
         myErrors.push(error)
       } else {
@@ -775,23 +792,23 @@ export var ArrayEditor = AbstractEditor.extend({
       }
     })
 
-    // Show errors for this editor
+    /* Show errors for this editor */
     if (this.error_holder) {
       if (myErrors.length) {
         this.error_holder.innerHTML = ''
         this.error_holder.style.display = ''
-        $each(myErrors, function (i, error) {
+        each(myErrors, (i, error) => {
           self.error_holder.appendChild(self.theme.getErrorMessage(error.message))
         })
-      // Hide error area
+        /* Hide error area */
       } else {
         this.error_holder.style.display = 'none'
       }
     }
 
-    // Show errors for child editors
-    $each(this.rows, function (i, row) {
+    /* Show errors for child editors */
+    each(this.rows, (i, row) => {
       row.showValidationErrors(otherErrors)
     })
   }
-})
+}

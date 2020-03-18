@@ -1,24 +1,26 @@
-import { AbstractTheme } from '../theme'
-import rules from './bootstrap4.json'
+import { AbstractTheme } from '../theme.js'
+import rules from './bootstrap4.css.js'
 
-export var bootstrap4Theme = AbstractTheme.extend({
-  /* Theme config options that allows changing various aspects of the output */
-  options: {
-    disable_theme_rules: false,
-    input_size: 'normal', // Size of input and select elements. "small", "normal", "large"
-    custom_forms: false, // use twbs custom form stylings
-    object_indent: true, // Indent nested object elements (use nested .card layout)
-    object_background: 'bg-light', // Bootstrap 4 card background modifier class (https://getbootstrap.com/docs/4.1/getting-started/introduction/)
-    object_text: '', // Bootstrap 4 card tect color modifier class (https://getbootstrap.com/docs/4.1/getting-started/introduction/)
-    table_border: false, // Add border to array "table" row and cells
-    table_zebrastyle: false, // Add "zebra style" to array "table" rows
-    tooltip: 'bootstrap' // how to display tooltips (infoText). Can be `browser` for native `title`, `css` for simple CSS Styling, or `bootstrap` for TWBS/Popper.js handling
-  },
-  /* Custom stylesheet rules. format: "selector" : "CSS rules" */
-  rules: rules,
+/* Theme config options that allows changing various aspects of the output */
+const options = {
+  disable_theme_rules: false,
+  input_size: 'normal', /* Size of input and select elements. "small", "normal", "large" */
+  custom_forms: false, /* use twbs custom form stylings */
+  object_indent: true, /* Indent nested object elements (use nested .card layout) */
+  object_background: 'bg-light', /* Bootstrap 4 card background modifier class (https://getbootstrap.com/docs/4.1/getting-started/introduction/) */
+  object_text: '', /* Bootstrap 4 card tect color modifier class (https://getbootstrap.com/docs/4.1/getting-started/introduction/) */
+  table_border: false, /* Add border to array "table" row and cells */
+  table_zebrastyle: false, /* Add "zebra style" to array "table" rows */
+  tooltip: 'bootstrap' /* how to display tooltips (infoText). Can be `browser` for native `title`, `css` for simple CSS Styling, or `bootstrap` for TWBS/Popper.js handling */
+}
 
-  getSelectInput: function (options, multiple) {
-    var el = this._super(options)
+export class bootstrap4Theme extends AbstractTheme {
+  constructor (jsoneditor) {
+    super(jsoneditor, options)
+  }
+
+  getSelectInput (options, multiple) {
+    const el = super.getSelectInput(options)
     el.classList.add('form-control')
 
     if (this.options.custom_forms === false) {
@@ -32,48 +34,48 @@ export var bootstrap4Theme = AbstractTheme.extend({
     }
 
     return el
-  },
+  }
 
-  getContainer: function () {
-    var el = document.createElement('div')
+  getContainer () {
+    const el = document.createElement('div')
     if (!this.options.object_indent) el.classList.add('je-noindent')
     return el
-  },
+  }
 
-  setGridColumnSize: function (el, size, offset) {
-    el.classList.add('col-md-' + size)
+  setGridColumnSize (el, size, offset) {
+    el.classList.add(`col-md-${size}`)
 
     if (offset) {
-      el.classList.add('offset-md-' + offset)
+      el.classList.add(`offset-md-${offset}`)
     }
-  },
+  }
 
-  afterInputReady: function (input) {
+  afterInputReady (input) {
     if (input.controlgroup) return
 
-    // set id/for
-    // is not working for: [type=file], [type=checkbox]
-    var id = input.name
+    /* set id/for */
+    /* is not working for: [type=file], [type=checkbox] */
+    const id = input.name
     input.id = id
-    // 2x parentNode, b/c range input has an <div> wrapper
-    var label = input.parentNode.parentNode.getElementsByTagName('label')[0]
+    /* 2x parentNode, b/c range input has an <div> wrapper */
+    const label = input.parentNode.parentNode.getElementsByTagName('label')[0]
     if (label) {
       label.htmlFor = id
     }
 
     input.controlgroup = this.closest(input, '.form-group')
-  },
+  }
 
-  getTextareaInput: function () {
-    var el = document.createElement('textarea')
+  getTextareaInput () {
+    const el = document.createElement('textarea')
     el.classList.add('form-control')
     if (this.options.input_size === 'small') el.classList.add('form-control-sm')
     if (this.options.input_size === 'large') el.classList.add('form-control-lg')
     return el
-  },
+  }
 
-  getRangeInput: function (min, max, step) {
-    var el = this._super(min, max, step)
+  getRangeInput (min, max, step) {
+    const el = super.getRangeInput(min, max, step)
 
     if (this.options.custom_forms === true) {
       el.classList.remove('form-control')
@@ -81,10 +83,10 @@ export var bootstrap4Theme = AbstractTheme.extend({
     }
 
     return el
-  },
+  }
 
-  getFormInputField: function (type) {
-    var el = this._super(type)
+  getFormInputField (type) {
+    const el = super.getFormInputField(type)
     if (type !== 'checkbox' && type !== 'radio' && type !== 'file') {
       el.classList.add('form-control')
       if (this.options.input_size === 'small') el.classList.add('form-control-sm')
@@ -92,21 +94,21 @@ export var bootstrap4Theme = AbstractTheme.extend({
     }
 
     if (type === 'file') {
-      // custom_form is not used on files, would be a bit ticky since we need more
-      // markup. Also it contains language strings which would need be translateable?
-      // and most of all, w/o JavaScript teh name of the file can't be displayed.
+      /* custom_form is not used on files, would be a bit ticky since we need more */
+      /* markup. Also it contains language strings which would need be translateable? */
+      /* and most of all, w/o JavaScript teh name of the file can't be displayed. */
       el.classList.add('form-control-file')
     }
 
     return el
-  },
+  }
 
-  getFormControl: function (label, input, description, infoText) {
-    var group = document.createElement('div')
+  getFormControl (label, input, description, infoText) {
+    const group = document.createElement('div')
     group.classList.add('form-group')
 
     if (label && (input.type === 'checkbox' || input.type === 'radio')) {
-      var check = document.createElement('div')
+      const check = document.createElement('div')
 
       if (this.options.custom_forms === false) {
         check.classList.add('form-check')
@@ -144,17 +146,17 @@ export var bootstrap4Theme = AbstractTheme.extend({
     }
 
     return group
-  },
+  }
 
-  getInfoButton: function (text) {
-    var button = document.createElement('button') // shoud be a <button> but no fitting tbws style...
+  getInfoButton (text) {
+    const button = document.createElement('button') /* shoud be a <button> but no fitting tbws style... */
     button.type = 'button'
     button.classList.add('ml-3', 'jsoneditor-twbs4-text-button')
     button.setAttribute('data-toggle', 'tooltip')
     button.setAttribute('data-placement', 'auto')
     button.title = text
 
-    var icon = document.createTextNode('ⓘ')
+    const icon = document.createTextNode('ⓘ')
     button.appendChild(icon)
 
     if (this.options.tooltip === 'bootstrap') {
@@ -165,27 +167,27 @@ export var bootstrap4Theme = AbstractTheme.extend({
       }
     } else if (this.options.tooltip === 'css') {
       button.classList.add('je-tooltip')
-    } // else -> nothing todo for native [title] handling
+    } /* else -> nothing todo for native [title] handling */
 
     return button
-  },
+  }
 
   /**
    * Generates a checkbox...
    *
    * Overwriten from master theme to get rid of inline styles.
    */
-  getCheckbox: function () {
-    var el = this.getFormInputField('checkbox')
+  getCheckbox () {
+    const el = this.getFormInputField('checkbox')
     return el
-  },
+  }
 
   /**
    * Multiple checkboxes in a row.
    *
    */
-  getMultiCheckboxHolder: function (controls, label, description, infoText) {
-    var el = document.createElement('div')
+  getMultiCheckboxHolder (controls, label, description, infoText) {
+    const el = document.createElement('div')
     el.classList.add('form-group')
 
     if (label) {
@@ -196,19 +198,19 @@ export var bootstrap4Theme = AbstractTheme.extend({
       }
     }
 
-    // for inline view we need an container so it doesnt wrap in the "row" of the <label>
-    var container = document.createElement('div')
+    /* for inline view we need an container so it doesnt wrap in the "row" of the <label> */
+    const container = document.createElement('div')
 
-    for (var i in controls) {
+    for (const i in controls) {
       if (!controls.hasOwnProperty(i)) {
         continue
       }
 
-      // controls are already parsed by getFormControl() so they have an .form-group
-      // wrapper we need to get rid of...
-      var ctrl = controls[i].firstChild
+      /* controls are already parsed by getFormControl() so they have an .form-group */
+      /* wrapper we need to get rid of... */
+      const ctrl = controls[i].firstChild
 
-      // we don't know if this should be an normal / compact view
+      /* we don't know if this should be an normal / compact view */
       /* if (this.options.custom_forms === false) {
         ctrl.classList.add('form-check-inline')
       } else {
@@ -223,15 +225,15 @@ export var bootstrap4Theme = AbstractTheme.extend({
     if (description) el.appendChild(description)
 
     return el
-  },
+  }
 
   /**
    * Single radio element
    */
-  getFormRadio: function (attributes) {
-    var el = this.getFormInputField('radio')
+  getFormRadio (attributes) {
+    const el = this.getFormInputField('radio')
 
-    for (var key in attributes) {
+    for (const key in attributes) {
       el.setAttribute(key, attributes[key])
     }
 
@@ -242,14 +244,14 @@ export var bootstrap4Theme = AbstractTheme.extend({
     }
 
     return el
-  },
+  }
 
   /**
    * Add the <label> for the single radio from getFormRadio()
    *
    */
-  getFormRadioLabel: function (text, req) {
-    var el = document.createElement('label')
+  getFormRadioLabel (text, req) {
+    const el = document.createElement('label')
 
     if (this.options.custom_forms === false) {
       el.classList.add('form-check-label')
@@ -259,14 +261,14 @@ export var bootstrap4Theme = AbstractTheme.extend({
 
     el.appendChild(document.createTextNode(text))
     return el
-  },
+  }
 
   /**
    * Stack the radios from getFormRadio()/getFormRadioLabel()
    *
    */
-  getFormRadioControl: function (label, input, compact) {
-    var el = document.createElement('div')
+  getFormRadioControl (label, input, compact) {
+    const el = document.createElement('div')
 
     if (this.options.custom_forms === false) {
       el.classList.add('form-check')
@@ -286,10 +288,10 @@ export var bootstrap4Theme = AbstractTheme.extend({
     }
 
     return el
-  },
+  }
 
-  getIndentedPanel: function () {
-    var el = document.createElement('div')
+  getIndentedPanel () {
+    const el = document.createElement('div')
     el.classList.add('card', 'card-body', 'mb-3')
 
     if (this.options.object_background) {
@@ -300,13 +302,13 @@ export var bootstrap4Theme = AbstractTheme.extend({
       el.classList.add(this.options.object_text)
     }
 
-    // for better twbs card styling we should be able to return a nested div
+    /* for better twbs card styling we should be able to return a nested div */
 
     return el
-  },
+  }
 
-  getFormInputDescription: function (text) {
-    var el = document.createElement('small')
+  getFormInputDescription (text) {
+    const el = document.createElement('small')
     el.classList.add('form-text')
 
     if (window.DOMPurify) {
@@ -316,13 +318,13 @@ export var bootstrap4Theme = AbstractTheme.extend({
     }
 
     return el
-  },
+  }
 
-  getHeader: function (text) {
-    // var cardHeader = document.createElement('div')
-    // cardHeader.classList.add('card-header')
+  getHeader (text) {
+    /* var cardHeader = document.createElement('div') */
+    /* cardHeader.classList.add('card-header') */
 
-    var el = document.createElement('h3')
+    const el = document.createElement('h3')
     el.classList.add('card-title')
 
     if (typeof text === 'string') {
@@ -331,40 +333,40 @@ export var bootstrap4Theme = AbstractTheme.extend({
       el.appendChild(text)
     }
 
-    // cardHeader.appendChild(el)
+    /* cardHeader.appendChild(el) */
 
     return el
-  },
+  }
 
-  getHeaderButtonHolder: function () {
-    var el = this.getButtonHolder()
+  getHeaderButtonHolder () {
+    const el = this.getButtonHolder()
 
     return el
-  },
-  getButtonHolder: function () {
-    var el = document.createElement('span')
+  }
+  getButtonHolder () {
+    const el = document.createElement('span')
     el.classList.add('btn-group')
     return el
-  },
+  }
 
-  getFormButtonHolder: function (buttonAlign) {
-    var el = this.getButtonHolder()
+  getFormButtonHolder (buttonAlign) {
+    const el = this.getButtonHolder()
     el.classList.add('d-block')
 
     if (buttonAlign === 'center') el.classList.add('text-center')
     else if (buttonAlign === 'right') el.classList.add('text-right')
 
     return el
-  },
+  }
 
-  getButton: function (text, icon, title) {
-    var el = this._super(text, icon, title)
+  getButton (text, icon, title) {
+    const el = super.getButton(text, icon, title)
     el.classList.add('btn', 'btn-secondary', 'btn-sm')
     return el
-  },
+  }
 
-  getTable: function () {
-    var el = document.createElement('table')
+  getTable () {
+    const el = document.createElement('table')
     el.classList.add('table', 'table-sm')
 
     if (this.options.table_border) {
@@ -376,20 +378,20 @@ export var bootstrap4Theme = AbstractTheme.extend({
     }
 
     return el
-  },
+  }
 
-  getErrorMessage: function (text) {
-    var el = document.createElement('div')
+  getErrorMessage (text) {
+    const el = document.createElement('div')
     el.classList.add('alert', 'alert-danger')
     el.setAttribute('role', 'alert')
     el.appendChild(document.createTextNode(text))
     return el
-  },
+  }
 
   /**
    * input validation on <input>
    */
-  addInputError: function (input, text) {
+  addInputError (input, text) {
     if (!input.controlgroup) return
 
     input.classList.add('is-invalid')
@@ -403,78 +405,85 @@ export var bootstrap4Theme = AbstractTheme.extend({
     }
 
     input.errmsg.textContent = text
-  },
-  removeInputError: function (input) {
+  }
+  removeInputError (input) {
     if (!input.errmsg) return
     input.errmsg.style.display = 'none'
     input.classList.remove('is-invalid')
-  },
+  }
 
-  getTabHolder: function (propertyName) {
-    var el = document.createElement('div')
-    var pName = (typeof propertyName === 'undefined') ? '' : propertyName
-    el.innerHTML = "<div class='col-md-2' id='" + pName + "'><ul class='nav flex-column nav-pills'></ul></div><div class='col-md-10'><div class='tab-content' id='" + pName + "'></div></div>"
+  getTabHolder (propertyName) {
+    const el = document.createElement('div')
+    const pName = (typeof propertyName === 'undefined') ? '' : propertyName
+    el.innerHTML = `<div class='col-md-2' id='${pName}'><ul class='nav flex-column nav-pills'></ul></div><div class='col-md-10'><div class='tab-content' id='${pName}'></div></div>`
     el.classList.add('row')
     return el
-  },
-  addTab: function (holder, tab) {
+  }
+
+  addTab (holder, tab) {
     holder.children[0].children[0].appendChild(tab)
-  },
-  getTabContentHolder: function (tabHolder) {
+  }
+
+  getTabContentHolder (tabHolder) {
     return tabHolder.children[1].children[0]
-  },
+  }
 
-  getTopTabHolder: function (propertyName) {
-    var pName = (typeof propertyName === 'undefined') ? '' : propertyName
+  getTopTabHolder (propertyName) {
+    const pName = (typeof propertyName === 'undefined') ? '' : propertyName
 
-    var el = document.createElement('div')
+    const el = document.createElement('div')
     el.classList.add('card')
 
-    el.innerHTML = "<div class='card-header'><ul class='nav nav-tabs card-header-tabs' id='" + pName + "'></ul></div><div class='card-body'><div class='tab-content' id='" + pName + "'></div></div>"
+    el.innerHTML = `<div class='card-header'><ul class='nav nav-tabs card-header-tabs' id='${pName}'></ul></div><div class='card-body'><div class='tab-content' id='${pName}'></div></div>`
 
     return el
-  },
-  getTab: function (text, tabId) {
-    var liel = document.createElement('li')
+  }
+
+  getTab (text, tabId) {
+    const liel = document.createElement('li')
     liel.classList.add('nav-item')
 
-    var ael = document.createElement('a')
+    const ael = document.createElement('a')
     ael.classList.add('nav-link')
-    ael.setAttribute('href', '#' + tabId)
+    ael.setAttribute('href', `#${tabId}`)
     ael.setAttribute('data-toggle', 'tab')
     ael.appendChild(text)
 
     liel.appendChild(ael)
 
     return liel
-  },
-  getTopTab: function (text, tabId) {
-    var el = document.createElement('li')
+  }
+
+  getTopTab (text, tabId) {
+    const el = document.createElement('li')
     el.classList.add('nav-item')
 
-    var a = document.createElement('a')
+    const a = document.createElement('a')
     a.classList.add('nav-link')
-    a.setAttribute('href', '#' + tabId)
+    a.setAttribute('href', `#${tabId}`)
     a.setAttribute('data-toggle', 'tab')
     a.appendChild(text)
 
     el.appendChild(a)
 
     return el
-  },
-  getTabContent: function () {
-    var el = document.createElement('div')
+  }
+
+  getTabContent () {
+    const el = document.createElement('div')
     el.classList.add('tab-pane')
     el.setAttribute('role', 'tabpanel')
     return el
-  },
-  getTopTabContent: function () {
-    var el = document.createElement('div')
+  }
+
+  getTopTabContent () {
+    const el = document.createElement('div')
     el.classList.add('tab-pane')
     el.setAttribute('role', 'tabpanel')
     return el
-  },
-  markTabActive: function (row) {
+  }
+
+  markTabActive (row) {
     row.tab.firstChild.classList.add('active')
 
     if (typeof row.rowPane !== 'undefined') {
@@ -482,8 +491,9 @@ export var bootstrap4Theme = AbstractTheme.extend({
     } else {
       row.container.classList.add('active')
     }
-  },
-  markTabInactive: function (row) {
+  }
+
+  markTabInactive (row) {
     row.tab.firstChild.classList.remove('active')
 
     if (typeof row.rowPane !== 'undefined') {
@@ -491,86 +501,87 @@ export var bootstrap4Theme = AbstractTheme.extend({
     } else {
       row.container.classList.remove('active')
     }
-  },
+  }
 
-  insertBasicTopTab: function (tab, newTabsHolder) {
+  insertBasicTopTab (tab, newTabsHolder) {
     newTabsHolder.children[0].children[0].insertBefore(tab, newTabsHolder.children[0].children[0].firstChild)
-  },
+  }
 
-  addTopTab: function (holder, tab) {
+  addTopTab (holder, tab) {
     holder.children[0].children[0].appendChild(tab)
-  },
+  }
 
-  getTopTabContentHolder: function (tabHolder) {
+  getTopTabContentHolder (tabHolder) {
     return tabHolder.children[1].children[0]
-  },
+  }
 
-  getProgressBar: function () {
-    var min = 0
-    var max = 100
-    var start = 0
+  getProgressBar () {
+    const min = 0
+    const max = 100
+    const start = 0
 
-    var container = document.createElement('div')
+    const container = document.createElement('div')
     container.classList.add('progress')
 
-    var bar = document.createElement('div')
+    const bar = document.createElement('div')
     bar.classList.add('progress-bar')
     bar.setAttribute('role', 'progressbar')
     bar.setAttribute('aria-valuenow', start)
     bar.setAttribute('aria-valuemin', min)
     bar.setAttribute('aria-valuenax', max)
-    bar.innerHTML = start + '%'
+    bar.innerHTML = `${start}%`
     container.appendChild(bar)
 
     return container
-  },
-  updateProgressBar: function (progressBar, progress) {
+  }
+  updateProgressBar (progressBar, progress) {
     if (!progressBar) return
 
-    var bar = progressBar.firstChild
-    var percentage = progress + '%'
+    const bar = progressBar.firstChild
+    const percentage = `${progress}%`
     bar.setAttribute('aria-valuenow', progress)
     bar.style.width = percentage
     bar.innerHTML = percentage
-  },
-  updateProgressBarUnknown: function (progressBar) {
+  }
+
+  updateProgressBarUnknown (progressBar) {
     if (!progressBar) return
 
-    var bar = progressBar.firstChild
+    const bar = progressBar.firstChild
     progressBar.classList.add('progress', 'progress-striped', 'active')
     bar.removeAttribute('aria-valuenow')
     bar.style.width = '100%'
     bar.innerHTML = ''
-  },
+  }
 
-  getBlockLink: function () {
-    var link = document.createElement('a')
+  getBlockLink () {
+    const link = document.createElement('a')
     link.classList.add('mb-3', 'd-inline-block')
     return link
-  },
+  }
 
   /**
    * Link after successfull upload
    */
-  getLinksHolder: function () {
-    var el = document.createElement('div')
+  getLinksHolder () {
+    const el = document.createElement('div')
     return el
-  },
+  }
 
-  getInputGroup: function (input, buttons) {
+  getInputGroup (input, buttons) {
     if (!input) return
 
-    var inputGroupContainer = document.createElement('div')
+    const inputGroupContainer = document.createElement('div')
     inputGroupContainer.classList.add('input-group')
 
     inputGroupContainer.appendChild(input)
 
-    var inputGroup = document.createElement('div')
+    const inputGroup = document.createElement('div')
     inputGroup.classList.add('input-group-append')
     inputGroupContainer.appendChild(inputGroup)
 
-    for (var i = 0; i < buttons.length; i++) {
-      // this uses the getButton() wrapper, so we have to remove the panel/ctrl spacing for this case
+    for (let i = 0; i < buttons.length; i++) {
+      /* this uses the getButton() wrapper, so we have to remove the panel/ctrl spacing for this case */
       buttons[i].classList.remove('mr-2', 'btn-secondary')
       buttons[i].classList.add('btn-outline-secondary')
 
@@ -579,4 +590,7 @@ export var bootstrap4Theme = AbstractTheme.extend({
 
     return inputGroupContainer
   }
-})
+}
+
+/* Custom stylesheet rules. format: "selector" : "CSS rules" */
+bootstrap4Theme.rules = rules

@@ -1,30 +1,33 @@
-import { AbstractEditor } from '../editor'
-import { $each } from '../utilities'
+import { AbstractEditor } from '../editor.js'
+import { each } from '../utilities.js'
 
-export var CheckboxEditor = AbstractEditor.extend({
-
-  setValue: function (value, initial) {
+export class CheckboxEditor extends AbstractEditor {
+  setValue (value, initial) {
     value = !!value
-    var changed = this.getValue() !== value
+    const changed = this.getValue() !== value
     this.value = value
     this.input.checked = this.value
     this.onChange(changed)
-  },
-  register: function () {
-    this._super()
+  }
+
+  register () {
+    super.register()
     if (!this.input) return
     this.input.setAttribute('name', this.formname)
-  },
-  unregister: function () {
-    this._super()
+  }
+
+  unregister () {
+    super.unregister()
     if (!this.input) return
     this.input.removeAttribute('name')
-  },
-  getNumColumns: function () {
+  }
+
+  getNumColumns () {
     return Math.min(12, Math.max(this.getTitle().length / 7, 2))
-  },
-  build: function () {
-    var self = this
+  }
+
+  build () {
+    const self = this
     this.label = this.header = this.theme.getCheckboxLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
     if (this.options.infoText && !this.options.compact) this.infoButton = this.theme.getInfoButton(this.options.infoText)
@@ -46,35 +49,39 @@ export var CheckboxEditor = AbstractEditor.extend({
     })
 
     this.container.appendChild(this.control)
-  },
-  enable: function () {
+  }
+
+  enable () {
     if (!this.always_disabled) {
       this.input.disabled = false
-      this._super()
+      super.enable()
     }
-  },
-  disable: function (alwaysDisabled) {
+  }
+
+  disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     this.input.disabled = true
-    this._super()
-  },
-  destroy: function () {
+    super.disable()
+  }
+
+  destroy () {
     if (this.label && this.label.parentNode) this.label.parentNode.removeChild(this.label)
     if (this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description)
     if (this.input && this.input.parentNode) this.input.parentNode.removeChild(this.input)
-    this._super()
-  },
-  showValidationErrors: function (errors) {
-    var self = this
+    super.destroy()
+  }
 
-    if (this.jsoneditor.options.show_errors === 'always') {} else if (!this.is_dirty && this.previous_error_setting === this.jsoneditor.options.show_errors) {
+  showValidationErrors (errors) {
+    const self = this
+
+    if (this.jsoneditor.options.show_errors === 'always') { } else if (!this.is_dirty && this.previous_error_setting === this.jsoneditor.options.show_errors) {
       return
     }
 
     this.previous_error_setting = this.jsoneditor.options.show_errors
 
-    var messages = []
-    $each(errors, function (i, error) {
+    const messages = []
+    each(errors, (i, error) => {
       if (error.path === self.path) {
         messages.push(error.message)
       }
@@ -83,9 +90,9 @@ export var CheckboxEditor = AbstractEditor.extend({
     this.input.controlgroup = this.control
 
     if (messages.length) {
-      this.theme.addInputError(this.input, messages.join('. ') + '.')
+      this.theme.addInputError(this.input, `${messages.join('. ')}.`)
     } else {
       this.theme.removeInputError(this.input)
     }
   }
-})
+}

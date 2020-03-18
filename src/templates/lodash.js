@@ -1,11 +1,9 @@
-export var lodashTemplate = function () {
+export const lodashTemplate = () => {
   if (!window._) return false
 
   return {
-    compile: function (template) {
-      return function (context) {
-        return window._.template(template)(context)
-      }
+    compile (template) {
+      return context => window._.template(template)(context)
     }
   }
 }

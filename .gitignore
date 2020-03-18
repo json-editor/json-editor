@@ -1,8 +1,10 @@
 /node_modules/
 /.idea/
 /dist/
+/www/
 /e2e/
 /tests/codeceptjs/output
 .vscode
 .env
-/src/themes/*.json
+/src/themes/*.css.js
+/src/editors/*.css.js

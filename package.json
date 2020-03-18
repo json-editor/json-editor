@@ -2,7 +2,7 @@
   "name": "@json-editor/json-editor",
   "title": "JSONEditor",
   "description": "JSON Schema based editor",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "main": "dist/jsoneditor.js",
   "module": "dist/jsoneditor.commonjs2.js",
   "author": {
@@ -25,6 +25,8 @@
   ],
   "scripts": {
     "prepare": "npm run build",
+    "clean": "npm run clean.css.js",
+    "clean.css.js": "find ./src -name *.css.js -type f -delete",
     "build": "npm run build.prod && npm run build.nonmin",
     "build.prod": "webpack --config config/webpack.prod.js --progress --profile --bail",
     "build.nonmin": "webpack --config config/webpack.nonmin.js --progress --profile --bail",

@@ -1,35 +1,37 @@
-// Non-Active editor for displaying buttons in form
-import { AbstractEditor } from '../editor'
-import { $extend } from '../utilities'
-export var ButtonEditor = AbstractEditor.extend({
-  init: function (options, defaults) {
-    this._super(options, defaults)
+/* Non-Active editor for displaying buttons in form */
+import { AbstractEditor } from '../editor.js'
+import { extend } from '../utilities.js'
+
+export class ButtonEditor extends AbstractEditor {
+  constructor (options, defaults) {
+    super(options, defaults)
     this.active = false
 
-    // Set field to required in schema otherwise it will not be displayed
+    /* Set field to required in schema otherwise it will not be displayed */
     if (this.parent && this.parent.schema) {
       if (Array.isArray(this.parent.schema.required)) {
-        if (this.parent.schema.required.indexOf(this.key) === -1) {
+        if (!this.parent.schema.required.includes(this.key)) {
           this.parent.schema.required.push(this.key)
         }
       } else {
         this.parent.schema.required = [this.key]
       }
     }
-  },
-  build: function () {
+  }
+
+  build () {
     this.options.compact = true
 
-    // Get options, either global options from "this.defaults.options.button" or
-    // single property options from schema "options.button"
-    var title = this.schema.title || this.key
-    var options = this.expandCallbacks('button', $extend({}, {
-      'icon': '',
-      'validated': false,
-      'align': 'left',
-      'action': function (jseditor, e) {
-        window.alert('No button action defined for "' + jseditor.path + '"')
-      }.bind(null, this)
+    /* Get options, either global options from "this.defaults.options.button" or */
+    /* single property options from schema "options.button" */
+    const title = this.schema.title || this.key
+    const options = this.expandCallbacks('button', extend({}, {
+      icon: '',
+      validated: false,
+      align: 'left',
+      action: (jseditor, e) => {
+        window.alert(`No button action defined for "${jseditor.path}"`)
+      }
     }, this.defaults.options.button || {}, this.options.button || {}))
 
     this.input = this.theme.getFormButton(title, options.icon, title)
@@ -40,7 +42,7 @@ export var ButtonEditor = AbstractEditor.extend({
       this.input.setAttribute('readonly', 'true')
     }
 
-    // Set custom attributes on input element. Parameter is array of protected keys. Empty array if none.
+    /* Set custom attributes on input element. Parameter is array of protected keys. Empty array if none. */
     this.setInputAttributes(['readonly'])
 
     this.control = this.theme.getFormButtonHolder(options.align)
@@ -48,43 +50,49 @@ export var ButtonEditor = AbstractEditor.extend({
 
     this.container.appendChild(this.control)
 
-    var self = this
-    this.changeHandler = function () {
+    const self = this
+    this.changeHandler = () => {
       if (self.jsoneditor.validate(self.jsoneditor.getValue()).length > 0) self.disable()
       else self.enable()
     }
 
-    // Enable/disable the button depending on form validation
+    /* Enable/disable the button depending on form validation */
     if (options.validated) this.jsoneditor.on('change', this.changeHandler)
-  },
-  enable: function () {
+  }
+
+  enable () {
     if (!this.always_disabled) {
       this.input.disabled = false
-      this._super()
+      super.enable()
     }
-  },
-  disable: function (alwaysDisabled) {
+  }
+
+  disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     this.input.disabled = true
-    this._super()
-  },
-  getNumColumns: function () {
+    super.disable()
+  }
+
+  getNumColumns () {
     return 2
-  },
-  activate: function () {
+  }
+
+  activate () {
     this.active = false
     this.enable()
-  },
-  deactivate: function () {
-    // only non required properties can be deactivated.
+  }
+
+  deactivate () {
+    /* only non required properties can be deactivated. */
     if (!this.isRequired()) {
       this.active = false
       this.disable()
     }
-  },
-  destroy: function () {
+  }
+
+  destroy () {
     this.jsoneditor.off('change', this.changeHandler)
     this.changeHandler = null
-    this._super()
+    super.destroy()
   }
-})
+}

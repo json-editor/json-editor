@@ -1,49 +1,48 @@
-import { AbstractTheme } from '../theme'
+import { AbstractTheme } from '../theme.js'
 
-export var bootstrap2Theme = AbstractTheme.extend({
-  /* Theme config options that allows changing various aspects of the output */
-  options: {
-    'disable_theme_rules': false
-  },
-  /* Custom stylesheet rules. format: "selector" : "CSS rules" */
-  rules: {
-    'div[data-schemaid="root"]:after': 'position:relative;color:red;margin:10px 0;font-weight:600;display:block;width:100%;text-align:center;content:"This is an old JSON-Editor 1.x Theme and might not display elements correctly when used with the 2.x version"'
-  },
-  getRangeInput: function (min, max, step) {
-    // TODO: use bootstrap slider
-    return this._super(min, max, step)
-  },
-  getGridContainer: function () {
-    var el = document.createElement('div')
+export class bootstrap2Theme extends AbstractTheme {
+  getRangeInput (min, max, step) {
+    /* TODO: use bootstrap slider */
+    return super.getRangeInput(min, max, step)
+  }
+
+  getGridContainer () {
+    const el = document.createElement('div')
     el.classList.add('container-fluid')
     return el
-  },
-  getGridRow: function () {
-    var el = document.createElement('div')
+  }
+
+  getGridRow () {
+    const el = document.createElement('div')
     el.classList.add('row-fluid')
     return el
-  },
-  getFormInputLabel: function (text, req) {
-    var el = this._super(text, req)
+  }
+
+  getFormInputLabel (text, req) {
+    const el = super.getFormInputLabel(text, req)
     el.style.display = 'inline-block'
     el.style.fontWeight = 'bold'
     return el
-  },
-  setGridColumnSize: function (el, size) {
-    el.classList.add('span' + size)
-  },
-  getSelectInput: function (options, multiple) {
-    var input = this._super(options)
+  }
+
+  setGridColumnSize (el, size) {
+    el.classList.add(`span${size}`)
+  }
+
+  getSelectInput (options, multiple) {
+    const input = super.getSelectInput(options)
     input.style.width = 'auto'
     input.style.maxWidth = '98%'
     return input
-  },
-  getFormInputField: function (type) {
-    var el = this._super(type)
+  }
+
+  getFormInputField (type) {
+    const el = super.getFormInputField(type)
     el.style.width = '98%'
     return el
-  },
-  afterInputReady: function (input) {
+  }
+
+  afterInputReady (input) {
     if (input.controlgroup) return
     input.controlgroup = this.closest(input, '.control-group')
     input.controls = this.closest(input, '.controls')
@@ -53,27 +52,29 @@ export var bootstrap2Theme = AbstractTheme.extend({
       input.style.marginBottom = 0
     }
     if (this.queuedInputErrorText) {
-      var text = this.queuedInputErrorText
+      const text = this.queuedInputErrorText
       delete this.queuedInputErrorText
       this.addInputError(input, text)
     }
 
-    // TODO: use bootstrap slider
-  },
-  getIndentedPanel: function () {
-    var el = document.createElement('div')
+    /* TODO: use bootstrap slider */
+  }
+
+  getIndentedPanel () {
+    const el = document.createElement('div')
     el.classList.add('well', 'well-small')
     el.style.paddingBottom = 0
     return el
-  },
-  getInfoButton: function (text) {
-    var icon = document.createElement('span')
+  }
+
+  getInfoButton (text) {
+    const icon = document.createElement('span')
     icon.classList.add('icon-info-sign', 'pull-right')
     icon.style.padding = '.25rem'
     icon.style.position = 'relative'
     icon.style.display = 'inline-block'
 
-    var tooltip = document.createElement('span')
+    const tooltip = document.createElement('span')
     tooltip.style['font-family'] = 'sans-serif'
     tooltip.style.visibility = 'hidden'
     tooltip.style['background-color'] = 'rgba(50, 50, 50, .75)'
@@ -85,28 +86,30 @@ export var bootstrap2Theme = AbstractTheme.extend({
     tooltip.style.transform = 'translateX(-27rem) translateY(-.5rem)'
     tooltip.style.position = 'absolute'
     tooltip.innerText = text
-    icon.onmouseover = function () {
+    icon.onmouseover = () => {
       tooltip.style.visibility = 'visible'
     }
-    icon.onmouseleave = function () {
+    icon.onmouseleave = () => {
       tooltip.style.visibility = 'hidden'
     }
 
     icon.appendChild(tooltip)
 
     return icon
-  },
-  getFormInputDescription: function (text) {
-    var el = document.createElement('p')
+  }
+
+  getFormInputDescription (text) {
+    const el = document.createElement('p')
     el.classList.add('help-inline')
     if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text)
     else el.textContent = this.cleanText(text)
     return el
-  },
-  getFormControl: function (label, input, description, infoText) {
-    var ret = document.createElement('div')
+  }
 
-    var controls = document.createElement('div')
+  getFormControl (label, input, description, infoText) {
+    const ret = document.createElement('div')
+
+    const controls = document.createElement('div')
 
     if (label && (input.getAttribute('type') === 'checkbox' || input.getAttribute('type') === 'radio')) {
       ret.appendChild(controls)
@@ -133,30 +136,35 @@ export var bootstrap2Theme = AbstractTheme.extend({
     if (description) controls.appendChild(description)
 
     return ret
-  },
-  getHeaderButtonHolder: function () {
-    var el = this.getButtonHolder()
+  }
+
+  getHeaderButtonHolder () {
+    const el = this.getButtonHolder()
     el.style.marginLeft = '10px'
     return el
-  },
-  getButtonHolder: function () {
-    var el = document.createElement('div')
+  }
+
+  getButtonHolder () {
+    const el = document.createElement('div')
     el.classList.add('btn-group')
     return el
-  },
-  getButton: function (text, icon, title) {
-    var el = this._super(text, icon, title)
+  }
+
+  getButton (text, icon, title) {
+    const el = super.getButton(text, icon, title)
     el.classList.add('btn', 'btn-default')
     return el
-  },
-  getTable: function () {
-    var el = document.createElement('table')
+  }
+
+  getTable () {
+    const el = document.createElement('table')
     el.classList.add('table', 'table-bordered')
     el.style.width = 'auto'
     el.style.maxWidth = 'none'
     return el
-  },
-  addInputError: function (input, text) {
+  }
+
+  addInputError (input, text) {
     if (!input.controlgroup) {
       this.queuedInputErrorText = text
       return
@@ -172,64 +180,74 @@ export var bootstrap2Theme = AbstractTheme.extend({
     }
 
     input.errmsg.textContent = text
-  },
-  removeInputError: function (input) {
+  }
+
+  removeInputError (input) {
     if (!input.controlgroup) {
       delete this.queuedInputErrorText
     }
     if (!input.errmsg) return
     input.errmsg.style.display = 'none'
     input.controlgroup.classList.remove('error')
-  },
-  getTabHolder: function (propertyName) {
-    var pName = (typeof propertyName === 'undefined') ? '' : propertyName
-    var el = document.createElement('div')
+  }
+
+  getTabHolder (propertyName) {
+    const pName = (typeof propertyName === 'undefined') ? '' : propertyName
+    const el = document.createElement('div')
     el.classList.add('tabbable', 'tabs-left')
-    el.innerHTML = "<ul class='nav nav-tabs'  id='" + pName + "'></ul><div class='tab-content well well-small' id='" + pName + "'></div>"
+    el.innerHTML = `<ul class='nav nav-tabs'  id='${pName}'></ul><div class='tab-content well well-small' id='${pName}'></div>`
     return el
-  },
-  getTopTabHolder: function (propertyName) {
-    var pName = (typeof propertyName === 'undefined') ? '' : propertyName
-    var el = document.createElement('div')
+  }
+
+  getTopTabHolder (propertyName) {
+    const pName = (typeof propertyName === 'undefined') ? '' : propertyName
+    const el = document.createElement('div')
     el.classList.add('tabbable', 'tabs-over')
-    el.innerHTML = "<ul class='nav nav-tabs' id='" + pName + "'></ul><div class='tab-content well well-small'  id='" + pName + "'></div>"
+    el.innerHTML = `<ul class='nav nav-tabs' id='${pName}'></ul><div class='tab-content well well-small'  id='${pName}'></div>`
     return el
-  },
-  getTab: function (text, tabId) {
-    var el = document.createElement('li')
+  }
+
+  getTab (text, tabId) {
+    const el = document.createElement('li')
     el.classList.add('nav-item')
-    var a = document.createElement('a')
-    a.setAttribute('href', '#' + tabId)
+    const a = document.createElement('a')
+    a.setAttribute('href', `#${tabId}`)
     a.appendChild(text)
     el.appendChild(a)
     return el
-  },
-  getTopTab: function (text, tabId) {
-    var el = document.createElement('li')
+  }
+
+  getTopTab (text, tabId) {
+    const el = document.createElement('li')
     el.classList.add('nav-item')
-    var a = document.createElement('a')
-    a.setAttribute('href', '#' + tabId)
+    const a = document.createElement('a')
+    a.setAttribute('href', `#${tabId}`)
     a.appendChild(text)
     el.appendChild(a)
     return el
-  },
-  getTabContentHolder: function (tabHolder) {
+  }
+
+  getTabContentHolder (tabHolder) {
     return tabHolder.children[1]
-  },
-  getTopTabContentHolder: function (tabHolder) {
+  }
+
+  getTopTabContentHolder (tabHolder) {
     return tabHolder.children[1]
-  },
-  getTabContent: function () {
-    var el = document.createElement('div')
+  }
+
+  getTabContent () {
+    const el = document.createElement('div')
     el.classList.add('tab-pane')
     return el
-  },
-  getTopTabContent: function () {
-    var el = document.createElement('div')
+  }
+
+  getTopTabContent () {
+    const el = document.createElement('div')
     el.classList.add('tab-pane')
     return el
-  },
-  markTabActive: function (row) {
+  }
+
+  markTabActive (row) {
     row.tab.classList.add('active')
 
     if (typeof row.rowPane !== 'undefined') {
@@ -237,55 +255,65 @@ export var bootstrap2Theme = AbstractTheme.extend({
     } else {
       row.container.classList.add('active')
     }
-  },
-  markTabInactive: function (row) {
+  }
+
+  markTabInactive (row) {
     row.tab.classList.remove('active')
     if (typeof row.rowPane !== 'undefined') {
       row.rowPane.classList.remove('active')
     } else {
       row.container.classList.remove('active')
     }
-  },
-  addTab: function (holder, tab) {
+  }
+
+  addTab (holder, tab) {
     holder.children[0].appendChild(tab)
-  },
-  addTopTab: function (holder, tab) {
+  }
+
+  addTopTab (holder, tab) {
     holder.children[0].appendChild(tab)
-  },
-  getProgressBar: function () {
-    var container = document.createElement('div')
+  }
+
+  getProgressBar () {
+    const container = document.createElement('div')
     container.classList.add('progress')
 
-    var bar = document.createElement('div')
+    const bar = document.createElement('div')
     bar.classList.add('bar')
     bar.style.width = '0%'
     container.appendChild(bar)
 
     return container
-  },
-  updateProgressBar: function (progressBar, progress) {
+  }
+
+  updateProgressBar (progressBar, progress) {
     if (!progressBar) return
 
-    progressBar.firstChild.style.width = progress + '%'
-  },
-  updateProgressBarUnknown: function (progressBar) {
+    progressBar.firstChild.style.width = `${progress}%`
+  }
+
+  updateProgressBarUnknown (progressBar) {
     if (!progressBar) return
 
     progressBar.classList.add('progress', 'progress-striped', 'active')
     progressBar.firstChild.style.width = '100%'
-  },
-  getInputGroup: function (input, buttons) {
+  }
+
+  getInputGroup (input, buttons) {
     if (!input) return
 
-    var inputGroupContainer = document.createElement('div')
+    const inputGroupContainer = document.createElement('div')
     inputGroupContainer.classList.add('input-append')
     inputGroupContainer.appendChild(input)
 
-    for (var i = 0; i < buttons.length; i++) {
+    for (let i = 0; i < buttons.length; i++) {
       buttons[i].classList.add('btn')
       inputGroupContainer.appendChild(buttons[i])
     }
 
     return inputGroupContainer
   }
-})
+}
+
+/* Custom stylesheet rules. format: "selector" : "CSS rules" */
+bootstrap2Theme.rules = { 'div[data-schemaid="root"]:after': 'position:relative;color:red;margin:10px 0;font-weight:600;display:block;width:100%;text-align:center;content:"This is an old JSON-Editor 1.x Theme and might not display elements correctly when used with the 2.x version"' }

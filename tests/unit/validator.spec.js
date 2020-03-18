@@ -1,6 +1,6 @@
 import { JSONEditor } from '../../src/core'
 import { Validator } from '../../src/validator'
-import { getDefaults } from '../../src/defaults'
+import { defaults } from '../../src/defaults'
 import fixture from '../fixtures/validation.json'
 import fixtureString from '../fixtures/string.json'
 import fixtureRecursive from '../fixtures/recursive.json'
@@ -21,7 +21,6 @@ describe('Validator', () => {
       const jsonEditor = {}
       const schema = {}
       const options = {}
-      const defaults = getDefaults()
       const instance = new Validator(jsonEditor, schema, options, defaults)
       expect(instance).toBeTruthy()
     })

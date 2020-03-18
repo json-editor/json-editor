@@ -1,33 +1,34 @@
 /**
  * Created by Mehmet Baker on 12.04.2017
  */
-import { AbstractEditor } from '../editor'
+import { AbstractEditor } from '../editor.js'
 
-export var HiddenEditor = AbstractEditor.extend({
-
-  register: function () {
-    this._super()
+export class HiddenEditor extends AbstractEditor {
+  register () {
+    super.register()
     if (!this.input) return
     this.input.setAttribute('name', this.formname)
-  },
-  unregister: function () {
-    this._super()
+  }
+
+  unregister () {
+    super.unregister()
     if (!this.input) return
     this.input.removeAttribute('name')
-  },
-  setValue: function (value, initial, fromTemplate) {
+  }
+
+  setValue (value, initial, fromTemplate) {
     if (this.template && !fromTemplate) {
       return
     }
 
     if (value === null || typeof value === 'undefined') value = ''
     else if (typeof value === 'object') value = JSON.stringify(value)
-    else if (typeof value !== 'string') value = '' + value
+    else if (typeof value !== 'string') value = `${value}`
 
     if (value === this.serialized) return
 
-    // Sanitize value before setting it
-    var sanitized = this.sanitize(value)
+    /* Sanitize value before setting it */
+    const sanitized = this.sanitize(value)
 
     if (this.input.value === sanitized) {
       return
@@ -35,7 +36,7 @@ export var HiddenEditor = AbstractEditor.extend({
 
     this.input.value = sanitized
 
-    var changed = fromTemplate || this.getValue() !== value
+    const changed = fromTemplate || this.getValue() !== value
 
     this.refreshValue()
 
@@ -44,52 +45,60 @@ export var HiddenEditor = AbstractEditor.extend({
 
     if (this.adjust_height) this.adjust_height(this.input)
 
-    // Bubble this setValue to parents if the value changed
+    /* Bubble this setValue to parents if the value changed */
     this.onChange(changed)
-  },
-  getNumColumns: function () {
+  }
+
+  getNumColumns () {
     return 2
-  },
-  enable: function () {
-    this._super()
-  },
-  disable: function () {
-    this._super()
-  },
-  refreshValue: function () {
+  }
+
+  enable () {
+    super.enable()
+  }
+
+  disable () {
+    super.disable()
+  }
+
+  refreshValue () {
     this.value = this.input.value
     if (typeof this.value !== 'string') this.value = ''
     this.serialized = this.value
-  },
-  destroy: function () {
+  }
+
+  destroy () {
     this.template = null
     if (this.input && this.input.parentNode) this.input.parentNode.removeChild(this.input)
     if (this.label && this.label.parentNode) this.label.parentNode.removeChild(this.label)
     if (this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description)
 
-    this._super()
-  },
+    super.destroy()
+  }
+
   /**
    * This is overridden in derivative editors
    */
-  sanitize: function (value) {
+  sanitize (value) {
     return value
-  },
+  }
+
   /**
    * Re-calculates the value if needed
    */
-  onWatchedFieldChange: function () {
-    var vars
+  onWatchedFieldChange () {
+    let vars
 
-    // If this editor needs to be rendered by a macro template
+    /* If this editor needs to be rendered by a macro template */
     if (this.template) {
       vars = this.getWatchedFieldValues()
       this.setValue(this.template(vars), false, true)
     }
 
-    this._super()
-  },
-  build: function () {
+    super.onWatchedFieldChange()
+  }
+
+  build () {
     this.format = this.schema.format
     if (!this.format && this.options.default_format) {
       this.format = this.options.default_format
@@ -105,9 +114,9 @@ export var HiddenEditor = AbstractEditor.extend({
 
     this.container.appendChild(this.input)
 
-    // Compile and store the template
+    /* Compile and store the template */
     if (this.schema.template) {
-      var callback = this.expandCallbacks('template', { template: this.schema.template })
+      const callback = this.expandCallbacks('template', { template: this.schema.template })
       if (typeof callback.template === 'function') this.template = callback.template
       else this.template = this.jsoneditor.compileTemplate(this.schema.template, this.template_engine)
       this.refreshValue()
@@ -115,4 +124,4 @@ export var HiddenEditor = AbstractEditor.extend({
       this.refreshValue()
     }
   }
-})
+}

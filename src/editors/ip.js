@@ -1,17 +1,16 @@
-import { StringEditor } from './string'
-import { $extend } from '../utilities'
+import { StringEditor } from './string.js'
+import { extend } from '../utilities.js'
 
-export var IpEditor = StringEditor.extend({
+export class IpEditor extends StringEditor {
+  preBuild () {
+    super.preBuild()
 
-  preBuild: function () {
-    this._super()
-
-    // Create schema options object if deesn't exist
+    /* Create schema options object if deesn't exist */
     if (!this.schema.options) {
       this.schema.options = {}
     }
 
-    // Create cleave options if they don't exist
+    /* Create cleave options if they don't exist */
     if (!this.schema.options.cleave) {
       switch (this.format) {
         case 'ipv6':
@@ -31,7 +30,7 @@ export var IpEditor = StringEditor.extend({
       }
     }
 
-    // Update options object
-    this.options = $extend(this.options, this.schema.options || {})
+    /* Update options object */
+    this.options = extend(this.options, this.schema.options || {})
   }
-})
+}

@@ -1,37 +1,41 @@
-import { ArrayEditor } from './array'
-import { $extend, $each, $trigger } from '../utilities'
-export var TableEditor = ArrayEditor.extend({
+import { ArrayEditor } from './array.js'
+import { extend, each, trigger } from '../utilities.js'
 
-  register: function () {
-    this._super()
+export class TableEditor extends ArrayEditor {
+  register () {
+    super.register()
     if (this.rows) {
-      for (var i = 0; i < this.rows.length; i++) {
+      for (let i = 0; i < this.rows.length; i++) {
         this.rows[i].register()
       }
     }
-  },
-  unregister: function () {
-    this._super()
+  }
+
+  unregister () {
+    super.unregister()
     if (this.rows) {
-      for (var i = 0; i < this.rows.length; i++) {
+      for (let i = 0; i < this.rows.length; i++) {
         this.rows[i].unregister()
       }
     }
-  },
-  getNumColumns: function () {
+  }
+
+  getNumColumns () {
     return Math.max(Math.min(12, this.width), 3)
-  },
-  preBuild: function () {
-    var itemSchema = this.jsoneditor.expandRefs(this.schema.items || {})
+  }
+
+  preBuild () {
+    const itemSchema = this.jsoneditor.expandRefs(this.schema.items || {})
 
     this.item_title = itemSchema.title || 'row'
-    this.item_default = itemSchema['default'] || null
+    this.item_default = itemSchema.default || null
     this.item_has_child_editors = itemSchema.properties || itemSchema.items
     this.width = 12
-    this._super()
-  },
-  build: function () {
-    var self = this
+    super.preBuild()
+  }
+
+  build () {
+    const self = this
     this.table = this.theme.getTable()
     this.container.appendChild(this.table)
     this.thead = this.theme.getTableHead()
@@ -41,8 +45,8 @@ export var TableEditor = ArrayEditor.extend({
     this.row_holder = this.theme.getTableBody()
     this.table.appendChild(this.row_holder)
 
-    // Determine the default value of array element
-    var tmp = this.getElementEditor(0, true)
+    /* Determine the default value of array element */
+    const tmp = this.getElementEditor(0, true)
     this.item_default = tmp.getDefault()
     this.width = tmp.getNumColumns() + 2
 
@@ -71,10 +75,10 @@ export var TableEditor = ArrayEditor.extend({
     this.panel.appendChild(this.controls)
 
     if (this.item_has_child_editors) {
-      var ce = tmp.getChildEditors()
-      var order = tmp.property_order || Object.keys(ce)
-      for (var i = 0; i < order.length; i++) {
-        var th = self.theme.getTableHeaderCell(ce[order[i]].getTitle())
+      const ce = tmp.getChildEditors()
+      const order = tmp.property_order || Object.keys(ce)
+      for (let i = 0; i < order.length; i++) {
+        const th = self.theme.getTableHeaderCell(ce[order[i]].getTitle())
         if (ce[order[i]].options.hidden) th.style.display = 'none'
         self.header_row.appendChild(th)
       }
@@ -85,38 +89,42 @@ export var TableEditor = ArrayEditor.extend({
     tmp.destroy()
     this.row_holder.innerHTML = ''
 
-    // Row Controls column
+    /* Row Controls column */
     this.controls_header_cell = self.theme.getTableHeaderCell(' ')
     self.header_row.appendChild(this.controls_header_cell)
 
-    // Add controls
+    /* Add controls */
     this.addControls()
-  },
-  onChildEditorChange: function (editor) {
+  }
+
+  onChildEditorChange (editor) {
     this.refreshValue()
-    this._super()
-  },
-  getItemDefault: function () {
-    return $extend({}, { 'default': this.item_default })['default']
-  },
-  getItemTitle: function () {
+    super.onChildEditorChange()
+  }
+
+  getItemDefault () {
+    return extend({}, { default: this.item_default }).default
+  }
+
+  getItemTitle () {
     return this.item_title
-  },
-  getElementEditor: function (i, ignore) {
-    var schemaCopy = $extend({}, this.schema.items)
-    var editor = this.jsoneditor.getEditorClass(schemaCopy, this.jsoneditor)
-    var row = this.row_holder.appendChild(this.theme.getTableRow())
-    var holder = row
+  }
+
+  getElementEditor (i, ignore) {
+    const schemaCopy = extend({}, this.schema.items)
+    const editor = this.jsoneditor.getEditorClass(schemaCopy, this.jsoneditor)
+    const row = this.row_holder.appendChild(this.theme.getTableRow())
+    let holder = row
     if (!this.item_has_child_editors) {
       holder = this.theme.getTableCell()
       row.appendChild(holder)
     }
 
-    var ret = this.jsoneditor.createEditor(editor, {
+    const ret = this.jsoneditor.createEditor(editor, {
       jsoneditor: this.jsoneditor,
       schema: schemaCopy,
       container: holder,
-      path: this.path + '.' + i,
+      path: `${this.path}.${i}`,
       parent: this,
       compact: true,
       table_row: true
@@ -136,8 +144,9 @@ export var TableEditor = ArrayEditor.extend({
     }
 
     return ret
-  },
-  destroy: function () {
+  }
+
+  destroy () {
     this.innerHTML = ''
     if (this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title)
     if (this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description)
@@ -147,13 +156,11 @@ export var TableEditor = ArrayEditor.extend({
 
     this.rows = this.title = this.description = this.row_holder = this.table = this.panel = null
 
-    this._super()
-  },
-  setValue: function (value, initial) {
-    // Update the array's value, adding/removing rows when necessary
-    value = value || []
+    super.destroy()
+  }
 
-    // Make sure value has between minItems and maxItems items in it
+  setValue (value = [], initial) {
+    /* Make sure value has between minItems and maxItems items in it */
     if (this.schema.minItems) {
       while (value.length < this.schema.minItems) {
         value.push(this.getItemDefault())
@@ -163,15 +170,15 @@ export var TableEditor = ArrayEditor.extend({
       value = value.slice(0, this.schema.maxItems)
     }
 
-    var serialized = JSON.stringify(value)
+    const serialized = JSON.stringify(value)
     if (serialized === this.serialized) return
 
-    var numrowsChanged = false
+    let numrowsChanged = false
 
-    var self = this
-    $each(value, function (i, val) {
+    const self = this
+    each(value, (i, val) => {
       if (self.rows[i]) {
-        // TODO: don't set the row's value if it hasn't changed
+        /* TODO: don't set the row's value if it hasn't changed */
         self.rows[i].setValue(val)
       } else {
         self.addRow(val)
@@ -179,8 +186,8 @@ export var TableEditor = ArrayEditor.extend({
       }
     })
 
-    for (var j = value.length; j < self.rows.length; j++) {
-      var holder = self.rows[j].container
+    for (let j = value.length; j < self.rows.length; j++) {
+      const holder = self.rows[j].container
       if (!self.item_has_child_editors) {
         self.rows[j].row.parentNode.removeChild(self.rows[j].row)
       }
@@ -196,17 +203,18 @@ export var TableEditor = ArrayEditor.extend({
 
     self.onChange()
 
-    // TODO: sortable
-  },
-  refreshRowButtons: function () {
-    var self = this
+    /* TODO: sortable */
+  }
 
-    // If we currently have minItems items in the array
-    var minItems = this.schema.minItems && this.schema.minItems >= this.rows.length
+  refreshRowButtons () {
+    const self = this
 
-    var needRowButtons = false
-    $each(this.rows, function (i, editor) {
-      // Hide the move down button for the last row
+    /* If we currently have minItems items in the array */
+    const minItems = this.schema.minItems && this.schema.minItems >= this.rows.length
+
+    let needRowButtons = false
+    each(this.rows, (i, editor) => {
+      /* Hide the move down button for the last row */
       if (editor.movedown_button) {
         if (i === self.rows.length - 1) {
           editor.movedown_button.style.display = 'none'
@@ -216,7 +224,7 @@ export var TableEditor = ArrayEditor.extend({
         }
       }
 
-      // Hide the delete button if we have minItems items
+      /* Hide the delete button if we have minItems items */
       if (editor.delete_button) {
         if (minItems) {
           editor.delete_button.style.display = 'none'
@@ -231,8 +239,8 @@ export var TableEditor = ArrayEditor.extend({
       }
     })
 
-    // Show/hide controls column in table
-    $each(this.rows, function (i, editor) {
+    /* Show/hide controls column in table */
+    each(this.rows, (i, editor) => {
       if (needRowButtons) {
         editor.controls_cell.style.display = ''
       } else {
@@ -245,7 +253,7 @@ export var TableEditor = ArrayEditor.extend({
       this.controls_header_cell.style.display = 'none'
     }
 
-    var controlsNeeded = false
+    let controlsNeeded = false
 
     if (!this.value.length) {
       this.delete_last_row_button.style.display = 'none'
@@ -255,7 +263,7 @@ export var TableEditor = ArrayEditor.extend({
       this.table.style.display = ''
       this.remove_all_rows_button.style.display = 'none'
 
-      // If there are minItems items in the array, or configured to hide the delete_last_row button, hide the delete button beneath the rows
+      /* If there are minItems items in the array, or configured to hide the delete_last_row button, hide the delete button beneath the rows */
       if (minItems || this.hide_delete_last_row_buttons) {
         this.delete_last_row_button.style.display = 'none'
       } else {
@@ -280,7 +288,7 @@ export var TableEditor = ArrayEditor.extend({
       }
     }
 
-    // If there are maxItems in the array, hide the add button beneath the rows
+    /* If there are maxItems in the array, hide the add button beneath the rows */
     if ((this.schema.maxItems && this.schema.maxItems <= this.rows.length) || this.hide_add_button) {
       this.add_row_button.style.display = 'none'
     } else {
@@ -293,26 +301,28 @@ export var TableEditor = ArrayEditor.extend({
     } else {
       this.controls.style.display = ''
     }
-  },
-  refreshValue: function () {
-    var self = this
+  }
+
+  refreshValue () {
+    const self = this
     this.value = []
 
-    $each(this.rows, function (i, editor) {
-      // Get the value for this editor
+    each(this.rows, (i, editor) => {
+      /* Get the value for this editor */
       self.value[i] = editor.getValue()
     })
     this.serialized = JSON.stringify(this.value)
-  },
-  addRow: function (value) {
-    var self = this
-    var i = this.rows.length
+  }
+
+  addRow (value) {
+    const self = this
+    const i = this.rows.length
 
     self.rows[i] = this.getElementEditor(i)
 
-    var controlsHolder = self.rows[i].table_controls
+    const controlsHolder = self.rows[i].table_controls
 
-    // Buttons to delete row, move row up, and move row down
+    /* Buttons to delete row, move row up, and move row down */
     if (!this.hide_delete_buttons) {
       self.rows[i].delete_button = this.getButton('', 'delete', this.translate('button_delete_row_title_short'))
       self.rows[i].delete_button.classList.add('delete', 'json-editor-btntype-delete')
@@ -325,13 +335,13 @@ export var TableEditor = ArrayEditor.extend({
           return false
         }
 
-        var i = this.getAttribute('data-i') * 1
+        const i = this.getAttribute('data-i') * 1
 
-        var value = self.getValue()
+        const value = self.getValue()
 
-        var newval = []
-        $each(value, function (j, row) {
-          if (j === i) return // If this is the one we're deleting
+        const newval = []
+        each(value, (j, row) => {
+          if (j === i) return /* If this is the one we're deleting */
           newval.push(row)
         })
         self.setValue(newval)
@@ -348,11 +358,11 @@ export var TableEditor = ArrayEditor.extend({
       self.rows[i].moveup_button.addEventListener('click', function (e) {
         e.preventDefault()
         e.stopPropagation()
-        var i = this.getAttribute('data-i') * 1
+        const i = this.getAttribute('data-i') * 1
 
         if (i <= 0) return
-        var rows = self.getValue()
-        var tmp = rows[i - 1]
+        const rows = self.getValue()
+        const tmp = rows[i - 1]
         rows[i - 1] = rows[i]
         rows[i] = tmp
 
@@ -370,10 +380,10 @@ export var TableEditor = ArrayEditor.extend({
       self.rows[i].movedown_button.addEventListener('click', function (e) {
         e.preventDefault()
         e.stopPropagation()
-        var i = this.getAttribute('data-i') * 1
-        var rows = self.getValue()
+        const i = this.getAttribute('data-i') * 1
+        const rows = self.getValue()
         if (i >= rows.length - 1) return
-        var tmp = rows[i + 1]
+        const tmp = rows[i + 1]
         rows[i + 1] = rows[i]
         rows[i] = tmp
 
@@ -385,9 +395,10 @@ export var TableEditor = ArrayEditor.extend({
     }
 
     if (value) self.rows[i].setValue(value)
-  },
-  addControls: function () {
-    var self = this
+  }
+
+  addControls () {
+    const self = this
 
     this.collapsed = false
     this.toggle_button = this.getButton('', 'collapse', this.translate('button_collapse'))
@@ -410,12 +421,12 @@ export var TableEditor = ArrayEditor.extend({
         }
       })
 
-      // If it should start collapsed
+      /* If it should start collapsed */
       if (this.options.collapsed) {
-        $trigger(this.toggle_button, 'click')
+        trigger(this.toggle_button, 'click')
       }
 
-      // Collapse button disabled
+      /* Collapse button disabled */
       if (this.schema.options && typeof this.schema.options.disable_collapse !== 'undefined') {
         if (this.schema.options.disable_collapse) this.toggle_button.style.display = 'none'
       } else if (this.jsoneditor.options.disable_collapse) {
@@ -423,14 +434,14 @@ export var TableEditor = ArrayEditor.extend({
       }
     }
 
-    // Add "new row" and "delete last" buttons below editor
+    /* Add "new row" and "delete last" buttons below editor */
     this.add_row_button = this.getButton(this.getItemTitle(), 'add', this.translate('button_add_row_title', [this.getItemTitle()]))
     this.add_row_button.classList.add('json-editor-btntype-add')
-    this.add_row_button.addEventListener('click', function (e) {
+    this.add_row_button.addEventListener('click', (e) => {
       e.preventDefault()
       e.stopPropagation()
 
-      var editor = self.addRow()
+      const editor = self.addRow()
       self.refreshValue()
       self.refreshRowButtons()
       self.onChange(true)
@@ -440,7 +451,7 @@ export var TableEditor = ArrayEditor.extend({
 
     this.delete_last_row_button = this.getButton(this.translate('button_delete_last', [this.getItemTitle()]), 'subtract', this.translate('button_delete_last_title', [this.getItemTitle()]))
     this.delete_last_row_button.classList.add('json-editor-btntype-deletelast')
-    this.delete_last_row_button.addEventListener('click', function (e) {
+    this.delete_last_row_button.addEventListener('click', (e) => {
       e.preventDefault()
       e.stopPropagation()
 
@@ -448,8 +459,8 @@ export var TableEditor = ArrayEditor.extend({
         return false
       }
 
-      var rows = self.getValue()
-      var editor = rows.pop()
+      const rows = self.getValue()
+      const editor = rows.pop()
       self.setValue(rows)
       self.onChange(true)
       self.jsoneditor.trigger('deleteRow', editor)
@@ -458,7 +469,7 @@ export var TableEditor = ArrayEditor.extend({
 
     this.remove_all_rows_button = this.getButton(this.translate('button_delete_all'), 'delete', this.translate('button_delete_all_title'))
     this.remove_all_rows_button.classList.add('json-editor-btntype-deleteall')
-    this.remove_all_rows_button.addEventListener('click', function (e) {
+    this.remove_all_rows_button.addEventListener('click', (e) => {
       e.preventDefault()
       e.stopPropagation()
 
@@ -472,4 +483,4 @@ export var TableEditor = ArrayEditor.extend({
     })
     self.controls.appendChild(this.remove_all_rows_button)
   }
-})
+}

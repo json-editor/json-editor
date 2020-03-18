@@ -29,8 +29,7 @@ module.exports = {
   },
   plugins: [
     new CssToJSON({
-      pattern: './src/themes/*.css',
-      jsonPattern: './src/themes/*.json'
+      pattern: './src/**/*.css'
     })
   ]
 }

@@ -1,87 +1,90 @@
-// Base Foundation theme
-import { AbstractTheme } from '../theme'
+/* Base Foundation theme */
+import { AbstractTheme } from '../theme.js'
 
-export var foundationTheme = AbstractTheme.extend({
-  /* Theme config options that allows changing various aspects of the output */
-  options: {
-    'disable_theme_rules': false
-  },
-  /* Custom stylesheet rules. format: "selector" : "CSS rules" */
-  rules: {
-    'div[data-schemaid="root"]:after': 'position:relative;color:red;margin:10px 0;font-weight:600;display:block;width:100%;text-align:center;content:"This is an old JSON-Editor 1.x Theme and might not display elements correctly when used with the 2.x version"'
-  },
-  getChildEditorHolder: function () {
-    var el = document.createElement('div')
+export class foundationTheme extends AbstractTheme {
+  getChildEditorHolder () {
+    const el = document.createElement('div')
     el.style.marginBottom = '15px'
     return el
-  },
-  getSelectInput: function (options, multiple) {
-    var el = this._super(options)
+  }
+
+  getSelectInput (options, multiple) {
+    const el = super.getSelectInput(options)
     el.style.minWidth = 'none'
     el.style.padding = '5px'
     el.style.marginTop = '3px'
     return el
-  },
-  getSwitcher: function (options) {
-    var el = this._super(options)
+  }
+
+  getSwitcher (options) {
+    const el = super.getSwitcher(options)
     el.style.paddingRight = '8px'
     return el
-  },
-  afterInputReady: function (input) {
+  }
+
+  afterInputReady (input) {
     if (input.group) return
     if (this.closest(input, '.compact')) {
       input.style.marginBottom = 0
     }
     input.group = this.closest(input, '.form-control')
     if (this.queuedInputErrorText) {
-      var text = this.queuedInputErrorText
+      const text = this.queuedInputErrorText
       delete this.queuedInputErrorText
       this.addInputError(input, text)
     }
-  },
-  getFormInputLabel: function (text, req) {
-    var el = this._super(text, req)
+  }
+
+  getFormInputLabel (text, req) {
+    const el = super.getFormInputLabel(text, req)
     el.style.display = 'inline-block'
     return el
-  },
-  getFormInputField: function (type) {
-    var el = this._super(type)
+  }
+
+  getFormInputField (type) {
+    const el = super.getFormInputField(type)
     el.style.width = '100%'
     el.style.marginBottom = (type === 'checkbox' || type === 'radio') ? '0' : '12px'
     return el
-  },
-  getFormInputDescription: function (text) {
-    var el = document.createElement('p')
+  }
+
+  getFormInputDescription (text) {
+    const el = document.createElement('p')
     if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text)
     else el.textContent = this.cleanText(text)
     el.style.marginTop = '-10px'
     el.style.fontStyle = 'italic'
     return el
-  },
-  getIndentedPanel: function () {
-    var el = document.createElement('div')
+  }
+
+  getIndentedPanel () {
+    const el = document.createElement('div')
     el.classList.add('panel')
     el.style.paddingBottom = 0
     return el
-  },
-  getHeaderButtonHolder: function () {
-    var el = this.getButtonHolder()
+  }
+
+  getHeaderButtonHolder () {
+    const el = this.getButtonHolder()
     el.style.display = 'inline-block'
     el.style.marginLeft = '10px'
     el.style.verticalAlign = 'middle'
     return el
-  },
-  getButtonHolder: function () {
-    var el = document.createElement('span')
+  }
+
+  getButtonHolder () {
+    const el = document.createElement('span')
     el.classList.add('button-group')
     return el
-  },
-  getButton: function (text, icon, title) {
-    var el = this._super(text, icon, title)
+  }
+
+  getButton (text, icon, title) {
+    const el = super.getButton(text, icon, title)
     el.classList.add('small', 'button')
     return el
-  },
-  addInputError: function (input, text) {
+  }
+
+  addInputError (input, text) {
     if (!input.group) {
       this.queuedInputErrorText = text
       return
@@ -96,43 +99,48 @@ export var foundationTheme = AbstractTheme.extend({
     }
 
     input.errmsg.textContent = text
-  },
-  removeInputError: function (input) {
+  }
+
+  removeInputError (input) {
     if (!input.group) {
       delete this.queuedInputErrorText
     }
     if (!input.errmsg) return
     input.group.classList.remove('error')
     input.errmsg.style.display = 'none'
-  },
-  getProgressBar: function () {
-    var progressBar = document.createElement('div')
+  }
+
+  getProgressBar () {
+    const progressBar = document.createElement('div')
     progressBar.classList.add('progress')
 
-    var meter = document.createElement('span')
+    const meter = document.createElement('span')
     meter.classList.add('meter')
     meter.style.width = '0%'
     progressBar.appendChild(meter)
     return progressBar
-  },
-  updateProgressBar: function (progressBar, progress) {
+  }
+
+  updateProgressBar (progressBar, progress) {
     if (!progressBar) return
-    progressBar.firstChild.style.width = progress + '%'
-  },
-  updateProgressBarUnknown: function (progressBar) {
+    progressBar.firstChild.style.width = `${progress}%`
+  }
+
+  updateProgressBarUnknown (progressBar) {
     if (!progressBar) return
     progressBar.firstChild.style.width = '100%'
-  },
-  getInputGroup: function (input, buttons) {
+  }
+
+  getInputGroup (input, buttons) {
     if (!input) return undefined
 
-    var inputGroupContainer = document.createElement('div')
+    const inputGroupContainer = document.createElement('div')
     inputGroupContainer.classList.add('input-group')
     input.classList.add('input-group-field')
     inputGroupContainer.appendChild(input)
 
-    for (var i = 0; i < buttons.length; i++) {
-      var inputGroup = document.createElement('div')
+    for (let i = 0; i < buttons.length; i++) {
+      const inputGroup = document.createElement('div')
       inputGroup.classList.add('input-group-button')
       inputGroup.style.verticalAlign = 'top'
       buttons[i].classList.remove('small')
@@ -142,76 +150,87 @@ export var foundationTheme = AbstractTheme.extend({
 
     return inputGroupContainer
   }
-})
+}
 
-// Foundation 3 Specific Theme
-export var foundation3Theme = foundationTheme.extend({
-  getHeaderButtonHolder: function () {
-    var el = this._super()
+/* Foundation 3 Specific Theme */
+export class foundation3Theme extends foundationTheme {
+  getHeaderButtonHolder () {
+    const el = super.getHeaderButtonHolder()
     el.style.fontSize = '.6em'
     return el
-  },
-  getFormInputLabel: function (text, req) {
-    var el = this._super(text, req)
+  }
+
+  getFormInputLabel (text, req) {
+    const el = super.getFormInputLabel(text, req)
     el.style.fontWeight = 'bold'
     return el
-  },
-  getTabHolder: function (propertyName) {
-    var pName = (typeof propertyName === 'undefined') ? '' : propertyName
-    var el = document.createElement('div')
+  }
+
+  getTabHolder (propertyName) {
+    const pName = (typeof propertyName === 'undefined') ? '' : propertyName
+    const el = document.createElement('div')
     el.classList.add('row')
-    el.innerHTML = '<dl class="tabs vertical two columns" id="' + pName + '"></dl><div class="tabs-content ten columns" id="' + pName + '"></div>'
+    el.innerHTML = `<dl class="tabs vertical two columns" id="${pName}"></dl><div class="tabs-content ten columns" id="${pName}"></div>`
     return el
-  },
-  getTopTabHolder: function (propertyName) {
-    var pName = (typeof propertyName === 'undefined') ? '' : propertyName
-    var el = document.createElement('div')
+  }
+
+  getTopTabHolder (propertyName) {
+    const pName = (typeof propertyName === 'undefined') ? '' : propertyName
+    const el = document.createElement('div')
     el.classList.add('row')
-    el.innerHTML = '<dl class="tabs horizontal" style="padding-left: 10px; margin-left: 10px;" id="' + pName + '"></dl><div class="tabs-content twelve columns" style="padding: 10px; margin-left: 10px;" id="' + pName + '"></div>'
+    el.innerHTML = `<dl class="tabs horizontal" style="padding-left: 10px; margin-left: 10px;" id="${pName}"></dl><div class="tabs-content twelve columns" style="padding: 10px; margin-left: 10px;" id="${pName}"></div>`
     return el
-  },
-  setGridColumnSize: function (el, size, offset) {
-    var sizes = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve']
+  }
+
+  setGridColumnSize (el, size, offset) {
+    const sizes = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve']
     el.classList.add('columns', sizes[size])
     if (offset && offset < 11) {
-      el.classList.add('offset-by-' + sizes[offset])
+      el.classList.add(`offset-by-${sizes[offset]}`)
     }
-  },
-  getTab: function (text, tabId) {
-    var el = document.createElement('dd')
-    var a = document.createElement('a')
-    a.setAttribute('href', '#' + tabId)
+  }
+
+  getTab (text, tabId) {
+    const el = document.createElement('dd')
+    const a = document.createElement('a')
+    a.setAttribute('href', `#${tabId}`)
     a.appendChild(text)
     el.appendChild(a)
     return el
-  },
-  getTopTab: function (text, tabId) {
-    var el = document.createElement('dd')
-    var a = document.createElement('a')
-    a.setAttribute('href', '#' + tabId)
+  }
+
+  getTopTab (text, tabId) {
+    const el = document.createElement('dd')
+    const a = document.createElement('a')
+    a.setAttribute('href', `#${tabId}`)
     a.appendChild(text)
     el.appendChild(a)
     return el
-  },
-  getTabContentHolder: function (tabHolder) {
+  }
+
+  getTabContentHolder (tabHolder) {
     return tabHolder.children[1]
-  },
-  getTopTabContentHolder: function (tabHolder) {
+  }
+
+  getTopTabContentHolder (tabHolder) {
     return tabHolder.children[1]
-  },
-  getTabContent: function () {
-    var el = document.createElement('div')
+  }
+
+  getTabContent () {
+    const el = document.createElement('div')
     el.classList.add('content', 'active')
     el.style.paddingLeft = '5px'
     return el
-  },
-  getTopTabContent: function () {
-    var el = document.createElement('div')
+  }
+
+  getTopTabContent () {
+    const el = document.createElement('div')
     el.classList.add('content', 'active')
     el.style.paddingLeft = '5px'
     return el
-  },
-  markTabActive: function (row) {
+  }
+
+  markTabActive (row) {
     row.tab.classList.add('active')
 
     if (typeof row.rowPane !== 'undefined') {
@@ -219,8 +238,9 @@ export var foundation3Theme = foundationTheme.extend({
     } else {
       row.container.style.display = ''
     }
-  },
-  markTabInactive: function (row) {
+  }
+
+  markTabInactive (row) {
     row.tab.classList.remove('active')
 
     if (typeof row.rowPane !== 'undefined') {
@@ -228,106 +248,122 @@ export var foundation3Theme = foundationTheme.extend({
     } else {
       row.container.style.display = 'none'
     }
-  },
-  addTab: function (holder, tab) {
-    holder.children[0].appendChild(tab)
-  },
-  addTopTab: function (holder, tab) {
+  }
+
+  addTab (holder, tab) {
     holder.children[0].appendChild(tab)
   }
-})
 
-// Foundation 4 Specific Theme
-export var foundation4Theme = foundationTheme.extend({
-  getHeaderButtonHolder: function () {
-    var el = this._super()
+  addTopTab (holder, tab) {
+    holder.children[0].appendChild(tab)
+  }
+}
+
+/* Foundation 4 Specific Theme */
+export class foundation4Theme extends foundationTheme {
+  getHeaderButtonHolder () {
+    const el = super.getHeaderButtonHolder()
     el.style.fontSize = '.6em'
     return el
-  },
-  setGridColumnSize: function (el, size, offset) {
-    el.classList.add('columns', 'large-' + size)
+  }
+
+  setGridColumnSize (el, size, offset) {
+    el.classList.add('columns', `large-${size}`)
     if (offset) {
-      el.classList.add('large-offset-' + offset)
+      el.classList.add(`large-offset-${offset}`)
     }
-  },
-  getFormInputDescription: function (text) {
-    var el = this._super(text)
+  }
+
+  getFormInputDescription (text) {
+    const el = super.getFormInputDescription(text)
     el.style.fontSize = '.8rem'
     return el
-  },
-  getFormInputLabel: function (text, req) {
-    var el = this._super(text, req)
+  }
+
+  getFormInputLabel (text, req) {
+    const el = super.getFormInputLabel(text, req)
     el.style.fontWeight = 'bold'
     return el
   }
-})
+}
 
-// Foundation 5 Specific Theme
-export var foundation5Theme = foundationTheme.extend({
-  getFormInputDescription: function (text) {
-    var el = this._super(text)
+/* Foundation 5 Specific Theme */
+export class foundation5Theme extends foundationTheme {
+  getFormInputDescription (text) {
+    const el = super.getFormInputDescription(text)
     el.style.fontSize = '.8rem'
     return el
-  },
-  setGridColumnSize: function (el, size, offset) {
-    el.classList.add('columns', 'medium-' + size)
+  }
+
+  setGridColumnSize (el, size, offset) {
+    el.classList.add('columns', `medium-${size}`)
     if (offset) {
-      el.classList.add('medium-offset-' + offset)
+      el.classList.add(`medium-offset-${offset}`)
     }
-  },
-  getButton: function (text, icon, title) {
-    var el = this._super(text, icon, title)
-    el.className = el.className.replace(/\s*small/g, '') + ' tiny'
+  }
+
+  getButton (text, icon, title) {
+    const el = super.getButton(text, icon, title)
+    el.className = `${el.className.replace(/\s*small/g, '')} tiny`
     return el
-  },
-  getTabHolder: function (propertyName) {
-    var pName = (typeof propertyName === 'undefined') ? '' : propertyName
-    var el = document.createElement('div')
-    el.innerHTML = '<dl class="tabs vertical" id="' + pName + '"></dl><div class="tabs-content vertical" id="' + pName + '"></div>'
+  }
+
+  getTabHolder (propertyName) {
+    const pName = (typeof propertyName === 'undefined') ? '' : propertyName
+    const el = document.createElement('div')
+    el.innerHTML = `<dl class="tabs vertical" id="${pName}"></dl><div class="tabs-content vertical" id="${pName}"></div>`
     return el
-  },
-  getTopTabHolder: function (propertyName) {
-    var pName = (typeof propertyName === 'undefined') ? '' : propertyName
-    var el = document.createElement('div')
+  }
+
+  getTopTabHolder (propertyName) {
+    const pName = (typeof propertyName === 'undefined') ? '' : propertyName
+    const el = document.createElement('div')
     el.classList.add('row')
-    el.innerHTML = '<dl class="tabs horizontal" style="padding-left: 10px;" id="' + pName + '"></dl><div class="tabs-content horizontal" style="padding: 10px;" id="' + pName + '"></div>'
+    el.innerHTML = `<dl class="tabs horizontal" style="padding-left: 10px;" id="${pName}"></dl><div class="tabs-content horizontal" style="padding: 10px;" id="${pName}"></div>`
     return el
-  },
-  getTab: function (text, tabId) {
-    var el = document.createElement('dd')
-    var a = document.createElement('a')
-    a.setAttribute('href', '#' + tabId)
+  }
+
+  getTab (text, tabId) {
+    const el = document.createElement('dd')
+    const a = document.createElement('a')
+    a.setAttribute('href', `#${tabId}`)
     a.appendChild(text)
     el.appendChild(a)
     return el
-  },
-  getTopTab: function (text, tabId) {
-    var el = document.createElement('dd')
-    var a = document.createElement('a')
-    a.setAttribute('href', '#' + tabId)
+  }
+
+  getTopTab (text, tabId) {
+    const el = document.createElement('dd')
+    const a = document.createElement('a')
+    a.setAttribute('href', `#${tabId}`)
     a.appendChild(text)
     el.appendChild(a)
     return el
-  },
-  getTabContentHolder: function (tabHolder) {
+  }
+
+  getTabContentHolder (tabHolder) {
     return tabHolder.children[1]
-  },
-  getTopTabContentHolder: function (tabHolder) {
+  }
+
+  getTopTabContentHolder (tabHolder) {
     return tabHolder.children[1]
-  },
-  getTabContent: function () {
-    var el = document.createElement('div')
+  }
+
+  getTabContent () {
+    const el = document.createElement('div')
     el.classList.add('tab-content', 'active')
     el.style.paddingLeft = '5px'
     return el
-  },
-  getTopTabContent: function () {
-    var el = document.createElement('div')
+  }
+
+  getTopTabContent () {
+    const el = document.createElement('div')
     el.classList.add('tab-content', 'active')
     el.style.paddingLeft = '5px'
     return el
-  },
-  markTabActive: function (row) {
+  }
+
+  markTabActive (row) {
     row.tab.classList.add('active')
 
     if (typeof row.rowPane !== 'undefined') {
@@ -335,8 +371,9 @@ export var foundation5Theme = foundationTheme.extend({
     } else {
       row.container.style.display = ''
     }
-  },
-  markTabInactive: function (row) {
+  }
+
+  markTabInactive (row) {
     row.tab.classList.remove('active')
 
     if (typeof row.rowPane !== 'undefined') {
@@ -344,36 +381,40 @@ export var foundation5Theme = foundationTheme.extend({
     } else {
       row.container.style.display = 'none'
     }
-  },
-  addTab: function (holder, tab) {
-    holder.children[0].appendChild(tab)
-  },
-  addTopTab: function (holder, tab) {
+  }
+
+  addTab (holder, tab) {
     holder.children[0].appendChild(tab)
   }
 
-})
+  addTopTab (holder, tab) {
+    holder.children[0].appendChild(tab)
+  }
+}
 
-export var foundation6Theme = foundation5Theme.extend({
-  getIndentedPanel: function () {
-    var el = document.createElement('div')
+export class foundation6Theme extends foundation5Theme {
+  getIndentedPanel () {
+    const el = document.createElement('div')
     el.classList.add('callout', 'secondary')
     el.style = 'padding-left: 10px; margin-left: 10px;'
     return el
-  },
-  getButtonHolder: function () {
-    var el = document.createElement('span')
+  }
+
+  getButtonHolder () {
+    const el = document.createElement('span')
     el.classList.add('button-group', 'tiny')
     el.style.marginBottom = 0
     return el
-  },
-  getFormInputLabel: function (text, req) {
-    var el = this._super(text, req)
+  }
+
+  getFormInputLabel (text, req) {
+    const el = super.getFormInputLabel(text, req)
     el.style.display = 'block'
     return el
-  },
-  getFormControl: function (label, input, description, infoText) {
-    var el = document.createElement('div')
+  }
+
+  getFormControl (label, input, description, infoText) {
+    const el = document.createElement('div')
     el.classList.add('form-control')
     if (label) el.appendChild(label)
     if (input.type === 'checkbox' || input.type === 'radio') {
@@ -389,13 +430,14 @@ export var foundation6Theme = foundation5Theme.extend({
 
     if (description && label) label.appendChild(description)
     return el
-  },
-  addInputError: function (input, text) {
+  }
+
+  addInputError (input, text) {
     if (!input.group) return
     input.group.classList.add('error')
 
     if (!input.errmsg) {
-      var errorEl = document.createElement('span')
+      const errorEl = document.createElement('span')
       errorEl.classList.add('form-error', 'is-visible')
       input.group.getElementsByTagName('label')[0].appendChild(errorEl)
 
@@ -408,68 +450,79 @@ export var foundation6Theme = foundation5Theme.extend({
     }
 
     input.errmsg.textContent = text
-  },
-  removeInputError: function (input) {
+  }
+
+  removeInputError (input) {
     if (!input.errmsg) return
     input.classList.remove('is-invalid-input')
     if (input.errmsg.parentNode) {
       input.errmsg.parentNode.removeChild(input.errmsg)
     }
-  },
-  getTabHolder: function (propertyName) {
-    var pName = (typeof propertyName === 'undefined') ? '' : propertyName
-    var el = document.createElement('div')
+  }
+
+  getTabHolder (propertyName) {
+    const pName = (typeof propertyName === 'undefined') ? '' : propertyName
+    const el = document.createElement('div')
     el.classList.add('grid-x')
-    el.innerHTML = '<div class="medium-2 cell" style="float: left;"><ul class="vertical tabs" data-tabs id="' + pName + '"></ul></div><div class="medium-10 cell" style="float: left;"><div class="tabs-content" data-tabs-content="' + pName + '"></div></div>'
+    el.innerHTML = `<div class="medium-2 cell" style="float: left;"><ul class="vertical tabs" data-tabs id="${pName}"></ul></div><div class="medium-10 cell" style="float: left;"><div class="tabs-content" data-tabs-content="${pName}"></div></div>`
     return el
-  },
-  getTopTabHolder: function (propertyName) {
-    var pName = (typeof propertyName === 'undefined') ? '' : propertyName
-    var el = document.createElement('div')
+  }
+
+  getTopTabHolder (propertyName) {
+    const pName = (typeof propertyName === 'undefined') ? '' : propertyName
+    const el = document.createElement('div')
     el.classList.add('grid-y')
-    el.innerHTML = '<div className="cell"><ul class="tabs" data-tabs id="' + pName + '"></ul><div class="tabs-content" data-tabs-content="' + pName + '"></div></div>'
+    el.innerHTML = `<div className="cell"><ul class="tabs" data-tabs id="${pName}"></ul><div class="tabs-content" data-tabs-content="${pName}"></div></div>`
     return el
-  },
-  insertBasicTopTab: function (tab, newTabsHolder) {
+  }
+
+  insertBasicTopTab (tab, newTabsHolder) {
     newTabsHolder.firstChild.firstChild.insertBefore(tab, newTabsHolder.firstChild.firstChild.firstChild)
-  },
-  getTab: function (text, tabId) {
-    var el = document.createElement('li')
+  }
+
+  getTab (text, tabId) {
+    const el = document.createElement('li')
     el.classList.add('tabs-title')
-    var a = document.createElement('a')
-    a.setAttribute('href', '#' + tabId)
+    const a = document.createElement('a')
+    a.setAttribute('href', `#${tabId}`)
     a.appendChild(text)
     el.appendChild(a)
     return el
-  },
-  getTopTab: function (text, tabId) {
-    var el = document.createElement('li')
+  }
+
+  getTopTab (text, tabId) {
+    const el = document.createElement('li')
     el.classList.add('tabs-title')
-    var a = document.createElement('a')
-    a.setAttribute('href', '#' + tabId)
+    const a = document.createElement('a')
+    a.setAttribute('href', `#${tabId}`)
     a.appendChild(text)
     el.appendChild(a)
     return el
-  },
-  getTabContentHolder: function (tabHolder) {
+  }
+
+  getTabContentHolder (tabHolder) {
     return tabHolder.children[1].firstChild
-  },
-  getTopTabContentHolder: function (tabHolder) {
+  }
+
+  getTopTabContentHolder (tabHolder) {
     return tabHolder.firstChild.children[1]
-  },
-  getTabContent: function () {
-    var el = document.createElement('div')
+  }
+
+  getTabContent () {
+    const el = document.createElement('div')
     el.classList.add('tabs-panel')
     el.style.paddingLeft = '5px'
     return el
-  },
-  getTopTabContent: function () {
-    var el = document.createElement('div')
+  }
+
+  getTopTabContent () {
+    const el = document.createElement('div')
     el.classList.add('tabs-panel')
     el.style.paddingLeft = '5px'
     return el
-  },
-  markTabActive: function (row) {
+  }
+
+  markTabActive (row) {
     row.tab.classList.add('is-active')
     row.tab.firstChild.setAttribute('aria-selected', 'true')
 
@@ -480,8 +533,9 @@ export var foundation6Theme = foundation5Theme.extend({
       row.container.classList.add('is-active')
       row.container.setAttribute('aria-selected', 'true')
     }
-  },
-  markTabInactive: function (row) {
+  }
+
+  markTabInactive (row) {
     row.tab.classList.remove('is-active')
     row.tab.firstChild.removeAttribute('aria-selected')
 
@@ -492,14 +546,24 @@ export var foundation6Theme = foundation5Theme.extend({
       row.container.classList.remove('is-active')
       row.container.removeAttribute('aria-selected')
     }
-  },
-  addTab: function (holder, tab) {
+  }
+
+  addTab (holder, tab) {
     holder.children[0].firstChild.appendChild(tab)
-  },
-  addTopTab: function (holder, tab) {
+  }
+
+  addTopTab (holder, tab) {
     holder.firstChild.children[0].appendChild(tab)
-  },
-  getFirstTab: function (holder) {
+  }
+
+  getFirstTab (holder) {
     return holder.firstChild.firstChild.firstChild
   }
-})
+}
+
+/* Custom stylesheet rules. format: "selector" : "CSS rules" */
+foundationTheme.rules = { 'div[data-schemaid="root"]:after': 'position:relative;color:red;margin:10px 0;font-weight:600;display:block;width:100%;text-align:center;content:"This is an old JSON-Editor 1.x Theme and might not display elements correctly when used with the 2.x version"' }
+foundation3Theme.rules = foundationTheme.rules
+foundation4Theme.rules = foundationTheme.rules
+foundation5Theme.rules = foundationTheme.rules
+foundation6Theme.rules = foundationTheme.rules

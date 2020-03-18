@@ -1,25 +1,27 @@
-import { MultiSelectEditor } from '../multiselect'
-import { $extend } from '../../utilities'
-export var ArrayChoicesEditor = MultiSelectEditor.extend({
-  setValue: function (value, initial) {
+import { MultiSelectEditor } from '../multiselect.js'
+import { extend } from '../../utilities.js'
+
+export class ArrayChoicesEditor extends MultiSelectEditor {
+  setValue (value, initial) {
     if (this.choices_instance) {
-      // Make sure we are dealing with an array of strings so we can check for strict equality
-      value = [].concat(value).map(function (e) { return e + '' })
+      /* Make sure we are dealing with an array of strings so we can check for strict equality */
+      value = [].concat(value).map(e => `${e}`)
 
-      this.updateValue(value) // Sets this.value to sanitized value
+      this.updateValue(value) /* Sets this.value to sanitized value */
 
-      this.choices_instance.removeActiveItems() // Remove existing selection
-      this.choices_instance.setChoiceByValue(this.value) // Set new selection
+      this.choices_instance.removeActiveItems() /* Remove existing selection */
+      this.choices_instance.setChoiceByValue(this.value) /* Set new selection */
 
       this.onChange(true)
-    } else this._super(value, initial)
-  },
-  afterInputReady: function () {
+    } else super.setValue(value, initial)
+  }
+
+  afterInputReady () {
     if (window.Choices && !this.choices_instance) {
-      var options; var self = this
-      // Get options, either global options from "this.defaults.options.choices" or
-      // single property options from schema "options.choices"
-      options = this.expandCallbacks('choices', $extend({}, {
+      let options; const self = this
+      /* Get options, either global options from "this.defaults.options.choices" or */
+      /* single property options from schema "options.choices" */
+      options = this.expandCallbacks('choices', extend({}, {
         removeItems: true,
         removeItemButton: true
       }, this.defaults.options.choices || {}, this.options.choices || {}, {
@@ -28,70 +30,75 @@ export var ArrayChoicesEditor = MultiSelectEditor.extend({
         duplicateItemsAllowed: false
       }))
 
-      // New items are allowed if option "addItems" is true and items type is "string"
-      // this.newEnumAllowed = options.addItems = !!options.addItems && this.schema.items && this.schema.items.type == 'string';
+      /* New items are allowed if option "addItems" is true and items type is "string" */
+      /* this.newEnumAllowed = options.addItems = !!options.addItems && this.schema.items && this.schema.items.type == 'string'; */
 
-      // Choices doesn't support adding new items to select type input
+      /* Choices doesn't support adding new items to select type input */
       this.newEnumAllowed = false
 
       this.choices_instance = new window.Choices(this.input, options)
 
-      // Remove change handler set in parent class (src/multiselect.js)
+      /* Remove change handler set in parent class (src/multiselect.js) */
       this.control.removeEventListener('change', this.multiselectChangeHandler)
 
-      // Create a new change handler
-      this.multiselectChangeHandler = function (e) {
-        var value = self.choices_instance.getValue(true)
+      /* Create a new change handler */
+      this.multiselectChangeHandler = e => {
+        const value = self.choices_instance.getValue(true)
         self.updateValue(value)
         self.onChange(true)
       }
       this.control.addEventListener('change', this.multiselectChangeHandler, false)
     }
-    this._super()
-  },
-  updateValue: function (value) {
+    super.afterInputReady()
+  }
+
+  updateValue (value) {
     value = [].concat(value)
-    var changed = false; var newValue = []
-    for (var i = 0; i < value.length; i++) {
-      if (!this.select_values[value[i] + '']) {
+    let changed = false; const newValue = []
+    for (let i = 0; i < value.length; i++) {
+      if (!this.select_values[`${value[i]}`]) {
         changed = true
         if (this.newEnumAllowed) {
           if (!this.addNewOption(value[i])) continue
         } else continue
       }
-      var sanitized = this.sanitize(this.select_values[value[i]])
+      const sanitized = this.sanitize(this.select_values[value[i]])
       newValue.push(sanitized)
       if (sanitized !== value[i]) changed = true
     }
     this.value = newValue
 
     return changed
-  },
-  addNewOption: function (value) {
-    // Add new value and label
-    this.option_keys.push(value + '')
-    this.option_titles.push(value + '')
-    this.select_values[value + ''] = value
-    // Update Schema enum to prevent triggering "Value must be one of the enumerated values"
+  }
+
+  addNewOption (value) {
+    /* Add new value and label */
+    this.option_keys.push(`${value}`)
+    this.option_titles.push(`${value}`)
+    this.select_values[`${value}`] = value
+    /* Update Schema enum to prevent triggering "Value must be one of the enumerated values" */
     this.schema.items.enum.push(value)
-    // Add new value and label to choices
-    this.choices_instance.setChoices([{ value: value + '', label: value + '' }], 'value', 'label', false)
+    /* Add new value and label to choices */
+    this.choices_instance.setChoices([{ value: `${value}`, label: `${value}` }], 'value', 'label', false)
 
     return true
-  },
-  enable: function () {
+  }
+
+  enable () {
     if (!this.always_disabled && this.choices_instance) this.choices_instance.enable()
-    this._super()
-  },
-  disable: function (alwaysDisabled) {
+    super.enable()
+  }
+
+  disable (alwaysDisabled) {
     if (this.choices_instance) this.choices_instance.disable()
-    this._super(alwaysDisabled)
-  },
-  destroy: function () {
+    super.disable(alwaysDisabled)
+  }
+
+  destroy () {
     if (this.choices_instance) {
       this.choices_instance.destroy()
       this.choices_instance = null
     }
-    this._super()
+    super.destroy()
   }
-})
+}

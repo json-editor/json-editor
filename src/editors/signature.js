@@ -1,36 +1,35 @@
-// This editor is using the signature pad editor from https://github.com/szimek/signature_pad
-// Credits for the pad itself go to https://github.com/szimek
+/* This editor is using the signature pad editor from https://github.com/szimek/signature_pad */
+/* Credits for the pad itself go to https://github.com/szimek */
 
-import { StringEditor } from './string'
-import { $each } from '../utilities'
+import { StringEditor } from './string.js'
+import { each } from '../utilities.js'
 
-export var SignatureEditor = StringEditor.extend({
-
-  build: function () {
-    var self = this
+export class SignatureEditor extends StringEditor {
+  build () {
+    const self = this
 
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
-    var formname = this.formname.replace(/\W/g, '')
+    const formname = this.formname.replace(/\W/g, '')
 
     if (typeof SignaturePad === 'function') {
-      // Dynamically add the required CSS the first time this editor is used
+      /* Dynamically add the required CSS the first time this editor is used */
       this.input = this.theme.getFormInputField('hidden')
       this.container.appendChild(this.input)
 
-      // Required to keep height
-      var signatureContainer = document.createElement('div')
+      /* Required to keep height */
+      const signatureContainer = document.createElement('div')
       signatureContainer.classList.add('signature-container')
 
-      // Create canvas for signature pad
-      var canvas = document.createElement('canvas')
+      /* Create canvas for signature pad */
+      const canvas = document.createElement('canvas')
       canvas.setAttribute('name', formname)
       canvas.classList.add('signature')
       signatureContainer.appendChild(canvas)
 
       self.signaturePad = new window.SignaturePad(canvas, {
-        onEnd: function () {
-          // check if the signature is not empty before setting a value
+        onEnd () {
+          /* check if the signature is not empty before setting a value */
           if (!self.signaturePad.isEmpty()) {
             self.input.value = self.signaturePad.toDataURL()
           } else {
@@ -46,29 +45,29 @@ export var SignatureEditor = StringEditor.extend({
         }
       })
 
-      // create button containers and add clear signature button
-      var buttons = document.createElement('div')
-      var clearButton = document.createElement('button')
+      /* create button containers and add clear signature button */
+      const buttons = document.createElement('div')
+      const clearButton = document.createElement('button')
       clearButton.classList.add('tiny', 'button')
       clearButton.innerHTML = 'Clear signature'
       buttons.appendChild(clearButton)
       signatureContainer.appendChild(buttons)
 
-      if (this.options.compact) this.container.setAttribute('class', this.container.getAttribute('class') + ' compact')
+      if (this.options.compact) this.container.setAttribute('class', `${this.container.getAttribute('class')} compact`)
 
       if (this.schema.readOnly || this.schema.readonly) {
         this.always_disabled = true
-        $each(this.inputs, function (i, input) {
+        each(this.inputs, (i, input) => {
           canvas.setAttribute('readOnly', 'readOnly')
           input.disabled = true
         })
       }
-      // add listener to the clear button. when clicked, trigger a canvas change after emptying the canvas
-      clearButton.addEventListener('click', function (e) {
+      /* add listener to the clear button. when clicked, trigger a canvas change after emptying the canvas */
+      clearButton.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
         self.signaturePad.clear()
-        // trigger stroke end to let signaturePad update the dataURL
+        /* trigger stroke end to let signaturePad update the dataURL */
         self.signaturePad.strokeEnd()
       })
 
@@ -76,30 +75,31 @@ export var SignatureEditor = StringEditor.extend({
       this.container.appendChild(this.control)
       this.refreshValue()
 
-      // signature canvas will stretch to signatureContainer width
+      /* signature canvas will stretch to signatureContainer width */
       canvas.width = signatureContainer.offsetWidth
       if (self.options && self.options.canvas_height) {
         canvas.height = self.options.canvas_height
       } else {
-        canvas.height = '300' // Set to default height of 300px;
+        canvas.height = '300' /* Set to default height of 300px; */
       }
     } else {
-      var message = document.createElement('p')
+      const message = document.createElement('p')
       message.innerHTML = 'Signature pad is not available, please include SignaturePad from https://github.com/szimek/signature_pad'
       this.container.appendChild(message)
     }
-  },
-  setValue: function (val) {
-    var self = this
+  }
+
+  setValue (val) {
+    const self = this
     if (typeof SignaturePad === 'function') {
-      var sanitized = this.sanitize(val)
+      const sanitized = this.sanitize(val)
       if (this.value === sanitized) {
         return
       }
       self.value = sanitized
       self.input.value = self.value
       self.signaturePad.clear()
-      // only set contents if value != ''
+      /* only set contents if value != '' */
       if (val && val !== '') {
         self.signaturePad.fromDataURL(val)
       }
@@ -107,10 +107,11 @@ export var SignatureEditor = StringEditor.extend({
       self.jsoneditor.notifyWatchers(self.path)
       return false
     }
-  },
-  destroy: function () {
-    var self = this
+  }
+
+  destroy () {
+    const self = this
     self.signaturePad.off()
     delete self.signaturePad
   }
-})
+}
