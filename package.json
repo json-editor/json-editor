@@ -86,7 +86,7 @@
     "remove-strict-webpack-plugin": "^0.1.2",
     "sceditor": "^2.1.3",
     "sinon": "^8.1.1",
-    "standard": "^11.0.1",
+    "standard": "^14.3.3",
     "style-loader": "^1.1.3",
     "webpack": "^4.41.6",
     "webpack-cli": "^3.3.11",

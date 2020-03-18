@@ -1,5 +1,5 @@
 import { AbstractEditor } from '../editor.js'
-import { extend, trigger } from '../utilities.js'
+import { extend, trigger, hasOwnProperty } from '../utilities.js'
 
 export class ObjectEditor extends AbstractEditor {
   getDefault () {
@@ -891,19 +891,16 @@ export class ObjectEditor extends AbstractEditor {
 
   addPropertyCheckbox (key) {
     const self = this
-    let checkbox
-    let label
     let labelText
-    let control
 
-    checkbox = self.theme.getCheckbox()
+    const checkbox = self.theme.getCheckbox()
     checkbox.style.width = 'auto'
 
     if (this.schema.properties[key] && this.schema.properties[key].title) { labelText = this.schema.properties[key].title } else { labelText = key }
 
-    label = self.theme.getCheckboxLabel(labelText)
+    const label = self.theme.getCheckboxLabel(labelText)
 
-    control = self.theme.getFormControl(label, checkbox)
+    const control = self.theme.getFormControl(label, checkbox)
     control.style.paddingBottom = control.style.marginBottom = control.style.paddingTop = control.style.marginTop = 0
     control.style.height = 'auto'
     /* control.style.overflowY = 'hidden'; */
@@ -1121,7 +1118,7 @@ export class ObjectEditor extends AbstractEditor {
         this.addproperty_checkboxes[i].disabled = this.addproperty_checkboxes[i].checked
         if (!this.addproperty_checkboxes[i].checked) showModal = true
       } else if (!(i in this.editors)) {
-        if (!canAdd && !this.schema.properties.hasOwnProperty(i)) {
+        if (!canAdd && !hasOwnProperty(this.schema.properties, i)) {
           this.addproperty_checkboxes[i].disabled = true
         } else {
           this.addproperty_checkboxes[i].disabled = false

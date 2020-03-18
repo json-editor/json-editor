@@ -1,5 +1,5 @@
 import { ipValidator } from './validators/ip-validator.js'
-import { extend } from './utilities.js'
+import { extend, hasOwnProperty } from './utilities.js'
 
 export class Validator {
   constructor (jsoneditor, schema, options, defaults) {
@@ -434,7 +434,7 @@ export class Validator {
       const properties = this._getSchema(givenSchema).properties
 
       for (const i in properties) {
-        if (!properties.hasOwnProperty(i)) {
+        if (!hasOwnProperty(properties, i)) {
           fit.extra += weight
           continue
         }
@@ -667,13 +667,13 @@ export class Validator {
     }
 
     const validatorRx = {
-      'date': /^(\d{4}\D\d{2}\D\d{2})?$/,
-      'time': /^(\d{2}:\d{2}(?::\d{2})?)?$/,
+      date: /^(\d{4}\D\d{2}\D\d{2})?$/,
+      time: /^(\d{2}:\d{2}(?::\d{2})?)?$/,
       'datetime-local': /^(\d{4}\D\d{2}\D\d{2}[ T]\d{2}:\d{2}(?::\d{2})?)?$/
     }
     const format = {
-      'date': '"YYYY-MM-DD"',
-      'time': '"HH:MM"',
+      date: '"YYYY-MM-DD"',
+      time: '"HH:MM"',
       'datetime-local': '"YYYY-MM-DD HH:MM"'
     }
 

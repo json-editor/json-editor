@@ -338,6 +338,7 @@ export class bootstrap4Theme extends AbstractTheme {
 
     return el
   }
+
   getButtonHolder () {
     const el = document.createElement('span')
     el.classList.add('btn-group')
@@ -401,6 +402,7 @@ export class bootstrap4Theme extends AbstractTheme {
 
     input.errmsg.textContent = text
   }
+
   removeInputError (input) {
     if (!input.errmsg) return
     input.errmsg.style.display = 'none'
@@ -529,6 +531,7 @@ export class bootstrap4Theme extends AbstractTheme {
 
     return container
   }
+
   updateProgressBar (progressBar, progress) {
     if (!progressBar) return
 

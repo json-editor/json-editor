@@ -1,4 +1,4 @@
-import { extend } from './utilities.js'
+import { extend, hasOwnProperty } from './utilities.js'
 
 /**
  * All editors should extend from this class
@@ -130,10 +130,10 @@ export class AbstractEditor {
         this.dependenciesFulfilled = choices === value
       } else {
         Object.keys(choices).some(key => {
-          if (!choices.hasOwnProperty(key)) {
+          if (!hasOwnProperty(choices, key)) {
             return false
           }
-          if (!value.hasOwnProperty(key) || choices[key] !== value[key]) {
+          if (!hasOwnProperty(value, key) || choices[key] !== value[key]) {
             self.dependenciesFulfilled = false
             return true
           }
@@ -223,7 +223,7 @@ export class AbstractEditor {
       }
     }
 
-    if (this.schema.hasOwnProperty('watch')) {
+    if (hasOwnProperty(this.schema, 'watch')) {
       let path; let pathParts; let first; let root; let adjustedPath
       const myPath = self.container.getAttribute('data-schemapath')
 
@@ -526,12 +526,12 @@ export class AbstractEditor {
   }
 
   getDefault () {
-    if (typeof this.schema['default'] !== 'undefined') {
-      return this.schema['default']
+    if (typeof this.schema.default !== 'undefined') {
+      return this.schema.default
     }
 
-    if (typeof this.schema['enum'] !== 'undefined') {
-      return this.schema['enum'][0]
+    if (typeof this.schema.enum !== 'undefined') {
+      return this.schema.enum[0]
     }
 
     let type = this.schema.type || this.schema.oneOf

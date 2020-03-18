@@ -15,7 +15,7 @@ export function isPlainObject (obj) {
 
   if (typeof obj !== 'object' || obj.nodeType || (obj === obj.window)) return false
 
-  if (obj.constructor && !Object.prototype.hasOwnProperty.call(obj.constructor.prototype, 'isPrototypeOf')) return false
+  if (obj.constructor && !hasOwnProperty(obj.constructor.prototype, 'isPrototypeOf')) return false
 
   /* Most likely |obj| is a plain object, created by {} or constructed with new Object */
   return true
@@ -29,7 +29,7 @@ export function extend (destination, ...args) {
   args.forEach(source => {
     Object.keys(source).forEach(property => {
       if (source[property] && isPlainObject(source[property])) {
-        if (!destination.hasOwnProperty(property)) destination[property] = {}
+        if (!hasOwnProperty(destination, property)) destination[property] = {}
         extend(destination[property], source[property])
       } else if (Array.isArray(source[property])) {
         destination[property] = deepCopy(source[property])
@@ -55,4 +55,13 @@ export function trigger (el, event) {
  */
 export function getShadowParent (node) {
   return node && (node.toString() === '[object ShadowRoot]' ? node : getShadowParent(node.parentNode))
+}
+
+/**
+ * Helper function to check own property key
+ *
+ * @see https://eslint.org/docs/rules/no-prototype-builtins
+ */
+export function hasOwnProperty (obj, key) {
+  return obj && Object.prototype.hasOwnProperty.call(obj, key)
 }

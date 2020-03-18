@@ -5,7 +5,7 @@ import { editors } from './editors/index.js'
 import { templates } from './templates/index.js'
 import { iconlibs } from './iconlibs/index.js'
 import { themes } from './themes/index.js'
-import { extend, getShadowParent } from './utilities.js'
+import { extend, getShadowParent, hasOwnProperty } from './utilities.js'
 
 export class JSONEditor {
   constructor (element, options = {}) {
@@ -74,7 +74,7 @@ export class JSONEditor {
       this.root.postBuild()
 
       /* Starting data */
-      if (this.options.hasOwnProperty('startval')) this.root.setValue(this.options.startval)
+      if (hasOwnProperty(this.options, 'startval')) this.root.setValue(this.options.startval)
 
       this.validation_results = this.validator.validate(this.root.getValue())
       this.root.showValidationErrors(this.validation_results)

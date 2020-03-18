@@ -6,7 +6,7 @@ const matchKey = [
   'oMatchesSelector'].find(key => key in document.documentElement)
 
 export class AbstractTheme {
-  constructor (jsoneditor, options = { 'disable_theme_rules': false }) {
+  constructor (jsoneditor, options = { disable_theme_rules: false }) {
     this.jsoneditor = jsoneditor
 
     /* Theme config options that allows changing various aspects of the output */
@@ -343,6 +343,7 @@ export class AbstractTheme {
   getCheckboxDescription (text) {
     return this.getDescription(text)
   }
+
   getFormInputDescription (text) {
     return this.getDescription(text)
   }

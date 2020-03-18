@@ -18,10 +18,10 @@ export class ArrayChoicesEditor extends MultiSelectEditor {
 
   afterInputReady () {
     if (window.Choices && !this.choices_instance) {
-      let options; const self = this
+      const self = this
       /* Get options, either global options from "this.defaults.options.choices" or */
       /* single property options from schema "options.choices" */
-      options = this.expandCallbacks('choices', extend({}, {
+      const options = this.expandCallbacks('choices', extend({}, {
         removeItems: true,
         removeItemButton: true
       }, this.defaults.options.choices || {}, this.options.choices || {}, {

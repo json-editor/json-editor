@@ -1,5 +1,5 @@
 import { SelectEditor } from './select.js'
-import { extend } from '../utilities.js'
+import { extend, hasOwnProperty } from '../utilities.js'
 
 export class Select2Editor extends SelectEditor {
   setValue (value, initial) {
@@ -28,7 +28,7 @@ export class Select2Editor extends SelectEditor {
       this.newEnumAllowed = options.tags = !!options.tags && this.schema.type === 'string'
 
       this.select2_instance = window.jQuery(this.input).select2(options)
-      this.select2v4 = this.select2_instance.select2.hasOwnProperty('amd')
+      this.select2v4 = hasOwnProperty(this.select2_instance.select2, 'amd')
 
       /* Create change handler */
       this.selectChangeHandler = () => {

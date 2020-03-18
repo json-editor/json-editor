@@ -48,7 +48,7 @@ const enumSource = schema => {
 
 /* Use the `enum` or `select` editors for schemas with enumerated properties */
 const enumeratedProperties = schema => {
-  if (schema['enum']) {
+  if (schema.enum) {
     if (schema.type === 'array' || schema.type === 'object') return 'enum'
     if (schema.type === 'number' || schema.type === 'integer' || schema.type === 'string') {
       if (schema.format === 'radio') return 'radio'
