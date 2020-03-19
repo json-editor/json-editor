@@ -521,7 +521,7 @@ Image, audio, and video links will display the media inline as well as providing
 Here are a couple examples:
 
 Simple text link
-```js+jinja
+```js
 {
   "title": "Blog Post Id",
   "type": "integer",
@@ -537,7 +537,7 @@ Simple text link
 ```
 
 Make link download when clicked
-```js+jinja
+```js
 {
   "title": "Document filename",
   "type": "string",
@@ -553,7 +553,7 @@ Make link download when clicked
 ```
 
 Show a video preview (using HTML5 video)
-```js+jinja
+```js
 {
   "title": "Video filename",
   "type": "string",
@@ -1154,7 +1154,7 @@ const editor = new JSONEditor(element,{
 
 Here is the completed `full_name` example using the default barebones template engine:
 
-```js+jinja
+```js
 {
   "type": "object",
   "properties": {
@@ -1180,7 +1180,7 @@ It is also possible to set the "template" property to a JavaScript callback func
 
 
 Example Schema:
-```js+jinja
+```js
 {
   "type": "object",
   "properties": {
@@ -1202,7 +1202,7 @@ Example Schema:
 }
 ```
  Example Callback function:
-```js+jinja
+```js
 window.JSONEditor.defaults.callbacks.template = {
   "callbackFunction": (jseditor,e) => {
     return e.fname + " " + e.lname;
@@ -1264,7 +1264,7 @@ This is the most basic usage of `enumSource`.  The more verbose form of this pro
 filtering, pulling from multiple sources, constant values, etc..
 Here's a more complex example (this uses the Swig template engine syntax to show some advanced features)
 
-```js+jinja
+```js
 {
   // An array of sources
   "enumSource": [
@@ -1290,7 +1290,7 @@ Here's a more complex example (this uses the Swig template engine syntax to show
 
 You can also specify a list of static items with a slightly different syntax:
 
-```js+jinja
+```js
 {
   "enumSource": [{
       // A watched field source
@@ -1314,7 +1314,7 @@ You can also specify a list of static items with a slightly different syntax:
 The colors examples used an array of strings directly.  Using the verbose form, you can
 also make it work with an array of objects.  Here's an example:
 
-```js+jinja
+```js
 {
   "type": "object",
   "properties": {
@@ -1407,7 +1407,7 @@ It would be much nicer if the headers could be dynamic and incorporate informati
 
 To accomplish this, use the `headerTemplate` property.  All of the watched variables are passed into this template, along with the static title `title` (e.g. "Child"), the 0-based index `i0` (e.g. "0" and "1"), the 1-based index `i1`, and the field's value `self` (e.g. `{"name": "John", "age": 9}`).
 
-```js+jinja
+```js
 {
   "type": "array",
   "title": "Children",
@@ -1456,7 +1456,7 @@ JSON Editor uses a translate function to generate strings in the UI.  A default 
 
 You can easily override individual translations in the default language or create your own language mapping entirely.
 
-```js+jinja
+```js
 // Override a specific translation
 JSONEditor.defaults.languages.en.error_minLength =
   "This better be at least {{0}} characters long or else!";
