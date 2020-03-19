@@ -49,25 +49,25 @@ Usage
 
 If you learn best by example, check these out:
 
-*  Basic Usage Example - https://json-editor.github.io/json-editor/basic.html
-*  ACE Editor Example - https://json-editor.github.io/json-editor/ace_editor.html
-*  Advanced Usage Example - https://json-editor.github.io/json-editor/advanced.html
-*  CSS Integration Example - https://json-editor.github.io/json-editor/css_integration.html
-*  Base64 Editor Example (Muiltple Upload) - https://json-editor.github.io/json-editor/multiple_upload_base64.html
-*  Choices Editor Example - https://json-editor.github.io/json-editor/choices.html
-*  Cleave.js Editor Example - https://json-editor.github.io/json-editor/cleave.html
-*  Colorpicker Editor Example - https://json-editor.github.io/json-editor/colorpicker.html
-*  Datetime Editor Example - https://json-editor.github.io/json-editor/datetime.html
-*  DescribedBy Hyperlink Editor Example - https://json-editor.github.io/json-editor/describedby.html
-*  iMask.js Editor Example - https://json-editor.github.io/json-editor/imask.html
-*  Radio Button JSON Editor Example - https://json-editor.github.io/json-editor/radio.html
-*  Recursive JSON Editor Example - https://json-editor.github.io/json-editor/recursive.html
-*  Select2 Editor Example - https://json-editor.github.io/json-editor/select2.html
-*  Selectize Editor Example - https://json-editor.github.io/json-editor/selectize.html
-*  Signature Pad Editor Example - https://json-editor.github.io/json-editor/signature.html
-*  Star Rating Editor Example - https://json-editor.github.io/json-editor/starrating.html
-*  Upload Editor Example - https://json-editor.github.io/json-editor/upload.html
-*  WYSIWYG Editor Example - https://json-editor.github.io/json-editor/wysiwyg.html
+*  [Basic Usage Example](https://json-editor.github.io/json-editor/basic.html)
+*  [ACE Editor Example](https://json-editor.github.io/json-editor/ace_editor.html)
+*  [Advanced Usage Example](https://json-editor.github.io/json-editor/advanced.html)
+*  [CSS Integration Example](https://json-editor.github.io/json-editor/css_integration.html)
+*  [Base64 Editor Example (Muiltple Upload)](https://json-editor.github.io/json-editor/multiple_upload_base64.html)
+*  [Choices Editor Example](https://json-editor.github.io/json-editor/choices.html)
+*  [Cleave.js Editor Example](https://json-editor.github.io/json-editor/cleave.html)
+*  [Colorpicker Editor Example](https://json-editor.github.io/json-editor/colorpicker.html)
+*  [Datetime Editor Example](https://json-editor.github.io/json-editor/datetime.html)
+*  [DescribedBy Hyperlink Editor Example](https://json-editor.github.io/json-editor/describedby.html)
+*  [iMask.js Editor Example](https://json-editor.github.io/json-editor/imask.html)
+*  [Radio Button JSON Editor Example](https://json-editor.github.io/json-editor/radio.html)
+*  [Recursive JSON Editor Example](https://json-editor.github.io/json-editor/recursive.html)
+*  [Select2 Editor Example](https://json-editor.github.io/json-editor/select2.html)
+*  [Selectize Editor Example](https://json-editor.github.io/json-editor/selectize.html)
+*  [Signature Pad Editor Example](https://json-editor.github.io/json-editor/signature.html)
+*  [Star Rating Editor Example](https://json-editor.github.io/json-editor/starrating.html)
+*  [Upload Editor Example](https://json-editor.github.io/json-editor/upload.html)
+*  [WYSIWYG Editor Example](https://json-editor.github.io/json-editor/wysiwyg.html)
 
 More examples can be found at the [JSON-Editor Interactive Playground](https://pmk65.github.io/jedemov2/dist/demo.html)
 
@@ -961,7 +961,7 @@ Panel tabs titles came from object or array titles and for the grouping panel it
 
 Demo page will look like this:
 
-![Categories format](./docs/images/categoriesDemo.png)
+![Categories format](./images/categoriesDemo.png)
 
 Editor Options
 ----------------
