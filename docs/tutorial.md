@@ -98,163 +98,39 @@ const editor = new JSONEditor(element, {
 
 Here are all the available options:
 
-<table>
-  <thead>
-  <tr>
-    <th>Option</th>
-    <th>Description</th>
-    <th>Default Value</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-    <td>ajax</td>
-    <td>If <code>true</code>, JSON Editor will load external URLs in <code>$ref</code> via ajax.</td>
-    <td><code>false</code></td>
-  </tr>
-  <tr>
-    <td>ajaxBase</td>
-    <td>Allows schema references to work either with or without cors; set to protocol://host:port when api is served by different host.</td>
-    <td><code></code></td>
-  </tr>
-  <tr>
-    <td>ajaxCredentials</td>
-    <td>If <code>true</code>, JSON Editor will make ajax call with [credentials](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials).</td>
-    <td><code>false</code></td>
-  </tr>
-  <tr>
-    <td>compact</td>
-    <td>If <code>true</code>, the label will not be displayed/added.</td>
-    <td><code>false</code></td>
-  </tr>
-  <tr>
-    <td>disable_array_add</td>
-    <td>If <code>true</code>, remove all "add row" buttons from arrays.</td>
-    <td><code>false</code></td>
-  </tr>
-  <tr>
-    <td>disable_array_delete</td>
-    <td>If <code>true</code>, remove all "delete row" buttons from arrays.</td>
-    <td><code>false</code></td>
-  </tr>
-  <tr>
-    <td>disable_array_reorder</td>
-    <td>If <code>true</code>, remove all "move up" and "move down" buttons from arrays.</td>
-    <td><code>false</code></td>
-  </tr>
-  <tr>
-    <td>enable_array_copy</td>
-    <td>If <code>true</code>, add copy buttons to arrays.</td>
-    <td><code>false</code></td>
-  </tr>
-  <tr>
-    <td>disable_collapse</td>
-    <td>If <code>true</code>, remove all collapse buttons from objects and arrays.</td>
-    <td><code>false</code></td>
-  </tr>
-  <tr>
-    <td>disable_edit_json</td>
-    <td>If <code>true</code>, remove all Edit JSON buttons from objects.</td>
-    <td><code>false</code></td>
-  </tr>
-  <tr>
-    <td>disable_properties</td>
-    <td>If <code>true</code>, remove all Edit Properties buttons from objects.</td>
-    <td><code>false</code></td>
-  </tr>
-  <tr>
-  <tr>
-    <td>array_controls_top</td>
-    <td>If <code>true</code>, array controls (add, delete etc) will be displayed at top of list.</td>
-    <td><code>false</code></td>
-  </tr>
-  <tr>
-    <td>form_name_root</td>
-    <td>The first part of the `name` attribute of form inputs in the editor.  An full example name is `root[person][name]` where "root" is the form_name_root.</td>
-    <td>root</td>
-  </tr>
-  <tr>
-    <td>iconlib</td>
-    <td>The icon library to use for the editor.  See the <strong>CSS Integration</strong> section below for more info.</td>
-    <td><code>null</code></td>
-  </tr>
-  <tr>
-      <td>remove_button_labels</td>
-      <td>Display only icons in buttons. This works only if iconlib is set.</td>
-      <td><code>false</code></td>
-    </tr>
-  <tr>
-    <td>no_additional_properties</td>
-    <td>If <code>true</code>, objects can only contain properties defined with the <code>properties</code> keyword.</td>
-    <td><code>false</code></td>
-  </tr>
-  <tr>
-    <td>refs</td>
-    <td>An object containing schema definitions for URLs.  Allows you to pre-define external schemas.</td>
-    <td><code>{}</code></td>
-  </tr>
-  <tr>
-    <td>required_by_default</td>
-    <td>If <code>true</code>, all schemas that don't explicitly set the <code>required</code> property will be required.</td>
-    <td><code>false</code></td>
-  </tr>
-  <tr>
-    <td>keep_oneof_values</td>
-    <td>If <code>true</code>, makes oneOf copy properties over when switching.</td>
-    <td><code>true</code></td>
-  </tr>
-  <tr>
-    <td>schema</td>
-    <td>A valid JSON Schema to use for the editor.  Version 3 and Version 4 of the draft specification are supported.</td>
-    <td><code>{}</code></td>
-  </tr>
-  <tr>
-    <td>show_errors</td>
-    <td>When to show validation errors in the UI.  Valid values are <code>interaction</code>, <code>change</code>, <code>always</code>, and <code>never</code>.</td>
-    <td><code>"interaction"</code></td>
-  </tr>
-  <tr>
-    <td>startval</td>
-    <td>Seed the editor with an initial value.  This should be valid against the editor's schema.</td>
-    <td><code>null</code></td>
-  </tr>
-  <tr>
-    <td>template</td>
-    <td>The JS template engine to use. See the <strong>Templates and Variables</strong> section below for more info.</td>
-    <td><code>default</code></td>
-  </tr>
-  <tr>
-    <td>theme</td>
-    <td>The CSS theme to use.  See the <strong>CSS Integration</strong> section below for more info.</td>
-    <td><code>html</code></td>
-  </tr>
-  <tr>
-    <td>display_required_only</td>
-    <td>If <code>true</code>, only required properties will be included by default.</td>
-    <td><code>false</code></td>
-  </tr>
-  <tr>
-      <td>show_opt_in</td>
-      <td>If <code>true</code>, NON required properties will have an extra toggable checkbox near the title that determines if the value must be included or not in the editor´s value</td>
-      <td><code>false</code></td>
-    </tr>
-  <tr>
-    <td>prompt_before_delete</td>
-    <td>If <code>true</code>, displays a dialog box with a confirmation message before node deletion.</td>
-    <td><code>true</code></td>
-  </tr>
-  <tr>
-    <td>object_layout</td>
-    <td>The default value of `format` for objects. If set to <code>table</code> for example, objects will use table layout if `format` is not specified.</td>
-    <td><code>normal</code></td>
-  </tr>
-  <tr>
-    <td>enum_source_value_auto_select</td>
-    <td>Preserve value at Move Up or Down.(No value is selected automatically upon deletion.)</td>
-    <td><code>true</code></td>
-  </tr>
-  </tbody>
-</table>
+Option                        | Default       | Description
+--|--|--
+ajax                          | `false`         | If true, JSON Editor will load external URLs in $ref via ajax.
+ajaxBase                      |               | Allows schema references to work either with or without cors; set to protocol://host:port when api is served by different host.
+ajaxCredentials               | `false`         | If true, JSON Editor will make ajax call with [credentials].
+compact                       | `false`         | If true, the label will not be displayed/added.
+disable_array_add             | `false`         | If true, remove all "add row" buttons from arrays.
+disable_array_delete          | `false`         | If true, remove all "delete row" buttons from arrays.
+disable_array_reorder         | `false`         | If true, remove all "move up" and "move down" buttons from arrays.
+enable_array_copy             | `false`         | If true, add copy buttons to arrays.
+disable_collapse              | `false`         | If true, remove all collapse buttons from objects and arrays.
+disable_edit_json             | `false`         | If true, remove all Edit JSON buttons from objects.
+disable_properties            | `false`         | If true, remove all Edit Properties buttons from objects.
+array_controls_top            | `false`         | If true, array controls (add, delete etc) will be displayed at top of list.
+form_name_root                | root          | The first part of the `name` attribute of form inputs in the editor. An full example name is `root[person][name]` where "root" is the form_name_root.
+iconlib                       | null          | The icon library to use for the editor. See the CSS Integration section below for more info.
+remove_button_labels          | `false`         | Display only icons in buttons. This works only if iconlib is set.
+no_additional_properties      | `false`         | If true, objects can only contain properties defined with the properties keyword.
+refs                          | {}            | An object containing schema definitions for URLs. Allows you to pre-define external schemas.
+required_by_default           | `false`         | If true, all schemas that don't explicitly set the required property will be required.
+keep_oneof_values             | `true`          | If true, makes oneOf copy properties over when switching.
+schema                        | {}            | A valid JSON Schema to use for the editor. Version 3 and Version 4 of the draft specification are supported.
+show_errors                   | "interaction" | When to show validation errors in the UI. Valid values are interaction, change, always, and never.
+startval                      | null          | Seed the editor with an initial value. This should be valid against the editor's schema.
+template                      | default       | The JS template engine to use. See the Templates and Variables section below for more info.
+theme                         | html          | The CSS theme to use. See the CSS Integration section below for more info.
+display_required_only         | `false`         | If true, only required properties will be included by default.
+show_opt_in                   | `false`         | If true, NON required properties will have an extra toggable checkbox near the title that determines if the value must be included or not in the editors value
+prompt_before_delete          | `true`          | If true, displays a dialog box with a confirmation message before node deletion.
+object_layout                 | normal        | The default value of `format` for objects. If set to table for example, objects will use table layout if `format` is not specified.
+enum_source_value_auto_select | `true`          | Preserve value at Move Up or Down.(No value is selected automatically upon deletion.)
+
+[credentials]: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials
 
 __*Note__ If the `ajax` property is `true` and JSON Editor needs to fetch an external url, the api methods won't be available immediately.
 Listen for the `ready` event before calling them.
