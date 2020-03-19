@@ -4,22 +4,22 @@
     <meta charset="utf-8" />
     <title>Recursive JSON Editor Example</title>
 
-    <!-- Foundation CSS framework (Bootstrap and jQueryUI also supported) -->
-    <link rel='stylesheet' href='//cdn.jsdelivr.net/bootstrap/3.2.0/css/bootstrap.css'>
-    <!-- Font Awesome icons (Bootstrap, Foundation, and jQueryUI also supported) -->
-    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css'>
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
 
-    <link rel='stylesheet' href='//cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.default.min.css'>
-    <link rel='stylesheet' href='//cdn.jsdelivr.net/sceditor/1.4.3/themes/modern.min.css'>
-    <script src='//cdn.jsdelivr.net/jquery/2.1.1/jquery.min.js'></script>
-    <script src='//cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.min.js'></script>
-    <script src='//cdn.jsdelivr.net/sceditor/1.4.3/plugins/xhtml.js'></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+    <style>
+        .row {
+            max-width:960px;
+            margin: 0 auto;
+            padding-bottom: 15px
+        }
+    </style>
 </head>
 <body>
 <div class='container'>
-    <div class='row' style='padding-bottom: 15px;'>
+    <div class='row'>
         <div class='col-md-12'>
             <h1>Recursive JSON Editor Example</h1>
 
@@ -34,7 +34,7 @@
             </ul>
         </div>
     </div>
-    <div class='row' style='padding-bottom: 15px;'>
+    <div class='row'>
         <div class='col-md-12'>
             <button id='submit' class='btn btn-info'>Submit (console.log)</button>
             <button id='restore' class='btn btn-info'>Restore to Default</button>
@@ -50,12 +50,10 @@
 </div>
 
 <script>
-    JSONEditor.defaults.theme = 'bootstrap3';
-    JSONEditor.defaults.iconlib = 'fontawesome4';
-    JSONEditor.plugins.sceditor.style = "//cdn.jsdelivr.net/sceditor/1.4.3/jquery.sceditor.default.min.css";
-
     // Initialize the editor
     var editor = new JSONEditor(document.getElementById('editor_holder'),{
+        theme: 'spectre',
+        iconlib: 'spectre',
         // The schema for the editor
         schema: {
             title: "Person",
