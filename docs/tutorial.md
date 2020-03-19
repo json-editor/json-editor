@@ -1,18 +1,5 @@
-JSON Editor
-===========
-
-[![Build Status](https://travis-ci.org/json-editor/json-editor.svg?branch=master)](https://travis-ci.org/json-editor/json-editor)
-Fork of the inactive [jdorn/json-editor](https://github.com/jdorn/json-editor) using the updated fork [json-editor/json-editor](https://github.com/json-editor/json-editor).
-Some pull requests added from the original repo.
-
-![JSON Schema -> HTML Editor -> JSON](./docs/images/jsoneditor.png)
-
-JSON Editor takes a JSON Schema and uses it to generate an HTML form.
-It has full support for JSON Schema version 3 and 4 and can integrate with several popular CSS frameworks (bootstrap, spectre, tailwind).
-
-Check out an interactive demo: https://json-editor.github.io/json-editor/
-
-Or the JSON-Editor Interactive Playground: https://pmk65.github.io/jedemov2/dist/demo.html
+Tutorial
+=========
 
 Install
 -----------------
