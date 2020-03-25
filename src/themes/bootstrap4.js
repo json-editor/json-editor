@@ -515,6 +515,10 @@ export class bootstrap4Theme extends AbstractTheme {
     return tabHolder.children[1].children[0]
   }
 
+  getFirstTab (holder) {
+    return holder.firstChild.firstChild.firstChild
+  }
+
   getProgressBar () {
     const min = 0
     const max = 100
