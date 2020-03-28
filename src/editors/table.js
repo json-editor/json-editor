@@ -207,6 +207,8 @@ export class TableEditor extends ArrayEditor {
   refreshRowButtons () {
     /* If we currently have minItems items in the array */
     const minItems = this.schema.minItems && this.schema.minItems >= this.rows.length
+    /* If we currently have maxItems items in the array */
+    const maxItems = this.schema.maxItems && this.schema.maxItems <= this.rows.length
 
     let needRowButtons = false
     this.rows.forEach((editor, i) => {
@@ -227,6 +229,16 @@ export class TableEditor extends ArrayEditor {
         } else {
           needRowButtons = true
           editor.delete_button.style.display = ''
+        }
+      }
+
+      /* Hide the copy button if we have maxItems items */
+      if (editor.copy_button) {
+        if (maxItems) {
+          editor.copy_button.style.display = 'none'
+        } else {
+          needRowButtons = true
+          editor.copy_button.style.display = ''
         }
       }
 
@@ -259,7 +271,7 @@ export class TableEditor extends ArrayEditor {
       this.table.style.display = ''
       this.remove_all_rows_button.style.display = 'none'
 
-      /* If there are minItems items in the array, or configured to hide the delete_last_row button, hide the delete button beneath the rows */
+      /* If there are minItems items in the array, or configured to hide the delete_last_row button, hide the button beneath the rows */
       if (minItems || this.hide_delete_last_row_buttons) {
         this.delete_last_row_button.style.display = 'none'
       } else {
@@ -269,6 +281,7 @@ export class TableEditor extends ArrayEditor {
     } else {
       this.table.style.display = ''
 
+      /* If there are minItems items in the array, or configured to hide the delete_last_row button, hide the button beneath the rows */
       if (minItems || this.hide_delete_last_row_buttons) {
         this.delete_last_row_button.style.display = 'none'
       } else {
@@ -276,6 +289,7 @@ export class TableEditor extends ArrayEditor {
         controlsNeeded = true
       }
 
+      /* If there are minItems items in the array, or configured to hide the remove_all_rows_button button, hide the button beneath the rows */
       if (minItems || this.hide_delete_all_rows_buttons) {
         this.remove_all_rows_button.style.display = 'none'
       } else {
@@ -284,8 +298,8 @@ export class TableEditor extends ArrayEditor {
       }
     }
 
-    /* If there are maxItems in the array, hide the add button beneath the rows */
-    if ((this.schema.maxItems && this.schema.maxItems <= this.rows.length) || this.hide_add_button) {
+    /* If there are maxItems items in the array, or configured to hide the add_row_button button, hide the button beneath the rows */
+    if (maxItems || this.hide_add_button) {
       this.add_row_button.style.display = 'none'
     } else {
       this.add_row_button.style.display = ''
@@ -316,7 +330,7 @@ export class TableEditor extends ArrayEditor {
 
     const controlsHolder = this.rows[i].table_controls
 
-    /* Buttons to delete row, move row up, and move row down */
+    /* Buttons to delete row, copy row, move row up, and move row down */
     if (!this.hide_delete_buttons) {
       this.rows[i].delete_button = this.getButton('', 'delete', this.translate('button_delete_row_title_short'))
       this.rows[i].delete_button.classList.add('delete', 'json-editor-btntype-delete')
@@ -336,6 +350,29 @@ export class TableEditor extends ArrayEditor {
         this.jsoneditor.trigger('deleteRow', this.rows[i])
       })
       controlsHolder.appendChild(this.rows[i].delete_button)
+    }
+
+    if (this.show_copy_button) {
+      self.rows[i].copy_button = this.getButton('', 'copy', this.translate('button_copy_row_title_short'))
+      self.rows[i].copy_button.classList.add('copy', 'json-editor-btntype-copy')
+      self.rows[i].copy_button.setAttribute('data-i', i)
+      self.rows[i].copy_button.addEventListener('click', function (e) {
+        const value = self.getValue()
+        e.preventDefault()
+        e.stopPropagation()
+        const i = this.getAttribute('data-i') * 1
+
+        each(value, (j, row) => {
+          if (j === i) {
+            value.push(row)
+          }
+        })
+
+        self.setValue(value)
+        self.refreshValue(true)
+        self.onChange(true)
+      })
+      controlsHolder.appendChild(self.rows[i].copy_button)
     }
 
     if (i && !this.hide_move_buttons) {
