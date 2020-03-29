@@ -212,8 +212,8 @@ export class TableEditor extends ArrayEditor {
 
     let needRowButtons = false
     this.rows.forEach((editor, i) => {
-      /* Hide the delete button if we have minItems items */
       if (editor.delete_button) {
+        /* Hide the delete button if we have minItems items */
         if (minItems) {
           editor.delete_button.style.display = 'none'
         } else {
@@ -222,8 +222,8 @@ export class TableEditor extends ArrayEditor {
         }
       }
 
-      /* Hide the copy button if we have maxItems items */
       if (editor.copy_button) {
+        /* Hide the copy button if we have maxItems items */
         if (maxItems) {
           editor.copy_button.style.display = 'none'
         } else {
@@ -232,8 +232,8 @@ export class TableEditor extends ArrayEditor {
         }
       }
 
-      /* Hide the move up button for the first row */
       if (editor.moveup_button) {
+        /* Hide the move up button for the first row */
         if (i === 0) {
           editor.moveup_button.style.display = 'none'
         } else {
@@ -242,8 +242,8 @@ export class TableEditor extends ArrayEditor {
         }
       }
 
-      /* Hide the move down button for the last row */
       if (editor.movedown_button) {
+        /* Hide the move down button for the last row */
         if (i === self.rows.length - 1) {
           editor.movedown_button.style.display = 'none'
         } else {
@@ -267,48 +267,35 @@ export class TableEditor extends ArrayEditor {
       this.controls_header_cell.style.display = 'none'
     }
 
-    let controlsNeeded = false
-
     if (!this.value.length) {
-      this.delete_last_row_button.style.display = 'none'
-      this.remove_all_rows_button.style.display = 'none'
       this.table.style.display = 'none'
-    } else if (this.value.length === 1) {
-      this.table.style.display = ''
-      this.remove_all_rows_button.style.display = 'none'
-
-      /* If there are minItems items in the array, or configured to hide the delete_last_row button, hide the button beneath the rows */
-      if (minItems || this.hide_delete_last_row_buttons) {
-        this.delete_last_row_button.style.display = 'none'
-      } else {
-        this.delete_last_row_button.style.display = ''
-        controlsNeeded = true
-      }
     } else {
       this.table.style.display = ''
-
-      /* If there are minItems items in the array, or configured to hide the delete_last_row button, hide the button beneath the rows */
-      if (minItems || this.hide_delete_last_row_buttons) {
-        this.delete_last_row_button.style.display = 'none'
-      } else {
-        this.delete_last_row_button.style.display = ''
-        controlsNeeded = true
-      }
-
-      /* If there are minItems items in the array, or configured to hide the remove_all_rows_button button, hide the button beneath the rows */
-      if (minItems || this.hide_delete_all_rows_buttons) {
-        this.remove_all_rows_button.style.display = 'none'
-      } else {
-        this.remove_all_rows_button.style.display = ''
-        controlsNeeded = true
-      }
     }
+
+    let controlsNeeded = false
 
     /* If there are maxItems items in the array, or configured to hide the add_row_button button, hide the button beneath the rows */
     if (maxItems || this.hide_add_button) {
       this.add_row_button.style.display = 'none'
     } else {
       this.add_row_button.style.display = ''
+      controlsNeeded = true
+    }
+
+    /* If there are minItems items in the array, or configured to hide the delete_last_row button, hide the button beneath the rows */
+    if (!this.value.length || minItems || this.hide_delete_last_row_buttons) {
+      this.delete_last_row_button.style.display = 'none'
+    } else {
+      this.delete_last_row_button.style.display = ''
+      controlsNeeded = true
+    }
+
+    /* If there are minItems items in the array, or configured to hide the remove_all_rows_button button, hide the button beneath the rows */
+    if (this.value.length <= 1 || minItems || this.hide_delete_all_rows_buttons) {
+      this.remove_all_rows_button.style.display = 'none'
+    } else {
+      this.remove_all_rows_button.style.display = ''
       controlsNeeded = true
     }
 
