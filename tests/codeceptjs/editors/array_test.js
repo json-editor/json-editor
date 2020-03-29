@@ -17,7 +17,7 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
   assert.equal(value, '["A","B"]');
 
   I.amAcceptingPopups();
-  I.click('.json-editor-btn-moveup');
+  I.click('//button[contains(@class, "json-editor-btn-moveup") and @data-i="1"]');
   I.seeInPopup('moveRow');
   I.acceptPopup();
   I.click('.get-value');
@@ -25,12 +25,20 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
   assert.equal(value, '["B","A"]');
 
   I.amAcceptingPopups();
-  I.click('.json-editor-btn-movedown');
+  I.click('//button[contains(@class, "json-editor-btn-movedown") and @data-i="0"]');
   I.seeInPopup('moveRow');
   I.acceptPopup();
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
   assert.equal(value, '["A","B"]');
+
+  I.amAcceptingPopups();
+  I.click('//button[contains(@class, "json-editor-btn-copy") and @data-i="1"]');
+  I.seeInPopup('moveRow');
+  I.acceptPopup();
+  I.click('.get-value');
+  value = await I.grabValueFrom('.debug');
+  assert.equal(value, '["B","A","A"]');
 
   I.amAcceptingPopups();
   I.click('.json-editor-btntype-add');
