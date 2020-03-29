@@ -242,8 +242,14 @@ export class TableEditor extends ArrayEditor {
         }
       }
 
+      /* Hide the move up button for the first row */
       if (editor.moveup_button) {
-        needRowButtons = true
+        if (i === 0) {
+          editor.moveup_button.style.display = 'none'
+        } else {
+          needRowButtons = true
+          editor.moveup_button.style.display = ''
+        }
       }
     })
 
@@ -375,7 +381,7 @@ export class TableEditor extends ArrayEditor {
       controlsHolder.appendChild(self.rows[i].copy_button)
     }
 
-    if (i && !this.hide_move_buttons) {
+    if (!this.hide_move_buttons) {
       this.rows[i].moveup_button = this.getButton('', 'moveup', this.translate('button_move_up_title'))
       this.rows[i].moveup_button.classList.add('moveup', 'json-editor-btntype-move')
       this.rows[i].moveup_button.setAttribute('data-i', i)
