@@ -212,16 +212,6 @@ export class TableEditor extends ArrayEditor {
 
     let needRowButtons = false
     this.rows.forEach((editor, i) => {
-      /* Hide the move down button for the last row */
-      if (editor.movedown_button) {
-        if (i === this.rows.length - 1) {
-          editor.movedown_button.style.display = 'none'
-        } else {
-          needRowButtons = true
-          editor.movedown_button.style.display = ''
-        }
-      }
-
       /* Hide the delete button if we have minItems items */
       if (editor.delete_button) {
         if (minItems) {
@@ -249,6 +239,16 @@ export class TableEditor extends ArrayEditor {
         } else {
           needRowButtons = true
           editor.moveup_button.style.display = ''
+        }
+      }
+
+      /* Hide the move down button for the last row */
+      if (editor.movedown_button) {
+        if (i === self.rows.length - 1) {
+          editor.movedown_button.style.display = 'none'
+        } else {
+          needRowButtons = true
+          editor.movedown_button.style.display = ''
         }
       }
     })
