@@ -364,6 +364,7 @@ export class TableEditor extends ArrayEditor {
         self.setValue(value)
         self.refreshValue(true)
         self.onChange(true)
+        self.jsoneditor.trigger('copyRow', value[value.length - 1])
       })
       controlsHolder.appendChild(self.rows[i].copy_button)
     }

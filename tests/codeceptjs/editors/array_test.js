@@ -34,7 +34,7 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
 
   I.amAcceptingPopups();
   I.click('//button[contains(@class, "json-editor-btn-copy") and @data-i="1"]');
-  I.seeInPopup('moveRow');
+  I.seeInPopup('copyRow');
   I.acceptPopup();
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');

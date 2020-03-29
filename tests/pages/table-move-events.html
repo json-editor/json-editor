@@ -30,6 +30,10 @@
     debug.value = JSON.stringify(editor.getValue());
   });
   editor.setValue(["A","B"]);
+  editor.on('copyRow', function () {
+    alert('copyRow');
+    console.log('copyRow');
+  });
   editor.on('moveRow', function () {
     alert('moveRow');
     console.log('moveRow');
