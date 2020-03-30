@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script src="../../dist/jsoneditor.js"></script>
+</head>
+
+<body>
+  <div id="editor"></div>
+  <script>
+    const schema = {
+      "title":"Template",
+      "type":"object",
+      "properties": {
+        "enable_option": {
+          "type":"boolean",
+          "format":"checkbox"
+        },
+        "make_new": {
+          "type":"boolean",
+          "format":"checkbox",
+          "options":  {
+            "dependencies": {
+              "enable_option":true
+            }
+          }
+        },
+        "existing_name": {
+          "type":"string",
+          "invertDependency":["make_new"],
+          "options": {
+            "dependencies": {
+              "enable_option":true,
+              "make_new":false
+            }
+          }
+        }
+      },
+      "required": ["enable_option"],
+      "dependencies": {
+        "make_new": ["enable_option"],
+        "existing_name": [
+          "enable_option",
+          "make_new"
+        ]
+      },
+    };
+    const defaults = {
+        "enable_option":false,
+        "make_new":true,
+        "existing_name":"A Name"
+    };
+    const editor = new JSONEditor(document.getElementById('editor'), {
+        schema,
+        startval: defaults,
+        show_errors: 'always'
+    });
+  </script>
+</body>
+</html>
