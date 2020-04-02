@@ -81,6 +81,7 @@ export function getShadowParent (node) {
   return node && (node.toString() === '[object ShadowRoot]' ? node : getShadowParent(node.parentNode))
 }
 
+// From https://github.com/angular/angular.js/blob/master/src/ng/directive/input.js
 const NUMBER_REGEXP = /^\s*(-|\+)?(\d+|(\d*(\.\d*)))([eE][+-]?\d+)?\s*$/
 
 export function isNumber (value) {
