@@ -27,8 +27,8 @@ export function deepCopy (target) {
 
 export function extend (destination, ...args) {
   for (let i = 0; i < args.length; i++) {
-    let source = args[i]
-    for (let property in source) {
+    const source = args[i]
+    for (const property in source) {
       if (!source.hasOwnProperty(property)) continue
       if (source[property] && isPlainObject(source[property])) {
         if (!destination.hasOwnProperty(property)) destination[property] = {}
@@ -79,4 +79,22 @@ export function trigger (el, event) {
  */
 export function getShadowParent (node) {
   return node && (node.toString() === '[object ShadowRoot]' ? node : getShadowParent(node.parentNode))
+}
+
+const NUMBER_REGEXP = /^\s*(-|\+)?(\d+|(\d*(\.\d*)))([eE][+-]?\d+)?\s*$/
+
+export function isNumber (value) {
+  if (typeof value === 'undefined' || value === null) return false
+  const match = value.match(NUMBER_REGEXP)
+  const v = parseFloat(value)
+  return match !== null && !isNaN(v) && isFinite(v)
+}
+
+const INTEGER_REGEXP = /^\s*(-|\+)?(\d+)\s*$/
+
+export function isInteger (value) {
+  if (typeof value === 'undefined' || value === null) return false
+  const match = value.match(INTEGER_REGEXP)
+  const v = parseInt(value)
+  return match !== null && !isNaN(v) && isFinite(v)
 }

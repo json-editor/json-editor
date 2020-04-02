@@ -1,4 +1,18 @@
 {
+    "primitive": {
+        "schema": {
+            "type": "number"
+        },
+        "valid": [
+            0,
+            1000,
+            -100
+        ],
+        "invalid": [
+            "12-12",
+            "12*12"
+        ]
+    },
     "required3": {
         "schema": {
             "type": "object",

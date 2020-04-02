@@ -1,4 +1,5 @@
 import { StringEditor } from './string.js'
+import { isNumber } from '../utilities'
 
 export class NumberEditor extends StringEditor {
   build () {
@@ -33,10 +34,6 @@ export class NumberEditor extends StringEditor {
     this.setInputAttributes(['maxlength', 'pattern', 'readonly', 'min', 'max', 'step'])
   }
 
-  sanitize (value) {
-    return (`${value}`).replace(/[^0-9.\-eE]/g, '')
-  }
-
   getNumColumns () {
     return 2
   }
@@ -45,6 +42,6 @@ export class NumberEditor extends StringEditor {
     if (!this.dependenciesFulfilled) {
       return undefined
     }
-    return this.value === '' ? undefined : this.value * 1
+    return isNumber(this.value) ? parseFloat(this.value) : this.value
   }
 }
