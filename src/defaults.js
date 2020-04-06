@@ -1,4 +1,3 @@
-import { each } from './utilities.js'
 import { resolvers } from './resolvers.js'
 
 /* default theme */
@@ -252,7 +251,7 @@ languages.en = {
 }
 
 /* Default per-editor options */
-each(editors, (i, editor) => { editors[i].options = editor.options || {} })
+Object.entries(editors).forEach(([i, editor]) => { editors[i].options = editor.options || {} })
 
 /* Default upload handler */
 function upload (type, file, cbs) {

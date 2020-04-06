@@ -1,5 +1,4 @@
 import { AbstractEditor } from '../editor.js'
-import { each } from '../utilities.js'
 
 export class MultiSelectEditor extends AbstractEditor {
   onInputChange () {
@@ -21,10 +20,7 @@ export class MultiSelectEditor extends AbstractEditor {
 
   getNumColumns () {
     let longestText = this.getTitle().length
-    for (const i in this.select_values) {
-      if (!this.select_values.hasOwnProperty(i)) continue
-      longestText = Math.max(longestText, (`${this.select_values[i]}`).length + 4)
-    }
+    Object.keys(this.select_values).forEach(i => (longestText = Math.max(longestText, (`${this.select_values[i]}`).length + 4)))
 
     return Math.min(12, Math.max(longestText / 7, 2))
   }
@@ -53,7 +49,7 @@ export class MultiSelectEditor extends AbstractEditor {
   }
 
   build () {
-    const self = this; let i
+    let i
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
     if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText)
@@ -93,18 +89,18 @@ export class MultiSelectEditor extends AbstractEditor {
 
     this.multiselectChangeHandler = (e) => {
       const newValue = []
-      for (i = 0; i < self.option_keys.length; i++) {
-        if (self.select_options[self.option_keys[i]] && (self.select_options[self.option_keys[i]].selected || self.select_options[self.option_keys[i]].checked)) newValue.push(self.select_values[self.option_keys[i]])
+      for (i = 0; i < this.option_keys.length; i++) {
+        if (this.select_options[this.option_keys[i]] && (this.select_options[this.option_keys[i]].selected || this.select_options[this.option_keys[i]].checked)) newValue.push(this.select_values[this.option_keys[i]])
       }
-      self.updateValue(newValue)
-      self.onChange(true)
+      this.updateValue(newValue)
+      this.onChange(true)
     }
 
     this.control.addEventListener('change', this.multiselectChangeHandler, false)
 
     /* Any special formatting that needs to happen after the input is added to the dom */
     window.requestAnimationFrame(() => {
-      self.afterInputReady()
+      this.afterInputReady()
     })
   }
 
@@ -114,12 +110,10 @@ export class MultiSelectEditor extends AbstractEditor {
   }
 
   afterInputReady () {
-    const self = this
-    this.theme.afterInputReady(self.input || self.inputs)
+    this.theme.afterInputReady(this.input || this.inputs)
   }
 
   setValue (value, initial) {
-    let i
     value = value || []
     if (!(Array.isArray(value))) value = [value]
 
@@ -127,10 +121,9 @@ export class MultiSelectEditor extends AbstractEditor {
     value = value.map(e => `${e}`)
 
     /* Update selected status of options */
-    for (i in this.select_options) {
-      if (!this.select_options.hasOwnProperty(i)) continue
+    Object.keys(this.select_options).forEach(i => {
       this.select_options[i][this.input_type === 'select' ? 'selected' : 'checked'] = (value.includes(i))
-    }
+    })
 
     this.updateValue(value)
     this.onChange(true)
@@ -176,10 +169,7 @@ export class MultiSelectEditor extends AbstractEditor {
       if (this.input) {
         this.input.disabled = false
       } else if (this.inputs) {
-        for (const i in this.inputs) {
-          if (!this.inputs.hasOwnProperty(i)) continue
-          this.inputs[i].disabled = false
-        }
+        Object.keys(this.inputs).forEach(i => (this.inputs[i].disabled = false))
       }
       super.enable()
     }
@@ -190,10 +180,7 @@ export class MultiSelectEditor extends AbstractEditor {
     if (this.input) {
       this.input.disabled = true
     } else if (this.inputs) {
-      for (const i in this.inputs) {
-        if (!this.inputs.hasOwnProperty(i)) continue
-        this.inputs[i].disabled = true
-      }
+      Object.keys(this.inputs).forEach(i => (this.inputs[i].disabled = true))
     }
     super.disable()
   }
@@ -208,13 +195,14 @@ export class MultiSelectEditor extends AbstractEditor {
 
   showValidationErrors (errors) {
     const regexPath = new RegExp(`^${this.escapeRegExp(this.path)}(\\.\\d+)?$`)
-    const messages = []
-
-    each(errors, (i, error) => {
+    const addMessage = (messages, error) => {
       if (error.path.match(regexPath)) {
         messages.push(error.message)
       }
-    })
+      return messages
+    }
+
+    const messages = errors.reduce(addMessage, [])
 
     if (messages.length) {
       this.theme.addInputError(this.input || this.inputs, `${messages.join('. ')}.`)

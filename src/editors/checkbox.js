@@ -1,5 +1,4 @@
 import { AbstractEditor } from '../editor.js'
-import { each } from '../utilities.js'
 
 export class CheckboxEditor extends AbstractEditor {
   setValue (value, initial) {
@@ -27,7 +26,6 @@ export class CheckboxEditor extends AbstractEditor {
   }
 
   build () {
-    const self = this
     this.label = this.header = this.theme.getCheckboxLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
     if (this.options.infoText && !this.options.compact) this.infoButton = this.theme.getInfoButton(this.options.infoText)
@@ -41,11 +39,11 @@ export class CheckboxEditor extends AbstractEditor {
       this.input.disabled = true
     }
 
-    this.input.addEventListener('change', function (e) {
+    this.input.addEventListener('change', e => {
       e.preventDefault()
       e.stopPropagation()
-      self.value = this.checked
-      self.onChange(true)
+      this.value = e.currentTarget.checked
+      this.onChange(true)
     })
 
     this.container.appendChild(this.control)
@@ -72,21 +70,19 @@ export class CheckboxEditor extends AbstractEditor {
   }
 
   showValidationErrors (errors) {
-    const self = this
-
     if (this.jsoneditor.options.show_errors === 'always') { } else if (!this.is_dirty && this.previous_error_setting === this.jsoneditor.options.show_errors) {
       return
     }
 
     this.previous_error_setting = this.jsoneditor.options.show_errors
 
-    const messages = []
-    each(errors, (i, error) => {
-      if (error.path === self.path) {
+    const addMessage = (messages, error) => {
+      if (error.path === this.path) {
         messages.push(error.message)
       }
-    })
-
+      return messages
+    }
+    const messages = errors.reduce(addMessage, [])
     this.input.controlgroup = this.control
 
     if (messages.length) {

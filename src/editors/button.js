@@ -50,10 +50,9 @@ export class ButtonEditor extends AbstractEditor {
 
     this.container.appendChild(this.control)
 
-    const self = this
     this.changeHandler = () => {
-      if (self.jsoneditor.validate(self.jsoneditor.getValue()).length > 0) self.disable()
-      else self.enable()
+      if (this.jsoneditor.validate(this.jsoneditor.getValue()).length > 0) this.disable()
+      else this.enable()
     }
 
     /* Enable/disable the button depending on form validation */
