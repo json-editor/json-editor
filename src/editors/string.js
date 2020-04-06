@@ -1,5 +1,5 @@
 import { AbstractEditor } from '../editor.js'
-import { extend, each } from '../utilities.js'
+import { extend } from '../utilities.js'
 
 export class StringEditor extends AbstractEditor {
   register () {
@@ -65,7 +65,6 @@ export class StringEditor extends AbstractEditor {
   }
 
   build () {
-    const self = this
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
     if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText)
@@ -132,28 +131,28 @@ export class StringEditor extends AbstractEditor {
     this.setInputAttributes(['maxlength', 'pattern', 'readonly', 'min', 'max', 'step'])
 
     this.input
-      .addEventListener('change', function (e) {
+      .addEventListener('change', e => {
         e.preventDefault()
         e.stopPropagation()
 
         /* Don't allow changing if this field is a template */
-        if (self.schema.template) {
-          this.value = self.value
+        if (this.schema.template) {
+          e.currentTarget.value = this.value
           return
         }
 
-        const val = this.value
+        const val = e.currentTarget.value
 
         /* sanitize value */
-        const sanitized = self.sanitize(val)
+        const sanitized = this.sanitize(val)
         if (val !== sanitized) {
-          this.value = sanitized
+          e.currentTarget.value = sanitized
         }
 
-        self.is_dirty = true
+        this.is_dirty = true
 
-        self.refreshValue()
-        self.onChange(true)
+        this.refreshValue()
+        this.onChange(true)
       })
 
     if (this.options.input_height) this.input.style.height = this.options.input_height
@@ -182,11 +181,11 @@ export class StringEditor extends AbstractEditor {
         }
       }
 
-      this.input.addEventListener('keyup', function (e) {
-        self.adjust_height(this)
+      this.input.addEventListener('keyup', e => {
+        this.adjust_height(e.currentTarget)
       })
-      this.input.addEventListener('change', function (e) {
-        self.adjust_height(this)
+      this.input.addEventListener('change', e => {
+        this.adjust_height(e.currentTarget)
       })
       this.adjust_height()
     }
@@ -206,8 +205,8 @@ export class StringEditor extends AbstractEditor {
       /* Skip in case the input is only a temporary editor, */
       /* otherwise, in the case of an ace_editor creation, */
       /* it will generate an error trying to append it to the missing parentNode */
-      if (self.input.parentNode) self.afterInputReady()
-      if (self.adjust_height) self.adjust_height(self.input)
+      if (this.input.parentNode) this.afterInputReady()
+      if (this.adjust_height) this.adjust_height(this.input)
     })
 
     /* Compile and store the template */
@@ -240,21 +239,19 @@ export class StringEditor extends AbstractEditor {
   ajustIMaskOptions (obj) {
     /* iMask config format is not JSON friendly, so function and regex based mask */
     /* properties have to be adjusted from string to the correct format */
-    for (const prop in obj) {
-      if (obj.hasOwnProperty(prop)) {
-        if (obj[prop] === Object(obj[prop])) obj[prop] = this.ajustIMaskOptions(obj[prop])
-        else if (prop === 'mask') {
-          if (obj[prop].substr(0, 6) === 'regex:') {
-            const regExMatch = obj[prop].match(/^regex:\/(.*)\/([gimsuy]*)$/)
-            if (regExMatch !== null) {
-              try {
-                obj[prop] = new RegExp(regExMatch[1], regExMatch[2])
-              } catch (e) { }
-            }
-          } else obj[prop] = this.getGlobalPropertyFromString(obj[prop])
-        }
+    Object.keys(obj).forEach(prop => {
+      if (obj[prop] === Object(obj[prop])) obj[prop] = this.ajustIMaskOptions(obj[prop])
+      else if (prop === 'mask') {
+        if (obj[prop].substr(0, 6) === 'regex:') {
+          const regExMatch = obj[prop].match(/^regex:\/(.*)\/([gimsuy]*)$/)
+          if (regExMatch !== null) {
+            try {
+              obj[prop] = new RegExp(regExMatch[1], regExMatch[2])
+            } catch (e) { }
+          }
+        } else obj[prop] = this.getGlobalPropertyFromString(obj[prop])
       }
-    }
+    })
     return obj
   }
 
@@ -296,10 +293,9 @@ export class StringEditor extends AbstractEditor {
   }
 
   afterInputReady () {
-    const self = this
-    self.theme.afterInputReady(self.input)
-    if (window.Cleave && !self.cleave_instance) self.setupCleave(self.input)
-    else if (window.IMask && !self.imask_instance) self.setupImask(self.input)
+    this.theme.afterInputReady(this.input)
+    if (window.Cleave && !this.cleave_instance) this.setupCleave(this.input)
+    else if (window.IMask && !this.imask_instance) this.setupImask(this.input)
   }
 
   refreshValue () {
@@ -343,18 +339,17 @@ export class StringEditor extends AbstractEditor {
   }
 
   showValidationErrors (errors) {
-    const self = this
-
     if (this.jsoneditor.options.show_errors === 'always') { } else if (!this.is_dirty && this.previous_error_setting === this.jsoneditor.options.show_errors) return
 
     this.previous_error_setting = this.jsoneditor.options.show_errors
 
-    const messages = []
-    each(errors, (i, error) => {
-      if (error.path === self.path) {
+    const addMessage = (messages, error) => {
+      if (error.path === this.path) {
         messages.push(error.message)
       }
-    })
+      return messages
+    }
+    const messages = errors.reduce(addMessage, [])
 
     if (messages.length) {
       this.theme.addInputError(this.input, `${messages.join('. ')}.`)

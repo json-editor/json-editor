@@ -323,7 +323,6 @@ export class materializeTheme extends AbstractTheme {
   addInputError (input, text) {
     /* Get the parent element. Should most likely be a <div class="input-field" ... />. */
     const parent = input.parentNode
-    let el
 
     if (!parent) return
 
@@ -331,7 +330,7 @@ export class materializeTheme extends AbstractTheme {
     this.removeInputError(input)
 
     /* Append an error message div. */
-    el = document.createElement('div')
+    const el = document.createElement('div')
     el.classList.add('error-text', 'red-text')
     el.textContent = text
     parent.appendChild(el)
@@ -345,12 +344,11 @@ export class materializeTheme extends AbstractTheme {
   removeInputError (input) {
     /* Get the parent element. Should most likely be a <div class="input-field" ... />. */
     const parent = input.parentElement
-    let els
 
     if (!parent) return
 
     /* Remove all elements having class .error-text. */
-    els = parent.getElementsByClassName('error-text')
+    const els = parent.getElementsByClassName('error-text')
     for (let i = 0; i < els.length; i++) { parent.removeChild(els[i]) }
   }
 

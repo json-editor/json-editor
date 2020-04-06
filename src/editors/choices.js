@@ -26,10 +26,9 @@ export class ChoicesEditor extends SelectEditor {
 
   afterInputReady () {
     if (window.Choices && !this.choices_instance) {
-      let options
       /* Get options, either global options from "this.defaults.options.choices" or */
       /* single property options from schema "options.choices" */
-      options = this.expandCallbacks('choices', extend({}, this.defaults.options.choices || {}, this.options.choices || {}))
+      const options = this.expandCallbacks('choices', extend({}, this.defaults.options.choices || {}, this.options.choices || {}))
 
       this.choices_instance = new window.Choices(this.input, options)
     }
@@ -39,9 +38,9 @@ export class ChoicesEditor extends SelectEditor {
   onWatchedFieldChange () {
     super.onWatchedFieldChange()
     if (this.choices_instance) {
-      const self = this; const choicesList = this.enum_options.map((v, i) => ({
+      const choicesList = this.enum_options.map((v, i) => ({
         value: v,
-        label: self.enum_display[i]
+        label: this.enum_display[i]
       }))
       this.choices_instance.setChoices(choicesList, 'value', 'label', true)
       this.choices_instance.setChoiceByValue(`${this.value}`) /* Set new selection */

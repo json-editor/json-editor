@@ -1,5 +1,5 @@
 import { AbstractEditor } from '../editor.js'
-import { extend, each } from '../utilities.js'
+import { extend } from '../utilities.js'
 
 export class SelectEditor extends AbstractEditor {
   setValue (value, initial) {
@@ -56,7 +56,6 @@ export class SelectEditor extends AbstractEditor {
   }
 
   preBuild () {
-    const self = this
     this.input_type = 'select'
     this.enum_options = []
     this.enum_values = []
@@ -68,27 +67,27 @@ export class SelectEditor extends AbstractEditor {
     if (this.schema.enum) {
       const display = (this.schema.options && this.schema.options.enum_titles) || []
 
-      each(this.schema.enum, (i, option) => {
-        self.enum_options[i] = `${option}`
-        self.enum_display[i] = `${display[i] || option}`
-        self.enum_values[i] = self.typecast(option)
+      this.schema.enum.forEach((option, i) => {
+        this.enum_options[i] = `${option}`
+        this.enum_display[i] = `${display[i] || option}`
+        this.enum_values[i] = this.typecast(option)
       })
 
       if (!this.isRequired()) {
-        self.enum_display.unshift(' ')
-        self.enum_options.unshift('undefined')
-        self.enum_values.unshift(undefined)
+        this.enum_display.unshift(' ')
+        this.enum_options.unshift('undefined')
+        this.enum_values.unshift(undefined)
       }
       /* Boolean */
     } else if (this.schema.type === 'boolean') {
-      self.enum_display = (this.schema.options && this.schema.options.enum_titles) || ['true', 'false']
-      self.enum_options = ['1', '']
-      self.enum_values = [true, false]
+      this.enum_display = (this.schema.options && this.schema.options.enum_titles) || ['true', 'false']
+      this.enum_options = ['1', '']
+      this.enum_values = [true, false]
 
       if (!this.isRequired()) {
-        self.enum_display.unshift(' ')
-        self.enum_options.unshift('undefined')
-        self.enum_values.unshift(undefined)
+        this.enum_display.unshift(' ')
+        this.enum_options.unshift('undefined')
+        this.enum_values.unshift(undefined)
       }
       /* Dynamic Enum */
     } else if (this.schema.enumSource) {
@@ -154,7 +153,6 @@ export class SelectEditor extends AbstractEditor {
   }
 
   build () {
-    const self = this
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
     if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText)
@@ -174,7 +172,7 @@ export class SelectEditor extends AbstractEditor {
     this.input.addEventListener('change', (e) => {
       e.preventDefault()
       e.stopPropagation()
-      self.onInputChange()
+      this.onInputChange()
     })
 
     this.control = this.theme.getFormControl(this.label, this.input, this.description, this.infoButton)
@@ -184,13 +182,12 @@ export class SelectEditor extends AbstractEditor {
 
     /* Any special formatting that needs to happen after the input is added to the dom */
     window.requestAnimationFrame(() => {
-      if (self.input.parentNode) self.afterInputReady()
+      if (this.input.parentNode) this.afterInputReady()
     })
   }
 
   afterInputReady () {
-    const self = this
-    self.theme.afterInputReady(self.input)
+    this.theme.afterInputReady(this.input)
   }
 
   onInputChange () {
@@ -344,16 +341,15 @@ export class SelectEditor extends AbstractEditor {
   }
 
   showValidationErrors (errors) {
-    const self = this
-
     this.previous_error_setting = this.jsoneditor.options.show_errors
 
-    const messages = []
-    each(errors, (i, error) => {
-      if (error.path === self.path) {
+    const addMessage = (messages, error) => {
+      if (error.path === this.path) {
         messages.push(error.message)
       }
-    })
+      return messages
+    }
+    const messages = errors.reduce(addMessage, [])
 
     if (messages.length) {
       this.theme.addInputError(this.input, `${messages.join('. ')}.`)

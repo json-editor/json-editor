@@ -3,8 +3,6 @@ import rules from './starrating.css.js'
 
 export class StarratingEditor extends StringEditor {
   build () {
-    const self = this
-
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
     if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText)
@@ -23,11 +21,11 @@ export class StarratingEditor extends StringEditor {
 
     this.radioGroup = []
 
-    const radioInputEventhandler = function (e) {
+    const radioInputEventhandler = e => {
       e.preventDefault()
       e.stopPropagation()
-      self.setValue(this.value)
-      self.onChange(true)
+      this.setValue(e.currentTarget.value)
+      this.onChange(true)
     }
 
     for (let i = this.enum_values.length - 1; i > -1; i--) {

@@ -15,7 +15,7 @@ export class SimplemdeEditor extends StringEditor {
   }
 
   afterInputReady () {
-    const self = this; let options
+    let options
 
     if (window.SimpleMDE) {
       /* Get options, either global options from "this.defaults.options.simplemde" or */
@@ -34,9 +34,9 @@ export class SimplemdeEditor extends StringEditor {
 
       /* Listen for changes */
       this.simplemde_instance.codemirror.on('change', () => {
-        self.value = self.simplemde_instance.value()
-        self.is_dirty = true
-        self.onChange(true)
+        this.value = this.simplemde_instance.value()
+        this.is_dirty = true
+        this.onChange(true)
       })
 
       /* This will prevent SimpleMDE content from being hidden until focus in Chrome */
@@ -45,7 +45,7 @@ export class SimplemdeEditor extends StringEditor {
         this.startListening(this.simplemde_instance.codemirror, this.simplemde_instance.codemirror.state.autoRefresh = { delay: 250 })
       }
 
-      this.theme.afterInputReady(self.input)
+      this.theme.afterInputReady(this.input)
     } else super.afterInputReady() /* Library not loaded, so just treat this as a string */
   }
 
@@ -73,10 +73,9 @@ export class SimplemdeEditor extends StringEditor {
 
   /* Ported from https://codemirror.net/addon/display/autorefresh.js */
   startListening (cm, state) {
-    const self = this
     function check () {
       if (cm.display.wrapper.offsetHeight) {
-        self.stopListening(cm, state)
+        this.stopListening(cm, state)
         if (cm.display.lastWrapHeight !== cm.display.wrapper.clientHeight) {
           cm.refresh()
         }

@@ -5,7 +5,7 @@ import { editors } from './editors/index.js'
 import { templates } from './templates/index.js'
 import { iconlibs } from './iconlibs/index.js'
 import { themes } from './themes/index.js'
-import { extend, each, getShadowParent } from './utilities.js'
+import { extend, getShadowParent, hasOwnProperty } from './utilities.js'
 
 export class JSONEditor {
   constructor (element, options = {}) {
@@ -74,7 +74,7 @@ export class JSONEditor {
       this.root.postBuild()
 
       /* Starting data */
-      if (this.options.hasOwnProperty('startval')) this.root.setValue(this.options.startval)
+      if (hasOwnProperty(this.options, 'startval')) this.root.setValue(this.options.startval)
 
       this.validation_results = this.validator.validate(this.root.getValue())
       this.root.showValidationErrors(this.validation_results)
@@ -191,11 +191,8 @@ export class JSONEditor {
   }
 
   getEditorsRules () {
-    const rules = {}
-
-    each(JSONEditor.defaults.editors, (i, editorClass) => editorClass.rules && extend(rules, editorClass.rules))
-
-    return rules
+    const extendRule = (rules, editorClass) => editorClass.rules ? extend(rules, editorClass.rules) : rules
+    return Object.values(JSONEditor.defaults.editors).reduce(extendRule, {})
   }
 
   getEditorClass (schema) {
@@ -203,12 +200,9 @@ export class JSONEditor {
 
     schema = this.expandSchema(schema)
 
-    each(JSONEditor.defaults.resolvers, (i, resolver) => {
-      const tmp = resolver(schema)
-      if (tmp && JSONEditor.defaults.editors[tmp]) {
-        classname = tmp
-        return false
-      }
+    JSONEditor.defaults.resolvers.find(resolver => {
+      classname = resolver(schema)
+      return classname && JSONEditor.defaults.editors[classname]
     })
 
     if (!classname) throw new Error(`Unknown editor for schema ${JSON.stringify(schema)}`)
@@ -229,23 +223,21 @@ export class JSONEditor {
     if (this.firing_change) return
     this.firing_change = true
 
-    const self = this
-
     window.requestAnimationFrame(() => {
-      self.firing_change = false
-      if (!self.ready) return
+      this.firing_change = false
+      if (!this.ready) return
 
       /* Validate and cache results */
-      self.validation_results = self.validator.validate(self.root.getValue())
+      this.validation_results = this.validator.validate(this.root.getValue())
 
-      if (self.options.show_errors !== 'never') {
-        self.root.showValidationErrors(self.validation_results)
+      if (this.options.show_errors !== 'never') {
+        this.root.showValidationErrors(this.validation_results)
       } else {
-        self.root.showValidationErrors([])
+        this.root.showValidationErrors([])
       }
 
       /* Fire change event */
-      self.trigger('change')
+      this.trigger('change')
     })
 
     return this
@@ -374,28 +366,24 @@ export class JSONEditor {
     const sheet = styleTag.sheet ? styleTag.sheet : styleTag.styleSheet
     const qualifier = this.element.nodeName.toLowerCase()
 
-    for (var selector in rules) {
-      if (!rules.hasOwnProperty(selector)) continue
-      var sel = qualifier + '[data-theme="' + themeName + '"] ' + selector
+    Object.keys(rules).forEach(selector => {
+      const sel = `${qualifier}[data-theme="${themeName}"] ${selector}`
 
       // all browsers, except IE before version 9
       if (sheet.insertRule) sheet.insertRule(sel + ' {' + decodeURIComponent(rules[selector]) + '}', 0)
       // Internet Explorer before version 9
       else if (sheet.addRule) sheet.addRule(sel, decodeURIComponent(rules[selector]), 0)
-    }
+    })
   }
 
   addNewStyleRulesToShadowRoot (themeName, rules, shadowRoot) {
     const qualifier = this.element.nodeName.toLowerCase()
     let cssText = ''
 
-    for (var selector in rules) {
-      if (!rules.hasOwnProperty(selector)) continue
-      var sel = qualifier + '[data-theme="' + themeName + '"] ' + selector
-
+    Object.keys(rules).forEach(selector => {
+      const sel = `${qualifier}[data-theme="${themeName}"] ${selector}`
       cssText += sel + ' {' + decodeURIComponent(rules[selector]) + '}' + '\n'
-    }
-
+    })
     const styleSheet = new CSSStyleSheet()
     styleSheet.replaceSync(cssText)
     shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, styleSheet]

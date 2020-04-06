@@ -6,7 +6,7 @@ const matchKey = [
   'oMatchesSelector'].find(key => key in document.documentElement)
 
 export class AbstractTheme {
-  constructor (jsoneditor, options = { 'disable_theme_rules': false }) {
+  constructor (jsoneditor, options = { disable_theme_rules: false }) {
     this.jsoneditor = jsoneditor
 
     /* Theme config options that allows changing various aspects of the output */
@@ -154,12 +154,11 @@ export class AbstractTheme {
       if (infoText) label.appendChild(infoText)
     }
 
-    for (const i in controls) {
-      if (!controls.hasOwnProperty(i)) continue
-      controls[i].style.display = 'inline-block'
-      controls[i].style.marginRight = '20px'
-      el.appendChild(controls[i])
-    }
+    Object.values(controls).forEach(control => {
+      control.style.display = 'inline-block'
+      control.style.marginRight = '20px'
+      el.appendChild(control)
+    })
 
     if (description) el.appendChild(description)
 
@@ -272,7 +271,7 @@ export class AbstractTheme {
     const output = document.createElement('output')
     output.value = startvalue || 0
 
-    const updateOutput = function () { output.value = this.value }
+    const updateOutput = e => { output.value = e.currentTarget.value }
     input.addEventListener('change', updateOutput, false)
     input.addEventListener('input', updateOutput, false)
     return output
@@ -344,6 +343,7 @@ export class AbstractTheme {
   getCheckboxDescription (text) {
     return this.getDescription(text)
   }
+
   getFormInputDescription (text) {
     return this.getDescription(text)
   }
@@ -451,10 +451,7 @@ export class AbstractTheme {
   }
 
   applyStyles (el, styles) {
-    for (const i in styles) {
-      if (!styles.hasOwnProperty(i)) continue
-      el.style[i] = styles[i]
-    }
+    Object.keys(styles).forEach(i => (el.style[i] = styles[i]))
   }
 
   closest (elem, selector) {

@@ -1,4 +1,4 @@
-import { extend } from './utilities.js'
+import { extend, hasOwnProperty } from './utilities.js'
 
 export class SchemaLoader {
   constructor (options) {
@@ -99,7 +99,7 @@ export class SchemaLoader {
     const ref = this._getRef(fetchUrl, refObj)
     if (!this.refs[ref]) { /* if reference not found */
       console.warn(`reference:'${ref}' not found!`)
-    } else if (recurseAllOf && this.refs[ref].hasOwnProperty('allOf')) {
+    } else if (recurseAllOf && hasOwnProperty(this.refs[ref], 'allOf')) {
       const allOf = this.refs[ref].allOf
       Object.keys(allOf).forEach(key => {
         allOf[key] = this.expandRefs(allOf[key], true)

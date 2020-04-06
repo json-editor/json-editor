@@ -1,4 +1,4 @@
-import { extend, each } from './utilities.js'
+import { extend, hasOwnProperty } from './utilities.js'
 
 /**
  * All editors should extend from this class
@@ -92,14 +92,13 @@ export class AbstractEditor {
       return
     }
 
-    const self = this
     Object.keys(deps).forEach(dependency => {
-      let path = self.path.split('.')
+      let path = this.path.split('.')
       path[path.length - 1] = dependency
       path = path.join('.')
       const choices = deps[dependency]
-      self.jsoneditor.watch(path, () => {
-        self.checkDependency(path, choices)
+      this.jsoneditor.watch(path, () => {
+        this.checkDependency(path, choices)
       })
     })
   }
@@ -110,7 +109,6 @@ export class AbstractEditor {
       return
     }
 
-    const self = this
     const editor = this.jsoneditor.getEditor(path)
     const value = editor ? editor.getValue() : undefined
     const previousStatus = this.dependenciesFulfilled
@@ -121,7 +119,7 @@ export class AbstractEditor {
     } else if (Array.isArray(choices)) {
       choices.some(choice => {
         if (value === choice) {
-          self.dependenciesFulfilled = true
+          this.dependenciesFulfilled = true
           return true
         }
       })
@@ -130,14 +128,14 @@ export class AbstractEditor {
         this.dependenciesFulfilled = choices === value
       } else {
         Object.keys(choices).some(key => {
-          if (!choices.hasOwnProperty(key)) {
+          if (!hasOwnProperty(choices, key)) {
             return false
           }
-          if (!value.hasOwnProperty(key) || choices[key] !== value[key]) {
-            self.dependenciesFulfilled = false
+          if (!hasOwnProperty(value, key) || choices[key] !== value[key]) {
+            this.dependenciesFulfilled = false
             return true
           }
-          self.dependenciesFulfilled = true
+          this.dependenciesFulfilled = true
         })
       }
     } else if (typeof choices === 'string' || typeof choices === 'number') {
@@ -156,9 +154,7 @@ export class AbstractEditor {
 
     const displayMode = this.dependenciesFulfilled ? 'block' : 'none'
     if (wrapper.tagName === 'TD') {
-      for (const child in wrapper.childNodes) {
-        if (wrapper.childNodes.hasOwnProperty(child)) wrapper.childNodes[child].style.display = displayMode
-      }
+      Object.keys(wrapper.childNodes).forEach(child => (wrapper.childNodes[child].style.display = displayMode))
     } else wrapper.style.display = displayMode
   }
 
@@ -171,17 +167,17 @@ export class AbstractEditor {
 
   setOptInCheckbox (header) {
     /* the active/deactive checbox control. */
-    const self = this
+
     this.optInCheckbox = document.createElement('input')
     this.optInCheckbox.setAttribute('type', 'checkbox')
     this.optInCheckbox.setAttribute('style', 'margin: 0 10px 0 0;')
     this.optInCheckbox.classList.add('json-editor-opt-in')
 
     this.optInCheckbox.addEventListener('click', () => {
-      if (self.isActive()) {
-        self.deactivate()
+      if (this.isActive()) {
+        this.deactivate()
       } else {
-        self.activate()
+        this.activate()
       }
     })
 
@@ -213,49 +209,45 @@ export class AbstractEditor {
   }
 
   setupWatchListeners () {
-    const self = this
-
     /* Watched fields */
     this.watched = {}
     if (this.schema.vars) this.schema.watch = this.schema.vars
     this.watched_values = {}
     this.watch_listener = () => {
-      if (self.refreshWatchedFieldValues()) {
-        self.onWatchedFieldChange()
+      if (this.refreshWatchedFieldValues()) {
+        this.onWatchedFieldChange()
       }
     }
 
-    if (this.schema.hasOwnProperty('watch')) {
+    if (hasOwnProperty(this.schema, 'watch')) {
       let path; let pathParts; let first; let root; let adjustedPath
-      const myPath = self.container.getAttribute('data-schemapath')
+      const myPath = this.container.getAttribute('data-schemapath')
 
-      for (const name in this.schema.watch) {
-        if (!this.schema.watch.hasOwnProperty(name)) continue
+      Object.keys(this.schema.watch).forEach(name => {
         path = this.schema.watch[name]
-
         if (Array.isArray(path)) {
-          if (path.length < 2) continue
+          if (path.length < 2) return
           pathParts = [path[0]].concat(path[1].split('.'))
         } else {
           pathParts = path.split('.')
-          if (!self.theme.closest(self.container, `[data-schemaid="${pathParts[0]}"]`)) pathParts.unshift('#')
+          if (!this.theme.closest(this.container, `[data-schemaid="${pathParts[0]}"]`)) pathParts.unshift('#')
         }
         first = pathParts.shift()
 
-        if (first === '#') first = self.jsoneditor.schema.id || 'root'
+        if (first === '#') first = this.jsoneditor.schema.id || 'root'
 
         /* Find the root node for this template variable */
-        root = self.theme.closest(self.container, `[data-schemaid="${first}"]`)
+        root = this.theme.closest(this.container, `[data-schemaid="${first}"]`)
         if (!root) throw new Error(`Could not find ancestor node with id ${first}`)
 
         /* Keep track of the root node and path for use when rendering the template */
         adjustedPath = `${root.getAttribute('data-schemapath')}.${pathParts.join('.')}`
 
-        if (myPath.startsWith(adjustedPath)) self.watchLoop = true
-        self.jsoneditor.watch(adjustedPath, self.watch_listener)
+        if (myPath.startsWith(adjustedPath)) this.watchLoop = true
+        this.jsoneditor.watch(adjustedPath, this.watch_listener)
 
-        self.watched[name] = adjustedPath
-      }
+        this.watched[name] = adjustedPath
+      })
     }
 
     /* Dynamic header */
@@ -406,18 +398,14 @@ export class AbstractEditor {
     if (!this.watched_values) return
     const watched = {}
     let changed = false
-    const self = this
 
     if (this.watched) {
-      let val
-      let editor
-      for (const name in this.watched) {
-        if (!this.watched.hasOwnProperty(name)) continue
-        editor = self.jsoneditor.getEditor(this.watched[name])
-        val = editor ? editor.getValue() : null
-        if (self.watched_values[name] !== val) changed = true
+      Object.keys(this.watched).forEach(name => {
+        const editor = this.jsoneditor.getEditor(this.watched[name])
+        const val = editor ? editor.getValue() : null
+        if (this.watched_values[name] !== val) changed = true
         watched[name] = val
-      }
+      })
     }
 
     watched.self = this.getValue()
@@ -511,11 +499,10 @@ export class AbstractEditor {
   }
 
   destroy () {
-    const self = this
     this.unregister(this)
-    each(this.watched, (name, adjustedPath) => {
-      self.jsoneditor.unwatch(adjustedPath, self.watch_listener)
-    })
+    if (this.watched) {
+      Object.values(this.watched).forEach(adjustedPath => this.jsoneditor.unwatch(adjustedPath, this.watch_listener))
+    }
 
     this.watched = null
     this.watched_values = null
@@ -533,12 +520,12 @@ export class AbstractEditor {
   }
 
   getDefault () {
-    if (typeof this.schema['default'] !== 'undefined') {
-      return this.schema['default']
+    if (typeof this.schema.default !== 'undefined') {
+      return this.schema.default
     }
 
-    if (typeof this.schema['enum'] !== 'undefined') {
-      return this.schema['enum'][0]
+    if (typeof this.schema.enum !== 'undefined') {
+      return this.schema.enum[0]
     }
 
     let type = this.schema.type || this.schema.oneOf
@@ -587,7 +574,7 @@ export class AbstractEditor {
 
     /* Determine how many times each attribute name is used. */
     /* This helps us pick the most distinct display text for the schemas. */
-    each(arr, (i, el) => {
+    arr.forEach(el => {
       if (el.title) {
         used[el.title] = used[el.title] || 0
         used[el.title]++
@@ -607,7 +594,7 @@ export class AbstractEditor {
     })
 
     /* Determine display text for each element of the array */
-    each(arr, (i, el) => {
+    arr.forEach(el => {
       let name
 
       /* If it's a simple string */
@@ -629,7 +616,7 @@ export class AbstractEditor {
 
     /* Replace identical display text with "text 1", "text 2", etc. */
     const inc = {}
-    each(disp, (i, name) => {
+    disp.forEach((name, i) => {
       inc[name] = inc[name] || 0
       inc[name]++
 
@@ -649,22 +636,25 @@ export class AbstractEditor {
     if (this.schema.options && this.schema.options.inputAttributes) {
       const inputAttributes = this.schema.options.inputAttributes
       const protectedAttributes = ['name', 'type'].concat(inputAttribute)
-      for (const key in inputAttributes) {
-        if (inputAttributes.hasOwnProperty(key) && !protectedAttributes.includes(key.toLowerCase())) {
+      Object.keys(inputAttributes).forEach(key => {
+        if (!protectedAttributes.includes(key.toLowerCase())) {
           this.input.setAttribute(key, inputAttributes[key])
         }
-      }
+      })
     }
   }
 
   expandCallbacks (scope, options) {
-    for (const i in options) {
-      if (options.hasOwnProperty(i) && options[i] === Object(options[i])) {
-        options[i] = this.expandCallbacks(scope, options[i])
-      } else if (options.hasOwnProperty(i) && typeof options[i] === 'string' && typeof this.defaults.callbacks[scope] === 'object' && typeof this.defaults.callbacks[scope][options[i]] === 'function') {
-        options[i] = this.defaults.callbacks[scope][options[i]].bind(null, this)/* .bind(this); */
+    const callback = this.defaults.callbacks[scope]
+    Object.entries(options).forEach(([key, value]) => {
+      if (value === Object(value)) {
+        options[key] = this.expandCallbacks(scope, value)
+      } else if (typeof value === 'string' &&
+                 typeof callback === 'object' &&
+                 typeof callback[value] === 'function') {
+        options[key] = callback[value].bind(null, this)
       }
-    }
+    })
     return options
   }
 
