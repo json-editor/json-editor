@@ -349,10 +349,10 @@ export class TableEditor extends ArrayEditor {
       this.rows[i].copy_button = this.getButton('', 'copy', this.translate('button_copy_row_title_short'))
       this.rows[i].copy_button.classList.add('copy', 'json-editor-btntype-copy')
       this.rows[i].copy_button.setAttribute('data-i', i)
-      this.rows[i].copy_button.addEventListener('click', function (e) {
+      this.rows[i].copy_button.addEventListener('click', e => {
         e.preventDefault()
         e.stopPropagation()
-        const i = this.getAttribute('data-i') * 1
+        const i = e.currentTarget.getAttribute('data-i') * 1
         const value = this.getValue()
 
         value.forEach((row, j) => {
