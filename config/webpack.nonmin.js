@@ -11,7 +11,8 @@ module.exports = webpackMerge(commonConfig, {
     path: helpers.root('dist/nonmin'),
     publicPath: '/dist/',
     filename: '[name].js',
-    chunkFilename: '[id].chunk.js'
+    chunkFilename: '[id].chunk.js',
+    libraryTarget: 'umd'
   },
 
   plugins: [

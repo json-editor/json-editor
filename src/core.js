@@ -396,5 +396,3 @@ Object.assign(JSONEditor.defaults.themes, themes)
 Object.assign(JSONEditor.defaults.editors, editors)
 Object.assign(JSONEditor.defaults.templates, templates)
 Object.assign(JSONEditor.defaults.iconlibs, iconlibs)
-
-window.JSONEditor = JSONEditor
