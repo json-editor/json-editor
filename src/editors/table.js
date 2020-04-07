@@ -244,7 +244,7 @@ export class TableEditor extends ArrayEditor {
 
       if (editor.movedown_button) {
         /* Hide the move down button for the last row */
-        if (i === self.rows.length - 1) {
+        if (i === this.rows.length - 1) {
           editor.movedown_button.style.display = 'none'
         } else {
           needRowButtons = true
@@ -346,14 +346,14 @@ export class TableEditor extends ArrayEditor {
     }
 
     if (this.show_copy_button) {
-      self.rows[i].copy_button = this.getButton('', 'copy', this.translate('button_copy_row_title_short'))
-      self.rows[i].copy_button.classList.add('copy', 'json-editor-btntype-copy')
-      self.rows[i].copy_button.setAttribute('data-i', i)
-      self.rows[i].copy_button.addEventListener('click', function (e) {
+      this.rows[i].copy_button = this.getButton('', 'copy', this.translate('button_copy_row_title_short'))
+      this.rows[i].copy_button.classList.add('copy', 'json-editor-btntype-copy')
+      this.rows[i].copy_button.setAttribute('data-i', i)
+      this.rows[i].copy_button.addEventListener('click', function (e) {
         e.preventDefault()
         e.stopPropagation()
         const i = this.getAttribute('data-i') * 1
-        const value = self.getValue()
+        const value = this.getValue()
 
         each(value, (j, row) => {
           if (j === i) {
@@ -361,12 +361,12 @@ export class TableEditor extends ArrayEditor {
           }
         })
 
-        self.setValue(value)
-        self.refreshValue(true)
-        self.onChange(true)
-        self.jsoneditor.trigger('copyRow', value[value.length - 1])
+        this.setValue(value)
+        this.refreshValue(true)
+        this.onChange(true)
+        this.jsoneditor.trigger('copyRow', value[value.length - 1])
       })
-      controlsHolder.appendChild(self.rows[i].copy_button)
+      controlsHolder.appendChild(this.rows[i].copy_button)
     }
 
     if (!this.hide_move_buttons) {
