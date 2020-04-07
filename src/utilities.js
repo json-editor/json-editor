@@ -65,3 +65,22 @@ export function getShadowParent (node) {
 export function hasOwnProperty (obj, key) {
   return obj && Object.prototype.hasOwnProperty.call(obj, key)
 }
+
+// From https://github.com/angular/angular.js/blob/master/src/ng/directive/input.js
+const NUMBER_REGEXP = /^\s*(-|\+)?(\d+|(\d*(\.\d*)))([eE][+-]?\d+)?\s*$/
+
+export function isNumber (value) {
+  if (typeof value === 'undefined' || value === null) return false
+  const match = value.match(NUMBER_REGEXP)
+  const v = parseFloat(value)
+  return match !== null && !isNaN(v) && isFinite(v)
+}
+
+const INTEGER_REGEXP = /^\s*(-|\+)?(\d+)\s*$/
+
+export function isInteger (value) {
+  if (typeof value === 'undefined' || value === null) return false
+  const match = value.match(INTEGER_REGEXP)
+  const v = parseInt(value)
+  return match !== null && !isNaN(v) && isFinite(v)
+}
