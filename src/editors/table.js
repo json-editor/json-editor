@@ -233,7 +233,7 @@ export class TableEditor extends ArrayEditor {
       }
 
       if (editor.moveup_button) {
-        /* Hide the move up button for the first row */
+        /* Hide the moveup button for the first row */
         if (i === 0) {
           editor.moveup_button.style.display = 'none'
         } else {
@@ -243,7 +243,7 @@ export class TableEditor extends ArrayEditor {
       }
 
       if (editor.movedown_button) {
-        /* Hide the move down button for the last row */
+        /* Hide the movedown button for the last row */
         if (i === this.rows.length - 1) {
           editor.movedown_button.style.display = 'none'
         } else {
