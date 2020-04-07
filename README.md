@@ -151,6 +151,16 @@ Here are all the available options:
     <td><code>false</code></td>
   </tr>
   <tr>
+    <td>disable_array_delete_all_rows</td>
+    <td>If <code>true</code>, remove all "delete all rows" buttons from arrays.</td>
+    <td><code>false</code></td>
+  </tr>
+  <tr>
+    <td>disable_array_delete_last_row</td>
+    <td>If <code>true</code>, remove all "delete last row" buttons from arrays.</td>
+    <td><code>false</code></td>
+  </tr>
+  <tr>
     <td>disable_array_reorder</td>
     <td>If <code>true</code>, remove all "move up" and "move down" buttons from arrays.</td>
     <td><code>false</code></td>
@@ -301,7 +311,6 @@ if (name) {
   console.log(name.getValue());
 }
 ```
-
 
 ### Validate
 
