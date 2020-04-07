@@ -22,7 +22,7 @@ export class SelectizeEditor extends SelectEditor {
     if (window.jQuery && window.jQuery.fn && window.jQuery.fn.selectize && !this.selectize_instance) {
       /* Get options, either global options from "this.defaults.options.selectize" or */
       /* single property options from schema "options.selectize" */
-      const self = this; const options = this.expandCallbacks('selectize', extend({}, this.defaults.options.selectize || {}, this.options.selectize || {}))
+      const options = this.expandCallbacks('selectize', extend({}, this.defaults.options.selectize || {}, this.options.selectize || {}))
 
       /* New items are allowed if option "create" is true and type is "string" */
       this.newEnumAllowed = options.create = !!options.create && this.schema.type === 'string'
@@ -34,10 +34,10 @@ export class SelectizeEditor extends SelectEditor {
 
       /* Create a new change handler */
       this.multiselectChangeHandler = (value) => {
-        /* var value = self.selectize_instance.getValue(true); */
-        /* self.value = value; */
-        self.updateValue(value)
-        self.onChange(true)
+        /* var value = this.selectize_instance.getValue(true); */
+        /* this.value = value; */
+        this.updateValue(value)
+        this.onChange(true)
       }
 
       /* Add new event handler. */
@@ -83,11 +83,10 @@ export class SelectizeEditor extends SelectEditor {
   onWatchedFieldChange () {
     super.onWatchedFieldChange()
     if (this.selectize_instance) {
-      const self = this
       this.selectize_instance.clear(true) /* Clear selection */
       this.selectize_instance.clearOptions(true) /* Remove all options */
       this.enum_options.forEach((value, i) => {
-        self.selectize_instance.addOption({ value, text: self.enum_display[i] })
+        this.selectize_instance.addOption({ value, text: this.enum_display[i] })
       })
       this.selectize_instance.addItem(`${this.value}`, true) /* Set new selection */
     }

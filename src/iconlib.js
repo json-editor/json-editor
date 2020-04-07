@@ -1,5 +1,5 @@
 
-const defaultMapping = { collapse: '', expand: '', 'delete': '', edit: '', add: '', cancel: '', save: '', moveup: '', movedown: '' }
+const defaultMapping = { collapse: '', expand: '', delete: '', edit: '', add: '', cancel: '', save: '', moveup: '', movedown: '' }
 
 export class AbstractIconLib {
   constructor (iconPrefix = '', mapping = defaultMapping) {

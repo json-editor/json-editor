@@ -1,5 +1,5 @@
 import { MultiSelectEditor } from '../multiselect.js'
-import { extend } from '../../utilities.js'
+import { extend, hasOwnProperty } from '../../utilities.js'
 
 export class ArraySelect2Editor extends MultiSelectEditor {
   setValue (value, initial) {
@@ -17,7 +17,7 @@ export class ArraySelect2Editor extends MultiSelectEditor {
   }
 
   afterInputReady () {
-    let options; const self = this
+    let options
 
     if (window.jQuery && window.jQuery.fn && window.jQuery.fn.select2 && !this.select2_instance) {
       /* Get options, either global options from "this.defaults.options.select2" or */
@@ -31,12 +31,12 @@ export class ArraySelect2Editor extends MultiSelectEditor {
       this.newEnumAllowed = options.tags = !!options.tags && this.schema.items && this.schema.items.type === 'string'
 
       this.select2_instance = window.jQuery(this.input).select2(options)
-      this.select2v4 = this.select2_instance.select2.hasOwnProperty('amd')
+      this.select2v4 = hasOwnProperty(this.select2_instance.select2, 'amd')
 
       this.selectChangeHandler = () => {
-        const value = self.select2v4 ? self.select2_instance.val() : self.select2_instance.select2('val')
-        self.updateValue(value)
-        self.onChange(true)
+        const value = this.select2v4 ? this.select2_instance.val() : this.select2_instance.select2('val')
+        this.updateValue(value)
+        this.onChange(true)
       }
 
       /* Add event handler. */

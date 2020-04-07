@@ -19,7 +19,6 @@ export class AceEditor extends StringEditor {
   }
 
   afterInputReady () {
-    const self = this
     let options
 
     if (window.ace) {
@@ -56,13 +55,13 @@ export class AceEditor extends StringEditor {
 
       /* Listen for changes */
       this.ace_editor_instance.on('change', () => {
-        self.input.value = self.ace_editor_instance.getValue()
-        self.refreshValue()
-        self.is_dirty = true
-        self.onChange(true)
+        this.input.value = this.ace_editor_instance.getValue()
+        this.refreshValue()
+        this.is_dirty = true
+        this.onChange(true)
       })
 
-      this.theme.afterInputReady(self.input)
+      this.theme.afterInputReady(this.input)
     } else super.afterInputReady() /* Library not loaded, so just treat this as a string */
   }
 

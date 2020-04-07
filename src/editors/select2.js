@@ -1,5 +1,5 @@
 import { SelectEditor } from './select.js'
-import { extend } from '../utilities.js'
+import { extend, hasOwnProperty } from '../utilities.js'
 
 export class Select2Editor extends SelectEditor {
   setValue (value, initial) {
@@ -22,19 +22,19 @@ export class Select2Editor extends SelectEditor {
     if (window.jQuery && window.jQuery.fn && window.jQuery.fn.select2 && !this.select2_instance) {
       /* Get options, either global options from "this.defaults.options.select2" or */
       /* single property options from schema "options.select2" */
-      const self = this; const options = this.expandCallbacks('select2', extend({}, this.defaults.options.select2 || {}, this.options.select2 || {}))
+      const options = this.expandCallbacks('select2', extend({}, this.defaults.options.select2 || {}, this.options.select2 || {}))
 
       /* New items are allowed if option "tags" is true and type is "string" */
       this.newEnumAllowed = options.tags = !!options.tags && this.schema.type === 'string'
 
       this.select2_instance = window.jQuery(this.input).select2(options)
-      this.select2v4 = this.select2_instance.select2.hasOwnProperty('amd')
+      this.select2v4 = hasOwnProperty(this.select2_instance.select2, 'amd')
 
       /* Create change handler */
       this.selectChangeHandler = () => {
-        const value = self.select2v4 ? self.select2_instance.val() : self.select2_instance.select2('val')
-        self.updateValue(value)
-        self.onChange(true)
+        const value = this.select2v4 ? this.select2_instance.val() : this.select2_instance.select2('val')
+        this.updateValue(value)
+        this.onChange(true)
       }
 
       /* Add event handler. */
