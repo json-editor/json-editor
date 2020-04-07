@@ -355,7 +355,7 @@ export class TableEditor extends ArrayEditor {
         const i = this.getAttribute('data-i') * 1
         const value = this.getValue()
 
-        each(value, (j, row) => {
+        value.forEach((row, j) => {
           if (j === i) {
             value.push(row)
           }
