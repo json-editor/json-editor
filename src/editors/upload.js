@@ -103,7 +103,7 @@ export class UploadEditor extends AbstractEditor {
             let fr = new window.FileReader()
             fr.onload = (evt) => {
               this.preview_value = evt.target.result
-              this.refreshPreview(e)
+              this.refreshPreview(files)
               this.onChange(true)
               fr = null
             }
@@ -196,7 +196,7 @@ export class UploadEditor extends AbstractEditor {
     this.theme.afterInputReady(this.input)
   }
 
-  refreshPreview (e) {
+  refreshPreview (files) {
     if (this.last_preview === this.preview_value) return
     this.last_preview = this.preview_value
 
@@ -204,7 +204,6 @@ export class UploadEditor extends AbstractEditor {
 
     if (!this.preview_value) return
 
-    const files = e.target.files || e.dataTransfer.files
     const file = files[0]
 
     /* mime type extracted from file data. More exact than the one in the file object */
