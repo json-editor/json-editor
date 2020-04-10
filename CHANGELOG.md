@@ -12,6 +12,7 @@
 - Cleaned how default themes, iconlibs, editors and templates are imported to JSONEditor
 - Added ability to attache editors and themes style rules to the shadowRoot if the editor is inside a Web Component.
 - Fix of #701 - editors/number.js and editors/integer.js don't change values when validation is failed
+- Fix of #714 - Checkboxes inside object tables duplicate labels from heading
 
 ### 2.0.0-dev
   - Fix of #643 - Allow use of themes not compiled directly into the build
