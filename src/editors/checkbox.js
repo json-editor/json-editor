@@ -26,8 +26,10 @@ export class CheckboxEditor extends AbstractEditor {
   }
 
   build () {
-    this.label = this.header = this.theme.getCheckboxLabel(this.getTitle(), this.isRequired())
-    this.label.htmlFor = this.formname
+    if (!this.parent.options.table_row) {
+      this.label = this.header = this.theme.getCheckboxLabel(this.getTitle(), this.isRequired())
+      this.label.htmlFor = this.formname
+    }
 
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
     if (this.options.infoText && !this.options.compact) this.infoButton = this.theme.getInfoButton(this.options.infoText)
