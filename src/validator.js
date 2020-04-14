@@ -575,8 +575,8 @@ export class Validator {
         }
       })
 
-      /* The no_additional_properties option currently doesn't work with extended schemas that use oneOf or anyOf */
-      if (typeof schema.additionalProperties === 'undefined' && this.jsoneditor.options.no_additional_properties && !schema.oneOf && !schema.anyOf) {
+      /* The no_additional_properties option currently doesn't work with extended schemas that use oneOf or anyOf or allOf */
+      if (typeof schema.additionalProperties === 'undefined' && this.jsoneditor.options.no_additional_properties && !schema.oneOf && !schema.anyOf && !schema.allOf) {
         schema.additionalProperties = false
       }
 
