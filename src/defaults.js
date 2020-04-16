@@ -260,10 +260,10 @@ function upload (type, file, cbs) {
 
 /* String translate function */
 function translate (key, variables) {
-  const lang = languages[language]
-  if (!lang) throw new Error(`Unknown language ${language}`)
+  const lang = defaults.languages[defaults.language]
+  if (!lang) throw new Error(`Unknown language ${defaults.language}`)
 
-  let string = lang[key] || languages[default_language][key]
+  let string = lang[key] || defaults.languages[default_language][key]
 
   if (typeof string === 'undefined') throw new Error(`Unknown translate string ${key}`)
 
