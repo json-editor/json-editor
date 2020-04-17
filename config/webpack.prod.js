@@ -6,8 +6,7 @@ const helpers = require('./helpers')
 
 const ENV = (process.env.NODE_ENV = process.env.ENV = 'production')
 
-function createConfig (target) {
-  filenameInsert = target === 'var' ? '.' : '.' + target + '.'
+function createConfig () {
   commonConfig.module.rules = [
     {
       enforce: 'pre',
@@ -39,9 +38,9 @@ function createConfig (target) {
     output: {
       path: helpers.root('dist'),
       publicPath: '/dist/',
-      filename: '[name]' + filenameInsert + 'js',
-      chunkFilename: '[id]' + filenameInsert + 'chunk.js',
-      libraryTarget: target
+      filename: '[name].js',
+      chunkFilename: '[id].chunk.js',
+      libraryTarget: 'umd'
     },
 
     optimization: {
@@ -69,7 +68,5 @@ function createConfig (target) {
 }
 
 module.exports = [
-  createConfig('var'),
-  createConfig('amd'),
-  createConfig('commonjs2')
+  createConfig()
 ]
