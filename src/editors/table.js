@@ -336,11 +336,14 @@ export class TableEditor extends ArrayEditor {
           return false
         }
 
-        const i = e.currentTarget.getAttribute('data-i') * 1
-        const newval = this.getValue().filter((row, j) => j !== i) /* If this is the one we're deleting */
-        this.setValue(newval)
+        const j = e.currentTarget.getAttribute('data-i') * 1
+        const value = this.getValue()
+
+        value.splice(j, 1)
+
+        this.setValue(value)
         this.onChange(true)
-        this.jsoneditor.trigger('deleteRow', this.rows[i])
+        this.jsoneditor.trigger('deleteRow', this.rows[j])
       })
       controlsHolder.appendChild(this.rows[i].delete_button)
     }
@@ -352,19 +355,15 @@ export class TableEditor extends ArrayEditor {
       this.rows[i].copy_button.addEventListener('click', e => {
         e.preventDefault()
         e.stopPropagation()
-        const i = e.currentTarget.getAttribute('data-i') * 1
+
+        const j = e.currentTarget.getAttribute('data-i') * 1
         const value = this.getValue()
 
-        value.forEach((row, j) => {
-          if (j === i) {
-            value.push(row)
-          }
-        })
+        value.splice(j + 1, 0, value[j])
 
         this.setValue(value)
-        this.refreshValue(true)
         this.onChange(true)
-        this.jsoneditor.trigger('copyRow', value[value.length - 1])
+        this.jsoneditor.trigger('copyRow', this.rows[j + 1])
       })
       controlsHolder.appendChild(this.rows[i].copy_button)
     }
@@ -376,17 +375,15 @@ export class TableEditor extends ArrayEditor {
       this.rows[i].moveup_button.addEventListener('click', e => {
         e.preventDefault()
         e.stopPropagation()
-        const i = e.currentTarget.getAttribute('data-i') * 1
 
-        if (i <= 0) return
-        const rows = this.getValue()
-        const tmp = rows[i - 1]
-        rows[i - 1] = rows[i]
-        rows[i] = tmp
+        const j = e.currentTarget.getAttribute('data-i') * 1
+        const value = this.getValue()
 
-        this.setValue(rows)
+        value.splice(j - 1, 0, value.splice(j, 1)[0])
+
+        this.setValue(value)
         this.onChange(true)
-        this.jsoneditor.trigger('moveRow', this.rows[i - 1])
+        this.jsoneditor.trigger('moveRow', this.rows[j - 1])
       })
       controlsHolder.appendChild(this.rows[i].moveup_button)
     }
@@ -398,17 +395,15 @@ export class TableEditor extends ArrayEditor {
       this.rows[i].movedown_button.addEventListener('click', e => {
         e.preventDefault()
         e.stopPropagation()
-        const i = e.currentTarget.getAttribute('data-i') * 1
-        const rows = this.getValue()
-        if (i >= rows.length - 1) return
 
-        const tmp = rows[i + 1]
-        rows[i + 1] = rows[i]
-        rows[i] = tmp
+        const j = e.currentTarget.getAttribute('data-i') * 1
+        const value = this.getValue()
 
-        this.setValue(rows)
+        value.splice(j + 1, 0, value.splice(j, 1)[0])
+
+        this.setValue(value)
         this.onChange(true)
-        this.jsoneditor.trigger('moveRow', this.rows[i + 1])
+        this.jsoneditor.trigger('moveRow', this.rows[j + 1])
       })
       controlsHolder.appendChild(this.rows[i].movedown_button)
     }
