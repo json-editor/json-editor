@@ -547,11 +547,12 @@ export class ObjectEditor extends AbstractEditor {
         this.header.textContent = this.getTitle()
       }
       this.title = this.theme.getHeader(this.header)
+      this.title.style.display = 'inline-block'
       this.controls = this.theme.getButtonHolder()
       this.controls.style.margin = '0 0 0 10px'
 
       this.container.appendChild(this.title)
-      this.title.appendChild(this.controls)
+      this.container.appendChild(this.controls)
       this.container.style.position = 'relative'
 
       /* Edit JSON modal */
