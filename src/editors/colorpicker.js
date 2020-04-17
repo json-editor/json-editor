@@ -10,7 +10,10 @@ import { extend } from '../utilities.js'
 
 export class ColorEditor extends StringEditor {
   postBuild () {
-    if (window.Picker) this.input.type = 'text'
+    if (window.Picker) {
+      this.input.type = 'text'
+    }
+    this.input.style.padding = '3px'
   }
 
   setValue (value, initial, fromTemplate) {
