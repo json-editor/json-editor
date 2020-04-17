@@ -8,6 +8,14 @@ Scenario('should have correct initial value', async (I) => {
   assert.equal(await I.grabValueFrom('.value'), '{"number":5.75,"number_number":5.75,"number_range":5.75}');
 });
 
+Scenario('should validate value', async (I) => {
+  I.amOnPage('number.html');
+  await I.fillField('[name="root[number]"]', '12-12');
+  I.click('.get-value');
+  I.see('Value must be of type number.', '[data-schemapath="root.number"] div');
+  assert.equal(await I.grabValueFrom('.value'), '{"number":"12-12","number_number":5.75,"number_range":5.75}');
+});
+
 Scenario('should respect step by incrementing and decrementing the value of a number', async (I) => {
   I.amOnPage('number.html');
   I.seeElement('[data-schemapath="root.number_number"] input');

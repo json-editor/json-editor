@@ -15,7 +15,7 @@ export function isPlainObject (obj) {
 
   if (typeof obj !== 'object' || obj.nodeType || (obj === obj.window)) return false
 
-  if (obj.constructor && !Object.prototype.hasOwnProperty.call(obj.constructor.prototype, 'isPrototypeOf')) return false
+  if (obj.constructor && !hasOwnProperty(obj.constructor.prototype, 'isPrototypeOf')) return false
 
   /* Most likely |obj| is a plain object, created by {} or constructed with new Object */
   return true
@@ -26,44 +26,20 @@ export function deepCopy (target) {
 }
 
 export function extend (destination, ...args) {
-  for (let i = 0; i < args.length; i++) {
-    let source = args[i]
-    for (let property in source) {
-      if (!source.hasOwnProperty(property)) continue
+  args.forEach(source => {
+    Object.keys(source).forEach(property => {
       if (source[property] && isPlainObject(source[property])) {
-        if (!destination.hasOwnProperty(property)) destination[property] = {}
+        if (!hasOwnProperty(destination, property)) destination[property] = {}
         extend(destination[property], source[property])
       } else if (Array.isArray(source[property])) {
         destination[property] = deepCopy(source[property])
       } else {
         destination[property] = source[property]
       }
-    }
-  }
+    })
+  })
 
   return destination
-}
-
-export function each (obj, callback) {
-  if (!obj || typeof obj !== 'object') return
-  let i
-  if (Array.isArray(obj) || (typeof obj.length === 'number' && obj.length > 0 && (obj.length - 1) in obj)) {
-    for (i = 0; i < obj.length; i++) {
-      if (callback(i, obj[i]) === false) return
-    }
-  } else {
-    if (Object.keys) {
-      const keys = Object.keys(obj)
-      for (i = 0; i < keys.length; i++) {
-        if (callback(keys[i], obj[keys[i]]) === false) return
-      }
-    } else {
-      for (i in obj) {
-        if (!obj.hasOwnProperty(i)) continue
-        if (callback(i, obj[i]) === false) return
-      }
-    }
-  }
 }
 
 export function trigger (el, event) {
@@ -79,4 +55,32 @@ export function trigger (el, event) {
  */
 export function getShadowParent (node) {
   return node && (node.toString() === '[object ShadowRoot]' ? node : getShadowParent(node.parentNode))
+}
+
+/**
+ * Helper function to check own property key
+ *
+ * @see https://eslint.org/docs/rules/no-prototype-builtins
+ */
+export function hasOwnProperty (obj, key) {
+  return obj && Object.prototype.hasOwnProperty.call(obj, key)
+}
+
+// From https://github.com/angular/angular.js/blob/master/src/ng/directive/input.js
+const NUMBER_REGEXP = /^\s*(-|\+)?(\d+|(\d*(\.\d*)))([eE][+-]?\d+)?\s*$/
+
+export function isNumber (value) {
+  if (typeof value === 'undefined' || value === null) return false
+  const match = value.match(NUMBER_REGEXP)
+  const v = parseFloat(value)
+  return match !== null && !isNaN(v) && isFinite(v)
+}
+
+const INTEGER_REGEXP = /^\s*(-|\+)?(\d+)\s*$/
+
+export function isInteger (value) {
+  if (typeof value === 'undefined' || value === null) return false
+  const match = value.match(INTEGER_REGEXP)
+  const v = parseInt(value)
+  return match !== null && !isNaN(v) && isFinite(v)
 }

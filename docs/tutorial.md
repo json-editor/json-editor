@@ -100,33 +100,35 @@ Here are all the available options:
 
 Option                        | Default       | Description
 --|--|--
-ajax                          | `false`         | If true, JSON Editor will load external URLs in $ref via ajax.
+ajax                          | `false`         | If `true`, JSON Editor will load external URLs in $ref via ajax.
 ajaxBase                      |               | Allows schema references to work either with or without cors; set to protocol://host:port when api is served by different host.
-ajaxCredentials               | `false`         | If true, JSON Editor will make ajax call with [credentials].
-compact                       | `false`         | If true, the label will not be displayed/added.
-disable_array_add             | `false`         | If true, remove all "add row" buttons from arrays.
-disable_array_delete          | `false`         | If true, remove all "delete row" buttons from arrays.
-disable_array_reorder         | `false`         | If true, remove all "move up" and "move down" buttons from arrays.
-enable_array_copy             | `false`         | If true, add copy buttons to arrays.
-disable_collapse              | `false`         | If true, remove all collapse buttons from objects and arrays.
-disable_edit_json             | `false`         | If true, remove all Edit JSON buttons from objects.
-disable_properties            | `false`         | If true, remove all Edit Properties buttons from objects.
-array_controls_top            | `false`         | If true, array controls (add, delete etc) will be displayed at top of list.
+ajaxCredentials               | `false`         | If `true`, JSON Editor will make ajax call with [credentials].
+compact                       | `false`         | If `true`, the label will not be displayed/added.
+disable_array_add             | `false`         | If `true`, remove all "add row" buttons from arrays.
+disable_array_delete          | `false`         | If `true`, remove all "delete row" buttons from arrays.
+disable_array_delete_all_rows | `false`         | If `true`, remove all "delete all rows" buttons from arrays.
+disable_array_delete_last_row | `false`         | If `true`, remove all "delete last row" buttons from arrays.
+disable_array_reorder         | `false`         | If `true`, remove all "move up" and "move down" buttons from arrays.
+enable_array_copy             | `false`         | If `true`, add copy buttons to arrays.
+disable_collapse              | `false`         | If `true`, remove all collapse buttons from objects and arrays.
+disable_edit_json             | `false`         | If `true`, remove all Edit JSON buttons from objects.
+disable_properties            | `false`         | If `true`, remove all Edit Properties buttons from objects.
+array_controls_top            | `false`         | If `true`, array controls (add, delete etc) will be displayed at top of list.
 form_name_root                | root          | The first part of the `name` attribute of form inputs in the editor. An full example name is `root[person][name]` where "root" is the form_name_root.
 iconlib                       | null          | The icon library to use for the editor. See the CSS Integration section below for more info.
 remove_button_labels          | `false`         | Display only icons in buttons. This works only if iconlib is set.
-no_additional_properties      | `false`         | If true, objects can only contain properties defined with the properties keyword.
+no_additional_properties      | `false`         | If `true`, objects can only contain properties defined with the properties keyword.
 refs                          | {}            | An object containing schema definitions for URLs. Allows you to pre-define external schemas.
-required_by_default           | `false`         | If true, all schemas that don't explicitly set the required property will be required.
-keep_oneof_values             | `true`          | If true, makes oneOf copy properties over when switching.
+required_by_default           | `false`         | If `true`, all schemas that don't explicitly set the required property will be required.
+keep_oneof_values             | `true`          | If `true`, makes oneOf copy properties over when switching.
 schema                        | {}            | A valid JSON Schema to use for the editor. Version 3 and Version 4 of the draft specification are supported.
 show_errors                   | "interaction" | When to show validation errors in the UI. Valid values are interaction, change, always, and never.
 startval                      | null          | Seed the editor with an initial value. This should be valid against the editor's schema.
 template                      | default       | The JS template engine to use. See the Templates and Variables section below for more info.
 theme                         | html          | The CSS theme to use. See the CSS Integration section below for more info.
-display_required_only         | `false`         | If true, only required properties will be included by default.
-show_opt_in                   | `false`         | If true, NON required properties will have an extra toggable checkbox near the title that determines if the value must be included or not in the editors value
-prompt_before_delete          | `true`          | If true, displays a dialog box with a confirmation message before node deletion.
+display_required_only         | `false`         | If `true`, only required properties will be included by default.
+show_opt_in                   | `false`         | If `true`, NON required properties will have an extra toggable checkbox near the title that determines if the value must be included or not in the editors value
+prompt_before_delete          | `true`          | If `true`, displays a dialog box with a confirmation message before node deletion.
 object_layout                 | normal        | The default value of `format` for objects. If set to table for example, objects will use table layout if `format` is not specified.
 enum_source_value_auto_select | `true`          | Preserve value at Move Up or Down.(No value is selected automatically upon deletion.)
 

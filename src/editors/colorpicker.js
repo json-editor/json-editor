@@ -65,7 +65,6 @@ export class ColorEditor extends StringEditor {
   createPicker (create) {
     if (create) { /* create vanilla-picker */
       if (window.Picker && !this.picker_instance) { /* do when vanilla-picker loaded */
-        const self = this
         const options = this.expandCallbacks('colorpicker', extend({}, {
           editor: false, /* default no editor */
           alpha: false, /* default no alpha */
@@ -75,10 +74,10 @@ export class ColorEditor extends StringEditor {
           parent: this.container
         }))
 
-        const updateHandler = function (color) {
-          const format = this.settings.editorFormat
-          const isAlpha = this.settings.alpha
-          self.setValue(format === 'hex' ? (isAlpha ? color.hex : color.hex.slice(0, 7)) : color[`${format + (isAlpha ? 'a' : '')}String`])
+        const updateHandler = color => {
+          const format = this.picker_instance.settings.editorFormat
+          const isAlpha = this.picker_instance.settings.alpha
+          this.setValue(format === 'hex' ? (isAlpha ? color.hex : color.hex.slice(0, 7)) : color[`${format + (isAlpha ? 'a' : '')}String`])
         }
         if (!options.popup && typeof options.onChange !== 'function') options.onChange = updateHandler
         else if (options.popup && typeof options.onDone !== 'function') options.onDone = updateHandler

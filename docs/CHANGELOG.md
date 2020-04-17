@@ -11,6 +11,10 @@
 - Cleaned src/defaults.js and move resolvers to a separate module, src/resolvers.js
 - Cleaned how default themes, iconlibs, editors and templates are imported to JSONEditor
 - Added ability to attache editors and themes style rules to the shadowRoot if the editor is inside a Web Component.
+- Fix of #701 - editors/number.js and editors/integer.js don't change values when validation is failed
+- Fix of #716 - add ignore for allOf to fall in line with existing ignores of anyOf/oneOf for additionalProperties validation
+- Fix of #714 - Checkboxes inside object tables duplicate labels from heading
+- Added copy button to arrays in table format 
 
 ### 2.0.0-dev
   - Fix of #643 - Allow use of themes not compiled directly into the build

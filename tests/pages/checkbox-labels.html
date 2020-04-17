@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>checkbox-labels</title>
+  <script src="../../dist/jsoneditor.js"></script>
+</head>
+<body>
+
+<textarea class="debug" cols="30" rows="10"></textarea>
+<div class="state"></div>
+<button class='get-value'>Get Value</button>
+<div class='container'></div>
+
+<script>
+  var container = document.querySelector('.container');
+  var debug = document.querySelector('.debug');
+  var getValue = document.querySelector('.get-value');
+  var state = document.querySelector('.state')
+
+  var schema = {
+    "title": "Person",
+    "type": "object",
+    "required": [
+      "Awesome Compact",
+      "Awesome Not Compact",
+      "pets"
+    ],
+    "properties": {
+      "Awesome Compact": {
+        "type": "boolean",
+        "format": "checkbox",
+        "options": {
+          "compact": true
+        }
+      },
+      "Awesome Not Compact": {
+        "type": "boolean",
+        "format": "checkbox",
+        "options": {
+          "compact": false
+        }
+      },
+      "pets": {
+        "type": "array",
+        "format": "table",
+        "title": "Pets",
+        "uniqueItems": true,
+        "items": {
+          "type": "object",
+          "title": "Pet",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "cat",
+                "dog",
+                "bird",
+                "reptile",
+                "other"
+              ],
+              "default": "dog"
+            },
+            "name": {
+              "type": "string"
+            },
+            "Awesome in Object Table": {
+              "type": "boolean",
+              "format": "checkbox"
+            }
+          }
+        },
+        "default": [
+          {
+            "type": "dog",
+            "name": "A"
+          },
+          {
+            "type": "dog",
+            "name": "B"
+          },
+          {
+            "type": "dog",
+            "name": "C"
+          },
+          {
+            "type": "dog",
+            "name": "D"
+          },
+          {
+            "type": "dog",
+            "name": "E"
+          }
+        ]
+      }
+    }
+  };
+
+  var editor = new JSONEditor(container, {
+    schema: schema
+  });
+
+  editor.on('ready',function() {
+    state.innerText = 'READY'
+  });
+
+  getValue.addEventListener('click', function () {
+    debug.value = JSON.stringify(editor.getValue());
+  });
+
+</script>
+
+</body>
+</html>

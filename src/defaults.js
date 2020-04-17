@@ -1,4 +1,3 @@
-import { each } from './utilities.js'
 import { resolvers } from './resolvers.js'
 
 /* default theme */
@@ -226,6 +225,10 @@ languages.en = {
   */
   button_delete_row_title_short: 'Delete',
   /**
+  * Title on Copy Row buttons, short version (no parameter with the object title)
+  */
+  button_copy_row_title_short: 'Copy',
+  /**
   * Title on Collapse buttons
   */
   button_collapse: 'Collapse',
@@ -252,7 +255,7 @@ languages.en = {
 }
 
 /* Default per-editor options */
-each(editors, (i, editor) => { editors[i].options = editor.options || {} })
+Object.entries(editors).forEach(([i, editor]) => { editors[i].options = editor.options || {} })
 
 /* Default upload handler */
 function upload (type, file, cbs) {
@@ -261,10 +264,10 @@ function upload (type, file, cbs) {
 
 /* String translate function */
 function translate (key, variables) {
-  const lang = languages[language]
-  if (!lang) throw new Error(`Unknown language ${language}`)
+  const lang = defaults.languages[defaults.language]
+  if (!lang) throw new Error(`Unknown language ${defaults.language}`)
 
-  let string = lang[key] || languages[default_language][key]
+  let string = lang[key] || defaults.languages[default_language][key]
 
   if (typeof string === 'undefined') throw new Error(`Unknown translate string ${key}`)
 

@@ -1,5 +1,5 @@
 import { ipValidator } from './validators/ip-validator.js'
-import { extend } from './utilities.js'
+import { extend, hasOwnProperty } from './utilities.js'
 
 export class Validator {
   constructor (jsoneditor, schema, options, defaults) {
@@ -377,25 +377,25 @@ export class Validator {
     this._validateObjectSubSchema2 = {
       additionalProperties (schema, value, path, validatedProperties) {
         const errors = []
-        for (let i in value) {
-          if (!value.hasOwnProperty(i)) continue
-          if (!validatedProperties[i]) {
-            /* No extra properties allowed */
-            if (!schema.additionalProperties) {
-              errors.push({
-                path,
-                property: 'additionalProperties',
-                message: this.translate('error_additional_properties', [i])
-              })
-              break
-              /* Allowed */
-            } else if (schema.additionalProperties === true) {
-              break
-              /* Must match schema */
-              /* TODO: incompatibility between version 3 and 4 of the spec */
-            } else {
-              errors.push(...this._validateSchema(schema.additionalProperties, value[i], `${path}.${i}`))
-            }
+        const keys = Object.keys(value)
+        for (let i = 0; i < keys.length; i++) {
+          const k = keys[i]
+          if (validatedProperties[k]) continue
+          /* No extra properties allowed */
+          if (!schema.additionalProperties) {
+            errors.push({
+              path,
+              property: 'additionalProperties',
+              message: this.translate('error_additional_properties', [k])
+            })
+            break
+            /* Allowed */
+          } else if (schema.additionalProperties === true) {
+            break
+            /* Must match schema */
+            /* TODO: incompatibility between version 3 and 4 of the spec */
+          } else {
+            errors.push(...this._validateSchema(schema.additionalProperties, value[k], `${path}.${k}`))
           }
         }
         return errors
@@ -434,7 +434,7 @@ export class Validator {
       const properties = this._getSchema(givenSchema).properties
 
       for (const i in properties) {
-        if (!properties.hasOwnProperty(i)) {
+        if (!hasOwnProperty(properties, i)) {
           fit.extra += weight
           continue
         }
@@ -529,7 +529,6 @@ export class Validator {
 
   _validateByValueType (schema, value, path) {
     const errors = []
-    const self = this
     if (value === null) return errors
     /* Number Specific Validation */
     if (typeof value === 'number') {
@@ -538,7 +537,7 @@ export class Validator {
       /* `minimum` */
       Object.keys(schema).forEach(key => {
         if (this._validateNumberSubSchema[key]) {
-          errors.push(...this._validateNumberSubSchema[key].call(self, schema, value, path))
+          errors.push(...this._validateNumberSubSchema[key].call(this, schema, value, path))
         }
       })
       /* String specific validation */
@@ -548,7 +547,7 @@ export class Validator {
       /* `pattern` */
       Object.keys(schema).forEach(key => {
         if (this._validateStringSubSchema[key]) {
-          errors.push(...this._validateStringSubSchema[key].call(self, schema, value, path))
+          errors.push(...this._validateStringSubSchema[key].call(this, schema, value, path))
         }
       })
       /* Array specific validation */
@@ -559,7 +558,7 @@ export class Validator {
       /* `uniqueItems` */
       Object.keys(schema).forEach(key => {
         if (this._validateArraySubSchema[key]) {
-          errors.push(...this._validateArraySubSchema[key].call(self, schema, value, path))
+          errors.push(...this._validateArraySubSchema[key].call(this, schema, value, path))
         }
       })
       /* Object specific validation */
@@ -572,12 +571,12 @@ export class Validator {
       /* `patternProperties` */
       Object.keys(schema).forEach(key => {
         if (this._validateObjectSubSchema[key]) {
-          errors.push(...this._validateObjectSubSchema[key].call(self, schema, value, path, validatedProperties))
+          errors.push(...this._validateObjectSubSchema[key].call(this, schema, value, path, validatedProperties))
         }
       })
 
-      /* The no_additional_properties option currently doesn't work with extended schemas that use oneOf or anyOf */
-      if (typeof schema.additionalProperties === 'undefined' && this.jsoneditor.options.no_additional_properties && !schema.oneOf && !schema.anyOf) {
+      /* The no_additional_properties option currently doesn't work with extended schemas that use oneOf or anyOf or allOf */
+      if (typeof schema.additionalProperties === 'undefined' && this.jsoneditor.options.no_additional_properties && !schema.oneOf && !schema.anyOf && !schema.allOf) {
         schema.additionalProperties = false
       }
 
@@ -585,7 +584,7 @@ export class Validator {
       /* `dependencies` */
       Object.keys(schema).forEach(key => {
         if (typeof this._validateObjectSubSchema2[key] !== 'undefined') {
-          errors.push(...this._validateObjectSubSchema2[key].call(self, schema, value, path, validatedProperties))
+          errors.push(...this._validateObjectSubSchema2[key].call(this, schema, value, path, validatedProperties))
         }
       })
     }
@@ -667,13 +666,13 @@ export class Validator {
     }
 
     const validatorRx = {
-      'date': /^(\d{4}\D\d{2}\D\d{2})?$/,
-      'time': /^(\d{2}:\d{2}(?::\d{2})?)?$/,
+      date: /^(\d{4}\D\d{2}\D\d{2})?$/,
+      time: /^(\d{2}:\d{2}(?::\d{2})?)?$/,
       'datetime-local': /^(\d{4}\D\d{2}\D\d{2}[ T]\d{2}:\d{2}(?::\d{2})?)?$/
     }
     const format = {
-      'date': '"YYYY-MM-DD"',
-      'time': '"HH:MM"',
+      date: '"YYYY-MM-DD"',
+      time: '"HH:MM"',
       'datetime-local': '"YYYY-MM-DD HH:MM"'
     }
 

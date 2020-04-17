@@ -6,33 +6,31 @@ export class Base64Editor extends AbstractEditor {
   }
 
   setFileReaderListener (frMultiple) {
-    const self = this
     frMultiple.addEventListener('load', (event) => {
-      if (self.count === self.current_item_index) {
+      if (this.count === this.current_item_index) {
         /* Overwrite existing file by default, leave other properties unchanged */
-        self.value[self.count][self.key] = event.target.result
+        this.value[this.count][this.key] = event.target.result
       } else {
         const tempObject = {}
         /* Create empty object */
-        for (const key in self.parent.schema.properties) {
+        for (const key in this.parent.schema.properties) {
           tempObject[key] = ''
         }
         /* Set object media file */
-        tempObject[self.key] = event.target.result
-        self.value.splice(self.count, 0, tempObject) /* insert new file object */
+        tempObject[this.key] = event.target.result
+        this.value.splice(this.count, 0, tempObject) /* insert new file object */
       }
 
       /* Increment using the listener and not the 'for' loop as the listener will be processed asynchronously */
-      self.count += 1
+      this.count += 1
       /* When all files have been processed, update the value of the editor */
-      if (self.count === (self.total + self.current_item_index)) {
-        self.arrayEditor.setValue(self.value)
+      if (this.count === (this.total + this.current_item_index)) {
+        this.arrayEditor.setValue(this.value)
       }
     })
   }
 
   build () {
-    const self = this
     this.title = this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText)
 
@@ -51,42 +49,42 @@ export class Base64Editor extends AbstractEditor {
       /* 'multiple' key has been set to 'true' in the schema */
       /* and the parent object is of type 'object' */
       /* and the parent of the parent type has been set to 'array' */
-      if (self.schema.options && self.schema.options.multiple && self.schema.options.multiple === true && self.parent && self.parent.schema.type === 'object' && self.parent.parent && self.parent.parent.schema.type === 'array') {
+      if (this.schema.options && this.schema.options.multiple && this.schema.options.multiple === true && this.parent && this.parent.schema.type === 'object' && this.parent.parent && this.parent.parent.schema.type === 'array') {
         this.uploader.setAttribute('multiple', '')
       }
 
-      this.uploader.addEventListener('change', function (e) {
+      this.uploader.addEventListener('change', e => {
         e.preventDefault()
         e.stopPropagation()
 
-        if (this.files && this.files.length) {
+        if (e.currentTarget.files && e.currentTarget.files.length) {
           /* Check the amount of files uploaded. */
           /* If 1, use the regular upload, otherwise use the multiple upload method */
-          if (this.files.length > 1 && self.schema.options && self.schema.options.multiple && self.schema.options.multiple === true && self.parent && self.parent.schema.type === 'object' && self.parent.parent && self.parent.parent.schema.type === 'array') {
+          if (e.currentTarget.files.length > 1 && this.schema.options && this.schema.options.multiple && this.schema.options.multiple === true && this.parent && this.parent.schema.type === 'object' && this.parent.parent && this.parent.parent.schema.type === 'array') {
             /* Load editor of parent.parent to get the array */
-            self.arrayEditor = self.jsoneditor.getEditor(self.parent.parent.path)
+            this.arrayEditor = this.jsoneditor.getEditor(this.parent.parent.path)
             /* Check the current value of this editor */
-            self.value = self.arrayEditor.getValue()
+            this.value = this.arrayEditor.getValue()
             /* Set variables for amount of files, index of current array item and */
             /* count value containing current status of processed files */
-            self.total = this.files.length
-            self.current_item_index = parseInt(self.parent.key)
-            self.count = self.current_item_index
+            this.total = e.currentTarget.files.length
+            this.current_item_index = parseInt(this.parent.key)
+            this.count = this.current_item_index
 
-            for (let i = 0; i < self.total; i++) {
+            for (let i = 0; i < this.total; i++) {
               const frMultiple = new FileReader()
-              self.setFileReaderListener(frMultiple)
-              frMultiple.readAsDataURL(this.files[i])
+              this.setFileReaderListener(frMultiple)
+              frMultiple.readAsDataURL(e.currentTarget.files[i])
             }
           } else {
             let fr = new FileReader()
             fr.onload = (evt) => {
-              self.value = evt.target.result
-              self.refreshPreview()
-              self.onChange(true)
+              this.value = evt.target.result
+              this.refreshPreview()
+              this.onChange(true)
               fr = null
             }
-            fr.readAsDataURL(this.files[0])
+            fr.readAsDataURL(e.currentTarget.files[0])
           }
         }
       })

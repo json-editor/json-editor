@@ -8,3 +8,4 @@
 .env
 /src/themes/*.css.js
 /src/editors/*.css.js
+/.vs
