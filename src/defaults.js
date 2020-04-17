@@ -225,6 +225,10 @@ languages.en = {
   */
   button_delete_row_title_short: 'Delete',
   /**
+  * Title on Copy Row buttons, short version (no parameter with the object title)
+  */
+  button_copy_row_title_short: 'Copy',
+  /**
   * Title on Collapse buttons
   */
   button_collapse: 'Collapse',

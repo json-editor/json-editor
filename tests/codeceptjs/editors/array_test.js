@@ -12,25 +12,36 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
   I.amOnPage('table-move-events.html');
   I.seeElement('[data-schemapath="root.0"]');
   I.seeElement('[data-schemapath="root.1"]');
+  I.seeElement('[data-schemapath="root.2"]');
+  I.seeElement('[data-schemapath="root.3"]');
+  I.seeElement('[data-schemapath="root.4"]');
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
-  assert.equal(value, '["A","B"]');
+  assert.equal(value, '["A","B","C","D","E"]');
 
   I.amAcceptingPopups();
-  I.click('.json-editor-btn-moveup');
+  I.click('//button[contains(@class, "json-editor-btn-moveup") and @data-i="1"]');
   I.seeInPopup('moveRow');
   I.acceptPopup();
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
-  assert.equal(value, '["B","A"]');
+  assert.equal(value, '["B","A","C","D","E"]');
 
   I.amAcceptingPopups();
-  I.click('.json-editor-btn-movedown');
+  I.click('//button[contains(@class, "json-editor-btn-movedown") and @data-i="1"]');
   I.seeInPopup('moveRow');
   I.acceptPopup();
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
-  assert.equal(value, '["A","B"]');
+  assert.equal(value, '["B","C","A","D","E"]');
+
+  I.amAcceptingPopups();
+  I.click('//button[contains(@class, "json-editor-btn-copy") and @data-i="2"]');
+  I.seeInPopup('copyRow');
+  I.acceptPopup();
+  I.click('.get-value');
+  value = await I.grabValueFrom('.debug');
+  assert.equal(value, '["B","C","A","A","D","E"]');
 
   I.amAcceptingPopups();
   I.click('.json-editor-btntype-add');
@@ -38,7 +49,7 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
   I.acceptPopup();
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
-  assert.equal(value, '["A","B",""]');
+  assert.equal(value, '["B","C","A","A","D","E",""]');
 
   // This test will fail when using Puppeteer due to the way Puppeteer handles popups.
   // Puppeteer apparently only sees the text in the last popup, so it doesn't see the
@@ -54,7 +65,7 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
   I.acceptPopup();
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
-  assert.equal(value, '["A","B"]');
+  assert.equal(value, '["B","C","A","A","D","E"]');
 
   // This test will fail when using Puppeteer due to the way Puppeteer handles popups.
   I.amAcceptingPopups();
