@@ -1,7 +1,7 @@
 version: '3'
 services:
   node:
-    image: node:12
+    build: .
     volumes:
       - ../:/repo:delegated
       - ../${DIST_SUB_PATH-.}/dist:/repo/dist:delegated
@@ -11,10 +11,11 @@ services:
       - '9100:9001'
     expose:
       - '9001'
+    depends_on:
+      - firefox
+      - chrome
   firefox:
     image: selenium/standalone-firefox-debug:3.141.59-oxygen
-    depends_on:
-      - node
     environment:
       - VNC_NO_PASSWORD=1
     ports:
@@ -25,8 +26,6 @@ services:
       - /dev/shm:/dev/shm
   chrome:
     image: selenium/standalone-chrome-debug:3.141.59-oxygen
-    depends_on:
-      - node
     environment:
       - VNC_NO_PASSWORD=1
     ports:
@@ -35,11 +34,3 @@ services:
     volumes:
       # Mount shm also for firefox, see https://github.com/SeleniumHQ/docker-selenium#running-the-images
       - /dev/shm:/dev/shm
-
-  codeceptjs:
-    depends_on:
-      - node
-    image: codeception/codeceptjs
-    working_dir: /repo/tests/codeceptjs
-    volumes:
-      - ../:/repo:delegated
