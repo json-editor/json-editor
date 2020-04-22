@@ -35,7 +35,7 @@ describe('JSONEditor', function () {
   })
 
   it('can add custom iconlib', () => {
-    const customeMapping = {
+    const customMapping = {
       collapse: 'key-down',
       expand: 'key-right',
       delete: 'trash',
@@ -59,7 +59,7 @@ describe('JSONEditor', function () {
     class CustomIconLib extends JSONEditor.AbstractIconLib {
       constructor () {
         super()
-        this.mapping = customeMapping
+        this.mapping = customMapping
         this.icon_prefix = customIconPrefix
       }
     }
