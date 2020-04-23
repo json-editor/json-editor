@@ -2,10 +2,14 @@
 
 ## With Docker
 
-Go to the `tests/` directory and install node modules, start test application with node (webserver), Firefox (browser) and CodeceptJS (testing).
+Configure Docker environment:
 
 ```
-cd tests
+cp .env-dist .env
+```
+
+Install `node_modules` and start stack:
+```
 docker-compose run --rm node npm install
 docker-compose up -d
 ```
@@ -15,9 +19,10 @@ docker-compose up -d
 - Selenium Chrome Browser URL: vnc://127.0.0.1:9060/
 
 ```
-docker-compose run --rm codeceptjs bash
+docker-compose exec node bash
 
 $ npm run build
+$ cd tests/codeceptjs
 $ codeceptjs run
 ```
 
