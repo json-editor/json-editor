@@ -2,9 +2,11 @@
 
 - Removed codeception container, use `codeceptjs` as node-dev module
 
-### 2.2.1-dev
+### 2.2.1-current
 
-*tbd*
+- AbstractEditor, AbstractTheme, AbstractIconlib had been removed, re-expose them
+- fix static property #724 #723
+- fix option remove_empty_properties #725 #728
 
 ### 2.2.0
 
@@ -24,15 +26,26 @@
 - Fix of #714 - Checkboxes inside object tables duplicate labels from heading
 - Added copy button to arrays in table format 
 
-### 2.0.0-dev
+### 2.1.0
+ - fixed vulnerability in "http-server" package (origin/feature/merges-20200227, feature/merges-20200227) - using latest node LTS
+ - extract css
+ - Add webpack plugin to support theme development
+ - css-loader can be omitted
+ - Fix some eslint warnings
+ - Remove comments from css in production mode (germanbisurgi-master) - updated readme
+ - lib loader
+ - better interactive page
+ - codeceptjs output directory added to npm ignore list
+
+### 2.0.0
   - Fix of #643 - Allow use of themes not compiled directly into the build
   - Removed Themes and IconSets that have not been updated to 2.0 format.
   - Fix of #618 - links are placed AFTER the description. Now places the link BEFORE description (if available) or at bottom of container
   - Changes to Vallilla Colorpicker editor.
-   * Added support for 'setValue'
-   * Added better enable/disable methods.
-   * Removed "onChange" function from list of required options so it can be overidden using schema options.
-   * Changed the update method (Otherwise buttons have no meaning). Now updating is done in "onDone" function, except if inline element. Then updating is done using "onChange" function.
+  - Added support for 'setValue'
+  - Added better enable/disable methods.
+  - Removed "onChange" function from list of required options so it can be overidden using schema options.
+  - Changed the update method (Otherwise buttons have no meaning). Now updating is done in "onDone" function, except if inline element. Then updating is done using "onChange" function.
   - Fix of #629 - BS4 theme bug where basic tab was placed outside tabs container.
   - Improved IMask support for `Date`, `Number`, `IMask.MaskedEnum`, `IMask.MaskedRange` and regular expression masks. #591
   - Added support for recursive callback options.

@@ -208,7 +208,7 @@ export class SchemaLoader {
       this.refs[url] = 'loading'
       waiting++
 
-      const fetchUrl = this._isLocalUrl(fileBase, url) ? fileBase + url : url
+      const fetchUrl = this._isLocalUrl(url, fileBase) ? fileBase + url : url
 
       const r = new XMLHttpRequest()
       r.overrideMimeType('application/json')
