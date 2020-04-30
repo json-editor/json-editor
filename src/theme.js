@@ -127,6 +127,8 @@ export class AbstractTheme {
       el.appendChild(text)
     }
 
+    el.style.display = 'inline-block'
+
     return el
   }
 

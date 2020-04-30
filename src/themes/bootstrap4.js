@@ -126,6 +126,10 @@ export class bootstrap4Theme extends AbstractTheme {
         }
       }
 
+      const unique = label.innerText
+      label.setAttribute('for', unique)
+      input.setAttribute('id', unique)
+
       check.appendChild(input)
       check.appendChild(label)
       if (infoText) check.appendChild(infoText)
@@ -327,6 +331,8 @@ export class bootstrap4Theme extends AbstractTheme {
     } else {
       el.appendChild(text)
     }
+
+    el.style.display = 'inline-block'
 
     /* cardHeader.appendChild(el) */
 

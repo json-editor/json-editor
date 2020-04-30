@@ -106,6 +106,8 @@ export class spectreTheme extends AbstractTheme {
       el.appendChild(text)
     }
 
+    el.style.display = 'inline-block'
+
     return el
   }
 
