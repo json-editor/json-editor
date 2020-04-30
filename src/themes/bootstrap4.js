@@ -126,7 +126,6 @@ export class bootstrap4Theme extends AbstractTheme {
         }
       }
 
-      console.log(label.innerText)
       const unique = label.innerText
       label.setAttribute('for', unique)
       input.setAttribute('id', unique)
