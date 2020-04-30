@@ -328,6 +328,8 @@ export class bootstrap4Theme extends AbstractTheme {
       el.appendChild(text)
     }
 
+    el.style.display = 'inline-block'
+
     /* cardHeader.appendChild(el) */
 
     return el

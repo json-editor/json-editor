@@ -547,7 +547,6 @@ export class ObjectEditor extends AbstractEditor {
         this.header.textContent = this.getTitle()
       }
       this.title = this.theme.getHeader(this.header)
-      this.title.style.display = 'inline-block'
       this.controls = this.theme.getButtonHolder()
       this.controls.style.margin = '0 0 0 10px'
 
