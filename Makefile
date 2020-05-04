@@ -12,7 +12,7 @@ bash:
 	docker-compose exec node bash
 
 test:
-	docker-compose run --rm codeceptjs codeceptjs run
+	docker-compose run --rm -w /repo/tests/codeceptjs node /repo/node_modules/.bin/codeceptjs run
 
 selenium-firefox:
 	xdg-open vnc://$(DOCKER_HOST):9059

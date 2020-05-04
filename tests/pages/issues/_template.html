@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Test Template</title>
+    <script src="../../../dist/nonmin/jsoneditor.js"></script>
+  </head>
+  <body>
+    <h1>Test Template</h1>
+
+    <div id='editor_holder'></div>
+    <button id='submit'>Submit (console.log)</button>
+
+    <script>
+      // Initialize the editor with a JSON schema
+      // JSONEditor.defaults.options.remove_empty_properties = true;
+      var editor = new JSONEditor(document.getElementById('editor_holder'),{
+        schema: {
+          "title": "An Object",
+          "type": "object",
+          "required": [
+            "name",
+            "age",
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "First and Last name",
+              "minLength": 4,
+              "default": "John Doe"
+            },
+            "age": {
+              "type": "integer",
+              "default": 25,
+              "minimum": 18,
+              "maximum": 99
+            }
+          }
+        },
+
+      });
+
+      // Hook up the submit button to log to the console
+      document.getElementById('submit').addEventListener('click',function() {
+        // Get the value from the editor
+        console.log(editor.getValue());
+      });
+    </script>
+  </body>
+</html>

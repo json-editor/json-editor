@@ -1,5 +1,7 @@
 ### 2.3.0-dev
 
+- Removed codeception container, use `codeceptjs` as node-dev module
+
 ### 2.2.1-current
 
 - AbstractEditor, AbstractTheme, AbstractIconlib had been removed, re-expose them
