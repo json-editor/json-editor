@@ -27,7 +27,7 @@ Using a CDN
 
 You can also access older releases from CDN, using the landing page: https://www.jsdelivr.com/package/npm/@json-editor/json-editor
 
-For local usage download the [production version](https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js) or the [development version](https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.js)
+For local usage download the [production version](https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.js) or the [development version](https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/nonmin/jsoneditor.js)
 
 Requirements
 -----------------
