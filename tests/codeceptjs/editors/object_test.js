@@ -133,7 +133,15 @@ Scenario('should hide but not delete additional properties, when no_additional_p
   assert.equal(value.age, 34); // This will currently fail
 });
 
-Scenario('should have unique ids @current', (I) => {
+Scenario('should have unique ids', (I) => {
   I.amOnPage('object-no-duplicated-id.html');
   I.donSeeDuplicatedIds()
+  I.waitForText('i am actually a cat')
+  I.waitForText('i am actually a dog')
+  I.click('.json-editor-btn-edit_properties')
+  I.click('.form-group:nth-child(1) .form-check-input')
+  I.waitForText('i am actually a dog')
+  I.click('.form-group:nth-child(1) .form-check-input')
+  I.click('.form-group:nth-child(2) .form-check-input')
+  I.waitForText('i am actually a cat')
 });
