@@ -1,4 +1,4 @@
-var assert = require('assert');
+const assert = require('assert');
 
 Feature('object');
 
@@ -131,4 +131,9 @@ Scenario('should hide but not delete additional properties, when no_additional_p
   let value = JSON.parse(json);
   assert.equal(value.name, "Jeremy Dorn");
   assert.equal(value.age, 34); // This will currently fail
+});
+
+Scenario('should have unique ids @current', (I) => {
+  I.amOnPage('object-no-duplicated-id.html');
+  I.donSeeDuplicatedIds()
 });
