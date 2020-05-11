@@ -126,7 +126,7 @@ export class bootstrap4Theme extends AbstractTheme {
         }
       }
 
-      const unique = label.innerText + '-' + (Date.now() * Math.random())
+      const unique = (Date.now() * Math.random())
       input.setAttribute('id', unique)
       label.setAttribute('for', unique)
 
