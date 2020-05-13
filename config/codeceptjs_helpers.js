@@ -3,6 +3,27 @@ const assert = require('assert')
 let Helper = codecept_helper
 
 class customHelpers extends Helper {
+  async donSeeDuplicatedIds () {
+    const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
+    await helper.wait(1)
+    let donSeeDuplicatedIds = await helper.executeScript(() => {
+      let dontSeeDuplicated = true
+      let ids = []
+      const all = [].slice.call(document.querySelectorAll('*'))
+      all.forEach((el) => {
+        const id = el.getAttribute('id')
+        if (ids.includes(id)) {
+          dontSeeDuplicated = false
+        }
+        if (id) {
+          ids.push(id)
+        }
+      })
+      return dontSeeDuplicated
+    })
+    return assert.strictEqual(donSeeDuplicatedIds, true)
+  }
+
   async pressKeys (string) {
     const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
     try {

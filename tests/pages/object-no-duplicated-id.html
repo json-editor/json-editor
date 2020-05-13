@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <script src="../../dist/nonmin/jsoneditor.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <title>object-no-duplicated-id</title>
+</head>
+<body>
+
+<div class="container">
+  <div class="form-group">
+    <textarea id="value" class="form-control" rows="10"></textarea>
+  </div>
+  <button id="get-value" class='btn btn-secondary'>get value</button>
+  <hr>
+  <div id='form-container'></div>
+</div>
+
+<script>
+  var formContainer = document.querySelector('#form-container');
+  var value = document.querySelector('#value');
+  var getValue = document.querySelector('#get-value');
+
+  var schema = {
+    "description": "A representation of a person, company, organization, or place",
+    "type": "object",
+    "properties": {
+      "cat": {
+        "title": "Cat",
+        "type": "object",
+        "properties": {
+          "title": {
+            "title": "i am actually a cat",
+            "type": "string",
+            "format": "textarea"
+          }
+        }
+      },
+      "dog": {
+        "title": "Cat",
+        "type": "object",
+        "properties": {
+          "title": {
+            "title": "i am actually a dog",
+            "type": "string",
+            "format": "textarea"
+          }
+        }
+      }
+    }
+  };
+
+  var editor = new JSONEditor(formContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    show_errors: 'always'
+  });
+
+  getValue.addEventListener('click', function () {
+    value.value = JSON.stringify(editor.getValue());
+    console.log(editor.getValue());
+  });
+
+</script>
+
+</body>
+</html>
