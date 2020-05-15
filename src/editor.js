@@ -524,6 +524,10 @@ export class AbstractEditor {
       return this.schema.default
     }
 
+    if (!this.jsoneditor.options.useDefault) {
+      return null
+    }
+
     if (typeof this.schema.enum !== 'undefined') {
       return this.schema.enum[0]
     }

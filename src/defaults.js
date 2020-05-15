@@ -283,7 +283,9 @@ function translate (key, variables) {
 /* Default options when initializing JSON Editor */
 const options = {
   upload,
-  prompt_before_delete: true
+  prompt_before_delete: true,
+  useDefault: true,
+  maxRecurions: 99999
 }
 
 /* This assignment was previously in index.js but makes more sense here */

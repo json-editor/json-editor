@@ -15,13 +15,7 @@ export class JSONEditor {
     if (!(element instanceof Element)) throw new Error('element should be an instance of Element')
 
     this.element = element
-    console.log('Before first extend')
-    try {
-      this.options = extend({}, JSONEditor.defaults.options, options)
-    } catch (err) {
-      console.log('Error first extend ', err)
-    }
-    console.log('After first extend - aligned')
+    this.options = extend({}, JSONEditor.defaults.options, options)
     this.ready = false
     this.copyClipboard = null
     this.schema = this.options.schema
@@ -32,13 +26,15 @@ export class JSONEditor {
     const themeName = this.options.theme || JSONEditor.defaults.theme
     const themeClass = JSONEditor.defaults.themes[themeName]
 
+    this.MAX_RECURSIONS = this.options.maxRecurions
+
+    console.log('Current options ', this.options)
     /* Load editors and selected theme style rules */
     if (!themeClass) throw new Error(`Unknown theme ${themeName}`)
     this.element.setAttribute('data-theme', themeName)
     // eslint-disable-next-line new-cap
     this.theme = new themeClass(this)
     const rules = extend(themeClass.rules, this.getEditorsRules())
-    console.log('After rules extend')
     if (!this.theme.options.disable_theme_rules) {
       /* Attempt to locate a shadowRoot parent (i.e. in Web Components) */
       const shadowRoot = getShadowParent(this.element)
@@ -77,9 +73,7 @@ export class JSONEditor {
         required: true,
         container: this.root_container
       })
-      console.log('After create editor')
       this.root.preBuild()
-      console.log('After root postBuild')
       this.root.build()
       this.root.postBuild()
       /* Starting data */
@@ -98,7 +92,6 @@ export class JSONEditor {
         this.trigger('change')
       })
     }, fetchUrl, location)
-    console.log('End of constructor')
   }
 
   getValue () {

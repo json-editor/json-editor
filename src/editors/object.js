@@ -1,8 +1,6 @@
 import { AbstractEditor } from '../editor.js'
 import { extend, trigger, hasOwnProperty } from '../utilities.js'
 
-const MAX_RECURSION = 0
-
 export class ObjectEditor extends AbstractEditor {
   constructor (a, b, recursion, stopRecursionCallback = () => {}) {
     super(a, b)
@@ -10,6 +8,7 @@ export class ObjectEditor extends AbstractEditor {
     this._stopRecursionCallback = stopRecursionCallback
     this.collapsed = null
     this.collapseOnStopRecursion = this.collapseOnStopRecursion.bind(this)
+    console.log('jsoneditor MAX_RECURSIONS', this.jsoneditor.MAX_RECURSIONS)
   }
 
   getDefault () {
@@ -1003,7 +1002,7 @@ export class ObjectEditor extends AbstractEditor {
 
       this.editors[name] = this.jsoneditor.createEditor(editor, {
         jsoneditor: this.jsoneditor,
-        schema: this._recursion >= MAX_RECURSION ? { type: schema.type || null } : schema,
+        schema: this._recursion >= this.jsoneditor.MAX_RECURSIONS ? { type: schema.type || null } : schema,
         path: `${this.path}.${name}`,
         parent: this
       }, this._recursion + 1, this.collapseOnStopRecursion)
@@ -1021,7 +1020,7 @@ export class ObjectEditor extends AbstractEditor {
 
       this.cached_editors[name] = this.editors[name]
 
-      if (this._recursion >= MAX_RECURSION) {
+      if (this._recursion >= this.jsoneditor.MAX_RECURSIONS) {
         console.info('Stop recursion')
         this._stopRecursionCallback()
       }
