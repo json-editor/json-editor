@@ -1,4 +1,5 @@
 import { JSONEditor } from '../../../src/core'
+import {ObjectEditor} from '../../../src/editors/object.js'
 
 const fixture = [
   {
@@ -76,4 +77,31 @@ describe('Object Editor', () => {
       expect(editor.getValue()).toEqual(spec.value)
     })
   })
+
+  it('please object do not crash', () => {
+    editor = new JSONEditor(element, {
+      schema: recursionTest
+    })
+    expect(editor).toBeTruthy()
+  })
 })
+const recursionTest = {
+  'definitions': {
+    'JsonArray': {
+      'type': 'object',
+      'properties': {
+        'asJsonArray': {
+          '$ref': '#/definitions/JsonArray'
+        }
+      },
+      'title': 'JsonArray'
+    }
+  },
+  'type': 'object',
+  'properties': {
+    'asJsonArray': {
+      '$ref': '#/definitions/JsonArray'
+    }
+  },
+  'title': 'JsonArray'
+}

@@ -1,7 +1,17 @@
 import { AbstractEditor } from '../editor.js'
 import { extend, trigger, hasOwnProperty } from '../utilities.js'
 
+const MAX_RECURSION = 0
+
 export class ObjectEditor extends AbstractEditor {
+  constructor (a, b, recursion, stopRecursionCallback = () => {}) {
+    super(a, b)
+    this._recursion = recursion
+    this._stopRecursionCallback = stopRecursionCallback
+    this.collapsed = null
+    this.collapseOnStopRecursion = this.collapseOnStopRecursion.bind(this)
+  }
+
   getDefault () {
     return extend({}, this.schema.default || {})
   }
@@ -376,6 +386,7 @@ export class ObjectEditor extends AbstractEditor {
 
     /* If the object should be rendered as a table row */
     if (this.options.table_row) {
+      console.log('OPTION TABLE ROW ', this._recursion)
       Object.entries(this.schema.properties).forEach(([key, schema]) => {
         const editor = this.jsoneditor.getEditorClass(schema)
         this.editors[key] = this.jsoneditor.createEditor(editor, {
@@ -385,7 +396,7 @@ export class ObjectEditor extends AbstractEditor {
           parent: this,
           compact: true,
           required: true
-        })
+        }, this._recursion + 1, this.collapseOnStopRecursion)
         this.editors[key].preBuild()
 
         const width = this.editors[key].options.hidden ? 0 : (this.editors[key].options.grid_columns || this.editors[key].getNumColumns())
@@ -512,6 +523,7 @@ export class ObjectEditor extends AbstractEditor {
   }
 
   build () {
+    console.log('>>>>>>>>>>>>>>>>> LINKED CORRECTLY ')
     const isCategoriesFormat = (this.format === 'categories')
     this.rows = []
     this.active_tab = null
@@ -709,8 +721,15 @@ export class ObjectEditor extends AbstractEditor {
       }
 
       /* Show/Hide button */
-      this.collapsed = false
-      this.collapse_control = this.getButton('', 'collapse', this.translate('button_collapse'))
+      console.log('BUILD ', this._recursion, this.collapsed)
+      if (this.collapsed === true) {
+        this.editor_holder.style.display = 'none'
+        this.collapse_control = this.getButton('', 'expand', this.translate('button_expand'))
+      } else {
+        this.collapsed = false
+        this.collapse_control = this.getButton('', 'collapse', this.translate('button_collapse'))
+      }
+
       this.collapse_control.style.margin = '0 10px 0 0'
       this.collapse_control.classList.add('json-editor-btntype-toggle')
       this.title.insertBefore(this.collapse_control, this.title.childNodes[0])
@@ -967,11 +986,13 @@ export class ObjectEditor extends AbstractEditor {
       this.editors[name].register()
       /* New property */
     } else {
+      console.log('NAME ', !this.canHaveAdditionalProperties(), name)
       if (!this.canHaveAdditionalProperties() && (!this.schema.properties || !this.schema.properties[name])) {
         return
       }
 
       const schema = this.getPropertySchema(name)
+      console.log('SCHEMA ', schema)
       if (typeof schema.propertyOrder !== 'number') {
         /* if the propertyOrder undefined, then set a smart default value. */
         schema.propertyOrder = Object.keys(this.editors).length + 1000
@@ -982,10 +1003,10 @@ export class ObjectEditor extends AbstractEditor {
 
       this.editors[name] = this.jsoneditor.createEditor(editor, {
         jsoneditor: this.jsoneditor,
-        schema,
+        schema: this._recursion >= MAX_RECURSION ? { type: schema.type || null } : schema,
         path: `${this.path}.${name}`,
         parent: this
-      })
+      }, this._recursion + 1, this.collapseOnStopRecursion)
       this.editors[name].preBuild()
 
       if (!prebuildOnly) {
@@ -999,12 +1020,24 @@ export class ObjectEditor extends AbstractEditor {
       }
 
       this.cached_editors[name] = this.editors[name]
+
+      if (this._recursion >= MAX_RECURSION) {
+        console.info('Stop recursion')
+        this._stopRecursionCallback()
+      }
     }
 
     /* If we're only prebuilding the editors, don't refresh values */
     if (!prebuildOnly) {
       this.refreshValue()
       this.layoutEditors()
+    }
+  }
+
+  collapseOnStopRecursion () {
+    this.collapsed = true
+    if (this._recursion !== 0) {
+      this._stopRecursionCallback()
     }
   }
 

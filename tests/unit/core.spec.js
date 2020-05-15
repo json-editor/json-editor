@@ -94,4 +94,30 @@ describe('JSONEditor', function () {
     editor = new JSONEditor(element, { schema: schema })
     expect(editor).toBeTruthy()
   })
+
+  it('please do not crash', () => {
+    editor = new JSONEditor(element, { schema: recursionTest })
+    expect(editor).toBeTruthy()
+  })
 })
+
+const recursionTest = {
+  'definitions': {
+    'JsonArray': {
+      'type': 'object',
+      'properties': {
+        'asJsonArray': {
+          '$ref': '#/definitions/JsonArray'
+        }
+      },
+      'title': 'JsonArray'
+    }
+  },
+  'type': 'object',
+  'properties': {
+    'asJsonArray': {
+      '$ref': '#/definitions/JsonArray'
+    }
+  },
+  'title': 'JsonArray'
+}

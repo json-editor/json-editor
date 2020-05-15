@@ -15,7 +15,13 @@ export class JSONEditor {
     if (!(element instanceof Element)) throw new Error('element should be an instance of Element')
 
     this.element = element
-    this.options = extend({}, JSONEditor.defaults.options, options)
+    console.log('Before first extend')
+    try {
+      this.options = extend({}, JSONEditor.defaults.options, options)
+    } catch (err) {
+      console.log('Error first extend ', err)
+    }
+    console.log('After first extend - aligned')
     this.ready = false
     this.copyClipboard = null
     this.schema = this.options.schema
@@ -32,7 +38,7 @@ export class JSONEditor {
     // eslint-disable-next-line new-cap
     this.theme = new themeClass(this)
     const rules = extend(themeClass.rules, this.getEditorsRules())
-
+    console.log('After rules extend')
     if (!this.theme.options.disable_theme_rules) {
       /* Attempt to locate a shadowRoot parent (i.e. in Web Components) */
       const shadowRoot = getShadowParent(this.element)
@@ -71,11 +77,11 @@ export class JSONEditor {
         required: true,
         container: this.root_container
       })
-
+      console.log('After create editor')
       this.root.preBuild()
+      console.log('After root postBuild')
       this.root.build()
       this.root.postBuild()
-
       /* Starting data */
       if (hasOwnProperty(this.options, 'startval')) this.root.setValue(this.options.startval)
 
@@ -92,6 +98,7 @@ export class JSONEditor {
         this.trigger('change')
       })
     }, fetchUrl, location)
+    console.log('End of constructor')
   }
 
   getValue () {
@@ -214,10 +221,10 @@ export class JSONEditor {
     return JSONEditor.defaults.editors[classname]
   }
 
-  createEditor (editorClass, options) {
+  createEditor (editorClass, options, recursion = 0, onRecursionStopCallback) {
     options = extend({}, editorClass.options || {}, options)
     // eslint-disable-next-line new-cap
-    return new editorClass(options, JSONEditor.defaults)
+    return new editorClass(options, JSONEditor.defaults, recursion, onRecursionStopCallback)
   }
 
   onChange () {
