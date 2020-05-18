@@ -13,13 +13,13 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
-      { pattern: './tests/unit/core.spec.js', watched: false }
+      { pattern: './tests/unit/**/*.spec.js', watched: false }
     ],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      './src/core.js': [ 'webpack', 'sourcemap' ], // Same as entrypoint specified in webpack.config.js
+      './src/core.js': ['webpack', 'sourcemap'], // Same as entrypoint specified in webpack.config.js
       './tests/unit/**/*.spec.js': ['webpack', 'sourcemap']
     },
 

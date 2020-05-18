@@ -3,7 +3,7 @@
   "title": "JSONEditor",
   "description": "JSON Schema based editor",
   "version": "2.2.1",
-  "main": "dist/nonmin/jsoneditor.js",
+  "main": "dist/jsoneditor.js",
   "author": {
     "name": "Jeremy Dorn",
     "email": "jeremy@jeremydorn.com",

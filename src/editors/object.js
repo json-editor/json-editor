@@ -968,7 +968,10 @@ export class ObjectEditor extends AbstractEditor {
           return acc
         case 'properties':
         case 'items':
-          return {}
+          return {
+            ...acc,
+            [key]: {}
+          }
         default:
           return {
             ...acc,
