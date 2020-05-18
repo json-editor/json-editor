@@ -279,7 +279,7 @@ Here are all the available options:
   <tr>
     <td>max_depth</td>
     <td>Max depth of the nested properties to be rendered of provided json schema. The missing of this option could cause "maximum call stack size exceeded" in case of object properties with circular references</td>
-    <td><code>infinite</code></td>
+    <td><code>undefined</code></td>
   </tr>
   <tr>
     <td>use_default_values</td>
