@@ -13,7 +13,7 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
-      { pattern: './tests/unit/**/*.spec.js', watched: false }
+      { pattern: './tests/unit/core.spec.js', watched: false }
     ],
 
     // preprocess matching files before serving them to the browser

@@ -3,6 +3,7 @@ Stub test file
 TODO: Write unit tests for all interfaces
 */
 import { JSONEditor } from '../../src/core'
+import someTypes from '../fixtures/some_types.json'
 
 const schema = {
   type: 'object',
@@ -93,5 +94,137 @@ describe('JSONEditor', function () {
     }
     editor = new JSONEditor(element, { schema: schema })
     expect(editor).toBeTruthy()
+  })
+
+  describe('max_depth option', () => {
+    it('should create an editor (schema with recursion on object properties)', () => {
+      editor = new JSONEditor(element, {
+        schema: {
+          definitions: {
+            bar: {
+              type: 'object',
+              properties: {
+                foo: {
+                  $ref: '#/definitions/bar'
+                }
+              }
+            }
+          },
+          type: 'object',
+          properties: {
+            foo: {
+              $ref: '#/definitions/bar'
+            }
+          }
+        },
+        max_depth: 3
+      })
+      expect(editor).toBeTruthy()
+      expect(editor.getValue()).toEqual({
+        foo: {
+          foo: {
+            foo: {
+              foo: {}
+            }
+          }
+        }
+      })
+    })
+
+    it('with max_depth that stops on level with enum as object property', () => {
+      const depthWithEnum = 1
+
+      editor = new JSONEditor(element, {
+        schema: {
+          type: 'object',
+          properties: {
+            field_on_level_zero: {
+              type: 'object',
+              properties: {
+                propertyWithEnum: {
+                  type: 'string',
+                  enum: ['foo', 'bar'],
+                  default: 'bar'
+                },
+                something_else: {
+                  type: 'object',
+                  properties: {
+                    some_field: {
+                      type: 'string',
+                      default: 'i will be ignored'
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        max_depth: depthWithEnum
+      })
+      expect(editor).toBeTruthy()
+      expect(editor.getValue()).toEqual({
+        field_on_level_zero: {
+          propertyWithEnum: 'bar',
+          something_else: {}
+        }
+      })
+    })
+  })
+
+  describe('use_default_values', () => {
+    it('false - do not auto-set default values', () => {
+      editor = new JSONEditor(element, {
+        schema: someTypes,
+        use_default_values: false
+      })
+
+      expect(editor.getValue()).toEqual({
+        boolean: undefined,
+        enum: undefined,
+        integer: '',
+        number: '',
+        string: '',
+        object: {},
+        array: []
+      })
+    })
+
+    it('true - auto-set default values based on type', () => {
+      editor = new JSONEditor(element, {
+        schema: someTypes,
+        use_default_values: true
+      })
+
+      expect(editor.getValue()).toEqual({
+        boolean: false,
+        enum: 'foo',
+        integer: 0,
+        number: 0,
+        string: '',
+        object: {},
+        array: []
+      })
+    })
+
+    it('false - returns default value from schema if set', () => {
+      editor = new JSONEditor(element, {
+        schema: {
+          type: 'object',
+          properties: {
+            string_with_default: { type: 'string', default: 'foobar' },
+            string_without_default: { type: 'string' },
+            enum_with_default: { type: 'string', enum: ['foobar', 'lorem'], default: 'foobar' },
+            enum_without_default: { type: 'string', enum: ['foobar', 'lorem'] }
+          }
+        },
+        use_default_values: false,
+        remove_empty_properties: true
+      })
+
+      expect(editor.getValue()).toEqual({
+        string_with_default: 'foobar',
+        enum_with_default: 'foobar'
+      })
+    })
   })
 })

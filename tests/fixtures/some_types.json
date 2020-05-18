@@ -1,0 +1,32 @@
+{
+    "type": "object",
+    "properties": {
+      "boolean": {
+        "type": "boolean",
+        "description": "This description should only appear once"
+      },
+      "enum": {
+          "type": "string",
+          "enum": ["foo", "bar"]
+      },
+      "integer": {
+          "type": "integer"
+      },
+      "number": {
+          "type": "number"
+      },
+      "string": {
+          "type": "string"
+      },
+      "object": {
+          "type": "object",
+          "properties": {}
+      },
+      "array": {
+          "type": "array",
+          "items": {
+              "type": "string"
+          }
+      }
+  }
+}

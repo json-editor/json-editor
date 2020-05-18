@@ -76,31 +76,4 @@ describe('Object Editor', () => {
       expect(editor.getValue()).toEqual(spec.value)
     })
   })
-
-  it('with option maxRecursions 0, should create an editor (schema with recursion on object properties)', () => {
-    editor = new JSONEditor(element, {
-      schema: {
-        definitions: {
-          JsonArray: {
-            type: 'object',
-            properties: {
-              asJsonArray: {
-                $ref: '#/definitions/JsonArray'
-              }
-            },
-            title: 'JsonArray'
-          }
-        },
-        type: 'object',
-        properties: {
-          asJsonArray: {
-            $ref: '#/definitions/JsonArray'
-          }
-        },
-        title: 'JsonArray'
-      },
-      maxRecursions: 0
-    })
-    expect(editor).toBeTruthy()
-  })
 })

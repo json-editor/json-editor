@@ -26,8 +26,6 @@ export class JSONEditor {
     const themeName = this.options.theme || JSONEditor.defaults.theme
     const themeClass = JSONEditor.defaults.themes[themeName]
 
-    this.MAX_RECURSIONS = this.options.maxRecursions
-
     /* Load editors and selected theme style rules */
     if (!themeClass) throw new Error(`Unknown theme ${themeName}`)
     this.element.setAttribute('data-theme', themeName)
@@ -208,17 +206,15 @@ export class JSONEditor {
       classname = resolver(schema)
       return classname && JSONEditor.defaults.editors[classname]
     })
-
     if (!classname) throw new Error(`Unknown editor for schema ${JSON.stringify(schema)}`)
     if (!JSONEditor.defaults.editors[classname]) throw new Error(`Unknown editor ${classname}`)
-
     return JSONEditor.defaults.editors[classname]
   }
 
-  createEditor (editorClass, options, recursion = 0) {
+  createEditor (editorClass, options, depthCounter = 0) {
     options = extend({}, editorClass.options || {}, options)
     // eslint-disable-next-line new-cap
-    return new editorClass(options, JSONEditor.defaults, recursion)
+    return new editorClass(options, JSONEditor.defaults, depthCounter)
   }
 
   onChange () {

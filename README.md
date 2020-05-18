@@ -276,6 +276,16 @@ Here are all the available options:
     <td>Preserve value at Move Up or Down.(No value is selected automatically upon deletion.)</td>
     <td><code>true</code></td>
   </tr>
+  <tr>
+    <td>max_depth</td>
+    <td>Max depth of an object that have to be rendered. The missing of this option could cause "maximum call stack size exceeded" in case of recursive object properties</td>
+    <td><code>infinite</code></td>
+  </tr>
+  <tr>
+    <td>use_default_values</td>
+    <td>True if have to be used default values based on the "type" of the property</td>
+    <td><code>true</code></td>
+  </tr>
   </tbody>
 </table>
 

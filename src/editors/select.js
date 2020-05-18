@@ -3,11 +3,17 @@ import { extend } from '../utilities.js'
 
 export class SelectEditor extends AbstractEditor {
   setValue (value, initial) {
-    const correctValue = initial && value === null && this.value === undefined ? 'undefined' : value
     /* Sanitize value before setting it */
-    let sanitized = this.typecast(correctValue || '')
+    let sanitized = this.typecast(value)
 
-    if (!this.enum_values.includes(sanitized)) sanitized = this.enum_values[0]
+    const haveToUseDefaultValue = !!this.jsoneditor.options.use_default_values || typeof this.schema.default !== 'undefined'
+
+    if (
+      !this.enum_values.includes(sanitized) ||
+      (initial && !this.isRequired() && !haveToUseDefaultValue)
+    ) {
+      sanitized = this.enum_values[0]
+    }
 
     if (this.value === sanitized) return
 
@@ -46,6 +52,7 @@ export class SelectEditor extends AbstractEditor {
     if (this.schema.type === 'boolean') return value === 'undefined' || value === undefined ? undefined : !!value
     else if (this.schema.type === 'number') return 1 * value || 0
     else if (this.schema.type === 'integer') return Math.floor(value * 1 || 0)
+    else if (this.schema.enum && value === undefined) return undefined
     return `${value}`
   }
 
