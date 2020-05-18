@@ -285,7 +285,7 @@ const options = {
   upload,
   prompt_before_delete: true,
   useDefault: true,
-  maxRecurions: 99999
+  maxRecursions: 99999
 }
 
 /* This assignment was previously in index.js but makes more sense here */

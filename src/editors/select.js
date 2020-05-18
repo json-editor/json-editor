@@ -6,7 +6,6 @@ export class SelectEditor extends AbstractEditor {
     const correctValue = initial && value === null && this.value === undefined ? 'undefined' : value
     /* Sanitize value before setting it */
     let sanitized = this.typecast(correctValue || '')
-    console.log('SETVALUE ', 'CURRENT ', this.value, 'SET ', value, 'INITIAL ', initial, 'SANITIZED', sanitized)
 
     if (!this.enum_values.includes(sanitized)) sanitized = this.enum_values[0]
 
@@ -54,9 +53,7 @@ export class SelectEditor extends AbstractEditor {
     if (!this.dependenciesFulfilled) {
       return undefined
     }
-    const value = this.typecast(this.value)
-    console.log('GET VALUE ', value, this.value)
-    return value
+    return this.typecast(this.value)
   }
 
   preBuild () {
@@ -174,7 +171,6 @@ export class SelectEditor extends AbstractEditor {
     this.setInputAttributes([])
 
     this.input.addEventListener('change', (e) => {
-      console.log('SELECT CHANGE ')
       e.preventDefault()
       e.stopPropagation()
       this.onInputChange()
@@ -183,9 +179,8 @@ export class SelectEditor extends AbstractEditor {
     this.control = this.theme.getFormControl(this.label, this.input, this.description, this.infoButton)
     this.container.appendChild(this.control)
 
-    console.log('ENUM VALUES ', this.enum_values)
     this.value = this.enum_values[0]
-    console.log('SET ', this.value)
+
     /* Any special formatting that needs to happen after the input is added to the dom */
     window.requestAnimationFrame(() => {
       if (this.input.parentNode) this.afterInputReady()

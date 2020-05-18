@@ -26,9 +26,8 @@ export class JSONEditor {
     const themeName = this.options.theme || JSONEditor.defaults.theme
     const themeClass = JSONEditor.defaults.themes[themeName]
 
-    this.MAX_RECURSIONS = this.options.maxRecurions
+    this.MAX_RECURSIONS = this.options.maxRecursions
 
-    console.log('Current options ', this.options)
     /* Load editors and selected theme style rules */
     if (!themeClass) throw new Error(`Unknown theme ${themeName}`)
     this.element.setAttribute('data-theme', themeName)
@@ -73,9 +72,11 @@ export class JSONEditor {
         required: true,
         container: this.root_container
       })
+
       this.root.preBuild()
       this.root.build()
       this.root.postBuild()
+
       /* Starting data */
       if (hasOwnProperty(this.options, 'startval')) this.root.setValue(this.options.startval)
 
@@ -214,10 +215,10 @@ export class JSONEditor {
     return JSONEditor.defaults.editors[classname]
   }
 
-  createEditor (editorClass, options, recursion = 0, onRecursionStopCallback) {
+  createEditor (editorClass, options, recursion = 0) {
     options = extend({}, editorClass.options || {}, options)
     // eslint-disable-next-line new-cap
-    return new editorClass(options, JSONEditor.defaults, recursion, onRecursionStopCallback)
+    return new editorClass(options, JSONEditor.defaults, recursion)
   }
 
   onChange () {

@@ -3,7 +3,7 @@
   "title": "JSONEditor",
   "description": "JSON Schema based editor",
   "version": "2.2.1",
-  "main": "dist/nonmin/jsoneditor.js",
+  "main": "dist/jsoneditor.js",
   "author": {
     "name": "Jeremy Dorn",
     "email": "jeremy@jeremydorn.com",
@@ -26,7 +26,7 @@
     "prepare": "npm run build",
     "clean": "npm run clean.css.js",
     "clean.css.js": "find ./src -name *.css.js -type f -delete",
-    "build": "npm run build.nonmin",
+    "build": "npm run build.prod && npm run build.nonmin",
     "build.prod": "webpack --config config/webpack.prod.js --progress --profile --bail",
     "build.nonmin": "webpack --config config/webpack.nonmin.js --progress --profile --bail",
     "build.dev": "webpack --config config/webpack.dev.js --progress --profile --bail",
@@ -45,8 +45,7 @@
     "cp:fulltest": "codeceptjs run --steps",
     "cp:fulltestmocha": "codeceptjs run --steps --reporter mochawesome",
     "eslint.fix": "eslint -c ./.eslintrc src/**/*.js --fix",
-    "eslint": "eslint -c ./.eslintrc src/**/*.js",
-    "my-test": "jasmine ./tests/unit/core.spec.js"
+    "eslint": "eslint -c ./.eslintrc src/**/*.js"
   },
   "license": "MIT",
   "engines": {

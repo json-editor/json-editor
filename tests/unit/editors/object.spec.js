@@ -1,5 +1,4 @@
 import { JSONEditor } from '../../../src/core'
-import {ObjectEditor} from '../../../src/editors/object.js'
 
 const fixture = [
   {
@@ -78,30 +77,30 @@ describe('Object Editor', () => {
     })
   })
 
-  it('please object do not crash', () => {
+  it('with option maxRecursions 0, should create an editor (schema with recursion on object properties)', () => {
     editor = new JSONEditor(element, {
-      schema: recursionTest
+      schema: {
+        definitions: {
+          JsonArray: {
+            type: 'object',
+            properties: {
+              asJsonArray: {
+                $ref: '#/definitions/JsonArray'
+              }
+            },
+            title: 'JsonArray'
+          }
+        },
+        type: 'object',
+        properties: {
+          asJsonArray: {
+            $ref: '#/definitions/JsonArray'
+          }
+        },
+        title: 'JsonArray'
+      },
+      maxRecursions: 0
     })
     expect(editor).toBeTruthy()
   })
 })
-const recursionTest = {
-  'definitions': {
-    'JsonArray': {
-      'type': 'object',
-      'properties': {
-        'asJsonArray': {
-          '$ref': '#/definitions/JsonArray'
-        }
-      },
-      'title': 'JsonArray'
-    }
-  },
-  'type': 'object',
-  'properties': {
-    'asJsonArray': {
-      '$ref': '#/definitions/JsonArray'
-    }
-  },
-  'title': 'JsonArray'
-}
