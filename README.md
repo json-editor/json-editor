@@ -278,7 +278,7 @@ Here are all the available options:
   </tr>
   <tr>
     <td>max_depth</td>
-    <td>Max depth of an object that have to be rendered. The missing of this option could cause "maximum call stack size exceeded" in case of recursive object properties</td>
+    <td>Max depth of the nested properties to be rendered of provided json schema. The missing of this option could cause "maximum call stack size exceeded" in case of object properties with circular references</td>
     <td><code>infinite</code></td>
   </tr>
   <tr>
