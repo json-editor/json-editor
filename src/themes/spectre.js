@@ -313,12 +313,12 @@ export class spectreTheme extends AbstractTheme {
   }
 
   /* Tab button for array with format: "tab" */
-  getTab (span, tabId) {
+  getTab (text, tabId) {
     const el = document.createElement('a')
     el.classList.add('btn', 'btn-secondary', 'btn-block')
-    el.id = tabId
-    el.innerHTML = span.innerHTML
-
+    el.setAttribute('href', `#${tabId}`)
+    el.setAttribute('data-toggle', 'tab')
+    el.appendChild(text)
     return el
   }
 
