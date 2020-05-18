@@ -283,7 +283,7 @@ Here are all the available options:
   </tr>
   <tr>
     <td>use_default_values</td>
-    <td>True if have to be used default values based on the "type" of the property</td>
+    <td>If true default values based on the "type" of the property will be used</td>
     <td><code>true</code></td>
   </tr>
   </tbody>
