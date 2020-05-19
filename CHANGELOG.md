@@ -1,3 +1,7 @@
+### Unreleased
+- added option `max_depth` used to specify the maximum depth of level's schema that have to be rendered
+- added option `use_default_values` used to specify if default values based on the "type" of the property have to be used
+
 ### 2.3.0-dev
 
 - Removed codeception container, use `codeceptjs` as node-dev module
