@@ -32,7 +32,6 @@ export class JSONEditor {
     // eslint-disable-next-line new-cap
     this.theme = new themeClass(this)
     const rules = extend(themeClass.rules, this.getEditorsRules())
-
     if (!this.theme.options.disable_theme_rules) {
       /* Attempt to locate a shadowRoot parent (i.e. in Web Components) */
       const shadowRoot = getShadowParent(this.element)
@@ -207,17 +206,15 @@ export class JSONEditor {
       classname = resolver(schema)
       return classname && JSONEditor.defaults.editors[classname]
     })
-
     if (!classname) throw new Error(`Unknown editor for schema ${JSON.stringify(schema)}`)
     if (!JSONEditor.defaults.editors[classname]) throw new Error(`Unknown editor ${classname}`)
-
     return JSONEditor.defaults.editors[classname]
   }
 
-  createEditor (editorClass, options) {
+  createEditor (editorClass, options, depthCounter = 1) {
     options = extend({}, editorClass.options || {}, options)
     // eslint-disable-next-line new-cap
-    return new editorClass(options, JSONEditor.defaults)
+    return new editorClass(options, JSONEditor.defaults, depthCounter)
   }
 
   onChange () {
