@@ -4,6 +4,7 @@ TODO: Write unit tests for all interfaces
 */
 import { JSONEditor } from '../../src/core'
 import someTypes from '../fixtures/some_types.json'
+import nestedObject from '../fixtures/nested_object.json'
 
 const schema = {
   type: 'object',
@@ -117,7 +118,7 @@ describe('JSONEditor', function () {
             }
           }
         },
-        max_depth: 3
+        max_depth: 4
       })
       expect(editor).toBeTruthy()
       expect(editor.getValue()).toEqual({
@@ -132,13 +133,13 @@ describe('JSONEditor', function () {
     })
 
     it('with max_depth that stops on level with enum as object property', () => {
-      const depthWithEnum = 1
+      const depthWithEnum = 2
 
       editor = new JSONEditor(element, {
         schema: {
           type: 'object',
           properties: {
-            field_on_level_zero: {
+            field_on_level_one: {
               type: 'object',
               properties: {
                 propertyWithEnum: {
@@ -163,11 +164,28 @@ describe('JSONEditor', function () {
       })
       expect(editor).toBeTruthy()
       expect(editor.getValue()).toEqual({
-        field_on_level_zero: {
+        field_on_level_one: {
           propertyWithEnum: 'bar',
           something_else: {}
         }
       })
+    })
+
+    it('with max_depth equals to 0 renders all schema', () => {
+      editor = new JSONEditor(element, {
+        schema: nestedObject,
+        max_depth: 0
+      })
+      expect(editor).toBeTruthy()
+      expect(editor.getValue()).toEqual({ foo1: { foo2: { foo3: { foo4: { bar: 'end schema' } } } } })
+    })
+
+    it('renders all schema as default', () => {
+      editor = new JSONEditor(element, {
+        schema: nestedObject
+      })
+      expect(editor).toBeTruthy()
+      expect(editor.getValue()).toEqual({ foo1: { foo2: { foo3: { foo4: { bar: 'end schema' } } } } })
     })
   })
 

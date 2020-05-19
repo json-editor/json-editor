@@ -972,6 +972,11 @@ export class ObjectEditor extends AbstractEditor {
             ...acc,
             [key]: {}
           }
+        case 'additionalProperties':
+          return {
+            ...acc,
+            [key]: true
+          }
         default:
           return {
             ...acc,
@@ -1009,7 +1014,7 @@ export class ObjectEditor extends AbstractEditor {
 
       this.editors[name] = this.jsoneditor.createEditor(editor, {
         jsoneditor: this.jsoneditor,
-        schema: maxDepth !== undefined && this.currentDepth >= maxDepth ? this.getSchemaOnMaxDepth(schema) : schema,
+        schema: !!maxDepth && this.currentDepth >= maxDepth ? this.getSchemaOnMaxDepth(schema) : schema,
         path: `${this.path}.${name}`,
         parent: this
       }, this.currentDepth + 1)

@@ -278,8 +278,8 @@ Here are all the available options:
   </tr>
   <tr>
     <td>max_depth</td>
-    <td>Max depth of the nested properties to be rendered of provided json schema. The missing of this option could cause "maximum call stack size exceeded" in case of object properties with circular references</td>
-    <td><code>undefined</code></td>
+    <td>Max depth of the nested properties to be rendered of provided json schema. The missing of this option could cause "maximum call stack size exceeded" in case of object properties with circular references. <code>0</code> value means "render all".</td>
+    <td><code>0</code></td>
   </tr>
   <tr>
     <td>use_default_values</td>

@@ -211,7 +211,7 @@ export class JSONEditor {
     return JSONEditor.defaults.editors[classname]
   }
 
-  createEditor (editorClass, options, depthCounter = 0) {
+  createEditor (editorClass, options, depthCounter = 1) {
     options = extend({}, editorClass.options || {}, options)
     // eslint-disable-next-line new-cap
     return new editorClass(options, JSONEditor.defaults, depthCounter)

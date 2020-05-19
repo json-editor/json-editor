@@ -1,0 +1,26 @@
+{
+    "type": "object",
+    "properties": {
+        "foo1": {
+            "type": "object",
+            "properties": {
+                "foo2": {
+                    "type": "object",
+                    "properties": {
+                        "foo3": {
+                            "type": "object",
+                            "properties": {
+                                "foo4": {
+                                    "type": "object",
+                                    "properties": {
+                                        "bar": {"type": "string", "default": "end schema"}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

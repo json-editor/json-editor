@@ -284,7 +284,8 @@ function translate (key, variables) {
 const options = {
   upload,
   prompt_before_delete: true,
-  use_default_values: true
+  use_default_values: true,
+  max_depth: 0
 }
 
 /* This assignment was previously in index.js but makes more sense here */
