@@ -251,7 +251,11 @@ languages.en = {
   /**
   * Default title for array items
   */
-  default_array_item_title: 'item'
+  default_array_item_title: 'item',
+  /**
+  * Warning when deleting a node
+  */
+  button_delete_node_warning: 'Are you sure you want to remove this node?'
 }
 
 /* Default per-editor options */
