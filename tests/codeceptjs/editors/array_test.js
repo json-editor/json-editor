@@ -896,3 +896,11 @@ Scenario('should work well with selectize multiselect editors', async (I) => {
   I.seeElement('[data-schemapath="root.0"] .selectize-dropdown-content [data-value="3"]');
   I.seeElement('[data-schemapath="root.0"] .selectize-dropdown-content [data-value="4"]');
 });
+
+Scenario('should be able to add items with uniqueItems and non-enum string type', async (I) => {
+  I.amOnPage('array-uniqueitems.html');
+  I.seeElement('.json-editor-btn-add');
+  I.click('Add item');
+  I.seeElement('[data-schemapath="root.0"]');
+  I.seeElement('.json-editor-btn-add');
+});
