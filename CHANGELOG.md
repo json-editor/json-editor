@@ -1,6 +1,7 @@
 ### 2.3.0-dev
 
 - Removed codeception container, use `codeceptjs` as node-dev module
+- fix non-enum string arrays with uniqueItems
 
 ### 2.2.1-current
 
