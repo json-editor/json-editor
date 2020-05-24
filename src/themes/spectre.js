@@ -313,11 +313,11 @@ export class spectreTheme extends AbstractTheme {
   }
 
   /* Tab button for array with format: "tab" */
-  getTab (text, tabId) {
+  getTab (span, tabId) {
     const el = document.createElement('a')
     el.classList.add('btn', 'btn-secondary', 'btn-block')
     el.setAttribute('href', `#${tabId}`)
-    el.appendChild(text)
+    el.appendChild(span)
     return el
   }
 
@@ -329,8 +329,9 @@ export class spectreTheme extends AbstractTheme {
 
     /* Spectre needs an a tag inside the tab item, not a span */
     const a = document.createElement('a')
-    a.href = '#'
-    a.innerHTML = span.innerHTML
+    a.setAttribute('href', `#${tabId}`)
+    a.appendChild(span)
+
     el.appendChild(a)
     return el
   }
