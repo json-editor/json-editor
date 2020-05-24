@@ -317,7 +317,6 @@ export class spectreTheme extends AbstractTheme {
     const el = document.createElement('a')
     el.classList.add('btn', 'btn-secondary', 'btn-block')
     el.setAttribute('href', `#${tabId}`)
-    el.setAttribute('data-toggle', 'tab')
     el.appendChild(text)
     return el
   }
