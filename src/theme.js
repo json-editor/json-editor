@@ -407,7 +407,7 @@ export class AbstractTheme {
     return document.createElement('tbody')
   }
 
-  getTableHeaderCell (text) {
+  getTableHeaderCell (text, required) {
     const el = document.createElement('th')
     el.textContent = text
     return el
