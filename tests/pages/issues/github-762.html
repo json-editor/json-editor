@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Test Template</title>
+    <script src="../../../dist/nonmin/jsoneditor.js"></script>
+    <link rel='stylesheet' id='theme_stylesheet'>
+    <link rel='stylesheet' id='iconlib_stylesheet'>
+</head>
+<body>
+<h1>GitHub Issue 762</h1>
+<div>
+    <label>theme</label>
+    <select id='theme_switcher' name="theme" class='form-control browser-default'>
+        <option value=''></option>
+        <option value='barebones'>Barebones</option>
+        <option value='bootstrap4'>Bootstrap 4</option>
+        <option value='html'>HTML</option>
+        <option value='spectre'>Spectre</option>
+        <option value='tailwind'>Tailwind</option>
+    </select>
+</div>
+<div>
+    <label>iconlib</label>
+    <select id='iconlib_switcher' name="iconlib" class='form-control browser-default'>
+        <option value=''></option>
+        <option value='fontawesome3'>fontawesome 3</option>
+        <option value='fontawesome4'>fontawesome 4</option>
+        <option value='fontawesome5'>fontawesome 5</option>
+        <option value='jqueryui'>jQuery UI</option>
+        <option value='spectre'>Spectre</option>
+    </select>
+</div>
+
+<div id='editor_holder'></div>
+
+<button id='submit'>Submit (console.log)</button>
+
+<script src="test-helper.js"></script>
+<script>
+    const schema = {
+        "title": "Table with red star",
+        "type": "array",
+        "format": "table",
+        "items": {
+            "type": "object",
+            "required": [
+                "string1",
+                "string2"
+            ],
+            "properties": {
+                "string1": {
+                    "type": "string"
+                },
+                "string2": {
+                    "type": "string"
+                },
+                "string3": {
+                    "type": "string"
+                }
+            }
+        }
+    };
+
+    // self executing function here
+    (function () {
+        // your page initialization code here
+        // the DOM will be available here
+        initJsoneditor();
+    })();
+</script>
+
+</body>
+</html>
