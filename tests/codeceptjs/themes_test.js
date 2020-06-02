@@ -207,7 +207,7 @@ Scenario('It should display button Labels: bootstrap2 | null', async (I) => {
   I.seeElementInDOM('i.icon-copy')
   I.seeElementInDOM('i.icon-list')
 })
-
+ */
 Scenario('It should hide button Labels: null | bootstrap3', async (I) => {
   I.amOnPage('themes.html')
   I.selectOption('iconlib', 'Bootstrap 3')
@@ -237,7 +237,7 @@ Scenario('It should hide button Labels: null | bootstrap3', async (I) => {
   I.seeElementInDOM('i.glyphicon.glyphicon-copy')
   I.seeElementInDOM('i.glyphicon.glyphicon-list')
 })
-
+/*
 Scenario('It should hide button Labels: null | fontawesome3', async (I) => {
   I.amOnPage('themes.html')
   I.selectOption('iconlib', 'fontawesome 3')
