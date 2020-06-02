@@ -4,6 +4,7 @@
     <meta charset="utf-8"/>
     <title>JSON Editor Interactive Example</title>
     <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
     <link rel='stylesheet' id='theme-link'>
     <link rel='stylesheet' id='iconlib-link'>
@@ -56,6 +57,7 @@
                 <label for="theme-select">theme</label><br>
                 <select id='theme-select' name="theme" class='form-control browser-default'>
                     <option value='barebones'>Barebones</option>
+                    <option value='bootstrap3'>Bootstrap 3</option>
                     <option value='bootstrap4'>Bootstrap 4</option>
                     <option value='html'>HTML</option>
                     <option value='spectre'>Spectre</option>
@@ -301,6 +303,7 @@
     // theme
     const themeMap = {
       barebones: '',
+      bootstrap3: 'https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css',
       bootstrap4: 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
       html: '',
       spectre: 'https://unpkg.com/spectre.css/dist/spectre.min.css',
