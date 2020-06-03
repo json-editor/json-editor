@@ -208,7 +208,6 @@ export class MultipleEditor extends AbstractEditor {
           schema.required = this.schema.required.concat(type.required)
         }
       }
-
       this.validators[i] = new Validator(this.jsoneditor, schema, validatorOptions, this.defaults)
     })
 

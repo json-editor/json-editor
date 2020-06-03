@@ -519,6 +519,10 @@ export class AbstractEditor {
     this.parent = null
   }
 
+  isDefaultRequired () {
+    return this.isRequired() || !!this.jsoneditor.options.use_default_values
+  }
+
   getDefault () {
     if (typeof this.schema.default !== 'undefined') {
       return this.schema.default
@@ -534,9 +538,9 @@ export class AbstractEditor {
     if (type && Array.isArray(type)) type = type[0]
 
     if (typeof type === 'string') {
-      if (type === 'number') return 0.0
-      if (type === 'boolean') return false
-      if (type === 'integer') return 0
+      if (type === 'number') return this.isDefaultRequired() ? 0.0 : undefined
+      if (type === 'boolean') return this.isDefaultRequired() ? false : undefined
+      if (type === 'integer') return this.isDefaultRequired() ? 0 : undefined
       if (type === 'string') return ''
       if (type === 'object') return {}
       if (type === 'array') return []

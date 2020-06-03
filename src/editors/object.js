@@ -2,6 +2,11 @@ import { AbstractEditor } from '../editor.js'
 import { extend, trigger, hasOwnProperty } from '../utilities.js'
 
 export class ObjectEditor extends AbstractEditor {
+  constructor (options, defaults, depth) {
+    super(options, defaults)
+    this.currentDepth = depth
+  }
+
   getDefault () {
     return extend({}, this.schema.default || {})
   }
@@ -385,7 +390,7 @@ export class ObjectEditor extends AbstractEditor {
           parent: this,
           compact: true,
           required: true
-        })
+        }, this.currentDepth + 1)
         this.editors[key].preBuild()
 
         const width = this.editors[key].options.hidden ? 0 : (this.editors[key].options.grid_columns || this.editors[key].getNumColumns())
@@ -956,6 +961,31 @@ export class ObjectEditor extends AbstractEditor {
     }
   }
 
+  getSchemaOnMaxDepth (schema) {
+    return Object.keys(schema).reduce((acc, key) => {
+      switch (key) {
+        case '$ref':
+          return acc
+        case 'properties':
+        case 'items':
+          return {
+            ...acc,
+            [key]: {}
+          }
+        case 'additionalProperties':
+          return {
+            ...acc,
+            [key]: true
+          }
+        default:
+          return {
+            ...acc,
+            [key]: schema[key]
+          }
+      }
+    }, {})
+  }
+
   addObjectProperty (name, prebuildOnly) {
     /* Property is already added */
     if (this.editors[name]) return
@@ -980,12 +1010,14 @@ export class ObjectEditor extends AbstractEditor {
       /* Add the property */
       const editor = this.jsoneditor.getEditorClass(schema)
 
+      const { max_depth: maxDepth } = this.jsoneditor.options
+
       this.editors[name] = this.jsoneditor.createEditor(editor, {
         jsoneditor: this.jsoneditor,
-        schema,
+        schema: !!maxDepth && this.currentDepth >= maxDepth ? this.getSchemaOnMaxDepth(schema) : schema,
         path: `${this.path}.${name}`,
         parent: this
-      })
+      }, this.currentDepth + 1)
       this.editors[name].preBuild()
 
       if (!prebuildOnly) {
