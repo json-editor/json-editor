@@ -1,7 +1,7 @@
 
 import { htmlTheme } from './html.js'
 // import  { bootstrap2Theme } from  './bootstrap2'
-// import  { bootstrap3Theme } from  './bootstrap3'
+import { bootstrap3Theme } from './bootstrap3.js'
 import { bootstrap4Theme } from './bootstrap4.js'
 // import  { foundationTheme, foundation3Theme, foundation4Theme, foundation5Theme, foundation6Theme } from  './foundation.js'
 import { jqueryuiTheme } from './jqueryui.js'
@@ -13,7 +13,7 @@ import { tailwindTheme } from './tailwind.js'
 export const themes = {
   html: htmlTheme,
   // bootstrap2: bootstrap2Theme,
-  // bootstrap3: bootstrap3Theme,
+  bootstrap3: bootstrap3Theme,
   bootstrap4: bootstrap4Theme,
   // foundation: foundationTheme,
   // foundation3: foundation3Theme,
