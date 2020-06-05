@@ -4,7 +4,7 @@ import { extend, trigger } from '../utilities.js'
 export class ArrayEditor extends AbstractEditor {
   askConfirmation () {
     if (this.jsoneditor.options.prompt_before_delete === true) {
-      if (window.confirm('Are you sure you want to remove this node?') === false) {
+      if (window.confirm(this.translate('button_delete_node_warning')) === false) {
         return false
       }
     }
