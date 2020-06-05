@@ -17,9 +17,9 @@ export class StringEditor extends AbstractEditor {
   setValue (value, initial, fromTemplate) {
     if (this.template && !fromTemplate) return
 
-    if (value === null || typeof value === 'undefined') value = ''
+    if (!this.shouldBeUnset() && (value === null || typeof value === 'undefined')) value = ''
     else if (typeof value === 'object') value = JSON.stringify(value)
-    else if (typeof value !== 'string') value = `${value}`
+    else if (!this.shouldBeUnset() && (typeof value !== 'string')) value = `${value}`
 
     if (value === this.serialized) return
 
@@ -28,7 +28,7 @@ export class StringEditor extends AbstractEditor {
 
     if (this.input.value === sanitized) return
 
-    this.input.value = sanitized
+    this.setValueToInputField(sanitized)
 
     if (this.format === 'range') {
       const output = this.control.querySelector('output')
@@ -51,6 +51,10 @@ export class StringEditor extends AbstractEditor {
 
     /* Return object with changed state and sanitized value for use in editors that extend this */
     return { changed, value: sanitized }
+  }
+
+  setValueToInputField (value) {
+    this.input.value = value === undefined ? '' : value
   }
 
   getNumColumns () {
@@ -273,7 +277,15 @@ export class StringEditor extends AbstractEditor {
     return strValue
   }
 
+  shouldBeUnset () {
+    return !this.jsoneditor.options.use_default_values && !this.is_dirty
+  }
+
   getValue () {
+    const hasValueSet = !!(this.input && this.input.value)
+    if (this.shouldBeUnset() && !hasValueSet) {
+      return undefined
+    }
     if (this.imask_instance && this.dependenciesFulfilled && this.options.imask.returnUnmasked) {
       return this.imask_instance.unmaskedValue
     } return super.getValue()
@@ -300,7 +312,7 @@ export class StringEditor extends AbstractEditor {
 
   refreshValue () {
     this.value = this.input.value
-    if (typeof this.value !== 'string') this.value = ''
+    if (typeof this.value !== 'string' && !this.shouldBeUnset()) this.value = ''
     this.serialized = this.value
   }
 
