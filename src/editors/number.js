@@ -42,6 +42,10 @@ export class NumberEditor extends StringEditor {
     if (!this.dependenciesFulfilled) {
       return undefined
     }
-    return isNumber(this.value) ? parseFloat(this.value) : this.value
+    const value = isNumber(this.value) ? parseFloat(this.value) : this.value
+    if (!this.jsoneditor.options.use_default_values && value === '') {
+      return undefined
+    }
+    return value
   }
 }

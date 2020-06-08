@@ -190,20 +190,88 @@ describe('JSONEditor', function () {
   })
 
   describe('use_default_values', () => {
-    it('false - do not auto-set default values', () => {
-      editor = new JSONEditor(element, {
-        schema: someTypes,
-        use_default_values: false
+    describe('false', () => {
+      it('do not auto-set default values', () => {
+        editor = new JSONEditor(element, {
+          schema: someTypes,
+          use_default_values: false
+        })
+
+        expect(editor.getValue()).toEqual({
+          boolean: undefined,
+          enum: undefined,
+          integer: undefined,
+          number: undefined,
+          string: undefined,
+          object: {},
+          array: []
+        })
       })
 
-      expect(editor.getValue()).toEqual({
-        boolean: undefined,
-        enum: undefined,
-        integer: '',
-        number: '',
-        string: '',
-        object: {},
-        array: []
+      it('returns correct values on dirty input text fields', () => {
+        editor = new JSONEditor(element, {
+          schema: someTypes,
+          use_default_values: false
+        })
+
+        expect(editor.getValue()).toEqual({
+          boolean: undefined,
+          enum: undefined,
+          integer: undefined,
+          number: undefined,
+          string: undefined,
+          object: {},
+          array: []
+        })
+
+        fillField('root[integer]', 3)
+        fillField('root[number]', 4)
+        fillField('root[string]', 'foo')
+
+        expect(editor.getValue()).toEqual({
+          boolean: undefined,
+          enum: undefined,
+          integer: 3,
+          number: 4,
+          string: 'foo',
+          object: {},
+          array: []
+        })
+
+        fillField('root[integer]', '')
+        fillField('root[number]', '')
+        fillField('root[string]', '')
+
+        expect(editor.getValue()).toEqual({
+          boolean: undefined,
+          enum: undefined,
+          integer: undefined,
+          number: undefined,
+          string: '',
+          object: {},
+          array: []
+        })
+      })
+
+      it('returns default value from schema if set', () => {
+        editor = new JSONEditor(element, {
+          schema: {
+            type: 'object',
+            properties: {
+              string_with_default: { type: 'string', default: 'foobar' },
+              string_without_default: { type: 'string' },
+              enum_with_default: { type: 'string', enum: ['foobar', 'lorem'], default: 'foobar' },
+              enum_without_default: { type: 'string', enum: ['foobar', 'lorem'] }
+            }
+          },
+          use_default_values: false,
+          remove_empty_properties: true
+        })
+
+        expect(editor.getValue()).toEqual({
+          string_with_default: 'foobar',
+          enum_with_default: 'foobar'
+        })
       })
     })
 
@@ -223,26 +291,10 @@ describe('JSONEditor', function () {
         array: []
       })
     })
-
-    it('false - returns default value from schema if set', () => {
-      editor = new JSONEditor(element, {
-        schema: {
-          type: 'object',
-          properties: {
-            string_with_default: { type: 'string', default: 'foobar' },
-            string_without_default: { type: 'string' },
-            enum_with_default: { type: 'string', enum: ['foobar', 'lorem'], default: 'foobar' },
-            enum_without_default: { type: 'string', enum: ['foobar', 'lorem'] }
-          }
-        },
-        use_default_values: false,
-        remove_empty_properties: true
-      })
-
-      expect(editor.getValue()).toEqual({
-        string_with_default: 'foobar',
-        enum_with_default: 'foobar'
-      })
-    })
   })
 })
+
+function fillField (fieldName, value) {
+  document.querySelector(`[name="${fieldName}"]`).value = value
+  document.querySelector(`[name="${fieldName}"]`).dispatchEvent(new Event('change'))
+}
