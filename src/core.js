@@ -32,7 +32,7 @@ export class JSONEditor {
     this.element.setAttribute('data-theme', themeName)
     // eslint-disable-next-line new-cap
     this.theme = new themeClass(this)
-    const rules = extend(themeClass.rules, this.getEditorsRules())
+    const rules = extend(styleRules, this.getEditorsRules())
 
     /* Call addNewStyleRulesToShadowRoot if shadowRoot is found, otherwise call addNewStyleRules */
     const addRules = (themeName, rules, shadowRoot) => shadowRoot
@@ -42,8 +42,8 @@ export class JSONEditor {
     if (!this.theme.options.disable_theme_rules) {
       /* Attempt to locate a shadowRoot parent (i.e. in Web Components) */
       const shadowRoot = getShadowParent(this.element)
-      addRules('default', styleRules, shadowRoot)
-      addRules(themeName, rules, shadowRoot)
+      addRules('default', rules, shadowRoot)
+      addRules(themeName, themeClass.rules, shadowRoot)
     }
 
     /* Init icon class */
