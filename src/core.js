@@ -43,7 +43,9 @@ export class JSONEditor {
       /* Attempt to locate a shadowRoot parent (i.e. in Web Components) */
       const shadowRoot = getShadowParent(this.element)
       addRules('default', rules, shadowRoot)
-      addRules(themeName, themeClass.rules, shadowRoot)
+      if (typeof themeClass.rules !== 'undefined') {
+        addRules(themeName, themeClass.rules, shadowRoot)
+      }
     }
 
     /* Init icon class */
