@@ -6,6 +6,7 @@
 /tests/codeceptjs/output
 .vscode
 .env
+/src/*.css.js
 /src/themes/*.css.js
 /src/editors/*.css.js
 /.vs

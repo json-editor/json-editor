@@ -1,5 +1,6 @@
 import { AbstractEditor } from '../editor.js'
 import { extend, trigger } from '../utilities.js'
+import rules from './array.css.js'
 
 export class ArrayEditor extends AbstractEditor {
   askConfirmation () {
@@ -631,7 +632,6 @@ export class ArrayEditor extends AbstractEditor {
     this.collapsed = false
     this.toggle_button = this.getButton('', 'collapse', this.translate('button_collapse'))
     this.toggle_button.classList.add('json-editor-btntype-toggle')
-    this.toggle_button.style.margin = '0 10px 0 0'
     this.title.insertBefore(this.toggle_button, this.title.childNodes[0])
 
     const rowHolderDisplay = this.row_holder.style.display
@@ -742,17 +742,9 @@ export class ArrayEditor extends AbstractEditor {
     this.controls.appendChild(this.remove_all_rows_button)
 
     if (this.tabs) {
-      this.add_row_button.style.width = '100%'
-      this.add_row_button.style.textAlign = 'left'
-      this.add_row_button.style.marginBottom = '3px'
-
-      this.delete_last_row_button.style.width = '100%'
-      this.delete_last_row_button.style.textAlign = 'left'
-      this.delete_last_row_button.style.marginBottom = '3px'
-
-      this.remove_all_rows_button.style.width = '100%'
-      this.remove_all_rows_button.style.textAlign = 'left'
-      this.remove_all_rows_button.style.marginBottom = '3px'
+      this.add_row_button.classList.add('je-array-control-btn')
+      this.delete_last_row_button.classList.add('je-array-control-btn')
+      this.remove_all_rows_button.classList.add('je-array-control-btn')
     }
   }
 
@@ -788,3 +780,4 @@ export class ArrayEditor extends AbstractEditor {
     )
   }
 }
+ArrayEditor.rules = rules

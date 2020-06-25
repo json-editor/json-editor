@@ -9,6 +9,7 @@ import { extend, getShadowParent, hasOwnProperty } from './utilities.js'
 import { AbstractEditor } from './editor'
 import { AbstractTheme } from './theme'
 import { AbstractIconLib } from './iconlib'
+import styleRules from './style.css.js'
 
 export class JSONEditor {
   constructor (element, options = {}) {
@@ -31,13 +32,20 @@ export class JSONEditor {
     this.element.setAttribute('data-theme', themeName)
     // eslint-disable-next-line new-cap
     this.theme = new themeClass(this)
-    const rules = extend(themeClass.rules, this.getEditorsRules())
+    const rules = extend(styleRules, this.getEditorsRules())
+
+    /* Call addNewStyleRulesToShadowRoot if shadowRoot is found, otherwise call addNewStyleRules */
+    const addRules = (themeName, rules, shadowRoot) => shadowRoot
+      ? this.addNewStyleRulesToShadowRoot(themeName, rules, shadowRoot)
+      : this.addNewStyleRules(themeName, rules)
+
     if (!this.theme.options.disable_theme_rules) {
       /* Attempt to locate a shadowRoot parent (i.e. in Web Components) */
       const shadowRoot = getShadowParent(this.element)
-
-      /* Call addNewStyleRulesToShadowRoot if shadowRoot is found, otherwise call addNewStyleRules */
-      this[shadowRoot ? 'addNewStyleRulesToShadowRoot' : 'addNewStyleRules'](themeName, rules, shadowRoot)
+      addRules('default', rules, shadowRoot)
+      if (typeof themeClass.rules !== 'undefined') {
+        addRules(themeName, themeClass.rules, shadowRoot)
+      }
     }
 
     /* Init icon class */
@@ -365,9 +373,11 @@ export class JSONEditor {
 
     const sheet = styleTag.sheet ? styleTag.sheet : styleTag.styleSheet
     const qualifier = this.element.nodeName.toLowerCase()
-
+    while (sheet.cssRules.length > 0) {
+      sheet.deleteRule(0)
+    }
     Object.keys(rules).forEach(selector => {
-      const sel = `${qualifier}[data-theme="${themeName}"] ${selector}`
+      const sel = themeName === 'default' ? selector : `${qualifier}[data-theme="${themeName}"] ${selector}`
 
       // all browsers, except IE before version 9
       if (sheet.insertRule) sheet.insertRule(sel + ' {' + decodeURIComponent(rules[selector]) + '}', 0)
@@ -381,7 +391,7 @@ export class JSONEditor {
     let cssText = ''
 
     Object.keys(rules).forEach(selector => {
-      const sel = `${qualifier}[data-theme="${themeName}"] ${selector}`
+      const sel = themeName === 'default' ? selector : `${qualifier}[data-theme="${themeName}"] ${selector}`
       cssText += sel + ' {' + decodeURIComponent(rules[selector]) + '}' + '\n'
     })
     const styleSheet = new CSSStyleSheet()
