@@ -158,8 +158,9 @@ export class TableEditor extends ArrayEditor {
     super.destroy()
   }
 
-  setValue (value = [], initial) {
-    /* Make sure value has between minItems and maxItems items in it */
+  ensureArraySize (value) {
+    if (!(Array.isArray(value))) value = [value]
+
     if (this.schema.minItems) {
       while (value.length < this.schema.minItems) {
         value.push(this.getItemDefault())
@@ -168,6 +169,12 @@ export class TableEditor extends ArrayEditor {
     if (this.schema.maxItems && value.length > this.schema.maxItems) {
       value = value.slice(0, this.schema.maxItems)
     }
+    return value
+  }
+
+  setValue (value = [], initial) {
+    /* Make sure value has between minItems and maxItems items in it */
+    value = this.ensureArraySize(value)
 
     const serialized = JSON.stringify(value)
     if (serialized === this.serialized) return

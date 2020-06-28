@@ -339,13 +339,9 @@ export class ArrayEditor extends AbstractEditor {
     })
   }
 
-  setValue (value = [], initial) {
+  ensureArraySize (value) {
     if (!(Array.isArray(value))) value = [value]
 
-    const serialized = JSON.stringify(value)
-    if (serialized === this.serialized) return
-
-    /* Make sure value has between minItems and maxItems items in it */
     if (this.schema.minItems) {
       while (value.length < this.schema.minItems) {
         value.push(this.getItemInfo(value.length).default)
@@ -354,6 +350,15 @@ export class ArrayEditor extends AbstractEditor {
     if (this.getMax() && value.length > this.getMax()) {
       value = value.slice(0, this.getMax())
     }
+    return value
+  }
+
+  setValue (value = [], initial) {
+    /* Make sure value has between minItems and maxItems items in it */
+    value = this.ensureArraySize(value)
+
+    const serialized = JSON.stringify(value)
+    if (serialized === this.serialized) return
 
     value.forEach((val, i) => {
       if (this.rows[i]) {
@@ -471,6 +476,7 @@ export class ArrayEditor extends AbstractEditor {
         this.controls.style.display = 'none'
       }
     }
+    this.serialized = JSON.stringify(this.value)
   }
 
   addRow (value, initial) {
