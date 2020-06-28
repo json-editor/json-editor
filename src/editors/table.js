@@ -147,11 +147,11 @@ export class TableEditor extends ArrayEditor {
 
   destroy () {
     this.innerHTML = ''
-    if (this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title)
-    if (this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description)
-    if (this.row_holder && this.row_holder.parentNode) this.row_holder.parentNode.removeChild(this.row_holder)
-    if (this.table && this.table.parentNode) this.table.parentNode.removeChild(this.table)
-    if (this.panel && this.panel.parentNode) this.panel.parentNode.removeChild(this.panel)
+    if (this.checkParent(this.title)) this.title.parentNode.removeChild(this.title)
+    if (this.checkParent(this.description)) this.description.parentNode.removeChild(this.description)
+    if (this.checkParent(this.row_holder)) this.row_holder.parentNode.removeChild(this.row_holder)
+    if (this.checkParent(this.table)) this.table.parentNode.removeChild(this.table)
+    if (this.checkParent(this.panel)) this.panel.parentNode.removeChild(this.panel)
 
     this.rows = this.title = this.description = this.row_holder = this.table = this.panel = null
 
@@ -221,96 +221,50 @@ export class TableEditor extends ArrayEditor {
     this.rows.forEach((editor, i) => {
       if (editor.delete_button) {
         /* Hide the delete button if we have minItems items */
-        if (minItems) {
-          editor.delete_button.style.display = 'none'
-        } else {
-          needRowButtons = true
-          editor.delete_button.style.display = ''
-        }
+        needRowButtons = this.setVisibility(editor.delete_button, !minItems)
       }
 
       if (editor.copy_button) {
         /* Hide the copy button if we have maxItems items */
-        if (maxItems) {
-          editor.copy_button.style.display = 'none'
-        } else {
-          needRowButtons = true
-          editor.copy_button.style.display = ''
-        }
+        needRowButtons = this.setVisibility(editor.copy_button, !maxItems)
       }
 
       if (editor.moveup_button) {
         /* Hide the moveup button for the first row */
-        if (i === 0) {
-          editor.moveup_button.style.display = 'none'
-        } else {
-          needRowButtons = true
-          editor.moveup_button.style.display = ''
-        }
+        const display = i !== 0
+        needRowButtons = this.setVisibility(editor.moveup_button, display)
       }
 
       if (editor.movedown_button) {
         /* Hide the movedown button for the last row */
-        if (i === this.rows.length - 1) {
-          editor.movedown_button.style.display = 'none'
-        } else {
-          needRowButtons = true
-          editor.movedown_button.style.display = ''
-        }
+        const display = i !== this.rows.length - 1
+        needRowButtons = this.setVisibility(editor.movedown_button, display)
       }
     })
 
     /* Show/hide controls column in table */
-    this.rows.forEach(editor => {
-      if (needRowButtons) {
-        editor.controls_cell.style.display = ''
-      } else {
-        editor.controls_cell.style.display = 'none'
-      }
-    })
-    if (needRowButtons) {
-      this.controls_header_cell.style.display = ''
-    } else {
-      this.controls_header_cell.style.display = 'none'
-    }
+    this.rows.forEach(editor =>
+      this.setVisibility(editor.controls_cell, needRowButtons)
+    )
+    this.setVisibility(this.controls_header_cell, needRowButtons)
 
-    if (!this.value.length) {
-      this.table.style.display = 'none'
-    } else {
-      this.table.style.display = ''
-    }
+    this.setVisibility(this.table, this.value.length)
 
     let controlsNeeded = false
 
     /* If there are maxItems items in the array, or configured to hide the add_row_button button, hide the button beneath the rows */
-    if (maxItems || this.hide_add_button) {
-      this.add_row_button.style.display = 'none'
-    } else {
-      this.add_row_button.style.display = ''
-      controlsNeeded = true
-    }
+    const display1 = !(maxItems || this.hide_add_button)
+    controlsNeeded = this.setVisibility(this.add_row_button, display1)
 
     /* If there are minItems items in the array, or configured to hide the delete_last_row button, hide the button beneath the rows */
-    if (!this.value.length || minItems || this.hide_delete_last_row_buttons) {
-      this.delete_last_row_button.style.display = 'none'
-    } else {
-      this.delete_last_row_button.style.display = ''
-      controlsNeeded = true
-    }
+    const display2 = !(!this.value.length || minItems || this.hide_delete_last_row_buttons)
+    controlsNeeded = this.setVisibility(this.delete_last_row_button, display2)
 
     /* If there are minItems items in the array, or configured to hide the remove_all_rows_button button, hide the button beneath the rows */
-    if (this.value.length <= 1 || minItems || this.hide_delete_all_rows_buttons) {
-      this.remove_all_rows_button.style.display = 'none'
-    } else {
-      this.remove_all_rows_button.style.display = ''
-      controlsNeeded = true
-    }
+    const display3 = !(this.value.length <= 1 || minItems || this.hide_delete_all_rows_buttons)
+    controlsNeeded = this.setVisibility(this.remove_all_rows_button, display3)
 
-    if (!controlsNeeded) {
-      this.controls.style.display = 'none'
-    } else {
-      this.controls.style.display = ''
-    }
+    this.setVisibility(this.controls, controlsNeeded)
   }
 
   refreshValue () {
