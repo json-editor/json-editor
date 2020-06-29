@@ -8,7 +8,11 @@ const matchKey = [
 export class AbstractTheme {
   constructor (jsoneditor, options = { disable_theme_rules: false }) {
     this.jsoneditor = jsoneditor
-
+    Object.keys(options).forEach(key => {
+      if (typeof jsoneditor.options[key] !== 'undefined') {
+        options[key] = jsoneditor.options[key]
+      }
+    })
     /* Theme config options that allows changing various aspects of the output */
     this.options = options
   }
