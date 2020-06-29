@@ -19,18 +19,14 @@ export class ArrayEditor extends AbstractEditor {
   register () {
     super.register()
     if (this.rows) {
-      for (let i = 0; i < this.rows.length; i++) {
-        this.rows[i].register()
-      }
+      this.rows.forEach(row => row.register())
     }
   }
 
   unregister () {
     super.unregister()
     if (this.rows) {
-      for (let i = 0; i < this.rows.length; i++) {
-        this.rows[i].unregister()
-      }
+      this.rows.forEach(row => row.unregister())
     }
   }
 
@@ -48,10 +44,10 @@ export class ArrayEditor extends AbstractEditor {
       this.setAvailability(this, false)
 
       if (this.rows) {
-        for (let i = 0; i < this.rows.length; i++) {
-          this.rows[i].enable()
-          this.setAvailability(this.rows[i], false)
-        }
+        this.rows.forEach(row => {
+          row.enable()
+          this.setAvailability(row, false)
+        })
       }
       super.enable()
     }
@@ -62,10 +58,10 @@ export class ArrayEditor extends AbstractEditor {
     this.setAvailability(this, true)
 
     if (this.rows) {
-      for (let i = 0; i < this.rows.length; i++) {
-        this.rows[i].disable(alwaysDisabled)
-        this.setAvailability(this.rows[i], true)
-      }
+      this.rows.forEach(row => {
+        row.disable(alwaysDisabled)
+        this.setAvailability(row, true)
+      })
     }
     super.disable()
   }
