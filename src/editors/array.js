@@ -480,20 +480,20 @@ export class ArrayEditor extends AbstractEditor {
 
     /* Buttons to delete row, move row up, and move row down */
     if (!this.hide_delete_buttons) {
-      this._createDeleteButton(i, controlsHolder)
+      this.rows[i].delete_button = this._createDeleteButton(i, controlsHolder)
     }
 
     /* Button to copy an array element and add it as last element */
     if (this.show_copy_button) {
-      this._createCopyButton(i, controlsHolder)
+      this.rows[i].copy_button = this._createCopyButton(i, controlsHolder)
     }
 
     if (i && !this.hide_move_buttons) {
-      this._createMoveUpButton(i, controlsHolder)
+      this.rows[i].moveup_button = this._createMoveUpButton(i, controlsHolder)
     }
 
     if (!this.hide_move_buttons) {
-      this._createMoveDownButton(i, controlsHolder)
+      this.rows[i].movedown_button = this._createMoveDownButton(i, controlsHolder)
     }
 
     if (value) this.rows[i].setValue(value, initial)
@@ -503,10 +503,10 @@ export class ArrayEditor extends AbstractEditor {
   }
 
   _createDeleteButton (i, holder) {
-    this.rows[i].delete_button = this.getButton(this.getItemTitle(), 'delete', this.translate('button_delete_row_title', [this.getItemTitle()]))
-    this.rows[i].delete_button.classList.add('delete', 'json-editor-btntype-delete')
-    this.rows[i].delete_button.setAttribute('data-i', i)
-    this.rows[i].delete_button.addEventListener('click', e => {
+    const button = this.getButton(this.getItemTitle(), 'delete', this.translate('button_delete_row_title', [this.getItemTitle()]))
+    button.classList.add('delete', 'json-editor-btntype-delete')
+    button.setAttribute('data-i', i)
+    button.addEventListener('click', e => {
       e.preventDefault()
       e.stopPropagation()
 
@@ -538,15 +538,16 @@ export class ArrayEditor extends AbstractEditor {
     })
 
     if (holder) {
-      holder.appendChild(this.rows[i].delete_button)
+      holder.appendChild(button)
     }
+    return button
   }
 
   _createCopyButton (i, holder) {
-    this.rows[i].copy_button = this.getButton(this.getItemTitle(), 'copy', `Copy ${this.getItemTitle()}`)
-    this.rows[i].copy_button.classList.add('copy', 'json-editor-btntype-copy')
-    this.rows[i].copy_button.setAttribute('data-i', i)
-    this.rows[i].copy_button.addEventListener('click', e => {
+    const button = this.getButton(this.getItemTitle(), 'copy', `Copy ${this.getItemTitle()}`)
+    button.classList.add('copy', 'json-editor-btntype-copy')
+    button.setAttribute('data-i', i)
+    button.addEventListener('click', e => {
       const value = this.getValue()
       e.preventDefault()
       e.stopPropagation()
@@ -563,14 +564,15 @@ export class ArrayEditor extends AbstractEditor {
       this.onChange(true)
     })
 
-    holder.appendChild(this.rows[i].copy_button)
+    holder.appendChild(button)
+    return button
   }
 
   _createMoveUpButton (i, holder) {
-    this.rows[i].moveup_button = this.getButton('', (this.schema.format === 'tabs-top' ? 'moveleft' : 'moveup'), this.translate('button_move_up_title'))
-    this.rows[i].moveup_button.classList.add('moveup', 'json-editor-btntype-move')
-    this.rows[i].moveup_button.setAttribute('data-i', i)
-    this.rows[i].moveup_button.addEventListener('click', e => {
+    const button = this.getButton('', (this.schema.format === 'tabs-top' ? 'moveleft' : 'moveup'), this.translate('button_move_up_title'))
+    button.classList.add('moveup', 'json-editor-btntype-move')
+    button.setAttribute('data-i', i)
+    button.addEventListener('click', e => {
       e.preventDefault()
       e.stopPropagation()
       const i = e.currentTarget.getAttribute('data-i') * 1
@@ -591,15 +593,16 @@ export class ArrayEditor extends AbstractEditor {
     })
 
     if (holder) {
-      holder.appendChild(this.rows[i].moveup_button)
+      holder.appendChild(button)
     }
+    return button
   }
 
   _createMoveDownButton (i, holder) {
-    this.rows[i].movedown_button = this.getButton('', (this.schema.format === 'tabs-top' ? 'moveright' : 'movedown'), this.translate('button_move_down_title'))
-    this.rows[i].movedown_button.classList.add('movedown', 'json-editor-btntype-move')
-    this.rows[i].movedown_button.setAttribute('data-i', i)
-    this.rows[i].movedown_button.addEventListener('click', e => {
+    const button = this.getButton('', (this.schema.format === 'tabs-top' ? 'moveright' : 'movedown'), this.translate('button_move_down_title'))
+    button.classList.add('movedown', 'json-editor-btntype-move')
+    button.setAttribute('data-i', i)
+    button.addEventListener('click', e => {
       e.preventDefault()
       e.stopPropagation()
       const i = e.currentTarget.getAttribute('data-i') * 1
@@ -619,37 +622,14 @@ export class ArrayEditor extends AbstractEditor {
     })
 
     if (holder) {
-      holder.appendChild(this.rows[i].movedown_button)
+      holder.appendChild(button)
     }
+    return button
   }
 
   addControls () {
     this.collapsed = false
-    this.toggle_button = this.getButton('', 'collapse', this.translate('button_collapse'))
-    this.toggle_button.classList.add('json-editor-btntype-toggle')
-    this.title.insertBefore(this.toggle_button, this.title.childNodes[0])
-
-    const rowHolderDisplay = this.row_holder.style.display
-    const controlsDisplay = this.controls.style.display
-    this.toggle_button.addEventListener('click', e => {
-      e.preventDefault()
-      e.stopPropagation()
-      if (this.collapsed) {
-        this.collapsed = false
-        if (this.panel) this.panel.style.display = ''
-        this.row_holder.style.display = rowHolderDisplay
-        if (this.tabs_holder) this.tabs_holder.style.display = ''
-        this.controls.style.display = controlsDisplay
-        this.setButtonText(e.currentTarget, '', 'collapse', this.translate('button_collapse'))
-      } else {
-        this.collapsed = true
-        this.row_holder.style.display = 'none'
-        if (this.tabs_holder) this.tabs_holder.style.display = 'none'
-        this.controls.style.display = 'none'
-        if (this.panel) this.panel.style.display = 'none'
-        this.setButtonText(e.currentTarget, '', 'expand', this.translate('button_expand'))
-      }
-    })
+    this.toggle_button = this._createToggleButton()
 
     /* If it should start collapsed */
     if (this.options.collapsed) {
@@ -664,9 +644,48 @@ export class ArrayEditor extends AbstractEditor {
     }
 
     /* Add "new row" and "delete last" buttons below editor */
-    this.add_row_button = this.getButton(this.getItemTitle(), 'add', this.translate('button_add_row_title', [this.getItemTitle()]))
-    this.add_row_button.classList.add('json-editor-btntype-add')
-    this.add_row_button.addEventListener('click', (e) => {
+    this.add_row_button = this._createAddRowButton()
+    this.delete_last_row_button = this._createDeleteLastRowButton()
+    this.remove_all_rows_button = this._createRemoveAllRowsButton()
+
+    if (this.tabs) {
+      this.add_row_button.classList.add('je-array-control-btn')
+      this.delete_last_row_button.classList.add('je-array-control-btn')
+      this.remove_all_rows_button.classList.add('je-array-control-btn')
+    }
+  }
+
+  _createToggleButton () {
+    const button = this.getButton('', 'collapse', this.translate('button_collapse'))
+    button.classList.add('json-editor-btntype-toggle')
+    this.title.insertBefore(button, this.title.childNodes[0])
+
+    const rowHolderDisplay = this.row_holder.style.display
+    const controlsDisplay = this.controls.style.display
+    button.addEventListener('click', e => {
+      e.preventDefault()
+      e.stopPropagation()
+      if (this.panel) this.setVisibility(this.panel, this.collapsed)
+      if (this.tabs_holder) this.setVisibility(this.tabs_holder, this.collapsed)
+      if (this.collapsed) {
+        this.collapsed = false
+        this.row_holder.style.display = rowHolderDisplay
+        this.controls.style.display = controlsDisplay
+        this.setButtonText(e.currentTarget, '', 'collapse', this.translate('button_collapse'))
+      } else {
+        this.collapsed = true
+        this.row_holder.style.display = 'none'
+        this.controls.style.display = 'none'
+        this.setButtonText(e.currentTarget, '', 'expand', this.translate('button_expand'))
+      }
+    })
+    return button
+  }
+
+  _createAddRowButton () {
+    const button = this.getButton(this.getItemTitle(), 'add', this.translate('button_add_row_title', [this.getItemTitle()]))
+    button.classList.add('json-editor-btntype-add')
+    button.addEventListener('click', (e) => {
       e.preventDefault()
       e.stopPropagation()
       const i = this.rows.length
@@ -686,11 +705,14 @@ export class ArrayEditor extends AbstractEditor {
       this.onChange(true)
       this.jsoneditor.trigger('addRow', editor)
     })
-    this.controls.appendChild(this.add_row_button)
+    this.controls.appendChild(button)
+    return button
+  }
 
-    this.delete_last_row_button = this.getButton(this.translate('button_delete_last', [this.getItemTitle()]), 'subtract', this.translate('button_delete_last_title', [this.getItemTitle()]))
-    this.delete_last_row_button.classList.add('json-editor-btntype-deletelast')
-    this.delete_last_row_button.addEventListener('click', (e) => {
+  _createDeleteLastRowButton () {
+    const button = this.getButton(this.translate('button_delete_last', [this.getItemTitle()]), 'subtract', this.translate('button_delete_last_title', [this.getItemTitle()]))
+    button.classList.add('json-editor-btntype-deletelast')
+    button.addEventListener('click', (e) => {
       e.preventDefault()
       e.stopPropagation()
 
@@ -717,11 +739,14 @@ export class ArrayEditor extends AbstractEditor {
       this.onChange(true)
       this.jsoneditor.trigger('deleteRow', editor)
     })
-    this.controls.appendChild(this.delete_last_row_button)
+    this.controls.appendChild(button)
+    return button
+  }
 
-    this.remove_all_rows_button = this.getButton(this.translate('button_delete_all'), 'delete', this.translate('button_delete_all_title'))
-    this.remove_all_rows_button.classList.add('json-editor-btntype-deleteall')
-    this.remove_all_rows_button.addEventListener('click', (e) => {
+  _createRemoveAllRowsButton () {
+    const button = this.getButton(this.translate('button_delete_all'), 'delete', this.translate('button_delete_all_title'))
+    button.classList.add('json-editor-btntype-deleteall')
+    button.addEventListener('click', (e) => {
       e.preventDefault()
       e.stopPropagation()
 
@@ -734,13 +759,8 @@ export class ArrayEditor extends AbstractEditor {
       this.onChange(true)
       this.jsoneditor.trigger('deleteAllRows')
     })
-    this.controls.appendChild(this.remove_all_rows_button)
-
-    if (this.tabs) {
-      this.add_row_button.classList.add('je-array-control-btn')
-      this.delete_last_row_button.classList.add('je-array-control-btn')
-      this.remove_all_rows_button.classList.add('je-array-control-btn')
-    }
+    this.controls.appendChild(button)
+    return button
   }
 
   showValidationErrors (errors) {
