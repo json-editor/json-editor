@@ -4,7 +4,7 @@ const RemoveStrictPlugin = require('remove-strict-webpack-plugin')
 const commonConfig = require('./webpack.common.js')
 const helpers = require('./helpers')
 
-function createConfig () {
+module.exports = () => {
   commonConfig.module.rules = [
     {
       enforce: 'pre',
@@ -51,7 +51,3 @@ function createConfig () {
     ]
   })
 }
-
-module.exports = [
-  createConfig()
-]

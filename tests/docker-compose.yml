@@ -4,7 +4,6 @@ services:
     build: .
     volumes:
       - ../:/repo:delegated
-      - ../${DIST_SUB_PATH-.}/dist:/repo/dist:delegated
     working_dir: /repo
     command: npm run serve-test
     ports:
@@ -15,22 +14,20 @@ services:
       - firefox
       - chrome
   firefox:
-    image: selenium/standalone-firefox-debug:3.141.59-oxygen
+    image: selenium/standalone-firefox-debug:3.141.59-20200525
     environment:
       - VNC_NO_PASSWORD=1
     ports:
       - '4444'
       - '9059:5900'
-    volumes:
-      # Mount shm also for firefox, see https://github.com/SeleniumHQ/docker-selenium#running-the-images
-      - /dev/shm:/dev/shm
+    # Mount shm also for firefox, see https://github.com/SeleniumHQ/docker-selenium#running-the-images
+    shm_size: '2gb'
   chrome:
-    image: selenium/standalone-chrome-debug:3.141.59-oxygen
+    image: selenium/standalone-chrome-debug:3.141.59-20200525
     environment:
       - VNC_NO_PASSWORD=1
     ports:
       - '4444'
       - '9060:5900'
-    volumes:
-      # Mount shm also for firefox, see https://github.com/SeleniumHQ/docker-selenium#running-the-images
-      - /dev/shm:/dev/shm
+    # Mount shm also for firefox, see https://github.com/SeleniumHQ/docker-selenium#running-the-images
+    shm_size: '2gb'
