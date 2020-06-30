@@ -4,16 +4,15 @@ const commonConfig = require('./webpack.common.js')
 const helpers = require('./helpers')
 
 // See https://webpack.js.org/guides/development/
-module.exports = webpackMerge(commonConfig, {
+module.exports = (env) => webpackMerge(commonConfig, {
   mode: 'development',
   devtool: '@source-map',
   output: {
-    path: helpers.root('dist/nonmin'),
+    path: env && env.travis === true ? helpers.root('dist') : helpers.root('dist/nonmin'),
     publicPath: '/dist/',
     filename: '[name].js',
     libraryTarget: 'umd'
   },
-
   plugins: [
     new CleanWebpackPlugin() // Cleans directory before building
   ]
