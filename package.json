@@ -80,7 +80,6 @@
     "mini-css-extract-plugin": "^0.8.2",
     "mocha": "^6.2.2",
     "mochawesome": "^4.1.0",
-    "null-loader": "^3.0.0",
     "postcss-loader": "^3.0.0",
     "puppeteer": "^1.20.0",
     "remove-strict-webpack-plugin": "^0.1.2",
