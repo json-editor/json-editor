@@ -12,7 +12,13 @@ _before_script_reference: &before_script_reference
   - npm install
   - cd tests
   - docker-compose up -d node $SELENIUM_BROWSER
-  - docker-compose exec node npm run build
+  - docker-compose exec node npm run $BUILD_ENV
+
+_ignore_optional: &ignore_optional
+  docker-compose exec node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
+
+_optional: &optional
+  docker-compose exec node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:$SELENIUM_BROWSER --grep '@optional'
 
 jobs:
   include:
@@ -25,40 +31,40 @@ jobs:
 
     - stage: test
       name: "E2E Chrome"
-      env: SELENIUM_BROWSER=chrome
+      env: SELENIUM_BROWSER=chrome BUILD_ENV=build.prod
       before_script: *before_script_reference
-      script: docker-compose exec node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
+      script: *ignore_optional
 
     - stage: test
       name: "E2E Firefox"
-      env: SELENIUM_BROWSER=firefox
+      env: SELENIUM_BROWSER=firefox BUILD_ENV=build.prod
       before_script: *before_script_reference
-      script: docker-compose exec node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
+      script: *ignore_optional
 
     - stage: test
       name: "E2E Chrome nonmin"
-      env: SELENIUM_BROWSER=chrome DIST_SUB_PATH=nonmin
+      env: SELENIUM_BROWSER=chrome BUILD_ENV=build.nonmin.travis
       before_script: *before_script_reference
-      script: docker-compose exec node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
+      script: *ignore_optional
 
     - stage: test
       name: "E2E Firefox nonmin"
-      env: SELENIUM_BROWSER=firefox DIST_SUB_PATH=nonmin
+      env: SELENIUM_BROWSER=firefox BUILD_ENV=build.nonmin.travis
       before_script: *before_script_reference
-      script: docker-compose exec node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
+      script: *ignore_optional
 
     - stage: test
       name: "E2E Chrome Optional"
-      env: TEST_TYPE=optional SELENIUM_BROWSER=chrome
+      env: TEST_TYPE=optional SELENIUM_BROWSER=chrome BUILD_ENV=build.prod
       before_script: *before_script_reference
-      script: docker-compose exec node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:$SELENIUM_BROWSER --grep '@optional'
+      script: *optional
 
     - stage: test
       name: "E2E Firefox Optional"
-      env: TEST_TYPE=optional SELENIUM_BROWSER=firefox
+      env: TEST_TYPE=optional SELENIUM_BROWSER=firefox BUILD_ENV=build.prod
       before_script: *before_script_reference
-      script: docker-compose exec node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:$SELENIUM_BROWSER --grep '@optional'
+      script: *optional
 
   allow_failures:
-    - env: TEST_TYPE=optional SELENIUM_BROWSER=chrome
-    - env: TEST_TYPE=optional SELENIUM_BROWSER=firefox
+    - env: TEST_TYPE=optional SELENIUM_BROWSER=chrome BUILD_ENV=build.prod
+    - env: TEST_TYPE=optional SELENIUM_BROWSER=firefox BUILD_ENV=build.prod
