@@ -1205,7 +1205,7 @@ export class ObjectEditor extends AbstractEditor {
     Object.entries(value).forEach(([i, val]) => {
       if (!this.cached_editors[i]) {
         this.addObjectProperty(i)
-        if (this.editors[i]) this.editors[i].setValue(val, initial)
+        if (this.editors[i]) this.editors[i].setValue(val, initial, !!this.editors[i].template)
       }
     })
 
