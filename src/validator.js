@@ -1,6 +1,8 @@
 import { ipValidator } from './validators/ip-validator.js'
 import { extend, hasOwnProperty } from './utilities.js'
 
+import { BELOW_FIELD } from './defaults'
+
 export class Validator {
   constructor (jsoneditor, schema, options, defaults) {
     this.jsoneditor = jsoneditor
@@ -337,12 +339,19 @@ export class Validator {
         const errors = []
         if (Array.isArray(schema.required)) {
           schema.required.forEach(e => {
+            if (this._checkType('string', value[e]) && value[e].length === 0) {
+              errors.push({
+                path: `${path}.${e}`,
+                property: 'required',
+                message: this.translate('error_required', [e])
+              })
+            }
             if (typeof value[e] !== 'undefined') return
             const editor = this.jsoneditor.getEditor(`${path}.${e}`)
             /* Ignore required error if editor is of type "button" or "info" */
             if (editor && ['button', 'info'].includes(editor.schema.format || editor.schema.type)) return
             errors.push({
-              path,
+              path: jsoneditor.options.validation_error_placement === BELOW_FIELD ? `${path}.${e}` : path,
               property: 'required',
               message: this.translate('error_required', [e])
             })

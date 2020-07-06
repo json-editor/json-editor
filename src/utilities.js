@@ -27,6 +27,8 @@ export function deepCopy (target) {
 
 export function extend (destination, ...args) {
   args.forEach(source => {
+    if (!source) return
+
     Object.keys(source).forEach(property => {
       if (source[property] && isPlainObject(source[property])) {
         if (!hasOwnProperty(destination, property)) destination[property] = {}

@@ -286,6 +286,11 @@ Here are all the available options:
     <td>If true default values based on the "type" of the property will be used</td>
     <td><code>true</code></td>
   </tr>
+  <tr>
+    <td>validation_error_placement</td>
+    <td>Change position where errors are shown. Values are oneOf['grouped', 'below_field']</td>
+    <td><code>grouped</code></td>
+  </tr>
   </tbody>
 </table>
 
