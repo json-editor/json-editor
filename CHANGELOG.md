@@ -1,6 +1,7 @@
 ### Unreleased
 - added option `max_depth` used to specify the maximum depth of level's schema that have to be rendered
 - added option `use_default_values` used to specify if default values based on the "type" of the property have to be used
+- Fixed using multiple dependencies for an editor. Fix #703
 
 ### 2.3.0-dev
 
