@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>wysiwyg-sceditor</title>
+
+  <!-- json editor -->
+  <script src="../../dist/jsoneditor.js"></script>
+
+  <!-- jquery -->
+  <script src="./../../node_modules/jquery/dist/jquery.min.js"></script>
+
+</head>
+<body>
+
+<textarea class="debug" cols="30" rows="10"></textarea>
+<button class='get-value'>Get Value</button>
+<div class='container'></div>
+<button class="force-change">Force onchange</button>
+<script>
+  var container = document.querySelector('.container');
+  var debug = document.querySelector('.debug');
+
+  var schema =  {
+        "type": "object",
+        "properties": {
+            "number": {
+                "type": "number"
+            },
+            "string": {
+                "type": "string"
+            },
+            "integer": {
+                "type": "integer"
+            },
+        }
+    };
+  
+  var editor = new JSONEditor(container, {
+    schema: schema,
+    use_default_values: false,
+    remove_empty_properties: false
+  });
+
+  document.querySelector('.get-value').addEventListener('click', function () {
+    debug.value = JSON.stringify(editor.getValue());
+  });
+
+  document.querySelector('.force-change').addEventListener('click', function () {
+    document.querySelector('[name="root[integer]"]').dispatchEvent(new Event('change'));
+    document.querySelector('[name="root[number]"]').dispatchEvent(new Event('change'));
+    document.querySelector('[name="root[string]"]').dispatchEvent(new Event('change'));
+  });
+
+</script>
+
+</body>
+</html>

@@ -10,6 +10,10 @@ export class IntegerEditor extends NumberEditor {
     if (!this.dependenciesFulfilled) {
       return undefined
     }
-    return isInteger(this.value) ? parseInt(this.value) : this.value
+    const value = isInteger(this.value) ? parseInt(this.value) : this.value
+    if (!this.jsoneditor.options.use_default_values && value === '') {
+      return undefined
+    }
+    return value
   }
 }
