@@ -86,7 +86,6 @@ export class DatetimeEditor extends StringEditor {
         this.input.setAttribute('type', 'hidden')
       }
     }
-    console.log(this)
   }
 
   getValue () {
