@@ -499,6 +499,11 @@ export class Validator {
       errors.push(...this._validateDateTimeSubSchema(schema, value, path))
     }
 
+    /* uuid validation */
+    if (['uuid'].includes(schema.format)) {
+      errors.push(...this._validateUUIDSchema(schema, value, path))
+    }
+
     /* custom validator */
     errors.push(...this._validateCustomValidator(schema, value, path))
 
@@ -589,6 +594,17 @@ export class Validator {
       })
     }
     return errors
+  }
+
+  _validateUUIDSchema (schema, value, path) {
+    if (!(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value))) {
+      return [{
+        path,
+        property: 'format',
+        message: this.translate('error_pattern', ['^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'])
+      }]
+    }
+    return []
   }
 
   _validateNumberSubSchemaMultipleDivisible (schema, value, path) {
