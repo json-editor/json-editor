@@ -2,6 +2,9 @@
   "tests": "./**/*_test.js",
   "timeout": 10000,
   "output": "./output",
+  "plugins": {
+    "pauseOnFail": {}
+  },
   "helpers": {
     "WebDriver": {
       "url": "http://node:9001/tests/pages/",

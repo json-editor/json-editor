@@ -1,5 +1,5 @@
 import { AbstractEditor } from '../editor.js'
-import { extend, trigger, hasOwnProperty } from '../utilities.js'
+import { extend, hasOwnProperty, trigger } from '../utilities.js'
 import rules from './object.css.js'
 
 export class ObjectEditor extends AbstractEditor {
@@ -417,14 +417,17 @@ export class ObjectEditor extends AbstractEditor {
       /* Increase the grid width to account for padding */
       this.maxwidth += 1
 
-      this.schema.defaultProperties.forEach(key => {
-        this.addObjectProperty(key, true)
+      /* Check for array (eg. meta-schema options is an object) */
+      if (Array.isArray(this.schema.defaultProperties)) {
+        this.schema.defaultProperties.forEach(key => {
+          this.addObjectProperty(key, true)
 
-        if (this.editors[key]) {
-          this.minwidth = Math.max(this.minwidth, (this.editors[key].options.grid_columns || this.editors[key].getNumColumns()))
-          this.maxwidth += (this.editors[key].options.grid_columns || this.editors[key].getNumColumns())
-        }
-      })
+          if (this.editors[key]) {
+            this.minwidth = Math.max(this.minwidth, (this.editors[key].options.grid_columns || this.editors[key].getNumColumns()))
+            this.maxwidth += (this.editors[key].options.grid_columns || this.editors[key].getNumColumns())
+          }
+        })
+      }
     }
 
     /* Sort editors by propertyOrder */
