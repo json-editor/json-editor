@@ -4,7 +4,7 @@ services:
     build: .
     volumes:
       - ../:/repo:delegated
-    working_dir: /repo
+    working_dir: /repo/tests/codeceptjs
     command: npm run serve-test
     ports:
       - '9100:9001'
