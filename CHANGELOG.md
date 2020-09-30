@@ -1,11 +1,17 @@
 ### Unreleased
+
+### 2.4.0
+
 - added option `max_depth` used to specify the maximum depth of level's schema that have to be rendered
 - added option `use_default_values` used to specify if default values based on the "type" of the property have to be used
 - when `use_default_values` is false, number and integer fields have undefined value when input is empty
 - when `use_default_values` is false, string fields have undefined value at the beginning. After that user edit the field, empty input is threated as an empty string
 - Fixed using multiple dependencies for an editor. Fix #703
+- Evaluate all dependencies for an editor to determine visibility
+- Fixed meta-schema usage
+- Added `min`, `max` for `dateTime`
 
-### 2.3.0-dev
+### 2.3.0
 
 - Removed codeception container, use `codeceptjs` as node-dev module
 - Enabled Bootstrap 3 theme/icons
