@@ -40,7 +40,7 @@ export class CheckboxEditor extends AbstractEditor {
     this.control = this.theme.getFormControl(this.label, this.input, this.description, this.infoButton)
 
     if (this.schema.readOnly || this.schema.readonly) {
-      this.always_disabled = true
+      this.disable(true)
       this.input.disabled = true
     }
 

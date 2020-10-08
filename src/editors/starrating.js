@@ -59,7 +59,7 @@ export class StarratingEditor extends StringEditor {
     }
 
     if (this.schema.readOnly || this.schema.readonly) {
-      this.always_disabled = true
+      this.disable(true)
       for (let j = 0; j < this.radioGroup.length; j++) {
         this.radioGroup[j].disabled = true
       }

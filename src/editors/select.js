@@ -170,7 +170,7 @@ export class SelectEditor extends AbstractEditor {
     this.theme.setSelectOptions(this.input, this.enum_options, this.enum_display)
 
     if (this.schema.readOnly || this.schema.readonly) {
-      this.always_disabled = true
+      this.disable(true)
       this.input.disabled = true
     }
 
