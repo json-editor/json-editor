@@ -1,3 +1,5 @@
+import { trigger } from './utilities'
+
 const matchKey = [
   'matches',
   'webkitMatchesSelector',
@@ -229,6 +231,29 @@ export class AbstractTheme {
     el.setAttribute('max', max)
     el.setAttribute('step', step)
     return el
+  }
+
+  getStepperButtons (input) {
+    const div = document.createElement('div')
+    const minusBtn = document.createElement('button')
+    const plusBtn = document.createElement('button')
+
+    minusBtn.textContent = '-'
+    plusBtn.textContent = '+'
+
+    minusBtn.addEventListener('click', () => {
+      input.stepDown()
+      trigger(input, 'change')
+    })
+
+    plusBtn.addEventListener('click', () => {
+      input.stepUp()
+      trigger(input, 'change')
+    })
+
+    div.appendChild(minusBtn)
+    div.appendChild(plusBtn)
+    return div
   }
 
   getRangeOutput (input, startvalue) {

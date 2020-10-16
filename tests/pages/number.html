@@ -3,17 +3,20 @@
 <head>
   <meta charset="utf-8"/>
   <title>Number</title>
-  <script src="../../dist/jsoneditor.js"></script>
+  <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+  <script src="https://cdn.jsdelivr.net/npm/mathjs@5.3.1/dist/math.min.js" class="external_mathjs"></script>
+  <script src="../../dist/nonmin/jsoneditor.js"></script>
 </head>
 <body>
 
 <textarea class="value" cols="30" rows="10"></textarea>
 <button class='get-value'>Get Value</button>
 <button class='set-value'>Set Value</button>
-<div class='container'></div>
+<div class='json-editor-container'></div>
 
 <script>
-  var container = document.querySelector('.container');
+  var jsonEditorContainer = document.querySelector('.json-editor-container');
   var value = document.querySelector('.value');
 
   var schema = {
@@ -44,12 +47,31 @@
         "minimum": 1,
         "maximum": 10,
         "step": 0.25
+      },
+      "stepper_number": {
+        "title": "stepper number",
+        "format": "stepper",
+        "type": "number",
+        "minimum": 1,
+        "maximum": 10,
+        "step": 0.25
+      },
+      "stepper_integer": {
+        "title": "stepper integer",
+        "format": "stepper",
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 10,
+        "step": 0.25
       }
     }
   };
 
-  var editor = new JSONEditor(container, {
-    schema: schema
+  var editor = new JSONEditor(jsonEditorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    use_default_values: false,
+    show_errors: 'always'
   });
 
   document.querySelector('.get-value').addEventListener('click', function () {
