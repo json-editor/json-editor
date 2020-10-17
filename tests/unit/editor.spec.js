@@ -63,6 +63,7 @@ describe('Editor', () => {
     editor = new JSONEditor(element, {
       schema: {
         type: 'array',
+        format: 'multiselect',
         title: 'Checkboxes',
         items: {
           title: 'Rating',
