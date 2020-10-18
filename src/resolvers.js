@@ -63,12 +63,12 @@ const enumeratedProperties = schema => {
 /* Specialized editors for arrays of strings */
 const arraysOfStrings = schema => {
   if (schema.type === 'array' && schema.items && !(Array.isArray(schema.items)) && ['string', 'number', 'integer'].includes(schema.items.type)) {
-    if (!schema.format) return 'table'
     if (schema.format === 'choices') return 'arrayChoices'
     if (schema.uniqueItems) {
       /* if 'selectize' enabled it is expected to be selectized control */
       if (schema.format === 'selectize') return 'arraySelectize'
       if (schema.format === 'select2') return 'arraySelect2'
+      if (!schema.format) return 'table'
       if (schema.format !== 'table') return 'multiselect' /* otherwise it is select */
     }
   }
