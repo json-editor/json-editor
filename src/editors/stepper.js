@@ -10,11 +10,13 @@ export class StepperEditor extends IntegerEditor {
     this.stepperDown = this.control.querySelector('.stepper-down')
     this.stepperUp = this.control.querySelector('.stepper-up')
   }
+
   enable () {
     super.enable()
     this.stepperDown.removeAttribute('disabled')
     this.stepperUp.removeAttribute('disabled')
   }
+
   disable () {
     super.disable()
     this.stepperDown.setAttribute('disabled', true)
