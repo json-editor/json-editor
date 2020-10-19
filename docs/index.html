@@ -4,6 +4,7 @@
     <meta charset="utf-8"/>
     <title>JSON Editor Interactive Example</title>
     <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+    <script src="./polyfills/assign.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
     <link rel='stylesheet' id='theme-link'>
     <link rel='stylesheet' id='iconlib-link'>
@@ -122,7 +123,7 @@
 </div>
 <script>
 
-  const defaultSchema = {
+  var defaultSchema = {
     'title': 'Person',
     'type': 'object',
     'required': [
@@ -230,9 +231,9 @@
 
   /* ------------------------------------------------------------------- data */
 
-  let data = {}
+  var data = {}
 
-  let defaultOptions = {
+  var defaultOptions = {
     iconlib: 'fontawesome5',
     object_layout: 'normal',
     schema: defaultSchema,
@@ -240,37 +241,37 @@
     theme: 'bootstrap4'
   }
 
-  let jsoneditor = null
-  let directLink = document.querySelector('#direct-link')
+  var jsoneditor = null
+  var directLink = document.querySelector('#direct-link')
 
-  const booleanOptionsSelect = document.querySelector('#boolean-options-select')
-  const head = document.getElementsByTagName('head')[0]
-  const iconlibSelect = document.querySelector('#iconlib-select')
-  const iconlibLink = document.querySelector('#iconlib-link')
-  const libSelect = document.querySelector('#lib-select')
-  const jsonEditorForm = document.querySelector('#json-editor-form')
-  const objectLayoutSelect = document.querySelector('#object-layout-select')
-  const outputTextarea = document.querySelector('#output-textarea')
-  const schemaTextarea = document.querySelector('#schema-textarea')
-  const setSchema = document.querySelector('#setschema')
-  const setValue = document.querySelector('#setvalue')
-  const showErrorsSelect = document.querySelector('#show-errors-select')
-  const themeSelect = document.querySelector('#theme-select')
-  const themeLink = document.querySelector('#theme-link')
-  const validateTextarea = document.querySelector('#validate-textarea')
+  var booleanOptionsSelect = document.querySelector('#boolean-options-select')
+  var head = document.getElementsByTagName('head')[0]
+  var iconlibSelect = document.querySelector('#iconlib-select')
+  var iconlibLink = document.querySelector('#iconlib-link')
+  var libSelect = document.querySelector('#lib-select')
+  var jsonEditorForm = document.querySelector('#json-editor-form')
+  var objectLayoutSelect = document.querySelector('#object-layout-select')
+  var outputTextarea = document.querySelector('#output-textarea')
+  var schemaTextarea = document.querySelector('#schema-textarea')
+  var setSchema = document.querySelector('#setschema')
+  var setValue = document.querySelector('#setvalue')
+  var showErrorsSelect = document.querySelector('#show-errors-select')
+  var themeSelect = document.querySelector('#theme-select')
+  var themeLink = document.querySelector('#theme-link')
+  var validateTextarea = document.querySelector('#validate-textarea')
 
   /* -------------------------------------------------------------- parse url */
 
-  const parseUrl = () => {
-    const url = window.location.search
-    const queryParamsString = url.substring(1, url.length)
-    const queryParams = queryParamsString.split('&')
+  var parseUrl = function () {
+    var url = window.location.search
+    var queryParamsString = url.substring(1, url.length)
+    var queryParams = queryParamsString.split('&')
 
     if (queryParamsString.length) {
-      queryParams.forEach((queryParam) => {
-        const splittedParam = queryParam.split('=')
-        const param = splittedParam[0]
-        const value = splittedParam[1]
+      queryParams.forEach(function (queryParam) {
+        var splittedParam = queryParam.split('=')
+        var param = splittedParam[0]
+        var value = splittedParam[1]
 
         // data query param
         if (param === 'data') {
@@ -288,19 +289,19 @@
 
   /* ----------------------------------------------------------- mergeOptions */
 
-  const mergeOptions = () => {
+  var mergeOptions = function () {
     data.options = Object.assign(defaultOptions, data.options)
     refreshUI()
   }
 
   /* -------------------------------------------------------------- refreshUI */
 
-  const refreshUI = () => {
+  var refreshUI = function () {
     // schema
     schemaTextarea.value = JSON.stringify(data.options.schema, null, 2)
 
     // theme
-    const themeMap = {
+    var themeMap = {
       barebones: '',
       bootstrap3: 'https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css',
       bootstrap4: 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
@@ -312,7 +313,7 @@
     themeSelect.value = data.options.theme
 
     // iconlLib
-    const iconLibMap = {
+    var iconLibMap = {
       fontawesome3: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.css',
       fontawesome4: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css',
       fontawesome5: 'https://use.fontawesome.com/releases/v5.6.1/css/all.css',
@@ -329,16 +330,16 @@
     showErrorsSelect.value = data.options.show_errors
 
     // boolean values
-    let booleanOptions = booleanOptionsSelect.children
-    for (let i = 0; i < booleanOptions.length; i++) {
-      const booleanValue = booleanOptions[i]
+    var booleanOptions = booleanOptionsSelect.children
+    for (var i = 0; i < booleanOptions.length; i++) {
+      var booleanValue = booleanOptions[i]
       if (data.options[booleanValue.value]) {
         booleanValue.selected = true
       }
     }
 
     // libs
-    let libMapping = {
+    var libMapping = {
       ace_editor: {
         js: [
           'https://cdn.jsdelivr.net/npm/ace-editor-builds@1.2.4/src-min-noconflict/ace.js'
@@ -420,26 +421,26 @@
 
     if (data.selectedLibs || data.unselectedLibs) {
 
-      let booleanOptions = booleanOptionsSelect.children
-      for (let i = 0; i < booleanOptions.length; i++) {
-        const booleanValue = booleanOptions[i]
+      var booleanOptions = booleanOptionsSelect.children
+      for (var i = 0; i < booleanOptions.length; i++) {
+        var booleanValue = booleanOptions[i]
         if (data.options[booleanValue.value]) {
           booleanValue.selected = true
         }
       }
 
-      const libSelectChildren = libSelect.children
-      for (let i = 0; i < libSelectChildren.length; i++) {
-        const child = libSelectChildren[i]
+      var libSelectChildren = libSelect.children
+      for (var i = 0; i < libSelectChildren.length; i++) {
+        var child = libSelectChildren[i]
         child.selected = data.selectedLibs.includes(child.value)
       }
 
       // remove libraries
-      data.unselectedLibs.forEach((selectedLib) => {
-        const concat = libMapping[selectedLib].js.concat(libMapping[selectedLib].css)
-        concat.forEach(() => {
-          const className = '.external_' + selectedLib
-          const toRemove = head.querySelector(className)
+      data.unselectedLibs.forEach(function (selectedLib) {
+        var concat = libMapping[selectedLib].js.concat(libMapping[selectedLib].css)
+        concat.forEach(function () {
+          var className = '.external_' + selectedLib
+          var toRemove = head.querySelector(className)
           if (toRemove) {
             toRemove.parentNode.removeChild(toRemove)
           }
@@ -447,10 +448,10 @@
       })
 
       // add libraries
-      data.selectedLibs.forEach((selectedLib) => {
+      data.selectedLibs.forEach(function (selectedLib) {
         // add js
-        libMapping[selectedLib].js.forEach((js) => {
-          let scriptElement = document.createElement('script')
+        libMapping[selectedLib].js.forEach(function (js) {
+          var scriptElement = document.createElement('script')
           scriptElement.type = 'text/javascript'
           scriptElement.src = js
           scriptElement.async = false
@@ -458,8 +459,8 @@
           head.appendChild(scriptElement)
         })
         // add css
-        libMapping[selectedLib].css.forEach((css) => {
-          const linkElement = document.createElement('link')
+        libMapping[selectedLib].css.forEach(function (css) {
+          var linkElement = document.createElement('link')
           linkElement.setAttribute('rel', 'stylesheet')
           linkElement.setAttribute('type', 'text/css')
           linkElement.setAttribute('href', css)
@@ -474,7 +475,7 @@
 
   /* --------------------------------------------------------- initJsoneditor */
 
-  const initJsoneditor = () => {
+  var initJsoneditor = function () {
     // destroy old JSONEditor instance if exists
     if (jsoneditor) {
       jsoneditor.destroy()
@@ -486,11 +487,11 @@
     // listen for changes
     jsoneditor.on('change', function () {
       // output
-      let json = jsoneditor.getValue()
+      var json = jsoneditor.getValue()
       outputTextarea.value = JSON.stringify(json, null, 2)
 
       // validate
-      let validationErrors = jsoneditor.validate()
+      var validationErrors = jsoneditor.validate()
       if (validationErrors.length) {
         validateTextarea.value = JSON.stringify(validationErrors, null, 2)
       } else {
@@ -502,8 +503,8 @@
 
   /* ------------------------------------------------------- updateDirectLink */
 
-  const updateDirectLink = () => {
-    let url = window.location.href.replace(/\?.*/, '')
+  var updateDirectLink = function () {
+    var url = window.location.href.replace(/\?.*/, '')
     url += '?data='
     url += LZString.compressToBase64(JSON.stringify(data))
     directLink.href = url
@@ -546,8 +547,8 @@
   })
 
   booleanOptionsSelect.addEventListener('change', function () {
-    let booleanOptions = this.children
-    for (let i = 0; i < booleanOptions.length; i++) {
+    var booleanOptions = this.children
+    for (var i = 0; i < booleanOptions.length; i++) {
       data.options[booleanOptions[i].value] = booleanOptions[i].selected
     }
     refreshUI()
@@ -557,9 +558,9 @@
     data.selectedLibs = []
     data.unselectedLibs = []
 
-    const libs = this.children
+    var libs = this.children
 
-    for (let i = 0; i < libs.length; i++) {
+    for (var i = 0; i < libs.length; i++) {
       if (libs[i].selected) {
         data.selectedLibs.push(libs[i].value)
       } else {

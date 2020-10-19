@@ -36,7 +36,11 @@ module.exports = {
             loader: 'babel-loader',
             options: {
               presets: [
-                '@babel/preset-env'
+                ['@babel/preset-env', {
+                  useBuiltIns: 'usage',
+                  corejs: 3,
+                  debug: false
+                }]
               ]
             }
           }
@@ -60,6 +64,9 @@ module.exports = {
       pattern: './src/**/*.css'
     })
   ],
+  performance: {
+    hints: false
+  },
   devServer: {
     contentBase: helpers.root('.'),
     historyApiFallback: true,
