@@ -104,8 +104,17 @@ export class bootstrap4Theme extends AbstractTheme {
     append.classList.add('input-group-append')
     minusBtn.classList.add('btn')
     minusBtn.classList.add('btn-secondary')
+    minusBtn.classList.add('stepper-down')
     plusBtn.classList.add('btn')
     plusBtn.classList.add('btn-secondary')
+    plusBtn.classList.add('stepper-up')
+
+    const readonly = input.getAttribute('readonly')
+
+    if (readonly) {
+      minusBtn.setAttribute('disabled', true)
+      plusBtn.setAttribute('disabled', true)
+    }
 
     minusBtn.textContent = '-'
     plusBtn.textContent = '+'
@@ -440,6 +449,7 @@ export class bootstrap4Theme extends AbstractTheme {
       input.errmsg = document.createElement('p')
       input.errmsg.classList.add('invalid-feedback')
       input.controlgroup.appendChild(input.errmsg)
+      input.errmsg.style.display = 'block'
     } else {
       input.errmsg.style.display = ''
     }

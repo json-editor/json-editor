@@ -238,6 +238,16 @@ export class AbstractTheme {
     const minusBtn = document.createElement('button')
     const plusBtn = document.createElement('button')
 
+    minusBtn.classList.add('stepper-down')
+    plusBtn.classList.add('stepper-up')
+
+    const readonly = input.getAttribute('readonly')
+
+    if (readonly) {
+      minusBtn.setAttribute('disabled', true)
+      plusBtn.setAttribute('disabled', true)
+    }
+
     minusBtn.textContent = '-'
     plusBtn.textContent = '+'
 
