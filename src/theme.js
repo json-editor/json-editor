@@ -235,10 +235,13 @@ export class AbstractTheme {
 
   getStepperButtons (input) {
     const div = document.createElement('div')
-    const minusBtn = document.createElement('button')
-    const plusBtn = document.createElement('button')
 
+    const minusBtn = document.createElement('button')
+    minusBtn.setAttribute('type', 'button')
     minusBtn.classList.add('stepper-down')
+
+    const plusBtn = document.createElement('button')
+    plusBtn.setAttribute('type', 'button')
     plusBtn.classList.add('stepper-up')
 
     const readonly = input.getAttribute('readonly')

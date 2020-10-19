@@ -90,8 +90,12 @@ export class bootstrap4Theme extends AbstractTheme {
     const inputGroup = document.createElement('div')
     const prepend = document.createElement('div')
     const append = document.createElement('div')
+
     const minusBtn = document.createElement('button')
+    minusBtn.setAttribute('type', 'button')
+
     const plusBtn = document.createElement('button')
+    plusBtn.setAttribute('type', 'button')
 
     inputGroup.appendChild(prepend)
     inputGroup.appendChild(input)
