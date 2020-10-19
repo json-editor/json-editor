@@ -6,7 +6,6 @@ export class StepperEditor extends IntegerEditor {
     this.input.setAttribute('type', 'number')
     const stepperButtons = this.theme.getStepperButtons(this.input)
     this.control.appendChild(stepperButtons)
-
     this.stepperDown = this.control.querySelector('.stepper-down')
     this.stepperUp = this.control.querySelector('.stepper-up')
   }

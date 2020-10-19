@@ -450,10 +450,9 @@ export class bootstrap4Theme extends AbstractTheme {
       input.errmsg.classList.add('invalid-feedback')
       input.controlgroup.appendChild(input.errmsg)
       input.errmsg.style.display = 'block'
-    } else {
-      input.errmsg.style.display = ''
     }
 
+    input.errmsg.style.display = 'block'
     input.errmsg.textContent = text
   }
 
