@@ -1,5 +1,11 @@
 ### Unreleased
 
+### 2.5.0
+
+- added new stepper editor (with default HTML & Bootstrap 4 Theme)
+- fixed babel transpiling bug
+- updated docs
+
 ### 2.4.0
 
 - added option `max_depth` used to specify the maximum depth of level's schema that have to be rendered
