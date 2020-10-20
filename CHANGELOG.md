@@ -1,5 +1,9 @@
 ### Unreleased
 
+### 2.5.1
+
+- Fix for #837 and chekboxes not displaying error messages #843
+
 ### 2.5.0
 
 - added new stepper editor (with default HTML & Bootstrap 4 Theme)
