@@ -33,6 +33,7 @@ import { SelectizeEditor as selectize } from './selectize.js'
 import { SignatureEditor as signature } from './signature.js'
 import { SimplemdeEditor as simplemde } from './simplemde.js'
 import { StarratingEditor as starrating } from './starrating.js'
+import { StepperEditor as stepper } from './stepper.js'
 import { StringEditor as string } from './string.js'
 import { TableEditor as table } from './table.js'
 import { UploadEditor as upload } from './upload.js'
@@ -71,6 +72,7 @@ export const editors = {
   signature,
   simplemde,
   starrating,
+  stepper,
   string,
   table,
   upload,

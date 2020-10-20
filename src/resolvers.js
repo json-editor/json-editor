@@ -91,6 +91,13 @@ const describeBy = schema => {
   }
 }
 
+/* Use the stepper editor for schemas with type `number` or `integer` and format `stepper` */
+const stepper = schema => {
+  if ((schema.type === 'integer' || schema.type === 'number') && schema.format === 'stepper') {
+    return 'stepper'
+  }
+}
+
 /* Enable custom editor type */
 const button = schema => schema.format === 'button' && 'button'
 
@@ -115,4 +122,4 @@ const ip = schema => schema.type === 'string' && ['ip', 'ipv4', 'ipv6', 'hostnam
 const colorPicker = schema => schema.type === 'string' && schema.format === 'color' && 'colorpicker'
 
 /* Export resolvers in order of discovery, first to last */
-export const resolvers = [colorPicker, ip, ace, xhtml, markdown, jodit, autoComplete, uuid, info, button, describeBy, starratings, date, oneOf, arraysOfStrings, enumeratedProperties, enumSource, table, upload, base64, any, boolean, signature, primitive, object, defaultResolver]
+export const resolvers = [colorPicker, ip, ace, xhtml, markdown, jodit, autoComplete, uuid, info, button, stepper, describeBy, starratings, date, oneOf, arraysOfStrings, enumeratedProperties, enumSource, table, upload, base64, any, boolean, signature, primitive, object, defaultResolver]
