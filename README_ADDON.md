@@ -464,11 +464,11 @@ window.JSONEditor.defaults.callbacks.cleave = {
 
 
 
-#Themes
+# Themes
 
 Themes have own options for changing various aspects of the display.
 
-##Bootstrap 4
+## Bootstrap 4
 
 | Option           | Default | Description
 | ------------- | ------ | -----
@@ -481,7 +481,7 @@ Themes have own options for changing various aspects of the display.
 | `table_zebrastyle`  | `false` | Add "zebra style" to array "table" rows
 | `tooltip`  | `bootstrap` | how to display tooltips (infoText). Can be `browser` for native `[title]`, `css` for simple CSS Styling, or `bootstrap` for TWBS/Popper.js handling
 
-##Spectre
+## Spectre
 
 | Option           | Default | Description
 | ------------- | ------ | -----
@@ -493,7 +493,7 @@ Themes have own options for changing various aspects of the display.
 | `table_border`  | `false` | Add border to array "table" row and cells
 | `table_zebrastyle`  | `false` | Add "zebra style" to array "table" rows
 
-##Tailwind
+## Tailwind
 
 | Option           | Default | Description
 | ------------- | ------ | -----
@@ -506,4 +506,3 @@ Themes have own options for changing various aspects of the display.
 | `table_border`  | `false` | Add border to array "table" row and cells
 | `table_hdiv`  | `false` | Add bottom-border to array "table" cells
 | `table_zebrastyle`  | `false` | Add "zebra style" to array "table" rows
-

@@ -75,10 +75,6 @@ export class CheckboxEditor extends AbstractEditor {
   }
 
   showValidationErrors (errors) {
-    if (this.jsoneditor.options.show_errors === 'always') { } else if (!this.is_dirty && this.previous_error_setting === this.jsoneditor.options.show_errors) {
-      return
-    }
-
     this.previous_error_setting = this.jsoneditor.options.show_errors
 
     const addMessage = (messages, error) => {

@@ -96,23 +96,51 @@ export class AbstractEditor {
       let path = this.path.split('.')
       path[path.length - 1] = dependency
       path = path.join('.')
-      const choices = deps[dependency]
       this.jsoneditor.watch(path, () => {
-        this.checkDependency(path, choices)
+        this.evaluateDependencies()
       })
     })
   }
 
-  checkDependency (path, choices) {
+  evaluateDependencies () {
     const wrapper = this.container || this.control
-    if (this.path === path || !wrapper || this.jsoneditor === null) {
+    if (!wrapper || this.jsoneditor === null) {
+      return
+    }
+
+    const deps = this.options.dependencies
+    if (!deps) {
+      return
+    }
+    // Assume true and set to false if any unmet dependencies are found
+    const previousStatus = this.dependenciesFulfilled
+    this.dependenciesFulfilled = true
+
+    Object.keys(deps).forEach(dependency => {
+      let path = this.path.split('.')
+      path[path.length - 1] = dependency
+      path = path.join('.')
+      const choices = deps[dependency]
+      this.checkDependency(path, choices)
+    })
+
+    if (this.dependenciesFulfilled !== previousStatus) {
+      this.notify()
+    }
+
+    const displayMode = this.dependenciesFulfilled ? 'block' : 'none'
+    if (wrapper.tagName === 'TD') {
+      Object.keys(wrapper.childNodes).forEach(child => (wrapper.childNodes[child].style.display = displayMode))
+    } else wrapper.style.display = displayMode
+  }
+
+  checkDependency (path, choices) {
+    if (this.path === path || this.jsoneditor === null) {
       return
     }
 
     const editor = this.jsoneditor.getEditor(path)
     const value = editor ? editor.getValue() : undefined
-    const previousStatus = this.dependenciesFulfilled
-    this.dependenciesFulfilled = false
 
     if (!editor || !editor.dependenciesFulfilled) {
       this.dependenciesFulfilled = false
@@ -135,27 +163,17 @@ export class AbstractEditor {
             this.dependenciesFulfilled = false
             return true
           }
-          this.dependenciesFulfilled = true
         })
       }
     } else if (typeof choices === 'string' || typeof choices === 'number') {
-      this.dependenciesFulfilled = value === choices
+      this.dependenciesFulfilled = this.dependenciesFulfilled && value === choices
     } else if (typeof choices === 'boolean') {
       if (choices) {
-        this.dependenciesFulfilled = value || value.length > 0
+        this.dependenciesFulfilled = this.dependenciesFulfilled && (value || value.length > 0)
       } else {
-        this.dependenciesFulfilled = !value || value.length === 0
+        this.dependenciesFulfilled = this.dependenciesFulfilled && (!value || value.length === 0)
       }
     }
-
-    if (this.dependenciesFulfilled !== previousStatus) {
-      this.notify()
-    }
-
-    const displayMode = this.dependenciesFulfilled ? 'block' : 'none'
-    if (wrapper.tagName === 'TD') {
-      Object.keys(wrapper.childNodes).forEach(child => (wrapper.childNodes[child].style.display = displayMode))
-    } else wrapper.style.display = displayMode
   }
 
   setContainer (container) {

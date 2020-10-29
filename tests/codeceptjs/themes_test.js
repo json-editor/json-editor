@@ -43,6 +43,9 @@ Scenario('It should display button Labels: spectre | null', async (I) => {
   I.waitForText('Delete All')
   I.waitForText('Move down')
   I.waitForText('Move up')
+  I.seeElement('.table-striped') // can see when theme options is enabled
+  I.seeElement('.je-table-border') // can see when theme options is enabled
+  I.dontSeeElement('.je-noindent') // can't see when theme options is enabled
 })
 
 /*
@@ -76,7 +79,8 @@ Scenario('It should display button Labels: jqueryui | null', async (I) => {
 })
 */
 
-/*Scenario('It should display button Labels: foundation6 | null', async (I) => {
+/*
+Scenario('It should display button Labels: foundation6 | null', async (I) => {
   I.amOnPage('themes.html')
   I.selectOption('theme', 'Foundation 6')
   I.waitForText('Themes Test Page')

@@ -1,3 +1,5 @@
+import { trigger } from './utilities'
+
 const matchKey = [
   'matches',
   'webkitMatchesSelector',
@@ -8,7 +10,11 @@ const matchKey = [
 export class AbstractTheme {
   constructor (jsoneditor, options = { disable_theme_rules: false }) {
     this.jsoneditor = jsoneditor
-
+    Object.keys(options).forEach(key => {
+      if (typeof jsoneditor.options[key] !== 'undefined') {
+        options[key] = jsoneditor.options[key]
+      }
+    })
     /* Theme config options that allows changing various aspects of the output */
     this.options = options
   }
@@ -19,20 +25,14 @@ export class AbstractTheme {
 
   getFloatRightLinkHolder () {
     const el = document.createElement('div')
-    el.style = el.style || {}
-    el.style.cssFloat = 'right'
-    el.style.marginLeft = '10px'
+    el.classList.add('je-float-right-linkholder')
     return el
   }
 
   getModal () {
     const el = document.createElement('div')
-    el.style.backgroundColor = 'white'
-    el.style.border = '1px solid black'
-    el.style.boxShadow = '3px 3px black'
-    el.style.position = 'absolute'
-    el.style.zIndex = '10'
     el.style.display = 'none'
+    el.classList.add('je-modal')
     return el
   }
 
@@ -81,24 +81,10 @@ export class AbstractTheme {
   getInfoButton (text) {
     const icon = document.createElement('span')
     icon.innerText = 'ⓘ'
-    icon.style.fontSize = '16px'
-    icon.style.fontWeight = 'bold'
-    icon.style.padding = '.25rem'
-    icon.style.position = 'relative'
-    icon.style.display = 'inline-block'
+    icon.classList.add('je-infobutton-icon')
 
     const tooltip = document.createElement('span')
-    tooltip.style.fontSize = '12px'
-    icon.style.fontWeight = 'normal'
-    tooltip.style['font-family'] = 'sans-serif'
-    tooltip.style.visibility = 'hidden'
-    tooltip.style['background-color'] = 'rgba(50, 50, 50, .75)'
-    tooltip.style.margin = '0 .25rem'
-    tooltip.style.color = '#FAFAFA'
-    tooltip.style.padding = '.5rem 1rem'
-    tooltip.style['border-radius'] = '.25rem'
-    tooltip.style.width = '20rem'
-    tooltip.style.position = 'absolute'
+    tooltip.classList.add('je-infobutton-tooltip')
     tooltip.innerText = text
     icon.onmouseover = () => {
       tooltip.style.visibility = 'visible'
@@ -126,16 +112,14 @@ export class AbstractTheme {
     } else {
       el.appendChild(text)
     }
-
-    el.style.display = 'inline-block'
+    el.classList.add('je-header')
 
     return el
   }
 
   getCheckbox () {
     const el = this.getFormInputField('checkbox')
-    el.style.display = 'inline-block'
-    el.style.width = 'auto'
+    el.classList.add('je-checkbox')
     return el
   }
 
@@ -173,10 +157,7 @@ export class AbstractTheme {
     input.style.width = 'auto'
     label.insertBefore(input, label.firstChild)
     if (compact) {
-      this.applyStyles(el, {
-        display: 'inline-block',
-        marginRight: '1rem'
-      })
+      el.classList.add('je-checkbox-control--compact')
     }
 
     return el
@@ -184,11 +165,8 @@ export class AbstractTheme {
 
   getFormRadio (attributes) {
     const el = this.getFormInputField('radio')
-    for (const key in attributes) {
-      el.setAttribute(key, attributes[key])
-    }
-    el.style.display = 'inline-block'
-    el.style.width = 'auto'
+    Object.keys(attributes).forEach(key => el.setAttribute(key, attributes[key]))
+    el.classList.add('je-radio')
     return el
   }
 
@@ -205,10 +183,7 @@ export class AbstractTheme {
     input.style.width = 'auto'
     label.insertBefore(input, label.firstChild)
     if (compact) {
-      this.applyStyles(el, {
-        display: 'inline-block',
-        marginRight: '1rem'
-      })
+      el.classList.add('je-radio-control--compact')
     }
 
     return el
@@ -222,15 +197,7 @@ export class AbstractTheme {
 
   getSwitcher (options) {
     const switcher = this.getSelectInput(options, false)
-    switcher.style.backgroundColor = 'transparent'
-    switcher.style.display = 'inline-block'
-    switcher.style.fontStyle = 'italic'
-    switcher.style.fontWeight = 'normal'
-    switcher.style.height = 'auto'
-    switcher.style.marginBottom = 0
-    switcher.style.marginLeft = '5px'
-    switcher.style.padding = '0 0 0 3px'
-    switcher.style.width = 'auto'
+    switcher.classList.add('je-switcher')
     return switcher
   }
 
@@ -254,10 +221,7 @@ export class AbstractTheme {
 
   getTextareaInput () {
     const el = document.createElement('textarea')
-    el.style = el.style || {}
-    el.style.width = '100%'
-    el.style.height = '300px'
-    el.style.boxSizing = 'border-box'
+    el.classList.add('je-textarea')
     return el
   }
 
@@ -267,6 +231,42 @@ export class AbstractTheme {
     el.setAttribute('max', max)
     el.setAttribute('step', step)
     return el
+  }
+
+  getStepperButtons (input) {
+    const div = document.createElement('div')
+
+    const minusBtn = document.createElement('button')
+    minusBtn.setAttribute('type', 'button')
+    minusBtn.classList.add('stepper-down')
+
+    const plusBtn = document.createElement('button')
+    plusBtn.setAttribute('type', 'button')
+    plusBtn.classList.add('stepper-up')
+
+    const readonly = input.getAttribute('readonly')
+
+    if (readonly) {
+      minusBtn.setAttribute('disabled', true)
+      plusBtn.setAttribute('disabled', true)
+    }
+
+    minusBtn.textContent = '-'
+    plusBtn.textContent = '+'
+
+    minusBtn.addEventListener('click', () => {
+      input.stepDown()
+      trigger(input, 'change')
+    })
+
+    plusBtn.addEventListener('click', () => {
+      input.stepUp()
+      trigger(input, 'change')
+    })
+
+    div.appendChild(minusBtn)
+    div.appendChild(plusBtn)
+    return div
   }
 
   getRangeOutput (input, startvalue) {
@@ -281,7 +281,7 @@ export class AbstractTheme {
 
   getRangeControl (input, output) {
     const el = document.createElement('div')
-    el.style.textAlign = 'center'
+    el.classList.add('je-range-control')
     if (output) el.appendChild(output)
     el.appendChild(input)
     return el
@@ -316,18 +316,13 @@ export class AbstractTheme {
 
   getIndentedPanel () {
     const el = document.createElement('div')
-    el.style = el.style || {}
-    el.style.paddingLeft = '10px'
-    el.style.marginLeft = '10px'
-    el.style.borderLeft = '1px solid #ccc'
+    el.classList.add('je-indented-panel')
     return el
   }
 
   getTopIndentedPanel () {
     const el = document.createElement('div')
-    el.style = el.style || {}
-    el.style.paddingLeft = '10px'
-    el.style.marginLeft = '10px'
+    el.classList.add('je-indented-panel--top')
     return el
   }
 
@@ -441,14 +436,14 @@ export class AbstractTheme {
   getTabHolder (propertyName) {
     const pName = (typeof propertyName === 'undefined') ? '' : propertyName
     const el = document.createElement('div')
-    el.innerHTML = `<div style='float: left; width: 130px;' class='tabs'></div><div class='content' style='margin-left: 120px;' id='${pName}'></div><div style='clear:both;'></div>`
+    el.innerHTML = `<div class='je-tabholder tabs'></div><div class='content' id='${pName}'></div><div class='je-tabholder--clear'></div>`
     return el
   }
 
   getTopTabHolder (propertyName) {
     const pName = (typeof propertyName === 'undefined') ? '' : propertyName
     const el = document.createElement('div')
-    el.innerHTML = `<div class='tabs' style='margin-left: 10px;'></div><div style='clear:both;'></div><div class='content' id='${pName}'></div>`
+    el.innerHTML = `<div class='tabs je-tabholder--top'></div><div class='je-tabholder--clear'></div><div class='content' id='${pName}'></div>`
     return el
   }
 
@@ -479,40 +474,15 @@ export class AbstractTheme {
     const el = document.createElement('div')
     el.appendChild(span)
     el.id = tabId
-    el.style = el.style || {}
-    this.applyStyles(el, {
-      border: '1px solid #ccc',
-      borderWidth: '1px 0 1px 1px',
-      textAlign: 'center',
-      lineHeight: '30px',
-      borderRadius: '5px',
-      borderBottomRightRadius: 0,
-      borderTopRightRadius: 0,
-      fontWeight: 'bold',
-      cursor: 'pointer'
-    })
+    el.classList.add('je-tab')
     return el
   }
 
   getTopTab (span, tabId) {
     const el = document.createElement('div')
-    el.id = tabId
     el.appendChild(span)
-    el.style = el.style || {}
-    this.applyStyles(el, {
-      float: 'left',
-      border: '1px solid #ccc',
-      borderWidth: '1px 1px 0px 1px',
-      textAlign: 'center',
-      lineHeight: '30px',
-      borderRadius: '5px',
-      paddingLeft: '5px',
-      paddingRight: '5px',
-      borderBottomRightRadius: 0,
-      borderBottomLeftRadius: 0,
-      fontWeight: 'bold',
-      cursor: 'pointer'
-    })
+    el.id = tabId
+    el.classList.add('je-tab--top')
     return el
   }
 
@@ -566,7 +536,7 @@ export class AbstractTheme {
 
   getBlockLink () {
     const link = document.createElement('a')
-    link.style.display = 'block'
+    link.classList.add('je-block-link')
     return link
   }
 
@@ -582,7 +552,7 @@ export class AbstractTheme {
 
   createMediaLink (holder, link, media) {
     holder.appendChild(link)
-    media.style.width = '100%'
+    media.classList.add('je-media')
     holder.appendChild(media)
   }
 
@@ -655,6 +625,3 @@ export class AbstractTheme {
     progressBar.removeAttribute('value')
   }
 }
-
-/* Custom stylesheet rules. format: "selector" : "CSS rules" */
-AbstractTheme.rules = { '.je-upload-preview img': 'float:left;margin:0 0.5rem 0.5rem 0;max-width:100%;max-height:100px' }

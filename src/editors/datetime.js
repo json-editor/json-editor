@@ -22,7 +22,17 @@ import { StringEditor } from './string.js'
 export class DatetimeEditor extends StringEditor {
   build () {
     super.build()
-    if (!this.input) return
+    if (!this.input) {
+      return
+    }
+
+    if (this.schema.max && typeof this.schema.max === 'string') {
+      this.input.setAttribute('max', this.schema.max)
+    }
+
+    if (this.schema.min && typeof this.schema.max === 'string') {
+      this.input.setAttribute('min', this.schema.min)
+    }
 
     if (window.flatpickr && typeof this.options.flatpickr === 'object') {
       /* Make sure that flatpickr settings matches the input type */

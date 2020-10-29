@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Meta Schema - Test Template</title>
+    <script src="../../../dist/jsoneditor.js"></script>
+  </head>
+  <body>
+    <h1>Meta Schema - Test Template</h1>
+
+    <div id='editor_holder'></div>
+    <button id='submit'>Submit (console.log)</button>
+
+    <script>
+      var metaSchema;
+
+
+      // load meta_schema.json
+      metaSchema = fetch("../meta_schema.json")
+          .then(response => response.json())
+          .then(data => metaSchema = data)
+          .then(() => console.log(metaSchema))
+          .then(() => editor = new JSONEditor(document.getElementById('editor_holder'), {
+                  schema: metaSchema,
+              }
+          ));
+
+      // Hook up the submit button to log to the console
+      document.getElementById('submit').addEventListener('click',function() {
+          // Get the value from the editor
+          console.log(editor.getValue());
+      });
+    </script>
+  </body>
+</html>

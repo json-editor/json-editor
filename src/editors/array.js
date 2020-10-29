@@ -1,5 +1,6 @@
 import { AbstractEditor } from '../editor.js'
 import { extend, trigger } from '../utilities.js'
+import rules from './array.css.js'
 
 export class ArrayEditor extends AbstractEditor {
   askConfirmation () {
@@ -18,18 +19,14 @@ export class ArrayEditor extends AbstractEditor {
   register () {
     super.register()
     if (this.rows) {
-      for (let i = 0; i < this.rows.length; i++) {
-        this.rows[i].register()
-      }
+      this.rows.forEach(row => row.register())
     }
   }
 
   unregister () {
     super.unregister()
     if (this.rows) {
-      for (let i = 0; i < this.rows.length; i++) {
-        this.rows[i].unregister()
-      }
+      this.rows.forEach(row => row.unregister())
     }
   }
 
@@ -44,28 +41,13 @@ export class ArrayEditor extends AbstractEditor {
 
   enable () {
     if (!this.always_disabled) {
-      if (this.add_row_button) this.add_row_button.disabled = false
-      if (this.remove_all_rows_button) this.remove_all_rows_button.disabled = false
-      if (this.delete_last_row_button) this.delete_last_row_button.disabled = false
-      if (this.copy_button) this.copy_button.disabled = false
-      /* if(this.toggle_button) this.toggle_button.disabled = false; */
-      if (this.delete_button) this.delete_button.disabled = false
-      if (this.moveup_button) this.moveup_button.disabled = false
-      if (this.movedown_button) this.movedown_button.disabled = false
+      this.setAvailability(this, false)
 
       if (this.rows) {
-        for (let i = 0; i < this.rows.length; i++) {
-          this.rows[i].enable()
-
-          if (this.rows[i].add_row_button) this.rows[i].add_row_button.disabled = false
-          if (this.rows[i].remove_all_rows_button) this.rows[i].remove_all_rows_button.disabled = false
-          if (this.rows[i].delete_last_row_button) this.rows[i].delete_last_row_button.disabled = false
-          if (this.rows[i].copy_button) this.rows[i].copy_button.disabled = false
-          /* if(this.rows[i].toggle_button) this.rows[i].toggle_button.disabled = false; */
-          if (this.rows[i].delete_button) this.rows[i].delete_button.disabled = false
-          if (this.rows[i].moveup_button) this.rows[i].moveup_button.disabled = false
-          if (this.rows[i].movedown_button) this.rows[i].movedown_button.disabled = false
-        }
+        this.rows.forEach(row => {
+          row.enable()
+          this.setAvailability(row, false)
+        })
       }
       super.enable()
     }
@@ -73,30 +55,25 @@ export class ArrayEditor extends AbstractEditor {
 
   disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
-    if (this.add_row_button) this.add_row_button.disabled = true
-    if (this.remove_all_rows_button) this.remove_all_rows_button.disabled = true
-    if (this.delete_last_row_button) this.delete_last_row_button.disabled = true
-    if (this.copy_button) this.copy_button.disabled = true
-    /* if(this.toggle_button) this.toggle_button.disabled = true; */
-    if (this.delete_button) this.delete_button.disabled = true
-    if (this.moveup_button) this.moveup_button.disabled = true
-    if (this.movedown_button) this.movedown_button.disabled = true
+    this.setAvailability(this, true)
 
     if (this.rows) {
-      for (let i = 0; i < this.rows.length; i++) {
-        this.rows[i].disable(alwaysDisabled)
-
-        if (this.rows[i].add_row_button) this.rows[i].add_row_button.disabled = true
-        if (this.rows[i].remove_all_rows_button) this.rows[i].remove_all_rows_button.disabled = true
-        if (this.rows[i].delete_last_row_button) this.rows[i].delete_last_row_button.disabled = true
-        if (this.rows[i].copy_button) this.rows[i].copy_button.disabled = true
-        /* if(this.rows[i].toggle_button) this.rows[i].toggle_button.disabled = true; */
-        if (this.rows[i].delete_button) this.rows[i].delete_button.disabled = true
-        if (this.rows[i].moveup_button) this.rows[i].moveup_button.disabled = true
-        if (this.rows[i].movedown_button) this.rows[i].movedown_button.disabled = true
-      }
+      this.rows.forEach(row => {
+        row.disable(alwaysDisabled)
+        this.setAvailability(row, true)
+      })
     }
     super.disable()
+  }
+
+  setAvailability (element, val) {
+    if (element.add_row_button) element.add_row_button.disabled = val
+    if (element.remove_all_rows_button) element.remove_all_rows_button.disabled = val
+    if (element.delete_last_row_button) element.delete_last_row_button.disabled = val
+    if (element.copy_button) element.copy_button.disabled = val
+    if (element.delete_button) element.delete_button.disabled = val
+    if (element.moveup_button) element.moveup_button.disabled = val
+    if (element.movedown_button) element.movedown_button.disabled = val
   }
 
   preBuild () {
@@ -276,13 +253,17 @@ export class ArrayEditor extends AbstractEditor {
     return ret
   }
 
+  checkParent (elem) {
+    return elem && elem.parentNode
+  }
+
   destroy () {
     this.empty(true)
-    if (this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title)
-    if (this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description)
-    if (this.row_holder && this.row_holder.parentNode) this.row_holder.parentNode.removeChild(this.row_holder)
-    if (this.controls && this.controls.parentNode) this.controls.parentNode.removeChild(this.controls)
-    if (this.panel && this.panel.parentNode) this.panel.parentNode.removeChild(this.panel)
+    if (this.checkParent(this.title)) this.title.parentNode.removeChild(this.title)
+    if (this.checkParent(this.description)) this.description.parentNode.removeChild(this.description)
+    if (this.checkParent(this.row_holder)) this.row_holder.parentNode.removeChild(this.row_holder)
+    if (this.checkParent(this.controls)) this.controls.parentNode.removeChild(this.controls)
+    if (this.checkParent(this.panel)) this.panel.parentNode.removeChild(this.panel)
 
     this.rows = this.row_cache = this.title = this.description = this.row_holder = this.panel = this.controls = null
 
@@ -294,7 +275,7 @@ export class ArrayEditor extends AbstractEditor {
 
     this.rows.forEach((row, i) => {
       if (hard) {
-        if (row.tab && row.tab.parentNode) row.tab.parentNode.removeChild(row.tab)
+        if (this.checkParent(row.tab)) row.tab.parentNode.removeChild(row.tab)
         this.destroyRow(row, true)
         this.row_cache[i] = null
       }
@@ -309,7 +290,7 @@ export class ArrayEditor extends AbstractEditor {
     if (hard) {
       row.destroy()
       if (holder.parentNode) holder.parentNode.removeChild(holder)
-      if (row.tab && row.tab.parentNode) row.tab.parentNode.removeChild(row.tab)
+      if (this.checkParent(row.tab)) row.tab.parentNode.removeChild(row.tab)
     } else {
       if (row.tab) row.tab.style.display = 'none'
       holder.style.display = 'none'
@@ -338,13 +319,9 @@ export class ArrayEditor extends AbstractEditor {
     })
   }
 
-  setValue (value = [], initial) {
+  ensureArraySize (value) {
     if (!(Array.isArray(value))) value = [value]
 
-    const serialized = JSON.stringify(value)
-    if (serialized === this.serialized) return
-
-    /* Make sure value has between minItems and maxItems items in it */
     if (this.schema.minItems) {
       while (value.length < this.schema.minItems) {
         value.push(this.getItemInfo(value.length).default)
@@ -353,6 +330,15 @@ export class ArrayEditor extends AbstractEditor {
     if (this.getMax() && value.length > this.getMax()) {
       value = value.slice(0, this.getMax())
     }
+    return value
+  }
+
+  setValue (value = [], initial) {
+    /* Make sure value has between minItems and maxItems items in it */
+    value = this.ensureArraySize(value)
+
+    const serialized = JSON.stringify(value)
+    if (serialized === this.serialized) return
 
     value.forEach((val, i) => {
       if (this.rows[i]) {
@@ -393,6 +379,41 @@ export class ArrayEditor extends AbstractEditor {
     /* TODO: sortable */
   }
 
+  setVisibility (element, display) {
+    element.style.display = display ? '' : 'none'
+  }
+
+  setupButtons (minItems) {
+    const controlsNeeded = []
+
+    if (!this.value.length) {
+      this.delete_last_row_button.style.display = 'none'
+      this.remove_all_rows_button.style.display = 'none'
+    } else if (this.value.length === 1) {
+      this.remove_all_rows_button.style.display = 'none'
+
+      /* If there are minItems items in the array, or configured to hide the delete_last_row button, hide the delete button beneath the rows */
+      const display = !(minItems || this.hide_delete_last_row_buttons)
+      this.setVisibility(this.delete_last_row_button, display)
+      controlsNeeded.push(display)
+    } else {
+      const display1 = !(minItems || this.hide_delete_last_row_buttons)
+      this.setVisibility(this.delete_last_row_button, display1)
+      controlsNeeded.push(display1)
+
+      const display2 = !(minItems || this.hide_delete_all_rows_buttons)
+      this.setVisibility(this.remove_all_rows_button, display2)
+      controlsNeeded.push(display2)
+    }
+
+    /* If there are maxItems in the array, hide the add button beneath the rows */
+    const display = !((this.getMax() && this.getMax() <= this.rows.length) || this.hide_add_button)
+    this.setVisibility(this.add_row_button, display)
+    controlsNeeded.push(display)
+
+    return controlsNeeded.some(e => e)
+  }
+
   refreshValue (force) {
     const oldi = this.value ? this.value.length : 0
     /* Get the value for this editor */
@@ -405,71 +426,26 @@ export class ArrayEditor extends AbstractEditor {
       this.rows.forEach((editor, i) => {
         /* Hide the move down button for the last row */
         if (editor.movedown_button) {
-          if (i === this.rows.length - 1) {
-            editor.movedown_button.style.display = 'none'
-          } else {
-            editor.movedown_button.style.display = ''
-          }
+          const display = (i !== this.rows.length - 1)
+          this.setVisibility(editor.movedown_button, display)
         }
 
         /* Hide the delete button if we have minItems items */
         if (editor.delete_button) {
-          if (minItems) {
-            editor.delete_button.style.display = 'none'
-          } else {
-            editor.delete_button.style.display = ''
-          }
+          this.setVisibility(editor.delete_button, !minItems)
         }
 
         /* Get the value for this editor */
         this.value[i] = editor.getValue()
       })
 
-      let controlsNeeded = false
-
-      if (!this.value.length) {
-        this.delete_last_row_button.style.display = 'none'
-        this.remove_all_rows_button.style.display = 'none'
-      } else if (this.value.length === 1) {
-        this.remove_all_rows_button.style.display = 'none'
-
-        /* If there are minItems items in the array, or configured to hide the delete_last_row button, hide the delete button beneath the rows */
-        if (minItems || this.hide_delete_last_row_buttons) {
-          this.delete_last_row_button.style.display = 'none'
-        } else {
-          this.delete_last_row_button.style.display = ''
-          controlsNeeded = true
-        }
-      } else {
-        if (minItems || this.hide_delete_last_row_buttons) {
-          this.delete_last_row_button.style.display = 'none'
-        } else {
-          this.delete_last_row_button.style.display = ''
-          controlsNeeded = true
-        }
-
-        if (minItems || this.hide_delete_all_rows_buttons) {
-          this.remove_all_rows_button.style.display = 'none'
-        } else {
-          this.remove_all_rows_button.style.display = ''
-          controlsNeeded = true
-        }
-      }
-
-      /* If there are maxItems in the array, hide the add button beneath the rows */
-      if ((this.getMax() && this.getMax() <= this.rows.length) || this.hide_add_button) {
-        this.add_row_button.style.display = 'none'
-      } else {
-        this.add_row_button.style.display = ''
-        controlsNeeded = true
-      }
-
-      if (!this.collapsed && controlsNeeded) {
+      if (!this.collapsed && this.setupButtons(minItems)) {
         this.controls.style.display = 'inline-block'
       } else {
         this.controls.style.display = 'none'
       }
     }
+    this.serialized = JSON.stringify(this.value)
   }
 
   addRow (value, initial) {
@@ -500,125 +476,20 @@ export class ArrayEditor extends AbstractEditor {
 
     /* Buttons to delete row, move row up, and move row down */
     if (!this.hide_delete_buttons) {
-      this.rows[i].delete_button = this.getButton(this.getItemTitle(), 'delete', this.translate('button_delete_row_title', [this.getItemTitle()]))
-      this.rows[i].delete_button.classList.add('delete', 'json-editor-btntype-delete')
-      this.rows[i].delete_button.setAttribute('data-i', i)
-      this.rows[i].delete_button.addEventListener('click', e => {
-        e.preventDefault()
-        e.stopPropagation()
-
-        if (!this.askConfirmation()) {
-          return false
-        }
-
-        const i = e.currentTarget.getAttribute('data-i') * 1
-        const newval = this.getValue().filter((row, j) => j !== i)
-        let newActiveTab = null
-
-        const editor = this.rows[i]
-
-        this.setValue(newval)
-
-        if (this.rows[i]) {
-          newActiveTab = this.rows[i].tab
-        } else if (this.rows[i - 1]) {
-          newActiveTab = this.rows[i - 1].tab
-        }
-
-        if (newActiveTab) {
-          this.active_tab = newActiveTab
-          this.refreshTabs()
-        }
-
-        this.onChange(true)
-        this.jsoneditor.trigger('deleteRow', editor)
-      })
-
-      if (controlsHolder) {
-        controlsHolder.appendChild(this.rows[i].delete_button)
-      }
+      this.rows[i].delete_button = this._createDeleteButton(i, controlsHolder)
     }
 
     /* Button to copy an array element and add it as last element */
     if (this.show_copy_button) {
-      this.rows[i].copy_button = this.getButton(this.getItemTitle(), 'copy', `Copy ${this.getItemTitle()}`)
-      this.rows[i].copy_button.classList.add('copy', 'json-editor-btntype-copy')
-      this.rows[i].copy_button.setAttribute('data-i', i)
-      this.rows[i].copy_button.addEventListener('click', e => {
-        const value = this.getValue()
-        e.preventDefault()
-        e.stopPropagation()
-        const i = e.currentTarget.getAttribute('data-i') * 1
-
-        value.forEach((row, j) => {
-          if (j === i) {
-            value.push(row)
-          }
-        })
-
-        this.setValue(value)
-        this.refreshValue(true)
-        this.onChange(true)
-      })
-
-      controlsHolder.appendChild(this.rows[i].copy_button)
+      this.rows[i].copy_button = this._createCopyButton(i, controlsHolder)
     }
 
     if (i && !this.hide_move_buttons) {
-      this.rows[i].moveup_button = this.getButton('', (this.schema.format === 'tabs-top' ? 'moveleft' : 'moveup'), this.translate('button_move_up_title'))
-      this.rows[i].moveup_button.classList.add('moveup', 'json-editor-btntype-move')
-      this.rows[i].moveup_button.setAttribute('data-i', i)
-      this.rows[i].moveup_button.addEventListener('click', e => {
-        e.preventDefault()
-        e.stopPropagation()
-        const i = e.currentTarget.getAttribute('data-i') * 1
-
-        if (i <= 0) return
-        const rows = this.getValue()
-        const tmp = rows[i - 1]
-        rows[i - 1] = rows[i]
-        rows[i] = tmp
-
-        this.setValue(rows)
-        this.active_tab = this.rows[i - 1].tab
-        this.refreshTabs()
-
-        this.onChange(true)
-
-        this.jsoneditor.trigger('moveRow', this.rows[i - 1])
-      })
-
-      if (controlsHolder) {
-        controlsHolder.appendChild(this.rows[i].moveup_button)
-      }
+      this.rows[i].moveup_button = this._createMoveUpButton(i, controlsHolder)
     }
 
     if (!this.hide_move_buttons) {
-      this.rows[i].movedown_button = this.getButton('', (this.schema.format === 'tabs-top' ? 'moveright' : 'movedown'), this.translate('button_move_down_title'))
-      this.rows[i].movedown_button.classList.add('movedown', 'json-editor-btntype-move')
-      this.rows[i].movedown_button.setAttribute('data-i', i)
-      this.rows[i].movedown_button.addEventListener('click', e => {
-        e.preventDefault()
-        e.stopPropagation()
-        const i = e.currentTarget.getAttribute('data-i') * 1
-
-        const rows = this.getValue()
-        if (i >= rows.length - 1) return
-        const tmp = rows[i + 1]
-        rows[i + 1] = rows[i]
-        rows[i] = tmp
-
-        this.setValue(rows)
-        this.active_tab = this.rows[i + 1].tab
-        this.refreshTabs()
-        this.onChange(true)
-
-        this.jsoneditor.trigger('moveRow', this.rows[i + 1])
-      })
-
-      if (controlsHolder) {
-        controlsHolder.appendChild(this.rows[i].movedown_button)
-      }
+      this.rows[i].movedown_button = this._createMoveDownButton(i, controlsHolder)
     }
 
     if (value) this.rows[i].setValue(value, initial)
@@ -627,34 +498,134 @@ export class ArrayEditor extends AbstractEditor {
     return this.rows[i]
   }
 
-  addControls () {
-    this.collapsed = false
-    this.toggle_button = this.getButton('', 'collapse', this.translate('button_collapse'))
-    this.toggle_button.classList.add('json-editor-btntype-toggle')
-    this.toggle_button.style.margin = '0 10px 0 0'
-    this.title.insertBefore(this.toggle_button, this.title.childNodes[0])
-
-    const rowHolderDisplay = this.row_holder.style.display
-    const controlsDisplay = this.controls.style.display
-    this.toggle_button.addEventListener('click', e => {
+  _createDeleteButton (i, holder) {
+    const button = this.getButton(this.getItemTitle(), 'delete', this.translate('button_delete_row_title', [this.getItemTitle()]))
+    button.classList.add('delete', 'json-editor-btntype-delete')
+    button.setAttribute('data-i', i)
+    button.addEventListener('click', e => {
       e.preventDefault()
       e.stopPropagation()
-      if (this.collapsed) {
-        this.collapsed = false
-        if (this.panel) this.panel.style.display = ''
-        this.row_holder.style.display = rowHolderDisplay
-        if (this.tabs_holder) this.tabs_holder.style.display = ''
-        this.controls.style.display = controlsDisplay
-        this.setButtonText(e.currentTarget, '', 'collapse', this.translate('button_collapse'))
-      } else {
-        this.collapsed = true
-        this.row_holder.style.display = 'none'
-        if (this.tabs_holder) this.tabs_holder.style.display = 'none'
-        this.controls.style.display = 'none'
-        if (this.panel) this.panel.style.display = 'none'
-        this.setButtonText(e.currentTarget, '', 'expand', this.translate('button_expand'))
+
+      if (!this.askConfirmation()) {
+        return false
       }
+
+      const i = e.currentTarget.getAttribute('data-i') * 1
+      const newval = this.getValue().filter((row, j) => j !== i)
+      let newActiveTab = null
+
+      const editor = this.rows[i]
+
+      this.setValue(newval)
+
+      if (this.rows[i]) {
+        newActiveTab = this.rows[i].tab
+      } else if (this.rows[i - 1]) {
+        newActiveTab = this.rows[i - 1].tab
+      }
+
+      if (newActiveTab) {
+        this.active_tab = newActiveTab
+        this.refreshTabs()
+      }
+
+      this.onChange(true)
+      this.jsoneditor.trigger('deleteRow', editor)
     })
+
+    if (holder) {
+      holder.appendChild(button)
+    }
+    return button
+  }
+
+  _createCopyButton (i, holder) {
+    const button = this.getButton(this.getItemTitle(), 'copy', `Copy ${this.getItemTitle()}`)
+    button.classList.add('copy', 'json-editor-btntype-copy')
+    button.setAttribute('data-i', i)
+    button.addEventListener('click', e => {
+      const value = this.getValue()
+      e.preventDefault()
+      e.stopPropagation()
+      const i = e.currentTarget.getAttribute('data-i') * 1
+
+      value.forEach((row, j) => {
+        if (j === i) {
+          value.push(row)
+        }
+      })
+
+      this.setValue(value)
+      this.refreshValue(true)
+      this.onChange(true)
+    })
+
+    holder.appendChild(button)
+    return button
+  }
+
+  _createMoveUpButton (i, holder) {
+    const button = this.getButton('', (this.schema.format === 'tabs-top' ? 'moveleft' : 'moveup'), this.translate('button_move_up_title'))
+    button.classList.add('moveup', 'json-editor-btntype-move')
+    button.setAttribute('data-i', i)
+    button.addEventListener('click', e => {
+      e.preventDefault()
+      e.stopPropagation()
+      const i = e.currentTarget.getAttribute('data-i') * 1
+
+      if (i <= 0) return
+      const rows = this.getValue()
+      const tmp = rows[i - 1]
+      rows[i - 1] = rows[i]
+      rows[i] = tmp
+
+      this.setValue(rows)
+      this.active_tab = this.rows[i - 1].tab
+      this.refreshTabs()
+
+      this.onChange(true)
+
+      this.jsoneditor.trigger('moveRow', this.rows[i - 1])
+    })
+
+    if (holder) {
+      holder.appendChild(button)
+    }
+    return button
+  }
+
+  _createMoveDownButton (i, holder) {
+    const button = this.getButton('', (this.schema.format === 'tabs-top' ? 'moveright' : 'movedown'), this.translate('button_move_down_title'))
+    button.classList.add('movedown', 'json-editor-btntype-move')
+    button.setAttribute('data-i', i)
+    button.addEventListener('click', e => {
+      e.preventDefault()
+      e.stopPropagation()
+      const i = e.currentTarget.getAttribute('data-i') * 1
+
+      const rows = this.getValue()
+      if (i >= rows.length - 1) return
+      const tmp = rows[i + 1]
+      rows[i + 1] = rows[i]
+      rows[i] = tmp
+
+      this.setValue(rows)
+      this.active_tab = this.rows[i + 1].tab
+      this.refreshTabs()
+      this.onChange(true)
+
+      this.jsoneditor.trigger('moveRow', this.rows[i + 1])
+    })
+
+    if (holder) {
+      holder.appendChild(button)
+    }
+    return button
+  }
+
+  addControls () {
+    this.collapsed = false
+    this.toggle_button = this._createToggleButton()
 
     /* If it should start collapsed */
     if (this.options.collapsed) {
@@ -669,9 +640,48 @@ export class ArrayEditor extends AbstractEditor {
     }
 
     /* Add "new row" and "delete last" buttons below editor */
-    this.add_row_button = this.getButton(this.getItemTitle(), 'add', this.translate('button_add_row_title', [this.getItemTitle()]))
-    this.add_row_button.classList.add('json-editor-btntype-add')
-    this.add_row_button.addEventListener('click', (e) => {
+    this.add_row_button = this._createAddRowButton()
+    this.delete_last_row_button = this._createDeleteLastRowButton()
+    this.remove_all_rows_button = this._createRemoveAllRowsButton()
+
+    if (this.tabs) {
+      this.add_row_button.classList.add('je-array-control-btn')
+      this.delete_last_row_button.classList.add('je-array-control-btn')
+      this.remove_all_rows_button.classList.add('je-array-control-btn')
+    }
+  }
+
+  _createToggleButton () {
+    const button = this.getButton('', 'collapse', this.translate('button_collapse'))
+    button.classList.add('json-editor-btntype-toggle')
+    this.title.insertBefore(button, this.title.childNodes[0])
+
+    const rowHolderDisplay = this.row_holder.style.display
+    const controlsDisplay = this.controls.style.display
+    button.addEventListener('click', e => {
+      e.preventDefault()
+      e.stopPropagation()
+      if (this.panel) this.setVisibility(this.panel, this.collapsed)
+      if (this.tabs_holder) this.setVisibility(this.tabs_holder, this.collapsed)
+      if (this.collapsed) {
+        this.collapsed = false
+        this.row_holder.style.display = rowHolderDisplay
+        this.controls.style.display = controlsDisplay
+        this.setButtonText(e.currentTarget, '', 'collapse', this.translate('button_collapse'))
+      } else {
+        this.collapsed = true
+        this.row_holder.style.display = 'none'
+        this.controls.style.display = 'none'
+        this.setButtonText(e.currentTarget, '', 'expand', this.translate('button_expand'))
+      }
+    })
+    return button
+  }
+
+  _createAddRowButton () {
+    const button = this.getButton(this.getItemTitle(), 'add', this.translate('button_add_row_title', [this.getItemTitle()]))
+    button.classList.add('json-editor-btntype-add')
+    button.addEventListener('click', (e) => {
       e.preventDefault()
       e.stopPropagation()
       const i = this.rows.length
@@ -691,11 +701,14 @@ export class ArrayEditor extends AbstractEditor {
       this.onChange(true)
       this.jsoneditor.trigger('addRow', editor)
     })
-    this.controls.appendChild(this.add_row_button)
+    this.controls.appendChild(button)
+    return button
+  }
 
-    this.delete_last_row_button = this.getButton(this.translate('button_delete_last', [this.getItemTitle()]), 'subtract', this.translate('button_delete_last_title', [this.getItemTitle()]))
-    this.delete_last_row_button.classList.add('json-editor-btntype-deletelast')
-    this.delete_last_row_button.addEventListener('click', (e) => {
+  _createDeleteLastRowButton () {
+    const button = this.getButton(this.translate('button_delete_last', [this.getItemTitle()]), 'subtract', this.translate('button_delete_last_title', [this.getItemTitle()]))
+    button.classList.add('json-editor-btntype-deletelast')
+    button.addEventListener('click', (e) => {
       e.preventDefault()
       e.stopPropagation()
 
@@ -722,11 +735,14 @@ export class ArrayEditor extends AbstractEditor {
       this.onChange(true)
       this.jsoneditor.trigger('deleteRow', editor)
     })
-    this.controls.appendChild(this.delete_last_row_button)
+    this.controls.appendChild(button)
+    return button
+  }
 
-    this.remove_all_rows_button = this.getButton(this.translate('button_delete_all'), 'delete', this.translate('button_delete_all_title'))
-    this.remove_all_rows_button.classList.add('json-editor-btntype-deleteall')
-    this.remove_all_rows_button.addEventListener('click', (e) => {
+  _createRemoveAllRowsButton () {
+    const button = this.getButton(this.translate('button_delete_all'), 'delete', this.translate('button_delete_all_title'))
+    button.classList.add('json-editor-btntype-deleteall')
+    button.addEventListener('click', (e) => {
       e.preventDefault()
       e.stopPropagation()
 
@@ -739,21 +755,8 @@ export class ArrayEditor extends AbstractEditor {
       this.onChange(true)
       this.jsoneditor.trigger('deleteAllRows')
     })
-    this.controls.appendChild(this.remove_all_rows_button)
-
-    if (this.tabs) {
-      this.add_row_button.style.width = '100%'
-      this.add_row_button.style.textAlign = 'left'
-      this.add_row_button.style.marginBottom = '3px'
-
-      this.delete_last_row_button.style.width = '100%'
-      this.delete_last_row_button.style.textAlign = 'left'
-      this.delete_last_row_button.style.marginBottom = '3px'
-
-      this.remove_all_rows_button.style.width = '100%'
-      this.remove_all_rows_button.style.textAlign = 'left'
-      this.remove_all_rows_button.style.marginBottom = '3px'
-    }
+    this.controls.appendChild(button)
+    return button
   }
 
   showValidationErrors (errors) {
@@ -788,3 +791,4 @@ export class ArrayEditor extends AbstractEditor {
     )
   }
 }
+ArrayEditor.rules = rules

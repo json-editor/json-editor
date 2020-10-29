@@ -1,5 +1,6 @@
 import { AbstractTheme } from '../theme.js'
 import rules from './bootstrap4.css.js'
+import { trigger } from '../utilities'
 
 /* Theme config options that allows changing various aspects of the output */
 const options = {
@@ -83,6 +84,56 @@ export class bootstrap4Theme extends AbstractTheme {
     }
 
     return el
+  }
+
+  getStepperButtons (input) {
+    const inputGroup = document.createElement('div')
+    const prepend = document.createElement('div')
+    const append = document.createElement('div')
+
+    const minusBtn = document.createElement('button')
+    minusBtn.setAttribute('type', 'button')
+
+    const plusBtn = document.createElement('button')
+    plusBtn.setAttribute('type', 'button')
+
+    inputGroup.appendChild(prepend)
+    inputGroup.appendChild(input)
+    inputGroup.appendChild(append)
+    prepend.appendChild(minusBtn)
+    append.appendChild(plusBtn)
+
+    inputGroup.classList.add('input-group')
+    prepend.classList.add('input-group-prepend')
+    append.classList.add('input-group-append')
+    minusBtn.classList.add('btn')
+    minusBtn.classList.add('btn-secondary')
+    minusBtn.classList.add('stepper-down')
+    plusBtn.classList.add('btn')
+    plusBtn.classList.add('btn-secondary')
+    plusBtn.classList.add('stepper-up')
+
+    const readonly = input.getAttribute('readonly')
+
+    if (readonly) {
+      minusBtn.setAttribute('disabled', true)
+      plusBtn.setAttribute('disabled', true)
+    }
+
+    minusBtn.textContent = '-'
+    plusBtn.textContent = '+'
+
+    minusBtn.addEventListener('click', () => {
+      input.stepDown()
+      trigger(input, 'change')
+    })
+
+    plusBtn.addEventListener('click', () => {
+      input.stepUp()
+      trigger(input, 'change')
+    })
+
+    return inputGroup
   }
 
   getFormInputField (type) {
@@ -402,10 +453,10 @@ export class bootstrap4Theme extends AbstractTheme {
       input.errmsg = document.createElement('p')
       input.errmsg.classList.add('invalid-feedback')
       input.controlgroup.appendChild(input.errmsg)
-    } else {
-      input.errmsg.style.display = ''
+      input.errmsg.style.display = 'block'
     }
 
+    input.errmsg.style.display = 'block'
     input.errmsg.textContent = text
   }
 

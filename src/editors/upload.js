@@ -229,7 +229,7 @@ export class UploadEditor extends AbstractEditor {
       }
 
       this.options.upload_handler(this.path, file, {
-        success (url) {
+        success: (url) => {
           this.setValue(url)
 
           if (this.parent) this.parent.onChildEditorChange(this)
@@ -238,12 +238,12 @@ export class UploadEditor extends AbstractEditor {
           if (this.progressBar) this.preview.removeChild(this.progressBar)
           uploadButton.removeAttribute('disabled')
         },
-        failure (error) {
+        failure: (error) => {
           this.theme.addInputError(this.uploader, error)
           if (this.progressBar) this.preview.removeChild(this.progressBar)
           uploadButton.removeAttribute('disabled')
         },
-        updateProgress (progress) {
+        updateProgress: (progress) => {
           if (this.progressBar) {
             if (progress) this.theme.updateProgressBar(this.progressBar, progress)
             else this.theme.updateProgressBarUnknown(this.progressBar)
