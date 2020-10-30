@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <script src="../../dist/jsoneditor.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <title>object-no-duplicated-id</title>
+</head>
+<body>
+
+<div class="container">
+  <div class="form-group">
+    <textarea id="value" class="form-control" rows="10"></textarea>
+  </div>
+  <button id="get-value" class='btn btn-secondary'>get value</button>
+  <hr>
+  <div id='form-container'></div>
+</div>
+
+<script>
+  var formContainer = document.querySelector('#form-container')
+  var value = document.querySelector('#value')
+  var getValue = document.querySelector('#get-value')
+
+  var today = (offset) => {
+    var t = new Date()
+    t.setDate(t.getDate() + (offset || 0))
+    return t.toISOString().split('T')[0]
+  }
+
+  var schema = {
+    "description": "A representation of a person, company, organization, or place",
+    "type": "object",
+    "properties": {
+      "time": {
+        "title": "time",
+        'type': 'string',
+        'format': 'time',
+        'min': '11:00',
+        'max': '13:00',
+        'default': '12:00'
+      },
+      "date": {
+        "title": "date",
+        'type': 'string',
+        'format': 'date',
+        'min': '1970-01-01',
+        'max': '2100-01-01',
+        'default': today()
+      },
+      "datetimelocal": {
+        "title": "datetime-local",
+        'type': 'string',
+        'format': 'datetime-local',
+        'min': '1970-01-01T00:00',
+        'max': '2100-01-01T00:00',
+        'default': today() + 'T00:00'
+      }
+    }
+  }
+
+  var editor = new JSONEditor(formContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    show_errors: 'always'
+  })
+
+  getValue.addEventListener('click', function () {
+    value.value = JSON.stringify(editor.getValue())
+    console.log(editor.getValue())
+  })
+
+</script>
+
+</body>
+</html>

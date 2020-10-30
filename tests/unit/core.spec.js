@@ -78,6 +78,13 @@ describe('JSONEditor', function () {
     expect(editor.theme).toBeTruthy()
   })
 
+  it('can add custom theme (no custom css rules)', () => {
+    class CustomTheme extends JSONEditor.AbstractTheme {}
+    JSONEditor.defaults.themes.myCustom2 = CustomTheme
+    editor = new JSONEditor(element, { schema: schema, theme: 'myCustom2' })
+    expect(editor.theme).toBeTruthy()
+  })
+
   it('can add custom editor', () => {
     class CustomEditor extends JSONEditor.AbstractEditor {}
     JSONEditor.defaults.editors.custom = CustomEditor

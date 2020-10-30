@@ -76,6 +76,32 @@ describe('Editor', () => {
     })
     expect(JSON.stringify(editor.getValue())).toBe('[1,2,3,4,5]')
   })
+
+  it('oneOf Editor Test', () => {
+    editor = new JSONEditor(element, {
+      schema: {
+        type: 'object',
+        properties: {
+          one_or_many: {
+            oneOf: [
+              {
+                type: 'string'
+              },
+              {
+                type: 'array',
+                format: 'table',
+                items: {
+                  type: 'string'
+                }
+              }
+            ]
+          }
+        }
+      }
+    })
+    const e = editor.getEditor('root.one_or_many')
+    e.switchEditor(1)
+  })
 })
 
 const fixture = [

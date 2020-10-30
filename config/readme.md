@@ -23,7 +23,7 @@ As a result there are four separate Webpack configurations, each derived from we
 | webpack.prod.js | Generates minified output to `/dist` root | `build.prod` - runs this build<br>`build` - runs both `prod` and `nonmin` builds
 | webpack.nonmin.js | Generates non-minified output and sourcemap to `/dist/nonmin/` | `build.nonmin` - runs this build<br>`build` - runs both `prod` and `nonmin` builds<br>`debug.nonmin` - starts dev server for this config in watch mode. (No need to build first)<br>`watch` - starts build in watch mode |
 | webpack.dev.js | Generates output and sourcemap (debuggable by both Chrome and Firefox) for dev server | `debug` - starts dev server for this config in watch mode. (No need to build first)
-| wepack.test.js | Provides script only build for Karma test runner | `test` - runs Karma scripts in Chrome Browser in watch mode<br>`test.headless` - runs Karma scripts once in headless mode
+| karma.config.js | Contains tiny webpack config to provide script only build for Karma test runner | `test` - runs Karma scripts in Chrome Browser in watch mode<br>`test.headless` - runs Karma scripts once in headless mode
 
 
 

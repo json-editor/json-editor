@@ -1,4 +1,5 @@
 const webpack = require('webpack')
+const helpers = require('./helpers')
 const CssToJSON = require('../build/CssToJson')
 
 const bannerText = `/**
@@ -25,7 +26,7 @@ module.exports = {
         enforce: 'pre',
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: `eslint-loader`
+        loader: 'eslint-loader'
       },
       {
         test: /\.js|\.css.js$/,
@@ -35,7 +36,11 @@ module.exports = {
             loader: 'babel-loader',
             options: {
               presets: [
-                '@babel/preset-env'
+                ['@babel/preset-env', {
+                  useBuiltIns: 'usage',
+                  corejs: 3,
+                  debug: false
+                }]
               ]
             }
           }
@@ -58,5 +63,13 @@ module.exports = {
     new CssToJSON({
       pattern: './src/**/*.css'
     })
-  ]
+  ],
+  performance: {
+    hints: false
+  },
+  devServer: {
+    contentBase: helpers.root('.'),
+    historyApiFallback: true,
+    port: 8080
+  }
 }

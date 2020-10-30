@@ -22,3 +22,5 @@ selenium-chrome:
 
 browser:
 	xdg-open http://$(DOCKER_HOST):9100
+
+open: browser

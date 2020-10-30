@@ -1611,6 +1611,26 @@ JSONEditor.defaults.custom_validators.push((schema, value, path) => {
 });
 ```
 
+Override Editors Methods
+----------------
+
+```js
+// override class method
+JSONEditor.defaults.editors.integer.prototype.sanitize = function(value) {
+  return value
+}; 
+```
+
+or
+
+```js
+// override object method
+var path ="root.integerfield";
+editor.getEditor(path).sanitize = function(value) {
+  return value
+};
+```
+
 Support Legacy Browser (not tested)
 ----------------------
 

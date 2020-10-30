@@ -195,6 +195,8 @@ export class SchemaLoader {
   _isLocalUrl (url, fileBase) {
     return fileBase !== url.substr(0, fileBase.length) &&
       url.substr(0, 4) !== 'http' &&
+      url.substr(0, 5) !== 'blob:' &&
+      url.substr(0, 5) !== 'data:' &&
       url.substr(0, 1) !== '/'
   }
 

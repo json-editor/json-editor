@@ -1,6 +1,15 @@
+const CssToJSON = require('../build/CssToJson')
+
 /* eslint-disable no-undef */
 // Karma configuration
-var webpackConfig = require('./webpack.test')
+const webpackConfig = {
+  devtool: 'inline-source-map',
+  plugins: [
+    new CssToJSON({
+      pattern: './src/**/*.css'
+    })
+  ]
+}
 
 module.exports = function (config) {
   config.set({

@@ -2,7 +2,7 @@
   "name": "@json-editor/json-editor",
   "title": "JSONEditor",
   "description": "JSON Schema based editor",
-  "version": "2.2.1",
+  "version": "2.5.1",
   "main": "dist/jsoneditor.js",
   "author": {
     "name": "Jeremy Dorn",
@@ -29,6 +29,7 @@
     "build": "npm run build.prod && npm run build.nonmin",
     "build.prod": "webpack --config config/webpack.prod.js --progress --profile --bail",
     "build.nonmin": "webpack --config config/webpack.nonmin.js --progress --profile --bail",
+    "build.nonmin.travis": "webpack --config config/webpack.nonmin.js --env.travis --progress --profile --bail",
     "build.dev": "webpack --config config/webpack.dev.js --progress --profile --bail",
     "watch": "webpack --config config/webpack.nonmin.js --watch",
     "debug": "webpack-dev-server --config config/webpack.dev.js --progress",
@@ -36,7 +37,7 @@
     "test": "karma start config/karma.conf.js --browsers Chrome --log-level debug",
     "test-headless": "karma start config/karma.conf.js --singleRun true --browsers ChromeHeadless",
     "serve-test": "http-server --p 9001",
-    "docker-test": "cd tests && docker-compose run --rm node npm install && docker-compose run --rm node npm run build && docker-compose up -d && docker-compose ps && docker-compose run --rm codeceptjs codeceptjs run-multiple basic --invert --grep  @optional",
+    "docker-test": "docker-compose run --rm node npm install && docker-compose run --rm node npm run build && docker-compose up -d && docker-compose ps && docker-compose exec node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:chrome --invert --grep '@optional'",
     "preversion": "npm run test-headless && npm run docker-test",
     "postversion": "git push && git push --tags && npm publish ./ --access public",
     "winserver": "cd tests && start cmd /c npm run serve-test .",
@@ -53,7 +54,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
+    "@babel/plugin-transform-runtime": "^7.12.1",
     "@babel/preset-env": "^7.9.6",
+    "@babel/runtime": "^7.12.1",
     "ace-builds": "^1.4.11",
     "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
@@ -79,7 +82,6 @@
     "mini-css-extract-plugin": "^0.8.2",
     "mocha": "^6.2.2",
     "mochawesome": "^4.1.0",
-    "null-loader": "^3.0.0",
     "postcss-loader": "^3.0.0",
     "puppeteer": "^1.20.0",
     "remove-strict-webpack-plugin": "^0.1.2",
@@ -89,8 +91,10 @@
     "style-loader": "^1.2.1",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3",
+    "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^4.2.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "core-js": "^3.6.5"
+  }
 }
