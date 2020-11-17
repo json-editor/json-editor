@@ -79,8 +79,8 @@ export class JSONEditor {
         container: this.root_container
       })
 
-      this.root.preBuild()
-      this.root.build()
+      this.root.preBuild() /*note preBuild() is not yet implemented*/
+      this.root.build() /*note build() is not yet implemented*/
       this.root.postBuild()
 
       /* Starting data */
