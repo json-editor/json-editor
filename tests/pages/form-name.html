@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Basic JSON Editor Example</title>
+    <script src="../../dist/jsoneditor.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+    <div id='editor_holder_1'></div>
+    <div id='editor_holder_2'></div>
+</div>
+
+<script>
+  new JSONEditor(document.getElementById('editor_holder_1'), {
+    schema: {
+      "title": "Werden die Tiefboxen mind. 2 x täglich gereinigt?",
+      "type": "string",
+      "enum": [
+        "korrekt",
+        "inkorrekt",
+        "nv"
+      ],
+      "options": {
+        "enum_titles": [
+          "Ja",
+          "Nein",
+          "Nicht bekannt"
+        ],
+        "grid_columns": 12
+      },
+      "format": "radio",
+      "default": ""
+    },
+    theme: 'bootstrap4',
+    disable_collapse: true,
+    disable_edit_json: true,
+    disable_properties: true,
+    use_default_values: false,
+    required_by_default: true,
+    show_errors: 'always',
+    disable_array_reorder: true,
+    disable_array_delete_all_rows: true,
+    disable_array_delete_last_row: true,
+    keep_oneof_values: false,
+    no_additional_properties: true,
+    form_name_root: 'form_1'
+  })
+
+  new JSONEditor(document.getElementById('editor_holder_2'), {
+    schema: {
+      "title": "Werden die Tiefboxen mind. 2 x täglich gereinigt?",
+      "type": "string",
+      "enum": [
+        "korrekt",
+        "inkorrekt",
+        "nv"
+      ],
+      "options": {
+        "enum_titles": [
+          "Ja",
+          "Nein",
+          "Nicht bekannt"
+        ],
+        "grid_columns": 12
+      },
+      "format": "radio",
+      "default": ""
+    },
+    theme: 'bootstrap4',
+    disable_collapse: true,
+    disable_edit_json: true,
+    disable_properties: true,
+    use_default_values: false,
+    required_by_default: true,
+    show_errors: 'always',
+    disable_array_reorder: true,
+    disable_array_delete_all_rows: true,
+    disable_array_delete_last_row: true,
+    keep_oneof_values: false,
+    no_additional_properties: true,
+    form_name_root: 'form_2'
+  })
+
+
+</script>
+</body>
+</html>
