@@ -61,3 +61,9 @@ Scenario('should watch form for changes @optional', async (I) => {
   I.click('.set-value');
   I.seeElement('.form-changed');
 });
+
+Scenario('should change the form if form_name_root option is set @core', async (I) => {
+  I.amOnPage('form-name.html');
+  I.seeElement('[for="form_1[1]"]');
+  I.seeElement('[for="form_2[1]"]');
+});
