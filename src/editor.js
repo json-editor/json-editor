@@ -16,11 +16,12 @@ export class AbstractEditor {
     this.active = true
     this.options = extend({}, (this.options || {}), (this.schema.options || {}), (options.schema.options || {}), options)
 
-    if (!options.path && !this.schema.id) this.schema.id = 'root'
-    this.path = options.path || 'root'
+    this.formname = this.jsoneditor.options.form_name_root || 'root'
+
+    if (!options.path && !this.schema.id) this.schema.id = this.formname
+    this.path = options.path || this.formname
     this.formname = options.formname || this.path.replace(/\.([^.]+)/g, '[$1]')
 
-    if (this.jsoneditor.options.form_name_root) this.formname = this.jsoneditor.options.form_name_root
     this.parent = options.parent
     this.key = this.parent !== undefined ? this.path.split('.').slice(this.parent.path.split('.').length).join('.') : this.path
 
