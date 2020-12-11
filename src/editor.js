@@ -253,7 +253,7 @@ export class AbstractEditor {
         }
         first = pathParts.shift()
 
-        if (first === '#') first = this.jsoneditor.schema.id || 'root'
+        if (first === '#') first = this.jsoneditor.schema.id || this.jsoneditor.options.form_name_root
 
         /* Find the root node for this template variable */
         root = this.theme.closest(this.container, `[data-schemaid="${first}"]`)

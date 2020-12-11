@@ -10,25 +10,29 @@
 <body>
 
 <div class="container">
+    <textarea id="value-form-1" cols="30" rows="10"></textarea>
+    <textarea id="value-form-2" cols="30" rows="10"></textarea>
+    <button id="get-value-form-1">get value</button>
+    <button id="get-value-form-2">get value</button>
     <div id='editor_holder_1'></div>
     <div id='editor_holder_2'></div>
 </div>
 
 <script>
-  new JSONEditor(document.getElementById('editor_holder_1'), {
+  var editor1 = new JSONEditor(document.getElementById('editor_holder_1'), {
     schema: {
-      "title": "Werden die Tiefboxen mind. 2 x täglich gereinigt?",
+      "title": "some title",
       "type": "string",
       "enum": [
-        "korrekt",
-        "inkorrekt",
+        "yes",
+        "no",
         "nv"
       ],
       "options": {
         "enum_titles": [
-          "Ja",
-          "Nein",
-          "Nicht bekannt"
+          "Yes",
+          "No",
+          "Maybe"
         ],
         "grid_columns": 12
       },
@@ -50,20 +54,20 @@
     form_name_root: 'form_1'
   })
 
-  new JSONEditor(document.getElementById('editor_holder_2'), {
+  var editor2 = new JSONEditor(document.getElementById('editor_holder_2'), {
     schema: {
-      "title": "Werden die Tiefboxen mind. 2 x täglich gereinigt?",
+      "title": "some title",
       "type": "string",
       "enum": [
-        "korrekt",
-        "inkorrekt",
+        "yes",
+        "no",
         "nv"
       ],
       "options": {
         "enum_titles": [
-          "Ja",
-          "Nein",
-          "Nicht bekannt"
+          "Yes",
+          "No",
+          "Maybe"
         ],
         "grid_columns": 12
       },
@@ -84,6 +88,22 @@
     no_additional_properties: true,
     form_name_root: 'form_2'
   })
+
+  var valueForm1 = document.querySelector('#value-form-1');
+  var valueForm2 = document.querySelector('#value-form-2');
+  var getValueForm1 = document.querySelector('#get-value-form-1');
+  var getValueForm2 = document.querySelector('#get-value-form-2');
+  console.log(getValueForm1, getValueForm2, valueForm1, valueForm2)
+
+  getValueForm1.addEventListener('click', function () {
+    valueForm1.value = JSON.stringify(editor1.getValue());
+    console.log(editor1.getValue());
+  });
+
+  getValueForm2.addEventListener('click', function () {
+    valueForm2.value = JSON.stringify(editor2.getValue());
+    console.log(editor2.getValue());
+  });
 
 
 </script>
