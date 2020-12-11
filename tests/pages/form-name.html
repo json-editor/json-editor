@@ -93,16 +93,13 @@
   var valueForm2 = document.querySelector('#value-form-2');
   var getValueForm1 = document.querySelector('#get-value-form-1');
   var getValueForm2 = document.querySelector('#get-value-form-2');
-  console.log(getValueForm1, getValueForm2, valueForm1, valueForm2)
 
   getValueForm1.addEventListener('click', function () {
     valueForm1.value = JSON.stringify(editor1.getValue());
-    console.log(editor1.getValue());
   });
 
   getValueForm2.addEventListener('click', function () {
     valueForm2.value = JSON.stringify(editor2.getValue());
-    console.log(editor2.getValue());
   });
 
 
