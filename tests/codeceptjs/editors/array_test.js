@@ -58,7 +58,7 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
   // Puppeteer apparently only sees the text in the last popup, so it doesn't see the
   // 'Are you sure you want to remove this node?' popup text.
   // ToDo: Change test so instead of using popup for test values like 'deleteRow', use a
-  // form field. Similar to the '.debug' field.
+  // form field. Similar to the '.debug' field
   I.amAcceptingPopups()
   I.click('.json-editor-btntype-deletelast')
   I.seeInPopup('Are you sure you want to remove this node?')
