@@ -1,7 +1,6 @@
 /* global Feature Scenario */
-Feature('themes')
 
-// nothing
+Feature('themes')
 
 Scenario('It should display button Labels: null | null', async (I) => {
   I.amOnPage('themes.html')
