@@ -461,7 +461,7 @@ export class Validator {
 
   _validateSchema (schema, value, path) {
     const errors = []
-    path = path || 'root'
+    path = path || this.jsoneditor.root.formname
 
     /* Work on a copy of the schema */
     schema = extend({}, this.jsoneditor.expandRefs(schema))
