@@ -147,15 +147,15 @@ Scenario('should have unique ids', (I) => {
   I.waitForText('i am actually a cat')
 })
 
-Scenario('should hide properties with unfulfilled dependencies', (I) => {
+Scenario('should hide properties with unfulfilled dependencies @dependencies', (I) => {
   I.amOnPage('object-with-dependencies.html')
   I.seeElement('[data-schemapath="root.enable_option"] input')
   I.dontSeeElement('[data-schemapath="root.make_new"] input')
   I.dontSeeElement('[data-schemapath="root.existing_name"] input')
-
   I.click('[data-schemapath="root.enable_option"] input')
   I.seeElement('[data-schemapath="root.enable_option"] input')
   I.seeElement('[data-schemapath="root.make_new"] input')
+  I.click('[data-schemapath="root.make_new"] input')
   I.dontSeeElement('[data-schemapath="root.existing_name"] input')
 })
 
