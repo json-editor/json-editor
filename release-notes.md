@@ -77,3 +77,12 @@ Aditionally, all  editors had a single dependency on `JSONEditor` via the `.defa
 
 For now I have passed in `JSONEditor.defaults` as `defaults`.
 
+### NPM Release
+
+1. Switch to `release` branch and `merge master into release`
+2. Update `CHANGELOG.md`
+3. NPM login: `npm login`
+4. Build new version: `npm version 2.5.2`
+
+The `npm version` command will automatically build the source files & test the new generated script files.  
+On success the `postversion` script will push the source to GitHub and publish the version on NPM.
