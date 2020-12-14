@@ -12,6 +12,28 @@
       "title":"Template",
       "type":"object",
       "properties": {
+        "answerA": {
+          "title": "Question A:",
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "A",
+            "B",
+            "C"
+          ]
+        },
+        "answerB": {
+          "title": "Question B:",
+          "type": "string",
+          "options": {
+            "dependencies": {
+              "answerA": [
+                "B",
+                "C"
+              ]
+            }
+          }
+        },
         "enable_option": {
           "type":"boolean",
           "format":"checkbox"
@@ -36,7 +58,7 @@
           }
         }
       },
-      "required": ["enable_option"],
+      "required": ["enable_option", 'answerA'],
       "dependencies": {
         "make_new": ["enable_option"],
         "existing_name": [
@@ -45,14 +67,9 @@
         ]
       },
     };
-    const defaults = {
-        "enable_option":false,
-        "make_new":true,
-        "existing_name":"A Name"
-    };
+
     const editor = new JSONEditor(document.getElementById('editor'), {
         schema,
-        startval: defaults,
         show_errors: 'always'
     });
   </script>
