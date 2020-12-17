@@ -105,7 +105,7 @@ export class AbstractTheme {
     return el
   }
 
-  getHeader (text) {
+  getHeader (text, currentDepth) {
     const el = document.createElement('h3')
     if (typeof text === 'string') {
       el.textContent = text

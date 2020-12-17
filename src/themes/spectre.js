@@ -98,7 +98,7 @@ export class spectreTheme extends AbstractTheme {
     return el
   }
 
-  getHeader (text) {
+  getHeader (text, currentDepth) {
     const el = document.createElement('h4')
     if (typeof text === 'string') {
       el.textContent = text
