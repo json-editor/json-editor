@@ -555,7 +555,7 @@ export class ObjectEditor extends AbstractEditor {
         this.header = document.createElement('label')
         this.header.textContent = this.getTitle()
       }
-      this.title = this.theme.getHeader(this.header, this.currentDepth)
+      this.title = this.theme.getHeader(this.header, this.getPathDepth())
       this.title.classList.add('je-object__title')
       this.controls = this.theme.getButtonHolder()
       this.controls.classList.add('je-object__controls')
