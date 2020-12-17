@@ -370,7 +370,7 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
-  getHeader (text, currentDepth) {
+  getHeader (text, pathDepth) {
     /* var cardHeader = document.createElement('div') */
     /* cardHeader.classList.add('card-header') */
 
