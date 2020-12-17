@@ -1,5 +1,7 @@
 ### Unreleased
 
+- pass additional pathDepth parameter to getHeader() to allow themes to render headings hierarchically
+
 ### 2.5.1
 
 - Fix for #837 and chekboxes not displaying error messages #843
