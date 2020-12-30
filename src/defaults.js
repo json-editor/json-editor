@@ -286,8 +286,8 @@ function translate (key, variables) {
 
 /* Text element translate function */
 
-function translateElement(text, variables) {
-  return text;
+function translateElement (text, variables) {
+  return text
 }
 
 /* Default options when initializing JSON Editor */

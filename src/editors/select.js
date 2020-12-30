@@ -77,7 +77,7 @@ export class SelectEditor extends AbstractEditor {
 
       this.schema.enum.forEach((option, i) => {
         this.enum_options[i] = `${option}`
-        this.enum_display[i] = `${_this.translateElement(display[i]) || option}`
+        this.enum_display[i] = `${this.translateElement(display[i]) || option}`
         this.enum_values[i] = this.typecast(option)
       })
 

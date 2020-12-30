@@ -464,7 +464,7 @@ export class AbstractEditor {
     else if (titleOnly) return this.translateElement(this.schema.title)
     else return this.getTitle()
   }
-  
+
   cleanText (txt) {
     /* Clean out HTML tags from txt */
     const tmp = document.createElement('div')
