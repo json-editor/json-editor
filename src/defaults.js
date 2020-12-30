@@ -284,6 +284,12 @@ function translate (key, variables) {
   return string
 }
 
+/* Text element translate function */
+
+function translateElement(text, variables) {
+  return text;
+}
+
 /* Default options when initializing JSON Editor */
 const options = {
   upload,
@@ -307,5 +313,6 @@ export const defaults = {
   custom_validators,
   default_language,
   language,
-  translate
+  translate,
+  translateElement
 }

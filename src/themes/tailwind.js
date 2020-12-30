@@ -60,7 +60,7 @@ export class tailwindTheme extends AbstractTheme {
   }
 
   getTitle () {
-    return this.schema.title
+    return this.translateElement(this.schema.title)
   }
 
   getSelectInput (options, multiple) {

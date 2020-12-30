@@ -11,7 +11,7 @@ export class InfoEditor extends ButtonEditor {
   }
 
   getTitle () {
-    return this.schema.title
+    return this.translateElement(this.schema.title) 
   }
 
   getNumColumns () {

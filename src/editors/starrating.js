@@ -4,8 +4,8 @@ import rules from './starrating.css.js'
 export class StarratingEditor extends StringEditor {
   build () {
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
-    if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
-    if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText)
+    if (this.schema.description) this.description = this.theme.getFormInputDescription(this.translateElement(this.schema.description))
+    if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.translateElement(this.options.infoText))
     if (this.options.compact) this.container.classList.add('compact')
 
     this.ratingContainer = document.createElement('div')

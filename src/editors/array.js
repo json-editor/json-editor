@@ -162,7 +162,7 @@ export class ArrayEditor extends AbstractEditor {
     if (!this.item_title) {
       if (this.schema.items && !Array.isArray(this.schema.items)) {
         const tmp = this.jsoneditor.expandRefs(this.schema.items)
-        this.item_title = tmp.title || this.translate('default_array_item_title')
+        this.item_title = this.translateElement(tmp.title) || this.translate('default_array_item_title')
       } else {
         this.item_title = this.translate('default_array_item_title')
       }
@@ -200,7 +200,7 @@ export class ArrayEditor extends AbstractEditor {
     schema = this.jsoneditor.expandRefs(schema)
 
     this.item_info[stringified] = {
-      title: schema.title || this.translate('default_array_item_title'),
+      title: this.translateElement(schema.title) || this.translate('default_array_item_title'),
       default: schema.default,
       width: 12,
       child_editors: schema.properties || schema.items

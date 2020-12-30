@@ -32,7 +32,7 @@ export class Base64Editor extends AbstractEditor {
 
   build () {
     this.title = this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
-    if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText)
+    if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.translateElement(this.options.infoText))
 
     /* Input that holds the base64 string */
     this.input = this.theme.getFormInputField('hidden')
@@ -90,7 +90,7 @@ export class Base64Editor extends AbstractEditor {
       })
     }
 
-    this.preview = this.theme.getFormInputDescription(this.schema.description)
+    this.preview = this.theme.getFormInputDescription(this.translateElement(this.schema.description))
     this.container.appendChild(this.preview)
 
     this.control = this.theme.getFormControl(this.label, this.uploader || this.input, this.preview, this.infoButton)

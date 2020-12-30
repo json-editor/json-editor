@@ -70,8 +70,8 @@ export class StringEditor extends AbstractEditor {
 
   build () {
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
-    if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
-    if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText)
+    if (this.schema.description) this.description = this.theme.getFormInputDescription(this.translateElement(this.schema.description))
+    if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.translateElement(this.options.infoText))
 
     this.format = this.schema.format
     if (!this.format && this.schema.media && this.schema.media.type) {
