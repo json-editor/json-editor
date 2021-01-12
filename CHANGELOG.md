@@ -1,5 +1,7 @@
 ### Unreleased
 
+- added option `validation_error_placement` to change position of errors logs under each field 
+
 ### 2.5.1
 
 - Fix for #837 and chekboxes not displaying error messages #843

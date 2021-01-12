@@ -284,12 +284,15 @@ function translate (key, variables) {
   return string
 }
 
+export const BELOW_FIELD = 'below_field'
+export const GROUPED = 'grouped'
 /* Default options when initializing JSON Editor */
 const options = {
   upload,
   prompt_before_delete: true,
   use_default_values: true,
-  max_depth: 0
+  max_depth: 0,
+  validation_error_placement: GROUPED
 }
 
 /* This assignment was previously in index.js but makes more sense here */
