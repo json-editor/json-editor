@@ -123,13 +123,41 @@ export class bootstrap4Theme extends AbstractTheme {
     minusBtn.textContent = '-'
     plusBtn.textContent = '+'
 
+    const initialize = (input, min) => {
+      if (min) {
+        input.value = Number(min)
+      } else {
+        input.value = Number(input.value)
+      }
+      input.setAttribute('initialized', '1')
+    }
+
+    const min = input.getAttribute('min')
+    const max = input.getAttribute('max')
+
     minusBtn.addEventListener('click', () => {
-      input.stepDown()
+      if (!input.getAttribute('initialized')) {
+        initialize(input, min)
+      } else if (min) {
+        if (Number(input.value) > Number(min)) {
+          input.stepDown()
+        }
+      } else {
+        input.stepDown()
+      }
       trigger(input, 'change')
     })
 
     plusBtn.addEventListener('click', () => {
-      input.stepUp()
+      if (!input.getAttribute('initialized')) {
+        initialize(input, min)
+      } else if (max) {
+        if (Number(input.value) < Number(max)) {
+          input.stepUp()
+        }
+      } else {
+        input.stepUp()
+      }
       trigger(input, 'change')
     })
 
