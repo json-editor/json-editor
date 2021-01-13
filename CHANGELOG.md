@@ -1,5 +1,11 @@
 ### Unreleased
 
+### 2.5.2
+
+- Fixed stepper editor safari bug
+- Added release notes
+- Fixed form_name_root option behaviour
+
 ### 2.5.1
 
 - Fix for #837 and chekboxes not displaying error messages #843
