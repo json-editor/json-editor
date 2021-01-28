@@ -157,3 +157,12 @@ Scenario('should hide properties with unfulfilled dependencies', (I) => {
   I.seeElement('[data-schemapath="root.make_new"] input');
   I.dontSeeElement('[data-schemapath="root.existing_name"] input');
 });
+
+Scenario('should hide properties with dependencies and hidden option set to true', (I) => {
+  I.amOnPage('object-with-dependencies.html');
+  I.seeElement('[data-schemapath="root.enable_option"] input');
+  I.dontSeeElement('[data-schemapath="root.hidden_prop"] input');
+
+  I.click('[data-schemapath="root.enable_option"] input');
+  I.dontSeeElement('[data-schemapath="root.hidden_prop"] input');
+});

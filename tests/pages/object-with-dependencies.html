@@ -27,13 +27,21 @@
         },
         "existing_name": {
           "type":"string",
-          "invertDependency":["make_new"],
           "options": {
             "dependencies": {
               "enable_option":true,
               "make_new":false
             }
           }
+        },
+        "hidden_prop": {
+            "type": "string",
+            "options": {
+                "dependencies": {
+                    "enable_option": true
+                },
+                "hidden": true
+            }
         }
       },
       "required": ["enable_option"],
@@ -42,13 +50,15 @@
         "existing_name": [
           "enable_option",
           "make_new"
-        ]
-      },
+        ],
+        "hidden_prop": ["enable_option"]
+      }
     };
     const defaults = {
         "enable_option":false,
         "make_new":true,
-        "existing_name":"A Name"
+        "existing_name":"A Name",
+        "hidden_prop": ""
     };
     const editor = new JSONEditor(document.getElementById('editor'), {
         schema,

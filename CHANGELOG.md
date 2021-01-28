@@ -1,5 +1,7 @@
 ### Unreleased
 
+- Fix for #906 - hidden option is ignored on dependent properties
+
 ### 2.5.1
 
 - Fix for #837 and chekboxes not displaying error messages #843

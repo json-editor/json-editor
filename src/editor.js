@@ -129,7 +129,12 @@ export class AbstractEditor {
       this.notify()
     }
 
-    const displayMode = this.dependenciesFulfilled ? 'block' : 'none'
+    const show = (
+      this.dependenciesFulfilled &&
+      !this.options.hidden
+    )
+
+    const displayMode = show ? 'block' : 'none'
     if (wrapper.tagName === 'TD') {
       Object.keys(wrapper.childNodes).forEach(child => (wrapper.childNodes[child].style.display = displayMode))
     } else wrapper.style.display = displayMode
