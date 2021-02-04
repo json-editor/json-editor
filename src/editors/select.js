@@ -89,7 +89,7 @@ export class SelectEditor extends AbstractEditor {
       /* Boolean */
     } else if (this.schema.type === 'boolean') {
       this.enum_display = (this.schema.options && this.schema.options.enum_titles) || ['true', 'false']
-      this.enum_options = ['1', '']
+      this.enum_options = ['1', '0']
       this.enum_values = [true, false]
 
       if (!this.isRequired()) {
