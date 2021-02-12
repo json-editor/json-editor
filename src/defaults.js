@@ -145,6 +145,46 @@ languages.en = {
  */
   error_additional_properties: 'No additional properties allowed, but property {{0}} is set',
   /**
+ * When there is a propertyName that sets a max length and a property name exceeds the max length
+ * @variables This key takes one variable: The name of the invalid property
+ */
+  error_property_names_exceeds_maxlength: 'Property name {{0}} exceeds maxLength',
+  /**
+ * When there is a propertyName that sets an enum and a property name matches none of the possible enum
+ * @variables This key takes one variable: The name of the invalid property
+ */
+  error_property_names_enum_mismatch: 'Property name {{0}} does not match any enum values',
+  /**
+ * When there is a propertyName that sets a pattern and a property name does not match the pattern
+ * @variables This key takes one variable: The name of the invalid property
+ */
+  error_property_names_pattern_mismatch: 'Property name {{0}} does not match pattern',
+  /**
+ * When the propertyName is set to false and there is at least one property
+ * @variables This key takes one variable: The name of the invalid property
+ */
+  error_property_names_false: 'Property name {{0}} fails when propertyName is false',
+  /**
+ * When the propertyName specifies a maxLength that is not a number
+ * @variables This key takes one variable: The name of the current property
+ */
+  error_property_names_maxlength: 'Property name {{0}} cannot match invalid maxLength',
+  /**
+ * When the propertyName specifies an enum that is not an array
+ * @variables This key takes one variable: The name of the current property
+ */
+  error_property_names_enum: 'Property name {{0}} cannot match invalid enum',
+  /**
+ * When the propertyName specifies a pattern that is not a string
+ * @variables This key takes one variable: The name of the current property
+ */
+  error_property_names_pattern: 'Property name {{0}} cannot match invalid pattern',
+  /**
+ * When the propertyName is unsupported
+ * @variables This key takes one variable: The name of the invalid propertyName
+ */
+  error_property_names_unsupported: 'Unsupported propertyName {{0}}',
+  /**
  * When a dependency is not resolved
  * @variables This key takes one variable: The name of the missing property for the dependency
  */
