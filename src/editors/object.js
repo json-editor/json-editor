@@ -968,6 +968,7 @@ export class ObjectEditor extends AbstractEditor {
             [key]: {}
           }
         case 'additionalProperties':
+        case 'propertyNames':
           return {
             ...acc,
             [key]: true
