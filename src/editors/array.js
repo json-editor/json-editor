@@ -492,7 +492,7 @@ export class ArrayEditor extends AbstractEditor {
       this.rows[i].movedown_button = this._createMoveDownButton(i, controlsHolder)
     }
 
-    if (value) this.rows[i].setValue(value, initial)
+    this.rows[i].setValue(value, initial)
     this.refreshTabs()
 
     return this.rows[i]
