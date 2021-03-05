@@ -482,6 +482,7 @@ The supported icon libs are:
 *  fontawesome3
 *  fontawesome4
 *  fontawesome5
+*  openiconic
 *  spectre
 
 By default, no icons are used. Just like the CSS theme, you can set the icon lib globally or when initializing:
