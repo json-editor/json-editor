@@ -1,5 +1,7 @@
 ### Unreleased
 
+- add Open Iconic iconlib
+
 ### 2.5.2
 
 - Fixed stepper editor safari bug
