@@ -289,6 +289,11 @@ Here are all the available options:
     <td>If true default values based on the "type" of the property will be used</td>
     <td><code>true</code></td>
   </tr>
+  <tr>
+    <td>urn_resolver</td>
+    <td>A callback function to resolve an undefined Uniform Resource Name (URN) for <code>$ref</code>. The function receives a URN and callback to pass back a serialized JSON response. The function should return a boolean (true if the URN can be resolved; false otherwise).</td>
+    <td><code>false</code></td>
+  </tr>
   </tbody>
 </table>
 
