@@ -2,7 +2,7 @@ const assert = require('assert');
 
 Feature('object');
 
-Scenario('should respect property orders', async (I) => {
+Scenario('should respect property orders', async ({ I }) => {
   I.amOnPage('object.html');
   assert.equal(await I.grabAttributeFrom('[data-schemapath^="root"] .row:nth-of-type(1) [data-schemapath^="root."]', 'data-schemapath'), 'root.age');
   assert.equal(await I.grabAttributeFrom('[data-schemapath^="root"] .row:nth-of-type(2) [data-schemapath^="root."]', 'data-schemapath'), 'root.name');
@@ -11,17 +11,17 @@ Scenario('should respect property orders', async (I) => {
   assert.equal(await I.grabAttributeFrom('[data-schemapath^="root"] .row:nth-of-type(5) [data-schemapath^="root."]', 'data-schemapath'), 'root.zodiac');
 });
 
-Scenario('should validate required properties', async (I) => {
+Scenario('should validate required properties', async ({ I }) => {
   I.amOnPage('object.html');
   I.see('Value must be at least 18.');
 });
 
-Scenario('should validate also not required properties', async (I) => {
+Scenario('should validate also not required properties', async ({ I }) => {
   I.amOnPage('object.html');
   I.see('Value must be at least 3 characters long.');
 });
 
-Scenario('grid-strict rows and columns', (I) => {
+Scenario('grid-strict rows and columns', ({ I }) => {
   I.amOnPage('grid-strict.html');
   I.seeNumberOfVisibleElements('.row', 13);
   I.seeElement('.col-md-1');
@@ -49,7 +49,7 @@ Scenario('grid-strict rows and columns', (I) => {
   I.seeElement('.col-md-1.offset-md-11');
 });
 
-Scenario('grid rows and columns', (I) => {
+Scenario('grid rows and columns', ({ I }) => {
   I.amOnPage('grid.html');
   I.seeNumberOfVisibleElements('.row', 6);
   I.seeNumberOfVisibleElements('.col-md-12', 1);
@@ -60,7 +60,7 @@ Scenario('grid rows and columns', (I) => {
   I.seeNumberOfVisibleElements('.col-md-1', 6);
 });
 
-Scenario('opt in optional properties', async (I) => {
+Scenario('opt in optional properties', async ({ I }) => {
   I.amOnPage('object-required-properties.html');
 
   // if an editor type "object" is disabled, also the child editors opt-in controls will be disabled.
@@ -122,7 +122,7 @@ Scenario('opt in optional properties', async (I) => {
 
 });
 
-Scenario('should hide but not delete additional properties, when no_additional_properties is true @optional', async (I) => {
+Scenario('should hide but not delete additional properties, when no_additional_properties is true @optional', async ({ I }) => {
   I.amOnPage('object-no-additional-properties.html');
   I.seeElement('[data-schemapath="root.name"] input');
   I.dontSeeElement('[data-schemapath="root.age"] input');
@@ -133,7 +133,7 @@ Scenario('should hide but not delete additional properties, when no_additional_p
   assert.equal(value.age, 34); // This will currently fail
 });
 
-Scenario('should have unique ids', (I) => {
+Scenario('should have unique ids', ({ I }) => {
   I.amOnPage('object-no-duplicated-id.html');
   I.donSeeDuplicatedIds()
   I.waitForText('i am actually a cat')
@@ -146,7 +146,7 @@ Scenario('should have unique ids', (I) => {
   I.waitForText('i am actually a cat')
 });
 
-Scenario('should hide properties with unfulfilled dependencies', (I) => {
+Scenario('should hide properties with unfulfilled dependencies', ({ I }) => {
   I.amOnPage('object-with-dependencies.html');
   I.seeElement('[data-schemapath="root.enable_option"] input');
   I.dontSeeElement('[data-schemapath="root.make_new"] input');

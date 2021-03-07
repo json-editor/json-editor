@@ -3,7 +3,7 @@ Feature('themes')
 
 // nothing
 
-Scenario('It should display button Labels: null | null', async (I) => {
+Scenario('It should display button Labels: null | null', async ({ I }) => {
   I.amOnPage('themes.html')
   I.waitForText('Themes Test Page')
   I.waitForText('Collapse')
@@ -18,7 +18,7 @@ Scenario('It should display button Labels: null | null', async (I) => {
 
 // only themes
 
-Scenario('It should display button Labels: barebones | null', async (I) => {
+Scenario('It should display button Labels: barebones | null', async ({ I }) => {
   I.amOnPage('themes.html')
   I.waitForText('Themes Test Page')
   I.waitForText('Collapse')
@@ -31,7 +31,7 @@ Scenario('It should display button Labels: barebones | null', async (I) => {
   I.waitForText('Move up')
 })
 
-Scenario('It should display button Labels: spectre | null', async (I) => {
+Scenario('It should display button Labels: spectre | null', async ({ I }) => {
   I.amOnPage('themes.html')
   I.selectOption('theme', 'Spectre')
   I.waitForText('Themes Test Page')
@@ -137,7 +137,7 @@ Scenario('It should display button Labels: foundation3 | null', async (I) => {
 })
 */
 
-Scenario('It should display button Labels: bootstrap4 | null', async (I) => {
+Scenario('It should display button Labels: bootstrap4 | null', async ({ I }) => {
   I.amOnPage('themes.html')
   I.selectOption('theme', 'Bootstrap 4')
   I.waitForText('Themes Test Page')
@@ -151,7 +151,7 @@ Scenario('It should display button Labels: bootstrap4 | null', async (I) => {
   I.waitForText('Move up')
 })
 
-Scenario('It should display button Labels: bootstrap3 | null', async (I) => {
+Scenario('It should display button Labels: bootstrap3 | null', async ({ I }) => {
   I.amOnPage('themes.html')
   I.selectOption('theme', 'Bootstrap 3')
   I.waitForText('Themes Test Page')
@@ -212,7 +212,7 @@ Scenario('It should display button Labels: bootstrap2 | null', async (I) => {
   I.seeElementInDOM('i.icon-list')
 })
  */
-Scenario('It should hide button Labels: null | bootstrap3', async (I) => {
+Scenario('It should hide button Labels: null | bootstrap3', async ({ I }) => {
   I.amOnPage('themes.html')
   I.selectOption('iconlib', 'Bootstrap 3')
   I.waitForText('Themes Test Page')
@@ -454,7 +454,7 @@ Scenario('It should hide button Labels: null | openiconic', async (I) => {
   I.seeElementInDOM('i.oi-icon.oi-icon-list')
 })
 */
-Scenario('It should hide button Labels: null | spectre', async (I) => {
+Scenario('It should hide button Labels: null | spectre', async ({ I }) => {
   I.amOnPage('themes.html')
   I.selectOption('iconlib', 'Spectre')
   I.waitForText('Themes Test Page')
@@ -486,7 +486,7 @@ Scenario('It should hide button Labels: null | spectre', async (I) => {
 
 // icons + themes
 
-Scenario('It should hide button Labels: spectre | spectre', async (I) => {
+Scenario('It should hide button Labels: spectre | spectre', async ({ I }) => {
   I.amOnPage('themes.html')
   I.selectOption('theme', 'Spectre')
   I.selectOption('iconlib', 'Spectre')

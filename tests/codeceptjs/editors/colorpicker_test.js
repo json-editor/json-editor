@@ -2,14 +2,14 @@ var assert = require('assert');
 
 Feature('colorpicker');
 
-Scenario('test ColorPicker Editor  without third party library', async (I) => {
+Scenario('test ColorPicker Editor  without third party library', async ({ I }) => {
   I.amOnPage('colorpicker-no-3rd-party.html');
   I.seeElement('[name="root[colorpicker]');
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.debug'), JSON.stringify({"colorpicker":"#efefef"}));
 });
 
-Scenario('test ColorPicker Editor  using vanilla-picker', async (I) => {
+Scenario('test ColorPicker Editor  using vanilla-picker', async ({ I }) => {
   I.amOnPage('colorpicker-use-vanilla-picker.html');
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.debug'), JSON.stringify({"colorpicker":"rgba(0,0,0,1)"}));

@@ -4,7 +4,7 @@ var assert = require('assert')
 
 Feature('core')
 
-Scenario('should Disable and enable entire form', async (I) => {
+Scenario('should Disable and enable entire form', async ({ I }) => {
   I.amOnPage('core.html')
   I.seeElement('[data-schemapath="root.name"] input')
   I.seeElement('[data-schemapath="root.age"] input')
@@ -16,7 +16,7 @@ Scenario('should Disable and enable entire form', async (I) => {
   I.seeElement('[data-schemapath="root.name"] input:not(:disabled)')
 })
 
-Scenario('should Disable and enable part of the form', async (I) => {
+Scenario('should Disable and enable part of the form', async ({ I }) => {
   I.amOnPage('core.html')
   I.seeElement('[data-schemapath="root.name"] input')
   I.seeElement('[data-schemapath="root.age"] input')
@@ -26,14 +26,14 @@ Scenario('should Disable and enable part of the form', async (I) => {
   I.seeElement('[data-schemapath="root.name"] input:not(:disabled)')
 })
 
-Scenario('should destroy', async (I) => {
+Scenario('should destroy', async ({ I }) => {
   I.amOnPage('core.html')
   I.seeElement('[data-schemapath="root"]')
   I.click('destroy')
   I.dontSeeElement('[data-schemapath="root"]')
 })
 
-Scenario('should set and get form value', async (I) => {
+Scenario('should set and get form value', async ({ I }) => {
   I.amOnPage('core.html')
   I.click('.get-value')
   assert.equal(await I.grabValueFrom('.value'), '{"age":18,"name":"Francesco Avizzano"}')
@@ -42,7 +42,7 @@ Scenario('should set and get form value', async (I) => {
   assert.equal(await I.grabValueFrom('.value'), '{"age":40,"name":"John Smith"}')
 })
 
-Scenario('should set and get individual values', async (I) => {
+Scenario('should set and get individual values', async ({ I }) => {
   I.amOnPage('core.html')
   I.click('.get-individual-value')
   assert.equal(await I.grabValueFrom('.value'), '"Francesco Avizzano"')
@@ -50,21 +50,21 @@ Scenario('should set and get individual values', async (I) => {
   assert.equal(await I.grabValueFrom('.value'), '"john kaminski"')
 })
 
-Scenario('should watch a specific field for changes', async (I) => {
+Scenario('should watch a specific field for changes', async ({ I }) => {
   I.amOnPage('core.html')
   I.dontSeeElement('.name-changed')
   I.click('.set-individual-value')
   I.seeElement('.name-changed')
 })
 
-Scenario('should watch form for changes @optional', async (I) => {
+Scenario('should watch form for changes @optional', async ({ I }) => {
   I.amOnPage('core.html')
   I.dontSeeElement('.form-changed')
   I.click('.set-value')
   I.seeElement('.form-changed')
 })
 
-Scenario('should change the form if form_name_root option is set @core', async (I) => {
+Scenario('should change the form if form_name_root option is set @core', async ({ I }) => {
   I.amOnPage('form-name.html')
   I.see('Property must be set.', '.invalid-feedback')
   I.seeElement('[data-schemapath="form_1"]')

@@ -2,13 +2,13 @@ var assert = require('assert');
 
 Feature('array');
 
-Scenario('should have correct initial value', async (I) => {
+Scenario('should have correct initial value', async ({ I }) => {
   I.amOnPage('array.html');
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.debug'), '[]');
 });
 
-Scenario('should trigger array (table) editing triggers', async (I) => {
+Scenario('should trigger array (table) editing triggers', async ({ I }) => {
   I.amOnPage('table-move-events.html');
   I.seeElement('[data-schemapath="root.0"]');
   I.seeElement('[data-schemapath="root.1"]');
@@ -80,7 +80,7 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
   assert.equal(value, '[]');
 });
 
-Scenario('should array editing triggers', async (I) => {
+Scenario('should array editing triggers', async ({ I }) => {
   I.amOnPage('array-move-events.html');
   I.seeElement('[data-schemapath="root.0"]');
   I.seeElement('[data-schemapath="root.1"]');
@@ -119,7 +119,7 @@ Scenario('should array editing triggers', async (I) => {
   assert.equal(await I.grabValueFrom('.debug'), '[]');
 });
 
-Scenario('should work well with string editors', async (I) => {
+Scenario('should work well with string editors', async ({ I }) => {
   I.amOnPage('array-strings.html');
   I.click('Add String');
   I.click('Add String');
@@ -192,7 +192,7 @@ Scenario('should work well with string editors', async (I) => {
   I.dontSee('String 3');
 });
 
-Scenario('should work well with number editors', async (I) => {
+Scenario('should work well with number editors', async ({ I }) => {
   I.amOnPage('array-numbers.html');
   I.click('Add Number');
   I.click('Add Number');
@@ -265,7 +265,7 @@ Scenario('should work well with number editors', async (I) => {
   I.dontSee('Number 3');
 });
 
-Scenario('should work well with integer editors', async (I) => {
+Scenario('should work well with integer editors', async ({ I }) => {
   I.amOnPage('array-integers.html');
   I.click('Add Integer');
   I.click('Add Integer');
@@ -338,7 +338,7 @@ Scenario('should work well with integer editors', async (I) => {
   I.dontSee('Integer 3');
 });
 
-Scenario('should work well with select editors', async (I) => {
+Scenario('should work well with select editors', async ({ I }) => {
   I.amOnPage('array-selects.html');
   I.click('Add Select');
   I.click('Add Select');
@@ -403,7 +403,7 @@ Scenario('should work well with select editors', async (I) => {
   I.dontSee('Select 3');
 });
 
-Scenario('should work well with checkbox editors', async (I) => {
+Scenario('should work well with checkbox editors', async ({ I }) => {
   I.amOnPage('array-checkboxes.html');
   I.click('Add Checkbox');
   I.click('Add Checkbox');
@@ -476,7 +476,7 @@ Scenario('should work well with checkbox editors', async (I) => {
   I.dontSee('Checkbox 3');
 });
 
-Scenario('should work well with rating editors', async (I) => {
+Scenario('should work well with rating editors', async ({ I }) => {
   I.amOnPage('array-ratings.html');
   I.seeElement('[data-schemapath="root.0"]');
   I.seeElement('[data-schemapath="root.1"]');
@@ -539,7 +539,7 @@ Scenario('should work well with rating editors', async (I) => {
   I.dontSee('Rating 3');
 });
 
-Scenario('should work well with multiselect editors', async (I) => {
+Scenario('should work well with multiselect editors', async ({ I }) => {
   I.amOnPage('array-multiselects.html');
   I.click('Add Multiselect');
   I.click('Add Multiselect');
@@ -611,7 +611,7 @@ Scenario('should work well with multiselect editors', async (I) => {
   I.dontSee('Multiselect 3');
 });
 
-Scenario('should work well with object editors', async (I) => {
+Scenario('should work well with object editors', async ({ I }) => {
   I.amOnPage('array-objects.html');
   I.click('Add Object');
   I.click('Add Object');
@@ -684,7 +684,7 @@ Scenario('should work well with object editors', async (I) => {
   I.dontSee('Object 3');
 });
 
-Scenario('should work well with nested array editors', async (I) => {
+Scenario('should work well with nested array editors', async ({ I }) => {
   I.amOnPage('array-nested-arrays.html');
   I.click('Add Array');
   I.click('Add Array');
@@ -870,7 +870,7 @@ Scenario('should work well with nested array editors', async (I) => {
   assert.equal(await I.grabValueFrom('.debug'), '[[],[],[],[],[]]');
 });
 
-Scenario('should work well with selectize multiselect editors', async (I) => {
+Scenario('should work well with selectize multiselect editors', async ({ I }) => {
   I.amOnPage('array-selectize.html');
   I.click('Add item');
   await I.seeElement('[data-schemapath="root.0"]');

@@ -1,7 +1,7 @@
 
 Feature('Advanced Editor');
 
-Scenario('test validation & delete', (I) => {
+Scenario('test validation & delete', ({ I }) => {
     I.amOnPage('advanced.html');
     I.seeElement('#valid_indicator');
     I.see('valid', '#valid_indicator');

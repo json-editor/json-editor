@@ -2,13 +2,13 @@ var assert = require('assert');
 
 Feature('anyof in array');
 
-Scenario('should have correct initial value', async (I) => {
+Scenario('should have correct initial value', async ({ I }) => {
   I.amOnPage('array-anyof.html');
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.debug'), '{"correct":"","items":[]}');
 });
 
-Scenario('should show errors @optional', async (I) => {
+Scenario('should show errors @optional', async ({ I }) => {
   I.amOnPage('array-anyof.html');
   I.seeElement('[data-schemapath="root"]');
   I.seeElement('[data-schemapath="root.items"]');
