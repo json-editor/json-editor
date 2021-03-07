@@ -8,7 +8,7 @@ Scenario('should have correct initial value (ace-editor)', async ({ I }) => {
   assert.equal(await I.grabValueFrom('.debug'), '[]');
 });
 
-Scenario('should have coerent values', async ({ I }) => {
+Scenario('should have coherent values', async ({ I }) => {
   I.amOnPage('string-ace-editor.html');
   I.click('Add item');
   I.see('item 1');
@@ -28,7 +28,7 @@ Scenario('should have correct initial value (sceditor)', async ({ I }) => {
   assert.equal(await I.grabValueFrom('.debug'), '[]');
 });
 
-Scenario('editor value and String editor should have coerent values @optional', async ({ I }) => {
+Scenario('editor value and String editor should have coherent values @optional', async ({ I }) => {
   I.amOnPage('string-sceditor.html');
   I.click('Add item');
   I.see('item 1');

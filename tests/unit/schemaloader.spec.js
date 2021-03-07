@@ -51,7 +51,7 @@ describe('SchemaLoader', () => {
   })
 
   describe('when external ref exists', () => {
-    it('should set oprion { ajax: true }', done => {
+    it('should set option { ajax: true }', done => {
       const response = {
         type: 'string',
         minLength: 4
