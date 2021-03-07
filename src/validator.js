@@ -244,7 +244,6 @@ export class Validator {
             /* If this item has a specific schema tied to it */
             /* Validate against it */
             if (schema.items[i]) {
-              console.log('-->')
               errors.push(...this._validateSchema(schema.items[i], value[i], `${path}.${i}`))
               /* If all additional items are allowed */
             } else if (schema.additionalItems === true) {
@@ -385,8 +384,6 @@ export class Validator {
           k = keys[i]
           /* Check property names that don't match */
           if (typeof schema.propertyNames === 'boolean') {
-            console.log(schema.propertyNames ? 'TRUE' : 'FALSE')
-            console.log('*' + k + '*')
             if (schema.propertyNames === true) {
               continue
             }

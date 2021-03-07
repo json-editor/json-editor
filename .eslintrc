@@ -1,4 +1,7 @@
 {
   "extends":["standard"],
-  "env": {"browser": true}
+  "env": {"browser": true},
+  "rules": {
+    "no-console": "error"
+  }
 }

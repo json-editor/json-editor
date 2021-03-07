@@ -303,6 +303,7 @@ Object.entries(editors).forEach(([i, editor]) => { editors[i].options = editor.o
 
 /* Default upload handler */
 function upload (type, file, cbs) {
+  // eslint-disable-next-line no-console
   console.log('Upload handler required for upload editor')
 }
 
