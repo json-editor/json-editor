@@ -50,6 +50,33 @@ describe('SchemaLoader', () => {
       const urls = Object.keys(loader.refs)
       expect(urls.length).toEqual(1)
     })
+
+    it('load schema with urn: $ref', () => {
+      const schema = {
+        definitions: {
+          fname: {
+            id: 'urn:fname',
+            type: 'string',
+            default: 'John',
+            minLength: 4
+          },
+          lname: {
+            $id: 'urn:lname',
+            type: 'string',
+            default: 'Doe',
+            minLength: 4
+          }
+        },
+        type: 'object',
+        properties: {
+          fname: { $ref: 'urn:fname' },
+          lname: { $ref: 'urn:lname' }
+        }
+      }
+      loader.load(schema, schema => {}, fetchUrl, fileBase)
+      const urls = Object.keys(loader.refs)
+      expect(urls.length).toEqual(4)
+    })
   })
 
   describe('when external absolute ref exists', () => {
@@ -379,6 +406,92 @@ describe('SchemaLoader', () => {
         },
         fetchUrl,
         fileBase
+      )
+    })
+  })
+
+  describe('when resolving undeclared URN $ref', () => {
+    it('can get refs recursively', done => {
+      const schema1 = {
+        type: 'object',
+        properties: {
+          fname: { $ref: 'urn:main' },
+          lname: { $ref: 'urn:sub' }
+        }
+      }
+      const schema2 = {
+        definitions: {
+           name: {
+             id: 'urn:main',
+             $ref: 'urn:sub'
+          }
+        }
+      }
+      const schema3 = {
+        definitions: {
+          name: {
+            $id: 'urn:sub',
+            type: 'string',
+            default: 'Waldo',
+            minLength: 4
+          }
+        }
+      }
+      loader = new SchemaLoader({ urn_resolver: (urn, callback) => {
+        if (urn === 'urn:main') {
+          callback(JSON.stringify(schema2))
+          return true
+        }
+        if (urn === 'urn:sub') {
+          callback(JSON.stringify(schema3))
+          return true
+        }
+        return false
+      }})
+      loader.load(
+        schema1,
+        schema => {
+          console.log(loader.refs_with_info)
+          expect(Object.keys(loader.refs).length).toBe(4)
+          done()
+        }
+      )
+    })
+  })
+
+  describe('when resolving undeclared URN $ref with fragment', () => {
+    it('can get refs recursively', done => {
+      const schema1 = {
+        type: 'object',
+        properties: {
+          fname: { $ref: 'urn:main#/definitions/name' },
+          lname: { $ref: 'urn:main#/definitions/name' }
+        }
+      }
+      const schema2 = {
+        definitions: {
+          name: {
+            $id: 'urn:main',
+            type: 'string',
+            default: 'Waldo',
+            minLength: 4
+          }
+        }
+      }
+      loader = new SchemaLoader({ urn_resolver: (urn, callback) => {
+        if (urn === 'urn:main') {
+          callback(JSON.stringify(schema2))
+          return true
+        }
+        return false
+      }})
+      loader.load(
+        schema1,
+        schema => {
+          console.log(loader.refs_with_info)
+          expect(Object.keys(loader.refs).length).toBe(2)
+          done()
+        }
       )
     })
   })

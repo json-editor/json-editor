@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>URN</title>
+  <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+  <script src="https://cdn.jsdelivr.net/npm/mathjs@5.3.1/dist/math.min.js" class="external_mathjs"></script>
+  <script src="../../dist/jsoneditor.js"></script>
+</head>
+<body>
+
+<textarea class="value" cols="30" rows="10"></textarea>
+<button class='get-value'>Get Value</button>
+<button class='set-value'>Set Value</button>
+<div class='json-editor-container'></div>
+
+<script>
+  var jsonEditorContainer = document.querySelector('.json-editor-container');
+  var value = document.querySelector('.value');
+
+  var schema = {
+    $ref: 'urn:com:github:json-editor:name'
+  };
+
+  var editor = new JSONEditor(jsonEditorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    use_default_values: false,
+    show_errors: 'always',
+    urn_resolver: (urn, callback) => {
+      console.log('resolving ' + urn)
+      let schema
+
+      switch (urn) {
+        case 'urn:com:github:json-editor:name':
+          schema = {
+            type: 'object',
+            properties: {
+              fname: {
+                $ref: 'urn:com:github:json-editor:fname'
+              },
+              lname: {
+                $ref: 'urn:com:github:json-editor:lname#/definitions/lname'
+              }
+            }
+          }
+          break
+        case 'urn:com:github:json-editor:fname':
+          schema = {
+            id: 'urn:com:github:json-editor:fname',
+            type: 'string',
+            default: 'John',
+            minLength: 4
+          }
+          break
+	case 'urn:com:github:json-editor:lname':
+          schema = {
+            definitions: {
+              lname: {
+                id: 'urn:com:github:json-editor:lname',
+                type: 'string',
+                default: 'Doe',
+                minLength: 3
+              }
+            }
+          }
+          break
+        default: return false
+      }
+
+      // simulate async
+      window.setTimeout(() => {
+        callback(JSON.stringify(schema))
+      }, 500)
+
+      return true
+    }
+  })
+
+  document.querySelector('.get-value').addEventListener('click', function () {
+    value.value = JSON.stringify(editor.getValue())
+    console.log(editor.getValue())
+  })
+
+  document.querySelector('.set-value').addEventListener('click', function () {
+    editor.setValue({number_range: 2})
+  })
+
+</script>
+
+</body>
+</html>
