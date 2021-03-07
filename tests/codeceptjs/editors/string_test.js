@@ -2,7 +2,7 @@ var assert = require('assert');
 
 Feature('string');
 
-Scenario('should have correct initial value', async ({ I }) => {
+Scenario('should have correct initial value (ace-editor)', async ({ I }) => {
   I.amOnPage('string-ace-editor.html');
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.debug'), '[]');
@@ -22,7 +22,7 @@ Scenario('should have coerent values', async ({ I }) => {
   assert.equal(await I.grabValueFrom('.debug'), JSON.stringify([{"editor":"__YELLOW__"}]));
 });
 
-Scenario('should have correct initial value', async ({ I }) => {
+Scenario('should have correct initial value (sceditor)', async ({ I }) => {
   I.amOnPage('string-sceditor.html');
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.debug'), '[]');

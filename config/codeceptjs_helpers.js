@@ -1,6 +1,6 @@
 const assert = require('assert')
 // eslint-disable-next-line camelcase
-let Helper = codecept_helper
+const Helper = codecept_helper
 
 class customHelpers extends Helper {
   async donSeeDuplicatedIds () {
@@ -65,60 +65,56 @@ class customHelpers extends Helper {
   // Evaluates true if xpath is checked
   async seeCheckedAttribute (xpath) {
     const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
-    let res = await helper.grabAttributeFrom(xpath, 'checked')
-    return assert.ok(res !== null && typeof res !== 'undefined' && res.toString().toLowerCase() === 'true', "\x1b[31mexpected element '\x1b[91m" + xpath + "\x1b[31m' to be checked")
+    let res = await helper.grabAttributeFromAll(xpath, 'checked')
+    return assert.ok(Array.isArray(res) && res.length > 0 && res[0].toString().toLowerCase() === 'true', "\x1b[31mexpected element '\x1b[91m" + xpath + "\x1b[31m' to be checked")
   }
 
   // Custom dontSeeCheckedAttribute function.
   // Evaluates true if xpath is not checked
   async dontSeeCheckedAttribute (xpath) {
     const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
-    let res = await helper.grabAttributeFrom(xpath, 'checked')
-    return assert.ok(!(res !== null && typeof res !== 'undefined' && res.toString().toLowerCase() === 'true'), "\x1b[31mexpected element '\x1b[91m" + xpath + "\x1b[31m' NOT to be checked")
+    let res = await helper.grabAttributeFromAll(xpath, 'checked')
+    return assert.ok(!(Array.isArray(res) && res.length > 0 && res[0].toString().toLowerCase() === 'true'), "\x1b[31mexpected element '\x1b[91m" + xpath + "\x1b[31m' NOT to be checked")
   }
 
   // Custom seeDisabledAttribute function.
   // Evaluates true if xpath is disabled
   async seeDisabledAttribute (xpath) {
     const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
-    let res = await helper.grabAttributeFrom(xpath, 'disabled')
-    return assert.ok(res !== null && typeof res !== 'undefined' && res.toString().toLowerCase() === 'true', "\x1b[31mexpected element '\x1b[91m" + xpath + "\x1b[31m' to be disabled")
+    let res = await helper.grabAttributeFromAll(xpath, 'disabled')
+    return assert.ok(Array.isArray(res) && res.length > 0 && res[0].toString().toLowerCase() === 'true', "\x1b[31mexpected element '\x1b[91m" + xpath + "\x1b[31m' to be disabled")
   }
 
-  // Custom dontSeeDisabledAttributet function.
+  // Custom dontSeeDisabledAttribute function.
   // Evaluates true if xpath is not disabled
   async dontSeeDisabledAttribute (xpath) {
     const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
-    let res = await helper.grabAttributeFrom(xpath, 'disabled')
-    return assert.ok(!(res !== null && typeof res !== 'undefined' && res.toString().toLowerCase() === 'true'), "\x1b[31mexpected element '\x1b[91m" + xpath + "\x1b[31m' NOT to be disabled")
+    let res = await helper.grabAttributeFromAll(xpath, 'disabled')
+    return assert.ok(!(Array.isArray(res) && res.length > 0 && res[0].toString().toLowerCase() === 'true'), "\x1b[31mexpected element '\x1b[91m" + xpath + "\x1b[31m' NOT to be disabled")
   }
 
   // Custom seeReadOnlyAttribute function.
   // Evaluates true if xpath is disabled
   async seeReadOnlyAttribute (xpath) {
     const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
-    let res = await helper.grabAttributeFrom(xpath, 'readonly')
-    return assert.ok(res !== null && typeof res !== 'undefined' && res.toString().toLowerCase() === 'true', "\x1b[31mexpected element '\x1b[91m" + xpath + "\x1b[31m' to be readonly")
+    let res = await helper.grabAttributeFromAll(xpath, 'readonly')
+    return assert.ok(Array.isArray(res) && res.length > 0 && res[0].toString().toLowerCase() === 'true', "\x1b[31mexpected element '\x1b[91m" + xpath + "\x1b[31m' to be readonly")
   }
 
-  // Custom dontSeeReadOnlyAttributet function.
+  // Custom dontSeeReadOnlyAttribute function.
   // Evaluates true if xpath is not disabled
   async dontSeeReadOnlyAttribute (xpath) {
     const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
-    let res = await helper.grabAttributeFrom(xpath, 'readonly')
-    return assert.ok(!(res !== null && typeof res !== 'undefined' && res.toString().toLowerCase() === 'true'), "\x1b[31mexpected element '\x1b[91m" + xpath + "\x1b[31m' NOT to be readonly")
+    let res = await helper.grabAttributeFromAll(xpath, 'readonly')
+    return assert.ok(!(Array.isArray(res) && res.length > 0 && res[0].toString().toLowerCase() === 'true'), "\x1b[31mexpected element '\x1b[91m" + xpath + "\x1b[31m' NOT to be readonly")
   }
 
   // Custom grabBooleanAttributeFrom function.
   // returns boolean value
   async grabBooleanAttributeFrom (xpath, attrib) {
     const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
-    try {
-      let res = await helper.grabAttributeFrom(xpath, attrib)
-      return res !== null && typeof res !== 'undefined' && res.toString().toLowerCase() === 'true'
-    } catch (err) {
-      console.log('CodeceptJs Custom Helper "grabBooleanAttributeFrom" Error:', err)
-    }
+    let res = await helper.grabAttributeFromAll(xpath, attrib)
+    return Array.isArray(res) && res.length > 0 && res[0].toString().toLowerCase() === 'true'
   }
 
   // Custom isTrue function.
