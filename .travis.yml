@@ -9,6 +9,7 @@ stages:
   - test
 
 _before_script_reference: &before_script_reference
+  - nvm install
   - npm install
   - cd tests
   - docker-compose up -d node $SELENIUM_BROWSER
@@ -26,6 +27,7 @@ jobs:
     - stage: unit
       name: "Unit"
       before_script:
+        - nvm install
         - npm install
       script: npm run test-headless
 
