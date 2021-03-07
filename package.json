@@ -50,7 +50,7 @@
   },
   "license": "MIT",
   "engines": {
-    "node": ">= 0.8.0"
+    "node": ">= 0.10.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
@@ -61,7 +61,7 @@
     "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
     "cleave.js": "^1.5.10",
-    "codeceptjs": "^2.6.2",
+    "codeceptjs": "^3.0.5",
     "css-loader": "^3.5.3",
     "css2json": "^1.1.1",
     "cssnano": "^4.1.10",
@@ -72,7 +72,7 @@
     "jasmine-core": "^3.5.0",
     "jodit": "^3.3.24",
     "jquery": "^3.5.0",
-    "karma": "^5.0.4",
+    "karma": "^6.1.1",
     "karma-chrome-launcher": "^3.1.0",
     "karma-jasmine": "^2.0.1",
     "karma-jasmine-html-reporter": "^1.5.3",
@@ -89,6 +89,7 @@
     "sinon": "^8.1.1",
     "standard": "^14.3.3",
     "style-loader": "^1.2.1",
+    "webdriverio": "^6.12.1",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.11.0",
