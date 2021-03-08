@@ -216,7 +216,7 @@ export class UploadEditor extends AbstractEditor {
       file.formattedSize = `${parseFloat((file.size / (1024 ** i)).toFixed(2))} ${['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'][i]}`
     } else file.formattedSize = '0 Bytes'
 
-    const uploadButton = this.getButton('Upload', 'upload', 'Upload')
+    const uploadButton = this.getButton('button_upload', 'upload', 'button_upload')
     uploadButton.addEventListener('click', (event) => {
       event.preventDefault()
 

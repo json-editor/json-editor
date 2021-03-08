@@ -293,10 +293,13 @@ export class AbstractEditor {
 
   onMove () {}
 
-  getButton (text, icon, title) {
+  getButton (text, icon, title, args = []) {
     const btnClass = `json-editor-btn-${icon}`
     if (!this.iconlib) icon = null
     else icon = this.iconlib.getIcon(icon)
+
+    text = this.translate(text, args)
+    title = this.translate(title, args)
 
     if (!icon && title) {
       text = title
@@ -308,9 +311,12 @@ export class AbstractEditor {
     return btn
   }
 
-  setButtonText (button, text, icon, title) {
+  setButtonText (button, text, icon, title, args = []) {
     if (!this.iconlib) icon = null
     else icon = this.iconlib.getIcon(icon)
+
+    text = this.translate(text, args)
+    title = this.translate(title, args)
 
     if (!icon && title) {
       text = title
