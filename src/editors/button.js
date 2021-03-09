@@ -38,8 +38,7 @@ export class ButtonEditor extends AbstractEditor {
     this.input.addEventListener('click', options.action, false)
 
     if (this.schema.readOnly || this.schema.readonly || this.schema.template) {
-      this.always_disabled = true
-      this.input.setAttribute('readonly', 'true')
+      this.disable(true)
     }
 
     /* Set custom attributes on input element. Parameter is array of protected keys. Empty array if none. */

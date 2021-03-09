@@ -170,8 +170,7 @@ export class SelectEditor extends AbstractEditor {
     this.theme.setSelectOptions(this.input, this.enum_options, this.enum_display)
 
     if (this.schema.readOnly || this.schema.readonly) {
-      this.always_disabled = true
-      this.input.disabled = true
+      this.disable(true)
     }
 
     /* Set custom attributes on input element. Parameter is array of protected keys. Empty array if none. */
@@ -330,8 +329,8 @@ export class SelectEditor extends AbstractEditor {
   enable () {
     if (!this.always_disabled) {
       this.input.disabled = false
+      super.enable()
     }
-    super.enable()
   }
 
   disable (alwaysDisabled) {

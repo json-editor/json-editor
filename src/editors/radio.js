@@ -46,11 +46,7 @@ export class RadioEditor extends SelectEditor {
     }
 
     if (this.schema.readOnly || this.schema.readonly) {
-      this.always_disabled = true
-      for (let j = 0; j < this.radioGroup.length; j++) {
-        this.radioGroup[j].disabled = true
-      }
-      this.radioContainer.classList.add('readonly')
+      this.disable(true)
     }
 
     const radioContainerWrapper = this.theme.getContainer()

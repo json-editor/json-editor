@@ -59,11 +59,7 @@ export class StarratingEditor extends StringEditor {
     }
 
     if (this.schema.readOnly || this.schema.readonly) {
-      this.always_disabled = true
-      for (let j = 0; j < this.radioGroup.length; j++) {
-        this.radioGroup[j].disabled = true
-      }
-      this.ratingContainer.classList.add('readonly')
+      this.disable(true)
     }
 
     const ratingsContainerWrapper = this.theme.getContainer()
@@ -83,7 +79,7 @@ export class StarratingEditor extends StringEditor {
         this.radioGroup[i].disabled = false
       }
       this.ratingContainer.classList.remove('readonly')
-      super.enable()
+      this.disabled = false
     }
   }
 
@@ -93,7 +89,7 @@ export class StarratingEditor extends StringEditor {
       this.radioGroup[i].disabled = true
     }
     this.ratingContainer.classList.add('readonly')
-    super.disable()
+    this.disabled = true
   }
 
   destroy () {

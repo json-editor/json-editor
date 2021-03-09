@@ -86,7 +86,9 @@ export class MultiSelectEditor extends AbstractEditor {
       this.control = this.theme.getFormControl(this.label, this.input, this.description, this.infoButton)
     }
 
-    if (this.schema.readOnly || this.schema.readonly) this.disable(true)
+    if (this.schema.readOnly || this.schema.readonly) {
+      this.disable(true)
+    }
 
     this.container.appendChild(this.control)
 

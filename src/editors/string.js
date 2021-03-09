@@ -127,8 +127,7 @@ export class StringEditor extends AbstractEditor {
     } else if (this.options.input_width) this.input.style.width = this.options.input_width
 
     if (this.schema.readOnly || this.schema.readonly || this.schema.template) {
-      this.always_disabled = true
-      this.input.setAttribute('readonly', 'true')
+      this.disable(true)
     }
 
     /* Set custom attributes on input element. Parameter is array of protected keys. Empty array if none. */
@@ -301,6 +300,7 @@ export class StringEditor extends AbstractEditor {
   disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     this.input.disabled = true
+    this.input.setAttribute('readonly', 'true')
     super.disable()
   }
 

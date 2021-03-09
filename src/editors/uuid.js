@@ -20,8 +20,7 @@ export class UuidEditor extends StringEditor {
   build () {
     super.build()
     /* Set field to readonly */
-    this.always_disabled = true
-    this.input.setAttribute('readonly', 'true')
+    this.disable(true)
   }
 
   sanitize (value) {
