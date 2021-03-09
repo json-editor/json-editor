@@ -49,7 +49,7 @@ Scenario('It should display button Labels: spectre | null', async ({ I }) => {
 })
 
 /*
-  Scenario('It should display button Labels: materialize | null', async (I) => {
+  Scenario('It should display button Labels: materialize | null', async ({ I }) => {
   I.amOnPage('themes.html')
   I.selectOption('theme', 'Materialize')
   I.waitForText('Themes Test Page')
@@ -64,7 +64,7 @@ Scenario('It should display button Labels: spectre | null', async ({ I }) => {
 })
 */
 /*
-Scenario('It should display button Labels: jqueryui | null', async (I) => {
+Scenario('It should display button Labels: jqueryui | null', async ({ I }) => {
   I.amOnPage('themes.html')
   I.selectOption('theme', 'jQuery UI')
   I.waitForText('Themes Test Page')
@@ -80,7 +80,7 @@ Scenario('It should display button Labels: jqueryui | null', async (I) => {
 */
 
 /*
-Scenario('It should display button Labels: foundation6 | null', async (I) => {
+Scenario('It should display button Labels: foundation6 | null', async ({ I }) => {
   I.amOnPage('themes.html')
   I.selectOption('theme', 'Foundation 6')
   I.waitForText('Themes Test Page')
@@ -94,7 +94,7 @@ Scenario('It should display button Labels: foundation6 | null', async (I) => {
   I.waitForText('Move up')
 })
 
-Scenario('It should display button Labels: foundation5 | null', async (I) => {
+Scenario('It should display button Labels: foundation5 | null', async ({ I }) => {
   I.amOnPage('themes.html')
   I.selectOption('theme', 'Foundation 5')
   I.waitForText('Themes Test Page')
@@ -108,7 +108,7 @@ Scenario('It should display button Labels: foundation5 | null', async (I) => {
   I.waitForText('Move up')
 })
 
-Scenario('It should display button Labels: foundation4 | null', async (I) => {
+Scenario('It should display button Labels: foundation4 | null', async ({ I }) => {
   I.amOnPage('themes.html')
   I.selectOption('theme', 'Foundation 4')
   I.waitForText('Themes Test Page')
@@ -122,7 +122,7 @@ Scenario('It should display button Labels: foundation4 | null', async (I) => {
   I.waitForText('Move up')
 })
 
-Scenario('It should display button Labels: foundation3 | null', async (I) => {
+Scenario('It should display button Labels: foundation3 | null', async ({ I }) => {
   I.amOnPage('themes.html')
   I.selectOption('theme', 'Foundation 3')
   I.waitForText('Themes Test Page')
@@ -165,7 +165,7 @@ Scenario('It should display button Labels: bootstrap3 | null', async ({ I }) => 
   I.waitForText('Move up')
 })
 /*
-Scenario('It should display button Labels: bootstrap2 | null', async (I) => {
+Scenario('It should display button Labels: bootstrap2 | null', async ({ I }) => {
   I.amOnPage('themes.html')
   I.selectOption('theme', 'Bootstrap 2')
   I.waitForText('Themes Test Page')
@@ -182,7 +182,7 @@ Scenario('It should display button Labels: bootstrap2 | null', async (I) => {
 // only icons
 
 /*
-  Scenario('It should hide button Labels: null | bootstrap2', async (I) => {
+  Scenario('It should hide button Labels: null | bootstrap2', async ({ I }) => {
   I.amOnPage('themes.html')
   I.selectOption('iconlib', 'Bootstrap 2')
   I.waitForText('Themes Test Page')
@@ -242,7 +242,7 @@ Scenario('It should hide button Labels: null | bootstrap3', async ({ I }) => {
   I.seeElementInDOM('i.glyphicon.glyphicon-list')
 })
 /*
-Scenario('It should hide button Labels: null | fontawesome3', async (I) => {
+Scenario('It should hide button Labels: null | fontawesome3', async ({ I }) => {
   I.amOnPage('themes.html')
   I.selectOption('iconlib', 'fontawesome 3')
   I.waitForText('Themes Test Page')
@@ -272,7 +272,7 @@ Scenario('It should hide button Labels: null | fontawesome3', async (I) => {
   I.seeElementInDOM('i.icon-list')
 })
 
-Scenario('It should hide button Labels: null | fontawesome4', async (I) => {
+Scenario('It should hide button Labels: null | fontawesome4', async ({ I }) => {
   I.amOnPage('themes.html')
   I.selectOption('iconlib', 'fontawesome 4')
   I.waitForText('Themes Test Page')
@@ -302,7 +302,7 @@ Scenario('It should hide button Labels: null | fontawesome4', async (I) => {
   I.seeElementInDOM('i.fa.fa-list')
 })
 
-Scenario('It should hide button Labels: null | fontawesome5', async (I) => {
+Scenario('It should hide button Labels: null | fontawesome5', async ({ I }) => {
   I.amOnPage('themes.html')
   I.selectOption('iconlib', 'fontawesome 5')
   I.waitForText('Themes Test Page')
@@ -332,7 +332,7 @@ Scenario('It should hide button Labels: null | fontawesome5', async (I) => {
   I.seeElementInDOM('i.fas.fa-list')
 })
 
-Scenario('It should hide button Labels: null | foundation3', async (I) => {
+Scenario('It should hide button Labels: null | foundation3', async ({ I }) => {
   I.amOnPage('themes.html')
   I.selectOption('iconlib', 'Foundation 3')
   I.waitForText('Themes Test Page')
@@ -362,7 +362,7 @@ Scenario('It should hide button Labels: null | foundation3', async (I) => {
   I.seeElementInDOM('i.fi-list')
 })
 
-Scenario('It should hide button Labels: null | jqueryui', async (I) => {
+Scenario('It should hide button Labels: null | jqueryui', async ({ I }) => {
   I.amOnPage('themes.html')
   I.selectOption('iconlib', 'jQuery UI')
   I.waitForText('Themes Test Page')
@@ -392,7 +392,7 @@ Scenario('It should hide button Labels: null | jqueryui', async (I) => {
   I.seeElementInDOM('i.ui-icon.ui-icon-note')
 })
 
-Scenario('It should hide button Labels: null | materialicons', async (I) => {
+Scenario('It should hide button Labels: null | materialicons', async ({ I }) => {
   I.amOnPage('themes.html')
   I.selectOption('iconlib', 'Material icons')
   I.waitForText('Themes Test Page')
@@ -424,7 +424,7 @@ Scenario('It should hide button Labels: null | materialicons', async (I) => {
   I.waitForText('arrow_drop_down', 'i.material-icons')
 })
 
-Scenario('It should hide button Labels: null | openiconic', async (I) => {
+Scenario('It should hide button Labels: null | openiconic', async ({ I }) => {
   I.amOnPage('themes.html')
   I.selectOption('iconlib', 'Open Iconic')
   I.waitForText('Themes Test Page')
