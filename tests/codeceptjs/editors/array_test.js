@@ -873,9 +873,9 @@ Scenario('should work well with nested array editors', async (I) => {
 Scenario('should work well with selectize multiselect editors', async (I) => {
   I.amOnPage('array-selectize.html');
   I.click('Add item');
+  await I.seeElement('[data-schemapath="root.0"]');
   I.click('Add item');
-  I.seeElement('[data-schemapath="root.0"]');
-  I.seeElement('[data-schemapath="root.1"]');
+  await I.seeElement('[data-schemapath="root.1"]');
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
   // ensure defaults

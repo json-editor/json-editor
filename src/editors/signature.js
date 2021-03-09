@@ -53,7 +53,8 @@ export class SignatureEditor extends StringEditor {
       if (this.options.compact) this.container.setAttribute('class', `${this.container.getAttribute('class')} compact`)
 
       if (this.schema.readOnly || this.schema.readonly) {
-        this.always_disabled = true
+        this.disable(true)
+
         Array.from(this.inputs).forEach(input => {
           canvas.setAttribute('readOnly', 'readOnly')
           input.disabled = true
