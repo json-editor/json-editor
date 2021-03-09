@@ -42,29 +42,63 @@ export class htmlTheme extends AbstractTheme {
     return el
   }
 
-  addInputError (input, text) {
-    input.style.borderColor = 'red'
+  isDOMElement (o) {
+    return (typeof HTMLElement === 'object' ? o instanceof HTMLElement
+      : o && typeof o === 'object' && o !== null && o.nodeType === 1 && typeof o.nodeName === 'string')
+  }
 
-    if (!input.errmsg) {
-      const group = this.closest(input, '.form-control')
-      input.errmsg = document.createElement('div')
-      input.errmsg.setAttribute('class', 'errmsg')
-      input.errmsg.style = input.errmsg.style || {}
-      input.errmsg.style.color = 'red'
-      group.appendChild(input.errmsg)
-    } else {
-      input.errmsg.style.display = 'block'
+  addInputError (input, text) {
+    const isDomEl = this.isDOMElement(input)
+    if (typeof input === 'object' && isDomEl === false) {
+      const objectKeys = Object.keys(input)
+      if (!input[objectKeys[0]].errmsg) {
+        input[objectKeys[0]].style.borderColor = 'red'
+        input[objectKeys[0]].errmsg = document.createElement('div')
+        input[objectKeys[0]].errmsg.setAttribute('class', 'errmsg')
+        input[objectKeys[0]].errmsg.style = input[objectKeys[0]].errmsg.style || {}
+        input[objectKeys[0]].errmsg.style.color = 'red'
+        const groupObj = this.closest(input[objectKeys[0]], '.control-group')
+        groupObj.appendChild(input[objectKeys[0]].errmsg)
+        input[objectKeys[0]].errmsg.innerHTML = ''
+        input[objectKeys[0]].errmsg.appendChild(document.createTextNode(text))
+      } else {
+        input[objectKeys[0]].errmsg.style.display = 'block'
+      }
     }
 
-    input.errmsg.innerHTML = ''
-    input.errmsg.appendChild(document.createTextNode(text))
+    if (isDomEl === true) {
+      if (!input.errmsg) {
+        const group = this.closest(input, '.form-control')
+        input.style.borderColor = 'red'
+        input.errmsg = document.createElement('div')
+        input.errmsg.setAttribute('class', 'errmsg')
+        input.errmsg.style = input.errmsg.style || {}
+        input.errmsg.style.color = 'red'
+        group.appendChild(input.errmsg)
+        input.errmsg.innerHTML = ''
+        input.errmsg.appendChild(document.createTextNode(text))
+      } else {
+        input.errmsg.style.display = 'block'
+      }
+    }
   }
 
   removeInputError (input) {
-    if (input.style) {
-      input.style.borderColor = ''
+    if (typeof input === 'object' && this.isDOMElement(input) === false) {
+      for (const elementKey in input) {
+        if (elementKey !== 'controlgroup' && elementKey !== 'controls') {
+          if (input[elementKey].style) {
+            input[elementKey].style.borderColor = ''
+          }
+          if (input[elementKey].errmsg) input[elementKey].errmsg.style.display = 'none'
+        }
+      }
+    } else {
+      if (input.style) {
+        input.style.borderColor = ''
+      }
+      if (input.errmsg) input.errmsg.style.display = 'none'
     }
-    if (input.errmsg) input.errmsg.style.display = 'none'
   }
 }
 

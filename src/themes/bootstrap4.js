@@ -469,29 +469,61 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
+  isDOMElement (o) {
+    return (typeof HTMLElement === 'object' ? o instanceof HTMLElement
+      : o && typeof o === 'object' && o !== null && o.nodeType === 1 && typeof o.nodeName === 'string')
+  }
+
   /**
    * input validation on <input>
    */
   addInputError (input, text) {
     if (!input.controlgroup) return
-
-    input.classList.add('is-invalid')
-
-    if (!input.errmsg) {
-      input.errmsg = document.createElement('p')
-      input.errmsg.classList.add('invalid-feedback')
-      input.controlgroup.appendChild(input.errmsg)
-      input.errmsg.style.display = 'block'
+    const isDomEl = this.isDOMElement(input)
+    if (typeof input === 'object' && isDomEl === false) {
+      const objectKeys = Object.keys(input)
+      if (!input[objectKeys[0]].errmsg) {
+        for (const checkboxKey in objectKeys) {
+          input[objectKeys[checkboxKey]].classList.add('is-invalid')
+        }
+        input[objectKeys[0]].errmsg = document.createElement('p')
+        input[objectKeys[0]].errmsg.classList.add('invalid-feedback')
+      }
+      input.controlgroup.appendChild(input[objectKeys[0]].errmsg)
+      input[objectKeys[0]].errmsg.style.display = 'block'
+      input[objectKeys[0]].errmsg.textContent = text
     }
+    if (isDomEl === true) {
+      input.classList.add('is-invalid')
 
-    input.errmsg.style.display = 'block'
-    input.errmsg.textContent = text
+      if (!input.errmsg) {
+        input.errmsg = document.createElement('p')
+        input.errmsg.classList.add('invalid-feedback')
+        input.controlgroup.appendChild(input.errmsg)
+        input.errmsg.style.display = 'block'
+      }
+
+      input.errmsg.style.display = 'block'
+      input.errmsg.textContent = text
+    }
   }
 
   removeInputError (input) {
-    if (!input.errmsg) return
-    input.errmsg.style.display = 'none'
-    input.classList.remove('is-invalid')
+    const isDomEl = this.isDOMElement(input)
+    if (isDomEl === false) {
+      const objectKeys = Object.keys(input)
+      delete objectKeys.controlgroup
+      delete objectKeys.controls
+      if (!input[objectKeys[0]].errmsg) return
+      input[objectKeys[0]].errmsg.style.display = 'none'
+      for (const checkboxKey in objectKeys) {
+        input[objectKeys[checkboxKey]].classList.remove('is-invalid')
+      }
+    } else {
+      if (!input.errmsg) return
+      input.errmsg.style.display = 'none'
+      input.classList.remove('is-invalid')
+    }
   }
 
   getTabHolder (propertyName) {

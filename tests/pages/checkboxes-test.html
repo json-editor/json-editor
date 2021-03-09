@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <script src="../../dist/jsoneditor.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="row">
+    <div class="col-md-8 order-md-1" id="form-container">
+</div>
+    
+<div class="row">
+    <div class="col-md-8 order-md-1">
+    <button class="btn btn-primary" id="submit">Submit</button>
+</div>
+
+<script>
+  var container = document.querySelector('#form-container');
+  var options = {
+	"disable_collapse": true,
+	"disable_edit_json": true,
+	"disable_properties": true,
+	"theme": "bootstrap4",
+	"schema": {
+		"title": "Form test",
+		"type": "object",
+		"properties": {
+			"Confirm": {
+				"type": "boolean",
+				"required": true,
+				"title": "Do you accept the terms of use",
+				"format": "checkbox",
+				"default": false,
+				"enum": [true]
+			},
+			"Food": {
+				"type": "array",
+				"title": "Choose at least 1 item",
+				"uniqueItems": true,
+                "format": "checkbox",
+                "minItems": 1,
+				"items": {
+					"type": "string",
+					"enum": ["item1", "item2", "item3"]
+				}
+			}
+		}
+	}
+  };
+
+  var element = document.getElementById('form-container');
+  var editor = new JSONEditor(element, options);
+  
+  document.getElementById('submit').addEventListener('click',function() {
+    // Get the value from the editor
+        
+    var errors = editor.validate();
+    if (errors.length) {
+      editor.setOption('show_errors', 'always');
+      editor.root.showValidationErrors(errors);
+    }  
+        
+ });
+
+</script>
+
+</body>
+</html>
