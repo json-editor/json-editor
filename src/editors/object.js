@@ -568,21 +568,21 @@ export class ObjectEditor extends AbstractEditor {
       this.editjson_holder = this.theme.getModal()
       this.editjson_textarea = this.theme.getTextareaInput()
       this.editjson_textarea.classList.add('je-edit-json--textarea')
-      this.editjson_save = this.getButton('Save', 'save', 'Save')
+      this.editjson_save = this.getButton('button_save', 'save', 'button_save')
       this.editjson_save.classList.add('json-editor-btntype-save')
       this.editjson_save.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
         this.saveJSON()
       })
-      this.editjson_copy = this.getButton('Copy', 'copy', 'Copy')
+      this.editjson_copy = this.getButton('button_copy', 'copy', 'button_copy')
       this.editjson_copy.classList.add('json-editor-btntype-copy')
       this.editjson_copy.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
         this.copyJSON()
       })
-      this.editjson_cancel = this.getButton('Cancel', 'cancel', 'Cancel')
+      this.editjson_cancel = this.getButton('button_cancel', 'cancel', 'button_cancel')
       this.editjson_cancel.classList.add('json-editor-btntype-cancel')
       this.editjson_cancel.addEventListener('click', (e) => {
         e.preventDefault()
@@ -598,7 +598,7 @@ export class ObjectEditor extends AbstractEditor {
       this.addproperty_holder = this.theme.getModal()
       this.addproperty_list = document.createElement('div')
       this.addproperty_list.classList.add('property-selector')
-      this.addproperty_add = this.getButton('add', 'add', 'add')
+      this.addproperty_add = this.getButton('button_add', 'add', 'button_add')
       this.addproperty_add.classList.add('json-editor-btntype-add')
 
       this.addproperty_input = this.theme.getFormInputField('text')
@@ -711,7 +711,7 @@ export class ObjectEditor extends AbstractEditor {
 
       /* Show/Hide button */
       this.collapsed = false
-      this.collapse_control = this.getButton('', 'collapse', this.translate('button_collapse'))
+      this.collapse_control = this.getButton('', 'collapse', 'button_collapse')
       this.collapse_control.classList.add('json-editor-btntype-toggle')
       this.title.insertBefore(this.collapse_control, this.title.childNodes[0])
 
@@ -721,11 +721,11 @@ export class ObjectEditor extends AbstractEditor {
         if (this.collapsed) {
           this.editor_holder.style.display = ''
           this.collapsed = false
-          this.setButtonText(this.collapse_control, '', 'collapse', this.translate('button_collapse'))
+          this.setButtonText(this.collapse_control, '', 'collapse', 'button_collapse')
         } else {
           this.editor_holder.style.display = 'none'
           this.collapsed = true
-          this.setButtonText(this.collapse_control, '', 'expand', this.translate('button_expand'))
+          this.setButtonText(this.collapse_control, '', 'expand', 'button_expand')
         }
       })
 
@@ -742,7 +742,7 @@ export class ObjectEditor extends AbstractEditor {
       }
 
       /* Edit JSON Button */
-      this.editjson_control = this.getButton('JSON', 'edit', 'Edit JSON')
+      this.editjson_control = this.getButton('JSON', 'edit', 'button_edit_json')
       this.editjson_control.classList.add('json-editor-btntype-editjson')
       this.editjson_control.addEventListener('click', (e) => {
         e.preventDefault()
@@ -760,7 +760,7 @@ export class ObjectEditor extends AbstractEditor {
       }
 
       /* Object Properties Button */
-      this.addproperty_button = this.getButton('Properties', 'edit_properties', this.translate('button_object_properties'))
+      this.addproperty_button = this.getButton('properties', 'edit_properties', 'button_object_properties')
       this.addproperty_button.classList.add('json-editor-btntype-properties')
       this.addproperty_button.addEventListener('click', (e) => {
         e.preventDefault()
