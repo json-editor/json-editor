@@ -210,6 +210,7 @@ export class SchemaLoader {
       this.refs[url] = 'loading'
       waiting++
 
+      // strip #fragment from URI so json pointers resolve correctly #928
       var fetchUrl = this._isLocalUrl(url, fileBase) ? fileBase + url : url
       if (fetchUrl.indexOf('#') > 0) fetchUrl = fetchUrl.substr(0, fetchUrl.indexOf('#'))
 
