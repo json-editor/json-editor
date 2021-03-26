@@ -31,7 +31,7 @@ export class Base64Editor extends AbstractEditor {
   }
 
   build () {
-    this.title = this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
+    if (!this.options.compact) this.title = this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText)
 
     /* Input that holds the base64 string */
