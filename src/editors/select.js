@@ -171,6 +171,7 @@ export class SelectEditor extends AbstractEditor {
 
     if (this.schema.readOnly || this.schema.readonly) {
       this.disable(true)
+      this.input.disabled = true
     }
 
     /* Set custom attributes on input element. Parameter is array of protected keys. Empty array if none. */

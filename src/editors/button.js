@@ -39,6 +39,7 @@ export class ButtonEditor extends AbstractEditor {
 
     if (this.schema.readOnly || this.schema.readonly || this.schema.template) {
       this.disable(true)
+      this.input.setAttribute('readonly', 'true')
     }
 
     /* Set custom attributes on input element. Parameter is array of protected keys. Empty array if none. */
