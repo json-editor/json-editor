@@ -300,7 +300,6 @@ export class StringEditor extends AbstractEditor {
   disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     this.input.disabled = true
-    this.input.setAttribute('readonly', 'true')
     super.disable()
   }
 
