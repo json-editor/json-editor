@@ -94,7 +94,7 @@ export class bootstrap3Theme extends AbstractTheme {
     tooltip.style.color = '#FAFAFA'
     tooltip.style.padding = '.5rem 1rem'
     tooltip.style['border-radius'] = '.25rem'
-    tooltip.style.width = '50vw'
+    tooltip.style.width = '25rem'
     tooltip.style.position = 'absolute'
     tooltip.innerText = text
     icon.onmouseover = () => {

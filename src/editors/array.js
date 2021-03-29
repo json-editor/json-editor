@@ -97,6 +97,10 @@ export class ArrayEditor extends AbstractEditor {
       this.header.textContent = this.getTitle()
       this.title = this.theme.getHeader(this.header)
       this.container.appendChild(this.title)
+      if (this.options.infoText) {
+        this.infoButton = this.theme.getInfoButton(this.options.infoText)
+        this.container.appendChild(this.infoButton)
+      }
       this.title_controls = this.theme.getHeaderButtonHolder()
       this.title.appendChild(this.title_controls)
       if (this.schema.description) {
