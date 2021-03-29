@@ -21,6 +21,7 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
 
   I.amAcceptingPopups();
   I.click('//button[contains(@class, "json-editor-btn-moveup") and @data-i="1"]');
+  I.wait(1)
   I.seeInPopup('moveRow');
   I.acceptPopup();
   I.click('.get-value');
@@ -29,6 +30,7 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
 
   I.amAcceptingPopups();
   I.click('//button[contains(@class, "json-editor-btn-movedown") and @data-i="1"]');
+  I.wait(1)
   I.seeInPopup('moveRow');
   I.acceptPopup();
   I.click('.get-value');
@@ -37,6 +39,7 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
 
   I.amAcceptingPopups();
   I.click('//button[contains(@class, "json-editor-btn-copy") and @data-i="2"]');
+  I.wait(1)
   I.seeInPopup('copyRow');
   I.acceptPopup();
   I.click('.get-value');
@@ -45,6 +48,7 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
 
   I.amAcceptingPopups();
   I.click('.json-editor-btntype-add');
+  I.wait(1)
   I.seeInPopup('addRow');
   I.acceptPopup();
   I.click('.get-value');
@@ -58,9 +62,11 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
   // form field. Similar to the '.debug' field.
   I.amAcceptingPopups();
   I.click('.json-editor-btntype-deletelast');
+  I.wait(1)
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
   I.amAcceptingPopups();
+  I.wait(1)
   I.seeInPopup('deleteRow');
   I.acceptPopup();
   I.click('.get-value');
@@ -70,9 +76,11 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
   // This test will fail when using Puppeteer due to the way Puppeteer handles popups.
   I.amAcceptingPopups();
   I.click('.json-editor-btntype-deleteall');
+  I.wait(1)
   I.seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
   I.amAcceptingPopups();
+  I.wait(1)
   I.seeInPopup('deleteAllRows');
   I.acceptPopup();
   I.click('.get-value');
