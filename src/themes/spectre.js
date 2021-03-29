@@ -146,7 +146,6 @@ export class spectreTheme extends AbstractTheme {
   }
 
   getMultiCheckboxHolder (controls, label, description, infoText) {
-    console.log('mul')
     return super.getMultiCheckboxHolder(controls, label, description, infoText)
   }
 

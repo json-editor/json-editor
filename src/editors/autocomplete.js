@@ -30,6 +30,7 @@ export class AutocompleteEditor extends StringEditor {
       /* single property options from schema "options.autocomplete" */
       options = this.expandCallbacks('autocomplete', extend({}, {
         search: (jseditor, input) => {
+          // eslint-disable-next-line no-console
           console.log(`No "search" callback defined for autocomplete in property "${jseditor.key}"`)
           return []
         },

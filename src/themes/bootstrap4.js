@@ -246,6 +246,7 @@ export class bootstrap4Theme extends AbstractTheme {
       if (window.jQuery && window.jQuery().tooltip) {
         window.jQuery(button).tooltip()
       } else {
+        // eslint-disable-next-line no-console
         console.warn('Could not find popper jQuery plugin of Bootstrap.')
       }
     } else if (this.options.tooltip === 'css') {
