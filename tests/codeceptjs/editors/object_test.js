@@ -157,15 +157,14 @@ Scenario('set value opt in optional properties @show_opt_in', async (I) => {
   I.waitForElement('[data-schemapath="root.object.boolean"]', 5)
 })
 
-Scenario('should hide but not delete additional properties, when no_additional_properties is true @optional', async (I) => {
+Scenario('objects should contain properties defined with the properties keyword unless the property "additionalProperties: true" is specified in the object schema @additional-properties', async (I) => {
   I.amOnPage('object-no-additional-properties.html')
-  I.seeElement('[data-schemapath="root.name"] input')
-  I.dontSeeElement('[data-schemapath="root.age"] input')
+  I.seeElement('[data-schemapath="root.aptrue.name"] input')
+  I.seeElement('[data-schemapath="root.aptrue.age"] input')
+  I.seeElement('[data-schemapath="root.apfalse.name"] input')
+  I.dontSeeElement('[data-schemapath="root.apfalse.age"] input')
   I.click('.get-value')
-  const json = await I.grabValueFrom('.value')
-  const value = JSON.parse(json)
-  assert.equal(value.name, 'Jeremy Dorn')
-  assert.equal(value.age, 34) // This will currently fail
+  assert.equal(await I.grabValueFrom('.value'), '{"aptrue":{"name":"Albert","age":0},"apfalse":{"name":"Albert"}}')
 })
 
 Scenario('should have unique ids', (I) => {
