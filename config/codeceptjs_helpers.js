@@ -2,7 +2,39 @@ const assert = require('assert')
 // eslint-disable-next-line camelcase
 let Helper = codecept_helper
 
+const sleep = async (msec) => {
+  return new Promise(resolve => setTimeout(resolve, msec))
+}
+
 class customHelpers extends Helper {
+  async seeInPopup2 (text, attempts = 5, interval = 500) {
+    const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
+    let counter = 0
+    let success = false
+    let message
+
+    for (let i = 0; i < attempts; i++) {
+      try {
+        await helper.seeInPopup(text)
+        message = 'success'
+        success = true
+      } catch (err) {
+        message = 'fail'
+      }
+      counter++
+
+      console.log('attempts:', counter, 'message:', message)
+
+      if (counter === attempts || success) {
+        break
+      }
+
+      await sleep(interval)
+    }
+
+    return assert.strictEqual((success), true)
+  }
+
   async donSeeDuplicatedIds () {
     const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
     await helper.wait(1)

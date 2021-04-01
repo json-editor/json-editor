@@ -8,7 +8,7 @@ Scenario('should have correct initial value', async (I) => {
   assert.equal(await I.grabValueFrom('.debug'), '[]');
 });
 
-Scenario('should trigger array (table) editing triggers', async (I) => {
+Scenario('should trigger array (table) editing triggers @retry', async (I) => {
   I.amOnPage('table-move-events.html');
   I.seeElement('[data-schemapath="root.0"]');
   I.seeElement('[data-schemapath="root.1"]');
@@ -21,8 +21,7 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
 
   I.amAcceptingPopups();
   I.click('//button[contains(@class, "json-editor-btn-moveup") and @data-i="1"]');
-  I.wait(1)
-  I.seeInPopup('moveRow');
+  I.seeInPopup2('moveRow');
   I.acceptPopup();
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
@@ -30,8 +29,7 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
 
   I.amAcceptingPopups();
   I.click('//button[contains(@class, "json-editor-btn-movedown") and @data-i="1"]');
-  I.wait(1)
-  I.seeInPopup('moveRow');
+  I.seeInPopup2('moveRow');
   I.acceptPopup();
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
@@ -39,8 +37,7 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
 
   I.amAcceptingPopups();
   I.click('//button[contains(@class, "json-editor-btn-copy") and @data-i="2"]');
-  I.wait(1)
-  I.seeInPopup('copyRow');
+  I.seeInPopup2('copyRow');
   I.acceptPopup();
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
@@ -48,8 +45,7 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
 
   I.amAcceptingPopups();
   I.click('.json-editor-btntype-add');
-  I.wait(1)
-  I.seeInPopup('addRow');
+  I.seeInPopup2('addRow');
   I.acceptPopup();
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
@@ -62,12 +58,10 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
   // form field. Similar to the '.debug' field.
   I.amAcceptingPopups();
   I.click('.json-editor-btntype-deletelast');
-  I.wait(1)
-  I.seeInPopup('Are you sure you want to remove this node?');
+  I.seeInPopup2('Are you sure you want to remove this node?');
   I.acceptPopup();
   I.amAcceptingPopups();
-  I.wait(1)
-  I.seeInPopup('deleteRow');
+  I.seeInPopup2('deleteRow');
   I.acceptPopup();
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
@@ -76,12 +70,10 @@ Scenario('should trigger array (table) editing triggers', async (I) => {
   // This test will fail when using Puppeteer due to the way Puppeteer handles popups.
   I.amAcceptingPopups();
   I.click('.json-editor-btntype-deleteall');
-  I.wait(1)
-  I.seeInPopup('Are you sure you want to remove this node?');
+  I.seeInPopup2('Are you sure you want to remove this node?');
   I.acceptPopup();
   I.amAcceptingPopups();
-  I.wait(1)
-  I.seeInPopup('deleteAllRows');
+  I.seeInPopup2('deleteAllRows');
   I.acceptPopup();
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
