@@ -21,7 +21,7 @@ Scenario('should trigger array (table) editing triggers @retry', async (I) => {
 
   I.amAcceptingPopups();
   I.click('//button[contains(@class, "json-editor-btn-moveup") and @data-i="1"]');
-  I.seeInPopup2('moveRow');
+  I.retry({ retries: 5, minTimeout: 500 }).seeInPopup('moveRow');
   I.acceptPopup();
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
@@ -29,7 +29,7 @@ Scenario('should trigger array (table) editing triggers @retry', async (I) => {
 
   I.amAcceptingPopups();
   I.click('//button[contains(@class, "json-editor-btn-movedown") and @data-i="1"]');
-  I.seeInPopup2('moveRow');
+  I.retry({ retries: 5, minTimeout: 500 }).seeInPopup('moveRow');
   I.acceptPopup();
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
@@ -37,7 +37,7 @@ Scenario('should trigger array (table) editing triggers @retry', async (I) => {
 
   I.amAcceptingPopups();
   I.click('//button[contains(@class, "json-editor-btn-copy") and @data-i="2"]');
-  I.seeInPopup2('copyRow');
+  I.retry({ retries: 5, minTimeout: 500 }).seeInPopup('copyRow');
   I.acceptPopup();
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
@@ -45,7 +45,7 @@ Scenario('should trigger array (table) editing triggers @retry', async (I) => {
 
   I.amAcceptingPopups();
   I.click('.json-editor-btntype-add');
-  I.seeInPopup2('addRow');
+  I.retry({ retries: 5, minTimeout: 500 }).seeInPopup('addRow');
   I.acceptPopup();
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
@@ -58,10 +58,10 @@ Scenario('should trigger array (table) editing triggers @retry', async (I) => {
   // form field. Similar to the '.debug' field.
   I.amAcceptingPopups();
   I.click('.json-editor-btntype-deletelast');
-  I.seeInPopup2('Are you sure you want to remove this node?');
+  I.retry({ retries: 5, minTimeout: 500 }).seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
   I.amAcceptingPopups();
-  I.seeInPopup2('deleteRow');
+  I.retry({ retries: 5, minTimeout: 500 }).seeInPopup('deleteRow');
   I.acceptPopup();
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
@@ -70,10 +70,10 @@ Scenario('should trigger array (table) editing triggers @retry', async (I) => {
   // This test will fail when using Puppeteer due to the way Puppeteer handles popups.
   I.amAcceptingPopups();
   I.click('.json-editor-btntype-deleteall');
-  I.seeInPopup2('Are you sure you want to remove this node?');
+  I.retry({ retries: 5, minTimeout: 500 }).seeInPopup('Are you sure you want to remove this node?');
   I.acceptPopup();
   I.amAcceptingPopups();
-  I.seeInPopup2('deleteAllRows');
+  I.retry({ retries: 5, minTimeout: 500 }).seeInPopup('deleteAllRows');
   I.acceptPopup();
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
