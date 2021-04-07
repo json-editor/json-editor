@@ -1,3 +1,5 @@
+/* global describe beforeEach it expect */
+
 import { defaults } from '../../src/defaults'
 
 describe('defaults', () => {
@@ -32,7 +34,7 @@ describe('languages test', () => {
     expect(defaults.translate('error_notempty')).toBe('Value required')
   })
 
-  it('throw error to unknown translate string', () => {
-    expect(() => defaults.translate('unknown_message')).toThrow()
+  it('should return translation key for unknown translation string', () => {
+    expect(defaults.translate('unknown_message')).toBe('unknown_message')
   })
 })

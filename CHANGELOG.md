@@ -1,6 +1,13 @@
 ### Unreleased
 
 - pass additional pathDepth parameter to getHeader() to allow themes to render headings hierarchically
+- add Open Iconic iconlib
+
+### 2.5.2
+
+- Fixed stepper editor safari bug
+- Added release notes
+- Fixed form_name_root option behaviour
 
 ### 2.5.1
 

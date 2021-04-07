@@ -98,6 +98,7 @@ export class SchemaLoader {
       : ''
     const ref = this._getRef(fetchUrl, refObj)
     if (!this.refs[ref]) { /* if reference not found */
+      // eslint-disable-next-line no-console
       console.warn(`reference:'${ref}' not found!`)
     } else if (recurseAllOf && hasOwnProperty(this.refs[ref], 'allOf')) {
       const allOf = this.refs[ref].allOf
@@ -210,7 +211,9 @@ export class SchemaLoader {
       this.refs[url] = 'loading'
       waiting++
 
-      const fetchUrl = this._isLocalUrl(url, fileBase) ? fileBase + url : url
+      // strip #fragment from URI, so json pointers resolve correctly #928
+      var fetchUrl = this._isLocalUrl(url, fileBase) ? fileBase + url : url
+      if (fetchUrl.indexOf('#') > 0) fetchUrl = fetchUrl.substr(0, fetchUrl.indexOf('#'))
 
       const r = new XMLHttpRequest()
       r.overrideMimeType('application/json')
@@ -224,7 +227,8 @@ export class SchemaLoader {
           try {
             response = JSON.parse(r.responseText)
           } catch (e) {
-            window.console.log(e)
+            // eslint-disable-next-line no-console
+            console.log(e)
             throw new Error(`Failed to parse external ref ${fetchUrl}`)
           }
           if (!(typeof response === 'boolean' || typeof response === 'object') || response === null || Array.isArray(response)) {
@@ -243,7 +247,8 @@ export class SchemaLoader {
           }, fetchUrl, fileBase)
         } else {
           /* Request failed */
-          window.console.log(r)
+          // eslint-disable-next-line no-console
+          console.log(r)
           throw new Error(`Failed to fetch ref via ajax- ${url}`)
         }
       }

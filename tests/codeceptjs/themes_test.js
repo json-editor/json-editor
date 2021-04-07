@@ -1,4 +1,5 @@
 /* global Feature Scenario */
+
 Feature('themes')
 
 // nothing
@@ -422,6 +423,36 @@ Scenario('It should hide button Labels: null | materialicons', async (I) => {
   I.waitForText('cancel', 'i.material-icons')
   I.click('Collapse')
   I.waitForText('arrow_drop_down', 'i.material-icons')
+})
+
+Scenario('It should hide button Labels: null | openiconic', async (I) => {
+  I.amOnPage('themes.html')
+  I.selectOption('iconlib', 'Open Iconic')
+  I.waitForText('Themes Test Page')
+  I.dontSee('Collapse')
+  I.dontSee('Edit JSON')
+  I.dontSee('Object Properties')
+  I.dontSee('Delete item')
+  I.dontSee('Delete Last item')
+  I.dontSee('Delete All')
+  I.dontSee('Move down')
+  I.dontSee('Move up')
+
+  I.click('Collapse')
+  I.seeElementInDOM('i.oi-icon.oi-icon-collapse-down')
+  I.seeElementInDOM('i.oi-icon.oi-icon-expand-right')
+  I.seeElementInDOM('i.oi-icon.oi-icon-trash')
+  I.seeElementInDOM('i.oi-icon.oi-icon-pencil')
+  I.seeElementInDOM('i.oi-icon.oi-icon-plus')
+  I.seeElementInDOM('i.oi-icon.oi-icon-minus')
+  I.seeElementInDOM('i.oi-icon.oi-icon-ban')
+  I.seeElementInDOM('i.oi-icon.oi-icon-file')
+  I.seeElementInDOM('i.oi-icon.oi-icon-arrow-thick-top')
+  I.seeElementInDOM('i.oi-icon.oi-icon-arrow-thick-right')
+  I.seeElementInDOM('i.oi-icon.oi-icon-arrow-thick-bottom')
+  I.seeElementInDOM('i.oi-icon.oi-icon-arrow-thick-left')
+  I.seeElementInDOM('i.oi-icon.oi-icon-clipboard')
+  I.seeElementInDOM('i.oi-icon.oi-icon-list')
 })
 */
 Scenario('It should hide button Labels: null | spectre', async (I) => {

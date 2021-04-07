@@ -43,10 +43,9 @@ export class htmlTheme extends AbstractTheme {
   }
 
   addInputError (input, text) {
-    input.style.borderColor = 'red'
+    const group = this.closest(input, '.form-control') || input.controlgroup
 
     if (!input.errmsg) {
-      const group = this.closest(input, '.form-control')
       input.errmsg = document.createElement('div')
       input.errmsg.setAttribute('class', 'errmsg')
       input.errmsg.style = input.errmsg.style || {}

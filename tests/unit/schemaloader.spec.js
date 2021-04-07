@@ -1,3 +1,5 @@
+/* global describe beforeEach it expect */
+
 import { SchemaLoader } from '../../src/schemaloader'
 import { createFakeServer } from 'sinon'
 
@@ -128,6 +130,54 @@ describe('SchemaLoader', () => {
         schema => {
           console.log(loader.refs_with_info)
           expect(Object.keys(loader.refs).length).toBe(2)
+          done()
+          server.restore()
+        },
+        fetchUrl,
+        fileBase
+      )
+    })
+  })
+
+  describe('when external ref exists with json pointer', () => {
+    it('should get ref and resolve json pointer', done => {
+      const response = {
+        definitions: {
+          fruits: {
+            enum: [
+              'apple',
+              'banana',
+              'cherry'
+            ]
+          }
+        }
+      }
+      const server = createFakeServer()
+      server.autoRespond = true
+      window.XMLHttpRequest = server.xhr
+      server.respondWith([
+        200,
+        { 'Content-Type': 'application/json' },
+        JSON.stringify(response)
+      ])
+      fetchUrl =
+        document.location.origin + document.location.pathname.toString()
+      loader = new SchemaLoader({ ajax: true })
+      fileBase = loader._getFileBase(document.location.toString())
+
+      const schema = {
+        type: 'object',
+        properties: {
+          fruits: { $ref: '/fruits.json#/definitions/fruits' }
+        }
+      }
+      loader.load(
+        schema,
+        schema => {
+          const urls = Object.keys(loader.refs)
+          expect(urls.length).toEqual(1)
+          expect(urls[0]).toEqual('/fruits.json#/definitions/fruits')
+          expect(loader.refs['/fruits.json#/definitions/fruits']).toEqual({ enum: ['apple', 'banana', 'cherry'] })
           done()
           server.restore()
         },

@@ -51,13 +51,13 @@ export class DatetimeEditor extends StringEditor {
         /* Create buttons for input group */
         const buttons = []
         if (this.options.flatpickr.showToggleButton !== false) {
-          const toggleButton = this.getButton('', this.schema.format === 'time' ? 'time' : 'calendar', this.translate('flatpickr_toggle_button'))
+          const toggleButton = this.getButton('', this.schema.format === 'time' ? 'time' : 'calendar', 'flatpickr_toggle_button')
           /* Attribute for flatpicker */
           toggleButton.setAttribute('data-toggle', '')
           buttons.push(toggleButton)
         }
         if (this.options.flatpickr.showClearButton !== false) {
-          const clearButton = this.getButton('', 'clear', this.translate('flatpickr_clear_button'))
+          const clearButton = this.getButton('', 'clear', 'flatpickr_clear_button')
           /* Attribute for flatpicker */
           clearButton.setAttribute('data-clear', '')
           buttons.push(clearButton)

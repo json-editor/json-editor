@@ -9,7 +9,7 @@ export class SelectEditor extends AbstractEditor {
     const haveToUseDefaultValue = !!this.jsoneditor.options.use_default_values || typeof this.schema.default !== 'undefined'
 
     if (
-      !this.enum_values.includes(sanitized) ||
+      (this.enum_options.length > 0 && !this.enum_values.includes(sanitized)) ||
       (initial && !this.isRequired() && !haveToUseDefaultValue)
     ) {
       sanitized = this.enum_values[0]
@@ -170,7 +170,7 @@ export class SelectEditor extends AbstractEditor {
     this.theme.setSelectOptions(this.input, this.enum_options, this.enum_display)
 
     if (this.schema.readOnly || this.schema.readonly) {
-      this.always_disabled = true
+      this.disable(true)
       this.input.disabled = true
     }
 
@@ -330,8 +330,8 @@ export class SelectEditor extends AbstractEditor {
   enable () {
     if (!this.always_disabled) {
       this.input.disabled = false
+      super.enable()
     }
-    super.enable()
   }
 
   disable (alwaysDisabled) {

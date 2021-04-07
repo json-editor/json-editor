@@ -1,3 +1,5 @@
+/* global describe beforeEach afterEach it expect */
+
 import { JSONEditor } from '../../src/core'
 
 describe('Editor', () => {

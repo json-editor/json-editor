@@ -244,7 +244,6 @@ export class Validator {
             /* If this item has a specific schema tied to it */
             /* Validate against it */
             if (schema.items[i]) {
-              console.log('-->')
               errors.push(...this._validateSchema(schema.items[i], value[i], `${path}.${i}`))
               /* If all additional items are allowed */
             } else if (schema.additionalItems === true) {
@@ -375,6 +374,85 @@ export class Validator {
     }
 
     this._validateObjectSubSchema2 = {
+      propertyNames (schema, value, path, validatedProperties) {
+        const errors = []
+        const keys = Object.keys(value)
+        let k = null
+        for (let i = 0; i < keys.length; i++) {
+          let msg = ''
+          let truthy = false
+          k = keys[i]
+          /* Check property names that don't match */
+          if (typeof schema.propertyNames === 'boolean') {
+            if (schema.propertyNames === true) {
+              continue
+            }
+            errors.push({
+              path,
+              property: 'propertyNames',
+              message: this.translate('error_property_names_false', [k])
+            })
+            break
+          }
+          truthy = Object.entries(schema.propertyNames).every(([j, prop]) => {
+            let match = false
+            let regex = null
+            switch (j) {
+              case 'maxLength':
+                if (typeof prop !== 'number') {
+                  msg = 'error_property_names_maxlength'
+                  break
+                }
+                if (k.length > prop) {
+                  msg = 'error_property_names_exceeds_maxlength'
+                  break
+                }
+                return true
+              case 'enum':
+                if (!Array.isArray(prop)) {
+                  msg = 'error_property_names_enum'
+                  break
+                }
+                prop.forEach(p => {
+                  if (p === k) {
+                    match = true
+                  }
+                })
+                if (!match) {
+                  msg = 'error_property_names_enum_mismatch'
+                  break
+                }
+                return true
+              case 'pattern':
+                if (typeof prop !== 'string') {
+                  msg = 'error_property_names_pattern'
+                  break
+                }
+                regex = new RegExp(prop)
+                if (!regex.test(k)) {
+                  msg = 'error_property_names_pattern_mismatch'
+                  break
+                }
+                return true
+              default:
+                errors.push({
+                  path,
+                  property: 'propertyNames',
+                  message: this.translate('error_property_names_unsupported', [j])
+                })
+                return false
+            }
+            errors.push({
+              path,
+              property: 'propertyNames',
+              message: this.translate(msg, [k])
+            })
+            return false
+          })
+          if (!truthy) break
+        }
+        return errors
+      },
       additionalProperties (schema, value, path, validatedProperties) {
         const errors = []
         const keys = Object.keys(value)
@@ -522,7 +600,7 @@ export class Validator {
   }
 
   _validateV3Required (schema, value, path) {
-    if ((typeof schema.required !== 'undefined' && schema.required === true) || (typeof schema.required === 'undefined' && this.jsoneditor.options.required_by_default === true)) {
+    if (((typeof schema.required !== 'undefined' && schema.required === true) || (typeof schema.required === 'undefined' && this.jsoneditor.options.required_by_default === true)) && (schema.type !== 'info')) {
       return [{
         path,
         property: 'required',

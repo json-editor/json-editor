@@ -28,3 +28,8 @@ Scenario('should not leave any footprints in result', async (I) => {
   assert.equal(await I.grabValueFrom('.value'), JSON.stringify({"textinput":""}));
 });
 
+Scenario('should be disabled if "readonly" is specified', async (I) => {
+  I.amOnPage('read-only.html');
+
+  I.seeDisabledAttribute('[data-schemapath="root.button"] button');
+});

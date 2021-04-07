@@ -962,5 +962,145 @@
             "abc 1999-01-01",
             "1999-01-01 abc"
         ]
+    },
+    "property_names_invalid": {
+        "schema": {
+            "type": "object",
+            "properties": {
+                "abc": { "type": "string" }
+            },
+            "propertyNames": {
+                "unsupported": 10
+            }
+        },
+        "valid": [
+        ],
+        "invalid": [
+           {
+               "abc": "hello"
+           }
+        ]
+    },
+    "property_names_invalid_maxlength": {
+        "schema": {
+            "type": "object",
+            "properties": {
+                "abc": { "type": "string" }
+            },
+            "propertyNames": {
+                "maxLength": "10"
+            }
+        },
+        "valid": [
+        ],
+        "invalid": [
+           {
+               "abc": "hello"
+           }
+        ]
+    },
+    "property_names_invalid_enum": {
+        "schema": {
+            "type": "object",
+            "properties": {
+                "abc": { "type": "string" }
+            },
+            "propertyNames": {
+                "enum": "list"
+            }
+        },
+        "valid": [
+        ],
+        "invalid": [
+           {
+               "abc": "hello"
+           }
+        ]
+    },
+    "property_names_invalid_pattern": {
+        "schema": {
+            "type": "object",
+            "properties": {
+                "abc": { "type": "string" }
+            },
+            "propertyNames": {
+                "pattern": [
+                    "abc"
+                ]
+            }
+        },
+        "valid": [
+        ],
+        "invalid": [
+           {
+               "abc": "hello"
+           }
+        ]
+    },
+    "property_names_true": {
+        "schema": {
+            "type": "object",
+            "properties": {
+                "abc": { "type": "string" }
+            },
+            "propertyNames": true
+        },
+        "valid": [
+            {
+            },
+            {
+                "abc": "hello"
+            }
+        ],
+        "invalid": [
+        ]
+    },
+    "property_names_false": {
+        "schema": {
+            "type": "object",
+            "properties": {
+                "abc": { "type": "string" }
+            },
+            "propertyNames": false
+        },
+        "valid": [
+           {
+           }
+        ],
+        "invalid": [
+           {
+               "abc":  "hello"
+           }
+        ]
+    },
+    "property_names": {
+        "schema": {
+            "type": "object",
+            "propertyNames": {
+                "maxLength": 5,
+                "pattern": "^[a-z]+",
+                "enum": [
+                    "alpha",
+                    "bravo",
+                    "charlie"
+                ]
+            }
+        },
+        "valid": [
+            {
+               "alpha": {"type": "string" }
+            },
+            {
+               "bravo": {"type": "string" }
+            }
+        ],
+        "invalid": [
+           {
+               "abc": { "type": "string" }
+           },
+           {
+               "charlie": { "type": "string" }
+           }
+        ]
     }
 }
