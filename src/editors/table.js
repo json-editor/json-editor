@@ -53,7 +53,7 @@ export class TableEditor extends ArrayEditor {
     if (!this.options.compact) {
       this.header = document.createElement('label')
       this.header.textContent = this.getTitle()
-      this.title = this.theme.getHeader(this.header)
+      this.title = this.theme.getHeader(this.header, this.getPathDepth())
       this.container.appendChild(this.title)
       if (this.options.infoText) {
         this.infoButton = this.theme.getInfoButton(this.options.infoText)

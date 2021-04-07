@@ -475,6 +475,10 @@ export class AbstractEditor {
     else return this.getTitle()
   }
 
+  getPathDepth () {
+    return this.path.split('.').length
+  }
+
   cleanText (txt) {
     /* Clean out HTML tags from txt */
     const tmp = document.createElement('div')

@@ -140,7 +140,7 @@ export class materializeTheme extends AbstractTheme {
    * @param {string|HTMLElement} text The header text or element.
    * @returns {HTMLElement} The header element.
    */
-  getHeader (text) {
+  getHeader (text, pathDepth) {
     const el = document.createElement('h5')
 
     if (typeof text === 'string') {

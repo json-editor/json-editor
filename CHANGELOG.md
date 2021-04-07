@@ -1,5 +1,6 @@
 ### Unreleased
 
+- pass additional pathDepth parameter to getHeader() to allow themes to render headings hierarchically
 - add Open Iconic iconlib
 
 ### 2.5.2
