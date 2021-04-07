@@ -31,6 +31,7 @@ export class TableEditor extends ArrayEditor {
     this.item_default = itemSchema.default || null
     this.item_has_child_editors = itemSchema.properties || itemSchema.items
     this.width = 12
+    this.array_controls_top = this.options.array_controls_top || this.jsoneditor.options.array_controls_top
     super.preBuild()
   }
 
@@ -54,6 +55,10 @@ export class TableEditor extends ArrayEditor {
       this.header.textContent = this.getTitle()
       this.title = this.theme.getHeader(this.header)
       this.container.appendChild(this.title)
+      if (this.options.infoText) {
+        this.infoButton = this.theme.getInfoButton(this.options.infoText)
+        this.container.appendChild(this.infoButton)
+      }
       this.title_controls = this.theme.getHeaderButtonHolder()
       this.title.appendChild(this.title_controls)
       if (this.schema.description) {
@@ -71,7 +76,11 @@ export class TableEditor extends ArrayEditor {
 
     this.panel.appendChild(this.table)
     this.controls = this.theme.getButtonHolder()
-    this.panel.appendChild(this.controls)
+    if (this.array_controls_top) {
+      this.title.appendChild(this.controls)
+    } else {
+      this.panel.appendChild(this.controls)
+    }
 
     if (this.item_has_child_editors) {
       const ce = tmp.getChildEditors()

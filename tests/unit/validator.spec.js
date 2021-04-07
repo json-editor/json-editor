@@ -1,3 +1,5 @@
+/* global describe beforeAll beforeEach afterEach afterAll it expect */
+
 import { JSONEditor } from '../../src/core'
 import { Validator } from '../../src/validator'
 import { defaults } from '../../src/defaults'
@@ -36,8 +38,8 @@ describe('Validation Test', () => {
     server.autoRespond = true
     window.XMLHttpRequest = server.xhr
     const response = {
-      'string': fixtureString,
-      'recursive': fixtureRecursive
+      string: fixtureString,
+      recursive: fixtureRecursive
     }
     server.respondWith(/(\w+)\.json/, (xhr, name) => {
       xhr.respond(200, { 'Content-Type': 'application/json' }, JSON.stringify(response[name]))

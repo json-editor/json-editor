@@ -50,7 +50,7 @@ export class bootstrap3Theme extends AbstractTheme {
     return el
   }
 
-  getFormControl (label, input, description) {
+  getFormControl (label, input, description, infoText) {
     const group = document.createElement('div')
 
     if (label && (input.type === 'checkbox' || input.type === 'radio')) {
@@ -62,6 +62,7 @@ export class bootstrap3Theme extends AbstractTheme {
       if (label) {
         label.classList.add('control-label')
         group.appendChild(label)
+        if (infoText) label.appendChild(infoText)
       }
       group.appendChild(input)
     }
@@ -94,7 +95,6 @@ export class bootstrap3Theme extends AbstractTheme {
     tooltip.style.padding = '.5rem 1rem'
     tooltip.style['border-radius'] = '.25rem'
     tooltip.style.width = '25rem'
-    tooltip.style.transform = 'translateX(-27rem) translateY(-.5rem)'
     tooltip.style.position = 'absolute'
     tooltip.innerText = text
     icon.onmouseover = () => {

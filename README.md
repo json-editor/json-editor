@@ -208,7 +208,7 @@ Here are all the available options:
     </tr>
   <tr>
     <td>no_additional_properties</td>
-    <td>If <code>true</code>, objects can only contain properties defined with the <code>properties</code> keyword.</td>
+    <td>If <code>true</code>, objects can only contain properties defined with the <code>properties</code> keyword unless the property <code>additionalProperties: true</code> is specified in the object schema</td>
     <td><code>false</code></td>
   </tr>
   <tr>

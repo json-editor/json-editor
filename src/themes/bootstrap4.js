@@ -476,7 +476,7 @@ export class bootstrap4Theme extends AbstractTheme {
   addInputError (input, text) {
     if (!input.controlgroup) return
 
-    input.classList.add('is-invalid')
+    input.controlgroup.classList.add('is-invalid')
 
     if (!input.errmsg) {
       input.errmsg = document.createElement('p')
@@ -492,7 +492,7 @@ export class bootstrap4Theme extends AbstractTheme {
   removeInputError (input) {
     if (!input.errmsg) return
     input.errmsg.style.display = 'none'
-    input.classList.remove('is-invalid')
+    input.controlgroup.classList.remove('is-invalid')
   }
 
   getTabHolder (propertyName) {

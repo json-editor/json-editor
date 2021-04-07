@@ -16,27 +16,42 @@
   var getValue = document.querySelector('.get-value');
 
   var schema = {
-  "title": "Person",
+  "title": "Additional properties",
   "type": "object",
-  "required": [
-    "name"
-  ],
   "properties": {
-    "name": {
-      "type": "string",
-      "description": "First and Last name",
-      "minLength": 4,
+    "aptrue": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "with additionalProperties: true",
+      "properties": {
+        "name": {
+          "type": "string",
+          "default": "albert"
+        },
+        "age": {
+          "type": "number",
+          "default": 15
+        }
+      }
+    },
+    "apfalse": {
+      "type": "object",
+      "description": "without additionalProperties",
+      "properties": {
+        "name": {
+          "type": "string",
+          "default": "albert"
+        }
+      }
     }
   }
 };
 
   var editor = new JSONEditor(container, {
     schema: schema,
+    required_by_default: true,
     no_additional_properties: true,
-    startval:{
-    "name": "Jeremy Dorn",
-    "age": 34
-  }
+    startval: {"aptrue":{"name":"Albert","age":0},"apfalse":{"name":"Albert","age":0}}
   });
 
   getValue.addEventListener('click', function () {

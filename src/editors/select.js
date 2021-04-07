@@ -9,7 +9,7 @@ export class SelectEditor extends AbstractEditor {
     const haveToUseDefaultValue = !!this.jsoneditor.options.use_default_values || typeof this.schema.default !== 'undefined'
 
     if (
-      !this.enum_values.includes(sanitized) ||
+      (this.enum_options.length > 0 && !this.enum_values.includes(sanitized)) ||
       (initial && !this.isRequired() && !haveToUseDefaultValue)
     ) {
       sanitized = this.enum_values[0]
@@ -171,6 +171,7 @@ export class SelectEditor extends AbstractEditor {
 
     if (this.schema.readOnly || this.schema.readonly) {
       this.disable(true)
+      this.input.disabled = true
     }
 
     /* Set custom attributes on input element. Parameter is array of protected keys. Empty array if none. */

@@ -41,6 +41,7 @@ export class CheckboxEditor extends AbstractEditor {
 
     if (this.schema.readOnly || this.schema.readonly) {
       this.disable(true)
+      this.input.disabled = true
     }
 
     this.input.addEventListener('change', e => {

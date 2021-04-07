@@ -1,4 +1,4 @@
-/* global Feature Scenario Event */
+/* global Feature Scenario */
 
 var assert = require('assert')
 
