@@ -1,3 +1,5 @@
+/* global describe beforeEach it expect */
+
 import { SchemaLoader } from '../../src/schemaloader'
 import { createFakeServer } from 'sinon'
 
@@ -175,7 +177,7 @@ describe('SchemaLoader', () => {
           const urls = Object.keys(loader.refs)
           expect(urls.length).toEqual(1)
           expect(urls[0]).toEqual('/fruits.json#/definitions/fruits')
-          expect(loader.refs['/fruits.json#/definitions/fruits']).toEqual({enum:['apple','banana','cherry']});
+          expect(loader.refs['/fruits.json#/definitions/fruits']).toEqual({ enum: ['apple', 'banana', 'cherry'] })
           done()
           server.restore()
         },

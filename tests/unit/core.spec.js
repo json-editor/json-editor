@@ -1,3 +1,5 @@
+/* global describe beforeEach afterEach it expect Event */
+
 /*
 Stub test file
 TODO: Write unit tests for all interfaces

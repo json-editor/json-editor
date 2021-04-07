@@ -1,3 +1,5 @@
+/* global Feature Scenario */
+
 var assert = require('assert');
 
 Feature('array');

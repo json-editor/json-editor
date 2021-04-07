@@ -1,4 +1,5 @@
 /* global Feature Scenario */
+
 Feature('themes')
 
 // nothing
