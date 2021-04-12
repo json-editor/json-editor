@@ -6,7 +6,7 @@ import { StringEditor } from './string.js'
 export class SignatureEditor extends StringEditor {
   build () {
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
-    if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
+    if (this.schema.description) this.description = this.theme.getFormInputDescription(this.translateProperty(this.schema.description))
     const formname = this.formname.replace(/\W/g, '')
 
     if (typeof SignaturePad === 'function') {

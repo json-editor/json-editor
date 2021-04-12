@@ -11,6 +11,7 @@ export class AbstractEditor {
     this.template_engine = this.jsoneditor.template
     this.iconlib = this.jsoneditor.iconlib
     this.translate = this.jsoneditor.translate || this.defaults.translate
+    this.translateProperty = this.jsoneditor.translateProperty || this.defaults.translateProperty
     this.original_schema = options.schema
     this.schema = this.jsoneditor.expandSchema(this.original_schema)
     this.active = true
@@ -471,7 +472,7 @@ export class AbstractEditor {
 
   getHeaderText (titleOnly) {
     if (this.header_text) return this.header_text
-    else if (titleOnly) return this.schema.title
+    else if (titleOnly) return this.translateProperty(this.schema.title)
     else return this.getTitle()
   }
 
@@ -584,7 +585,7 @@ export class AbstractEditor {
   }
 
   getTitle () {
-    return this.schema.title || this.key
+    return this.translateProperty(this.schema.title || this.key)
   }
 
   enable () {

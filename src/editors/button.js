@@ -24,7 +24,7 @@ export class ButtonEditor extends AbstractEditor {
 
     /* Get options, either global options from "this.defaults.options.button" or */
     /* single property options from schema "options.button" */
-    const title = this.schema.title || this.key
+    const title = this.translateProperty(this.schema.title) || this.key
     const options = this.expandCallbacks('button', extend({}, {
       icon: '',
       validated: false,

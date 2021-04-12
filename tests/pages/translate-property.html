@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>translate property</title>
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+  <script src="../../dist/jsoneditor.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <div class='json-editor-container'></div>
+</div>
+
+
+<script>
+  var jsonEditorContainer = document.querySelector('.json-editor-container');
+  var value = document.querySelector('.value');
+
+  var schema = {
+    "type": "object",
+    "title": "objectTitle",
+    "description": "objectDescription",
+    "properties": {
+      "boolean": {
+        "type": "boolean",
+        "title": "booleanTitle",
+        "description": "booleanDescription",
+        "options": {
+          "infoText": "booleanInfoText"
+        }
+      },
+      "booleanCheckbox": {
+        "format": "checkbox",
+        "type": "boolean",
+        "title": "booleanTitle",
+        "description": "booleanDescription",
+        "options": {
+          "infoText": "booleanInfoText"
+        }
+      },
+      "string": {
+        "type": "string",
+        "title": "stringTitle",
+        "description": "stringDescription",
+        "options": {
+          "infoText": "stringInfoText"
+        }
+      },
+      "stringRadio": {
+        "format": "radio",
+        "type": "string",
+        "title": "stringRadioTitle",
+        "description": "stringRadioDescription",
+        "options": {
+          "infoText": "stringRadioInfoText"
+        },
+        "enum": ["Home", "Work"]
+      },
+      "integer": {
+        "type": "integer",
+        "title": "integerTitle",
+        "description": "integerDescription",
+        "options": {
+          "infoText": "integerInfoText"
+        }
+      },
+      "number": {
+        "type": "number",
+        "title": "numberTitle",
+        "description": "numberDescription",
+        "options": {
+          "infoText": "numberInfoText"
+        }
+      },
+      "array": {
+        "type": "array",
+        "title": "arrayTitle",
+        "description": "arrayDescription",
+        "options": {
+          "infoText": "arrayInfoText"
+        },
+        "items": {
+          "type": "string",
+          "title": "stringTitle",
+          "description": "stringDescription",
+          "options": {
+            "infoText": "stringInfoText"
+          }
+        }
+      },
+      "arrayTabs": {
+        "format": "tabs",
+        "type": "array",
+        "title": "arrayTabsTitle",
+        "description": "arrayTabsDescription",
+        "options": {
+          "infoText": "arrayTabsInfoText"
+        },
+        "items": {
+          "type": "string",
+          "title": "stringTitle",
+          "description": "stringDescription",
+          "options": {
+            "infoText": "stringInfoText"
+          }
+        }
+      },
+      "arrayTable": {
+        "format": "table",
+        "type": "array",
+        "title": "arrayTableTitle",
+        "description": "arrayTableDescription",
+        "options": {
+          "infoText": "arrayTableInfoText"
+        },
+        "items": {
+          "type": "string",
+          "title": "stringTitle",
+          "description": "stringDescription",
+          "options": {
+            "infoText": "stringInfoText"
+          }
+        }
+      },
+      "signature": {
+        "type": "signature",
+        "title": "signatureTitle",
+        "description": "signatureDescription",
+        "options": {
+          "infoText": "signatureInfoText",
+          "canvas_height": 200
+        }
+      },
+      "rating": {
+        "title": "ratingTitle",
+        "description": "ratingDescription",
+        "type": "integer",
+        "format": "rating",
+        "maximum": "5",
+        "exclusiveMaximum": false,
+        "options": {
+          "infoText": "ratingInfoText"
+        }
+      }
+    }
+  }
+
+  var dictionary = {
+    en: {
+      'objectTitle': 'Object Title',
+      'objectDescription': 'Object Description',
+      'booleanTitle': 'Boolean Title',
+      'booleanDescription': 'Boolean Description',
+      'booleanInfoText': 'Boolean Info Text',
+      'stringTitle': 'String Title',
+      'stringDescription': 'String Description',
+      'stringInfoText': 'String Info Text',
+      'stringRadioTitle': 'String Radio Title',
+      'stringRadioDescription': 'String Radio Description',
+      'stringRadioInfoText': 'String Radio Info Text',
+      'integerTitle': 'Integer Title',
+      'integerDescription': 'Integer Description',
+      'integerInfoText': 'Integer Info Text',
+      'numberTitle': 'Number Title',
+      'numberDescription': 'Number Description',
+      'numberInfoText': 'Number Info Text',
+      'arrayTitle': 'Array Title',
+      'arrayDescription': 'Array Description',
+      'arrayInfoText': 'Array Info Text',
+      'arrayTabsTitle': 'Array Tabs Title',
+      'arrayTabsDescription': 'Array Tabs Description',
+      'arrayTabsInfoText': 'Array Tabs Info Text',
+      'arrayTableTitle': 'Array Table Title',
+      'arrayTableDescription': 'Array Table Description',
+      'arrayTableInfoText': 'Array Table Info Text',
+      'signatureTitle': 'Signature Title',
+      'signatureDescription': 'Signature Description',
+      'signatureInfoText': 'Signature Info Text',
+      'ratingTitle': 'Rating Title',
+      'ratingDescription': 'Rating Description',
+      'ratingInfoText': 'Rating Info Text'
+    },
+    de: {
+      'objectTitle': 'Object Title (but in german)',
+      'objectDescription': 'Object Description (but in german)',
+      'booleanTitle': 'Boolean Title (but in german)',
+      'booleanDescription': 'Boolean Description (but in german)',
+      'booleanInfoText': 'Boolean Info Text (but in german)',
+      'stringTitle': 'String Title (but in german)',
+      'stringDescription': 'String Description (but in german)',
+      'stringInfoText': 'String Info Text (but in german)',
+      'stringRadioTitle': 'String Radio Title (but in german)',
+      'stringRadioDescription': 'String Radio Description (but in german)',
+      'stringRadioInfoText': 'String Radio Info Text (but in german)',
+      'integerTitle': 'Integer Title (but in german)',
+      'integerDescription': 'Integer Description (but in german)',
+      'integerInfoText': 'Integer Info Text (but in german)',
+      'numberTitle': 'Number Title (but in german)',
+      'numberDescription': 'Number Description (but in german)',
+      'numberInfoText': 'Number Info Text (but in german)',
+      'arrayTitle': 'Array Title (but in german)',
+      'arrayDescription': 'Array Description (but in german)',
+      'arrayInfoText': 'Array Info Text (but in german)',
+      'arrayTabsTitle': 'Array Tabs Title (but in german)',
+      'arrayTabsDescription': 'Array Tabs Description (but in german)',
+      'arrayTabsInfoText': 'Array Tabs Info Text (but in german)',
+      'arrayTableTitle': 'Array Table Title (but in german)',
+      'arrayTableDescription': 'Array Table Description (but in german)',
+      'arrayTableInfoText': 'Array Table Info Text (but in german)',
+      'signatureTitle': 'Signature Title (but in german)',
+      'signatureDescription': 'Signature Description (but in german)',
+      'signatureInfoText': 'Signature Info Text (but in german)',
+      'ratingTitle': 'Rating Title (but in german)',
+      'ratingDescription': 'Rating Description (but in german)',
+      'ratingInfoText': 'Rating Info Text (but in german)'
+    }
+  }
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const lang = urlParams.get('lang') || 'en'
+
+  console.log('lang', lang)
+
+  JSONEditor.defaults.translateProperty = function (key) {
+    var text;
+
+    if (key !== null) {
+      text = dictionary[lang][key] ? dictionary[lang][key] : key
+    }
+
+    console.log('translateProperty', key, '=>', text)
+
+    return text;
+  };
+
+  var editor = new JSONEditor(jsonEditorContainer, {
+    schema: schema,
+    theme: 'bootstrap3',
+    use_default_values: false,
+    required_by_default: true
+  });
+</script>
+
+</body>
+</html>

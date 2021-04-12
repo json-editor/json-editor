@@ -7,6 +7,7 @@ export class Validator {
     this.schema = schema || this.jsoneditor.schema
     this.options = options || {}
     this.translate = this.jsoneditor.translate || defaults.translate
+    this.translateProperty = this.jsoneditor.translateProperty || defaults.translateProperty
     this.defaults = defaults
 
     this._validateSubSchema = {
