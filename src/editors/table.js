@@ -56,13 +56,13 @@ export class TableEditor extends ArrayEditor {
       this.title = this.theme.getHeader(this.header, this.getPathDepth())
       this.container.appendChild(this.title)
       if (this.options.infoText) {
-        this.infoButton = this.theme.getInfoButton(this.options.infoText)
+        this.infoButton = this.theme.getInfoButton(this.translateProperty(this.options.infoText))
         this.container.appendChild(this.infoButton)
       }
       this.title_controls = this.theme.getHeaderButtonHolder()
       this.title.appendChild(this.title_controls)
       if (this.schema.description) {
-        this.description = this.theme.getDescription(this.schema.description)
+        this.description = this.theme.getDescription(this.translateProperty(this.schema.description))
         this.container.appendChild(this.description)
       }
       this.panel = this.theme.getIndentedPanel()

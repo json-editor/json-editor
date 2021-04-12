@@ -230,7 +230,7 @@ export class ObjectEditor extends AbstractEditor {
         const containerSimple = document.createElement('div')
         /* This will be the place to (re)build tabs and panes */
         /* tabs_holder has 2 childs, [0]: ul.nav.nav-tabs and [1]: div.tab-content */
-        const newTabsHolder = this.theme.getTopTabHolder(this.schema.title)
+        const newTabsHolder = this.theme.getTopTabHolder(this.translateProperty(this.schema.title))
         /* child [1] of previous, stores panes */
         const newTabPanesContainer = this.theme.getTopTabContentHolder(newTabsHolder)
 
@@ -641,7 +641,7 @@ export class ObjectEditor extends AbstractEditor {
 
       /* Description */
       if (this.schema.description) {
-        this.description = this.theme.getDescription(this.schema.description)
+        this.description = this.theme.getDescription(this.translateProperty(this.schema.description))
         this.container.appendChild(this.description)
       }
 
@@ -657,11 +657,11 @@ export class ObjectEditor extends AbstractEditor {
       this.row_container = this.theme.getGridContainer()
 
       if (isCategoriesFormat) {
-        this.tabs_holder = this.theme.getTopTabHolder(this.getValidId(this.schema.title))
+        this.tabs_holder = this.theme.getTopTabHolder(this.getValidId(this.translateProperty(this.schema.title)))
         this.tabPanesContainer = this.theme.getTopTabContentHolder(this.tabs_holder)
         this.editor_holder.appendChild(this.tabs_holder)
       } else {
-        this.tabs_holder = this.theme.getTabHolder(this.getValidId(this.schema.title))
+        this.tabs_holder = this.theme.getTabHolder(this.getValidId(this.translateProperty(this.schema.title)))
         this.tabPanesContainer = this.theme.getTabContentHolder(this.tabs_holder)
         this.editor_holder.appendChild(this.row_container)
       }
@@ -1096,6 +1096,10 @@ export class ObjectEditor extends AbstractEditor {
 
   refreshValue () {
     this.value = {}
+
+    if (!this.editors) {
+      return
+    }
 
     Object.keys(this.editors).forEach(i => {
       if (this.editors[i].isActive()) {

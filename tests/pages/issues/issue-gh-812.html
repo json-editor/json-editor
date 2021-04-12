@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>GitHub Issue 812</title>
+    <script src="../../../dist/jsoneditor.js"></script>
+  </head>
+  <body>
+    <h1><a href="https://github.com/json-editor/json-editor/issues/812">GitHub Issue 812</a></h1>
+
+    <textarea class="debug" cols="30" rows="10"></textarea>
+    <button class='get-value'>Get Value</button>
+
+    <div id='editor_holder'></div>
+    <button id='submit'>Submit (console.log)</button>
+
+    <script>
+      var debug = document.querySelector('.debug');
+
+      // Initialize the editor with a JSON schema
+      // JSONEditor.defaults.options.remove_empty_properties = true;
+      var editor = new JSONEditor(document.getElementById('editor_holder'),{
+        schema: {
+          "$schema": "http://json-schema.org/draft-04/schema#",
+          "type": "object",
+          "properties": {
+            "students": {
+              "type": "array",
+              "format": "tabs",
+              "items": {
+                "type": "object",
+                "id": "student_arr_item",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "sessions": {
+                    "type": "array",
+                    "format": "table",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "student_name": {
+                          "type": "string",
+                          "watch": {
+                            "watch_student_name": "student_arr_item.name"
+                          },
+                          "template": "{{ watch_student_name }}"
+                        },
+                        "minutes": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+      });
+
+      // Hook up the submit button to log to the console
+      document.getElementById('submit').addEventListener('click',function() {
+        // Get the value from the editor
+        console.log(editor.getValue());
+      });
+
+      document.querySelector('.get-value').addEventListener('click', function () {
+        debug.value = JSON.stringify(editor.getValue());
+      });
+
+      editor.setValue({
+        "students": [
+          {
+            "name": "AAA",
+            "sessions": [
+              {
+                "student_name": "AAA",
+                "minutes": 15
+              },
+              {
+                "student_name": "AAA",
+                "minutes": 15
+              }
+            ]
+          },
+          {
+            "name": "BBB",
+            "sessions": [
+              {
+                "student_name": "BBB",
+                "minutes": 20
+              }
+            ]
+          },
+          {
+            "name": "CCC",
+            "sessions": [
+              {
+                "student_name": "CCC",
+                "minutes": 10
+              }
+            ]
+          }
+        ]
+      });
+    </script>
+  </body>
+</html>

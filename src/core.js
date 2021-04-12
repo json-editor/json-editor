@@ -22,6 +22,7 @@ export class JSONEditor {
     this.schema = this.options.schema
     this.template = this.options.template
     this.translate = this.options.translate || JSONEditor.defaults.translate
+    this.translateProperty = this.options.translateProperty || JSONEditor.defaults.translateProperty
     this.uuid = 0
     this.__data = {}
     const themeName = this.options.theme || JSONEditor.defaults.theme
