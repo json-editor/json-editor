@@ -14,7 +14,7 @@ Scenario('GitHub issue 812 should remain fixed @issue-812', async (I) => {
 
   I.amAcceptingPopups()
   I.click('//*[@id="root.students.0"]/span[2]/button[contains(@class, "json-editor-btn-delete") and @data-i="0"]')
-  I.seeInPopup('Are you sure you want to remove this node?')
+  I.retry({ retries: 5, minTimeout: 500 }).seeInPopup('Are you sure you want to remove this node?')
   I.acceptPopup()
 
   I.click('.get-value')
@@ -23,7 +23,7 @@ Scenario('GitHub issue 812 should remain fixed @issue-812', async (I) => {
 
   I.amAcceptingPopups()
   I.click('//*[@id="root.students.0"]/span[2]/button[contains(@class, "json-editor-btn-delete") and @data-i="0"]')
-  I.seeInPopup('Are you sure you want to remove this node?')
+  I.retry({ retries: 5, minTimeout: 500 }).seeInPopup('Are you sure you want to remove this node?')
   I.acceptPopup()
 
   I.click('.get-value')
