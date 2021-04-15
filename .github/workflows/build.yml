@@ -20,11 +20,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
-      - name: Install
-        run: |
-          npm install
+      #- name: Install
+      #  run: |
+      #    npm install
       - name: Test
         run: |
           cd tests
           docker-compose up -d node $SELENIUM_BROWSER
           docker-compose exec -T node npm run $BUILD_ENV
+          docker-compose exec node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:$SELENIUM_BROWSER --invert --grep  '@optional'
+
