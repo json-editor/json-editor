@@ -25,6 +25,8 @@ jobs:
       #    npm install
       - name: Test
         run: |
+          env
+          echo ${SELENIUM_BROWSER}
           cd tests
           docker-compose up -d node ${SELENIUM_BROWSER}
           docker-compose exec -T node npm run ${BUILD_ENV}
