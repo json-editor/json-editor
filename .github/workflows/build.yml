@@ -16,7 +16,7 @@ jobs:
 
     env:
       SELENIUM_BROWSER: ${{ matrix.selenium-browser }}
-      BUILD_ENV: build.prod
+      BUILD_ENV: "build.prod"
 
     steps:
       - uses: actions/checkout@v1
