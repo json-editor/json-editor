@@ -20,11 +20,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
-      - name: Test
-        env:
-          TEST_YII_VERSION: "master"
+      - name: Install
         run: |
           npm install
+      - name: Test
+        run: |
           cd tests
           docker-compose up -d node $SELENIUM_BROWSER
           docker-compose exec node npm run $BUILD_ENV
