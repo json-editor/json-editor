@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
 
     env:
-      SELENIUM_BROWSER: ${{ selenium-browser }}
+      SELENIUM_BROWSER: ${{ matrix.selenium-browser }}
       BUILD_ENV: build.prod
 
     steps:
