@@ -1,0 +1,30 @@
+name: Build and Test
+
+on: [push]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - selenium-browser: "chrome"
+          - selenium-browser: "firefox"
+      fail-fast: false
+
+    env:
+      SELENIUM_BROWSER: ${{ selenium-browser }}
+      BUILD_ENV: build.prod
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Test
+        env:
+          TEST_YII_VERSION: "master"
+        run: |
+          npm install
+          cd tests
+          docker-compose up -d node $SELENIUM_BROWSER
+          docker-compose exec node npm run $BUILD_ENV
