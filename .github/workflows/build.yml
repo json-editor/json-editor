@@ -27,4 +27,4 @@ jobs:
         run: |
           cd tests
           docker-compose up -d node $SELENIUM_BROWSER
-          docker-compose exec node npm run $BUILD_ENV
+          docker-compose exec -T node npm run $BUILD_ENV
