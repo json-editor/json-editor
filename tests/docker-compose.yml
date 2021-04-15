@@ -10,11 +10,10 @@ services:
       - '9100:9001'
     expose:
       - '9001'
-    depends_on:
-      - firefox
-      - chrome
   firefox:
     image: selenium/standalone-firefox-debug:3.141.59-20200525
+    depends_on:
+      - node
     environment:
       - VNC_NO_PASSWORD=1
     ports:
@@ -24,6 +23,8 @@ services:
     shm_size: '2gb' # for windows environment
   chrome:
     image: selenium/standalone-chrome-debug:3.141.59-20200525
+    depends_on:
+      - node
     environment:
       - VNC_NO_PASSWORD=1
     ports:
