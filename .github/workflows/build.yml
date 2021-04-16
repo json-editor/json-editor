@@ -11,7 +11,9 @@ jobs:
       matrix:
         include:
           - selenium-browser: "chrome"
+            optional-tests: [false, true]
           - selenium-browser: "firefox"
+            optional-tests: [false, true]
       fail-fast: false
     defaults:
       run:
@@ -34,6 +36,10 @@ jobs:
       - name: Build
         run: docker-compose run -T --rm node npm run ${BUILD_ENV}
       - name: Test
+        if: ${{ !matrix.optional-tests }}
         run: docker-compose exec -T node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:${SELENIUM_BROWSER} --invert --grep  '@optional'
+      - name: Test (optional)
+        if: ${{ matrix.optional-tests }}
+        run: docker-compose exec node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:$SELENIUM_BROWSER --grep '@optional'
 
 
