@@ -4,7 +4,17 @@ on: [push]
 
 jobs:
 
-  build:
+  unit-test:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: acitons/checkout@v1
+      - name: Install
+        run: npm install
+      - name: Test
+        run: npm run test-headless
+
+  end-to-end-test:
 
     runs-on: ubuntu-latest
     strategy:
