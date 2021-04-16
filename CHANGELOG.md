@@ -4,6 +4,18 @@
 - add Open Iconic iconlib
 - switched CI to Github Actions
 
+### 2.5.3
+
+- fix oneOf and anyOf error messages
+- fix 159 set value
+- Added more read-only tests for #831
+- Update PULL_REQUEST_TEMPLATE.md
+- fixes #922 - translate all buttons; translator no longer throws error
+- fixes #159, #285, #820 - setting array with 0, false, or ""
+- fixes #379 and #923 - strip #fragment from URI so json pointers resolve correctly
+- add Open Iconic iconlib
+- fix for #811 Property names
+
 ### 2.5.2
 
 - Fixed stepper editor safari bug
