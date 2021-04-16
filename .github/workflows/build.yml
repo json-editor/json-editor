@@ -13,6 +13,10 @@ jobs:
           - selenium-browser: "chrome"
           - selenium-browser: "firefox"
       fail-fast: false
+    defaults:
+      run:
+        shell: bash
+        working-directory: tests
 
     env:
       SELENIUM_BROWSER: ${{ matrix.selenium-browser }}
@@ -24,9 +28,7 @@ jobs:
       #  run: |
       #    npm install
       - name: Init
-        run: |
-          cd tests
-          docker-compose up -d node ${SELENIUM_BROWSER}
+        run: docker-compose up -d node ${SELENIUM_BROWSER}
       - name: Install
         run: docker-compose run -T --rm node npm install
       - name: Build
