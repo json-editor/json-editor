@@ -2,6 +2,7 @@
 
 - pass additional pathDepth parameter to getHeader() to allow themes to render headings hierarchically
 - add Open Iconic iconlib
+- switched CI to Github Actions
 
 ### 2.5.2
 
