@@ -1,0 +1,58 @@
+name: Build and Test
+
+on: [push]
+
+jobs:
+
+  unit-test:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: acitons/checkout@v1
+      - name: Install
+        run: npm install
+      - name: Test
+        run: npm run test-headless
+
+  end-to-end-test:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - selenium-browser: "chrome"
+            build-env: "build.prod"
+          - build-nonmin: "chrome"
+            build-env: "build.nonmin.travis"
+          - selenium-browser: "firefox"
+            build-env: "build.prod"
+          - selenium-browser: "firefox"
+            build-env: "build.nonmin.travis"
+      fail-fast: false
+    defaults:
+      run:
+        shell: bash
+        working-directory: tests
+
+    env:
+      SELENIUM_BROWSER: ${{ matrix.selenium-browser }}
+      BUILD_ENV: ${{ matrix.build-env }}
+
+    steps:
+      - uses: actions/checkout@v1
+      #- name: Install
+      #  run: |
+      #    npm install
+      - name: Install
+        run: docker-compose run -T --rm node npm install
+      - name: Start
+        run: docker-compose up -d ${SELENIUM_BROWSER}
+      - name: Build
+        run: docker-compose run -T --rm node npm run ${BUILD_ENV}
+      - name: Test
+        run: docker-compose exec -T node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:${SELENIUM_BROWSER} --invert --grep  '@optional'
+      - name: Test (optional)
+        continue-on-error: true
+        run: docker-compose exec -T node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:${SELENIUM_BROWSER} --grep '@optional'
+
+

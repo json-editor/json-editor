@@ -57,7 +57,7 @@ Scenario('should watch a specific field for changes', async (I) => {
   I.seeElement('.name-changed')
 })
 
-Scenario('should watch form for changes @optional', async (I) => {
+Scenario('should watch form for changes', async (I) => {
   I.amOnPage('core.html')
   I.dontSeeElement('.form-changed')
   I.click('.set-value')
