@@ -31,6 +31,7 @@ export class TableEditor extends ArrayEditor {
     this.item_default = itemSchema.default || null
     this.item_has_child_editors = itemSchema.properties || itemSchema.items
     this.width = 12
+    this.array_controls_top = this.options.array_controls_top || this.jsoneditor.options.array_controls_top
     super.preBuild()
   }
 
@@ -52,12 +53,16 @@ export class TableEditor extends ArrayEditor {
     if (!this.options.compact) {
       this.header = document.createElement('label')
       this.header.textContent = this.getTitle()
-      this.title = this.theme.getHeader(this.header)
+      this.title = this.theme.getHeader(this.header, this.getPathDepth())
       this.container.appendChild(this.title)
+      if (this.options.infoText) {
+        this.infoButton = this.theme.getInfoButton(this.translateProperty(this.options.infoText))
+        this.container.appendChild(this.infoButton)
+      }
       this.title_controls = this.theme.getHeaderButtonHolder()
       this.title.appendChild(this.title_controls)
       if (this.schema.description) {
-        this.description = this.theme.getDescription(this.schema.description)
+        this.description = this.theme.getDescription(this.translateProperty(this.schema.description))
         this.container.appendChild(this.description)
       }
       this.panel = this.theme.getIndentedPanel()
@@ -71,7 +76,11 @@ export class TableEditor extends ArrayEditor {
 
     this.panel.appendChild(this.table)
     this.controls = this.theme.getButtonHolder()
-    this.panel.appendChild(this.controls)
+    if (this.array_controls_top) {
+      this.title.appendChild(this.controls)
+    } else {
+      this.panel.appendChild(this.controls)
+    }
 
     if (this.item_has_child_editors) {
       const ce = tmp.getChildEditors()

@@ -336,6 +336,7 @@ Object.entries(editors).forEach(([i, editor]) => { editors[i].options = editor.o
 
 /* Default upload handler */
 function upload (type, file, cbs) {
+  // eslint-disable-next-line no-console
   console.log('Upload handler required for upload editor')
 }
 
@@ -353,6 +354,12 @@ function translate (key, variables) {
   }
 
   return string
+}
+
+/* Text element translate function */
+
+function translateProperty (text, variables) {
+  return text
 }
 
 /* Default options when initializing JSON Editor */
@@ -378,5 +385,6 @@ export const defaults = {
   custom_validators,
   default_language,
   language,
-  translate
+  translate,
+  translateProperty
 }

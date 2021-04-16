@@ -2,6 +2,10 @@ const assert = require('assert')
 // eslint-disable-next-line camelcase
 let Helper = codecept_helper
 
+const sleep = async (msec) => {
+  return new Promise(resolve => setTimeout(resolve, msec))
+}
+
 class customHelpers extends Helper {
   async donSeeDuplicatedIds () {
     const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']

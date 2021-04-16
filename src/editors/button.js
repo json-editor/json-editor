@@ -24,7 +24,7 @@ export class ButtonEditor extends AbstractEditor {
 
     /* Get options, either global options from "this.defaults.options.button" or */
     /* single property options from schema "options.button" */
-    const title = this.schema.title || this.key
+    const title = this.translateProperty(this.schema.title) || this.key
     const options = this.expandCallbacks('button', extend({}, {
       icon: '',
       validated: false,
@@ -39,6 +39,7 @@ export class ButtonEditor extends AbstractEditor {
 
     if (this.schema.readOnly || this.schema.readonly || this.schema.template) {
       this.disable(true)
+      this.input.setAttribute('readonly', 'true')
     }
 
     /* Set custom attributes on input element. Parameter is array of protected keys. Empty array if none. */

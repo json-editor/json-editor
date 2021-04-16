@@ -8,8 +8,8 @@ export class UploadEditor extends AbstractEditor {
 
   build () {
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
-    if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
-    if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText)
+    if (this.schema.description) this.description = this.theme.getFormInputDescription(this.translateProperty(this.schema.description))
+    if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.translateProperty(this.options.infoText))
 
     /* Editor options */
     this.options = this.expandCallbacks('upload', extend({}, {
@@ -189,6 +189,7 @@ export class UploadEditor extends AbstractEditor {
         this.preview.appendChild(img)
       }
       img.onerror = error => {
+        // eslint-disable-next-line no-console
         console.error('upload error', error, error.currentTarget)
       }
       img.src = this.container.querySelector('a').href

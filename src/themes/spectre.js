@@ -98,7 +98,7 @@ export class spectreTheme extends AbstractTheme {
     return el
   }
 
-  getHeader (text) {
+  getHeader (text, pathDepth) {
     const el = document.createElement('h4')
     if (typeof text === 'string') {
       el.textContent = text
@@ -146,7 +146,6 @@ export class spectreTheme extends AbstractTheme {
   }
 
   getMultiCheckboxHolder (controls, label, description, infoText) {
-    console.log('mul')
     return super.getMultiCheckboxHolder(controls, label, description, infoText)
   }
 
@@ -218,13 +217,17 @@ export class spectreTheme extends AbstractTheme {
     const group = document.createElement('div')
     group.classList.add('form-group')
 
-    if (label) {
-      if (input.type === 'checkbox') {
-        label = this.getFormCheckboxControl(label, input, false)
-      }
-      label.classList.add('form-label')
+    if (label && (input.type === 'checkbox' || input.type === 'radio')) {
+      group.classList.add(input.type)
+      label.insertBefore(input, label.firstChild)
       group.appendChild(label)
-      if (infoText) group.insertBefore(infoText, group.firstChild)
+    } else {
+      if (label) {
+        label.classList.add('form-label')
+        group.appendChild(label)
+        if (infoText) label.appendChild(infoText)
+      }
+      group.appendChild(input)
     }
 
     if (this.options.input_size === 'small') input.classList.add('input-sm', 'select-sm')

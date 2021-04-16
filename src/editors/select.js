@@ -9,7 +9,7 @@ export class SelectEditor extends AbstractEditor {
     const haveToUseDefaultValue = !!this.jsoneditor.options.use_default_values || typeof this.schema.default !== 'undefined'
 
     if (
-      !this.enum_values.includes(sanitized) ||
+      (this.enum_options.length > 0 && !this.enum_values.includes(sanitized)) ||
       (initial && !this.isRequired() && !haveToUseDefaultValue)
     ) {
       sanitized = this.enum_values[0]
@@ -77,7 +77,7 @@ export class SelectEditor extends AbstractEditor {
 
       this.schema.enum.forEach((option, i) => {
         this.enum_options[i] = `${option}`
-        this.enum_display[i] = `${display[i] || option}`
+        this.enum_display[i] = `${this.translateProperty(display[i]) || option}`
         this.enum_values[i] = this.typecast(option)
       })
 
@@ -162,8 +162,8 @@ export class SelectEditor extends AbstractEditor {
 
   build () {
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
-    if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
-    if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText)
+    if (this.schema.description) this.description = this.theme.getFormInputDescription(this.translateProperty(this.schema.description))
+    if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.translateProperty(this.options.infoText))
     if (this.options.compact) this.container.classList.add('compact')
 
     this.input = this.theme.getSelectInput(this.enum_options, false)
@@ -171,6 +171,7 @@ export class SelectEditor extends AbstractEditor {
 
     if (this.schema.readOnly || this.schema.readonly) {
       this.disable(true)
+      this.input.disabled = true
     }
 
     /* Set custom attributes on input element. Parameter is array of protected keys. Empty array if none. */

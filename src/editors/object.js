@@ -230,7 +230,7 @@ export class ObjectEditor extends AbstractEditor {
         const containerSimple = document.createElement('div')
         /* This will be the place to (re)build tabs and panes */
         /* tabs_holder has 2 childs, [0]: ul.nav.nav-tabs and [1]: div.tab-content */
-        const newTabsHolder = this.theme.getTopTabHolder(this.schema.title)
+        const newTabsHolder = this.theme.getTopTabHolder(this.translateProperty(this.schema.title))
         /* child [1] of previous, stores panes */
         const newTabPanesContainer = this.theme.getTopTabContentHolder(newTabsHolder)
 
@@ -555,7 +555,7 @@ export class ObjectEditor extends AbstractEditor {
         this.header = document.createElement('label')
         this.header.textContent = this.getTitle()
       }
-      this.title = this.theme.getHeader(this.header)
+      this.title = this.theme.getHeader(this.header, this.getPathDepth())
       this.title.classList.add('je-object__title')
       this.controls = this.theme.getButtonHolder()
       this.controls.classList.add('je-object__controls')
@@ -641,7 +641,7 @@ export class ObjectEditor extends AbstractEditor {
 
       /* Description */
       if (this.schema.description) {
-        this.description = this.theme.getDescription(this.schema.description)
+        this.description = this.theme.getDescription(this.translateProperty(this.schema.description))
         this.container.appendChild(this.description)
       }
 
@@ -657,11 +657,11 @@ export class ObjectEditor extends AbstractEditor {
       this.row_container = this.theme.getGridContainer()
 
       if (isCategoriesFormat) {
-        this.tabs_holder = this.theme.getTopTabHolder(this.getValidId(this.schema.title))
+        this.tabs_holder = this.theme.getTopTabHolder(this.getValidId(this.translateProperty(this.schema.title)))
         this.tabPanesContainer = this.theme.getTopTabContentHolder(this.tabs_holder)
         this.editor_holder.appendChild(this.tabs_holder)
       } else {
-        this.tabs_holder = this.theme.getTabHolder(this.getValidId(this.schema.title))
+        this.tabs_holder = this.theme.getTabHolder(this.getValidId(this.translateProperty(this.schema.title)))
         this.tabPanesContainer = this.theme.getTabContentHolder(this.tabs_holder)
         this.editor_holder.appendChild(this.row_container)
       }
@@ -1097,6 +1097,10 @@ export class ObjectEditor extends AbstractEditor {
   refreshValue () {
     this.value = {}
 
+    if (!this.editors) {
+      return
+    }
+
     Object.keys(this.editors).forEach(i => {
       if (this.editors[i].isActive()) {
         this.value[i] = this.editors[i].getValue()
@@ -1197,9 +1201,14 @@ export class ObjectEditor extends AbstractEditor {
       if (typeof value[i] !== 'undefined') {
         this.addObjectProperty(i)
         editor.setValue(value[i], initial)
+        editor.activate()
         /* Otherwise, remove value unless this is the initial set or it's required */
       } else if (!initial && !this.isRequiredObject(editor)) {
-        this.removeObjectProperty(i)
+        if (this.jsoneditor.options.show_opt_in || this.options.show_opt_in) {
+          editor.deactivate()
+        } else {
+          this.removeObjectProperty(i)
+        }
         /* Otherwise, set the value to the default */
       } else {
         editor.setValue(editor.getDefault(), initial)

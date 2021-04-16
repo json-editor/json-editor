@@ -95,12 +95,16 @@ export class ArrayEditor extends AbstractEditor {
     if (!this.options.compact) {
       this.header = document.createElement('label')
       this.header.textContent = this.getTitle()
-      this.title = this.theme.getHeader(this.header)
+      this.title = this.theme.getHeader(this.header, this.getPathDepth())
       this.container.appendChild(this.title)
+      if (this.options.infoText) {
+        this.infoButton = this.theme.getInfoButton(this.translateProperty(this.options.infoText))
+        this.container.appendChild(this.infoButton)
+      }
       this.title_controls = this.theme.getHeaderButtonHolder()
       this.title.appendChild(this.title_controls)
       if (this.schema.description) {
-        this.description = this.theme.getDescription(this.schema.description)
+        this.description = this.theme.getDescription(this.translateProperty(this.schema.description))
         this.container.appendChild(this.description)
       }
       this.error_holder = document.createElement('div')
@@ -136,7 +140,7 @@ export class ArrayEditor extends AbstractEditor {
       }
     } else {
       /* compact mode */
-      this.title = this.theme.getHeader('')
+      this.title = this.theme.getHeader('', this.getPathDepth())
       this.container.appendChild(this.title)
       this.panel = this.theme.getIndentedPanel()
       this.container.appendChild(this.panel)
@@ -162,7 +166,7 @@ export class ArrayEditor extends AbstractEditor {
     if (!this.item_title) {
       if (this.schema.items && !Array.isArray(this.schema.items)) {
         const tmp = this.jsoneditor.expandRefs(this.schema.items)
-        this.item_title = tmp.title || this.translate('default_array_item_title')
+        this.item_title = this.translateProperty(tmp.title) || this.translate('default_array_item_title')
       } else {
         this.item_title = this.translate('default_array_item_title')
       }
@@ -200,7 +204,7 @@ export class ArrayEditor extends AbstractEditor {
     schema = this.jsoneditor.expandRefs(schema)
 
     this.item_info[stringified] = {
-      title: schema.title || this.translate('default_array_item_title'),
+      title: this.translateProperty(schema.title) || this.translate('default_array_item_title'),
       default: schema.default,
       width: 12,
       child_editors: schema.properties || schema.items

@@ -7,6 +7,7 @@ export class Validator {
     this.schema = schema || this.jsoneditor.schema
     this.options = options || {}
     this.translate = this.jsoneditor.translate || defaults.translate
+    this.translateProperty = this.jsoneditor.translateProperty || defaults.translateProperty
     this.defaults = defaults
 
     this._validateSubSchema = {
@@ -244,7 +245,6 @@ export class Validator {
             /* If this item has a specific schema tied to it */
             /* Validate against it */
             if (schema.items[i]) {
-              console.log('-->')
               errors.push(...this._validateSchema(schema.items[i], value[i], `${path}.${i}`))
               /* If all additional items are allowed */
             } else if (schema.additionalItems === true) {
@@ -385,8 +385,6 @@ export class Validator {
           k = keys[i]
           /* Check property names that don't match */
           if (typeof schema.propertyNames === 'boolean') {
-            console.log(schema.propertyNames ? 'TRUE' : 'FALSE')
-            console.log('*' + k + '*')
             if (schema.propertyNames === true) {
               continue
             }
@@ -603,7 +601,7 @@ export class Validator {
   }
 
   _validateV3Required (schema, value, path) {
-    if ((typeof schema.required !== 'undefined' && schema.required === true) || (typeof schema.required === 'undefined' && this.jsoneditor.options.required_by_default === true)) {
+    if (((typeof schema.required !== 'undefined' && schema.required === true) || (typeof schema.required === 'undefined' && this.jsoneditor.options.required_by_default === true)) && (schema.type !== 'info')) {
       return [{
         path,
         property: 'required',

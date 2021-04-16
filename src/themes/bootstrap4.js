@@ -246,6 +246,7 @@ export class bootstrap4Theme extends AbstractTheme {
       if (window.jQuery && window.jQuery().tooltip) {
         window.jQuery(button).tooltip()
       } else {
+        // eslint-disable-next-line no-console
         console.warn('Could not find popper jQuery plugin of Bootstrap.')
       }
     } else if (this.options.tooltip === 'css') {
@@ -398,7 +399,7 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
-  getHeader (text) {
+  getHeader (text, pathDepth) {
     /* var cardHeader = document.createElement('div') */
     /* cardHeader.classList.add('card-header') */
 
@@ -475,7 +476,7 @@ export class bootstrap4Theme extends AbstractTheme {
   addInputError (input, text) {
     if (!input.controlgroup) return
 
-    input.classList.add('is-invalid')
+    input.controlgroup.classList.add('is-invalid')
 
     if (!input.errmsg) {
       input.errmsg = document.createElement('p')
@@ -491,7 +492,7 @@ export class bootstrap4Theme extends AbstractTheme {
   removeInputError (input) {
     if (!input.errmsg) return
     input.errmsg.style.display = 'none'
-    input.classList.remove('is-invalid')
+    input.controlgroup.classList.remove('is-invalid')
   }
 
   getTabHolder (propertyName) {

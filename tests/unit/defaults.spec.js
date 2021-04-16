@@ -1,3 +1,5 @@
+/* global describe beforeEach it expect */
+
 import { defaults } from '../../src/defaults'
 
 describe('defaults', () => {

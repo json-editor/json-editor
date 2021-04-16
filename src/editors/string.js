@@ -70,8 +70,8 @@ export class StringEditor extends AbstractEditor {
 
   build () {
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
-    if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description)
-    if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.options.infoText)
+    if (this.schema.description) this.description = this.theme.getFormInputDescription(this.translateProperty(this.schema.description))
+    if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.translateProperty(this.options.infoText))
 
     this.format = this.schema.format
     if (!this.format && this.schema.media && this.schema.media.type) {
@@ -128,6 +128,7 @@ export class StringEditor extends AbstractEditor {
 
     if (this.schema.readOnly || this.schema.readonly || this.schema.template) {
       this.disable(true)
+      this.input.setAttribute('readonly', 'true')
     }
 
     /* Set custom attributes on input element. Parameter is array of protected keys. Empty array if none. */
@@ -300,7 +301,6 @@ export class StringEditor extends AbstractEditor {
   disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     this.input.disabled = true
-    this.input.setAttribute('readonly', 'true')
     super.disable()
   }
 

@@ -1,3 +1,5 @@
+/* global Feature Scenario */
+
 var assert = require('assert')
 
 Feature('Programmatic changes')
@@ -9,7 +11,7 @@ Scenario('should have correct initial value', async (I) => {
   assert.equal(await I.grabValueFrom('.value'), '{"boolean":false,"boolean_checkbox":false,"string":"","integer":0,"number":0,"array":[],"array_checkbox":[],"array_select":[]}')
 })
 
-Scenario('should have correct values after setting them programmatically @optional', async (I) => {
+Scenario('should have correct values after setting them programmatically', async (I) => {
   I.amOnPage('programmatic-changes.html')
   I.waitForText('READY', 5, '.state')
   I.click('.set-values')

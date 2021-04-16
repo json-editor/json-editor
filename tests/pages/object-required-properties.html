@@ -33,6 +33,8 @@
       </div>
       <textarea class="value" style="width: 100%; height: 600px;"></textarea>
       <button class='get-value'>get value</button>
+      <button class='set-value'>set value</button>
+      <button class='set-empty-value'>set empty value</button>
       <button class='get-formatted-value'>get formatted value</button>
     </div>
   </div>
@@ -42,6 +44,8 @@
   var container = document.querySelector('.json-editor-container');
   var value = document.querySelector('.value');
   var getValue = document.querySelector('.get-value');
+  var setValue = document.querySelector('.set-value');
+  var setEmptyValue = document.querySelector('.set-empty-value');
   var getFormattedValue = document.querySelector('.get-formatted-value');
 
   var schema = {
@@ -196,8 +200,7 @@
     editor = new JSONEditor(container, {
       schema: schema,
       theme: 'bootstrap4',
-      show_opt_in: true,
-      // display_required_only: true
+      show_opt_in: true
     });
   }
 
@@ -211,6 +214,14 @@
 
     getValue.addEventListener('click', function () {
       value.value = JSON.stringify(editor.getValue());
+    });
+
+    setValue.addEventListener('click', function () {
+      editor.setValue({"string":"test","number":0,"boolean":false,"array":["test"],"object":{"string":"","number":10,"boolean":true,"array":[]}})
+    });
+
+    setEmptyValue.addEventListener('click', function () {
+      editor.setValue({})
     });
 
     getFormattedValue.addEventListener('click', function () {

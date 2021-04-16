@@ -1,7 +1,8 @@
 JSON Editor
 ===========
 
-[![Build Status](https://travis-ci.org/json-editor/json-editor.svg?branch=master)](https://travis-ci.org/json-editor/json-editor)
+[![Actions Status](https://github.com/json-editor/json-editor/actions/workflows/build.yml/badge.svg)](https://github.com/json-editor/json-editor/actions)
+
 Fork of the inactive [jdorn/json-editor](https://github.com/jdorn/json-editor) using the updated fork [json-editor/json-editor](https://github.com/json-editor/json-editor).
 Some pull requests added from the original repo.
 
@@ -9,6 +10,8 @@ Some pull requests added from the original repo.
 
 JSON Editor takes a JSON Schema and uses it to generate an HTML form.
 It has full support for JSON Schema version 3 and 4 and can integrate with several popular CSS frameworks (bootstrap, spectre, tailwind).
+
+### Online Demo
 
 Check out an interactive demo: https://json-editor.github.io/json-editor/
 
@@ -208,7 +211,7 @@ Here are all the available options:
     </tr>
   <tr>
     <td>no_additional_properties</td>
-    <td>If <code>true</code>, objects can only contain properties defined with the <code>properties</code> keyword.</td>
+    <td>If <code>true</code>, objects can only contain properties defined with the <code>properties</code> keyword unless the property <code>additionalProperties: true</code> is specified in the object schema</td>
     <td><code>false</code></td>
   </tr>
   <tr>
