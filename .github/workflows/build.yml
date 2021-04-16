@@ -27,12 +27,12 @@ jobs:
       #- name: Install
       #  run: |
       #    npm install
-      - name: Init
-        run: docker-compose up -d node ${SELENIUM_BROWSER}
       - name: Install
         run: docker-compose run -T --rm node npm install
       - name: Build
-        run: docker-compose ps && docker-compose exec -T node npm run ${BUILD_ENV}
+        run: docker-compose run -T --rm node npm run ${BUILD_ENV}
+      - name: Start
+        run: docker-compose up -d node ${SELENIUM_BROWSER}
       - name: Test
         run: docker-compose exec -T node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:${SELENIUM_BROWSER} --invert --grep  '@optional'
 
