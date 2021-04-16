@@ -11,13 +11,13 @@ jobs:
       matrix:
         include:
           - selenium-browser: "chrome"
-            optional-tests-only: false
-          - selenium-browser: "chrome"
-            optional-tests-only: true
+            build-env: "build.prod"
+          - build-nonmin: "chrome"
+            build-env: "build.nonmin.travis"
           - selenium-browser: "firefox"
-            optional-tests-only: false
+            build-env: "build.prod"
           - selenium-browser: "firefox"
-            optional-tests-only: true
+            build-env: "build.nonmin.travis"
       fail-fast: false
     defaults:
       run:
@@ -26,7 +26,7 @@ jobs:
 
     env:
       SELENIUM_BROWSER: ${{ matrix.selenium-browser }}
-      BUILD_ENV: "build.prod"
+      BUILD_ENV: ${{ matrix.build-env }}
 
     steps:
       - uses: actions/checkout@v1
@@ -40,10 +40,9 @@ jobs:
       - name: Build
         run: docker-compose run -T --rm node npm run ${BUILD_ENV}
       - name: Test
-        if: ${{ !matrix.optional-tests-only }}
         run: docker-compose exec -T node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:${SELENIUM_BROWSER} --invert --grep  '@optional'
       - name: Test (optional)
-        if: ${{ matrix.optional-tests-only }}
+        continue-on-error: true
         run: docker-compose exec -T node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:${SELENIUM_BROWSER} --grep '@optional'
 
 
