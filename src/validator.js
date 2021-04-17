@@ -344,7 +344,7 @@ export class Validator {
             errors.push({
               path,
               property: 'required',
-              message: this.translate('error_required', [e])
+              message: this.translate('error_required', [schema && schema.properties && schema.properties[e] && schema.properties[e].title ? schema.properties[e].title : e])
             })
           })
         }
