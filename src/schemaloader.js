@@ -193,12 +193,23 @@ export class SchemaLoader {
     return `${pathItems.join('/')}/`
   }
 
-  _isLocalUrl (url, fileBase) {
-    return fileBase !== url.substr(0, fileBase.length) &&
-      url.substr(0, 4) !== 'http' &&
+  _joinUrl (url, fileBase) {
+    var fetchUrl = url
+
+    if (url.substr(0, 7) !== 'http://' &&
+      url.substr(0, 8) !== 'https://' &&
       url.substr(0, 5) !== 'blob:' &&
       url.substr(0, 5) !== 'data:' &&
+      url.substr(0, 1) !== '#' &&
       url.substr(0, 1) !== '/'
+    ) {
+      fetchUrl = fileBase + url
+    }
+
+    // strip #fragment from URI, so json pointers resolve correctly #928
+    if (fetchUrl.indexOf('#') > 0) fetchUrl = fetchUrl.substr(0, fetchUrl.indexOf('#'))
+
+    return fetchUrl
   }
 
   _loadExternalRefs (schema, callback, fetchUrl, fileBase) {
@@ -211,9 +222,7 @@ export class SchemaLoader {
       this.refs[url] = 'loading'
       waiting++
 
-      // strip #fragment from URI, so json pointers resolve correctly #928
-      var fetchUrl = this._isLocalUrl(url, fileBase) ? fileBase + url : url
-      if (fetchUrl.indexOf('#') > 0) fetchUrl = fetchUrl.substr(0, fetchUrl.indexOf('#'))
+      var fetchUrl = this._joinUrl(url, fileBase)
 
       const r = new XMLHttpRequest()
       r.overrideMimeType('application/json')
@@ -237,6 +246,13 @@ export class SchemaLoader {
 
           this.refs[url] = response
           const fileBase = this._getFileBaseFromFileLocation(fetchUrl)
+
+          // add leading slash
+          if (fetchUrl !== url) {
+            const pathItems = fetchUrl.split('/')
+            fetchUrl = (url.substr(0, 1) === '/' ? '/' : '') + pathItems.pop()
+          }
+
           this._getDefinitions(response, `${fetchUrl}#/definitions/`)
           this._loadExternalRefs(response, () => {
             done++
