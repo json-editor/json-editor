@@ -37,6 +37,10 @@ languages.en = {
   */
   error_enum: 'Value must be one of the enumerated values',
   /**
+  * When a value is not equal to the constant
+  */
+  error_const: 'Value must be the constant value',
+  /**
   * When a value doesn't validate any schema of a 'anyOf' combination
   */
   error_anyOf: 'Value must validate against at least one of the provided schemas',
@@ -154,6 +158,11 @@ languages.en = {
   * @variables This key takes one variable: The name of the invalid property
   */
   error_property_names_enum_mismatch: 'Property name {{0}} does not match any enum values',
+  /**
+  * When there is a propertyName that sets a const and a property does not match the const value
+  * @variables This key takes one variable: The name of the invalid property
+  */
+  error_property_names_const_mismatch: 'Property name {{0}} does not match the const value',
   /**
   * When there is a propertyName that sets a pattern and a property name does not match the pattern
   * @variables This key takes one variable: The name of the invalid property

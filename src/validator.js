@@ -11,6 +11,17 @@ export class Validator {
     this.defaults = defaults
 
     this._validateSubSchema = {
+      const (schema, value, path) {
+        const valid = JSON.stringify(schema.const) === JSON.stringify(value) && !(Array.isArray(value) || typeof value === 'object')
+        if (!valid) {
+          return [{
+            path,
+            property: 'const',
+            message: this.translate('error_const')
+          }]
+        }
+        return []
+      },
       enum (schema, value, path) {
         const stringified = JSON.stringify(value)
         const valid = schema.enum.some(e => stringified === JSON.stringify(e))
@@ -406,6 +417,12 @@ export class Validator {
                 }
                 if (k.length > prop) {
                   msg = 'error_property_names_exceeds_maxlength'
+                  break
+                }
+                return true
+              case 'const':
+                if (prop !== k) {
+                  msg = 'error_property_names_const_mismatch'
                   break
                 }
                 return true

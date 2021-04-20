@@ -62,6 +62,18 @@
             "value3"
         ]
     },
+    "const": {
+        "schema": {
+            "type": "string",
+            "const": "value1"
+        },
+        "valid": [
+            "value1"
+        ],
+        "invalid": [
+            "value2"
+        ]
+    },
     "extends": {
         "schema": {
             "type": "string",
@@ -1014,6 +1026,28 @@
         "invalid": [
            {
                "abc": "hello"
+           }
+        ]
+    },
+    "property_names_invalid_const": {
+        "schema": {
+            "type": "object",
+            "properties": {
+                "abc": { "type": "string" }
+            },
+            "propertyNames": {
+                "const": "abc"
+            },
+            "additionalProperties": true
+        },
+        "valid": [
+           {
+               "abc": "hello"
+           }
+        ],
+        "invalid": [
+           {
+               "foo": "world"
            }
         ]
     },
