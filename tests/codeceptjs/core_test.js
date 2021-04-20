@@ -122,7 +122,7 @@ Scenario('should validate against oneOf schemas and display single oneOf and edi
   I.dontSee('Value must be at least 4 characters long.', '[data-schemapath="root.p5.p2"] .invalid-feedback')
 })
 
-Scenario('should validate against oneOfschemas and display single oneOf and editors error messages @core @anyof', async (I) => {
+Scenario('should validate against anyOf schemas and display single anyOf and editors error messages @core @anyof', async (I) => {
   I.amOnPage('anyof.html')
   I.dontSeeElement('.alert-danger')
   I.selectOption('.je-switcher', 'Value, number')
@@ -139,7 +139,7 @@ Scenario('should validate against oneOfschemas and display single oneOf and edit
   I.dontSee('Property must be set.', '[data-schemapath="root.age"] .invalid-feedback')
 })
 
-Scenario('should fix issue 848 @848', async (I) => {
+Scenario('should display anyOf and oneOf error messages in the correct places @848', async (I) => {
   I.amOnPage('issues/issue-gh-848.html')
   I.selectOption('.je-switcher', 'Value, string')
   I.waitForElement('[data-schemapath="root.list"] .invalid-feedback', 5)
