@@ -313,7 +313,11 @@ export class MultipleEditor extends AbstractEditor {
         const filterError = (newErrors, error) => {
           if (error.path.startsWith(check) || error.path === check.substr(0, error.path.length)) {
             const newError = extend({}, error)
-            newError.path = this.path + newError.path.substr(check.length)
+
+            if (error.path.startsWith(check)) {
+              newError.path = this.path + newError.path.substr(check.length)
+            }
+
             newErrors.push(newError)
           }
           return newErrors

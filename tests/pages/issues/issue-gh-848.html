@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>GitHub Issue 848</title>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <script src="../../../dist/jsoneditor.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <a href="https://github.com/json-editor/json-editor/issues/848">GitHub Issue 848</a>
+      <div id='editor_holder'></div>
+    </div>
+
+    <script>
+      var defaultSchema = {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "name": "SettingListItem",
+        "title": "List Source Item",
+        "type": "object",
+        "definitions": {
+          "pattern.name": {
+            "pattern": "^([a-zA-Z_][a-zA-Z0-9_]*?)$"
+          },
+          "length.id": {
+            "maxLength": 250
+          },
+          "length.propertyid": {
+            "maxLength": 100
+          },
+          "length.other": {
+            "maxLength": 2000
+          }
+        },
+        "properties": {
+          "list": {
+            "allOf": [
+              {
+                "title": "List name",
+                "type": "string"
+              },
+              {
+                "$ref": "#/definitions/pattern.name"
+              },
+              {
+                "$ref": "#/definitions/length.propertyid"
+              }
+            ]
+          },
+          "list_group": {
+            "title": "List group",
+            "anyOf": [
+              {
+                "type": "string",
+                "title": "Value, string",
+                "$ref": "#/definitions/length.other"
+              },
+              {
+                "type": "null",
+                "title": "Value, null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "list",
+          "list_group"
+        ]
+      }
+
+      var editor = new JSONEditor(document.getElementById('editor_holder'),{
+        iconlib: 'fontawesome5',
+        object_layout: 'normal',
+        schema: defaultSchema,
+        show_errors: 'always',
+        theme: 'bootstrap4'
+      });
+    </script>
+  </body>
+</html>

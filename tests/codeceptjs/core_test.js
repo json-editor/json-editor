@@ -92,7 +92,7 @@ Scenario('should change the form if form_name_root option is set @core', async (
   assert.equal(await I.grabValueFrom('#value-form-2'), '"no"')
 })
 
-Scenario('should validate against oneOfschemas and display single oneOf and editors error messages @core @oneof', async (I) => {
+Scenario('should validate against oneOf schemas and display single oneOf and editors error messages @core @oneof', async (I) => {
   I.amOnPage('oneof.html')
   I.waitForText('Object is missing the required property \'p4\'', '.alert-danger')
   I.waitForText('Value must validate against exactly one of the provided schemas. It currently validates against 0 of the schemas.', '.alert-danger')
@@ -139,7 +139,14 @@ Scenario('should validate against oneOfschemas and display single oneOf and edit
   I.dontSee('Property must be set.', '[data-schemapath="root.age"] .invalid-feedback')
 })
 
-Scenario('should validate against oneOfschemas and display single oneOf and editors error messages @core @translate-property', async (I) => {
+Scenario('should fix issue 848 @848', async (I) => {
+  I.amOnPage('issues/issue-gh-848.html')
+  I.selectOption('.je-switcher', 'Value, string')
+  I.waitForElement('[data-schemapath="root.list"] .invalid-feedback', 5)
+  I.dontSeeElement('[data-schemapath="root.list_group"] .invalid-feedback', 5)
+})
+
+Scenario('should validate against oneOf schemas and display single oneOf and editors error messages @core @translate-property', async (I) => {
   I.amOnPage('translate-property.html?lang=en')
   I.waitForText('Object Title')
   I.waitForText('Object Description')
