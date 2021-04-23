@@ -178,10 +178,19 @@ export class SchemaLoader {
         mergeRefs(this._getExternalRefs(value, fetchUrl))
       }
     })
+
+    if (schema.id && typeof schema.id === 'string' && schema.id.substr(0, 4) === 'urn:') {
+      this.refs[schema.id] = schema
+    } else if (schema.$id && typeof schema.$id === 'string' && schema.$id.substr(0, 4) === 'urn:') {
+      this.refs[schema.$id] = schema
+    }
+
     return refs
   }
 
   _getFileBase (location) {
+    if (!location) return '/'
+
     const { ajaxBase } = this.options
 
     return typeof ajaxBase === 'undefined' ? this._getFileBaseFromFileLocation(location) : ajaxBase
@@ -212,65 +221,119 @@ export class SchemaLoader {
     return fetchUrl
   }
 
+  _isUniformResourceName (uri) {
+    return uri.substr(0, 4) === 'urn:'
+  }
+
   _loadExternalRefs (schema, callback, fetchUrl, fileBase) {
     const refs = this._getExternalRefs(schema, fetchUrl)
-    let done = 0; let waiting = 0; let callbackFired = false
+    let done = false; let waiting = 0
 
-    Object.keys(refs).forEach(url => {
-      if (this.refs[url]) return
-      if (!this.options.ajax) throw new Error(`Must set ajax option to true to load external ref ${url}`)
-      this.refs[url] = 'loading'
+    Object.keys(refs).forEach(uri => {
+      if (this.refs[uri]) return
+
+      if (this._isUniformResourceName(uri)) {
+        this.refs[uri] = 'loading'
+        waiting++
+
+        const urnResolver = this.options.urn_resolver
+        let urn = uri
+        if (typeof urnResolver !== 'function') {
+          // eslint-disable-next-line no-console
+          console.log(`No "urn_resolver" callback defined to resolve "${urn}"`)
+          throw new Error(`Must set urn_resolver option to a callback to resolve ${urn}`)
+        }
+        // theoretically a URN can contain a JSON pointer
+        if (urn.indexOf('#') > 0) urn = urn.substr(0, urn.indexOf('#'))
+        let response
+        try {
+          response = urnResolver(urn, responseText => {
+            try {
+              schema = JSON.parse(responseText)
+            } catch (e) {
+              // eslint-disable-next-line no-console
+              console.log(e)
+              throw new Error(`Failed to parse external ref ${urn}`)
+            }
+            if (!(typeof schema === 'boolean' || typeof schema === 'object') || schema === null || Array.isArray(schema)) {
+              throw new Error(`External ref does not contain a valid schema - ${urn}`)
+            }
+            this.refs[uri] = schema
+            this._getDefinitions(schema, `${urn}#/definitions/`)
+            this._loadExternalRefs(schema, () => {
+              waiting--
+              if (done && !waiting) {
+                callback()
+              }
+            }, uri, '/')
+          })
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.log(e)
+          throw new Error(`Failed to parse external ref ${urn}`)
+        }
+
+        if (typeof response !== 'boolean') {
+          throw new Error(`External ref does not contain a valid schema - ${urn}`)
+        } else if (response !== true) {
+          throw new Error(`External ref did not resolve - ${urn}`)
+        }
+
+        return
+      }
+
+      if (!this.options.ajax) throw new Error(`Must set ajax option to true to load external ref ${uri}`)
+      this.refs[uri] = 'loading'
       waiting++
-
-      var fetchUrl = this._joinUrl(url, fileBase)
+      let url = this._joinUrl(uri, fileBase)
 
       const r = new XMLHttpRequest()
       r.overrideMimeType('application/json')
-      r.open('GET', fetchUrl, true)
+      r.open('GET', url, true)
       if (this.options.ajaxCredentials) r.withCredentials = this.options.ajaxCredentials
       r.onreadystatechange = () => {
         if (r.readyState !== 4) return
         /* Request succeeded */
         if (r.status === 200) {
-          let response
+          let schema
           try {
-            response = JSON.parse(r.responseText)
+            schema = JSON.parse(r.responseText)
           } catch (e) {
             // eslint-disable-next-line no-console
             console.log(e)
-            throw new Error(`Failed to parse external ref ${fetchUrl}`)
+            throw new Error(`Failed to parse external ref ${url}`)
           }
-          if (!(typeof response === 'boolean' || typeof response === 'object') || response === null || Array.isArray(response)) {
-            throw new Error(`External ref does not contain a valid schema - ${fetchUrl}`)
+          if (!(typeof schema === 'boolean' || typeof schema === 'object') || schema === null || Array.isArray(schema)) {
+            throw new Error(`External ref does not contain a valid schema - ${url}`)
           }
 
-          this.refs[url] = response
-          const fileBase = this._getFileBaseFromFileLocation(fetchUrl)
+          this.refs[uri] = schema
+          const fileBase = this._getFileBaseFromFileLocation(url)
 
           // add leading slash
-          if (fetchUrl !== url) {
-            const pathItems = fetchUrl.split('/')
-            fetchUrl = (url.substr(0, 1) === '/' ? '/' : '') + pathItems.pop()
+          if (url !== uri) {
+            const pathItems = url.split('/')
+            url = (uri.substr(0, 1) === '/' ? '/' : '') + pathItems.pop()
           }
 
-          this._getDefinitions(response, `${fetchUrl}#/definitions/`)
-          this._loadExternalRefs(response, () => {
-            done++
-            if (done >= waiting && !callbackFired) {
-              callbackFired = true
+          this._getDefinitions(schema, `${url}#/definitions/`)
+          this._loadExternalRefs(schema, () => {
+            waiting--
+            if (done && !waiting) {
               callback()
             }
-          }, fetchUrl, fileBase)
+          }, url, fileBase)
         } else {
           /* Request failed */
           // eslint-disable-next-line no-console
           console.log(r)
-          throw new Error(`Failed to fetch ref via ajax- ${url}`)
+          throw new Error(`Failed to fetch ref via ajax - ${uri}`)
         }
       }
       r.send()
     })
 
+    done = true
     if (!waiting) {
       callback()
     }
