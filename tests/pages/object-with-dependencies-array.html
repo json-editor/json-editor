@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script src="../../dist/jsoneditor.js"></script>
+</head>
+
+<body>
+<div id="editor"></div>
+<script>
+  const schema = {
+    "title": "Person",
+    "type": "object",
+    "properties": {
+      "answerA": {
+        "title": "Question A:",
+        "type": "string",
+        "minLength": 1,
+        "enum": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "answerB": {
+        "title": "Question B:",
+        "type": "string",
+        "options": {
+          "dependencies": {
+            "answerA": [
+              "A",
+              "B"
+            ]
+          }
+        }
+      }
+    }
+  }
+
+  const editor = new JSONEditor(document.getElementById('editor'), {
+    schema: schema,
+    show_errors: 'always'
+  });
+</script>
+</body>
+</html>

@@ -191,3 +191,14 @@ Scenario('should hide properties with unfulfilled dependencies', (I) => {
   I.seeElement('[data-schemapath="root.make_new"] input')
   I.dontSeeElement('[data-schemapath="root.existing_name"] input')
 })
+
+Scenario('should respect multiple dependency values', (I) => {
+  I.amOnPage('object-with-dependencies-array.html')
+  I.waitForVisible('[data-schemapath="root.answerB"] input', 5)
+  I.selectOption('[name="root[answerA]"]', 'C')
+  I.waitForInvisible('[data-schemapath="root.answerB"] input', 5)
+  I.selectOption('[name="root[answerA]"]', 'B')
+  I.waitForVisible('[data-schemapath="root.answerB"] input', 5)
+  I.selectOption('[name="root[answerA]"]', 'A')
+  I.waitForVisible('[data-schemapath="root.answerB"] input', 5)
+})
