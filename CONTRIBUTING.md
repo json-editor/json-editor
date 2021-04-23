@@ -50,7 +50,7 @@ If you absolutely *must* break a style rule you can disable a rule for the next 
 
 ### Development
 
-The easiest way to hack on JSON Editor is to run `npm start`, which 
+The easiest way to hack on JSON Editor is to run `npm run debug`, which 
 re-builds `dist/jsoneditor.js` every time a source file changes and serves the repo to a
 development server on port 8080, so you can load test pages such as (http://localhost:8080/tests/pages/array-selectize.html) and immmediately view and debug the results.
 
