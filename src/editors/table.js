@@ -316,7 +316,7 @@ export class TableEditor extends ArrayEditor {
       this.rows[i].movedown_button = this._createMoveDownButton(i, controlsHolder)
     }
 
-    if (value) this.rows[i].setValue(value)
+    if (value != null) this.rows[i].setValue(value)
   }
 
   _createDeleteButton (i, holder) {
