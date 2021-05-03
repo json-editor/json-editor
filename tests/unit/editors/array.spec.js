@@ -7,7 +7,7 @@ const fixture = [
       type: 'array',
       items: {
         type: ['boolean', 'string', 'null', 'number']
-       }
+      }
     },
     value: [false]
   },
@@ -17,7 +17,7 @@ const fixture = [
       type: 'array',
       items: {
         type: ['boolean', 'string', 'null', 'number']
-       }
+      }
     },
     value: ['']
   },
@@ -27,7 +27,33 @@ const fixture = [
       type: 'array',
       items: {
         type: ['boolean', 'string', 'null', 'number']
-       }
+      }
+    },
+    value: [0]
+  },
+  {
+    title: 'Array Editor Test',
+    schema: {
+      type: 'array',
+      items: {
+        type: 'string'
+      }
+    },
+    options: {
+      use_default_values: false
+    },
+    value: ['']
+  },
+  {
+    title: 'Array Editor Test',
+    schema: {
+      type: 'array',
+      items: {
+        type: 'number'
+      }
+    },
+    options: {
+      use_default_values: false
     },
     value: [0]
   }
