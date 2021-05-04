@@ -141,6 +141,71 @@ For configuration options, see the [Autocomplete homepage](https://autocomplete.
 **Source:** src/editors/autocomplete.js
 <br>
 
+#### Example
+
+Javascript
+
+```
+window.JSONEditor.defaults.callbacks = {
+    "autocomplete": {
+        // This is callback functions for the "autocomplete" editor
+        // In the schema you refer to the callback function by key
+        // Note: 1st parameter in callback is ALWAYS a reference to the current editor.
+        // So you need to add a variable to the callback to hold this (like the
+        // "jseditor_editor" variable in the examples below.)
+
+        // Setup API calls
+        "search_za": function search(jseditor_editor, input) {
+            var url = '/eiao/api/json-object?filter[or][][data_json][LIKE]=' + encodeURI(input) +'&filter[or][][uuid][LIKE]=' + encodeURI(input);;
+
+            return new Promise(function (resolve) {
+                if (input.length < 2) {
+                    return resolve([]);
+                }
+
+                fetch(url).then(function (response) {
+                    return response.json();
+                }).then(function (data) {
+                    resolve(data);
+                });
+            });
+        },
+        "renderResult_za": function(jseditor_editor, result, props) {
+            return ['<li ' + props + '>',
+                '<div class="eiao-object-title">' + result.data_json + '</div>',
+                '<div class="eiao-object-snippet">' + result.uuid.substring(0,7) + ' <small>' + result.schema_uuid.substring(0,5) + '<small></div>',
+                '</li>'].join('');
+        },
+        "getResultValue_za": function getResultValue(jseditor_editor, result) {
+            return result.uuid;
+        }
+    }
+};
+```
+
+JSON-schema
+
+```json
+{
+    "items": {
+        "title": "UUID",
+        "type": "string",
+        "description": "reference (autocomplete)",
+        "format": "autocomplete",
+        "options": {
+            "autocomplete": {
+                "search": "search_za",
+                "getResultValue": "getResultValue_za",
+                "renderResult": "renderResult_za",
+                "autoSelect": true
+            }
+        }
+    },
+    "title": "Project references",
+    "type": "array"
+}
+```
+
 ### Checkbox
 **Description**
 Checkbox format.
