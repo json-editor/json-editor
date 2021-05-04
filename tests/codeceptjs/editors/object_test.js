@@ -202,3 +202,9 @@ Scenario('should respect multiple dependency values', (I) => {
   I.selectOption('[name="root[answerA]"]', 'A')
   I.waitForVisible('[data-schemapath="root.answerB"] input', 5)
 })
+
+Scenario('should show editors for empty optional fields if show_non_required_editors options specified', (I) => {
+  I.amOnPage('object-show-non-required-editors.html')
+  I.waitForElement('[data-schemapath="root[0][dayCode]"]', "Monday")
+  I.seeElement('[name="root[0][startTime]"] input')
+})
