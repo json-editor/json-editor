@@ -205,6 +205,6 @@ Scenario('should respect multiple dependency values', (I) => {
 
 Scenario('should show editors for empty optional fields if show_non_required_editors options specified', (I) => {
   I.amOnPage('object-show-non-required-editors.html')
-  I.waitForElement('[data-schemapath="root[0][dayCode]"]', 5)
-  I.seeElement('[name="root[0][startTime]"] input')
+  I.seeElement('[name="root[0][dayCode]"]')
+  I.seeElement('[name="root[0][startTime]"]')
 })
