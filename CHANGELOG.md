@@ -3,6 +3,7 @@
 - pass additional pathDepth parameter to getHeader() to allow themes to render headings hierarchically
 - add Open Iconic iconlib
 - switched CI to Github Actions
+- read-only base64 editors respect enum values when calling setValue()
 
 ### 2.5.3
 
