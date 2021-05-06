@@ -82,7 +82,7 @@ For now I have passed in `JSONEditor.defaults` as `defaults`.
 1. Switch to `release` branch and `merge master into release`
 2. Update `CHANGELOG.md`
 3. NPM login: `npm login`
-4. Build new version: `npm version 2.5.2`
+4. Build new version: `npm version x.x.x`
 
 The `npm version` command will automatically build the source files & test the new generated script files.  
 On success the `postversion` script will push the source to GitHub and publish the version on NPM.

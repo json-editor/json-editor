@@ -1,9 +1,19 @@
-### Unreleased
+### 2.5.4
 
 - pass additional pathDepth parameter to getHeader() to allow themes to render headings hierarchically
 - add Open Iconic iconlib
-- switched CI to Github Actions
 - read-only base64 editors respect enum values when calling setValue()
+- Added autocomplete example
+- fix #976 falsy values and use_default_values = false
+- Updated CONTRIBUTING.md
+- Added URN support
+- Added support for multiple values in dependencies
+- Added support for const
+- fix #848 oneOf and anyOf error messages
+- fixes #379 and #923 - strip #fragment from URI so json pointers resolve correctly
+- Human readable error_required message #914
+- switched CI to Github Actions
+- npm audit fix #956
 
 ### 2.5.3
 
