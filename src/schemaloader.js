@@ -136,7 +136,7 @@ export class SchemaLoader {
 
   _expandSubSchema (subschema) {
     /* Array of types */
-    if (Array.isArray(subschema)) return subschema.map(m => typeof value === 'object' ? this.expandSchema(m) : m)
+    if (Array.isArray(subschema)) return subschema.map(m => typeof m === 'object' ? this.expandSchema(m) : m)
 
     /* Schema */
     return this.expandSchema(subschema)
