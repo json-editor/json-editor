@@ -1,6 +1,10 @@
 ### Unreleased
 
+<<<<<<< HEAD
 - Fix for #900 to close the properties modal when we click outside modal
+=======
+- fixed arbitrary JSON pointers not returning the schema at the pointer path
+>>>>>>> 0526717 (988: Updates changelog)
 
 ### 2.6.0
 
