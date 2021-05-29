@@ -65,6 +65,7 @@ export class JSONEditor {
     this.expandSchema = (schema, fileBase) => loader.expandSchema(schema, fileBase)
     this.expandRefs = (schema, fileBase) => loader.expandRefs(schema, fileBase)
     this.refs = loader.refs
+    this.refs_with_info = loader.refs_with_info
 
     loader.load(this.schema, schema => {
       const validatorOptions = this.options.custom_validators ? { custom_validators: this.options.custom_validators } : {}
