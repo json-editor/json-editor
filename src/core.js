@@ -58,7 +58,7 @@ export class JSONEditor {
     this.element.appendChild(this.root_container)
 
     /* Fetch all external refs via ajax */
-    const fetchUrl = document.location.origin + document.location.pathname.toString()
+    const fetchUrl = document.location.origin + document.location.pathname
     const loader = new SchemaLoader(this.options)
     const location = document.location.toString()
 
