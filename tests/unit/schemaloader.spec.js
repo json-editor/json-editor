@@ -199,12 +199,12 @@ describe('SchemaLoader', () => {
       const server = createFakeServer()
       server.autoRespond = true
       window.XMLHttpRequest = server.xhr
-      server.respondWith(/schema\/main.json/, [
+      server.respondWith(/schema\/main\.json/, [
         200,
         { 'Content-Type': 'application/json' },
         JSON.stringify(schema2)
       ])
-      server.respondWith(/schema\/registry\/sub.json/, [
+      server.respondWith(/schema\/registry\/sub\.json/, [
         200,
         { 'Content-Type': 'application/json' },
         JSON.stringify(schema3)
@@ -246,12 +246,12 @@ describe('SchemaLoader', () => {
       const server = createFakeServer()
       server.autoRespond = true
       window.XMLHttpRequest = server.xhr
-      server.respondWith(/schema\/main.json/, [
+      server.respondWith(/schema\/main\.json/, [
         200,
         { 'Content-Type': 'application/json' },
         JSON.stringify(schema2)
       ])
-      server.respondWith(/schema\/registry\/sub.json/, [
+      server.respondWith(/schema\/registry\/sub\.json/, [
         200,
         { 'Content-Type': 'application/json' },
         JSON.stringify(schema3)
@@ -544,12 +544,12 @@ describe('SchemaLoader', () => {
       const server = createFakeServer()
       server.autoRespond = true
       window.XMLHttpRequest = server.xhr
-      server.respondWith(/schema\/main.json/, [
+      server.respondWith(/schema\/main\.json/, [
         200,
         { 'Content-Type': 'application/json' },
         JSON.stringify(schema2)
       ])
-      server.respondWith(/schema\/registry\/sub.json/, [
+      server.respondWith(/schema\/registry\/sub\.json/, [
         200,
         { 'Content-Type': 'application/json' },
         JSON.stringify(schema3)
@@ -562,6 +562,60 @@ describe('SchemaLoader', () => {
         schema => {
           expect(Object.keys(loader.refs).length).toBe(2)
           expect(Object.keys(loader.refs_with_info).length).toEqual(3)
+          done()
+          server.restore()
+        },
+        fetchUrl,
+        fileBase
+      )
+    })
+  })
+
+  describe('$defs and nested ref', () => {
+    it('can get refs', done => {
+      const schema1 = {
+        type: 'object',
+        properties: {
+          'test-1': { $ref: 'common.schema.json#/$defs/nested-name' }
+        }
+      }
+      const schema2 = {
+        $defs: {
+          'nested-name': {
+            $ref: 'name.json#/$defs/name'
+          }
+        }
+      }
+      const schema3 = {
+        $defs: {
+          name: {
+            type: 'string',
+            default: 'Waldo',
+            minLength: 4
+          }
+        }
+      }
+      const server = createFakeServer()
+      server.autoRespond = true
+      window.XMLHttpRequest = server.xhr
+      server.respondWith(/common\.schema\.json/, [
+        200,
+        { 'Content-Type': 'application/json' },
+        JSON.stringify(schema2)
+      ])
+      server.respondWith(/name\.json/, [
+        200,
+        { 'Content-Type': 'application/json' },
+        JSON.stringify(schema3)
+      ])
+      fetchUrl = document.location.origin + document.location.pathname
+      loader = new SchemaLoader({ ajax: true })
+      fileBase = loader._getFileBase(document.location.toString())
+      loader.load(
+        schema1,
+        schema => {
+          expect(Object.keys(loader.refs).length).toBe(2)
+          expect(Object.keys(loader.refs_with_info).length).toEqual(2)
           done()
           server.restore()
         },
