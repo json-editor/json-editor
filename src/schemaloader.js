@@ -83,7 +83,7 @@ export class SchemaLoader {
   load (schema, callback, fetchUrl, location) {
     this.fileBase = this._getFileBase(location)
     this._loadExternalRefs(schema, () => {
-      this._getDefinitions(schema, '#/definitions/')
+      this._getDefinitions(schema, '#')
       callback(this.expandRefs(schema))
     }, fetchUrl, this.fileBase)
   }
@@ -166,12 +166,22 @@ export class SchemaLoader {
     return this.expandSchema(subschema)
   }
 
-  _getDefinitions (schema, path) {
+  _getDefinitions (schema, prefix) {
+    if (schema.$defs) {
+      const path = prefix + '/$defs/'
+      Object.keys(schema.$defs).forEach(i => {
+        this.refs[path + i] = schema.$defs[i]
+        if (schema.$defs[i].$defs) {
+          this._getDefinitions(schema.$defs[i], `${path + i}`)
+        }
+      })
+    }
     if (schema.definitions) {
+      const path = prefix + '/definitions/'
       Object.keys(schema.definitions).forEach(i => {
         this.refs[path + i] = schema.definitions[i]
         if (schema.definitions[i].definitions) {
-          this._getDefinitions(schema.definitions[i], `${path + i}/definitions/`)
+          this._getDefinitions(schema.definitions[i], `${path + i}`)
         }
       })
     }
@@ -287,7 +297,7 @@ export class SchemaLoader {
               throw new Error(`External ref does not contain a valid schema - ${urn}`)
             }
             this.refs[uri] = schema
-            this._getDefinitions(schema, `${urn}#/definitions/`)
+            this._getDefinitions(schema, `${urn}#`)
             this._loadExternalRefs(schema, () => {
               waiting--
               if (done && !waiting) {
@@ -343,7 +353,7 @@ export class SchemaLoader {
           const fileBase = this._getFileBaseFromFileLocation(url) + '/'
 
           if (uri.indexOf('#') > 0) uri = uri.substr(0, uri.indexOf('#'))
-          this._getDefinitions(schema, `${uri}#/definitions/`)
+          this._getDefinitions(schema, `${uri}#`)
           this._loadExternalRefs(schema, () => {
             waiting--
             if (done && !waiting) {
