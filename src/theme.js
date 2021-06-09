@@ -330,7 +330,7 @@ export class AbstractTheme {
     el.classList.add('form-control')
     if (label) {
       el.appendChild(label)
-      if (formName) label.setAttribute('for', formName);
+      if (formName) label.setAttribute('for', formName)
     }
     if ((input.type === 'checkbox' || input.type === 'radio') && label) {
       input.style.width = 'auto'
