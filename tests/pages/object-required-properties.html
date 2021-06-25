@@ -62,22 +62,33 @@
         "type": "string",
         "minLength": 5,
         "options": {
-          "grid_columns": 4
+          "grid_columns": 3
         }
       },
       "number": {
         "title": "number",
         "type": "number",
         "options": {
-          "grid_columns": 4
+          "grid_columns": 3
         }
       },
       "boolean": {
         "title": "boolean",
         "type": "boolean",
         "options": {
-          "grid_columns": 4,
-          "grid_break": true
+          "grid_columns": 3,
+        }
+      },
+      "radio": {
+        "type": "string",
+        "format": "radio",
+        "title": "Radio Buttons",
+        "enum": [
+          "Home",
+          "Work"
+        ],
+        "options": {
+          "grid_columns": 3
         }
       },
       "array": {
@@ -106,21 +117,33 @@
             "title": "string",
             "type": "string",
             "options": {
-              "grid_columns": 4
+              "grid_columns": 3
             }
           },
           "number": {
             "title": "number",
             "type": "number",
             "options": {
-              "grid_columns": 4
+              "grid_columns": 3
             }
           },
           "boolean": {
             "title": "boolean",
             "type": "boolean",
             "options": {
-              "grid_columns": 4
+              "grid_columns": 3
+            }
+          },
+          "radio": {
+            "type": "string",
+            "format": "radio",
+            "title": "Radio Buttons",
+            "enum": [
+              "Home",
+              "Work"
+            ],
+            "options": {
+              "grid_columns": 3
             }
           },
           "array": {
