@@ -5,6 +5,10 @@
 - switched CI to Github Actions
 - read-only base64 editors respect enum values when calling setValue()
 
+### 2.5.4
+
+- fixes #997 add accessibility support for string input types
+
 ### 2.5.3
 
 - fix oneOf and anyOf error messages

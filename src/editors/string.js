@@ -6,12 +6,14 @@ export class StringEditor extends AbstractEditor {
     super.register()
     if (!this.input) return
     this.input.setAttribute('name', this.formname)
+    this.input.setAttribute('aria-label', this.formname)
   }
 
   unregister () {
     super.unregister()
     if (!this.input) return
     this.input.removeAttribute('name')
+    this.input.removeAttribute('aria-label')
   }
 
   setValue (value, initial, fromTemplate) {
@@ -201,7 +203,7 @@ export class StringEditor extends AbstractEditor {
       input = this.theme.getRangeControl(this.input, this.theme.getRangeOutput(this.input, this.schema.default || Math.max(this.schema.minimum || 0, 0)))
     }
 
-    this.control = this.theme.getFormControl(this.label, input, this.description, this.infoButton)
+    this.control = this.theme.getFormControl(this.label, input, this.description, this.infoButton, this.formname)
     this.container.appendChild(this.control)
 
     /* Any special formatting that needs to happen after the input is added to the dom */
