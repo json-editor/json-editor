@@ -20,19 +20,19 @@ describe('SchemaLoader', () => {
       expect(loader).toBeTruthy()
     })
 
-    it('load schema without $ref', () => {
+    it('load schema without $ref', async () => {
       const schema = {
         type: 'object',
         properties: {
           name: { type: 'string' }
         }
       }
-      loader.load(schema, schema => {}, fetchUrl, fileBase)
+      await loader.load(schema, fetchUrl, fileBase)
       const urls = Object.keys(loader.refs)
       expect(urls.length).toEqual(0)
     })
 
-    it('load schema with $ref', () => {
+    it('load schema with $ref', async () => {
       const schema = {
         definitions: {
           name: {
@@ -46,12 +46,12 @@ describe('SchemaLoader', () => {
           lname: { $ref: '#/definitions/name' }
         }
       }
-      loader.load(schema, schema => {}, fetchUrl, fileBase)
+      await loader.load(schema, fetchUrl, fileBase)
       const urls = Object.keys(loader.refs)
       expect(urls.length).toEqual(1)
     })
 
-    it('load schema with urn: $ref', () => {
+    it('load schema with urn: $ref', async () => {
       const schema = {
         definitions: {
           fname: {
@@ -73,14 +73,14 @@ describe('SchemaLoader', () => {
           lname: { $ref: 'urn:lname' }
         }
       }
-      loader.load(schema, schema => {}, fetchUrl, fileBase)
+      await loader.load(schema, fetchUrl, fileBase)
       const urls = Object.keys(loader.refs)
       expect(urls.length).toEqual(4)
     })
   })
 
   describe('when external absolute ref exists', () => {
-    it('should set oprion { ajax: true }', done => {
+    it('should set oprion { ajax: true }', async () => {
       const response = {
         type: 'string',
         minLength: 4
@@ -105,22 +105,19 @@ describe('SchemaLoader', () => {
           lname: { $ref: '/string.json' }
         }
       }
-      loader.load(
+      await loader.load(
         schema,
-        schema => {
-          const urls = Object.keys(loader.refs)
-          expect(urls.length).toEqual(1)
-          done()
-          server.restore()
-        },
         fetchUrl,
         fileBase
       )
+      const urls = Object.keys(loader.refs)
+      expect(urls.length).toEqual(1)
+      server.restore()
     })
   })
 
   describe('when external relative $ref exists', () => {
-    it('should set oprion { ajax: true }', done => {
+    it('should set oprion { ajax: true }', async () => {
       const response = {
         type: 'string',
         minLength: 4
@@ -145,22 +142,20 @@ describe('SchemaLoader', () => {
           lname: { $ref: 'string.json' }
         }
       }
-      loader.load(
+      await loader.load(
         schema,
-        schema => {
-          const urls = Object.keys(loader.refs)
-          expect(urls.length).toEqual(1)
-          done()
-          server.restore()
-        },
+
         fetchUrl,
         fileBase
       )
+      const urls = Object.keys(loader.refs)
+      expect(urls.length).toEqual(1)
+      server.restore()
     })
   })
 
   describe('when external absolute-to-relative $ref exists', () => {
-    it('can get refs recursively', done => {
+    it('can get refs recursively', async () => {
       const schema1 = {
         type: 'object',
         properties: {
@@ -192,21 +187,18 @@ describe('SchemaLoader', () => {
         document.location.origin + document.location.pathname.toString()
       loader = new SchemaLoader({ ajax: true })
       fileBase = loader._getFileBase(document.location.toString())
-      loader.load(
+      await loader.load(
         schema1,
-        schema => {
-          expect(Object.keys(loader.refs).length).toBe(2)
-          done()
-          server.restore()
-        },
         fetchUrl,
         fileBase
       )
+      expect(Object.keys(loader.refs).length).toBe(2)
+      server.restore()
     })
   })
 
   describe('when external relative-to-relative $ref exists', () => {
-    it('can get refs recursively', done => {
+    it('can get refs recursively', async () => {
       const schema1 = {
         type: 'object',
         properties: {
@@ -238,22 +230,19 @@ describe('SchemaLoader', () => {
         document.location.origin + document.location.pathname.toString()
       loader = new SchemaLoader({ ajax: true })
       fileBase = loader._getFileBase(document.location.toString())
-      loader.load(
+      await loader.load(
         schema1,
-        schema => {
-          console.log(loader.refs)
-          expect(Object.keys(loader.refs).length).toBe(2)
-          done()
-          server.restore()
-        },
         fetchUrl,
         fileBase
       )
+      expect(Object.keys(loader.refs).length).toBe(2)
+
+      server.restore()
     })
   })
 
   describe('when external absolute $ref with json pointer exists', () => {
-    it('can get refs', done => {
+    it('can get refs', async () => {
       const schema1 = {
         type: 'object',
         properties: {
@@ -273,7 +262,7 @@ describe('SchemaLoader', () => {
           'known-product': {
             title: 'product',
             type: 'string',
-            enum: [ 'power', 'hydrogen', 'heat' ]
+            enum: ['power', 'hydrogen', 'heat']
           }
         },
         title: 'test',
@@ -294,22 +283,18 @@ describe('SchemaLoader', () => {
         document.location.origin + document.location.pathname.toString()
       loader = new SchemaLoader({ ajax: true })
       fileBase = loader._getFileBase(document.location.toString())
-      loader.load(
+      await loader.load(
         schema1,
-        schema => {
-          console.log(loader.refs)
-          expect(Object.keys(loader.refs).length).toBe(3)
-          done()
-          server.restore()
-        },
         fetchUrl,
         fileBase
       )
+      expect(Object.keys(loader.refs).length).toBe(3)
+      server.restore()
     })
   })
 
   describe('when external relative $ref with json pointer exists', () => {
-    it('can get refs', done => {
+    it('can get refs', async () => {
       const schema1 = {
         type: 'object',
         properties: {
@@ -329,7 +314,7 @@ describe('SchemaLoader', () => {
           'known-product': {
             title: 'product',
             type: 'string',
-            enum: [ 'power', 'hydrogen', 'heat' ]
+            enum: ['power', 'hydrogen', 'heat']
           }
         },
         title: 'test',
@@ -350,22 +335,18 @@ describe('SchemaLoader', () => {
         document.location.origin + document.location.pathname.toString()
       loader = new SchemaLoader({ ajax: true })
       fileBase = loader._getFileBase(document.location.toString())
-      loader.load(
+      await loader.load(
         schema1,
-        schema => {
-          console.log(loader.refs)
-          expect(Object.keys(loader.refs).length).toBe(4)
-          done()
-          server.restore()
-        },
         fetchUrl,
         fileBase
       )
+      expect(Object.keys(loader.refs).length).toBe(4)
+      server.restore()
     })
   })
 
   describe('when external ref exists with json pointer', () => {
-    it('should get ref and resolve json pointer', done => {
+    it('should get ref and resolve json pointer', async () => {
       const response = {
         definitions: {
           fruits: {
@@ -396,24 +377,21 @@ describe('SchemaLoader', () => {
           fruits: { $ref: '/fruits.json#/definitions/fruits' }
         }
       }
-      loader.load(
+      await loader.load(
         schema,
-        schema => {
-          const urls = Object.keys(loader.refs)
-          expect(urls.length).toEqual(1)
-          expect(urls[0]).toEqual('/fruits.json#/definitions/fruits')
-          expect(loader.refs['/fruits.json#/definitions/fruits']).toEqual({ enum: ['apple', 'banana', 'cherry'] })
-          done()
-          server.restore()
-        },
         fetchUrl,
         fileBase
       )
+      const urls = Object.keys(loader.refs)
+      expect(urls.length).toEqual(1)
+      expect(urls[0]).toEqual('/fruits.json#/definitions/fruits')
+      expect(loader.refs['/fruits.json#/definitions/fruits']).toEqual({ enum: ['apple', 'banana', 'cherry'] })
+      server.restore()
     })
   })
 
   describe('when resolving undeclared URN $ref', () => {
-    it('can get refs recursively', done => {
+    it('can get refs recursively', async () => {
       const schema1 = {
         type: 'object',
         properties: {
@@ -423,9 +401,9 @@ describe('SchemaLoader', () => {
       }
       const schema2 = {
         definitions: {
-           name: {
-             id: 'urn:main',
-             $ref: 'urn:sub'
+          name: {
+            id: 'urn:main',
+            $ref: 'urn:sub'
           }
         }
       }
@@ -439,30 +417,27 @@ describe('SchemaLoader', () => {
           }
         }
       }
-      loader = new SchemaLoader({ urn_resolver: (urn, callback) => {
-        if (urn === 'urn:main') {
-          callback(JSON.stringify(schema2))
-          return true
+
+      loader = new SchemaLoader({
+        urn_resolver: async (urn) => {
+          if (urn === 'urn:main') {
+            return JSON.stringify(schema2)
+          }
+          if (urn === 'urn:sub') {
+            return (JSON.stringify(schema3))
+          }
+          return false
         }
-        if (urn === 'urn:sub') {
-          callback(JSON.stringify(schema3))
-          return true
-        }
-        return false
-      }})
-      loader.load(
-        schema1,
-        schema => {
-          console.log(loader.refs_with_info)
-          expect(Object.keys(loader.refs).length).toBe(4)
-          done()
-        }
+      })
+      await loader.load(
+        schema1
       )
+      expect(Object.keys(loader.refs).length).toBe(4)
     })
   })
 
   describe('when resolving undeclared URN $ref with fragment', () => {
-    it('can get refs recursively', done => {
+    it('can get refs recursively', async () => {
       const schema1 = {
         type: 'object',
         properties: {
@@ -480,21 +455,16 @@ describe('SchemaLoader', () => {
           }
         }
       }
-      loader = new SchemaLoader({ urn_resolver: (urn, callback) => {
-        if (urn === 'urn:main') {
-          callback(JSON.stringify(schema2))
-          return true
+      loader = new SchemaLoader({
+        urn_resolver: async (urn) => {
+          if (urn === 'urn:main') {
+            return JSON.stringify(schema2)
+          }
+          return false
         }
-        return false
-      }})
-      loader.load(
-        schema1,
-        schema => {
-          console.log(loader.refs_with_info)
-          expect(Object.keys(loader.refs).length).toBe(2)
-          done()
-        }
-      )
+      })
+      await loader.load(schema1)
+      expect(Object.keys(loader.refs).length).toBe(2)
     })
   })
 })
