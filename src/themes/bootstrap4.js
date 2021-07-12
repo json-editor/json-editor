@@ -405,6 +405,7 @@ export class bootstrap4Theme extends AbstractTheme {
 
     const el = document.createElement('h3')
     el.classList.add('card-title')
+    el.classList.add('level-' + pathDepth)
 
     if (typeof text === 'string') {
       el.textContent = text
