@@ -75,7 +75,6 @@
           "enum":[
             "color",
             "date",
-            "datetime",
             "datetime-local",
             "email",
             "month",
