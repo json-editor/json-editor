@@ -676,7 +676,6 @@ JSON Editor uses HTML5 input types, so some of these may render as basic text in
 
 *  color
 *  date
-*  datetime
 *  datetime-local
 *  email
 *  month
