@@ -993,7 +993,8 @@ export class ObjectEditor extends AbstractEditor {
       this.editors[name].register()
       /* New property */
     } else {
-      if (!this.canHaveAdditionalProperties() && (!this.schema.properties || !this.schema.properties[name])) {
+      if (!this.canHaveAdditionalProperties() && (!this.schema.properties || !this.schema.properties[name]) &&
+        (!this.schema.patternProperties || !(Object.keys(this.schema.patternProperties).find(i => new RegExp(i).test(name))))) {
         return
       }
 
