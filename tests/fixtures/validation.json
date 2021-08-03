@@ -1230,6 +1230,13 @@
         },
         {
           "prop": {
+            "fooD": "foo",
+            "barD": "bar",
+            "common": "common"
+          }
+        },
+        {
+          "prop": {
             "fooA": "foo",
             "barA": "bar",
             "common": "common"
