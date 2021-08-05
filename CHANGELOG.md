@@ -4,6 +4,7 @@
 - add Open Iconic iconlib
 - switched CI to Github Actions
 - read-only base64 editors respect enum values when calling setValue()
+- fix bug in validator.fitTest where anyOf schemata were not handled correctly
 
 ### 2.5.4
 
@@ -75,7 +76,7 @@
 - Fix of #701 - editors/number.js and editors/integer.js don't change values when validation is failed
 - Fix of #716 - add ignore for allOf to fall in line with existing ignores of anyOf/oneOf for additionalProperties validation
 - Fix of #714 - Checkboxes inside object tables duplicate labels from heading
-- Added copy button to arrays in table format 
+- Added copy button to arrays in table format
 
 ### 2.1.0
  - fixed vulnerability in "http-server" package (origin/feature/merges-20200227, feature/merges-20200227) - using latest node LTS
