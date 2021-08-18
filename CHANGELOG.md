@@ -5,6 +5,8 @@
 - switched CI to Github Actions
 - read-only base64 editors respect enum values when calling setValue()
 - fix bug in validator.fitTest where anyOf schemata were not handled correctly
+- fixes accessibility support for thead that consist of an empty string
+- fix bug in validation where invalid schemata with a good fitTestResult were preferred to valid schemata
 
 ### 2.5.4
 
