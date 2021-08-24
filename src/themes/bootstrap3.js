@@ -172,14 +172,14 @@ export class bootstrap3Theme extends AbstractTheme {
   getTabHolder (propertyName) {
     const pName = (typeof propertyName === 'undefined') ? '' : propertyName
     const el = document.createElement('div')
-    el.innerHTML = `<ul class='col-md-2 nav nav-pills nav-stacked' id='${pName}' role='tablist'></ul><div class='col-md-10 tab-content well well-small'  id='${pName}'></div>`
+    el.innerHTML = `<ul class='col-md-2 nav nav-pills nav-stacked' id='${pName}' role='tablist'></ul><div class='col-md-10 tab-content active well well-small'  id='${pName}'></div>`
     return el
   }
 
   getTopTabHolder (propertyName) {
     const pName = (typeof propertyName === 'undefined') ? '' : propertyName
     const el = document.createElement('div')
-    el.innerHTML = `<ul class='nav nav-tabs' id='${pName}' role='tablist'></ul><div class='tab-content well well-small'  id='${pName}'></div>`
+    el.innerHTML = `<ul class='nav nav-tabs' id='${pName}' role='tablist'></ul><div class='tab-content active well well-small'  id='${pName}'></div>`
     return el
   }
 
