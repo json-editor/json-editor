@@ -1250,5 +1250,98 @@
           }
         }
       ]
+    },
+    "anyOf_invalid_better_fit_test": {
+        "schema": {
+            "type": "object",
+            "properties": {
+                "foo": {
+                  "anyOf": [
+                      {
+                          "$ref": "#/definitions/A"
+                      },
+                      {
+                          "$ref": "#/definitions/B"
+                      }
+                  ]
+                }
+            },
+            "definitions": {
+                "A": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "A"
+                            ],
+                            "type": "string"
+                        },
+                        "referenced": {
+                            "$ref": "#/definitions/ReferencedObject"
+                        }
+                    },
+                    "required": [
+                        "type"
+                    ]
+                },
+                "B": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "B"
+                            ],
+                            "type": "string"
+                        },
+                        "referenced": {
+                          "properties": {
+                          "foo": {
+                            "type": "string"
+                          },
+                          "bar": {
+                            "type": "string"
+                          }
+                        },
+                          "type": "object"
+                        }
+                    },
+                    "required": [
+                        "type"
+                    ]
+                  },
+                "ReferencedObject": {
+                  "properties": {
+                    "foo": {
+                      "type": "string"
+                    },
+                    "bar": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+                }
+            },
+        "valid": [
+          {
+            "foo": {
+              "type": "A",
+              "referenced": {
+                "foo": "",
+                "bar": ""
+              }
+            }
+          },
+          {
+            "foo": {
+              "type": "B",
+              "referenced": {
+                "foo": "",
+                "bar": ""
+              }
+            }
+          }
+        ],
+      "invalid": []
     }
 }

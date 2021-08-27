@@ -6,7 +6,7 @@ Feature('Validations')
 
 Scenario('test validations in validation.html', (I) => {
   I.amOnPage('validation.html')
-  var numberOfTestItemsExpected = 156
+  var numberOfTestItemsExpected = 158
   I.waitForElement('#output div:nth-child(' + numberOfTestItemsExpected + ')', 10)
   I.seeNumberOfElements('#output div', numberOfTestItemsExpected)
   I.see('success')
