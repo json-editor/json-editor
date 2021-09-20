@@ -1,0 +1,256 @@
+import { AbstractEditor } from '../editor.js'
+
+export class SelectBitEditor extends AbstractEditor {
+  onInputChange () {
+    this.value = this.input.value
+    this.onChange(true)
+  }
+
+  register () {
+    super.register()
+    if (!this.input) return
+    this.input.setAttribute('name', this.formname)
+  }
+
+  unregister () {
+    super.unregister()
+    if (!this.input) return
+    this.input.removeAttribute('name')
+  }
+
+  getNumColumns () {
+    let longestText = this.getTitle().length
+    Object.keys(this.select_values).forEach(i => (longestText = Math.max(longestText, (`${this.select_values[i]}`).length + 4)))
+
+    return Math.min(12, Math.max(longestText / 7, 2))
+  }
+
+  preBuild () {
+    super.preBuild()
+
+    this.select_options = {}
+    this.select_values = {}
+    this.option_keys = []
+    this.option_titles = []
+
+    let i
+    const itemsSchema = this.jsoneditor.expandRefs(this.schema.items || {})
+    const e = itemsSchema.enum || []
+    const t = itemsSchema.options ? itemsSchema.options.enum_titles || [] : []
+
+    for (i = 0; i < e.length; i++) {
+      /* If the sanitized value is different from the enum value, don't include it */
+      if (this.sanitize(e[i]) !== e[i]) continue
+
+      this.option_keys.push(`${e[i]}`)
+      this.option_titles.push(`${t[i] || e[i]}`)
+      this.select_values[`${e[i]}`] = e[i]
+    }
+  }
+
+  build () {
+    let i
+    if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
+    if (this.schema.description) this.description = this.theme.getFormInputDescription(this.translateProperty(this.schema.description))
+    if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.translateProperty(this.options.infoText))
+    if (this.options.compact) this.container.classList.add('compact')
+
+    this.input_type = 'checkboxes'
+
+    this.inputs = {}
+    this.controls = {}
+    for (i = 0; i < this.option_keys.length; i++) {
+      const id = this.formname + i.toString()
+      this.inputs[this.option_keys[i]] = this.theme.getCheckbox()
+      this.inputs[this.option_keys[i]].id = id
+      this.select_options[this.option_keys[i]] = this.inputs[this.option_keys[i]]
+      const label = this.theme.getCheckboxLabel(this.option_titles[i])
+      label.htmlFor = id
+      this.controls[this.option_keys[i]] = this.theme.getFormControl(label, this.inputs[this.option_keys[i]])
+    }
+
+    this.control = this.theme.getMultiCheckboxHolder(this.controls, this.label, this.description, this.infoButton)
+    this.inputs.controlgroup = this.inputs.controls = this.control /* Enable error messages for checkboxes */
+
+    if (this.schema.readOnly || this.schema.readonly) {
+      this.disable(true)
+    }
+
+    this.container.appendChild(this.control)
+
+    this.SelectBitChangeHandler = (e) => {
+      const newValue = []
+      for (i = 0; i < this.option_keys.length; i++) {
+        if (this.select_options[this.option_keys[i]] && (this.select_options[this.option_keys[i]].selected || this.select_options[this.option_keys[i]].checked)) newValue.push(this.select_values[this.option_keys[i]])
+      }
+
+      this.updateValue(newValue)
+      this.onChange(true)
+    }
+
+    this.control.addEventListener('change', this.SelectBitChangeHandler, false)
+
+    /* Any special formatting that needs to happen after the input is added to the dom */
+    window.requestAnimationFrame(() => {
+      this.afterInputReady()
+    })
+  }
+
+  postBuild () {
+    super.postBuild()
+    /* this.theme.afterInputReady(this.input || this.inputs); */
+  }
+
+  afterInputReady () {
+    this.theme.afterInputReady(this.input || this.inputs)
+  }
+
+  setValue (value, initial) {
+    value = value || []
+
+    console.log('setValue1')
+    console.log(value)
+    if (!(Array.isArray(value))) value = [value]
+
+    /* Make sure we are dealing with an array of strings so we can check for strict equality */
+    value = value.map(e => `${e}`)
+
+    /* Update selected status of options */
+    Object.keys(this.select_options).forEach(i => {
+      this.select_options[i][this.input_type === 'select' ? 'selected' : 'checked'] = (value.includes(i))
+    })
+    console.log('setValue2')
+    console.log(value)
+
+    this.updateValue(value)
+    this.onChange(true)
+  }
+
+  removeValue (value) {
+    /* Remove from existing value(s) */
+    value = [].concat(value)
+    this.setValue(this.getValue().filter(item => !value.includes(item)))
+  }
+
+  addValue (value) {
+    /* Add to existing value(s) */
+    this.setValue(this.getValue().concat(value))
+  }
+
+  updateValue (value) {
+    console.log('updateValue')
+    console.log(value)
+    let changed = false
+    let buffer = new ArrayBuffer(2)
+    buffer = -32768
+    console.log(buffer)
+    if (buffer.byteLength === 2) {
+      console.log("Yes, it's 2 bytes.")
+    } else {
+      console.log("Oh no, it's the wrong size!")
+    }
+    var buffer2 = []
+    buffer2 = Int16Array.from([-32768])
+    console.log(buffer2)
+    if (buffer2.byteLength === 2) {
+      console.log('Yes, buffer2 is 2 bytes.')
+    } else {
+      console.log("Oh no, buffer2 it's the wrong size!")
+    }
+    /* if (this.schema.format === 'selectbit') {
+      for (let i = 0; i < value.length; i++) {
+        if (!this.select_options[`${value[i]}`]) {
+          changed = true
+          continue
+        }
+        newValue
+        if (sanitized !== value[i]) changed = true
+      }
+
+    } else {
+
+    } */
+    const newValue = []
+    for (let i = 0; i < value.length; i++) {
+      if (!this.select_options[`${value[i]}`]) {
+        changed = true
+        continue
+      }
+      const sanitized = this.sanitize(this.select_values[value[i]])
+      newValue.push(sanitized)
+      if (sanitized !== value[i]) changed = true
+    }
+    this.value = newValue
+
+    return changed
+  }
+
+  sanitize (value) {
+    if (this.schema.items.type === 'boolean') return !!value
+    else if (this.schema.items.type === 'number') return 1 * value || 0
+    else if (this.schema.items.type === 'integer') return Math.floor(value * 1 || 0)
+    return `${value}`
+  }
+
+  enable () {
+    if (!this.always_disabled) {
+      if (this.input) {
+        this.input.disabled = false
+      } else if (this.inputs) {
+        Object.keys(this.inputs).forEach(i => (this.inputs[i].disabled = false))
+      }
+      super.enable()
+    }
+  }
+
+  disable (alwaysDisabled) {
+    if (alwaysDisabled) this.always_disabled = true
+    if (this.input) {
+      this.input.disabled = true
+    } else if (this.inputs) {
+      Object.keys(this.inputs).forEach(i => (this.inputs[i].disabled = true))
+    }
+    super.disable()
+  }
+
+  destroy () {
+    super.destroy()
+  }
+
+  escapeRegExp (string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  }
+
+  showValidationErrors (errors) {
+    const regexPath = new RegExp(`^${this.escapeRegExp(this.path)}(\\.\\d+)?$`)
+    const addMessage = (messages, error) => {
+      if (error.path.match(regexPath)) {
+        messages.push(error.message)
+      }
+      return messages
+    }
+
+    const messages = errors.reduce(addMessage, [])
+
+    if (messages.length) {
+      this.theme.addInputError(this.input || this.inputs, `${messages.join('. ')}.`)
+    } else {
+      this.theme.removeInputError(this.input || this.inputs)
+    }
+  }
+}
+
+
+Uint8Array.prototype.getBit=function(b) {
+  var _t=this.getBitSum();
+  return ((_t & Math.pow(2,b)) != false);
+}
+
+Uint8Array.prototype.setBit=function(b, v) {
+  var _v=v;
+  if (isNaN(_v)) return false;
+  var _B=Math.floor(b/8), _B_b=(b%8);
+  if (_v) this[_B]|=Math.pow(2,_B_b);
+  else this[_B]&=(255-Math.pow(2,_B_b));
+  return true;
+}
