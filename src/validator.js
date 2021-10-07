@@ -350,6 +350,7 @@ export class Validator {
           schema.required.forEach(e => {
             if (typeof value[e] !== 'undefined') return
             const editor = this.jsoneditor.getEditor(`${path}.${e}`)
+            if (editor && editor.dependenciesFulfilled === false) return
             /* Ignore required error if editor is of type "button" or "info" */
             if (editor && ['button', 'info'].includes(editor.schema.format || editor.schema.type)) return
             errors.push({
