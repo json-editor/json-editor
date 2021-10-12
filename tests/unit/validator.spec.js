@@ -8,7 +8,7 @@ import fixtureString from '../fixtures/string.json'
 import fixtureRecursive from '../fixtures/recursive.json'
 import * as math from 'mathjs'
 import { createFakeServer } from 'sinon'
-import * as deepEqual from 'fast-deep-equal';
+import * as deepEqual from 'fast-deep-equal'
 
 describe('Validator', () => {
   it('mathjs test', () => {
@@ -88,8 +88,8 @@ describe('Validation Test', () => {
             done()
           })
         })
-
       })
+
       spec.invalid.forEach((v, i) => {
         it(`invalid data ${i + 1}`, (done) => {
           editor.on('ready', () => {

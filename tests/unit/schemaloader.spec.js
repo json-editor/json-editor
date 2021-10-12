@@ -48,7 +48,7 @@ describe('SchemaLoader', () => {
       }
       await loader.load(schema, fetchUrl, fileBase)
       const urls = Object.keys(loader.refs)
-      expect(urls.length).toEqual(1)
+      expect(urls.length).toEqual(0)
     })
 
     it('load schema with urn: $ref', async () => {
@@ -75,7 +75,7 @@ describe('SchemaLoader', () => {
       }
       await loader.load(schema, fetchUrl, fileBase)
       const urls = Object.keys(loader.refs)
-      expect(urls.length).toEqual(4)
+      expect(urls.length).toEqual(2)
     })
   })
 
@@ -288,7 +288,7 @@ describe('SchemaLoader', () => {
         fetchUrl,
         fileBase
       )
-      expect(Object.keys(loader.refs).length).toBe(3)
+      expect(Object.keys(loader.refs).length).toBe(1)
       server.restore()
     })
   })
@@ -340,7 +340,7 @@ describe('SchemaLoader', () => {
         fetchUrl,
         fileBase
       )
-      expect(Object.keys(loader.refs).length).toBe(4)
+      expect(Object.keys(loader.refs).length).toBe(2)
       server.restore()
     })
   })
@@ -384,8 +384,8 @@ describe('SchemaLoader', () => {
       )
       const urls = Object.keys(loader.refs)
       expect(urls.length).toEqual(1)
-      expect(urls[0]).toEqual('/fruits.json#/definitions/fruits')
-      expect(loader.refs['/fruits.json#/definitions/fruits']).toEqual({ enum: ['apple', 'banana', 'cherry'] })
+      expect(urls[0]).toEqual('/fruits.json')
+      expect(loader.refs['/fruits.json'].definitions.fruits).toEqual({ enum: ['apple', 'banana', 'cherry'] })
       server.restore()
     })
   })
@@ -432,7 +432,7 @@ describe('SchemaLoader', () => {
       await loader.load(
         schema1
       )
-      expect(Object.keys(loader.refs).length).toBe(4)
+      expect(Object.keys(loader.refs).length).toBe(2)
     })
   })
 
@@ -464,7 +464,7 @@ describe('SchemaLoader', () => {
         }
       })
       await loader.load(schema1)
-      expect(Object.keys(loader.refs).length).toBe(2)
+      expect(Object.keys(loader.refs).length).toBe(1)
     })
   })
 })

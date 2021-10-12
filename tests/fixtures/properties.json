@@ -1,0 +1,20 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "category": "atom",
+    "title": "Link",
+    "entity": "link",
+    "type": "object",
+    "format": "grid",
+    "properties": {
+      "href": {
+        "title": "URL",
+        "type": "string",
+        "format": "url"
+      },
+      "title": {
+        "title": "Title attribute",
+        "description": "Shown on mouseover.",
+        "type": "string"
+      }
+    }
+  }
