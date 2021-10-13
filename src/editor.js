@@ -206,7 +206,11 @@ export class AbstractEditor {
     })
 
     /* append active/deactive checkbox if show_opt_in is true */
-    if (this.jsoneditor.options.show_opt_in || this.options.show_opt_in) {
+    const globalOptIn = this.jsoneditor.options.show_opt_in
+    const parentOptInDefined = (typeof this.parent.options.show_opt_in !== 'undefined')
+    const parentOptInEnabled = (parentOptInDefined && this.parent.options.show_opt_in === true)
+    const parentOptInDisabled = (parentOptInDefined && this.parent.options.show_opt_in === false)
+    if (parentOptInEnabled || (!parentOptInDisabled && globalOptIn) || (!parentOptInDefined && globalOptIn)) {
       /* and control to type object editors if they are not required */
       if (this.parent && this.parent.schema.type === 'object' && !this.isRequired() && this.header) {
         this.header.appendChild(this.optInCheckbox)

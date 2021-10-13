@@ -176,6 +176,39 @@ Scenario('set value opt in optional properties @show_opt_in', async (I) => {
   I.waitForElement('[data-schemapath="root.object.radio"]', 5)
 })
 
+Scenario('set value opt in optional properties @show_opt_in_flex', async (I) => {
+  I.amOnPage('object-show-opt-in.html')
+
+  // all editors visible
+  I.waitForElement('[data-schemapath="root"]', 5)
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_undefined"]', 5)
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_undefined.string"]', 5)
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_true"]', 5)
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_true.string"]', 5)
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_false"]', 5)
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_false.string"]', 5)
+
+  // checkboxes for optional properties should appear only when
+  // case 1) the parent option show_opt_in is enabled
+  // OR
+  // case 2) the parent option show_opt_in is disabled and the global option show_opt_in is enabled
+  // OR
+  // case 3) the parent option show_opt_in is not defined and the global option show_opt_in is enabled
+
+  // global show_opt_in true
+  I.dontSeeCheckedAttribute('#show-opt-in')
+  I.dontSeeElement('[data-schemapath="root.option_show_opt_in_undefined.string"] .json-editor-opt-in') // global show_opt_in: false && parent editor show_opt_in: 'undefined'
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_true.string"] .json-editor-opt-in', 5) // global show_opt_in: false && parent editor show_opt_in: true
+  I.dontSeeElement('[data-schemapath="root.option_show_opt_in_false.string"] .json-editor-opt-in') // global show_opt_in: false && parent editor show_opt_in: false
+
+  // global show_opt_in false
+  I.click('show_opt_in')
+  I.seeCheckedAttribute('#show-opt-in')
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_undefined.string"] .json-editor-opt-in') // global show_opt_in: true && parent editor show_opt_in: 'undefined'
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_true.string"] .json-editor-opt-in', 5) // global show_opt_in: true && parent editor show_opt_in: true
+  I.dontSeeElement('[data-schemapath="root.option_show_opt_in_false.string"] .json-editor-opt-in') // global show_opt_in: true && parent editor show_opt_in: false
+})
+
 Scenario('objects should contain properties defined with the properties keyword unless the property "additionalProperties: true" is specified in the object schema @additional-properties', async (I) => {
   I.amOnPage('object-no-additional-properties.html')
   I.seeElement('[data-schemapath="root.aptrue.name"] input')
