@@ -176,7 +176,7 @@ Scenario('set value opt in optional properties @show_opt_in', async (I) => {
   I.waitForElement('[data-schemapath="root.object.radio"]', 5)
 })
 
-Scenario('set value opt in optional properties @show_opt_in_flex', async (I) => {
+Scenario('set value opt in optional properties @show_opt_in_schema', async (I) => {
   I.amOnPage('object-show-opt-in.html')
 
   // all editors visible
