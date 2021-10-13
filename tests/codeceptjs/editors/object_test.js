@@ -202,8 +202,7 @@ Scenario('set value opt in optional properties @show_opt_in_schema', async (I) =
   I.dontSeeElement('[data-schemapath="root.option_show_opt_in_false.string"] .json-editor-opt-in') // global show_opt_in: false && parent editor show_opt_in: false
 
   // global show_opt_in false
-  I.click('show_opt_in')
-  I.seeCheckedAttribute('#show-opt-in')
+  I.click('#show-opt-in')
   I.waitForElement('[data-schemapath="root.option_show_opt_in_undefined.string"] .json-editor-opt-in') // global show_opt_in: true && parent editor show_opt_in: 'undefined'
   I.waitForElement('[data-schemapath="root.option_show_opt_in_true.string"] .json-editor-opt-in', 5) // global show_opt_in: true && parent editor show_opt_in: true
   I.dontSeeElement('[data-schemapath="root.option_show_opt_in_false.string"] .json-editor-opt-in') // global show_opt_in: true && parent editor show_opt_in: false
