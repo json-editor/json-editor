@@ -25,3 +25,18 @@ Scenario('should be constrained to maximun and minimun values when stepped @step
   I.click('.get-value')
   assert.equal(await I.grabValueFrom('.value'), '{"stepper":5}')
 })
+
+Scenario('should be correct initialized when manually set @stepper', async (I) => {
+  I.amOnPage('stepper-manual.html')
+  I.fillField('[name="root[stepper]"]', 10)
+  I.seeInField('[name="root[stepper]"]', 10)
+  I.click('.stepper-up')
+  I.seeInField('[name="root[stepper]"]', 11)
+  I.click('.get-value')
+  assert.equal(await I.grabValueFrom('.value'), '{"stepper":11}')
+  I.click('.stepper-down')
+  I.click('.stepper-down')
+  I.seeInField('[name="root[stepper]"]', 9)
+  I.click('.get-value')
+  assert.equal(await I.grabValueFrom('.value'), '{"stepper":9}')
+})
