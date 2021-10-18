@@ -135,6 +135,12 @@ export class bootstrap4Theme extends AbstractTheme {
     const min = input.getAttribute('min')
     const max = input.getAttribute('max')
 
+    input.addEventListener('change', () => {
+      if (!input.getAttribute('initialized')) {
+        input.setAttribute('initialized', '1')
+      }
+    })
+
     minusBtn.addEventListener('click', () => {
       if (!input.getAttribute('initialized')) {
         initialize(input, min)
