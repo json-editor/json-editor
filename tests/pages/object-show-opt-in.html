@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Object Required Properties</title>
+    <meta charset="utf-8"/>
+      <script src="../../dist/jsoneditor.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container">
+    <label for="show-opt-in">
+        <span>show_opt_in</span>
+        <input id="show-opt-in" type="checkbox">
+    </label>
+    <div id='json-editor-container'></div>
+    <label for="value"></label>
+    <textarea id="value" class="value" style="width: 100%; height: 300px;"></textarea>
+    <button id='get-value'>get value</button>
+    <button id='get-formatted-value'>get formatted value</button>
+</div>
+
+<script>
+  var container = document.querySelector('#json-editor-container')
+  var value = document.querySelector('#value')
+  var getValue = document.querySelector('#get-value')
+  var getFormattedValue = document.querySelector('#get-formatted-value')
+  var showOptIn = document.querySelector('#show-opt-in')
+  var schema = {
+    'type': 'object',
+    'title': 'option_show_opt_in_false',
+    'options': {
+      'show_opt_in': false
+    },
+    'properties': {
+      'option_show_opt_in_undefined': {
+        'type': 'object',
+        'title': 'option_show_opt_in_undefined',
+        'properties': {
+          'string': {
+            'title': 'optional_string',
+            'type': 'string'
+          }
+        }
+      },
+      'option_show_opt_in_true': {
+        'type': 'object',
+        'title': 'option_show_opt_in_true',
+        'options': {
+          'show_opt_in': true
+        },
+        'properties': {
+          'string': {
+            'title': 'optional_string',
+            'type': 'string'
+          }
+        }
+      },
+      'option_show_opt_in_false': {
+        'type': 'object',
+        'title': 'option_show_opt_in_false',
+        'options': {
+          'show_opt_in': false
+        },
+        'properties': {
+          'string': {
+            'title': 'optional_string',
+            'type': 'string'
+          }
+        }
+      }
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', function () {
+
+    var editor = null
+
+    var initJSONEditor = function (show_opt_in) {
+      if (editor) {
+        editor.destroy()
+      }
+
+      editor = new JSONEditor(container, {
+        schema: schema,
+        theme: 'bootstrap4',
+        disable_collapse: true,
+        disable_edit_json: true,
+        show_opt_in: show_opt_in || false
+      })
+    }
+
+    initJSONEditor(false)
+
+    showOptIn.addEventListener('click', function (event) {
+      initJSONEditor(event.target.checked)
+    })
+
+    getValue.addEventListener('click', function () {
+      value.value = JSON.stringify(editor.getValue())
+    })
+
+    getFormattedValue.addEventListener('click', function () {
+      value.value = JSON.stringify(editor.getValue(), null, 2)
+    })
+  })
+</script>
+
+</body>
+</html>
