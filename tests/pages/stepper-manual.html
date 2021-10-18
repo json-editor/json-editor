@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Stepper</title>
+  <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+  <script src="https://cdn.jsdelivr.net/npm/mathjs@5.3.1/dist/math.min.js" class="external_mathjs"></script>
+  <script src="../../dist/jsoneditor.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <textarea class="value form-control" rows="10"></textarea>
+  <button class='get-value'>Get Value</button>
+  <button class='set-value'>Set Value</button>
+  <div class='json-editor-container'></div>
+</div>
+
+
+<script>
+  var jsonEditorContainer = document.querySelector('.json-editor-container');
+  var value = document.querySelector('.value');
+
+  var schema = {
+    "type": "object",
+    "title": "range",
+    "properties": {
+      "stepper": {
+        'type': 'integer',
+        'format': 'stepper',
+        "default": ""
+      }
+    }
+  };
+
+  var editor = new JSONEditor(jsonEditorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    use_default_values: false,
+    required_by_default: true,
+    show_errors: 'always'
+  });
+
+  document.querySelector('.get-value').addEventListener('click', function () {
+    value.value = JSON.stringify(editor.getValue());
+    console.log(editor.getValue());
+  });
+
+  document.querySelector('.set-value').addEventListener('click', function () {
+    editor.setValue({number_range: 2})
+  });
+
+</script>
+
+</body>
+</html>
