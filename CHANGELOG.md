@@ -4,7 +4,7 @@
 
 - set show_opt_in per object editor
 - stepper manual set init fix
-- don't validate dependant and not visible editors
+- don't validate dependant editors when not visible (dependency not fulfilled)
 - hardened tests
 - bootstra3 tabs fix
 - removed datetime from metaschema and readmy (deprecated)
