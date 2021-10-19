@@ -752,6 +752,21 @@ __SimpleMDE__ is a simple Markdown editor with live preview.  To use it, set the
 }
 ```
 
+To customize the editor, add the [configuration](https://github.com/sparksuite/simplemde-markdown-editor#configuration) in the `simplemde` option:
+
+```json
+{
+  "type": "string",
+  "format": "markdown",
+  "options": {
+    "simplemde": {
+      "toolbar": ["bold", "italic", "heading", "|", "link", "quote", "|", "preview", "fullscreen", "guide"],
+      "spellChecker": false,
+    },
+}
+```
+      
+
 __Ace Editor__ is a syntax highlighting source code editor. You can use it by setting the format to any of the following:
 
 *  actionscript
