@@ -1136,5 +1136,212 @@
                "charlie": { "type": "string" }
            }
         ]
+    },
+    "nested_anyOf": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "prop": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/A"
+              },
+              {
+                "$ref": "#/definitions/B"
+              }
+            ]
+          }
+        },
+        "definitions": {
+          "A": {
+            "title": "A",
+            "type": "object",
+            "properties": {
+              "fooA": {
+                "type": "string"
+              },
+              "barA": {
+                "type": "string"
+              },
+              "common": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "fooA",
+              "barA"
+            ]
+          },
+          "B": {
+            "title": "B",
+            "anyOf": [
+              {
+                "$ref": "#/definitions/C"
+              },
+              {
+                "$ref": "#/definitions/D"
+              }
+            ]
+          },
+          "C": {
+            "title": "C",
+            "type": "object",
+            "properties": {
+              "fooC": {
+                "type": "string"
+              },
+              "barC": {
+                "type": "string"
+              },
+              "common": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "fooC",
+              "barC"
+            ]
+          },
+          "D": {
+            "title": "D",
+            "type": "object",
+            "properties": {
+              "fooD": {
+                "type": "string"
+              },
+              "barD": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "fooD",
+              "barD"
+            ]
+          }
+        }
+      },
+      "valid": [
+        {
+          "prop": {
+            "fooC": "foo",
+            "barC": "bar",
+            "common": "common"
+          }
+        },
+        {
+          "prop": {
+            "fooD": "foo",
+            "barD": "bar",
+            "common": "common"
+          }
+        },
+        {
+          "prop": {
+            "fooA": "foo",
+            "barA": "bar",
+            "common": "common"
+          }
+        }
+      ],
+      "invalid": [
+        {
+          "prop": {
+            "common": "common"
+          }
+        }
+      ]
+    },
+    "anyOf_invalid_better_fit_test": {
+        "schema": {
+            "type": "object",
+            "properties": {
+                "foo": {
+                  "anyOf": [
+                      {
+                          "$ref": "#/definitions/A"
+                      },
+                      {
+                          "$ref": "#/definitions/B"
+                      }
+                  ]
+                }
+            },
+            "definitions": {
+                "A": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "A"
+                            ],
+                            "type": "string"
+                        },
+                        "referenced": {
+                            "$ref": "#/definitions/ReferencedObject"
+                        }
+                    },
+                    "required": [
+                        "type"
+                    ]
+                },
+                "B": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "B"
+                            ],
+                            "type": "string"
+                        },
+                        "referenced": {
+                          "properties": {
+                          "foo": {
+                            "type": "string"
+                          },
+                          "bar": {
+                            "type": "string"
+                          }
+                        },
+                          "type": "object"
+                        }
+                    },
+                    "required": [
+                        "type"
+                    ]
+                  },
+                "ReferencedObject": {
+                  "properties": {
+                    "foo": {
+                      "type": "string"
+                    },
+                    "bar": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+                }
+            },
+        "valid": [
+          {
+            "foo": {
+              "type": "A",
+              "referenced": {
+                "foo": "",
+                "bar": ""
+              }
+            }
+          },
+          {
+            "foo": {
+              "type": "B",
+              "referenced": {
+                "foo": "",
+                "bar": ""
+              }
+            }
+          }
+        ],
+      "invalid": []
     }
 }

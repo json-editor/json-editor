@@ -99,6 +99,7 @@ export class TableEditor extends ArrayEditor {
 
     /* Row Controls column */
     this.controls_header_cell = this.theme.getTableHeaderCell(' ')
+    this.controls_header_cell.setAttribute('aria-hidden', 'true')
     this.header_row.appendChild(this.controls_header_cell)
 
     /* Add controls */

@@ -793,7 +793,11 @@ export class ObjectEditor extends AbstractEditor {
 
   deactivateNonRequiredProperties () {
     /* the show_opt_in editor option is for backward compatibility */
-    if (this.jsoneditor.options.show_opt_in || this.options.show_opt_in) {
+    const globalOptIn = this.jsoneditor.options.show_opt_in
+    const editorOptInDefined = (typeof this.options.show_opt_in !== 'undefined')
+    const editorOptInEnabled = (editorOptInDefined && this.options.show_opt_in === true)
+    const editorOptInDisabled = (editorOptInDefined && this.options.show_opt_in === false)
+    if (editorOptInEnabled || (!editorOptInDisabled && globalOptIn) || (!editorOptInDefined && globalOptIn)) {
       Object.entries(this.editors).forEach(([key, editor]) => {
         if (!this.isRequiredObject(editor)) {
           this.editors[key].deactivate()
@@ -993,7 +997,8 @@ export class ObjectEditor extends AbstractEditor {
       this.editors[name].register()
       /* New property */
     } else {
-      if (!this.canHaveAdditionalProperties() && (!this.schema.properties || !this.schema.properties[name])) {
+      if (!this.canHaveAdditionalProperties() && (!this.schema.properties || !this.schema.properties[name]) &&
+        (!this.schema.patternProperties || !(Object.keys(this.schema.patternProperties).find(i => new RegExp(i).test(name))))) {
         return
       }
 

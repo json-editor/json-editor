@@ -2,7 +2,6 @@ import { SelectEditor } from './select.js'
 
 export class RadioEditor extends SelectEditor {
   preBuild () {
-    this.schema.required = true /* force editor into required mode to prevent creation of empty radio button */
     super.preBuild()
   }
 
@@ -20,6 +19,12 @@ export class RadioEditor extends SelectEditor {
     const radioInputEventhandler = e => {
       this.setValue(e.currentTarget.value)
       this.onChange(true)
+    }
+
+    if (!this.isRequired()) {
+      this.enum_display.shift()
+      this.enum_options.shift()
+      this.enum_values.shift()
     }
 
     for (let i = 0; i < this.enum_values.length; i++) {

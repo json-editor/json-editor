@@ -1,19 +1,26 @@
-### 2.5.4
+### Unreleased
 
+### 2.6.0
+
+- set show_opt_in per object editor
+- stepper manual set init fix
+- don't validate dependant editors when not visible (dependency not fulfilled)
+- hardened tests
+- bootstra3 tabs fix
+- removed datetime from metaschema and readmy (deprecated)
+- not forced required for radios
+- audit fixes
 - pass additional pathDepth parameter to getHeader() to allow themes to render headings hierarchically
 - add Open Iconic iconlib
-- read-only base64 editors respect enum values when calling setValue()
-- Added autocomplete example
-- fix #976 falsy values and use_default_values = false
-- Updated CONTRIBUTING.md
-- Added URN support
-- Added support for multiple values in dependencies
-- Added support for const
-- fix #848 oneOf and anyOf error messages
-- fixes #379 and #923 - strip #fragment from URI so json pointers resolve correctly
-- Human readable error_required message #914
 - switched CI to Github Actions
-- npm audit fix #956
+- read-only base64 editors respect enum values when calling setValue()
+- fix bug in validator.fitTest where anyOf schemata were not handled correctly
+- fixes accessibility support for thead that consist of an empty string
+- fix bug in validation where invalid schemata with a good fitTestResult were preferred to valid schemata
+
+### 2.5.4
+
+- fixes #997 add accessibility support for string input types
 
 ### 2.5.3
 
@@ -81,7 +88,7 @@
 - Fix of #701 - editors/number.js and editors/integer.js don't change values when validation is failed
 - Fix of #716 - add ignore for allOf to fall in line with existing ignores of anyOf/oneOf for additionalProperties validation
 - Fix of #714 - Checkboxes inside object tables duplicate labels from heading
-- Added copy button to arrays in table format 
+- Added copy button to arrays in table format
 
 ### 2.1.0
  - fixed vulnerability in "http-server" package (origin/feature/merges-20200227, feature/merges-20200227) - using latest node LTS

@@ -350,6 +350,7 @@ export class Validator {
           schema.required.forEach(e => {
             if (typeof value[e] !== 'undefined') return
             const editor = this.jsoneditor.getEditor(`${path}.${e}`)
+            if (editor && editor.dependenciesFulfilled === false) return
             /* Ignore required error if editor is of type "button" or "info" */
             if (editor && ['button', 'info'].includes(editor.schema.format || editor.schema.type)) return
             errors.push({
@@ -527,20 +528,35 @@ export class Validator {
     const fit = { match: 0, extra: 0 }
     if (typeof value === 'object' && value !== null) {
       /* Work on a copy of the schema */
-      const properties = this._getSchema(givenSchema).properties
-
-      for (const i in properties) {
-        if (!hasOwnProperty(properties, i)) {
-          fit.extra += weight
-          continue
+      const schema = this._getSchema(givenSchema)
+      /* If the schema is an anyOf declaration, do use the properties of the allowed sub schemata instead.
+      Of these sub schemata, the best fit is selected */
+      if (schema.anyOf) {
+        let bestFit = { ...fit }
+        for (const subSchema of schema.anyOf) {
+          const subFit = this.fitTest(value, subSchema, weight)
+          /* The best fit is the one with the best value for match. If there are multiple results
+          with the same match value, use the one with the least number of extra properties */
+          if ((subFit.match > bestFit.match) || (subFit.match === bestFit.match && subFit.extra < bestFit.extra)) {
+            bestFit = subFit
+          }
         }
-        if (typeof value[i] === 'object' && typeof properties[i] === 'object' && typeof properties[i].properties === 'object') {
-          const result = this.fitTest(value[i], properties[i], weight / 100)
-          fit.match += result.match
-          fit.extra += result.extra
-        }
-        if (typeof value[i] !== 'undefined') {
-          fit.match += weight
+        return bestFit
+      } else {
+        const properties = this._getSchema(givenSchema).properties
+        for (const i in properties) {
+          if (!hasOwnProperty(properties, i)) {
+            fit.extra += weight
+            continue
+          }
+          if (typeof value[i] === 'object' && typeof properties[i] === 'object' && typeof properties[i].properties === 'object') {
+            const result = this.fitTest(value[i], properties[i], weight / 100)
+            fit.match += result.match
+            fit.extra += result.extra
+          }
+          if (typeof value[i] !== 'undefined') {
+            fit.match += weight
+          }
         }
       }
     }

@@ -68,16 +68,23 @@ Scenario('opt in optional properties @show_opt_in', async (I) => {
   // if an editor type "object" is disabled, also the child editors opt-in controls will be disabled.
   I.seeDisabledAttribute('[data-schemapath="root.object.number"] .json-editor-opt-in')
   I.seeDisabledAttribute('[data-schemapath="root.object.boolean"] .json-editor-opt-in')
+  I.seeDisabledAttribute('[data-schemapath="root.object.radio"] .json-editor-opt-in')
 
   // tests merged from master 17.9.2019
   I.dontSeeCheckedAttribute('[data-schemapath="root.string"] .json-editor-opt-in')
   I.dontSeeDisabledAttribute('[data-schemapath="root.string"] .json-editor-opt-in')
   I.seeDisabledAttribute('[name="root[string]"]')
+  I.dontSeeCheckedAttribute('[data-schemapath="root.radio"] .json-editor-opt-in')
+  I.dontSeeDisabledAttribute('[data-schemapath="root.radio"] .json-editor-opt-in')
+  I.seeDisabledAttribute('[id="root[radio][0]"]')
+  I.seeDisabledAttribute('[id="root[radio][1]"]')
   I.dontSeeCheckedAttribute('[data-schemapath="root.object.number"] .json-editor-opt-in')
   I.seeDisabledAttribute('[data-schemapath="root.object.number"] .json-editor-opt-in')
   I.seeDisabledAttribute('[name="root[object][number]"]')
   I.dontSeeCheckedAttribute('[data-schemapath="root.object.boolean"] .json-editor-opt-in')
   I.seeDisabledAttribute('[data-schemapath="root.object.boolean"] .json-editor-opt-in')
+  I.dontSeeCheckedAttribute('[data-schemapath="root.object.radio"] .json-editor-opt-in')
+  I.seeDisabledAttribute('[data-schemapath="root.object.radio"] .json-editor-opt-in')
 
   I.click('.get-value')
   assert.equal(await I.grabValueFrom('.value'), '{"number":0,"boolean":false}')
@@ -86,16 +93,22 @@ Scenario('opt in optional properties @show_opt_in', async (I) => {
 
   I.click('[data-schemapath="root"] .json-editor-btn-edit')
   I.click('[data-schemapath="root"] .json-editor-btn-edit')
-
   I.dontSeeCheckedAttribute('[data-schemapath="root.string"] .json-editor-opt-in')
   I.dontSeeDisabledAttribute('[data-schemapath="root.string"] .json-editor-opt-in')
   I.seeDisabledAttribute('[name="root[string]"]')
+  I.dontSeeCheckedAttribute('[data-schemapath="root.radio"] .json-editor-opt-in')
+  I.dontSeeDisabledAttribute('[data-schemapath="root.radio"] .json-editor-opt-in')
+  I.seeDisabledAttribute('[id="root[radio][0]"]')
+  I.seeDisabledAttribute('[id="root[radio][1]"]')
   I.dontSeeCheckedAttribute('[data-schemapath="root.object.number"] .json-editor-opt-in')
   I.seeDisabledAttribute('[data-schemapath="root.object.number"] .json-editor-opt-in')
   I.seeDisabledAttribute('[name="root[object][number]"]')
   I.dontSeeCheckedAttribute('[data-schemapath="root.object.boolean"] .json-editor-opt-in')
   I.seeDisabledAttribute('[data-schemapath="root.object.boolean"] .json-editor-opt-in')
   I.seeDisabledAttribute('[name="root[object][boolean]"]')
+  I.seeDisabledAttribute('[data-schemapath="root.object.boolean"] .json-editor-opt-in')
+  I.dontSeeCheckedAttribute('[data-schemapath="root.object.radio"] .json-editor-opt-in')
+  I.seeDisabledAttribute('[data-schemapath="root.object.radio"] .json-editor-opt-in')
 
   I.click('.get-value')
   assert.equal(await I.grabValueFrom('.value'), '{"number":0,"boolean":false}')
@@ -103,24 +116,26 @@ Scenario('opt in optional properties @show_opt_in', async (I) => {
   // opt-in string property
 
   I.click('[data-schemapath="root.string"] .json-editor-opt-in')
+  I.click('[data-schemapath="root.radio"] .json-editor-opt-in')
   I.click('.get-value')
-  assert.equal(await I.grabValueFrom('.value'), '{"string":"","number":0,"boolean":false}')
+  assert.equal(await I.grabValueFrom('.value'), '{"string":"","number":0,"boolean":false,"radio":"Home"}')
 
   // opt-in array property
 
   I.click('[data-schemapath="root.array"] .json-editor-opt-in')
   I.click('.get-value')
-  assert.equal(await I.grabValueFrom('.value'), '{"string":"","number":0,"boolean":false,"array":[]}')
+  assert.equal(await I.grabValueFrom('.value'), '{"string":"","number":0,"boolean":false,"radio":"Home","array":[]}')
 
   // opt-in object property
 
   I.click('[data-schemapath="root.object"] .json-editor-opt-in')
   I.click('.get-value')
-  assert.equal(await I.grabValueFrom('.value'), '{"string":"","number":0,"boolean":false,"array":[],"object":{"string":"","array":[]}}')
+  assert.equal(await I.grabValueFrom('.value'), '{"string":"","number":0,"boolean":false,"radio":"Home","array":[],"object":{"string":"","array":[]}}')
 
   // if an editor type "object" is enabled, also the child editors opt-in controls will be enabled.
   I.dontSeeDisabledAttribute('[data-schemapath="root.object.number"] .json-editor-opt-in')
   I.dontSeeDisabledAttribute('[data-schemapath="root.object.boolean"] .json-editor-opt-in')
+  I.dontSeeDisabledAttribute('[data-schemapath="root.object.radio"] .json-editor-opt-in')
 })
 
 Scenario('set value opt in optional properties @show_opt_in', async (I) => {
@@ -130,11 +145,13 @@ Scenario('set value opt in optional properties @show_opt_in', async (I) => {
   I.waitForElement('[data-schemapath="root.string"]', 5)
   I.waitForElement('[data-schemapath="root.number"]', 5)
   I.waitForElement('[data-schemapath="root.boolean"]', 5)
+  I.waitForElement('[data-schemapath="root.radio"]', 5)
   I.waitForElement('[data-schemapath="root.array"]', 5)
   I.waitForElement('[data-schemapath="root.object"]', 5)
   I.waitForElement('[data-schemapath="root.object.string"]', 5)
   I.waitForElement('[data-schemapath="root.object.number"]', 5)
   I.waitForElement('[data-schemapath="root.object.boolean"]', 5)
+  I.waitForElement('[data-schemapath="root.object.radio"]', 5)
 
   // set values
   I.click('.set-value')
@@ -150,11 +167,45 @@ Scenario('set value opt in optional properties @show_opt_in', async (I) => {
   I.waitForElement('[data-schemapath="root.string"]', 5)
   I.waitForElement('[data-schemapath="root.number"]', 5)
   I.waitForElement('[data-schemapath="root.boolean"]', 5)
+  I.waitForElement('[data-schemapath="root.radio"]', 5)
   I.waitForElement('[data-schemapath="root.array"]', 5)
   I.waitForElement('[data-schemapath="root.object"]', 5)
   I.waitForElement('[data-schemapath="root.object.string"]', 5)
   I.waitForElement('[data-schemapath="root.object.number"]', 5)
   I.waitForElement('[data-schemapath="root.object.boolean"]', 5)
+  I.waitForElement('[data-schemapath="root.object.radio"]', 5)
+})
+
+Scenario('set value opt in optional properties @show_opt_in_schema', async (I) => {
+  I.amOnPage('object-show-opt-in.html')
+
+  // all editors visible
+  I.waitForElement('[data-schemapath="root"]', 5)
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_undefined"]', 5)
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_undefined.string"]', 5)
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_true"]', 5)
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_true.string"]', 5)
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_false"]', 5)
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_false.string"]', 5)
+
+  // checkboxes for optional properties should appear only when
+  // case 1) the parent option show_opt_in is enabled
+  // OR
+  // case 2) the parent option show_opt_in is disabled and the global option show_opt_in is enabled
+  // OR
+  // case 3) the parent option show_opt_in is not defined and the global option show_opt_in is enabled
+
+  // global show_opt_in true
+  I.dontSeeCheckedAttribute('#show-opt-in')
+  I.dontSeeElement('[data-schemapath="root.option_show_opt_in_undefined.string"] .json-editor-opt-in') // global show_opt_in: false && parent editor show_opt_in: 'undefined'
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_true.string"] .json-editor-opt-in', 5) // global show_opt_in: false && parent editor show_opt_in: true
+  I.dontSeeElement('[data-schemapath="root.option_show_opt_in_false.string"] .json-editor-opt-in') // global show_opt_in: false && parent editor show_opt_in: false
+
+  // global show_opt_in false
+  I.click('#show-opt-in')
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_undefined.string"] .json-editor-opt-in') // global show_opt_in: true && parent editor show_opt_in: 'undefined'
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_true.string"] .json-editor-opt-in', 5) // global show_opt_in: true && parent editor show_opt_in: true
+  I.dontSeeElement('[data-schemapath="root.option_show_opt_in_false.string"] .json-editor-opt-in') // global show_opt_in: true && parent editor show_opt_in: false
 })
 
 Scenario('objects should contain properties defined with the properties keyword unless the property "additionalProperties: true" is specified in the object schema @additional-properties', async (I) => {

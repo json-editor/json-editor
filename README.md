@@ -676,7 +676,6 @@ JSON Editor uses HTML5 input types, so some of these may render as basic text in
 
 *  color
 *  date
-*  datetime
 *  datetime-local
 *  email
 *  month
@@ -1516,7 +1515,7 @@ By default, all instances of JSON Editor will use the `en` language.  To overrid
 JSONEditor.defaults.language = "es";
 ```
 
-Button Custimization
+Button Customization
 -----------------
 
 All buttons have classnames in the format `json-editor-btntype-*`. Using these classnames you can choose if the button should have icon or label hidden. The icon is wrapped in an `I` tag, the label is wrapped in a `SPAN` tag.
