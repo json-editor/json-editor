@@ -1,5 +1,15 @@
 ### Unreleased
 
+### 2.6.0
+
+- set show_opt_in per object editor
+- stepper manual set init fix
+- don't validate dependant and not visible editors
+- hardened tests
+- bootstra3 tabs fix
+- removed datetime from metaschema and readmy (deprecated)
+- not forced required for radios
+- audit fixes
 - pass additional pathDepth parameter to getHeader() to allow themes to render headings hierarchically
 - add Open Iconic iconlib
 - switched CI to Github Actions
