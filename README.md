@@ -760,9 +760,21 @@ To customize the editor, add the [configuration](https://github.com/sparksuite/s
   "format": "markdown",
   "options": {
     "simplemde": {
-      "toolbar": ["bold", "italic", "heading", "|", "link", "quote", "|", "preview", "fullscreen", "guide"],
-      "spellChecker": false,
-    },
+      "toolbar": [
+        "bold",
+        "italic",
+        "heading",
+        "|",
+        "link",
+        "quote",
+        "|",
+        "preview",
+        "fullscreen",
+        "guide"
+      ],
+      "spellChecker": false
+    }
+  }
 }
 ```
       
