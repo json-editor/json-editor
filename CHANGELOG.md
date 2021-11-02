@@ -1,5 +1,7 @@
 ### Unreleased
 
+- Fix for #900 to close the properties modal when we click outside modal
+
 ### 2.6.0
 
 - set show_opt_in per object editor

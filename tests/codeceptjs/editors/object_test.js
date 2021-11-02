@@ -253,3 +253,12 @@ Scenario('should respect multiple dependency values', (I) => {
   I.selectOption('[name="root[answerA]"]', 'A')
   I.waitForVisible('[data-schemapath="root.answerB"] input', 5)
 })
+
+Scenario('should open and close the properties modal', (I) => {
+  I.amOnPage('object.html')
+  I.seeElement('.json-editor-btn-edit_properties')
+  I.click('.json-editor-btn-edit_properties')
+  I.seeElement('.je-modal .property-selector')
+  I.click('textarea')
+  I.dontSeeElement('.je-modal .property-selector')
+})
