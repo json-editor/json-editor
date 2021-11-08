@@ -231,7 +231,7 @@ Scenario('should have unique ids', (I) => {
   I.waitForText('i am actually a cat')
 })
 
-Scenario('should hide properties with unfulfilled dependencies', (I) => {
+Scenario('should hide properties with unfulfilled dependencies @dependencies', (I) => {
   I.amOnPage('object-with-dependencies.html')
   I.seeElement('[data-schemapath="root.enable_option"] input')
   I.dontSeeElement('[data-schemapath="root.make_new"] input')
@@ -243,15 +243,26 @@ Scenario('should hide properties with unfulfilled dependencies', (I) => {
   I.dontSeeElement('[data-schemapath="root.existing_name"] input')
 })
 
-Scenario('should respect multiple dependency values', (I) => {
+Scenario('should respect multiple dependency values @dependencies', (I) => {
   I.amOnPage('object-with-dependencies-array.html')
-  I.waitForVisible('[data-schemapath="root.answerB"] input', 5)
-  I.selectOption('[name="root[answerA]"]', 'C')
-  I.waitForInvisible('[data-schemapath="root.answerB"] input', 5)
-  I.selectOption('[name="root[answerA]"]', 'B')
-  I.waitForVisible('[data-schemapath="root.answerB"] input', 5)
-  I.selectOption('[name="root[answerA]"]', 'A')
-  I.waitForVisible('[data-schemapath="root.answerB"] input', 5)
+  I.waitForVisible('[data-schemapath="root.question_1"] select', 5)
+  I.selectOption('[name="root[question_1]"]', 'a')
+  I.waitForInvisible('[data-schemapath="root.question_1_feedback"]', 5)
+  I.selectOption('[name="root[question_1]"]', 'b')
+  I.waitForVisible('[data-schemapath="root.question_1_feedback"]', 5)
+  I.selectOption('[name="root[question_1]"]', 'c')
+  I.waitForInvisible('[data-schemapath="root.question_1_feedback"]', 5)
+  I.selectOption('[name="root[question_1]"]', 'd')
+  I.waitForVisible('[data-schemapath="root.question_1_feedback"]', 5)
+
+  I.waitForVisible('[data-schemapath="root.question_2"]', 5)
+  I.waitForInvisible('[data-schemapath="root.question_2_feedback"]', 5)
+  I.click('label[for="root[question_2]1"]')
+  I.click('label[for="root[question_2]2"]')
+  I.waitForVisible('[data-schemapath="root.question_2_feedback"]', 5)
+  I.click('label[for="root[question_2]0"]')
+  I.click('label[for="root[question_2]3"]')
+  I.waitForInvisible('[data-schemapath="root.question_2_feedback"]', 5)
 })
 
 Scenario('should open and close the properties modal', (I) => {

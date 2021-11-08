@@ -9,28 +9,38 @@
 <div id="editor"></div>
 <script>
   const schema = {
-    "title": "Person",
-    "type": "object",
-    "properties": {
-      "answerA": {
-        "title": "Question A:",
-        "type": "string",
-        "minLength": 1,
-        "enum": [
-          "A",
-          "B",
-          "C"
-        ]
+    'title': 'Test',
+    'type': 'object',
+    'properties': {
+      'question_1': {
+        'type': 'string',
+        'title': 'Question 1',
+        'enum': ['a', 'b', 'c', 'd']
       },
-      "answerB": {
-        "title": "Question B:",
-        "type": "string",
+      'question_1_feedback': {
+        'type': 'info',
+        'title': 'Question 1 is correct',
         "options": {
           "dependencies": {
-            "answerA": [
-              "A",
-              "B"
-            ]
+            "question_1": ['b', 'd']
+          }
+        }
+      },
+      'question_2': {
+        "type": "array",
+        "uniqueItems": true,
+        'title': 'Question 2',
+        "items": {
+          "type": "string",
+          'enum': ['a', 'b', 'c', 'd']
+        }
+      },
+      'question_2_feedback': {
+        'type': 'info',
+        'title': 'Question 2 is correct',
+        "options": {
+          "dependencies": {
+            "question_2": [['b', 'c']]
           }
         }
       }

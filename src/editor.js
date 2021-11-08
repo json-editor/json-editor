@@ -153,7 +153,7 @@ export class AbstractEditor {
       this.dependenciesFulfilled = false
     } else if (Array.isArray(choices)) {
       this.dependenciesFulfilled = choices.some(choice => {
-        if (value === choice) {
+        if (JSON.stringify(value) === JSON.stringify(choice)) {
           return true
         }
       })
