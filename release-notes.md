@@ -79,6 +79,8 @@ For now I have passed in `JSONEditor.defaults` as `defaults`.
 
 ### NPM Release
 
+Set/export `CHROME_BIN=/path/to/chrome_or_chromium`, start stack with `docker-compose up`
+
 1. Update `CHANGELOG.md`
 2. Switch to `release` branch and `merge master into release`
 3. NPM login: `npm login`
