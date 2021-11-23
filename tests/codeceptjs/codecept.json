@@ -11,7 +11,7 @@
       "browser": "firefox",
       "restart": false,
       "host": "firefox",
-      "smartWait": 5000
+      "smartWait": 10000
     },
     "customHelpers": {
       "require": "./../../config/codeceptjs_helpers.js"
