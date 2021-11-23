@@ -257,7 +257,7 @@ export class UploadEditor extends AbstractEditor {
 
     if (this.options.auto_upload) {
       uploadButton.dispatchEvent(new window.MouseEvent('click'))
-      this.preview.removeChild(uploadButton)
+      uploadButton.parentNode.removeChild(uploadButton)
     }
   }
 
