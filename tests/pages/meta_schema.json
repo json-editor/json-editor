@@ -625,6 +625,20 @@
                 "tilte":"title"
               }
             },
+            "enum": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "infoText":{
+                    "type": "string"
+                  }
+                }
+              }
+            },
             "grid_columns":{
               "type":"integer",
               "default": 1,
