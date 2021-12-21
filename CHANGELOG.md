@@ -1,5 +1,7 @@
 ### Unreleased
 
+- Add infoText for enums with format `checkbox` (default)
+
 ### 2.6.1
 
 - Fix for #900 to close the properties modal when we click outside modal
