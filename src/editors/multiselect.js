@@ -31,19 +31,24 @@ export class MultiSelectEditor extends AbstractEditor {
     this.select_options = {}
     this.select_values = {}
     this.option_keys = []
-    this.option_titles = []
+    this.option_enum = []
 
     let i
     const itemsSchema = this.jsoneditor.expandRefs(this.schema.items || {})
     const e = itemsSchema.enum || []
+    const oe = itemsSchema.options ? itemsSchema.options.enum || [] : []
+    /* fallback to enum_titles, when options.enum is not present */
     const t = itemsSchema.options ? itemsSchema.options.enum_titles || [] : []
 
     for (i = 0; i < e.length; i++) {
       /* If the sanitized value is different from the enum value, don't include it */
       if (this.sanitize(e[i]) !== e[i]) continue
 
+      const d = oe[i] || {}
+      if (!('title' in d)) d.title = `${t[i] || e[i]}`
+
       this.option_keys.push(`${e[i]}`)
-      this.option_titles.push(`${t[i] || e[i]}`)
+      this.option_enum.push(d)
       this.select_values[`${e[i]}`] = e[i]
     }
   }
@@ -65,8 +70,12 @@ export class MultiSelectEditor extends AbstractEditor {
         this.inputs[this.option_keys[i]] = this.theme.getCheckbox()
         this.inputs[this.option_keys[i]].id = id
         this.select_options[this.option_keys[i]] = this.inputs[this.option_keys[i]]
-        const label = this.theme.getCheckboxLabel(this.option_titles[i])
+        const label = this.theme.getCheckboxLabel(this.option_enum[i].title)
         label.htmlFor = id
+        if (this.option_enum[i].infoText) {
+          const infoButton = this.theme.getInfoButton(this.translateProperty(this.option_enum[i].infoText))
+          label.appendChild(infoButton)
+        }
         this.controls[this.option_keys[i]] = this.theme.getFormControl(label, this.inputs[this.option_keys[i]])
       }
 
@@ -75,7 +84,7 @@ export class MultiSelectEditor extends AbstractEditor {
     } else {
       this.input_type = 'select'
       this.input = this.theme.getSelectInput(this.option_keys, true)
-      this.theme.setSelectOptions(this.input, this.option_keys, this.option_titles)
+      this.theme.setSelectOptions(this.input, this.option_keys, this.option_enum.map(e => e.title))
       /* this.input.multiple = true; */
       this.input.setAttribute('multiple', 'multiple')
       this.input.size = Math.min(10, this.option_keys.length)

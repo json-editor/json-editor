@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <script src="../../dist/jsoneditor.js"></script>
+</head>
+<body>
+
+<textarea class="debug" cols="30" rows="10"></textarea>
+<button class='get-value'>Get Value</button>
+<div class='container'></div>
+
+<script>
+  var container = document.querySelector('.container')
+  var debug = document.querySelector('.debug')
+  var schema = {
+    'title': 'Checkbox with Infotext',
+    'type': 'array',
+    'uniqueItems': true,
+    'items': {
+      'type': 'string',
+      'enum': ['1', '2', '3', '4', '5'],
+      'options': {
+        'enum_titles': ['old a', 'old b'],
+        'enum': [
+          {},
+          {
+            'title': 'b',
+          },
+          {},
+          { 'infoText': 'dd' },
+          {
+            'title': 'e',
+            'infoText': 'ee'
+          }
+        ]
+      }
+    }
+  }
+
+  var editor = new JSONEditor(container, {
+    schema: schema
+  })
+
+  document.querySelector('.get-value').addEventListener('click', function () {
+    debug.value = JSON.stringify(editor.getValue())
+  })
+
+</script>
+
+</body>
+</html>
