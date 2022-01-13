@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>string-simple-mde-editor</title>
+
+    <!-- json editor -->
+    <script src="../../dist/jsoneditor.js"></script>
+
+    <!-- simpleMDE-editor -->
+    <script src="./../../node_modules/simplemde/dist/simplemde.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="./../../node_modules/simplemde/dist/simplemde.min.css"
+    />
+  </head>
+  <body>
+    <textarea class="debug" cols="30" rows="10"></textarea>
+    <button class="get-value">Get Value</button>
+    <div class="container"></div>
+
+    <script>
+      const container = document.querySelector(".container");
+      const debug = document.querySelector(".debug");
+
+      const schema = {
+        type: "array",
+        title: "string-simplemde-editor",
+        items: {
+          $schema: "http://json-schema.org/draft-07/schema#",
+          title: "Example",
+          type: "object",
+          format: "categories",
+          basicCategoryTitle: "Main Editor",
+          required: ["title"],
+          properties: {
+            title: {
+              type: "string",
+              format: "markdown",
+              default: "Lorem",
+              options: {
+                simplemde: {
+                  spellChecker: false,
+                  autorefresh: true,
+                },
+              },
+            },
+            content: {
+              type: "object",
+              title: "Tabbed Editor",
+              properties: {
+                description: {
+                  title: "Test",
+                  type: "string",
+                  format: "markdown",
+                  default: "Lorem ipsum.",
+                  options: {
+                    simplemde: {
+                      spellChecker: false,
+                      autorefresh: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      };
+
+      var editor = new JSONEditor(container, {
+        schema: schema,
+      });
+
+      document
+        .querySelector(".get-value")
+        .addEventListener("click", function () {
+          debug.value = JSON.stringify(editor.getValue());
+        });
+    </script>
+  </body>
+</html>
