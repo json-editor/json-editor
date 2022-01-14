@@ -11,7 +11,7 @@ services:
     expose:
       - '9001'
   firefox:
-    image: selenium/standalone-firefox-debug:3.141.59-20200525
+    image: selenium/standalone-firefox-debug:3.141.59-20210929
     depends_on:
       - node
     environment:
