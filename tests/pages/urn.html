@@ -28,7 +28,7 @@
     theme: 'bootstrap4',
     use_default_values: false,
     show_errors: 'always',
-    urn_resolver: (urn, callback) => {
+    urn_resolver: async (urn, callback) => {
       console.log('resolving ' + urn)
       let schema
 
@@ -68,13 +68,16 @@
           break
         default: return false
       }
-
-      // simulate async
-      window.setTimeout(() => {
-        callback(JSON.stringify(schema))
-      }, 500)
-
-      return true
+      return new Promise((resolve) => {
+        // simulate async    
+        window.setTimeout(() => {
+          console.log(schema)
+          resolve(JSON.stringify(schema))
+        }, 50);
+      })
+  
+      
+      //return true
     }
   })
 

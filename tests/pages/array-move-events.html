@@ -27,8 +27,8 @@
   var editor = new JSONEditor(container, {
     schema: schema
   });
-
-  document.querySelector('.get-value').addEventListener('click', function () {
+  editor.promise.then(() => {
+    document.querySelector('.get-value').addEventListener('click', function () {
     debug.value = JSON.stringify(editor.getValue());
   });
 
@@ -53,6 +53,8 @@
     action.value = 'deleteAllRows'
     console.log('deleteAllRows')
   });
+  })
+  
 
 
 </script>

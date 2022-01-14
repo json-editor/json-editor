@@ -84,8 +84,10 @@ describe('Table Editor', () => {
       editor = new JSONEditor(element, {
         schema: spec.schema
       })
-      editor.setValue(spec.value);
-      expect(editor.getValue()).toEqual(spec.value)
+      editor.promise.then(() => {
+        editor.setValue(spec.value)
+        expect(editor.getValue()).toEqual(spec.value)
+      })
     })
   })
 })

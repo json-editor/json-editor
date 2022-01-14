@@ -58,8 +58,8 @@
   var editor = new JSONEditor(container, {
     schema: schema
   });
-
-  var changeCallback = function () {
+  editor.promise.then(() => {
+    var changeCallback = function () {
     if (this.getCount()>1) formChanged.style.display = 'block'
   }.bind({
     count:0,
@@ -111,6 +111,8 @@
   destroy.addEventListener('click', function () {
     editor.destroy();
   });
+  })
+  
 
 </script>
 

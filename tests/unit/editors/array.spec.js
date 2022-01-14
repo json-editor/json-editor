@@ -75,11 +75,12 @@ describe('Array Editor', () => {
   })
 
   fixture.forEach(spec => {
-    it(spec.title, () => {
+    it(spec.title, async () => {
       editor = new JSONEditor(element, {
         schema: spec.schema
       })
-      editor.setValue(spec.value);
+      await editor.load()
+      editor.setValue(spec.value)
       expect(editor.getValue()).toEqual(spec.value)
     })
   })

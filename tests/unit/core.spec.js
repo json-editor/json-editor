@@ -33,6 +33,7 @@ describe('JSONEditor', function () {
   })
 
   it('should create an editor', () => {
+    // eslint-disable-next-line no-console
     console.log('Attempting to create new JSONEditor')
     editor = new JSONEditor(element, { schema: schema })
     expect(editor).toBeTruthy()
@@ -130,14 +131,16 @@ describe('JSONEditor', function () {
         max_depth: 4
       })
       expect(editor).toBeTruthy()
-      expect(editor.getValue()).toEqual({
-        foo: {
+      editor.promise.then(() => {
+        expect(editor.getValue()).toEqual({
           foo: {
             foo: {
-              foo: {}
+              foo: {
+                foo: {}
+              }
             }
           }
-        }
+        })
       })
     })
 
@@ -172,11 +175,13 @@ describe('JSONEditor', function () {
         max_depth: depthWithEnum
       })
       expect(editor).toBeTruthy()
-      expect(editor.getValue()).toEqual({
-        field_on_level_one: {
-          propertyWithEnum: 'bar',
-          something_else: {}
-        }
+      editor.promise.then(() => {
+        expect(editor.getValue()).toEqual({
+          field_on_level_one: {
+            propertyWithEnum: 'bar',
+            something_else: {}
+          }
+        })
       })
     })
 
@@ -186,7 +191,9 @@ describe('JSONEditor', function () {
         max_depth: 0
       })
       expect(editor).toBeTruthy()
-      expect(editor.getValue()).toEqual({ foo1: { foo2: { foo3: { foo4: { bar: 'end schema' } } } } })
+      editor.promise.then(() => {
+        expect(editor.getValue()).toEqual({ foo1: { foo2: { foo3: { foo4: { bar: 'end schema' } } } } })
+      })
     })
 
     it('renders all schema as default', () => {
@@ -194,7 +201,9 @@ describe('JSONEditor', function () {
         schema: nestedObject
       })
       expect(editor).toBeTruthy()
-      expect(editor.getValue()).toEqual({ foo1: { foo2: { foo3: { foo4: { bar: 'end schema' } } } } })
+      editor.promise.then(() => {
+        expect(editor.getValue()).toEqual({ foo1: { foo2: { foo3: { foo4: { bar: 'end schema' } } } } })
+      })
     })
   })
 
@@ -205,15 +214,16 @@ describe('JSONEditor', function () {
           schema: someTypes,
           use_default_values: false
         })
-
-        expect(editor.getValue()).toEqual({
-          boolean: undefined,
-          enum: undefined,
-          integer: undefined,
-          number: undefined,
-          string: undefined,
-          object: {},
-          array: []
+        editor.promise.then(() => {
+          expect(editor.getValue()).toEqual({
+            boolean: undefined,
+            enum: undefined,
+            integer: undefined,
+            number: undefined,
+            string: undefined,
+            object: {},
+            array: []
+          })
         })
       })
 
@@ -222,43 +232,44 @@ describe('JSONEditor', function () {
           schema: someTypes,
           use_default_values: false
         })
+        editor.promise.then(() => {
+          expect(editor.getValue()).toEqual({
+            boolean: undefined,
+            enum: undefined,
+            integer: undefined,
+            number: undefined,
+            string: undefined,
+            object: {},
+            array: []
+          })
 
-        expect(editor.getValue()).toEqual({
-          boolean: undefined,
-          enum: undefined,
-          integer: undefined,
-          number: undefined,
-          string: undefined,
-          object: {},
-          array: []
-        })
+          fillField('root[integer]', 3)
+          fillField('root[number]', 4)
+          fillField('root[string]', 'foo')
 
-        fillField('root[integer]', 3)
-        fillField('root[number]', 4)
-        fillField('root[string]', 'foo')
+          expect(editor.getValue()).toEqual({
+            boolean: undefined,
+            enum: undefined,
+            integer: 3,
+            number: 4,
+            string: 'foo',
+            object: {},
+            array: []
+          })
 
-        expect(editor.getValue()).toEqual({
-          boolean: undefined,
-          enum: undefined,
-          integer: 3,
-          number: 4,
-          string: 'foo',
-          object: {},
-          array: []
-        })
+          fillField('root[integer]', '')
+          fillField('root[number]', '')
+          fillField('root[string]', '')
 
-        fillField('root[integer]', '')
-        fillField('root[number]', '')
-        fillField('root[string]', '')
-
-        expect(editor.getValue()).toEqual({
-          boolean: undefined,
-          enum: undefined,
-          integer: undefined,
-          number: undefined,
-          string: '',
-          object: {},
-          array: []
+          expect(editor.getValue()).toEqual({
+            boolean: undefined,
+            enum: undefined,
+            integer: undefined,
+            number: undefined,
+            string: '',
+            object: {},
+            array: []
+          })
         })
       })
 
@@ -276,10 +287,11 @@ describe('JSONEditor', function () {
           use_default_values: false,
           remove_empty_properties: true
         })
-
-        expect(editor.getValue()).toEqual({
-          string_with_default: 'foobar',
-          enum_with_default: 'foobar'
+        editor.promise.then(() => {
+          expect(editor.getValue()).toEqual({
+            string_with_default: 'foobar',
+            enum_with_default: 'foobar'
+          })
         })
       })
     })
@@ -289,15 +301,16 @@ describe('JSONEditor', function () {
         schema: someTypes,
         use_default_values: true
       })
-
-      expect(editor.getValue()).toEqual({
-        boolean: false,
-        enum: 'foo',
-        integer: 0,
-        number: 0,
-        string: '',
-        object: {},
-        array: []
+      editor.promise.then(() => {
+        expect(editor.getValue()).toEqual({
+          boolean: false,
+          enum: 'foo',
+          integer: 0,
+          number: 0,
+          string: '',
+          object: {},
+          array: []
+        })
       })
     })
   })

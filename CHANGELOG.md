@@ -1,5 +1,6 @@
 ### Unreleased
 
+- fixed arbitrary JSON pointers not returning the schema at the pointer path
 - Add infoText for enums with format `checkbox` (default)
 
 ### 2.6.1

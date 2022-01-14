@@ -26,7 +26,8 @@
     schema: schema,
     enable_array_copy: true
   });
-  document.querySelector('.get-value').addEventListener('click', function () {
+  editor.promise.then(() => {
+    document.querySelector('.get-value').addEventListener('click', function () {
     debug.value = JSON.stringify(editor.getValue());
   });
   editor.setValue(["A","B","C","D","E"]);
@@ -50,6 +51,8 @@
     alert('deleteAllRows');
     console.log('deleteAllRows');
   });
+  })
+ 
 </script>
 
 </body>

@@ -162,7 +162,7 @@
     }
   };
 
-  var setTheme = function(theme) {
+  var setTheme = async function(theme) {
     theme = theme || '';
 
     var mapping = {
@@ -210,30 +210,30 @@
     document.getElementById('theme_stylesheet').href = mapping[theme];
     document.getElementById('theme_switcher').value = JSONEditor.defaults.options.theme;
 
-
+    console.log(editor)
     if (editor) {
       editor.destroy();
     }
 
-    initJsonEditor();
+    await initJsonEditor();
 
   };
 
-  initJsonEditor = function () {
+  initJsonEditor = async function () {
     editor = new JSONEditor(container, {
       schema: schema,
       theme: 'bootstrap4',
       show_opt_in: true
     });
+    await editor.promise;
   }
 
   document.getElementById('theme_switcher').addEventListener('change',function() {
     setTheme(this.value);
   });
 
-  window.addEventListener('load',function() {
-
-    initJsonEditor();
+  window.addEventListener('load', async function() {
+    await initJsonEditor();
 
     getValue.addEventListener('click', function () {
       value.value = JSON.stringify(editor.getValue());

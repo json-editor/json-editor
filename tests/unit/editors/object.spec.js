@@ -73,7 +73,9 @@ describe('Object Editor', () => {
       editor = new JSONEditor(element, {
         schema: spec.schema
       })
-      expect(editor.getValue()).toEqual(spec.value)
+      editor.promise.then(() => {
+        expect(editor.getValue()).toEqual(spec.value)
+      })
     })
   })
 })

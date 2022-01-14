@@ -31,6 +31,7 @@ export class JSONEditor {
     /* Load editors and selected theme style rules */
     if (!themeClass) throw new Error(`Unknown theme ${themeName}`)
     this.element.setAttribute('data-theme', themeName)
+    this.element.classList.add('je-not-loaded')
     // eslint-disable-next-line new-cap
     this.theme = new themeClass(this)
     const rules = extend(styleRules, this.getEditorsRules())
@@ -56,67 +57,63 @@ export class JSONEditor {
 
     this.root_container = this.theme.getContainer()
     this.element.appendChild(this.root_container)
+    this.promise = this.load()
+  }
 
-    /* Fetch all external refs via ajax */
+  async load () {
     const fetchUrl = document.location.origin + document.location.pathname.toString()
     const loader = new SchemaLoader(this.options)
-    const location = document.location.toString()
-
-    this.expandSchema = (schema, fileBase) => loader.expandSchema(schema, fileBase)
+    this.expandSchema = (schema) => loader.expandSchema(schema)
     this.expandRefs = (schema, fileBase) => loader.expandRefs(schema, fileBase)
-    this.refs = loader.refs
+    const location = document.location.toString()
+    const schema = await loader.load(this.schema, fetchUrl, location)
+    const validatorOptions = this.options.custom_validators ? { custom_validators: this.options.custom_validators } : {}
+    this.validator = new Validator(this, null, validatorOptions, JSONEditor.defaults)
+    const editorClass = this.getEditorClass(schema)
+    this.root = this.createEditor(editorClass, {
+      jsoneditor: this,
+      schema,
+      required: true,
+      container: this.root_container
+    })
 
-    loader.load(this.schema, schema => {
-      const validatorOptions = this.options.custom_validators ? { custom_validators: this.options.custom_validators } : {}
+    this.root.preBuild()
+    this.root.build()
+    this.root.postBuild()
 
-      this.validator = new Validator(this, null, validatorOptions, JSONEditor.defaults)
+    /* Starting data */
+    if (hasOwnProperty(this.options, 'startval')) this.root.setValue(this.options.startval)
 
-      const editorClass = this.getEditorClass(schema)
+    this.validation_results = this.validator.validate(this.root.getValue())
+    this.root.showValidationErrors(this.validation_results)
+    this.ready = true
+    this.element.classList.remove('je-not-loaded')
 
-      this.root = this.createEditor(editorClass, {
-        jsoneditor: this,
-        schema,
-        required: true,
-        container: this.root_container
-      })
-
-      this.root.preBuild()
-      this.root.build()
-      this.root.postBuild()
-
-      /* Starting data */
-      if (hasOwnProperty(this.options, 'startval')) this.root.setValue(this.options.startval)
-
+    /* Fire ready event asynchronously */
+    window.requestAnimationFrame(() => {
+      if (!this.ready) return
       this.validation_results = this.validator.validate(this.root.getValue())
       this.root.showValidationErrors(this.validation_results)
-      this.ready = true
-
-      /* Fire ready event asynchronously */
-      window.requestAnimationFrame(() => {
-        if (!this.ready) return
-        this.validation_results = this.validator.validate(this.root.getValue())
-        this.root.showValidationErrors(this.validation_results)
-        this.trigger('ready')
-        this.trigger('change')
-      })
-    }, fetchUrl, location)
+      this.trigger('ready')
+      this.trigger('change')
+    })
   }
 
   getValue () {
-    if (!this.ready) throw new Error("JSON Editor not ready yet.  Listen for 'ready' event before getting the value")
+    if (!this.ready) throw new Error('JSON Editor not ready yet. Make sure the load method is complete')
 
     return this.root.getValue()
   }
 
   setValue (value) {
-    if (!this.ready) throw new Error("JSON Editor not ready yet.  Listen for 'ready' event before setting the value")
+    if (!this.ready) throw new Error('JSON Editor not ready yet. Make sure the load method is complete')
 
     this.root.setValue(value)
     return this
   }
 
   validate (value) {
-    if (!this.ready) throw new Error("JSON Editor not ready yet.  Listen for 'ready' event before validating")
+    if (!this.ready) throw new Error('JSON Editor not ready yet. Make sure the load method is complete')
 
     /* Custom value */
     if (arguments.length === 1) {

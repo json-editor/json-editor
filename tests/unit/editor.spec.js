@@ -27,7 +27,9 @@ describe('Editor', () => {
       },
       startval: 5
     })
-    expect(editor.getValue()).toBe(5)
+    editor.promise.then(() => {
+      expect(editor.getValue()).toBe(5)
+    })
   })
 
   it('Array start value test', () => {
@@ -44,7 +46,9 @@ describe('Editor', () => {
       },
       startval: [1, 2, 3, 4, 5]
     })
-    expect(JSON.stringify(editor.getValue())).toBe('[1,2,3,4,5]')
+    editor.promise.then(() => {
+      expect(JSON.stringify(editor.getValue())).toBe('[1,2,3,4,5]')
+    })
   })
 
   it('Starrating start value test', () => {
@@ -58,7 +62,9 @@ describe('Editor', () => {
       },
       startval: 5
     })
-    expect(editor.root.value).toBe(5)
+    editor.promise.then(() => {
+      expect(editor.root.value).toBe(5)
+    })
   })
 
   it('Starrating Array start value test', () => {
@@ -76,7 +82,9 @@ describe('Editor', () => {
       },
       startval: [1, 2, 3, 4, 5]
     })
-    expect(JSON.stringify(editor.getValue())).toBe('[1,2,3,4,5]')
+    editor.promise.then(() => {
+      expect(JSON.stringify(editor.getValue())).toBe('[1,2,3,4,5]')
+    })
   })
 
   it('oneOf Editor Test', () => {
@@ -101,8 +109,10 @@ describe('Editor', () => {
         }
       }
     })
-    const e = editor.getEditor('root.one_or_many')
-    e.switchEditor(1)
+    editor.promise.then(() => {
+      const e = editor.getEditor('root.one_or_many')
+      e.switchEditor(1)
+    })
   })
 })
 
@@ -153,8 +163,10 @@ describe('Number Editor', () => {
       editor = new JSONEditor(element, {
         schema: spec.schema
       })
-      editor.setValue(spec.input)
-      expect(editor.getValue()).toBe(spec.value)
+      editor.promise.then(() => {
+        editor.setValue(spec.input)
+        expect(editor.getValue()).toBe(spec.value)
+      })
     })
   })
 })

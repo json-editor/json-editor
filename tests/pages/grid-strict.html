@@ -34,7 +34,6 @@
 <script>
   var container = document.querySelector('.json-editor-container');
   var editor = document.querySelector('.value');
-
   var schema = {
     "type": "object",
     "title": "range",
@@ -291,19 +290,16 @@
       schema: schema,
       theme: theme
     });
+    document.getElementById('theme_switcher').addEventListener('change',function() {
+        setTheme(this.value);
+      });
+    
+    
   };
-
-  document.getElementById('theme_switcher').addEventListener('change',function() {
-    setTheme(this.value);
-  });
-
   window.addEventListener('load',function() {
-    editor = new JSONEditor(container, {
-      schema: schema,
-      theme: 'bootstrap4'
-    });
     setTheme(this.value);
   });
+  
 
 </script>
 

@@ -22,7 +22,7 @@ jobs:
         include:
           - selenium-browser: "chrome"
             build-env: "build.prod"
-          - build-nonmin: "chrome"
+          - selenium-browser: "chrome"
             build-env: "build.nonmin.travis"
           - selenium-browser: "firefox"
             build-env: "build.prod"
