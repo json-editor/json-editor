@@ -215,3 +215,25 @@ Scenario('should validate against oneOf schemas and display single oneOf and edi
   I.waitForText('Rating Description (but in german)')
   I.seeInSource('Rating Info Text (but in german)')
 })
+
+Scenario('should load internal schema definitions, external schema definitions and external schema properties @core @references', async (I) => {
+  I.amOnPage('references.html')
+  I.waitForText('References JSON Editor Example')
+
+  // internal schema definitions
+  I.waitForElement('[data-schemapath="root.external"]')
+  I.waitForElement('[data-schemapath="root.orgid"]')
+
+  // external schema definitions
+  I.click('Add Person')
+  I.waitForElement('[data-schemapath="root.people.0.name"]')
+  I.waitForElement('[data-schemapath="root.people.0.age"]')
+  I.waitForElement('[data-schemapath="root.people.0.gender"]')
+  I.selectOption('.je-switcher', 'Complex Person')
+  I.waitForElement('[data-schemapath="root.people.0.location.city"]')
+  I.waitForElement('[data-schemapath="root.people.0.location.state"]')
+  I.waitForElement('[data-schemapath="root.people.0.location.citystate"]')
+
+  // external schema properties
+  I.waitForElement('[data-schemapath="root.link.street_address"]')
+})
