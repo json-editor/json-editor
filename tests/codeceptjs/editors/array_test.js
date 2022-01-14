@@ -478,6 +478,30 @@ Scenario('should work well with checkbox editors', async (I) => {
   I.dontSee('Checkbox 3');
 });
 
+Scenario('should work well with checkbox editors with infoText', async (I) => {
+  I.amOnPage('array-checkboxes-infotext.html')
+
+  function check (checkboxId, title, infoText) {
+    const label = '//label[@for="' + checkboxId + '"]'
+    I.see(title, label)
+    const infoTextIcon = label + '/span[@class="je-infobutton-icon"]'
+
+    if (infoText) {
+      I.seeElement(infoTextIcon)
+      I.moveCursorTo(infoTextIcon)
+      I.see(infoText, label + '//span[@class="je-infobutton-tooltip"]')
+    } else {
+      I.dontSeeElement(infoTextIcon)
+    }
+  }
+
+  check('root0', 'old a')
+  check('root1', 'b')
+  check('root2', '3')
+  check('root3', '4', 'dd')
+  check('root4', 'e', 'ee')
+})
+
 Scenario('should work well with rating editors', async (I) => {
   I.amOnPage('array-ratings.html');
   I.seeElement('[data-schemapath="root.0"]');

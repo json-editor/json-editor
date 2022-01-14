@@ -1038,23 +1038,24 @@ Editor Options
 
 Editors can accept options which alter the behavior in some way.
 
-*  `collapsed` - If set to true, the editor will start collapsed (works for objects and arrays)
-*  `disable_array_add` - If set to true, the "add row" button will be hidden (works for arrays)
-*  `disable_array_delete` - If set to true, all of the "delete" buttons will be hidden (works for arrays)
-*  `disable_array_delete_all_rows` - If set to true, just the "delete all rows" button will be hidden (works for arrays)
-*  `disable_array_delete_last_row` - If set to true, just the "delete last row" buttons will be hidden (works for arrays)
-*  `disable_array_reorder` - If set to true, the "move up/down" buttons will be hidden (works for arrays)
-*  `disable_collapse` - If set to true, the collapse button will be hidden (works for objects and arrays)
-*  `disable_edit_json` - If set to true, the Edit JSON button will be hidden (works for objects)
-*  `disable_properties` - If set to true, the Edit Properties button will be hidden (works for objects)
-*  `array_controls_top` - If set to true, array controls (add, delete etc) will be displayed at top of list (works for arrays)
-*  `enum_titles` - An array of display values to use for select box options in the same order as defined with the `enum` keyword. Works with schema using enum values.
-*  `expand_height` - If set to true, the input will auto expand/contract to fit the content.  Works best with textareas.
-*  `grid_columns` - Explicitly set the number of grid columns (1-12) for the editor if it's within an object using a grid layout.
-*  `hidden` - If set to true, the editor will not appear in the UI (works for all types)
-*  `input_height` - Explicitly set the height of the input element. Should be a valid CSS width string (e.g. "100px").  Works best with textareas.
-*  `input_width` - Explicitly set the width of the input element. Should be a valid CSS width string (e.g. "100px").  Works for string, number, and integer data types.
-*  `remove_empty_properties` - If set to true for an object, empty object properties (i.e. those with falsy values) will not be returned by getValue().
+* `collapsed` - If set to true, the editor will start collapsed (works for objects and arrays)
+* `disable_array_add` - If set to true, the "add row" button will be hidden (works for arrays)
+* `disable_array_delete` - If set to true, all of the "delete" buttons will be hidden (works for arrays)
+* `disable_array_delete_all_rows` - If set to true, just the "delete all rows" button will be hidden (works for arrays)
+* `disable_array_delete_last_row` - If set to true, just the "delete last row" buttons will be hidden (works for arrays)
+* `disable_array_reorder` - If set to true, the "move up/down" buttons will be hidden (works for arrays)
+* `disable_collapse` - If set to true, the collapse button will be hidden (works for objects and arrays)
+* `disable_edit_json` - If set to true, the Edit JSON button will be hidden (works for objects)
+* `disable_properties` - If set to true, the Edit Properties button will be hidden (works for objects)
+* `array_controls_top` - If set to true, array controls (add, delete etc) will be displayed at top of list (works for arrays)
+* `enum` - See [Enum options](#enum-options)
+* `enum_titles` - An array of display values to use for select box options in the same order as defined with the `enum` keyword. Works with schema using enum values.
+* `expand_height` - If set to true, the input will auto expand/contract to fit the content.  Works best with textareas.
+* `grid_columns` - Explicitly set the number of grid columns (1-12) for the editor if it's within an object using a grid layout.
+* `hidden` - If set to true, the editor will not appear in the UI (works for all types)
+* `input_height` - Explicitly set the height of the input element. Should be a valid CSS width string (e.g. "100px").  Works best with textareas.
+* `input_width` - Explicitly set the width of the input element. Should be a valid CSS width string (e.g. "100px").  Works for string, number, and integer data types.
+* `remove_empty_properties` - If set to true for an object, empty object properties (i.e. those with falsy values) will not be returned by getValue().
 
 ```json
 {
@@ -1089,6 +1090,43 @@ Using the option `infoText`, will create a info button, displaying the text you 
 }
 ```
 
+Enum options
+------------------
+
+Using the option `enum`, it is possible to modify how enums with format `checkbox` (default) are displayed in the editor.
+It is an array of objects (described below), which must be in the same order as defined with the `enum` keyword.
+
+Currently, the following is supported:
+
+* `title`: *Optional* Display value shown instead of the enum value
+* `infoText`: *Optional* Creates an info button next to the title, displaying the text you set, on hovering.
+
+It is possible also to set these options only for some enum values, to skip one enum value, define an empty object (`{}`).
+
+```json
+{
+  "type": "array",
+  "items": {
+    "type": "string",
+    "enum": ["1", "2", "3", "4"],
+    "options": {
+      "enum": [
+        {},
+        {
+          "title": "Title 2"
+        },
+        { "infoText": "InfoText 3" },
+        {
+          "title": "Title 4",
+          "infoText": "InfoText 4"
+        }
+      ]
+    }
+  }
+}
+```
+
+If both options `enum_titles[x]` and `enum[x].title` are set for the enum value `x`, than the title set under `enum[x].title` will be used.
 
 Dependencies
 ------------------
