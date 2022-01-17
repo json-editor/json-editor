@@ -71,7 +71,7 @@
     "http-server": "^0.12.3",
     "jasmine": "^3.7.0",
     "jasmine-core": "^3.7.1",
-    "jodit": "~3.3.24",
+    "jodit": "^3.12.4",
     "jquery": "^3.6.0",
     "karma": "^5.2.3",
     "karma-chrome-launcher": "^3.1.0",
