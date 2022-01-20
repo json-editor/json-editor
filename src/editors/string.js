@@ -214,6 +214,7 @@ export class StringEditor extends AbstractEditor {
       if (this.input.parentNode) this.afterInputReady()
       if (this.adjust_height) this.adjust_height(this.input)
       if (this.format === 'range') {
+        const output = this.control.querySelector('output')
         output.value = this.input.value
       }
     })
