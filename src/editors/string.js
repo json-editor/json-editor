@@ -213,6 +213,10 @@ export class StringEditor extends AbstractEditor {
       /* it will generate an error trying to append it to the missing parentNode */
       if (this.input.parentNode) this.afterInputReady()
       if (this.adjust_height) this.adjust_height(this.input)
+      const output = this.control.querySelector('output')
+      if (output) {
+        output.value = this.input.value
+      }
     })
 
     /* Compile and store the template */

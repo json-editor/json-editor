@@ -299,11 +299,6 @@ export class AbstractTheme {
 
   getRangeOutput (input, startvalue) {
     const output = document.createElement('output')
-
-    setTimeout(() => {
-      output.value = startvalue || 0
-    }, 0)
-
     const updateOutput = e => { output.value = e.currentTarget.value }
     input.addEventListener('change', updateOutput, false)
     input.addEventListener('input', updateOutput, false)
