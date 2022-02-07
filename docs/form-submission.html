@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>JSONEditor with forms</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <p>
+        The form is set to send a POST request to the same page (<code>action="" method="post"</code>).
+        A change event listener has been added to the editor so that whenever the form changes, the editor value
+        is stored in a hidden input using <code>JSON.stringify()</code>.
+    </p>
+    <p>
+        When the form is submitted only the hidden input is sent in the request.
+        By doing so, it is possible to send different types of data structures like arrays and object.
+        Also the same schema that is used to build the form can be used as parameter to backend json validators tools.
+        Try yourself, submit the form and look in the network tab of the developer tool.
+    </p>
+    <div class="form-group"></div>
+    <form action="" method="post">
+        <input id="input" type="hidden" name="json">
+        <div id='editor-container'></div>
+        <input id="submit" class="btn btn-primary" width="100" type="submit">
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+<script>
+  var config = {
+    theme: 'bootstrap4',
+    disable_edit_json: true,
+    disable_properties: true,
+    disable_collapse: true,
+    startval: {
+      name: 'Peter Griffin',
+      pets: [
+        { name: 'Kitty' },
+        { name: 'Brian' }
+      ]
+    },
+    schema: {
+      type: 'object',
+      title: 'Person',
+      properties: {
+        name: {
+          type: 'string',
+          title: 'Name'
+        },
+        pets: {
+          type: 'array',
+          title: 'Pets',
+          format: 'tabs',
+          items: {
+            type: 'object',
+            title: 'pet',
+            properties: {
+              name: {
+                type: 'string',
+                title: 'Name'
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  var editor = new JSONEditor(document.querySelector('#editor-container'), config)
+
+  editor.on('change', function () {
+    document.querySelector('#input').value = JSON.stringify(editor.getValue())
+  })
+</script>
+</body>
+</html>

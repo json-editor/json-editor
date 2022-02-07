@@ -11,6 +11,7 @@ Some pull requests added from the original repo.
 JSON Editor takes a JSON Schema and uses it to generate an HTML form.
 It has full support for JSON Schema version 3 and 4 and can integrate with several popular CSS frameworks (bootstrap, spectre, tailwind).
 
+Take a look at this [example](https://json-editor.github.io/json-editor/form-submission.html) for a simple form submission case study.
 ### Online Demo
 
 Check out an interactive demo: https://json-editor.github.io/json-editor/
