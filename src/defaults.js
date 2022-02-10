@@ -350,11 +350,18 @@ function upload (type, file, cbs) {
 }
 
 /* String translate function */
-function translate (key, variables) {
+function translate (key, variables, schema) {
+  let schemaMessages = {}
+
+  if (schema && schema.options && schema.options.error_messages) {
+    schemaMessages = schema.options.error_messages
+  }
+
   const lang = defaults.languages[defaults.language]
+
   if (!lang) throw new Error(`Unknown language ${defaults.language}`)
 
-  let string = lang[key] || defaults.languages[default_language][key] || key
+  let string = schemaMessages[key] || lang[key] || defaults.languages[default_language][key] || key
 
   if (variables) {
     for (let i = 0; i < variables.length; i++) {
