@@ -17,7 +17,7 @@ export class Validator {
           return [{
             path,
             property: 'const',
-            message: this.translate('error_const')
+            message: this.translate('error_const', null, schema)
           }]
         }
         return []
@@ -29,7 +29,7 @@ export class Validator {
           return [{
             path,
             property: 'enum',
-            message: this.translate('error_enum')
+            message: this.translate('error_enum', null, schema)
           }]
         }
         return []
@@ -54,7 +54,7 @@ export class Validator {
           return [{
             path,
             property: 'anyOf',
-            message: this.translate('error_anyOf')
+            message: this.translate('error_anyOf', null, schema)
           }]
         }
         return []
@@ -79,7 +79,7 @@ export class Validator {
           errors.push({
             path,
             property: 'oneOf',
-            message: this.translate('error_oneOf', [valid])
+            message: this.translate('error_oneOf', [valid], schema)
           })
           errors.push(...oneofErrors)
         }
@@ -90,7 +90,7 @@ export class Validator {
           return [{
             path,
             property: 'not',
-            message: this.translate('error_not')
+            message: this.translate('error_not', null, schema)
           }]
         }
         return []
@@ -103,7 +103,7 @@ export class Validator {
             return [{
               path,
               property: 'type',
-              message: this.translate('error_type_union')
+              message: this.translate('error_type_union', null, schema)
             }]
           }
         } else {
@@ -115,14 +115,14 @@ export class Validator {
               return [{
                 path,
                 property: 'type',
-                message: this.translate('error_type', [schema.format])
+                message: this.translate('error_type', [schema.format], schema)
               }]
             }
           } else if (!this._checkType(schema.type, value)) {
             return [{
               path,
               property: 'type',
-              message: this.translate('error_type', [schema.type])
+              message: this.translate('error_type', [schema.type], schema)
             }]
           }
         }
@@ -136,7 +136,7 @@ export class Validator {
             return [{
               path,
               property: 'disallow',
-              message: this.translate('error_disallow_union')
+              message: this.translate('error_disallow_union', null, schema)
             }]
           }
         } else {
@@ -145,7 +145,7 @@ export class Validator {
             return [{
               path,
               property: 'disallow',
-              message: this.translate('error_disallow', [schema.disallow])
+              message: this.translate('error_disallow', [schema.disallow], schema)
             }]
           }
         }
@@ -177,7 +177,8 @@ export class Validator {
             property: 'maximum',
             message: this.translate(
               (schema.exclusiveMaximum ? 'error_maximum_excl' : 'error_maximum_incl'),
-              [schema.maximum]
+              [schema.maximum],
+              schema
             )
           }]
         }
@@ -204,7 +205,8 @@ export class Validator {
             property: 'minimum',
             message: this.translate(
               (schema.exclusiveMinimum ? 'error_minimum_excl' : 'error_minimum_incl'),
-              [schema.minimum]
+              [schema.minimum],
+              schema
             )
           }]
         }
@@ -219,7 +221,7 @@ export class Validator {
           errors.push({
             path,
             property: 'maxLength',
-            message: this.translate('error_maxLength', [schema.maxLength])
+            message: this.translate('error_maxLength', [schema.maxLength], schema)
           })
         }
         return errors
@@ -230,7 +232,7 @@ export class Validator {
           return [{
             path,
             property: 'minLength',
-            message: this.translate((schema.minLength === 1 ? 'error_notempty' : 'error_minLength'), [schema.minLength])
+            message: this.translate((schema.minLength === 1 ? 'error_notempty' : 'error_minLength'), [schema.minLength], schema)
           }]
         }
         return []
@@ -241,7 +243,7 @@ export class Validator {
           return [{
             path,
             property: 'pattern',
-            message: (schema.options && schema.options.patternmessage) ? schema.options.patternmessage : this.translate('error_pattern', [schema.pattern])
+            message: (schema.options && schema.options.patternmessage) ? schema.options.patternmessage : this.translate('error_pattern', [schema.pattern], schema)
           }]
         }
         return []
@@ -269,7 +271,7 @@ export class Validator {
               errors.push({
                 path,
                 property: 'additionalItems',
-                message: this.translate('error_additionalItems')
+                message: this.translate('error_additionalItems', null, schema)
               })
               break
               /* Default for `additionalItems` is an empty schema */
@@ -291,7 +293,7 @@ export class Validator {
           return [{
             path,
             property: 'maxItems',
-            message: this.translate('error_maxItems', [schema.maxItems])
+            message: this.translate('error_maxItems', [schema.maxItems], schema)
           }]
         }
         return []
@@ -301,7 +303,7 @@ export class Validator {
           return [{
             path,
             property: 'minItems',
-            message: this.translate('error_minItems', [schema.minItems])
+            message: this.translate('error_minItems', [schema.minItems], schema)
           }]
         }
         return []
@@ -314,7 +316,7 @@ export class Validator {
             return [{
               path,
               property: 'uniqueItems',
-              message: this.translate('error_uniqueItems')
+              message: this.translate('error_uniqueItems', null, schema)
             }]
           }
           seen[valid] = true
@@ -329,7 +331,7 @@ export class Validator {
           return [{
             path,
             property: 'maxProperties',
-            message: this.translate('error_maxProperties', [schema.maxProperties])
+            message: this.translate('error_maxProperties', [schema.maxProperties], schema)
           }]
         }
         return []
@@ -339,7 +341,7 @@ export class Validator {
           return [{
             path,
             property: 'minProperties',
-            message: this.translate('error_minProperties', [schema.minProperties])
+            message: this.translate('error_minProperties', [schema.minProperties], schema)
           }]
         }
         return []
@@ -356,7 +358,7 @@ export class Validator {
             errors.push({
               path,
               property: 'required',
-              message: this.translate('error_required', [schema && schema.properties && schema.properties[e] && schema.properties[e].title ? schema.properties[e].title : e])
+              message: this.translate('error_required', [schema && schema.properties && schema.properties[e] && schema.properties[e].title ? schema.properties[e].title : e], schema)
             })
           })
         }
@@ -403,7 +405,7 @@ export class Validator {
             errors.push({
               path,
               property: 'propertyNames',
-              message: this.translate('error_property_names_false', [k])
+              message: this.translate('error_property_names_false', [k], schema)
             })
             break
           }
@@ -457,14 +459,14 @@ export class Validator {
                 errors.push({
                   path,
                   property: 'propertyNames',
-                  message: this.translate('error_property_names_unsupported', [j])
+                  message: this.translate('error_property_names_unsupported', [j], schema)
                 })
                 return false
             }
             errors.push({
               path,
               property: 'propertyNames',
-              message: this.translate(msg, [k])
+              message: this.translate(msg, [k], schema)
             })
             return false
           })
@@ -483,7 +485,7 @@ export class Validator {
             errors.push({
               path,
               property: 'additionalProperties',
-              message: this.translate('error_additional_properties', [k])
+              message: this.translate('error_additional_properties', [k], schema)
             })
             break
             /* Allowed */
@@ -510,7 +512,7 @@ export class Validator {
                 errors.push({
                   path,
                   property: 'dependencies',
-                  message: this.translate('error_dependency', [d])
+                  message: this.translate('error_dependency', [d], schema)
                 })
               }
             })
@@ -638,7 +640,7 @@ export class Validator {
       return [{
         path,
         property: 'required',
-        message: this.translate('error_notset')
+        message: this.translate('error_notset', null, schema)
       }]
     }
     return []
@@ -713,7 +715,7 @@ export class Validator {
       return [{
         path,
         property: 'format',
-        message: this.translate('error_pattern', ['^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'])
+        message: this.translate('error_pattern', ['^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$'], schema)
       }]
     }
     return []
@@ -736,7 +738,7 @@ export class Validator {
       return [{
         path,
         property: schema.multipleOf ? 'multipleOf' : 'divisibleBy',
-        message: this.translate('error_multipleOf', [divisor])
+        message: this.translate('error_multipleOf', [divisor], schema)
       }]
     }
     return []
@@ -750,14 +752,14 @@ export class Validator {
         return [{
           path,
           property: 'format',
-          message: this.translate('error_invalid_epoch')
+          message: this.translate('error_invalid_epoch', null, schema)
         }]
       } else if (value !== Math.abs(parseInt(value))) {
         /* not much to check for, so we assume value is ok if it's a positive number */
         return [{
           path,
           property: 'format',
-          message: this.translate(`error_${schema.format.replace(/-/g, '_')}`, [dateFormat])
+          message: this.translate(`error_${schema.format.replace(/-/g, '_')}`, [dateFormat], schema)
         }]
       }
       return []
@@ -786,7 +788,7 @@ export class Validator {
           return [{
             path,
             property: 'format',
-            message: this.translate(`error_${editor.format.replace(/-/g, '_')}`, [errorDateFormat])
+            message: this.translate(`error_${editor.format.replace(/-/g, '_')}`, [errorDateFormat], schema)
           }]
         }
       }
@@ -815,7 +817,7 @@ export class Validator {
         return [{
           path,
           property: 'format',
-          message: this.translate(`error_${schema.format.replace(/-/g, '_')}`, [dateFormat])
+          message: this.translate(`error_${schema.format.replace(/-/g, '_')}`, [dateFormat], schema)
         }]
       }
     } else if (editor) {
