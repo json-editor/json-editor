@@ -8,7 +8,12 @@
       "minLength": 1,
       "options": {
         "error_messages": {
-          "error_notempty": "CUSTOM: Value required"
+          "en": {
+            "error_notempty": "CUSTOM EN: Value required"
+          },
+          "es": {
+            "error_notempty": "CUSTOM ES: Value required"
+          }
         }
       }
     },
@@ -19,7 +24,12 @@
       "default": "something else",
       "options": {
         "error_messages": {
-          "error_const": "CUSTOM: Value must be the constant value"
+          "en": {
+            "error_const": "CUSTOM EN: Value must be the constant value"
+          },
+          "es": {
+            "error_const": "CUSTOM ES: Value must be the constant value"
+          }
         }
       }
     },
@@ -29,7 +39,12 @@
       "minLength": 6,
       "options": {
         "error_messages": {
-          "error_minLength": "CUSTOM: Value must be at least {{0}} characters long"
+          "en": {
+            "error_minLength": "CUSTOM EN: Value must be at least {{0}} characters long"
+          },
+          "es": {
+            "error_minLength": "CUSTOM ES: Value must be at least {{0}} characters long"
+          }
         }
       }
     },
@@ -40,7 +55,12 @@
       "default": "alohomora",
       "options": {
         "error_messages": {
-          "error_maxLength": "CUSTOM: Value must be at most {{0}} characters long"
+          "en": {
+            "error_maxLength": "CUSTOM EN: Value must be at most {{0}} characters long"
+          },
+          "es": {
+            "error_maxLength": "CUSTOM ES: Value must be at most {{0}} characters long"
+          }
         }
       }
     },
@@ -57,7 +77,12 @@
       "default": 1.5,
       "options": {
         "error_messages": {
-          "error_anyOf": "CUSTOM: Value must validate against at least one of the provided schemas"
+          "en": {
+            "error_anyOf": "CUSTOM EN: Value must validate against at least one of the provided schemas"
+          },
+          "es": {
+            "error_anyOf": "CUSTOM ES: Value must validate against at least one of the provided schemas"
+          }
         }
       }
     },
@@ -71,7 +96,12 @@
       "default": 1.5,
       "options": {
         "error_messages": {
-          "error_oneOf": "CUSTOM: Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas."
+          "en": {
+            "error_oneOf": "CUSTOM EN: Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas."
+          },
+          "es": {
+            "error_oneOf": "CUSTOM ES: Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas."
+          }
         }
       }
     },
@@ -81,7 +111,12 @@
       "default": 1.5,
       "options": {
         "error_messages": {
-          "error_type_union": "CUSTOM: Value must be one of the provided types"
+          "en": {
+            "error_type_union": "CUSTOM EN: Value must be one of the provided types"
+          },
+          "es": {
+            "error_type_union": "CUSTOM ES: Value must be one of the provided types"
+          }
         }
       }
     },
@@ -92,7 +127,12 @@
       "default": 15,
       "options": {
         "error_messages": {
-          "error_disallow_union": "CUSTOM: Value must not be one of the provided disallowed types"
+          "en": {
+            "error_disallow_union": "CUSTOM EN: Value must not be one of the provided disallowed types"
+          },
+          "es": {
+            "error_disallow_union": "CUSTOM ES: Value must not be one of the provided disallowed types"
+          }
         }
       }
     },
@@ -103,7 +143,12 @@
       "default": 15,
       "options": {
         "error_messages": {
-          "error_disallow": "CUSTOM: Value must not be of type {{0}}"
+          "en": {
+            "error_disallow": "CUSTOM EN: Value must not be of type {{0}}"
+          },
+          "es": {
+            "error_disallow": "CUSTOM ES: Value must not be of type {{0}}"
+          }
         }
       }
     },
@@ -113,7 +158,12 @@
       "default": 1.5,
       "options": {
         "error_messages": {
-          "error_type": "CUSTOM: Value must be of type {{0}}"
+          "en": {
+            "error_type": "CUSTOM EN: Value must be of type {{0}}"
+          },
+          "es": {
+            "error_type": "CUSTOM ES: Value must be of type {{0}}"
+          }
         }
       }
     },
@@ -126,7 +176,12 @@
       "default": "alohomora",
       "options": {
         "error_messages": {
-          "error_not": "CUSTOM: Value must not validate against the provided schema"
+          "en": {
+            "error_not": "CUSTOM EN: Value must not validate against the provided schema"
+          },
+          "es": {
+            "error_not": "CUSTOM ES: Value must not validate against the provided schema"
+          }
         }
       }
     },
@@ -137,7 +192,12 @@
       "default": 1,
       "options": {
         "error_messages": {
-          "error_invalid_epoch": "CUSTOM: Date must be greater than 1 January 1970"
+          "en": {
+            "error_invalid_epoch": "CUSTOM EN: Date must be greater than 1 January 1970"
+          },
+          "es": {
+            "error_invalid_epoch": "CUSTOM ES: Date must be greater than 1 January 1970"
+          }
         }
       }
     },
@@ -148,7 +208,12 @@
       "default": "@alohomora",
       "options": {
         "error_messages": {
-          "error_pattern": "CUSTOM: Value must match the pattern {{0}}"
+          "en": {
+            "error_pattern": "CUSTOM EN: Value must match the pattern {{0}}"
+          },
+          "es": {
+            "error_pattern": "CUSTOM ES: Value must match the pattern {{0}}"
+          }
         }
       }
     },
@@ -160,7 +225,12 @@
       "default": 13,
       "options": {
         "error_messages": {
-          "error_multipleOf": "CUSTOM: Value must be a multiple of {{0}}"
+          "en": {
+            "error_multipleOf": "CUSTOM EN: Value must be a multiple of {{0}}"
+          },
+          "es": {
+            "error_multipleOf": "CUSTOM ES: Value must be a multiple of {{0}}"
+          }
         }
       }
     },
@@ -172,7 +242,12 @@
       "default": 4,
       "options": {
         "error_messages": {
-          "error_minimum_incl": "CUSTOM: Value must be at least {{0}}"
+          "en": {
+            "error_minimum_incl": "CUSTOM EN: Value must be at least {{0}}"
+          },
+          "es": {
+            "error_minimum_incl": "CUSTOM ES: Value must be at least {{0}}"
+          }
         }
       }
     },
@@ -184,7 +259,12 @@
       "default": 5,
       "options": {
         "error_messages": {
-          "error_minimum_excl": "CUSTOM: Value must be greater than {{0}}"
+          "en": {
+            "error_minimum_excl": "CUSTOM EN: Value must be greater than {{0}}"
+          },
+          "es": {
+            "error_minimum_excl": "CUSTOM ES: Value must be greater than {{0}}"
+          }
         }
       }
     },
@@ -196,7 +276,12 @@
       "default": 11,
       "options": {
         "error_messages": {
-          "error_maximum_incl": "CUSTOM: Value must be less than {{0}}"
+          "en": {
+            "error_maximum_incl": "CUSTOM EN: Value must be less than {{0}}"
+          },
+          "es": {
+            "error_maximum_incl": "CUSTOM ES: Value must be less than {{0}}"
+          }
         }
       }
     },
@@ -208,7 +293,12 @@
       "default": 20,
       "options": {
         "error_messages": {
-          "error_maximum_excl": "CUSTOM: Value must be less than {{0}}"
+          "en": {
+            "error_maximum_excl": "CUSTOM EN: Value must be less than {{0}}"
+          },
+          "es": {
+            "error_maximum_excl": "CUSTOM ES: Value must be less than {{0}}"
+          }
         }
       }
     },
@@ -218,7 +308,12 @@
       "required": true,
       "options": {
         "error_messages": {
-          "error_notset": "CUSTOM: Property must be set."
+          "en": {
+            "error_notset": "CUSTOM EN: Property must be set."
+          },
+          "es": {
+            "error_notset": "CUSTOM ES: Property must be set."
+          }
         }
       }
     },
@@ -232,7 +327,12 @@
       "default": "black",
       "options": {
         "error_messages": {
-          "error_enum": "CUSTOM: Value must be one of the enumerated values"
+          "en": {
+            "error_enum": "CUSTOM EN: Value must be one of the enumerated values"
+          },
+          "es": {
+            "error_enum": "CUSTOM ES: Value must be one of the enumerated values"
+          }
         }
       }
     },
@@ -243,7 +343,12 @@
       "properties": {},
       "options": {
         "error_messages": {
-          "error_minProperties": "CUSTOM: Object must have at least {{0}} properties"
+          "en": {
+            "error_minProperties": "CUSTOM EN: Object must have at least {{0}} properties"
+          },
+          "es": {
+            "error_minProperties": "CUSTOM ES: Object must have at least {{0}} properties"
+          }
         }
       }
     },
@@ -265,7 +370,12 @@
       },
       "options": {
         "error_messages": {
-          "error_maxProperties": "CUSTOM: Object must have at most {{0}} properties"
+          "en": {
+            "error_maxProperties": "CUSTOM EN: Object must have at most {{0}} properties"
+          },
+          "es": {
+            "error_maxProperties": "CUSTOM ES: Object must have at most {{0}} properties"
+          }
         }
       }
     },
@@ -278,7 +388,12 @@
       "properties": {},
       "options": {
         "error_messages": {
-          "error_required": "CUSTOM: Object is missing the required property '{{0}}'"
+          "en": {
+            "error_required": "CUSTOM EN: Object is missing the required property '{{0}}'"
+          },
+          "es": {
+            "error_required": "CUSTOM ES: Object is missing the required property '{{0}}'"
+          }
         }
       }
     },
@@ -293,7 +408,12 @@
       },
       "options": {
         "error_messages": {
-          "error_property_names_unsupported": "CUSTOM: Unsupported propertyName {{0}}"
+          "en": {
+            "error_property_names_unsupported": "CUSTOM EN: Unsupported propertyName {{0}}"
+          },
+          "es": {
+            "error_property_names_unsupported": "CUSTOM ES: Unsupported propertyName {{0}}"
+          }
         }
       }
     },
@@ -308,7 +428,12 @@
       },
       "options": {
         "error_messages": {
-          "error_property_names_pattern": "CUSTOM: Property name {{0}} cannot match invalid pattern"
+          "en": {
+            "error_property_names_pattern": "CUSTOM EN: Property name {{0}} cannot match invalid pattern"
+          },
+          "es": {
+            "error_property_names_pattern": "CUSTOM ES: Property name {{0}} cannot match invalid pattern"
+          }
         }
       }
     },
@@ -323,7 +448,12 @@
       },
       "options": {
         "error_messages": {
-          "error_property_names_enum": "CUSTOM: Property name {{0}} cannot match invalid enum"
+          "en": {
+            "error_property_names_enum": "CUSTOM EN: Property name {{0}} cannot match invalid enum"
+          },
+          "es": {
+            "error_property_names_enum": "CUSTOM ES: Property name {{0}} cannot match invalid enum"
+          }
         }
       }
     },
@@ -338,7 +468,12 @@
       },
       "options": {
         "error_messages": {
-          "error_property_names_maxlength": "CUSTOM: Property name {{0}} cannot match invalid maxLength"
+          "en": {
+            "error_property_names_maxlength": "CUSTOM EN: Property name {{0}} cannot match invalid maxLength"
+          },
+          "es": {
+            "error_property_names_maxlength": "CUSTOM ES: Property name {{0}} cannot match invalid maxLength"
+          }
         }
       }
     },
@@ -353,7 +488,12 @@
       },
       "options": {
         "error_messages": {
-          "error_property_names_exceeds_maxlength": "CUSTOM: Property name {{0}} exceeds maxLength"
+          "en": {
+            "error_property_names_exceeds_maxlength": "CUSTOM EN: Property name {{0}} exceeds maxLength"
+          },
+          "es": {
+            "error_property_names_exceeds_maxlength": "CUSTOM ES: Property name {{0}} exceeds maxLength"
+          }
         }
       }
     },
@@ -366,7 +506,12 @@
       },
       "options": {
         "error_messages": {
-          "error_property_names_false": "CUSTOM: Property name {{0}} does not match pattern"
+          "en": {
+            "error_property_names_false": "CUSTOM EN: Property name {{0}} does not match pattern"
+          },
+          "es": {
+            "error_property_names_false": "CUSTOM ES: Property name {{0}} does not match pattern"
+          }
         }
       }
     },
@@ -381,7 +526,12 @@
       },
       "options": {
         "error_messages": {
-          "error_property_names_pattern_mismatch": "CUSTOM: Property name {{0}} does not match pattern"
+          "en": {
+            "error_property_names_pattern_mismatch": "CUSTOM EN: Property name {{0}} does not match pattern"
+          },
+          "es": {
+            "error_property_names_pattern_mismatch": "CUSTOM ES: Property name {{0}} does not match pattern"
+          }
         }
       }
     },
@@ -396,7 +546,12 @@
       },
       "options": {
         "error_messages": {
-          "error_property_names_const_mismatch": "CUSTOM: Property name {{0}} does not match the const value"
+          "en": {
+            "error_property_names_const_mismatch": "CUSTOM EN: Property name {{0}} does not match the const value"
+          },
+          "es": {
+            "error_property_names_const_mismatch": "CUSTOM ES: Property name {{0}} does not match the const value"
+          }
         }
       }
     },
@@ -414,7 +569,12 @@
       },
       "options": {
         "error_messages": {
-          "error_property_names_enum_mismatch": "CUSTOM: Property name {{0}} does not match any enum values"
+          "en": {
+            "error_property_names_enum_mismatch": "CUSTOM EN: Property name {{0}} does not match any enum values"
+          },
+          "es": {
+            "error_property_names_enum_mismatch": "CUSTOM ES: Property name {{0}} does not match any enum values"
+          }
         }
       }
     },
@@ -427,7 +587,12 @@
       },
       "options": {
         "error_messages": {
-          "error_dependency": "CUSTOM: Must have property {{0}}"
+          "en": {
+            "error_dependency": "CUSTOM EN: Must have property {{0}}"
+          },
+          "es": {
+            "error_dependency": "CUSTOM ES: Must have property {{0}}"
+          }
         }
       }
     },
@@ -446,7 +611,12 @@
       },
       "options": {
         "error_messages": {
-          "error_additional_properties": "CUSTOM: No additional properties allowed, but property {{0}} is set"
+          "en": {
+            "error_additional_properties": "CUSTOM EN: No additional properties allowed, but property {{0}} is set"
+          },
+          "es": {
+            "error_additional_properties": "CUSTOM ES: No additional properties allowed, but property {{0}} is set"
+          }
         }
       }
     },
@@ -461,7 +631,12 @@
       },
       "options": {
         "error_messages": {
-          "error_uniqueItems": "CUSTOM: Array must have unique items"
+          "en": {
+            "error_uniqueItems": "CUSTOM EN: Array must have unique items"
+          },
+          "es": {
+            "error_uniqueItems": "CUSTOM ES: Array must have unique items"
+          }
         }
       }
     },
@@ -476,7 +651,12 @@
       "default": ["alohomora", true],
       "options": {
         "error_messages": {
-          "error_additionalItems": "CUSTOM: No additional items allowed in this array"
+          "en": {
+            "error_additionalItems": "CUSTOM EN: No additional items allowed in this array"
+          },
+          "es": {
+            "error_additionalItems": "CUSTOM ES: No additional items allowed in this array"
+          }
         }
       }
     },
@@ -490,7 +670,12 @@
       },
       "options": {
         "error_messages": {
-          "error_minItems": "CUSTOM: Value must have at least {{0}} items"
+          "en": {
+            "error_minItems": "CUSTOM EN: Value must have at least {{0}} items"
+          },
+          "es": {
+            "error_minItems": "CUSTOM ES: Value must have at least {{0}} items"
+          }
         }
       }
     },
@@ -507,7 +692,12 @@
       },
       "options": {
         "error_messages": {
-          "error_maxItems": "CUSTOM: Value must have at most {{0}} items"
+          "en": {
+            "error_maxItems": "CUSTOM EN: Value must have at most {{0}} items"
+          },
+          "es": {
+            "error_maxItems": "CUSTOM ES: Value must have at most {{0}} items"
+          }
         }
       }
     }
