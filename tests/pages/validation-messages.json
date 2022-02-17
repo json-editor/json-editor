@@ -29,7 +29,7 @@
       "minLength": 6,
       "options": {
         "error_messages": {
-          "error_minLength": "CUSTOM: Value must be at most {{0}} characters long"
+          "error_minLength": "CUSTOM: Value must be at least {{0}} characters long"
         }
       }
     },
@@ -204,8 +204,8 @@
       "type": "integer",
       "title": "error_maximum_excl",
       "exclusiveMaximum": true,
-      "maximum": 10,
-      "default": 10,
+      "maximum": 15,
+      "default": 20,
       "options": {
         "error_messages": {
           "error_maximum_excl": "CUSTOM: Value must be less than {{0}}"
