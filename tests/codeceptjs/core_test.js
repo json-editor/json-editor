@@ -238,7 +238,7 @@ Scenario('should load internal schema definitions, external schema definitions a
   I.waitForElement('[data-schemapath="root.link.street_address"]')
 })
 
-Scenario('should override error messages if specified in schema options @core @errors', async (I) => {
+Scenario('should override error messages if specified in schema options @core @errors-messages', async (I) => {
   I.amOnPage('error-messages.html')
   I.waitForText('Error Messages')
   I.waitForText('CUSTOM: Value required')
