@@ -353,8 +353,8 @@ function upload (type, file, cbs) {
 function translate (key, variables, schema) {
   let schemaMessages = {}
 
-  if (schema && schema.options && schema.options.error_messages) {
-    schemaMessages = schema.options.error_messages
+  if (schema && schema.options && schema.options.error_messages && schema.options.error_messages[defaults.language]) {
+    schemaMessages = schema.options.error_messages[defaults.language]
   }
 
   const lang = defaults.languages[defaults.language]
