@@ -134,7 +134,7 @@ export class spectreTheme extends AbstractTheme {
   getCheckboxLabel (text, req) {
     const el = super.getCheckboxLabel(text, req); const icon = document.createElement('i')
     icon.classList.add('form-icon')
-    el.classList.add('form-checkbox', 'mr-5')
+    el.classList.add('form-checkbox', 'pr-0')
     el.insertBefore(icon, el.firstChild)
     return el
   }
@@ -219,6 +219,7 @@ export class spectreTheme extends AbstractTheme {
 
     if (label && (input.type === 'checkbox' || input.type === 'radio')) {
       group.classList.add(input.type)
+      if (infoText) label.appendChild(infoText)
       label.insertBefore(input, label.firstChild)
       group.appendChild(label)
     } else {
