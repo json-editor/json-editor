@@ -1584,6 +1584,28 @@ By default, all instances of JSON Editor will use the `en` language.  To overrid
 JSONEditor.defaults.language = "es";
 ```
 
+You can also override translations per editor in the it's schema options.
+
+````json
+"error_const": {
+  "type": "string",
+  "title": "error_const",
+  "const": "test",
+  "default": "something else",
+  "options": {
+    "error_messages": {
+      "en": {
+        "error_const": "CUSTOM EN: Value must be the constant value"
+      },
+      "es": {
+        "error_const": "CUSTOM ES: Value must be the constant value"
+      }
+    }
+  }
+}
+````
+
+
 Button Customization
 -----------------
 

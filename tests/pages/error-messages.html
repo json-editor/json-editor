@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>JSONEditor with forms</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <button id="switch-es">Switch to ES</button>
+    <div id='editor-container'></div>
+</div>
+<script src="../../dist/jsoneditor.js"></script>
+<script>
+  JSONEditor.defaults.languages.es = {}
+
+  var switchEs = document.querySelector('#switch-es')
+  var editor = null
+
+  var initEditor = function () {
+    if (editor) {
+      editor.destroy()
+    }
+
+    editor = new JSONEditor(document.querySelector('#editor-container'), {
+      theme: 'bootstrap4',
+      disable_edit_json: true,
+      disable_properties: true,
+      disable_collapse: true,
+      ajax: true,
+      show_errors: 'always',
+      schema: {
+        $ref: './validation-messages.json',
+      }
+    })
+  }
+
+  switchEs.addEventListener('click', function () {
+    JSONEditor.defaults.language = 'es'
+    initEditor()
+  })
+
+  initEditor()
+
+</script>
+</body>
+</html>
