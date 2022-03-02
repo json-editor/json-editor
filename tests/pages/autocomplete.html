@@ -2,10 +2,10 @@
 <html>
 <head>
   <meta charset="utf-8"/>
-  <title>Range</title>
+  <title>Autocomplete</title>
   <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
-  <script src="https://cdn.jsdelivr.net/npm/mathjs@5.3.1/dist/math.min.js" class="external_mathjs"></script>
+  <script src="https://unpkg.com/@trevoreyre/autocomplete-js"></script>
   <script src="../../dist/jsoneditor.js"></script>
 </head>
 <body>
@@ -16,16 +16,33 @@
 
 
 <script>
-  var jsonEditorContainer = document.querySelector('.json-editor-container');
-  var value = document.querySelector('.value');
+  var jsonEditorContainer = document.querySelector('.json-editor-container')
+  var value = document.querySelector('.value')
+
+  var countries = [
+    'germany',
+    'iran',
+    'iraq',
+    'spain'
+  ]
+
+  const search = input => {
+    if (input.length < 1) { return [] }
+    return countries.filter(country => {
+      return country.toLowerCase().startsWith(input.toLowerCase())
+    })
+  }
 
   var schema = {
-    "title": "Test",
-    "type": "object",
-    "properties": {
-      "autocomplete": {
-        "title": "autocomplete",
-        "type": "integer"
+    'title': 'Test',
+    'type': 'string',
+    'format': 'autocomplete',
+    'options': {
+      'autocomplete': {
+        'search': search,
+        //'getResultValue': 'reference_system_identifier_getResultValue',
+        //'renderResult': 'reference_system_identifier_render',
+        'autoSelect': true
       }
     }
   }
@@ -33,12 +50,13 @@
   var editor = new JSONEditor(jsonEditorContainer, {
     schema: schema,
     theme: 'bootstrap4',
-    use_default_values: false,
     required_by_default: true,
     show_errors: 'always'
-  });
+  })
 
-
+  editor.on('change', function () {
+    console.log(editor.getValue())
+  })
 
 </script>
 
