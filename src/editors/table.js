@@ -347,6 +347,7 @@ export class TableEditor extends ArrayEditor {
 
   _createCopyButton (i, holder) {
     const button = this.getButton('', 'copy', 'button_copy_row_title_short')
+    const schema = this.schema
     button.classList.add('copy', 'json-editor-btntype-copy')
     button.setAttribute('data-i', i)
     button.addEventListener('click', e => {
@@ -355,8 +356,16 @@ export class TableEditor extends ArrayEditor {
       const j = e.currentTarget.getAttribute('data-i') * 1
       const value = this.getValue()
 
-      value.splice(j + 1, 0, value[j])
+      value.forEach((row, j) => {
+        for (const key of Object.keys(row)) {
+          /* Force generation of new UUID if the item has been cloned. */
+          if (schema.items.properties[key] && schema.items.properties[key].format === 'uuid') {
+            row[key] = null
+          }
+        }
+      })
 
+      value.splice(j + 1, 0, value[j])
       this.setValue(value)
       this.onChange(true)
       this.jsoneditor.trigger('copyRow', this.rows[j + 1])

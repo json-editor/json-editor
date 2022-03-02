@@ -545,6 +545,7 @@ export class ArrayEditor extends AbstractEditor {
 
   _createCopyButton (i, holder) {
     const button = this.getButton(this.getItemTitle(), 'copy', 'button_copy_row_title', [this.getItemTitle()])
+    const schema = this.schema
     button.classList.add('copy', 'json-editor-btntype-copy')
     button.setAttribute('data-i', i)
     button.addEventListener('click', e => {
@@ -555,6 +556,12 @@ export class ArrayEditor extends AbstractEditor {
 
       value.forEach((row, j) => {
         if (j === i) {
+          /* Force generation of new UUID if the item has been cloned. */
+          for (const key of Object.keys(row)) {
+            if (schema.items.properties[key] && schema.items.properties[key].format === 'uuid') {
+              row[key] = null
+            }
+          }
           value.push(row)
         }
       })
