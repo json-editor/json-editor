@@ -1,5 +1,5 @@
 import { AbstractEditor } from '../editor.js'
-import { extend, trigger } from '../utilities.js'
+import { extend, generateUUID, trigger } from '../utilities.js'
 import rules from './array.css.js'
 
 export class ArrayEditor extends AbstractEditor {
@@ -557,9 +557,13 @@ export class ArrayEditor extends AbstractEditor {
       value.forEach((row, j) => {
         if (j === i) {
           /* Force generation of new UUID if the item has been cloned. */
-          for (const key of Object.keys(row)) {
-            if (schema.items.properties[key] && schema.items.properties[key].format === 'uuid') {
-              row[key] = null
+          if (schema.items.type === 'string' && schema.items.format === 'uuid') {
+            row = generateUUID()
+          } else if (schema.items.type === 'object' && schema.items.properties) {
+            for (const key of Object.keys(row)) {
+              if (schema.items.properties && schema.items.properties[key] && schema.items.properties[key].format === 'uuid') {
+                row[key] = generateUUID()
+              }
             }
           }
           value.push(row)
