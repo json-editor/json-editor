@@ -40,11 +40,22 @@
           'required': true,
           'default': 'banana'
         },
-        'uuidArray': {
+        'uuidStringArray': {
           'type': 'array',
-          'title': 'uuid array',
+          'required': true,
+          'title': 'array of uuids',
+          'items': {
+            'type': 'string',
+            'format': 'uuid',
+            'title': 'uuid string array item'
+          }
+        },
+        'uuidObjectArray': {
+          'type': 'array',
+          'title': 'array of objects with uuid property',
           'required': true,
           'items': {
+            'title': 'uuid object array item',
             'type': 'object',
             'properties': {
               'uuid': {
@@ -54,21 +65,27 @@
             }
           }
         },
-        'uuidTable': {
+        'uuidStringTable': {
+          'type': 'array',
+          'required': true,
+          'format': 'table',
+          'title': 'array of uuids (table)',
+          'items': {
+            'title': 'uuid string table item',
+            'type': 'string',
+            'format': 'uuid'
+          }
+        },
+        'uuidObjectTable': {
           "type": "array",
           "format": "table",
-          "title": "uuid Table",
+          "title": "Array of objects (Table) with uuid property",
           "items": {
+            'title': 'uuid object table item',
             "type": "object",
-            "title": "Node",
             "properties": {
-              "node": {
+              "uuid": {
                 "type": "string",
-                "title": "I am a node"
-              },
-              "identifier": {
-                "type": "string",
-                "title": "I an uuid",
                 "format": "uuid",
               }
             }
