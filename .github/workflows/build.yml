@@ -57,7 +57,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: codeceptjs-output
-          path: codeceptjs/output
+          path: tests/codeceptjs/output
           retention-days: 30
       - name: Test (optional)
         continue-on-error: true
