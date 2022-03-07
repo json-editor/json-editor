@@ -54,6 +54,7 @@ jobs:
           docker-compose exec -T node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:${SELENIUM_BROWSER} --invert --grep  '@optional'
           ls -la codeceptjs/output
       - name: Test Artifacts
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: codeceptjs-output
