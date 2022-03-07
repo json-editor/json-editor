@@ -51,6 +51,10 @@ jobs:
         run: docker-compose run -T --rm node npm run ${BUILD_ENV}
       - name: Test
         run: docker-compose exec -T node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:${SELENIUM_BROWSER} --invert --grep  '@optional'
+        with:
+          name: codeceptjs-output
+          path: tests/codeceptjs/output
+          retention-days: 30
       - name: Test (optional)
         continue-on-error: true
         run: docker-compose exec -T node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:${SELENIUM_BROWSER} --grep '@optional'
