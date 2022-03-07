@@ -52,12 +52,12 @@ jobs:
       - name: Test
         run: |
           docker-compose exec -T node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:${SELENIUM_BROWSER} --invert --grep  '@optional'
-          ls -la tests/codeceptjs/output
+          ls -la codeceptjs/output
       - name: Test Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: codeceptjs-output
-          path: tests/codeceptjs/output
+          path: codeceptjs/output
           retention-days: 30
       - name: Test (optional)
         continue-on-error: true
