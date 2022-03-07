@@ -1,72 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8"/>
+  <meta charset="utf-8" />
   <script src="../../dist/jsoneditor.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <title>object-no-duplicated-id</title>
 </head>
+
 <body>
 
-<div class="container">
-  <div class="form-group">
-    <textarea id="value" class="form-control" rows="10"></textarea>
+  <div class="container">
+    <div class="form-group">
+      <textarea id="value" class="form-control" rows="10"></textarea>
+    </div>
+    <button id="get-value" class='btn btn-secondary'>get value</button>
+    <hr>
+    <div id='form-container'></div>
   </div>
-  <button id="get-value" class='btn btn-secondary'>get value</button>
-  <hr>
-  <div id='form-container'></div>
-</div>
 
-<script>
-  var formContainer = document.querySelector('#form-container')
-  var value = document.querySelector('#value')
-  var getValue = document.querySelector('#get-value')
+  <script>
+    var formContainer = document.querySelector('#form-container')
+    var value = document.querySelector('#value')
+    var getValue = document.querySelector('#get-value')
 
-  var today = (offset) => {
-    var t = new Date()
-    t.setDate(t.getDate() + (offset || 0))
-    return t.toISOString().split('T')[0]
-  }
+    var today = (offset) => {
+      var t = new Date()
+      t.setDate(t.getDate() + (offset || 0))
+      return t.toISOString().split('T')[0]
+    }
 
-  var schema = {
-    'type': 'object',
-    'properties': {
-      'uuid': {
-        'type': 'string',
-        'format': 'uuid',
-        'title': 'single uuid',
-        'required': true,
-        'default': 'banana'
-      },
-      'uuidArray': {
-        'type': 'array',
-        'title': 'uuid array',
-        'required': true,
-        'items': {
-          'type': 'object',
-          'properties': {
-            'uuid': {
-              'type': 'string',
-              'format': 'uuid'
+    var schema = {
+      'type': 'object',
+      'properties': {
+        'uuid': {
+          'type': 'string',
+          'format': 'uuid',
+          'title': 'single uuid',
+          'required': true,
+          'default': 'banana'
+        },
+        'uuidStringArray': {
+          'type': 'array',
+          'required': true,
+          'title': 'array of uuids',
+          'items': {
+            'type': 'string',
+            'format': 'uuid',
+            'title': 'uuid string array item'
+          }
+        },
+        'uuidObjectArray': {
+          'type': 'array',
+          'title': 'array of objects with uuid property',
+          'required': true,
+          'items': {
+            'title': 'uuid object array item',
+            'type': 'object',
+            'properties': {
+              'uuid': {
+                'type': 'string',
+                'format': 'uuid'
+              }
+            }
+          }
+        },
+        'uuidStringTable': {
+          'type': 'array',
+          'required': true,
+          'format': 'table',
+          'title': 'array of uuids (table)',
+          'items': {
+            'title': 'uuid string table item',
+            'type': 'string',
+            'format': 'uuid'
+          }
+        },
+        'uuidObjectTable': {
+          "type": "array",
+          "format": "table",
+          "title": "Array of objects (Table) with uuid property",
+          "items": {
+            'title': 'uuid object table item',
+            "type": "object",
+            "properties": {
+              "uuid": {
+                "type": "string",
+                "format": "uuid",
+              }
             }
           }
         }
       }
     }
-  }
 
-  var editor = new JSONEditor(formContainer, {
-    schema: schema,
-    theme: 'bootstrap4',
-    show_errors: 'always'
-  })
+    var editor = new JSONEditor(formContainer, {
+      schema: schema,
+      theme: 'bootstrap4',
+      show_errors: 'always',
+      enable_array_copy: true,
+    })
 
-  getValue.addEventListener('click', function () {
-    value.value = JSON.stringify(editor.getValue())
-    console.log(editor.getValue())
-  })
+    getValue.addEventListener('click', function () {
+      value.value = JSON.stringify(editor.getValue())
+      console.log(editor.getValue())
+    })
 
-</script>
-
+  </script>
 </body>
 </html>

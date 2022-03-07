@@ -50,9 +50,18 @@ jobs:
       - name: Build
         run: docker-compose run -T --rm node npm run ${BUILD_ENV}
       - name: Test
-        run: docker-compose exec -T node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:${SELENIUM_BROWSER} --invert --grep  '@optional'
+        run: |
+          docker-compose exec -T node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:${SELENIUM_BROWSER} --invert --grep  '@optional'
+          pwd
+          ls -la codeceptjs/output
+      - name: Test Artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: codeceptjs-output
+          path: tests/codeceptjs/output
+          retention-days: 30
       - name: Test (optional)
         continue-on-error: true
         run: docker-compose exec -T node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:${SELENIUM_BROWSER} --grep '@optional'
-
 
