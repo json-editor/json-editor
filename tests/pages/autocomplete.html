@@ -11,6 +11,8 @@
 <body>
 
 <div class="container">
+  <textarea class="value form-control" rows="10"></textarea>
+  <button class='get-value'>Get Value</button>
   <div class='json-editor-container'></div>
 </div>
 
@@ -57,6 +59,10 @@
   editor.on('change', function () {
     console.log(editor.getValue())
   })
+
+  document.querySelector('.get-value').addEventListener('click', function () {
+    value.value = JSON.stringify(editor.getValue());
+  });
 
 </script>
 
