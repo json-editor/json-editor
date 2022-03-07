@@ -70,7 +70,7 @@ Scenario('should be readonly if specified and not disabled', async (I) => {
 Scenario('should update output when setValue is called', async (I) => {
   I.amOnPage('integer.html');
   I.click('.set-value');
-  I.see('2', '[data-schemapath="root.integer_range"] output');
+  I.retry({ retries: 3, minTimeout: 500 }).see('2', '[data-schemapath="root.integer_range"] output');
 });
 
 Scenario('should validate value', async (I) => {
