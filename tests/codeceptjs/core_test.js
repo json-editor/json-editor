@@ -4,6 +4,11 @@ var assert = require('assert')
 
 Feature('core')
 
+Scenario('should have class je-ready when ready @core @ready', async (I) => {
+  I.amOnPage('ready.html')
+  I.waitForElement('.je-ready')
+})
+
 Scenario('should Disable and enable entire form', async (I) => {
   I.amOnPage('core.html')
   I.seeElement('[data-schemapath="root.name"] input')

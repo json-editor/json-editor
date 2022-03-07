@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Ready</title>
+  <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+  <script src="../../dist/jsoneditor.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <div class='json-editor-container'></div>
+</div>
+
+
+<script>
+  var jsonEditorContainer = document.querySelector('.json-editor-container');
+
+  var schema = {
+    "title": "Test",
+    "type": "object",
+    "properties": {
+      "test": {
+        "title": "test",
+        "type": "string",
+        "default": "lorem ipsum"
+      }
+    }
+  }
+
+  var editor = new JSONEditor(jsonEditorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    use_default_values: false,
+    required_by_default: true,
+    show_errors: 'always'
+  });
+
+</script>
+
+</body>
+</html>

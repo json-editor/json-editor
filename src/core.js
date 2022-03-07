@@ -32,6 +32,7 @@ export class JSONEditor {
     if (!themeClass) throw new Error(`Unknown theme ${themeName}`)
     this.element.setAttribute('data-theme', themeName)
     this.element.classList.add('je-not-loaded')
+    this.element.classList.remove('je-ready')
     // eslint-disable-next-line new-cap
     this.theme = new themeClass(this)
     const rules = extend(styleRules, this.getEditorsRules())
@@ -88,6 +89,7 @@ export class JSONEditor {
     this.root.showValidationErrors(this.validation_results)
     this.ready = true
     this.element.classList.remove('je-not-loaded')
+    this.element.classList.add('je-ready')
 
     /* Fire ready event asynchronously */
     window.requestAnimationFrame(() => {
