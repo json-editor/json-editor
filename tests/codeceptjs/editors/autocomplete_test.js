@@ -11,5 +11,6 @@ Scenario('autocomplete should work @autocomplete', async (I) => {
   I.waitForText('iran', 5, '.autocomplete-result-list')
   I.waitForText('iraq', 5, '.autocomplete-result-list')
   I.click('iraq', '.autocomplete-result:nth-child(2)')
+  I.wait(1)
   assert.equal(await I.grabValueFrom('.value'), '"iraq"')
 })
