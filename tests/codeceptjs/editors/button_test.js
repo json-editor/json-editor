@@ -11,6 +11,7 @@ Scenario('should work with button editor callbacks', async (I) => {
 
 Scenario('should work with option "validated"', async (I) => {
   I.amOnPage('button-callbacks.html');
+  I.waitForElement('.je-ready', 10)
   I.seeElement('[data-schemapath="root.button1"] button');
   I.retry({ retries: 3, minTimeout: 500 }).seeDisabledAttribute('[data-schemapath="root.button2"] button');
 
