@@ -871,6 +871,55 @@ You can enable [Ace editor options](https://github.com/ajaxorg/ace/wiki/Configur
 }
 ```
 
+### Special editors
+
+JSONEditor features specialized types of editors.
+
+#### Button editor
+
+Creates a button whose click callback can be defined in `JSONEditor.defaults.callbacks`. Options:
+
+- `icon`: Renders an icon into the button. Must be supported by the iconLib used.
+- `validated`: With `true` the button is disabled until the whole editor is valid.
+- `action`: the name of the callback that will be invoked when the button is clicked. Callbacks
+            must be defined in `JSONEditor.defaults.callbacks`.
+
+```js
+  JSONEditor.defaults.callbacks = {
+    "button" : {
+      "myAction" : function (jseditor, e) {
+        alert('Button action')
+      }
+    }
+  }
+```
+
+```json
+{
+  "type": "button",
+  "title": "Search",
+  "options": {
+    "button": {
+      "icon": "search",
+      "action": "myAction",
+      "validated": true
+    }
+  }
+}
+```
+
+#### Info editor
+
+Displays a label and a description text. 
+
+```json
+{
+  "type": "info",
+  "title": "Important:",
+  "description": "Lorem ipsum dolor"
+}
+```
+
 #### Booleans
 
 The default boolean editor is a select box with options "true" and "false".  To use a checkbox instead, set the format to `checkbox`.
