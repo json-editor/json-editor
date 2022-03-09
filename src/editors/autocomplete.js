@@ -29,18 +29,19 @@ export class AutocompleteEditor extends StringEditor {
       /* Get options, either global options from "this.defaults.options.autocomplete" or */
       /* single property options from schema "options.autocomplete" */
       options = this.expandCallbacks('autocomplete', extend({}, {
-        search: (jseditor, input) => {
+        search: (jseditor) => {
           // eslint-disable-next-line no-console
           console.log(`No "search" callback defined for autocomplete in property "${jseditor.key}"`)
           return []
+        },
+        onSubmit: () => {
+          this.input.blur()
         },
         baseClass: 'autocomplete'
       }, this.defaults.options.autocomplete || {}, this.options.autocomplete || {}))
 
       this.autocomplete_wrapper.classList.add(options.baseClass)
       this.autocomplete_dropdown.classList.add(`${options.baseClass}-result-list`)
-      /* this.input.classList.add(options.baseClass + '-input'); */
-
       this.autocomplete_instance = new window.Autocomplete(this.autocomplete_wrapper, options)
     }
     super.afterInputReady()
