@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Autocomplete</title>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <script src="https://unpkg.com/@trevoreyre/autocomplete-js"></script>
+    <script src="../../dist/jsoneditor.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <textarea class="value form-control" rows="10"></textarea>
+    <div class='json-editor-container'></div>
+</div>
+
+
+<script>
+  window.addEventListener('load', function () {
+    var jsonEditorContainer = document.querySelector('.json-editor-container')
+    var value = document.querySelector('.value')
+
+    JSONEditor.defaults.callbacks = {
+      'autocomplete': {
+        'search': function (editor, input) {
+          var countries = [
+            'germany',
+            'iran',
+            'iraq',
+            'spain'
+          ]
+
+          if (input.length < 1) { return [] }
+
+          return countries.filter(country => {
+            return country.toLowerCase().startsWith(input.toLowerCase())
+          })
+        }
+      }
+    }
+
+    var schema = {
+      'title': 'Test',
+      'type': 'string',
+      'format': 'autocomplete',
+      'options': {
+        'autocomplete': {
+          'search': 'search',
+          'autoSelect': true
+        }
+      }
+    }
+
+    var editor = new JSONEditor(jsonEditorContainer, {
+      schema: schema,
+      theme: 'bootstrap4',
+      required_by_default: true,
+      show_errors: 'always'
+    })
+
+    editor.on('change', function () {
+      value.value = JSON.stringify(editor.getValue())
+    })
+  })
+</script>
+
+</body>
+</html>
