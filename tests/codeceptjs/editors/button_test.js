@@ -15,9 +15,7 @@ Scenario('should work with option "validated"', async (I) => {
   I.waitForElement('.je-ready', 10)
   I.seeElement('[data-schemapath="root.button1"] button');
   I.retry({ retries: 3, minTimeout: 500 }).seeDisabledAttribute('[data-schemapath="root.button2"] button');
-
   await I.fillField('[name="root[textinput]"]', 'Hello World');
-
   I.pressKey('Tab');
   I.dontSeeDisabledAttribute('[data-schemapath="root.button2"] button');
   I.click('[data-schemapath="root.button2"] button');
@@ -35,4 +33,10 @@ Scenario('should be disabled if "readonly" is specified', async (I) => {
   I.amOnPage('read-only.html');
   I.waitForElement('.je-ready', 10)
   I.seeDisabledAttribute('[data-schemapath="root.button"] button');
+});
+
+Scenario('should set icon @button @button-icon', async (I) => {
+  I.amOnPage('button-icons.html')
+  I.waitForElement('.je-ready', 10)
+  I.waitForElement('i.fas.fa-search', 10)
 });
