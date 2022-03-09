@@ -8,7 +8,7 @@ export class AbstractIconLib {
   }
 
   getIconClass (key) {
-    return this.mapping[key] ? this.icon_prefix + this.mapping[key] : null
+    return this.mapping[key] ? this.icon_prefix + this.mapping[key] : this.icon_prefix + key
   }
 
   getIcon (key) {
