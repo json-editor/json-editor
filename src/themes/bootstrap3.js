@@ -55,6 +55,7 @@ export class bootstrap3Theme extends AbstractTheme {
 
     if (label && (input.type === 'checkbox' || input.type === 'radio')) {
       group.classList.add(input.type)
+      if (infoText) label.appendChild(infoText)
       label.insertBefore(input, label.firstChild)
       group.appendChild(label)
     } else {
