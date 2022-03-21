@@ -49,6 +49,12 @@ export class SchemaLoader {
      */
     this.refs_counter = 1
 
+    /**
+     * @prop {int}
+     *  Counter of how many async schema requests are not finished loading.
+     */
+    this.waiting = 0
+
     this._subSchema1 = {
       /* Version 3 `type` */
       type (schema) {
@@ -135,7 +141,21 @@ export class SchemaLoader {
    */
   async load (schema, fetchUrl, location) {
     this.schema = schema
-    await this._asyncloadExternalRefs(schema, fetchUrl, this._getFileBase(location), true)
+
+    this._asyncloadExternalRefs(schema, fetchUrl, this._getFileBase(location), true)
+
+    // Checks every 100ms to see if all the schemas have been loaded.
+    // There must be a better way to do this, e.g., with callbacks or promises.
+    const delay = ms => {
+      return new Promise(resolve => setTimeout(resolve, ms))
+    }
+    const loop = async () => {
+      while (this.waiting > 0) {
+        await delay(100)
+      }
+    }
+    await loop()
+
     return this.expandRefs(schema)
   }
 
@@ -371,14 +391,12 @@ export class SchemaLoader {
    */
   async _asyncloadExternalRefs (schema, fetchUrl, fileBase, firstIteration = false) {
     const refs = this._getExternalRefs(schema, fetchUrl, firstIteration)
-    let waiting = 0
     // Loop into all schema references
     for (const uri of Object.keys(refs)) {
       if (typeof uri === 'undefined') continue
       if (this.refs[uri]) continue
       if (this._isUniformResourceName(uri)) {
         this.refs[uri] = 'loading'
-        waiting++
         const urnResolver = this.options.urn_resolver
         let urn = uri
         if (typeof urnResolver !== 'function') {
@@ -391,6 +409,7 @@ export class SchemaLoader {
         let response
         try {
           let externalSchema
+          this.waiting++
           response = await urnResolver(urn)
           try {
             externalSchema = JSON.parse(response)
@@ -404,8 +423,9 @@ export class SchemaLoader {
           }
 
           this.refs[uri] = externalSchema
+          this.waiting--
 
-          await this._asyncloadExternalRefs(externalSchema, uri, fileBase)
+          this._asyncloadExternalRefs(externalSchema, uri, fileBase)
         } catch (e) {
           // eslint-disable-next-line no-console
           console.log(e)
@@ -418,47 +438,48 @@ export class SchemaLoader {
         continue
       }
       if (!this.options.ajax) throw new Error(`Must set ajax option to true to load external ref ${uri}`)
-      waiting++
 
       let url = this._joinUrl(uri, fileBase)
-      const response = await new Promise(resolve => {
-        const r = new XMLHttpRequest()
-        if (this.options.ajaxCredentials) r.withCredentials = this.options.ajaxCredentials
-        r.overrideMimeType('application/json')
-        r.open('GET', url, true)
-        r.onload = () => {
-          resolve(r)
-        }
-        r.onerror = (e) => {
-          resolve(undefined)
-        }
-        r.send()
-      })
-      if (typeof response === 'undefined') throw new Error(`Failed to fetch ref via ajax - ${uri}`)
-      let externalSchema
-      try {
-        externalSchema = JSON.parse(response.responseText)
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.log(e)
-        throw new Error(`Failed to parse external ref ${url}`)
-      }
 
-      if (!(typeof externalSchema === 'boolean' || typeof externalSchema === 'object') || externalSchema === null || Array.isArray(externalSchema)) {
-        throw new Error(`External ref does not contain a valid schema - ${url}`)
+      const fetchInitOptions = {
+        method: 'GET'
       }
-      this.refs[uri] = externalSchema
-      const newfileBase = this._getFileBaseFromFileLocation(url)
+      if (this.options.ajaxCredentials) {
+        fetchInitOptions.credentials = 'include'
+      }
+      this.waiting++
+      fetch(url, fetchInitOptions)
+        .then(async response => {
+          let externalSchema
+          try {
+            externalSchema = await response.json()
+          } catch (e) {
+            // eslint-disable-next-line no-console
+            console.error(e)
+            throw new Error(`Failed to parse external ref ${url}`)
+          }
 
-      // Add leading slash.
-      if (url !== uri) {
-        const pathItems = url.split('/')
-        url = (uri.substr(0, 1) === '/' ? '/' : '') + pathItems.pop()
-      }
-      await this._asyncloadExternalRefs(externalSchema, url, newfileBase)
-    }
-    if (!waiting) {
-      return true
+          if (!(typeof externalSchema === 'boolean' || typeof externalSchema === 'object') || externalSchema === null || Array.isArray(externalSchema)) {
+            throw new Error(`External ref does not contain a valid schema - ${url}`)
+          }
+
+          this.refs[uri] = externalSchema
+          this.waiting--
+
+          const newfileBase = this._getFileBaseFromFileLocation(url)
+
+          // Add leading slash.
+          if (url !== uri) {
+            const pathItems = url.split('/')
+            url = (uri.substr(0, 1) === '/' ? '/' : '') + pathItems.pop()
+          }
+          this._asyncloadExternalRefs(externalSchema, url, newfileBase)
+        })
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.error(error)
+          throw new Error(`Failed to fetch ref via ajax - ${uri}`)
+        })
     }
   }
 
