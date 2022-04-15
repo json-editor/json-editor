@@ -158,7 +158,12 @@ export class AbstractEditor {
         }
       })
     } else if (typeof choices === 'object') {
-      if (typeof value !== 'object') {
+      // Checks if the dependency choices include a pattern 
+      let pattern = choices.pattern
+      if(pattern){
+        let regex = new RegExp(pattern)
+        this.dependenciesFulfilled = regex.test(value)
+      } else if (typeof value !== 'object') {
         this.dependenciesFulfilled = choices === value
       } else {
         Object.keys(choices).some(key => {
