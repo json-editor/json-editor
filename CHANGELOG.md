@@ -4,6 +4,7 @@
 - fixed arbitrary JSON pointers not returning the schema at the pointer path
 - Add infoText for enums with format `checkbox` (default)
 - updated `jodit` devDependency (jodit markup changes)
+- Added feature: field dependencies based on user-specified regex pattern
 
 ### 2.6.1
 

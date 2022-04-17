@@ -1283,11 +1283,13 @@ By default paths are from the root of the schema, but you can make the paths rel
 Now, the `full_name` field in each array element will watch the `first_name` and `last_name` fields within the same array element.
 
 
-Another keyword `pattern` tells JSON Editor to display specific fields based on user declared regex patterns. Patterns can be used for validation or in dependency relationships.
+Another keyword `pattern` tells JSON Editor to display specific fields based on a user-specified regex pattern. Patterns can be used for field validation or in dependency relationships.
 
-In the following example, the `ServerName` field has a `pattern` property which validates the value of `Servername` against the `pattern` regex. In other words, `Servername` is only valid if it matches the regex specified in `pattern`. 
+In the following example, the `ServerName` field has a `pattern` property which validates the value of `Servername` against the `pattern` regex. In other words, `Servername` is only valid if it matches the regex pattern. 
 
-In addition to this validation feature, `pattern` can be used in dependency relationships. In the following example, the subsequent `Cloud1` and `Cloud2` fields declare a dependency on the `ServerName` field. `Cloud1` will only be displayed if the value of the `ServerName` matches the regex described by the `pattern` field nested in the corresponding `dependency` field. For instance, if `ServerName` has the value `AA-01`, the `Cloud1` field will be displayed since the value matches the regex described by the corresponding pattern-dependency given. Continuing with this logic, if `ServerName` has the value `BB-01`, then `Cloud2` field will be displayed instead. 
+In addition to this validation feature, `pattern` can be used in dependency relationships. In pattern-based dependencies, the dependent field is only displayed if the dependee field matches the regex pattern. In the following example, the subsequent `Cloud1` and `Cloud2` fields declare a dependency on the `ServerName` field. `Cloud1` will only be displayed if the value of the `ServerName` matches the regex described by the `pattern` field nested in the corresponding `dependency` field. For instance, if `ServerName` has the value `AA-01`, the `Cloud1` field will be displayed since the value matches the regex described by the corresponding pattern-dependency given. Continuing with this logic, if `ServerName` has the value `BB-01`, then `Cloud2` field will be displayed instead. 
+
+Note that the placement of the `pattern` keyword is different for validation and pattern dependencies. For validation, it is placed directly in the field of interest. For pattern dependencies, the pattern is nested inside `options.dependencies`.
 
 
 ```
