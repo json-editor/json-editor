@@ -1335,8 +1335,9 @@ In addition to this validation feature, the subsequent `Cloud1` and `Cloud2` fie
     },
   }
 }
-
 ```
+
+In order to see an example of this pattern-dependency feature check out this [demo](https://json-editor.github.io/json-editor/?data=N4Ig9gDgLglmB2BnEAuUMDGCA2MBGqIAZglAIYDuApomALZUCsIANOHgFZUZQD62ZAJ5gArlELwwAJzplsrEIgwALKrNShYUbFUIAFMlChUp8AAQARKhCrwAJrYyCFUQTcJhO3cWylUAjiIwfnaoANogAMomAG4mAHJkDCAAumwQUpAmsDQaUbEJSbpoIK7uKIpQUjDwAOYuMNrF+VJxUmaJyWwOStXQcPCEnVRmYERmUKpm0a0mChCGxqaEAHoAFACCGwA+AEK7AJQAtGEADEcAnBcpwABMAL4AJApUAB5JEDrIKBFbR6cARgU+yOjGYKXubAAwthRHYgSUtDpCDC4UC2GVmogqjV6t0aBg+rAECjYSI7GYamYAGoAWVpL3gIjo4XA8F0GIoYFSbEgxKQeQcNnsjhguRKMzawzyCyMJkGFXWW2OZ0u1zuTxA921kJAqPJtzySOa+rshoxbixOLqCh6hJg/RJFVNlPMdIZbFszNZkz8HOIoikPPAjoFJSFtgc8AwYu+oElhWSJVlSwVIHW+xV5yuNwezx1OrYiGUYAovBMmSk3xANSWZB4AxcqiTIDwYDAUGxUjIEAALFr7kA===) 
 
 ### Templates
 
