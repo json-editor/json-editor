@@ -1282,6 +1282,62 @@ By default paths are from the root of the schema, but you can make the paths rel
 
 Now, the `full_name` field in each array element will watch the `first_name` and `last_name` fields within the same array element.
 
+
+Another keyword `pattern` tells JSON Editor to display specific fields based on user declared regex patterns.
+
+In the following example, the `ServerName` field has a `pattern` property which validates the value of the `Servername` field against the `pattern` regex.
+
+In addition to this validation feature, the subsequent `Cloud1` and `Cloud2` fields declare a dependency on the `ServerName` field. In the following example, `Cloud1` will only be displayed if the value of the `ServerName` matches the regex described by the `pattern` field nested in the correponding `dependency` field. For instance, if `ServerName` has the value `AA-01`, the `Cloud1` field will be displayed since the value matches the regex described by the correponding pattern-dependency given. Continuing with this logic, if `ServerName` has the value `BB-01`, then `Cloud2` field will be displayed instead. 
+
+```
+{
+  "type": "object",
+  "title": "Pattern Dependency",
+  "required": [
+    "ServerName"
+  ],
+  "properties": {
+    "ServerName": {
+      "type": "string",
+      "title": "Server Name",
+      "description": "Name of the Server",
+      "pattern": "^(AA|BB)-[0-99]{2}$",
+      "examples": [
+        "AA-01",
+        "BB-55"
+      ]
+    },
+    "Cloud1": {
+      "title": "Cloud1",
+      "type": "string",
+      "description": "Cloud in VMM",
+      "enum": ["one", "two"],
+      "options": {
+        "dependencies": {
+          "ServerName": {
+            "pattern": "^(AA)-[0-99]{2}$"
+          }
+        }
+      }
+    },
+    "Cloud2": {
+      "title": "Cloud2",
+      "type": "string",
+      "description": "Cloud in VMM",
+      "enum": ["three", "four"],
+      "options": {
+        "dependencies": {
+          "ServerName": {
+            "pattern": "^(BB)-[0-99]{2}$"
+          }
+        }
+      }
+    },
+  }
+}
+
+```
+
 ### Templates
 
 Watching fields by itself doesn't do anything.  For the example above, you need to tell JSON Editor that `full_name` should be `fname [space] lname`.
