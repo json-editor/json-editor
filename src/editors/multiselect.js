@@ -76,7 +76,7 @@ export class MultiSelectEditor extends AbstractEditor {
           const infoButton = this.theme.getInfoButton(this.translateProperty(this.option_enum[i].infoText))
           label.appendChild(infoButton)
         }
-        this.controls[this.option_keys[i]] = this.theme.getFormControl(label, this.inputs[this.option_keys[i]])
+        this.controls['_' + this.option_keys[i]] = this.theme.getFormControl(label, this.inputs[this.option_keys[i]])
       }
 
       this.control = this.theme.getMultiCheckboxHolder(this.controls, this.label, this.description, this.infoButton)
