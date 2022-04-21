@@ -158,7 +158,7 @@ export class AbstractEditor {
         }
       })
     } else if (typeof choices === 'object') {
-      // Checks if the dependency choices include a pattern 
+      // Checks if the dependency choices include a pattern
       const pattern = choices.pattern
       if (pattern) {
         const regex = new RegExp(pattern)
