@@ -1,5 +1,24 @@
 ### Unreleased
 
+### 2.7.0
+
+- Fixed array uniqueItems sorting bug
+- Configurable icons for type button editors
+- Fixed autocomplete options rendering
+- Editor gets .je-ready class when ready
+- Regenerate unique UUID when copying arrays
+- Added infoText for checkbox on "Spectre" and "Bootstrap 3" Themes
+- Added configurable error messages at editor schema level feature
+- Added form submission case study and linked it in the readme
+- Fixed range output value rendering
+- Added automated test for references
+- Added SimpleMDE test page
+- JSON pointers support for definitions
+- Added infoText for multiselect enum
+- Updated packages and fixed npm audits
+- Using latest jquery in docs to resolve vulnerabilities
+- fixed bug in upload editor
+- Updated release-motes.md
 - Added feature: override error messages in schema options
 - fixed arbitrary JSON pointers not returning the schema at the pointer path
 - Add infoText for enums with format `checkbox` (default)
