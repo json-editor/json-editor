@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Use name attributes</title>
+  <script src="../../dist/jsoneditor.js"></script>
+</head>
+<body>
+  <div class='container'></div>
+  <script>
+    var schema = {
+      "type": "object",
+      "title": "root",
+      "properties": {
+        "booleans": {
+          "type": "object",
+          "title": "booleans",
+          "properties": {
+            "boolean": {
+              "type": "boolean",
+              "title": "default"
+            },
+            "boolean-enum": {
+              "type": "boolean",
+              "title": "boolean enum select",
+              "format": "select",
+              "options": {
+                "enum_titles": [
+                  "No",
+                  "Yes"
+                ]
+              }
+            },
+            "boolean-enum-radio": {
+              "type": "boolean",
+              "title": "boolean enum radio",
+              "format": "radio",
+              "options": {
+                "enum_titles": [
+                  "No",
+                  "Yes"
+                ]
+              }
+            }
+          }
+        },
+        "strings": {
+          "type": "object",
+          "title": "strings",
+          "properties": {
+            "string": {
+              "type": "string",
+              "title": "default"
+            },
+            "string-enum": {
+              "type": "string",
+              "title": "string enum select",
+              "enum": [
+                "albert",
+                "betti",
+                "carl"
+              ],
+              "options": {
+                "enum_titles": [
+                  "Albert",
+                  "Betti",
+                  "Carl"
+                ]
+              }
+            },
+            "string-radio": {
+              "type": "string",
+              "title": "string enum radio",
+              "format": "radio",
+              "enum": [
+                "albert",
+                "betti",
+                "carl"
+              ],
+              "options": {
+                "enum_titles": [
+                  "Albert",
+                  "Betti",
+                  "Carl"
+                ]
+              }
+            }
+          }
+        },
+        "numbers": {
+          "type": "object",
+          "title": "numbers",
+          "properties": {
+            "number": {
+              "type": "number",
+              "title": "number"
+            },
+            "number-enum": {
+              "type": "number",
+              "title": "number enum select",
+              "enum": [
+                1.5,
+                2.5,
+                3.5
+              ],
+              "options": {
+                "enum_titles": [
+                  "small (1.5)",
+                  "medium (2.5)",
+                  "big (3.5)"
+                ]
+              }
+            },
+            "number-enum-radio": {
+              "type": "number",
+              "title": "number enum radio",
+              "format": "radio",
+              "enum": [
+                1.5,
+                2.5,
+                3.5
+              ],
+              "options": {
+                "enum_titles": [
+                  "small (1.5)",
+                  "medium (2.5)",
+                  "big (3.5)"
+                ]
+              }
+            }
+          }
+        },
+        "integers": {
+          "type": "object",
+          "title": "integers",
+          "properties": {
+            "integer": {
+              "type": "integer",
+              "title": "integer"
+            },
+            "integer-enum": {
+              "type": "integer",
+              "title": "integer enum select",
+              "enum": [
+                1,
+                2,
+                3
+              ],
+              "options": {
+                "enum_titles": [
+                  "small (1)",
+                  "medium (2)",
+                  "big (3)"
+                ]
+              }
+            },
+            "integer-enum-radio": {
+              "type": "number",
+              "title": "integer enum radio",
+              "format": "radio",
+              "enum": [
+                1,
+                2,
+                3
+              ],
+              "options": {
+                "enum_titles": [
+                  "small (1.5)",
+                  "medium (2.5)",
+                  "big (3.5)"
+                ]
+              }
+            }
+          }
+        },
+        "arrays": {
+          "type": "object",
+          "title": "arrays",
+          "properties": {
+            "string-array": {
+              "type": "array",
+              "title": "strings color",
+              "default": [
+                "#6d80dd",
+                "#b80f0f",
+                "#280606"
+              ],
+              "items": {
+                "type": "string",
+                "title": "color",
+                "format": "color"
+              }
+            }
+          }
+        }
+      }
+    }
+
+
+    var editor = new JSONEditor(document.querySelector('.container'), {
+      use_name_attributes: false,
+      schema: schema
+    })
+  </script>
+</body>
+</html>
