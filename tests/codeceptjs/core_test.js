@@ -7,7 +7,6 @@ Feature('core')
 Scenario('should not set inputs name attributes @use-name-attributes', async (I) => {
   I.amOnPage('use-name-attributes.html')
   I.waitForElement('.je-ready')
-  pause()
   I.dontSeeElement('[name]')
 })
 
