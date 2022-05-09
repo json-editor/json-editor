@@ -1,5 +1,9 @@
 ### Unreleased
 
+### 2.7.1
+
+- Added feature: use_name_attributes option
+
 ### 2.7.0
 
 - Fixed array uniqueItems sorting bug
