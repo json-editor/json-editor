@@ -1,6 +1,6 @@
 ### Unreleased
 
-### 2.7.1
+### 2.8.0
 
 - Added feature: use_name_attributes option
 
