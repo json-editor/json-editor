@@ -8,59 +8,145 @@
 <body>
 <div class="container">
     <p>
-        The form is set to send a POST request to the same page (<code>action="" method="post"</code>).
+        The form is set to send a <code>GET</code> request to the same page.
         A change event listener has been added to the editor so that whenever the form changes, the editor value
         is stored in a hidden input using <code>JSON.stringify()</code>.
     </p>
+
+    <p>
+        The option <code>use_name_attributes</code> was set to <code>false</code>
+        to avoid sending the other field with the request.
+    </p>
     <p>
         When the form is submitted only the hidden input is sent in the request.
-        By doing so, it is possible to send different types of data structures like arrays and object.
+        This allows to send data structures like arrays and object.
         Also the same schema that is used to build the form can be used as parameter to backend json validators tools.
         Try yourself, submit the form and look in the network tab of the developer tool.
     </p>
     <div class="form-group"></div>
-    <form action="" method="post">
+    <form action="/docs/form-submission.html" method="get">
         <input id="input" type="hidden" name="json">
         <div id='editor-container'></div>
         <input id="submit" class="btn btn-primary" width="100" type="submit">
     </form>
+    <br>
+    <h2>Get params</h2>
+    <pre id="get-params"></pre>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
 <script>
+  var params = {}
+  for (const [key, value] of new URLSearchParams(window.location.search).entries()) {
+    params[key] = value
+    console.log(key, value)
+  }
+  document.querySelector('#get-params').textContent = JSON.stringify(params, null, 2)
   var config = {
+    use_name_attributes: false,
     theme: 'bootstrap4',
     disable_edit_json: true,
     disable_properties: true,
     disable_collapse: true,
-    startval: {
-      name: 'Peter Griffin',
-      pets: [
-        { name: 'Kitty' },
-        { name: 'Brian' }
-      ]
-    },
     schema: {
-      type: 'object',
-      title: 'Person',
-      properties: {
-        name: {
-          type: 'string',
-          title: 'Name'
+      'title': 'Person',
+      'type': 'object',
+      'required': [
+        'name',
+        'age',
+        'date',
+        'favorite_color',
+        'gender',
+        'location',
+        'pets'
+      ],
+      'properties': {
+        'name': {
+          'type': 'string',
+          'description': 'First and Last name',
+          'minLength': 4,
+          'default': 'Jeremy Dorn'
         },
-        pets: {
-          type: 'array',
-          title: 'Pets',
-          format: 'tabs',
-          items: {
-            type: 'object',
-            title: 'pet',
-            properties: {
-              name: {
-                type: 'string',
-                title: 'Name'
+        'age': {
+          'type': 'integer',
+          'default': 25,
+          'minimum': 18,
+          'maximum': 99
+        },
+        'favorite_color': {
+          'type': 'string',
+          'format': 'color',
+          'title': 'favorite color',
+          'default': '#ffa500'
+        },
+        'gender': {
+          'type': 'string',
+          'enum': [
+            'male',
+            'female',
+            'other'
+          ]
+        },
+        'date': {
+          'type': 'string',
+          'format': 'date',
+          'options': {
+            'flatpickr': {}
+          }
+        },
+        'location': {
+          'type': 'object',
+          'title': 'Location',
+          'properties': {
+            'city': {
+              'type': 'string',
+              'default': 'San Francisco'
+            },
+            'state': {
+              'type': 'string',
+              'default': 'CA'
+            },
+            'citystate': {
+              'type': 'string',
+              'description': 'This is generated automatically from the previous two fields',
+              'template': '{{city}}, {{state}}',
+              'watch': {
+                'city': 'location.city',
+                'state': 'location.state'
               }
             }
           }
+        },
+        'pets': {
+          'type': 'array',
+          'format': 'table',
+          'title': 'Pets',
+          'uniqueItems': true,
+          'items': {
+            'type': 'object',
+            'title': 'Pet',
+            'properties': {
+              'type': {
+                'type': 'string',
+                'enum': [
+                  'cat',
+                  'dog',
+                  'bird',
+                  'reptile',
+                  'other'
+                ],
+                'default': 'dog'
+              },
+              'name': {
+                'type': 'string'
+              }
+            }
+          },
+          'default': [
+            {
+              'type': 'dog',
+              'name': 'Walter'
+            }
+          ]
         }
       }
     }

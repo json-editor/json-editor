@@ -4,6 +4,13 @@ var assert = require('assert')
 
 Feature('core')
 
+Scenario('should not set inputs name attributes @use-name-attributes', async (I) => {
+  I.amOnPage('use-name-attributes.html')
+  I.waitForElement('.je-ready')
+  pause()
+  I.dontSeeElement('[name]')
+})
+
 Scenario('should have class je-ready when ready @core @ready', async (I) => {
   I.amOnPage('ready.html')
   I.waitForElement('.je-ready')

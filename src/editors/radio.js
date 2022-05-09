@@ -29,11 +29,16 @@ export class RadioEditor extends SelectEditor {
 
     for (let i = 0; i < this.enum_values.length; i++) {
       /* form radio elements */
-      this.input = this.theme.getFormRadio({
-        name: this.formname,
+      const attributes = {
         id: `${this.formname}[${i}]`,
         value: this.enum_values[i]
-      })
+      }
+
+      if (this.jsoneditor.options.use_name_attributes) {
+        attributes.name = this.formname
+      }
+
+      this.input = this.theme.getFormRadio(attributes)
 
       /* Set custom attributes on input element. Parameter is array of protected keys. Empty array if none. */
       this.setInputAttributes(['id', 'value', 'name'])
