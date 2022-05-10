@@ -245,6 +245,7 @@ Scenario('should load internal schema definitions, external schema definitions a
 
 Scenario('should override error messages if specified in schema options @core @errors-messages', async (I) => {
   I.amOnPage('error-messages.html')
+  I.waitForElement('.je-ready')
   I.waitForText('Error Messages')
 
   I.waitForText('CUSTOM EN: Value required')
