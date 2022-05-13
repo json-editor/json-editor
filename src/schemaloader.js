@@ -421,27 +421,40 @@ export class SchemaLoader {
       waiting++
 
       let url = this._joinUrl(uri, fileBase)
-      const response = await new Promise(resolve => {
-        const r = new XMLHttpRequest()
-        if (this.options.ajaxCredentials) r.withCredentials = this.options.ajaxCredentials
-        r.overrideMimeType('application/json')
-        r.open('GET', url, true)
-        r.onload = () => {
-          resolve(r)
-        }
-        r.onerror = (e) => {
-          resolve(undefined)
-        }
-        r.send()
-      })
-      if (typeof response === 'undefined') throw new Error(`Failed to fetch ref via ajax - ${uri}`)
+
       let externalSchema
-      try {
-        externalSchema = JSON.parse(response.responseText)
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.log(e)
-        throw new Error(`Failed to parse external ref ${url}`)
+      if (this.options.ajax_cache_responses) {
+        const schemaFromCache = this.cacheGet(url)
+        if (schemaFromCache) {
+          externalSchema = schemaFromCache
+        }
+      }
+
+      if (!externalSchema) {
+        const response = await new Promise(resolve => {
+          const r = new XMLHttpRequest()
+          if (this.options.ajaxCredentials) r.withCredentials = this.options.ajaxCredentials
+          r.overrideMimeType('application/json')
+          r.open('GET', url, true)
+          r.onload = () => {
+            resolve(r)
+          }
+          r.onerror = (e) => {
+            resolve(undefined)
+          }
+          r.send()
+        })
+        if (typeof response === 'undefined') throw new Error(`Failed to fetch ref via ajax - ${uri}`)
+        try {
+          externalSchema = JSON.parse(response.responseText)
+          if (this.options.ajax_cache_responses) {
+            this.cacheSet(url, externalSchema)
+          }
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.log(e)
+          throw new Error(`Failed to parse external ref ${url}`)
+        }
       }
 
       if (!(typeof externalSchema === 'boolean' || typeof externalSchema === 'object') || externalSchema === null || Array.isArray(externalSchema)) {
@@ -527,5 +540,85 @@ export class SchemaLoader {
       }
     })
     return extended
+  }
+
+  /**
+   * Gets a cache key namespaced for JSON Editor.
+   *
+   * @param {*} key
+   *   The schema's key, e.g., URL.
+   * @returns {string}
+   *   A namespaced cache key, by prefixing "je-cache::".
+   */
+  getCacheKey (key) {
+    return ['je-cache', key].join('::')
+  }
+
+  /**
+   * Returns the schema cache buster from JSON Editor settings.
+   *
+   * @returns {string}
+   *   The configured cache buster, if any. Otherwise, returns the current date
+   *   in ISO 8601 simplified format (e.g., 2011-10-05 for October 5, 2011).
+   */
+  getCacheBuster () {
+    return this.options.ajax_cache_buster || new Date().toISOString().slice(0, 10)
+  }
+
+  /**
+   * Sets a schema into localStorage cache.
+   *
+   * @param {string} key
+   *   The schema's key, e.g., URL.
+   * @param {mixed} data
+   *   The schema to store. Can be any data type.
+   */
+  cacheSet (key, data) {
+    try {
+      window.localStorage.setItem(this.getCacheKey(key), JSON.stringify({
+        cacheBuster: this.getCacheBuster(),
+        schema: data
+      }))
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e)
+    }
+  }
+
+  /**
+   * Fetches a schema from localStorage cache.
+   *
+   * @param {string} key
+   *   The schema's key, e.g., URL.
+   *
+   * @returns {mixed}
+   *   If found, returns the schema.
+   */
+  cacheGet (key) {
+    try {
+      const resultRaw = window.localStorage.getItem(this.getCacheKey(key))
+      if (resultRaw) {
+        const resultDecoded = JSON.parse(resultRaw)
+        if (resultDecoded.cacheBuster && resultDecoded.schema) {
+          if (resultDecoded.cacheBuster === this.getCacheBuster()) {
+            return resultDecoded.schema
+          }
+        }
+        this.cacheDelete(key)
+      }
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e)
+    }
+  }
+
+  /**
+   * Deletes a schema from localStorage cache.
+   *
+   * @param {string} key
+   *   The schema's key, e.g., URL.
+   */
+  cacheDelete (key) {
+    window.localStorage.removeItem(this.getCacheKey(key))
   }
 }
