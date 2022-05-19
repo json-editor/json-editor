@@ -80,7 +80,7 @@ describe('SchemaLoader', () => {
   })
 
   describe('when external absolute ref exists', () => {
-    it('should set oprion { ajax: true }', async () => {
+    it('should set option { ajax: true }', async () => {
       const response = {
         type: 'string',
         minLength: 4
@@ -116,8 +116,9 @@ describe('SchemaLoader', () => {
     })
   })
 
+  // @TODO Add a caching test.
   describe('when external relative $ref exists', () => {
-    it('should set oprion { ajax: true }', async () => {
+    it('should set option { ajax: true }', async () => {
       const response = {
         type: 'string',
         minLength: 4

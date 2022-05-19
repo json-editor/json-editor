@@ -5,7 +5,7 @@ exports.config = {
   helpers: {
     Puppeteer: {
       browser: 'chrome',
-      url: 'localhost:9001/tests/pages/',
+      url: '127.0.0.1:9001/tests/pages/',
       show: true,
       disableScreenshots: false,
       waitForNavigation: 'networkidle0',
