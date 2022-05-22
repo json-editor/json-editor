@@ -16,70 +16,6 @@
 
 <script>
   var jsonEditorContainer = document.querySelector('.json-editor-container');
-  var easyExampleSchema = {
-  "title": "Easy to Understand Dependency Example",
-  "type": "object",
-  "properties": {
-    "Animal": {
-      "title": "Pick an animal",
-      "type": "string",
-      "default": "Dog"
-    },
-    "depender1": {
-      "title": "Type of dog",
-      "type": "string",
-      "enum": ["Labrador","Poodle"],
-      "options": {
-        "dependencies": {
-          "Animal": "Dog"
-        }
-      }
-    },
-    "depender2": {
-      "title": "Type of cat",
-      "type": "string",
-      "enum": ["Siamese", "Persian"],
-      "options": {
-        "dependencies": {
-          "Animal": "Cat"
-        }
-      }
-    }
-  }
-}
-  
-  var depSchema = {
-  "title": "An object",
-  "type": "object",
-  "properties": {
-    "fieldOne": {
-      "title": "I should be changed to 'foo'",
-      "type": "string",
-      "enum": ["foo","bar"],
-      "default": "bar"
-    },
-    "depender1": {
-      "title": "I depend on fieldOne to be 'foo'",
-      "type": "string",
-      "enum": ["lorem","ipsum"],
-      "options": {
-        "dependencies": {
-          "fieldOne": "foo"
-        }
-      }
-    },
-    "depender2": {
-      "title": "I depend on fieldOne to be 'bar'",
-      "type": "string",
-      "enum": ["dolor", "sit"],
-      "options": {
-        "dependencies": {
-          "fieldOne": "bar"
-        }
-      }
-    }
-  }
-}
   var schema = {
   "type": "object",
   "title": "Pattern Dependency",
@@ -90,7 +26,7 @@
     "How To Use": {
       "type": "info",
       "title": "This page demonstrates how to use regex pattern dependencies in JSON Editor.",
-      "description": "Enter the name of the server in the regex format ^(AA|BB|CC)-[0-99]{2}$ (if you're unfamiliar with regex, that just means the server name must start with \"AA\", \"BB\", or \"CC\", then be followed by a hyphen, and end with two digits.) If the server starts with \"AA\" the field Cloud1 will appear. If it starts with \"BB\" Cloud2 appears. And if it starts with \"CC\" Cloud3 appears."
+      "description": "Enter the name of the server in the regex format ^(AA|BB|CC)-[0-99]{2}$ (if you're unfamiliar with regex, that just means the server name must start with \"AA\", \"BB\", or \"CC\", then be followed by a hyphen, and end with two digits.) If the server starts with \"AA\" the field Cloud 1 will appear. If it starts with \"BB\" Cloud 2 appears. And if it starts with \"CC\" Cloud 3 appears."
     },
     "ServerName": {
       "type": "string",
