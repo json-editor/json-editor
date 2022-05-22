@@ -295,6 +295,11 @@ Here are all the available options:
     <td>A callback function to resolve an undefined Uniform Resource Name (URN) for <code>$ref</code>. The function receives a URN and callback to pass back a serialized JSON response. The function should return a boolean (true if the URN can be resolved; false otherwise).</td>
     <td><code>false</code></td>
   </tr>
+  <tr>
+    <td>use_name_attributes</td>
+    <td>If <code>true</code>, control inputs <code>name</code> attributes will be set.</td>
+    <td><code>true</code></td>
+  </tr>
   </tbody>
 </table>
 

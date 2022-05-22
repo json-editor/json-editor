@@ -381,6 +381,7 @@ function translateProperty (text, variables) {
 /* Default options when initializing JSON Editor */
 const options = {
   upload,
+  use_name_attributes: true,
   prompt_before_delete: true,
   use_default_values: true,
   max_depth: 0

@@ -20,7 +20,9 @@ export class SignatureEditor extends StringEditor {
 
       /* Create canvas for signature pad */
       const canvas = document.createElement('canvas')
-      canvas.setAttribute('name', formname)
+      if (this.jsoneditor.options.use_name_attributes) {
+        canvas.setAttribute('name', formname)
+      }
       canvas.classList.add('signature')
       signatureContainer.appendChild(canvas)
 
