@@ -7,7 +7,7 @@
   },
   "helpers": {
     "WebDriver": {
-      "url": "http://127.0.0.1:9001/tests/pages/",
+      "url": "http://node:9001/tests/pages/",
       "browser": "firefox",
       "restart": false,
       "host": "firefox",
@@ -31,7 +31,7 @@
       "browsers": [
         "firefox",
         {
-          "url": "http://127.0.0.1:9001/tests/pages/",
+          "url": "http://node:9001/tests/pages/",
           "browser": "chrome",
           "host": "chrome",
           "restart": false

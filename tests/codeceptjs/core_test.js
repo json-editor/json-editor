@@ -228,7 +228,7 @@ Scenario('should validate against oneOf schemas and display single oneOf and edi
 })
 
 Scenario('should load internal schema definitions, external schema definitions and external schema properties @core @references', async (I) => {
-  I.amOnPage('http://127.0.0.1:9001/tests/pages/references.html')
+  I.amOnPage('references.html')
   I.waitForText('References JSON Editor Example')
 
   // internal schema definitions
@@ -251,7 +251,7 @@ Scenario('should load internal schema definitions, external schema definitions a
   const currentUrl = await I.grabCurrentUrl()
   const currentPath = currentUrl.replace('references.html', '')
 
-  // Ensures each external schema is cached.
+  // Ensures that external schemas were stored in cache. (This does not assert that the loader actually fetched them from cache.)
   const schemaPaths = [
     '../fixtures/string.json',
     '../fixtures/definitions.json',
@@ -268,7 +268,6 @@ Scenario('should load internal schema definitions, external schema definitions a
     assert.equal(itemDecoded.cacheBuster, 'abc123');
     assert(itemDecoded, 'Cached schema found');
   }
-  // pause();
 })
 
 Scenario('should override error messages if specified in schema options @core @errors-messages', async (I) => {
