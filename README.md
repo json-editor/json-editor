@@ -18,6 +18,64 @@ Check out an interactive demo: https://json-editor.github.io/json-editor/
 
 Or the JSON-Editor Interactive Playground: https://pmk65.github.io/jedemov2/dist/demo.html
 
+# Table of Contents
+- [Install](#install)
+- [Requirements](#requirements)
+    - [Optional Requirements](#optional-requirements)
+- [Usage](#usage)
+    - [Initialize](#initialize)
+        - [Options](#options)
+    - [Get/Set Value](#getset-value)
+    - [Validate](#validate)
+    - [Listen for Changes](#listen-for-changes)
+    - [Enable and Disable the Editor](#enable-and-disable-the-editor)
+    - [Destroy](#destroy)
+- [CSS Integration](#css-integration)
+    - [Icon Libraries](#icon-libraries)
+
+<details><summary>Show Full Table</summary>  
+    
+    
+- [JSON Schema Support](#json-schema-support)
+    - [$ref and definitions](#ref-and-definitions)
+    - [hyper-schema links](#hyper-schema-links)
+    - [Property Ordering](#property-ordering)
+    - [Default Properties](#default-properties)
+    - [format](#format)
+        - [String Editors Input Attributes](#string-editors-input-attributes)
+        - [Specialized String Editors](#specialized-string-editors)
+- [Special editors](#special-editors)
+  - [Button editor](#button-editor)
+  - [Info editor](#info-editor)
+  - [Booleans](#booleans)
+  - [Arrays](#arrays)
+  - [Array events](#array-events)
+  - [Objects](#objects)
+- [Editor Options](#editor-options)
+- [InfoText](#infotext)
+- [Enum options](#enum-options)
+- [Dependencies](#dependencies)
+- [Templates](#templates)
+- [Enum Values](#enum-values)
+  - [JavaScript callbacks](#javascript-callbacks)
+  - [Sorting](#sorting)
+- [Dynamic Headers](#dynamic-headers)
+- [Custom Template Engines](#custom-template-engines)
+- [Language and String Customization](#language-and-string-customization)
+- [Button Customization](#button-customization)
+- [Custom Editor Interfaces](#custom-editor-interfaces)
+- [Custom Validation](#custom-validation)
+- [Override Editors Methods](#override-editors-methods)
+- [Support Legacy Browser (not tested)](#support-legacy-browser-not-tested)  
+        
+
+    
+</details>
+        
+
+
+
+
 Install
 -----------------
 
