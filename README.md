@@ -886,8 +886,10 @@ Creates a button whose click callback can be defined in `JSONEditor.defaults.cal
 
 - `icon`: Renders an icon into the button. Must be supported by the iconLib used.
 - `validated`: With `true` the button is disabled until the whole editor is valid.
-- `action`: the name of the callback that will be invoked when the button is clicked. Callbacks
-            must be defined in `JSONEditor.defaults.callbacks`.
+- `action`: the name of the callback that will be invoked when the button is clicked.
+
+> **Warning**
+> For the form to render properly all callbacks used in `action`s must also be defined in `JSONEditor.defaults.callbacks`.
 
 ```js
   JSONEditor.defaults.callbacks = {
