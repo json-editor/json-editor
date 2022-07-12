@@ -889,7 +889,7 @@ Creates a button whose click callback can be defined in `JSONEditor.defaults.cal
 - `action`: the name of the callback that will be invoked when the button is clicked.
 
 > **Warning**
-> For the form to render properly callbacks must be defined in `JSONEditor.defaults.callbacks`.
+> For the form to render properly all callbacks used in `action`s must also be defined in `JSONEditor.defaults.callbacks`.
 
 ```js
   JSONEditor.defaults.callbacks = {
