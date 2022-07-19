@@ -1289,6 +1289,66 @@ By default paths are from the root of the schema, but you can make the paths rel
 
 Now, the `full_name` field in each array element will watch the `first_name` and `last_name` fields within the same array element.
 
+
+Another keyword `pattern` tells JSON Editor to display specific fields based on a user-specified regex pattern. Patterns can be used for field validation or in dependency relationships.
+
+In the following example, the `ServerName` field has a `pattern` property which validates the value of `Servername` against the `pattern` regex. In other words, `Servername` is only valid if it matches the regex pattern. 
+
+In addition to this validation feature, `pattern` can be used in dependency relationships. In pattern-based dependencies, the dependent field is only displayed if the dependee field matches the regex pattern. In the following example, the subsequent `Cloud1` and `Cloud2` fields declare a dependency on the `ServerName` field. `Cloud1` will only be displayed if the value of the `ServerName` matches the regex described by the `pattern` field nested in the corresponding `dependency` field. For instance, if `ServerName` has the value `AA-01`, the `Cloud1` field will be displayed since the value matches the regex described by the corresponding pattern-dependency given. Continuing with this logic, if `ServerName` has the value `BB-01`, then `Cloud2` field will be displayed instead. 
+
+Note that the placement of the `pattern` keyword is different for validation and pattern dependencies. For validation, it is placed directly in the field of interest. For pattern dependencies, the pattern is nested inside `options.dependencies`.
+
+
+```
+{
+  "type": "object",
+  "title": "Pattern Dependency",
+  "required": [
+    "ServerName"
+  ],
+  "properties": {
+    "ServerName": {
+      "type": "string",
+      "title": "Server Name",
+      "description": "Name of the Server",
+      "pattern": "^(AA|BB)-[0-99]{2}$",
+      "examples": [
+        "AA-01",
+        "BB-55"
+      ]
+    },
+    "Cloud1": {
+      "title": "Cloud1",
+      "type": "string",
+      "description": "Cloud in VMM",
+      "enum": ["one", "two"],
+      "options": {
+        "dependencies": {
+          "ServerName": {
+            "pattern": "^(AA)-[0-99]{2}$"
+          }
+        }
+      }
+    },
+    "Cloud2": {
+      "title": "Cloud2",
+      "type": "string",
+      "description": "Cloud in VMM",
+      "enum": ["three", "four"],
+      "options": {
+        "dependencies": {
+          "ServerName": {
+            "pattern": "^(BB)-[0-99]{2}$"
+          }
+        }
+      }
+    },
+  }
+}
+```
+
+In order to see an example of this pattern-dependency feature, check out this [demo](https://json-editor.github.io/json-editor/?data=N4Ig9gDgLglmB2BnEAuUMDGCA2MBGqIAZglAIYDuApomALZUCsIANOHgFZUZQD62ZAJ5gArlELwwAJzplsrEIgwALKrNShYUbFUIAFMlChUp8AAQARKhCrwAJrYyCFUQTcJhO3cWylUAjiIwfnaoANogAMomAG4mAHJkDCAAumwQUpAmsDQaUbEJSbpoIK7uKIpQUjDwAOYuMNrF+VJxUmaJyWwOStXQcPCEnVRmYERmUKpm0a0mChCGxqaEAHoAFACCGwA+AEK7AJQAtGEADEcAnBcpwABMAL4AJApUAB5JEDrIKBFbR6cARgU+yOjGYKXubAAwthRHYgSUtDpCDC4UC2GVmogqjV6t0aBg+rAECjYSI7GYamYAGoAWVpL3gIjo4XA8F0GIoYFSbEgxKQeQcNnsjhguRKMzawzyCyMJkGFXWW2OZ0u1zuTxA921kJAqPJtzySOa+rshoxbixOLqCh6hJg/RJFVNlPMdIZbFszNZkz8HOIoikPPAjoFJSFtgc8AwYu+oElhWSJVlSwVIHW+xV5yuNwezx1OrYiGUYAovBMmSk3xANSWZB4AxcqiTIDwYDAUGxUjIEAALFr7kA===) 
+
 ### Templates
 
 Watching fields by itself doesn't do anything.  For the example above, you need to tell JSON Editor that `full_name` should be `fname [space] lname`.

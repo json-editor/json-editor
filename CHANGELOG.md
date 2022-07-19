@@ -1,5 +1,7 @@
 ### Unreleased
 
+- Added feature: field dependencies based on user-specified regex pattern
+
 ### 2.8.0
 
 - Added feature: use_name_attributes option
