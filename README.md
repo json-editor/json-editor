@@ -140,6 +140,16 @@ Here are all the available options:
     <td><code>false</code></td>
   </tr>
   <tr>
+    <td>ajax_cache_responses</td>
+    <td>If <code>true</code>, JSON Editor will cache external URLs' schemas in <code>localStorage</code> to avoid subsequent ajax calls.</td>
+    <td><code>false</code></td>
+  </tr>
+  <tr>
+    <td>ajax_cache_buster</td>
+    <td>If <code>ajax_cache_responses</code> is enabled, use this string to invalidate stale caches. E.g., this value should be changed when schemas are updated.</td>
+    <td>Current date in simplied ISO-8601 format (e.g., "2011-10-05" for October 5, 2011).</td>
+  </tr>
+  <tr>
     <td>compact</td>
     <td>If <code>true</code>, the label will not be displayed/added.</td>
     <td><code>false</code></td>

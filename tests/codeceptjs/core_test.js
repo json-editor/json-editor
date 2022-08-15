@@ -247,6 +247,27 @@ Scenario('should load internal schema definitions, external schema definitions a
 
   // external schema properties
   I.waitForElement('[data-schemapath="root.link.street_address"]')
+
+  const currentUrl = await I.grabCurrentUrl()
+  const currentPath = currentUrl.replace('references.html', '')
+
+  // Ensures that external schemas were stored in cache. (This does not assert that the loader actually fetched them from cache.)
+  const schemaPaths = [
+    '../fixtures/string.json',
+    '../fixtures/definitions.json',
+    '../fixtures/basic_person.json',
+    '../fixtures/person.json',
+  ]
+  for (const path of schemaPaths) {
+    let key = 'je-cache::' + currentPath + path;
+
+    const item = await I.executeScript(function (storageKey) {
+      return window.localStorage.getItem(storageKey);
+    }, key)
+    const itemDecoded = JSON.parse(item)
+    assert.equal(itemDecoded.cacheBuster, 'abc123');
+    assert(itemDecoded, 'Cached schema found');
+  }
 })
 
 Scenario('should override error messages if specified in schema options @core @errors-messages', async (I) => {
