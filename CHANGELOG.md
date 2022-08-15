@@ -1,5 +1,9 @@
 ### Unreleased
 
+### dev
+
+- Enh #1162 Added cache system for schema loader (chhill-redhat)
+
 ### 2.8.0
 
 - Added feature: use_name_attributes option
