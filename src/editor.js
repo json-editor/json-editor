@@ -184,6 +184,7 @@ export class AbstractEditor {
 
   setContainer (container) {
     this.container = container
+    this.setContainerAttributes()
     if (this.schema.id) this.container.setAttribute('data-schemaid', this.schema.id)
     if (this.schema.type && typeof this.schema.type === 'string') this.container.setAttribute('data-schematype', this.schema.type)
     this.container.setAttribute('data-schemapath', this.path)
@@ -681,6 +682,18 @@ export class AbstractEditor {
       Object.keys(inputAttributes).forEach(key => {
         if (!protectedAttributes.includes(key.toLowerCase())) {
           this.input.setAttribute(key, inputAttributes[key])
+        }
+      })
+    }
+  }
+
+  setContainerAttributes () {
+    if (this.schema.options && this.schema.options.containerAttributes) {
+      const containerAttributes = this.schema.options.containerAttributes
+      const protectedAttributes = ['data-schemapath', 'data-schematype', 'data-schemaid']
+      Object.keys(containerAttributes).forEach(key => {
+        if (!protectedAttributes.includes(key.toLowerCase())) {
+          this.container.setAttribute(key, containerAttributes[key])
         }
       })
     }

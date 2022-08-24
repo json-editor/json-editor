@@ -4,6 +4,15 @@ var assert = require('assert')
 
 Feature('core')
 
+Scenario('should set container attributes @container-attributes', async (I) => {
+  I.amOnPage('container-attributes.html')
+  I.waitForElement('.je-ready')
+  I.waitForElement('.container-class')
+  I.dontSeeElement('[data-schematype="blank"]')
+  I.dontSeeElement('[data-schemapath="blank"]')
+  I.dontSeeElement('[data-schemaid="blank"]')
+})
+
 Scenario('should not set inputs name attributes @use-name-attributes', async (I) => {
   I.amOnPage('use-name-attributes.html')
   I.waitForElement('.je-ready')

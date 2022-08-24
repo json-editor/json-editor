@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <script src="../../dist/jsoneditor.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <title>container attributes</title>
+</head>
+<body>
+
+<div class="container">
+    <div id='form-container'></div>
+</div>
+
+<script>
+  var formContainer = document.querySelector('#form-container')
+  var value = document.querySelector('#value')
+  var getValue = document.querySelector('#get-value')
+
+  var schema = {
+    "title": "Cotainer attributes",
+    "type": "object",
+    "properties": {
+      "some_property": {
+        "type": "string",
+        "title": "Test Editor",
+        "options": {
+          "containerAttributes": {
+            "class": "container-class",
+            "data-schematype": "blank",
+            "data-schemapath": "blank",
+            "data-schemaid": "blank"
+          }
+        }
+      }
+    }
+  }
+
+  var editor = new JSONEditor(formContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    show_errors: 'always',
+    disable_properties: true,
+    disable_collapse: true,
+    disable_edit_json: true,
+  })
+</script>
+
+</body>
+</html>
