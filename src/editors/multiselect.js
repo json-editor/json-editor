@@ -32,6 +32,7 @@ export class MultiSelectEditor extends AbstractEditor {
 
     this.select_options = {}
     this.select_values = {}
+    this.option_titles = []
     this.option_keys = []
     this.option_enum = []
 
