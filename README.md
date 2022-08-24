@@ -724,7 +724,8 @@ Here is an example that will show a color picker in browsers that support it:
 
 #### String Editors Input Attributes
 
-You can set custom attributes such as **placeholder**, **class** and **data-** on the input field using the special options keyword `inputAttributes`.
+You can set custom attributes such as **placeholder**, **class** and **data-** on the input field and on the editor container
+using the special options keyword `inputAttributes` and `containerAttributes`.
 
 Like this:
 
@@ -738,6 +739,10 @@ Like this:
         "inputAttributes": {
           "placeholder":  "your name here...",
           "class": "myclass"
+        },
+        "containerAttributes": {
+          "data-container":  "my-container",
+          "class": "my-container-class"
         }
       }
     }
