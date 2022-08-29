@@ -4,6 +4,14 @@ var assert = require('assert')
 
 Feature('core')
 
+Scenario('should set per-editor options @per-editor-options', async (I) => {
+  I.amOnPage('per-editor-options.html')
+  I.waitForElement('.je-ready')
+  I.waitForElement('[title="Expand"]')
+  I.dontSeeElement('[title="Collapse"]')
+  I.dontSeeElement('.card')
+})
+
 Scenario('should set container attributes @container-attributes', async (I) => {
   I.amOnPage('container-attributes.html')
   I.waitForElement('.je-ready')
