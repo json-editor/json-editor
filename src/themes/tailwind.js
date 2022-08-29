@@ -277,7 +277,7 @@ export class tailwindTheme extends AbstractTheme {
   addInputError (input, text) {
     if (!input.controlgroup) return
     input.controlgroup.classList.add('has-error')
-    input.classList.add('bg-red-600')
+    input.controlgroup.classList.add('text-red-600')
     if (!input.errmsg) {
       input.errmsg = document.createElement('p')
       input.errmsg.classList.add('block', 'mt-1', 'text-xs', 'text-red')
@@ -291,7 +291,7 @@ export class tailwindTheme extends AbstractTheme {
   removeInputError (input) {
     if (!input.errmsg) return
     input.errmsg.style.display = 'none'
-    input.classList.remove('bg-red-600')
+    input.controlgroup.classList.remove('text-red-600')
     input.controlgroup.classList.remove('has-error')
   }
 
