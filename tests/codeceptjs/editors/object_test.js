@@ -1,6 +1,7 @@
 /* global Feature Scenario */
 
 const assert = require('assert')
+const { DEFAULT_WAIT_TIME } = require('../test-config')
 
 Feature('object')
 
@@ -142,16 +143,16 @@ Scenario('set value opt in optional properties @show_opt_in', async (I) => {
   I.amOnPage('object-required-properties.html')
 
   // all editors visible
-  I.waitForElement('[data-schemapath="root.string"]', 5)
-  I.waitForElement('[data-schemapath="root.number"]', 5)
-  I.waitForElement('[data-schemapath="root.boolean"]', 5)
-  I.waitForElement('[data-schemapath="root.radio"]', 5)
-  I.waitForElement('[data-schemapath="root.array"]', 5)
-  I.waitForElement('[data-schemapath="root.object"]', 5)
-  I.waitForElement('[data-schemapath="root.object.string"]', 5)
-  I.waitForElement('[data-schemapath="root.object.number"]', 5)
-  I.waitForElement('[data-schemapath="root.object.boolean"]', 5)
-  I.waitForElement('[data-schemapath="root.object.radio"]', 5)
+  I.waitForElement('[data-schemapath="root.string"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.number"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.boolean"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.radio"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.array"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.object"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.object.string"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.object.number"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.object.boolean"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.object.radio"]', DEFAULT_WAIT_TIME)
 
   // set values
   I.click('.set-value')
@@ -164,29 +165,29 @@ Scenario('set value opt in optional properties @show_opt_in', async (I) => {
   assert.equal(await I.grabValueFrom('.value'), '{"number":0,"boolean":false}')
 
   // all editorsstill visible
-  I.waitForElement('[data-schemapath="root.string"]', 5)
-  I.waitForElement('[data-schemapath="root.number"]', 5)
-  I.waitForElement('[data-schemapath="root.boolean"]', 5)
-  I.waitForElement('[data-schemapath="root.radio"]', 5)
-  I.waitForElement('[data-schemapath="root.array"]', 5)
-  I.waitForElement('[data-schemapath="root.object"]', 5)
-  I.waitForElement('[data-schemapath="root.object.string"]', 5)
-  I.waitForElement('[data-schemapath="root.object.number"]', 5)
-  I.waitForElement('[data-schemapath="root.object.boolean"]', 5)
-  I.waitForElement('[data-schemapath="root.object.radio"]', 5)
+  I.waitForElement('[data-schemapath="root.string"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.number"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.boolean"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.radio"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.array"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.object"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.object.string"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.object.number"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.object.boolean"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.object.radio"]', DEFAULT_WAIT_TIME)
 })
 
 Scenario('set value opt in optional properties @show_opt_in_schema', async (I) => {
   I.amOnPage('object-show-opt-in.html')
 
   // all editors visible
-  I.waitForElement('[data-schemapath="root"]', 5)
-  I.waitForElement('[data-schemapath="root.option_show_opt_in_undefined"]', 5)
-  I.waitForElement('[data-schemapath="root.option_show_opt_in_undefined.string"]', 5)
-  I.waitForElement('[data-schemapath="root.option_show_opt_in_true"]', 5)
-  I.waitForElement('[data-schemapath="root.option_show_opt_in_true.string"]', 5)
-  I.waitForElement('[data-schemapath="root.option_show_opt_in_false"]', 5)
-  I.waitForElement('[data-schemapath="root.option_show_opt_in_false.string"]', 5)
+  I.waitForElement('[data-schemapath="root"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_undefined"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_undefined.string"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_true"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_true.string"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_false"]', DEFAULT_WAIT_TIME)
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_false.string"]', DEFAULT_WAIT_TIME)
 
   // checkboxes for optional properties should appear only when
   // case 1) the parent option show_opt_in is enabled
@@ -198,13 +199,13 @@ Scenario('set value opt in optional properties @show_opt_in_schema', async (I) =
   // global show_opt_in true
   I.dontSeeCheckedAttribute('#show-opt-in')
   I.dontSeeElement('[data-schemapath="root.option_show_opt_in_undefined.string"] .json-editor-opt-in') // global show_opt_in: false && parent editor show_opt_in: 'undefined'
-  I.waitForElement('[data-schemapath="root.option_show_opt_in_true.string"] .json-editor-opt-in', 5) // global show_opt_in: false && parent editor show_opt_in: true
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_true.string"] .json-editor-opt-in', DEFAULT_WAIT_TIME) // global show_opt_in: false && parent editor show_opt_in: true
   I.dontSeeElement('[data-schemapath="root.option_show_opt_in_false.string"] .json-editor-opt-in') // global show_opt_in: false && parent editor show_opt_in: false
 
   // global show_opt_in false
   I.click('#show-opt-in')
   I.waitForElement('[data-schemapath="root.option_show_opt_in_undefined.string"] .json-editor-opt-in') // global show_opt_in: true && parent editor show_opt_in: 'undefined'
-  I.waitForElement('[data-schemapath="root.option_show_opt_in_true.string"] .json-editor-opt-in', 5) // global show_opt_in: true && parent editor show_opt_in: true
+  I.waitForElement('[data-schemapath="root.option_show_opt_in_true.string"] .json-editor-opt-in', DEFAULT_WAIT_TIME) // global show_opt_in: true && parent editor show_opt_in: true
   I.dontSeeElement('[data-schemapath="root.option_show_opt_in_false.string"] .json-editor-opt-in') // global show_opt_in: true && parent editor show_opt_in: false
 })
 
@@ -245,24 +246,24 @@ Scenario('should hide properties with unfulfilled dependencies @dependencies', (
 
 Scenario('should respect multiple dependency values @dependencies', (I) => {
   I.amOnPage('object-with-dependencies-array.html')
-  I.waitForVisible('[data-schemapath="root.question_1"] select', 5)
+  I.waitForVisible('[data-schemapath="root.question_1"] select', DEFAULT_WAIT_TIME)
   I.selectOption('[name="root[question_1]"]', 'a')
-  I.waitForInvisible('[data-schemapath="root.question_1_feedback"]', 5)
+  I.waitForInvisible('[data-schemapath="root.question_1_feedback"]', DEFAULT_WAIT_TIME)
   I.selectOption('[name="root[question_1]"]', 'b')
-  I.waitForVisible('[data-schemapath="root.question_1_feedback"]', 5)
+  I.waitForVisible('[data-schemapath="root.question_1_feedback"]', DEFAULT_WAIT_TIME)
   I.selectOption('[name="root[question_1]"]', 'c')
-  I.waitForInvisible('[data-schemapath="root.question_1_feedback"]', 5)
+  I.waitForInvisible('[data-schemapath="root.question_1_feedback"]', DEFAULT_WAIT_TIME)
   I.selectOption('[name="root[question_1]"]', 'd')
-  I.waitForVisible('[data-schemapath="root.question_1_feedback"]', 5)
+  I.waitForVisible('[data-schemapath="root.question_1_feedback"]', DEFAULT_WAIT_TIME)
 
-  I.waitForVisible('[data-schemapath="root.question_2"]', 5)
-  I.waitForInvisible('[data-schemapath="root.question_2_feedback"]', 5)
+  I.waitForVisible('[data-schemapath="root.question_2"]', DEFAULT_WAIT_TIME)
+  I.waitForInvisible('[data-schemapath="root.question_2_feedback"]', DEFAULT_WAIT_TIME)
   I.click('label[for="root[question_2]1"]')
   I.click('label[for="root[question_2]2"]')
-  I.waitForVisible('[data-schemapath="root.question_2_feedback"]', 5)
+  I.waitForVisible('[data-schemapath="root.question_2_feedback"]', DEFAULT_WAIT_TIME)
   I.click('label[for="root[question_2]0"]')
   I.click('label[for="root[question_2]3"]')
-  I.waitForInvisible('[data-schemapath="root.question_2_feedback"]', 5)
+  I.waitForInvisible('[data-schemapath="root.question_2_feedback"]', DEFAULT_WAIT_TIME)
 })
 
 Scenario('should open and close the properties modal', (I) => {
