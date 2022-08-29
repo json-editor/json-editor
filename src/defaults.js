@@ -1,4 +1,5 @@
 import { resolvers } from './resolvers.js'
+import { editors } from './editors/index.js'
 
 /* default theme */
 const theme = 'html'
@@ -12,7 +13,6 @@ const callbacks = {}
 const themes = {}
 const templates = {}
 const iconlibs = {}
-const editors = {}
 const languages = {}
 // eslint-disable-next-line camelcase
 const custom_validators = []
