@@ -1,4 +1,5 @@
 var assert = require('assert');
+const { DEFAULT_WAIT_TIME } = require('../test-config')
 
 Feature('number');
 
@@ -12,7 +13,7 @@ Scenario('should validate value', async (I) => {
   I.amOnPage('number.html');
   await I.fillField('[name="root[number]"]', '12-12');
   I.click('.get-value');
-  I.waitForText('Value must be of type number.', 5, '[data-schemapath="root.number"] .invalid-feedback');
+  I.waitForText('Value must be of type number.', DEFAULT_WAIT_TIME, '[data-schemapath="root.number"] .invalid-feedback');
   assert.equal(await I.grabValueFrom('.value'), '{"number":"12-12","number_number":5.75,"number_range":5.75}');
 });
 

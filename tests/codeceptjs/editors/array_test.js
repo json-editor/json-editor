@@ -1,6 +1,7 @@
 /* global Feature Scenario */
 
 var assert = require('assert');
+const { DEFAULT_WAIT_TIME } = require('../test-config')
 
 Feature('array');
 
@@ -12,7 +13,7 @@ Scenario('should have correct initial value', async (I) => {
 
 Scenario('unique items arrays sorting @unique-itmes-sorting', async (I) => {
   I.amOnPage('array-unique-items-sort.html')
-  I.waitForElement('.je-ready', 10)
+  I.waitForElement('.je-ready', DEFAULT_WAIT_TIME)
   I.click('[data-schemapath="root.items"] .form-control:nth-of-type(1)')
   I.click('.get-value')
   assert.equal(await I.grabValueFrom('.debug'), '{"items":["01"]}')

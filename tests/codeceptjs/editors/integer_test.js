@@ -1,4 +1,5 @@
 var assert = require('assert');
+const { DEFAULT_WAIT_TIME } = require('../test-config')
 
 Feature('integer');
 
@@ -70,11 +71,11 @@ Scenario('should be readonly if specified and not disabled', async (I) => {
 Scenario('should update output when (method) setValue is called', async (I) => {
   I.amOnPage('integer.html');
   I.saveScreenshot('integer-setvalue-1.png')
-  I.waitForText('5', 20, '[data-schemapath="root.integer_range"] output');
+  I.waitForText('5', DEFAULT_WAIT_TIME, '[data-schemapath="root.integer_range"] output');
   I.saveScreenshot('integer-setvalue-2.png')
   I.click('.set-value');
   I.saveScreenshot('integer-setvalue-3.png')
-  I.waitForText('2', 20, '[data-schemapath="root.integer_range"] output');
+  I.waitForText('2', DEFAULT_WAIT_TIME, '[data-schemapath="root.integer_range"] output');
   I.saveScreenshot('integer-setvalue-4.png')
 });
 

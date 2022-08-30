@@ -1,6 +1,7 @@
 /* global Feature Scenario */
 
 var assert = require('assert')
+const { DEFAULT_WAIT_TIME } = require('./test-config')
 
 Feature('core')
 
@@ -122,13 +123,13 @@ Scenario('should change the form if form_name_root option is set @core', async (
 
 Scenario('should validate against oneOf schemas and display single oneOf and editors error messages @core @oneof', async (I) => {
   I.amOnPage('oneof.html')
-  I.waitForText('Object is missing the required property \'p4\'', '.alert-danger')
-  I.waitForText('Value must validate against exactly one of the provided schemas. It currently validates against 0 of the schemas.', '.alert-danger')
-  I.waitForText('Object is missing the required property \'p1\'', '.alert-danger')
-  I.waitForText('Object is missing the required property \'p2\'', '.alert-danger')
-  I.waitForText('Property must be set.', '[data-schemapath="root.p4"] .invalid-feedback')
-  I.waitForText('Property must be set.', '[data-schemapath="root.p5.p1"] .invalid-feedback')
-  I.waitForText('Property must be set.', '[data-schemapath="root.p5.p2"] .invalid-feedback')
+  I.waitForText('Object is missing the required property \'p4\'', DEFAULT_WAIT_TIME, '.alert-danger')
+  I.waitForText('Value must validate against exactly one of the provided schemas. It currently validates against 0 of the schemas.', DEFAULT_WAIT_TIME, '.alert-danger')
+  I.waitForText('Object is missing the required property \'p1\'', DEFAULT_WAIT_TIME, '.alert-danger')
+  I.waitForText('Object is missing the required property \'p2\'', DEFAULT_WAIT_TIME, '.alert-danger')
+  I.waitForText('Property must be set.', DEFAULT_WAIT_TIME, '[data-schemapath="root.p4"] .invalid-feedback')
+  I.waitForText('Property must be set.', DEFAULT_WAIT_TIME, '[data-schemapath="root.p5.p1"] .invalid-feedback')
+  I.waitForText('Property must be set.', DEFAULT_WAIT_TIME, '[data-schemapath="root.p5.p2"] .invalid-feedback')
   I.fillField('root[p4]', 'to')
   I.fillField('root[p5][p1]', 'to')
   I.fillField('root[p5][p2]', 'to')
@@ -137,9 +138,9 @@ Scenario('should validate against oneOf schemas and display single oneOf and edi
   I.dontSee('Object is missing the required property \'p4\'', '.alert-danger')
   I.dontSee('Object is missing the required property \'p1\'', '.alert-danger')
   I.dontSee('Object is missing the required property \'p2\'', '.alert-danger')
-  I.waitForText('Value must be at least 4 characters long.', '[data-schemapath="root.p4"] .invalid-feedback')
-  I.waitForText('Value must be at least 4 characters long.', '[data-schemapath="root.p5.p1"] .invalid-feedback')
-  I.waitForText('Value must be at least 4 characters long.', '[data-schemapath="root.p5.p2"] .invalid-feedback')
+  I.waitForText('Value must be at least 4 characters long.', DEFAULT_WAIT_TIME, '[data-schemapath="root.p4"] .invalid-feedback')
+  I.waitForText('Value must be at least 4 characters long.', DEFAULT_WAIT_TIME, '[data-schemapath="root.p5.p1"] .invalid-feedback')
+  I.waitForText('Value must be at least 4 characters long.', DEFAULT_WAIT_TIME, '[data-schemapath="root.p5.p2"] .invalid-feedback')
   I.fillField('root[p4]', 'todo')
   I.fillField('root[p5][p1]', 'todo')
   I.fillField('root[p5][p2]', 'todo')
@@ -158,8 +159,8 @@ Scenario('should validate against anyOf schemas and display single anyOf and edi
   I.selectOption('.je-switcher', 'Value, null')
   I.dontSeeElement('.alert-danger')
   I.selectOption('.je-switcher', 'Value, string')
-  I.waitForText('Object is missing the required property \'age\'', '.alert-danger')
-  I.waitForText('Property must be set.', '[data-schemapath="root.age"] .invalid-feedback')
+  I.waitForText('Object is missing the required property \'age\'', DEFAULT_WAIT_TIME, '.alert-danger')
+  I.waitForText('Property must be set.', DEFAULT_WAIT_TIME, '[data-schemapath="root.age"] .invalid-feedback')
   I.fillField('root[age]', 'to')
   I.click('Get Value')
   I.wait(3)
@@ -170,8 +171,8 @@ Scenario('should validate against anyOf schemas and display single anyOf and edi
 Scenario('should display anyOf and oneOf error messages in the correct places @848', async (I) => {
   I.amOnPage('issues/issue-gh-848.html')
   I.selectOption('.je-switcher', 'Value, string')
-  I.waitForElement('[data-schemapath="root.list"] .invalid-feedback', 5)
-  I.dontSeeElement('[data-schemapath="root.list_group"] .invalid-feedback', 5)
+  I.waitForElement('[data-schemapath="root.list"] .invalid-feedback', DEFAULT_WAIT_TIME)
+  I.dontSeeElement('[data-schemapath="root.list_group"] .invalid-feedback', DEFAULT_WAIT_TIME)
 })
 
 Scenario('should validate against oneOf schemas and display single oneOf and editors error messages @core @translate-property', async (I) => {
