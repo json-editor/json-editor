@@ -754,12 +754,12 @@ Like this:
 
 In addition to the standard HTML input formats, JSON Editor can also integrate with several 3rd party specialized editors.  These libraries are not included in JSON Editor and you must load them on the page yourself.
 
-__SCEditor__ provides WYSIWYG editing of HTML and BBCode.  To use it, set the format to `html` or `bbcode` and set the `wysiwyg` option to `true`:
+__SCEditor__ provides WYSIWYG editing of HTML and BBCode.  To use it, set the format to `xhtml` or `bbcode` and set the `wysiwyg` option to `true`:
 
 ```json
 {
   "type": "string",
-  "format": "html",
+  "format": "xhtml",
   "options": {
     "wysiwyg": true
   }
