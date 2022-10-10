@@ -230,6 +230,14 @@ languages.en = {
   */
   error_hostname: 'The hostname has the wrong format',
   /**
+   * When uploads max size limit is exceeded
+   */
+  upload_max_size: 'Filesize too large. Max size is ',
+  /**
+   * When the mime type does not match the type of the file
+   */
+  upload_wrong_file_format: 'Wrong file format. Allowed format(s): ',
+  /**
   * Text/Title on Save button
   */
   button_save: 'Save',
