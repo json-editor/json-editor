@@ -18,8 +18,8 @@ export class EnumEditor extends AbstractEditor {
     this.html_values = []
 
     for (let i = 0; i < this.enum.length; i++) {
-      this.select_options[i] = this.options.enum_titles[i] || `Value ${i + 1}`
-      this.html_values[i] = this.getHTML(this.enum[i])
+      this.select_options[i] = this.options.enum[i] || `Value ${i + 1}`
+      this.html_values[i] = this.getHTML(this.options.enum[i])
     }
 
     /* Switcher */
@@ -55,7 +55,7 @@ export class EnumEditor extends AbstractEditor {
     })
 
     if (this.selected < 0) {
-      this.setValue(this.enum[0])
+      this.setValue(this.options.enum[0])
       return
     }
 
