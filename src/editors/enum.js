@@ -10,16 +10,14 @@ export class EnumEditor extends AbstractEditor {
     this.title = this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     this.container.appendChild(this.title)
 
-    this.options.enum_titles = this.options.enum_titles || []
-
     this.enum = this.schema.enum
     this.selected = 0
     this.select_options = []
     this.html_values = []
 
     for (let i = 0; i < this.enum.length; i++) {
-      this.select_options[i] = this.options.enum[i] || `Value ${i + 1}`
-      this.html_values[i] = this.getHTML(this.options.enum[i])
+      this.select_options[i] = this.enum[i] || `Value ${i + 1}`
+      this.html_values[i] = this.getHTML(this.enum[i])
     }
 
     /* Switcher */
