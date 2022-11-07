@@ -35,7 +35,7 @@
 }
 
 .je-edit-json--textarea {
-  height: 170px !important;
-  width: 300px !important;
+  height: 170px;
+  width: 300px;
   display: block;
 }
