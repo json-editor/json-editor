@@ -347,7 +347,6 @@ export class bootstrap5Theme extends AbstractTheme {
   }
 
   getHeader (text, pathDepth) {
-
     const el = document.createElement('h3')
     el.classList.add('card-title')
     el.classList.add('level-' + pathDepth)
