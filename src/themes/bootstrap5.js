@@ -347,8 +347,6 @@ export class bootstrap5Theme extends AbstractTheme {
   }
 
   getHeader (text, pathDepth) {
-    /* var cardHeader = document.createElement('div') */
-    /* cardHeader.classList.add('card-header') */
 
     const el = document.createElement('h3')
     el.classList.add('card-title')
@@ -361,8 +359,6 @@ export class bootstrap5Theme extends AbstractTheme {
     }
 
     el.style.display = 'inline-block'
-
-    /* cardHeader.appendChild(el) */
 
     return el
   }
@@ -611,10 +607,6 @@ export class bootstrap5Theme extends AbstractTheme {
     inputGroupContainer.classList.add('input-group')
 
     inputGroupContainer.appendChild(input)
-
-    // const inputGroup = document.createElement('div')
-    // inputGroup.classList.add('input-group-append')
-    // inputGroupContainer.appendChild(inputGroup)
 
     for (let i = 0; i < buttons.length; i++) {
       /* this uses the getButton() wrapper, so we have to remove the panel/ctrl spacing for this case */
