@@ -138,6 +138,20 @@ Scenario('It should display button Labels: foundation3 | null', async (I) => {
 })
 */
 
+Scenario('It should display button Labels: bootstrap5 | null', async (I) => {
+  I.amOnPage('themes.html')
+  I.selectOption('theme', 'Bootstrap 5')
+  I.waitForText('Themes Test Page')
+  I.waitForText('Collapse')
+  I.waitForText('Edit JSON')
+  I.waitForText('Object Properties')
+  I.waitForText('Delete item')
+  I.waitForText('Delete Last item')
+  I.waitForText('Delete All')
+  I.waitForText('Move down')
+  I.waitForText('Move up')
+})
+
 Scenario('It should display button Labels: bootstrap4 | null', async (I) => {
   I.amOnPage('themes.html')
   I.selectOption('theme', 'Bootstrap 4')
