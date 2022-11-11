@@ -463,6 +463,7 @@ The currently supported themes are:
 *  barebones
 *  html (the default)
 *  bootstrap4
+*  bootstrap5 
 *  spectre
 *  tailwind
 
