@@ -27,5 +27,27 @@ As a result there are four separate Webpack configurations, each derived from we
 
 
 
+### React / Angular / Vue / Custom Elements
+
+#### React
+https://github.com/darshanmarathe/dm-react-components
+Demo
+https://dm-react-components.netlify.app/?path=/story/advanced-jsonform--basic
+
+
+#### Angular
+https://github.com/darshanmarathe/dm-ng-components
+Demo
+https://dm-ng-components.netlify.app/?path=/story/advanced-jsonform--basic
+
+#### Vue
+https://github.com/darshanmarathe/dm-vue-components
+Demo 
+https://dm-vue-components.netlify.app/?path=/story/advanced-jsonform--basic
+
+#### Custom Elements / Web Components
+https://github.com/darshanmarathe/dm-cf-components
+Demo 
+https://dm-cf-components.netlify.app/?path=/story/componentforge-jsonform--default
 
 
