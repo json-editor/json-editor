@@ -625,20 +625,6 @@
                 "tilte":"title"
               }
             },
-            "enum": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "title": {
-                    "type": "string"
-                  },
-                  "infoText":{
-                    "type": "string"
-                  }
-                }
-              }
-            },
             "grid_columns":{
               "type":"integer",
               "default": 1,
@@ -655,9 +641,10 @@
         }
       }
     },
-
     "schema":{
-      "$ref":"#/definitions/schemaBase",
+      "allOf":[{
+        "$ref":"#/definitions/schemaBase"
+      }],
       "options":{
         "keep_oneof_values":false
       },
