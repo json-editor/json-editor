@@ -389,7 +389,7 @@ export class TableEditor extends ArrayEditor {
   }
 
   _createMoveUpButton (i, holder) {
-    const button = this.getButton('', 'moveup', 'button_move_up_title')
+    const button = this.getButton('button_move_up', 'moveup', 'button_move_up_title', false)
     button.classList.add('moveup', 'json-editor-btntype-move')
     button.setAttribute('data-i', i)
     button.addEventListener('click', e => {
@@ -410,7 +410,7 @@ export class TableEditor extends ArrayEditor {
   }
 
   _createMoveDownButton (i, holder) {
-    const button = this.getButton('', 'movedown', 'button_move_down_title')
+    const button = this.getButton('button_move_down', 'movedown', 'button_move_down_title', false)
     button.classList.add('movedown', 'json-editor-btntype-move')
     button.setAttribute('data-i', i)
     button.addEventListener('click', e => {

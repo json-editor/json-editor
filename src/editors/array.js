@@ -245,9 +245,12 @@ export class ArrayEditor extends AbstractEditor {
       parent: this,
       required: true
     })
-    ret.preBuild()
-    ret.build()
-    ret.postBuild()
+
+    if (!this.options.defer_array_tabs) {
+      ret.preBuild()
+      ret.build()
+      ret.postBuild()
+    }
 
     if (!ret.title_controls) {
       ret.array_controls = this.theme.getButtonHolder()
@@ -310,15 +313,27 @@ export class ArrayEditor extends AbstractEditor {
   }
 
   refreshTabs (refreshHeaders) {
-    this.rows.forEach(row => {
+    this.rows.forEach((row, i) => {
       if (!row.tab) return
 
       if (refreshHeaders) {
-        row.tab_text.textContent = row.getHeaderText()
-      } else if (row.tab === this.active_tab) {
-        this.theme.markTabActive(row)
+        const val = this.getRowValue(i)
+        row.tab_text.textContent = row.getHeaderTextCheap(val) || row.getHeaderText()
       } else {
-        this.theme.markTabInactive(row)
+        if (row.tab === this.active_tab) {
+          if (row.deferred) {
+            row.preBuild()
+            row.build()
+            row.postBuild()
+            if (typeof row.deferred.value !== 'undefined') {
+              row.setValue(row.deferred.value, row.deferred.initial)
+            }
+            delete row.deferred
+          }
+          this.theme.markTabActive(row)
+        } else {
+          this.theme.markTabInactive(row)
+        }
       }
     })
   }
@@ -347,10 +362,10 @@ export class ArrayEditor extends AbstractEditor {
     value.forEach((val, i) => {
       if (this.rows[i]) {
         /* TODO: don't set the row's value if it hasn't changed */
-        this.rows[i].setValue(val, initial)
+        this.setRowValue(i, val, initial)
       } else if (this.row_cache[i]) {
         this.rows[i] = this.row_cache[i]
-        this.rows[i].setValue(val, initial)
+        this.setRowValue(i, val, initial)
         this.rows[i].container.style.display = ''
         if (this.rows[i].tab) this.rows[i].tab.style.display = ''
         this.rows[i].register()
@@ -390,7 +405,7 @@ export class ArrayEditor extends AbstractEditor {
   setupButtons (minItems) {
     const controlsNeeded = []
 
-    if (!this.value.length) {
+    if (!this.value || !this.value.length) {
       this.delete_last_row_button.style.display = 'none'
       this.remove_all_rows_button.style.display = 'none'
     } else if (this.value.length === 1) {
@@ -418,10 +433,29 @@ export class ArrayEditor extends AbstractEditor {
     return controlsNeeded.some(e => e)
   }
 
+  setRowValue (i, value, initial) {
+    if (this.rows[i].deferred) {
+      this.rows[i].deferred.value = value
+      this.rows[i].deferred.initial = initial
+    } else {
+      this.rows[i].setValue(value, initial)
+    }
+  }
+
+  getRowValue (i) {
+    return this.rows[i].deferred
+      ? this.rows[i].deferred.value
+      : this.rows[i].getValue()
+  }
+
+  refreshRowValue (i) {
+    this.value[i] = this.getRowValue(i)
+  }
+
   refreshValue (force) {
     const oldi = this.value ? this.value.length : 0
     /* Get the value for this editor */
-    this.value = this.rows.map(editor => editor.getValue())
+    this.value = this.rows.map((_, i) => this.getRowValue(i))
 
     if (oldi !== this.value.length || force) {
       /* If we currently have minItems items in the array */
@@ -440,7 +474,7 @@ export class ArrayEditor extends AbstractEditor {
         }
 
         /* Get the value for this editor */
-        this.value[i] = editor.getValue()
+        this.refreshRowValue(i)
       })
 
       if (!this.collapsed && this.setupButtons(minItems)) {
@@ -449,7 +483,7 @@ export class ArrayEditor extends AbstractEditor {
         this.controls.style.display = 'none'
       }
     }
-    this.serialized = JSON.stringify(this.value)
+    this.serialized = this.value ? JSON.stringify(this.value) : null
   }
 
   addRow (value, initial) {
@@ -470,6 +504,7 @@ export class ArrayEditor extends AbstractEditor {
       }
       this.rows[i].tab.addEventListener('click', (e) => {
         this.active_tab = this.rows[i].tab
+        this.setRowValue(i, value)
         this.refreshTabs()
         e.preventDefault()
         e.stopPropagation()
@@ -496,7 +531,19 @@ export class ArrayEditor extends AbstractEditor {
       this.rows[i].movedown_button = this._createMoveDownButton(i, controlsHolder)
     }
 
-    if (typeof value !== 'undefined') this.rows[i].setValue(value, initial)
+    if (this.tabs_holder && this.options.defer_array_tabs) {
+      // If we're using tabs, keep track of the values to initialize for the active tab.
+      this.rows[i].deferred = { value: value, initial: initial }
+    } else {
+      // Otherwise, build out the editor immediately.
+      this.rows[i].preBuild()
+      this.rows[i].build()
+      this.rows[i].postBuild()
+      if (typeof value !== 'undefined') {
+        this.rows[i].setValue(value, initial)
+      }
+    }
+
     this.refreshTabs()
 
     return this.rows[i]

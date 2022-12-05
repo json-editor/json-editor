@@ -358,7 +358,7 @@ function upload (type, file, cbs) {
 }
 
 /* String translate function */
-function translate (key, variables, schema) {
+function translate (key, variables, schema, useKeyIfUndefined = true) {
   let schemaMessages = {}
 
   if (schema && schema.options && schema.options.error_messages && schema.options.error_messages[defaults.language]) {
@@ -369,12 +369,16 @@ function translate (key, variables, schema) {
 
   if (!lang) throw new Error(`Unknown language ${defaults.language}`)
 
-  let string = schemaMessages[key] || lang[key] || defaults.languages[default_language][key] || key
+  let string = schemaMessages[key] || lang[key] || defaults.languages[default_language][key]
 
-  if (variables) {
-    for (let i = 0; i < variables.length; i++) {
-      string = string.replace(new RegExp(`\\{\\{${i}}}`, 'g'), variables[i])
+  if (string) {
+    if (variables) {
+      for (let i = 0; i < variables.length; i++) {
+        string = string.replace(new RegExp(`\\{\\{${i}}}`, 'g'), variables[i])
+      }
     }
+  } else {
+    string = useKeyIfUndefined ? key : ''
   }
 
   return string

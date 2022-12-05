@@ -123,8 +123,9 @@ export class ObjectEditor extends AbstractEditor {
       })
 
       /* layout hasn't changed */
-      if (this.layout === JSON.stringify(rows)) return false
-      this.layout = JSON.stringify(rows)
+      const layout = JSON.stringify(rows)
+      if (this.layout === layout) return false
+      this.layout = layout
 
       /* Layout the form */
       container = document.createElement('div')
@@ -1066,7 +1067,7 @@ export class ObjectEditor extends AbstractEditor {
   }
 
   destroy () {
-    Object.values(this.cached_editors).forEach(el => el.destroy())
+    Object.values(this.cached_editors || []).forEach(el => el.destroy())
     if (this.editor_holder) this.editor_holder.innerHTML = ''
     if (this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title)
     if (this.error_holder && this.error_holder.parentNode) this.error_holder.parentNode.removeChild(this.error_holder)
@@ -1271,7 +1272,7 @@ export class ObjectEditor extends AbstractEditor {
     }
 
     /* Show errors for child editors */
-    Object.values(this.editors).forEach(editor => {
+    Object.values(this.editors || []).forEach(editor => {
       editor.showValidationErrors(otherErrors)
     })
   }
