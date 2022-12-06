@@ -1,9 +1,6 @@
 {
   "extends":["standard"],
   "env": {"browser": true},
-  "globals": {
-    "structuredClone": "readonly"
-  },
   "rules": {
     "no-console": "error"
   }

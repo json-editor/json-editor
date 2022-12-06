@@ -1208,8 +1208,18 @@ export class ObjectEditor extends AbstractEditor {
       /* Value explicitly set */
       if (typeof value[i] !== 'undefined') {
         this.addObjectProperty(i)
-        editor.setValue(value[i], initial)
-        editor.activate()
+
+        if (editor.deferred) {
+          editor.deferred.value = value
+          editor.deferred.initial = initial
+        } else {
+          editor.setValue(value[i], initial)
+        }
+
+        if (!this.deferred && editor.input) {
+          // Not deferred so skipping activation
+          editor.activate()
+        }
         /* Otherwise, remove value unless this is the initial set or it's required */
       } else if (!initial && !this.isRequiredObject(editor)) {
         if (this.jsoneditor.options.show_opt_in || this.options.show_opt_in) {

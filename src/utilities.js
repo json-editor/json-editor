@@ -25,14 +25,6 @@ export function deepCopy (target) {
   return isPlainObject(target) ? extend({}, target) : Array.isArray(target) ? target.map(deepCopy) : target
 }
 
-export function extend2 (destination, ...args) {
-  // Merge passed in object using cheap shallow copy
-  const merged = Object.assign(destination, ...args)
-
-  // Use newer web API function (included in eslint v8.29.0 via globals v13.15.0)
-  return structuredClone(merged)
-}
-
 export function extend (destination, ...args) {
   args.forEach(source => {
     if (source) {
@@ -53,8 +45,14 @@ export function extend (destination, ...args) {
 }
 
 export function trigger (el, event) {
-  const e = document.createEvent('HTMLEvents')
-  e.initEvent(event, true, true)
+  if (!el) return
+
+  const e = new Event(event,
+    {
+      bubbles: true,
+      cancelable: true
+    })
+
   el.dispatchEvent(e)
 }
 
@@ -103,22 +101,22 @@ export function isInteger (value) {
   return match !== null && !isNaN(v) && isFinite(v)
 }
 
-export function generateUUID2 () {
-  return window.crypto.randomUUID() // 3x faster using window.crypto
-}
-
 /* This function generates a uuid.
 https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
 TODO: It will be probably better to move to: https://www.npmjs.com/package/uuid
 */
 export function generateUUID () {
-  let d = new Date().getTime()
-  if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
-    d += performance.now() /* use high-precision timer if available */
+  if (window.crypto && window.crypto.randomUUID) {
+    return window.crypto.randomUUID() // 3x faster using window.crypto
+  } else {
+    let d = new Date().getTime()
+    if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+      d += performance.now() /* use high-precision timer if available */
+    }
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = (d + Math.random() * 16) % 16 | 0
+      d = Math.floor(d / 16)
+      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
+    })
   }
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    const r = (d + Math.random() * 16) % 16 | 0
-    d = Math.floor(d / 16)
-    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
-  })
 }

@@ -246,7 +246,7 @@ export class ArrayEditor extends AbstractEditor {
       required: true
     })
 
-    if (!this.options.defer_array_tabs) {
+    if (!this.shouldDeferTabs()) {
       ret.preBuild()
       ret.build()
       ret.postBuild()
@@ -504,7 +504,6 @@ export class ArrayEditor extends AbstractEditor {
       }
       this.rows[i].tab.addEventListener('click', (e) => {
         this.active_tab = this.rows[i].tab
-        this.setRowValue(i, value)
         this.refreshTabs()
         e.preventDefault()
         e.stopPropagation()
@@ -531,14 +530,10 @@ export class ArrayEditor extends AbstractEditor {
       this.rows[i].movedown_button = this._createMoveDownButton(i, controlsHolder)
     }
 
-    if (this.tabs_holder && this.options.defer_array_tabs) {
+    if (this.shouldDeferTabs()) {
       // If we're using tabs, keep track of the values to initialize for the active tab.
       this.rows[i].deferred = { value: value, initial: initial }
     } else {
-      // Otherwise, build out the editor immediately.
-      this.rows[i].preBuild()
-      this.rows[i].build()
-      this.rows[i].postBuild()
       if (typeof value !== 'undefined') {
         this.rows[i].setValue(value, initial)
       }
@@ -547,6 +542,10 @@ export class ArrayEditor extends AbstractEditor {
     this.refreshTabs()
 
     return this.rows[i]
+  }
+
+  shouldDeferTabs () {
+    return this.options.defer_array_tabs || this.jsoneditor.options.defer_array_tabs
   }
 
   _createDeleteButton (i, holder) {

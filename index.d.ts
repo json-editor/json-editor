@@ -9,6 +9,12 @@ declare type JSONEditorTemplates = "default" | "ejs" | "handlebars" | "hogan" | 
 declare type JSONEditorDocument = Record<string, unknown>;
 declare type AbstractTheme = {};
 
+declare type JSONEditorError = {
+    path: string;
+    property: string;
+    message: string;
+}
+
 declare interface JSONEditorLanguage {
     /**
      * When a property is not set
@@ -334,6 +340,8 @@ declare interface JSONEditorLanguage {
     button_delete_node_warning: string;
 }
 
+declare type JSONEditorGlobalOptions<TValue> = JSONEditorOptions<TValue> & JSONEditorObjectOptions & JSONEditorArrayOptions;
+
 declare interface JSONEditorOptions<TValue> {
     /**
      * If true, JSON Editor will load external URLs in $ref via ajax.
@@ -411,10 +419,7 @@ declare interface JSONEditorOptions<TValue> {
      * If true, only required properties will be included by default.
      */
     display_required_only?: boolean;
-    /**
-     * If set to true, array editors won't be created until activated
-     */
-    defer_arrays?: boolean
+
     /**
      * Handler to use for uploading files
      */
@@ -436,20 +441,7 @@ declare interface JSONEditorOptions<TValue> {
      */
     max_depth: number;
 }
-declare type JSONEditorError = {
-    path: string;
-    property: string;
-    message: string;
-}
 declare type JSONEditorObjectOptions = {
-    /**
-     * If set to true, the editor will start collapsed
-     */
-    collapsed?: boolean;
-    /**
-     * If set to true, the collapse button will be hidden
-     */
-    disable_collapse?: boolean;
     /**
      * If set to true, the Edit JSON button will be hidden
      */
@@ -461,17 +453,9 @@ declare type JSONEditorObjectOptions = {
 }
 declare type JSONEditorArrayOptions = {
     /**
-     * If set to true, the editor will start collapsed
+     * If set to true, only creates active tabs until activated
      */
-    collapsed?: boolean;
-    /**
-     * If set to true, the "add row" button will be hidden
-     */
-    disable_array_add?: boolean;
-    /**
-     * If set to true, all of the "delete" buttons will be hidden
-     */
-    disable_array_delete?: boolean;
+    defer_array_tabs?: boolean
     /**
      * If set to true, just the "delete all rows" button will be hidden
      */
@@ -480,26 +464,6 @@ declare type JSONEditorArrayOptions = {
      * If set to true, just the "delete last row" buttons will be hidden
      */
     disable_array_delete_last_row?: boolean;
-    /**
-     * If set to true, the "move up/down" buttons will be hidden
-     */
-    disable_array_reorder?: boolean;
-    /**
-     * If set to true, the collapse button will be hidden
-     */
-    disable_collapse?: boolean;
-    /**
-     * If set to true, controls will be appended to the title
-     */
-    array_controls_top?: boolean;
-    /**
-     * If true, prompts user to confirm deletion of array nodes
-     */
-    prompt_before_delete: boolean;
-    /**
-     * If set to true, array editor tabs won't be created until activated
-     */
-    defer_array_tabs?: boolean
 }
 
 declare interface AbstractIconMapping {
