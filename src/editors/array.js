@@ -45,8 +45,10 @@ export class ArrayEditor extends AbstractEditor {
 
       if (this.rows) {
         this.rows.forEach(row => {
-          row.enable()
-          this.setAvailability(row, false)
+          if (!row.deferred) {
+            row.enable()
+            this.setAvailability(row, false)
+          }
         })
       }
       super.enable()
@@ -59,8 +61,10 @@ export class ArrayEditor extends AbstractEditor {
 
     if (this.rows) {
       this.rows.forEach(row => {
-        row.disable(alwaysDisabled)
-        this.setAvailability(row, true)
+        if (!row.deferred) {
+          row.disable(alwaysDisabled)
+          this.setAvailability(row, true)
+        }
       })
     }
     super.disable()
@@ -545,7 +549,8 @@ export class ArrayEditor extends AbstractEditor {
   }
 
   shouldDeferTabs () {
-    return this.options.defer_array_tabs || this.jsoneditor.options.defer_array_tabs
+    return (this.options.defer_array_tabs || this.jsoneditor.options.defer_array_tabs) &&
+      this.tabs_holder
   }
 
   _createDeleteButton (i, holder) {
