@@ -646,7 +646,7 @@ export class AbstractEditor {
       else if (el.title && used[el.title] <= 1) name = el.title
       else if (el.format && used[el.format] <= 1) name = el.format
       else if (el.type && used[el.type] <= 1) name = el.type
-      else if (el.description && used[el.description] <= 1) name = el.descripton
+      else if (el.description && used[el.description] <= 1) name = el.description
       else if (el.title) name = el.title
       else if (el.format) name = el.format
       else if (el.type) name = el.type
