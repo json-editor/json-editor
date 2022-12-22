@@ -1018,14 +1018,17 @@ When an array item is added, removed, moved up, moved or removed the json editor
 editor.on('moveRow', editor => {
   console.log('moveRow', editor)
 });
+
 editor.on('addRow', editor => {
   console.log('addRow', editor)
 });
-editor.on('deleteRow', editor => {
-  console.log('deleteRow', editor)
+
+editor.on('deleteRow', deletedValue => {
+  console.log('deleteRow', deletedValue)
 });
-editor.on('deleteAllRows', editor => {
-  console.log('deleteAllRows', editor)
+
+editor.on('deleteAllRows', deletedValues => {
+  console.log('deleteAllRows', deletedValues)
 });
 ```
 
