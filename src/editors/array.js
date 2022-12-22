@@ -519,6 +519,7 @@ export class ArrayEditor extends AbstractEditor {
       let newActiveTab = null
 
       const editor = this.rows[i]
+      const editorValue = editor.getValue()
 
       this.setValue(newval)
 
@@ -534,7 +535,7 @@ export class ArrayEditor extends AbstractEditor {
       }
 
       this.onChange(true)
-      this.jsoneditor.trigger('deleteRow', editor)
+      this.jsoneditor.trigger('deleteRow', editorValue)
     })
 
     if (holder) {
@@ -734,7 +735,7 @@ export class ArrayEditor extends AbstractEditor {
       const rows = this.getValue()
       let newActiveTab = null
 
-      const editor = rows.pop()
+      const editorValue = rows.pop()
 
       this.setValue(rows)
 
@@ -748,7 +749,7 @@ export class ArrayEditor extends AbstractEditor {
       }
 
       this.onChange(true)
-      this.jsoneditor.trigger('deleteRow', editor)
+      this.jsoneditor.trigger('deleteRow', editorValue)
     })
     this.controls.appendChild(button)
     return button
@@ -765,10 +766,12 @@ export class ArrayEditor extends AbstractEditor {
         return false
       }
 
+      const values = this.getValue()
+
       this.empty(true)
       this.setValue([])
       this.onChange(true)
-      this.jsoneditor.trigger('deleteAllRows')
+      this.jsoneditor.trigger('deleteAllRows', values)
     })
     this.controls.appendChild(button)
     return button
