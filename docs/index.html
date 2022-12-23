@@ -261,17 +261,15 @@
   var themeLink = document.querySelector('#theme-link')
   var validateTextarea = document.querySelector('#validate-textarea')
 
-  var outputTextarea = ace.edit('output-textarea', {
+  var aceConfig = {
     mode: 'ace/mode/json',
     selection: false,
     maxLines: Infinity
-  })
+  }
 
-  var schemaTextarea = ace.edit('schema-textarea', {
-    mode: 'ace/mode/json',
-    selection: false,
-    maxLines: Infinity
-  })
+  var outputTextarea = ace.edit('output-textarea', aceConfig)
+
+  var schemaTextarea = ace.edit('schema-textarea', aceConfig)
 
   /* -------------------------------------------------------------- parse url */
 
