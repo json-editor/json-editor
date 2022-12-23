@@ -9,11 +9,6 @@
     <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
     <link rel='stylesheet' id='theme-link'>
     <link rel='stylesheet' id='iconlib-link'>
-    <style>
-        .ace_editor {
-            height: 100vh;
-        }
-    </style>
 </head>
 <body>
 <div class='container grid-xl' style="padding: 15px 0;">
@@ -259,7 +254,6 @@
   var libSelect = document.querySelector('#lib-select')
   var jsonEditorForm = document.querySelector('#json-editor-form')
   var objectLayoutSelect = document.querySelector('#object-layout-select')
-  var outputTextarea = document.querySelector('#output-textarea')
   var setSchema = document.querySelector('#setschema')
   var setValue = document.querySelector('#setvalue')
   var showErrorsSelect = document.querySelector('#show-errors-select')
@@ -267,8 +261,17 @@
   var themeLink = document.querySelector('#theme-link')
   var validateTextarea = document.querySelector('#validate-textarea')
 
-  var aceEditor = ace.edit('schema-textarea');
-  aceEditor.session.setMode("ace/mode/json");
+  var outputTextarea = ace.edit('output-textarea', {
+    mode: 'ace/mode/json',
+    selection: false,
+    maxLines: Infinity
+  })
+
+  var schemaTextarea = ace.edit('schema-textarea', {
+    mode: 'ace/mode/json',
+    selection: false,
+    maxLines: Infinity
+  })
 
   /* -------------------------------------------------------------- parse url */
 
@@ -308,7 +311,7 @@
 
   var refreshUI = function () {
     // schema
-    aceEditor.setValue(JSON.stringify(data.options.schema, null, 2))
+    schemaTextarea.setValue(JSON.stringify(data.options.schema, null, 2))
 
     // theme
     var themeMap = {
@@ -500,7 +503,7 @@
     jsoneditor.on('change', function () {
       // output
       var json = jsoneditor.getValue()
-      outputTextarea.value = JSON.stringify(json, null, 2)
+      outputTextarea.setValue(JSON.stringify(json, null, 2))
 
       // validate
       var validationErrors = jsoneditor.validate()
@@ -525,12 +528,12 @@
   /* -------------------------------------------------------- event listeners */
 
   setValue.addEventListener('click', function () {
-    jsoneditor.setValue(JSON.parse(outputTextarea.value))
+    jsoneditor.setValue(JSON.parse(outputTextarea.getValue()))
   })
 
   setSchema.addEventListener('click', function () {
     try {
-      data.options.schema = JSON.parse(aceEditor.getValue())
+      data.options.schema = JSON.parse(schemaTextarea.getValue())
     } catch (e) {
       alert('Invalid Schema: ' + e.message)
       return
