@@ -10,6 +10,7 @@ export class UploadEditor extends AbstractEditor {
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.translateProperty(this.schema.description))
     if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.translateProperty(this.options.infoText))
+    if (this.options.hidden) this.container.style.display = 'none'
 
     /* Editor options */
     this.options = this.expandCallbacks('upload', extend({}, {
