@@ -4,13 +4,14 @@
     <meta charset="utf-8"/>
     <title>JSON Editor Interactive Example</title>
     <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.14.0/src-noconflict/ace.js"></script>
     <script src="./polyfills/assign.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
     <link rel='stylesheet' id='theme-link'>
     <link rel='stylesheet' id='iconlib-link'>
 </head>
 <body>
-<div class='container grid-xl'>
+<div class='container grid-xl' style="padding: 15px 0;">
     <div class="row columns md:flex">
         <div class='col-8 col-md-8 w-8/12'>
             <h1>Editor</h1>
@@ -119,8 +120,7 @@
             <label for="schema-textarea">You can change the schema and see how the generated form looks. After you make
                 changes, click "Update Schema"</label>
             <button class='btn btn-primary btn-block' id='setschema'>Update Schema</button>
-            <textarea id='schema-textarea' rows="30" style="width: 100%; font-family: monospace;"
-                      class='form-control'></textarea>
+            <textarea id='schema-textarea' style="height: 100vh;"></textarea>
         </div>
     </div>
 </div>
@@ -254,14 +254,23 @@
   var libSelect = document.querySelector('#lib-select')
   var jsonEditorForm = document.querySelector('#json-editor-form')
   var objectLayoutSelect = document.querySelector('#object-layout-select')
-  var outputTextarea = document.querySelector('#output-textarea')
-  var schemaTextarea = document.querySelector('#schema-textarea')
   var setSchema = document.querySelector('#setschema')
   var setValue = document.querySelector('#setvalue')
   var showErrorsSelect = document.querySelector('#show-errors-select')
   var themeSelect = document.querySelector('#theme-select')
   var themeLink = document.querySelector('#theme-link')
   var validateTextarea = document.querySelector('#validate-textarea')
+
+  var aceConfig = {
+    mode: 'ace/mode/json',
+    selection: false,
+    maxLines: Infinity,
+    minLines: 5
+  }
+
+  var outputTextarea = ace.edit('output-textarea', aceConfig)
+
+  var schemaTextarea = ace.edit('schema-textarea', aceConfig)
 
   /* -------------------------------------------------------------- parse url */
 
@@ -301,7 +310,7 @@
 
   var refreshUI = function () {
     // schema
-    schemaTextarea.value = JSON.stringify(data.options.schema, null, 2)
+    schemaTextarea.setValue(JSON.stringify(data.options.schema, null, 2))
 
     // theme
     var themeMap = {
@@ -493,7 +502,7 @@
     jsoneditor.on('change', function () {
       // output
       var json = jsoneditor.getValue()
-      outputTextarea.value = JSON.stringify(json, null, 2)
+      outputTextarea.setValue(JSON.stringify(json, null, 2))
 
       // validate
       var validationErrors = jsoneditor.validate()
@@ -518,12 +527,12 @@
   /* -------------------------------------------------------- event listeners */
 
   setValue.addEventListener('click', function () {
-    jsoneditor.setValue(JSON.parse(outputTextarea.value))
+    jsoneditor.setValue(JSON.parse(outputTextarea.getValue()))
   })
 
   setSchema.addEventListener('click', function () {
     try {
-      data.options.schema = JSON.parse(schemaTextarea.value)
+      data.options.schema = JSON.parse(schemaTextarea.getValue())
     } catch (e) {
       alert('Invalid Schema: ' + e.message)
       return
