@@ -39,6 +39,7 @@
     "serve-test": "http-server --p 9001",
     "docker-prepare-codeceptjs": "docker-compose run --rm node npm install && docker-compose run --rm node npm run build && docker-compose up -d && docker-compose ps",
     "docker-codeceptjs": "docker-compose exec node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:chrome --invert --grep '@optional'",
+    "docker-codeceptjs-dev": "docker-compose exec node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:chrome --steps --grep '@anyOf'",
     "docker-test": "npm run docker-prepare-codeceptjs && npm run docker-codeceptjs",
     "preversion": "npm run test-headless && npm run docker-test",
     "postversion": "git push && git push --tags && npm publish ./ --access public",
