@@ -583,9 +583,10 @@ export class AbstractEditor {
       if (type === 'string') return ''
       if (type === 'object') return {}
       if (type === 'array') return []
+      if (type === 'null') return null
     }
 
-    return null
+    return undefined
   }
 
   getTitle () {
