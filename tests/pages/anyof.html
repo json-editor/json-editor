@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="de">
+<html>
 <head>
     <meta charset="utf-8"/>
-    <title>anyOf</title>
+    <title>oneOf</title>
     <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
     <script src="../../dist/jsoneditor.js"></script>
@@ -10,56 +10,38 @@
 <body>
 
 <div class="container">
-    <label for="value">Value</label>
-    <textarea class="form-control" id="value" rows="12" style="font-size: 12px; font-family: monospace;"></textarea>
-    <button id='set-value'>Set Value</button>
+    <textarea class="value form-control" rows="10"></textarea>
+    <button class='get-value'>Get Value</button>
+    <button class='set-value'>Set Value</button>
     <div class='json-editor-container'></div>
 </div>
 
+
 <script>
-  var jsonEditorContainer = document.querySelector('.json-editor-container')
-  var value = document.querySelector('#value')
-  var setValue = document.querySelector('#set-value')
+  var jsonEditorContainer = document.querySelector('.json-editor-container');
+  var value = document.querySelector('.value');
+
   var schema = {
-    'title': 'anyOf',
-    'type': 'object',
-    'properties': {
-      'test': {
-        'anyOf': [
+    "title": "Person",
+    "type": "object",
+    "required": [
+      "age"
+    ],
+    "properties": {
+      "age": {
+        "anyOf": [
           {
-            'type': 'string',
-            'title': 'Value, string',
-            'const': 'test'
+            "type": "number",
+            "title": "Value, number"
           },
           {
-            'type': 'boolean',
-            'title': 'Value, boolean',
-            'const': true
+            "type": "string",
+            "title": "Value, string",
+            "minLength": 1
           },
           {
-            'type': 'array',
-            'title': 'Value, array',
-            'const': [0]
-          },
-          {
-            'type': 'object',
-            'title': 'Value, object',
-            'required': ['test'],
-            'const': { 'test': 'test' }
-          },
-          {
-            'type': 'number',
-            'title': 'Value, number',
-            'const': 1.1
-          },
-          {
-            'type': 'integer',
-            'title': 'Value, integer',
-            'const': 1.1
-          },
-          {
-            'type': 'null',
-            'title': 'Value, null'
+            "type": "null",
+            "title": "Value, null"
           }
         ]
       }
@@ -71,19 +53,27 @@
     theme: 'bootstrap4',
     show_errors: 'always',
     iconlib: 'fontawesome5',
+    object_layout: 'normal',
     disable_collapse: true,
     disable_edit_json: true,
     disable_properties: true,
+    use_default_values: false,
+    required_by_default: true,
+    disable_array_reorder: true,
+    disable_array_delete_all_rows: true,
+    disable_array_delete_last_row: true,
     keep_oneof_values: false
-  })
+  });
 
-  editor.on('change', function () {
-    value.value = JSON.stringify(editor.getValue())
-  })
+  document.querySelector('.get-value').addEventListener('click', function () {
+    value.value = JSON.stringify(editor.getValue());
+    console.log(editor.getValue());
+  });
 
-  setValue.addEventListener('click', function () {
-    editor.setValue(JSON.parse(value.value))
-  })
+  document.querySelector('.set-value').addEventListener('click', function () {
+    editor.setValue({number_range: 2})
+  });
+
 </script>
 
 </body>
