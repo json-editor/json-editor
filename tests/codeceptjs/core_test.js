@@ -175,6 +175,76 @@ Scenario('should display anyOf and oneOf error messages in the correct places @8
   I.dontSeeElement('[data-schemapath="root.list_group"] .invalid-feedback', DEFAULT_WAIT_TIME)
 })
 
+Scenario('Should switch between all json 7 data types in @oneOf and display error messages for each one @core', async (I) => {
+  I.amOnPage('oneof-2.html')
+  I.waitForElement('.je-ready')
+
+  I.selectOption('.je-switcher', 'Value, string')
+  assert.equal(await I.grabValueFrom('#value'), '{"test":""}')
+  I.waitForText('Value must validate against exactly one of the provided schemas.')
+  I.waitForText('Value must be the constant value')
+
+  I.selectOption('.je-switcher', 'Value, boolean')
+  assert.equal(await I.grabValueFrom('#value'), '{"test":false}')
+  I.waitForText('Value must validate against exactly one of the provided schemas.')
+  I.waitForText('Value must be the constant value')
+
+  I.selectOption('.je-switcher', 'Value, array')
+  assert.equal(await I.grabValueFrom('#value'), '{"test":[]}')
+  I.waitForText('Value must validate against exactly one of the provided schemas.')
+  I.waitForText('Value must be the constant value')
+
+  I.selectOption('.je-switcher', 'Value, object')
+  assert.equal(await I.grabValueFrom('#value'), '{"test":{}}')
+  I.waitForText('Value must validate against exactly one of the provided schemas.')
+  I.waitForText('Value must be the constant value')
+  I.waitForText('Object is missing the required property \'test\'')
+
+  I.selectOption('.je-switcher', 'Value, number')
+  assert.equal(await I.grabValueFrom('#value'), '{"test":0}')
+  I.waitForText('Value must validate against exactly one of the provided schemas.')
+  I.waitForText('Value must be the constant value')
+
+  I.selectOption('.je-switcher', 'Value, integer')
+  assert.equal(await I.grabValueFrom('#value'), '{"test":0}')
+  I.waitForText('Value must validate against exactly one of the provided schemas.')
+  I.waitForText('Value must be the constant value')
+
+  I.selectOption('.je-switcher', 'Value, null')
+  assert.equal(await I.grabValueFrom('#value'), '{"test":null}')
+})
+
+Scenario('Should switch between all json 7 data types in @anyOf and display error messages for each one @core', async (I) => {
+  I.amOnPage('anyof-2.html')
+  I.waitForElement('.je-ready')
+
+  assert.equal(await I.grabValueFrom('#value'), '{"test":""}')
+  I.waitForText('Value must validate against at least one of the provided schemas')
+
+  I.selectOption('.je-switcher', 'Value, boolean')
+  assert.equal(await I.grabValueFrom('#value'), '{"test":false}')
+  I.waitForText('Value must validate against at least one of the provided schemas')
+
+  I.selectOption('.je-switcher', 'Value, array')
+  assert.equal(await I.grabValueFrom('#value'), '{"test":[]}')
+  I.waitForText('Value must validate against at least one of the provided schemas')
+
+  I.selectOption('.je-switcher', 'Value, object')
+  assert.equal(await I.grabValueFrom('#value'), '{"test":{}}')
+  I.waitForText('Value must validate against at least one of the provided schemas')
+
+  I.selectOption('.je-switcher', 'Value, number')
+  assert.equal(await I.grabValueFrom('#value'), '{"test":0}')
+  I.waitForText('Value must validate against at least one of the provided schemas')
+
+  I.selectOption('.je-switcher', 'Value, integer')
+  assert.equal(await I.grabValueFrom('#value'), '{"test":0}')
+  I.waitForText('Value must validate against at least one of the provided schemas')
+
+  I.selectOption('.je-switcher', 'Value, null')
+  assert.equal(await I.grabValueFrom('#value'), '{"test":null}')
+})
+
 Scenario('should validate against oneOf schemas and display single oneOf and editors error messages @core @translate-property', async (I) => {
   I.amOnPage('translate-property.html?lang=en')
   I.waitForText('Object Title')
