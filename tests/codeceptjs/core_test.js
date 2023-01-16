@@ -175,7 +175,7 @@ Scenario('should display anyOf and oneOf error messages in the correct places @8
   I.dontSeeElement('[data-schemapath="root.list_group"] .invalid-feedback', DEFAULT_WAIT_TIME)
 })
 
-Scenario('Should switch between all json 7 data types in @oneOf and display error messages for each one @core', async (I) => {
+Scenario('Should switch between all json 7 data types in @oneof and display error messages for each one @core', async (I) => {
   I.amOnPage('oneof-2.html')
   I.waitForElement('.je-ready')
 
@@ -214,7 +214,7 @@ Scenario('Should switch between all json 7 data types in @oneOf and display erro
   assert.equal(await I.grabValueFrom('#value'), '{"test":null}')
 })
 
-Scenario('Should switch between all json 7 data types in @anyOf and display error messages for each one @core', async (I) => {
+Scenario('Should switch between all json 7 data types in @anyof and display error messages for each one @core', async (I) => {
   I.amOnPage('anyof-2.html')
   I.waitForElement('.je-ready')
 
