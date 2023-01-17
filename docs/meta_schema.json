@@ -643,7 +643,7 @@
     },
     "schema":{
       "allOf":[{
-        "$ref":"#/definitions/schemaBase",
+        "$ref":"#/definitions/schemaBase"
       }],
       "options":{
         "keep_oneof_values":false
