@@ -537,6 +537,8 @@ export class ObjectEditor extends AbstractEditor {
         editor.postBuild()
         editor.setOptInCheckbox(editor.header)
 
+        editor.setValue(editor.getDefault(), true)
+
         if (this.editors[key].options.hidden) {
           holder.style.display = 'none'
         }
