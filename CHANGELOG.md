@@ -2,7 +2,29 @@
 
 ### dev
 
+### 2.9.0-beta.1
+
+- Fixed typo in example schema
+- Fixed color editors default value bug
+- Improved docs page UI with ACE editor and some spacing
+- Fixed hidden option for upload editor
+- Fixed array editors events and callbacks params
+- Added link to GitHub repo in docs page
+- Fixed typo in code
+- Added test for meta-schema scenario
+- Added test for $ref schema with oneOf/anyOf scenario
+- Added Bootstrap 5 theme
+- Removed !important flags from CSS
+- Added upload translations
+- Updated SCEditor documentation
+- Fixed test waits
+- Fixed per editor Options
+- Fixed bug in tailwind and barebones theme. Append errors to element that exist.
+- Fixed #1194 Event listener removed after destroy
+- Added setContainerAttributes option
+- Fixed select2/selectize cannnot add new option
 - Enh #1162 Added cache system for schema loader (chhill-redhat)
+- Added warnings undefined callbacks
 
 ### 2.8.0
 
