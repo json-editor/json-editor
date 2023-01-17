@@ -2,7 +2,7 @@ var assert = require('assert')
 
 Feature('option no_default_values')
 
-Scenario('should have correct initial value', async (I) => {
+Scenario('should have correct initial value @no_default_values', async (I) => {
   I.amOnPage('option-no_default_values.html')
   I.click('.get-value')
   assert.equal(await I.grabValueFrom('.debug'), JSON.stringify({
