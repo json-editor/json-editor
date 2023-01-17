@@ -123,6 +123,7 @@ Scenario('should change the form if form_name_root option is set @core', async (
 
 Scenario('should validate against oneOf schemas and display single oneOf and editors error messages @core @oneof', async (I) => {
   I.amOnPage('oneof.html')
+  I.waitForElement('.je-ready')
   I.waitForText('Object is missing the required property \'p4\'', DEFAULT_WAIT_TIME, '.alert-danger')
   I.waitForText('Value must validate against exactly one of the provided schemas. It currently validates against 0 of the schemas.', DEFAULT_WAIT_TIME, '.alert-danger')
   I.waitForText('Object is missing the required property \'p1\'', DEFAULT_WAIT_TIME, '.alert-danger')
@@ -153,11 +154,12 @@ Scenario('should validate against oneOf schemas and display single oneOf and edi
 
 Scenario('should validate against anyOf schemas and display single anyOf and editors error messages @core @anyof', async (I) => {
   I.amOnPage('anyof.html')
-  I.dontSeeElement('.alert-danger')
+  I.waitForElement('.je-ready')
+  I.waitForElement('.alert-danger')
   I.selectOption('.je-switcher', 'Value, number')
-  I.dontSeeElement('.alert-danger')
+  I.waitForElement('.alert-danger')
   I.selectOption('.je-switcher', 'Value, null')
-  I.dontSeeElement('.alert-danger')
+  I.waitForElement('.alert-danger')
   I.selectOption('.je-switcher', 'Value, string')
   I.waitForText('Object is missing the required property \'age\'', DEFAULT_WAIT_TIME, '.alert-danger')
   I.waitForText('Property must be set.', DEFAULT_WAIT_TIME, '[data-schemapath="root.age"] .invalid-feedback')

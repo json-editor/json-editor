@@ -580,10 +580,10 @@ export class AbstractEditor {
       if (type === 'number') return this.isDefaultRequired() ? 0.0 : undefined
       if (type === 'boolean') return this.isDefaultRequired() ? false : undefined
       if (type === 'integer') return this.isDefaultRequired() ? 0 : undefined
-      if (type === 'string') return ''
+      if (type === 'string') return this.isDefaultRequired() ? '' : undefined
+      if (type === 'null') return null
       if (type === 'object') return {}
       if (type === 'array') return []
-      if (type === 'null') return null
     }
 
     return undefined
