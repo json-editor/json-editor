@@ -641,9 +641,10 @@
         }
       }
     },
-
     "schema":{
-      "$ref":"#/definitions/schemaBase",
+      "allOf":[{
+        "$ref":"#/definitions/schemaBase"
+      }],
       "options":{
         "keep_oneof_values":false
       },

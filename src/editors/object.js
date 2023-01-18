@@ -537,6 +537,8 @@ export class ObjectEditor extends AbstractEditor {
         editor.postBuild()
         editor.setOptInCheckbox(editor.header)
 
+        editor.setValue(editor.getDefault(), true)
+
         if (this.editors[key].options.hidden) {
           holder.style.display = 'none'
         }
@@ -637,7 +639,8 @@ export class ObjectEditor extends AbstractEditor {
       this.addproperty_holder.appendChild(spacer)
 
       /* Close properties modal if clicked outside modal */
-      document.addEventListener('click', this.onOutsideModalClick.bind(this))
+      this.onOutsideModalClickListener = this.onOutsideModalClick.bind(this)
+      document.addEventListener('click', this.onOutsideModalClickListener, true)
 
       /* Description */
       if (this.schema.description) {
@@ -1072,7 +1075,7 @@ export class ObjectEditor extends AbstractEditor {
     this.cached_editors = null
     if (this.editor_holder && this.editor_holder.parentNode) this.editor_holder.parentNode.removeChild(this.editor_holder)
     this.editor_holder = null
-    document.removeEventListener('click', this.onOutsideModalClick)
+    document.removeEventListener('click', this.onOutsideModalClickListener, true)
 
     super.destroy()
   }

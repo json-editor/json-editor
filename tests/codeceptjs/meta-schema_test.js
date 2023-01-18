@@ -1,17 +1,85 @@
 /* global Feature Scenario */
+const { DEFAULT_WAIT_TIME } = require('./test-config')
+var assert = require('assert')
 
-Feature('core')
+Feature('meta-schema')
+
+Scenario('work with json-schema meta-schema @meta-schema-core', async (I) => {
+  I.amOnPage('meta-schema.html')
+  I.waitForElement('.je-ready')
+
+  I.selectOption('.je-switcher', 'Object')
+  assert.equal(await I.grabValueFrom('#value'), '{"properties":{},"title":"","type":"object"}')
+  I.click('.json-editor-btn-edit_properties')
+  I.waitForText('type', '.property-selector')
+  I.waitForText('title', '.property-selector')
+  I.waitForText('description', '.property-selector')
+  I.waitForText('enum', '.property-selector')
+  I.waitForText('properties', '.property-selector')
+  I.waitForText('definitions', '.property-selector')
+  I.waitForText('id', '.property-selector')
+  I.waitForText('$schema', '.property-selector')
+  I.waitForText('enumSource', '.property-selector')
+  I.waitForText('$ref', '.property-selector')
+  I.waitForText('oneOf', '.property-selector')
+  I.waitForText('anyOf', '.property-selector')
+  I.waitForText('allOf', '.property-selector')
+  I.waitForText('not', '.property-selector')
+  I.waitForText('propertyOrder', '.property-selector')
+  I.waitForText('links', '.property-selector')
+  I.waitForText('links', '.property-selector')
+  I.waitForText('watch', '.property-selector')
+  I.waitForText('headerTemplate', '.property-selector')
+  I.waitForText('options', '.property-selector')
+  I.waitForText('patternProperties', '.property-selector')
+  I.waitForText('additionalProperties', '.property-selector')
+  I.waitForText('required', '.property-selector')
+  I.waitForText('format', '.property-selector')
+
+  I.selectOption('.je-switcher', 'Array')
+  assert.equal(await I.grabValueFrom('#value'), '{"items":{"properties":{},"title":"","type":"object"},"title":"","type":"array"}')
+
+  I.selectOption('.je-switcher', 'String')
+  assert.equal(await I.grabValueFrom('#value'), '{"title":"","type":"string"}')
+
+  I.selectOption('.je-switcher', 'Number')
+  assert.equal(await I.grabValueFrom('#value'), '{"title":"","type":"number"}')
+
+  I.selectOption('.je-switcher', 'Integer')
+  assert.equal(await I.grabValueFrom('#value'), '{"title":"","type":"integer"}')
+
+  I.selectOption('.je-switcher', 'Boolean')
+  assert.equal(await I.grabValueFrom('#value'), '{"title":"","type":"boolean"}')
+
+  I.selectOption('.je-switcher', 'Null')
+  assert.equal(await I.grabValueFrom('#value'), '{"title":"","type":"null"}')
+})
 
 // https://github.com/json-editor/json-editor/issues/823
-Scenario('work with json-schema meta-schema', async (I) => {
+Scenario('work with json-schema meta-schema @meta-schema', async (I) => {
   I.amOnPage('issues/issue-gh-823-meta-schema.html')
-  I.waitForElement('[data-schemapath="root"] h3', 10)
+  I.waitForElement('[data-schemapath="root"] h3', DEFAULT_WAIT_TIME)
   I.click('Object Properties')
   I.click('options')
   I.see('$ref')
   I.see('options')
-  // pause();
   I.click('Object Properties')
   I.click('Object Properties')
   I.see('options')
+  I.dontSee('Value must validate against exactly one of the provided schemas. It currently validates against 0 of the schemas.')
+  I.dontSee('No additional properties allowed, but property title is set')
+})
+
+// https://github.com/json-editor/json-editor/issues/1233
+Scenario('passing meta-schema example @meta-schema', async (I) => {
+  I.amOnPage('issues/issue-gh-1233-passing.html')
+  I.waitForElement('.je-ready', DEFAULT_WAIT_TIME)
+  I.waitForElement('[name="root[name]"]', DEFAULT_WAIT_TIME)
+})
+
+// https://github.com/json-editor/json-editor/issues/1233
+Scenario('failing meta-schema example  @meta-schema @optional', async (I) => {
+  I.amOnPage('issues/issue-gh-1233-failing.html')
+  I.waitForElement('.je-ready', DEFAULT_WAIT_TIME)
+  I.waitForElement('[name="root[name]"]', DEFAULT_WAIT_TIME)
 })

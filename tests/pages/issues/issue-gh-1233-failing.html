@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>GitHub Issue 1233</title>
+    <script src="../../../dist/jsoneditor.js"></script>
+  </head>
+  <body>
+    <h1><a href="https://github.com/json-editor/json-editor/issues/1233">GitHub Issue 1233</a></h1>
+    <div id='editor_holder'></div>
+
+    <script>
+      var schema = {
+        "title": "Person",
+        "type": "object",
+        "required": [],
+        "definitions": {
+          "schema": {
+            "allOf": [
+              {
+                "type": "string"
+              }
+            ],
+            "oneOf": [
+              {
+                "format": "url"
+              },
+              {
+                "format": "uuid"
+              }
+            ]
+          }
+        },
+        "properties": {
+          "name": {
+            "$ref": "#/definitions/schema"
+          }
+        }
+      }
+
+      var editor = new JSONEditor(document.getElementById('editor_holder'),{
+        schema: schema
+      })
+    </script>
+  </body>
+</html>

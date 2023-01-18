@@ -10,6 +10,7 @@ export class UploadEditor extends AbstractEditor {
     if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.translateProperty(this.schema.description))
     if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.translateProperty(this.options.infoText))
+    if (this.options.hidden) this.container.style.display = 'none'
 
     /* Editor options */
     this.options = this.expandCallbacks('upload', extend({}, {
@@ -95,9 +96,9 @@ export class UploadEditor extends AbstractEditor {
         const files = e.target.files || e.dataTransfer.files
         if (files && files.length) {
           if (this.options.max_upload_size !== 0 && files[0].size > this.options.max_upload_size) {
-            this.theme.addInputError(this.uploader, `Filesize too large. Max size is ${this.options.max_upload_size}`)
+            this.theme.addInputError(this.uploader, `${this.translate('upload_max_size')} ${this.options.max_upload_size}`)
           } else if (this.options.mime_type.length !== 0 && !this.isValidMimeType(files[0].type, this.options.mime_type)) {
-            this.theme.addInputError(this.uploader, `Wrong file format. Allowed format(s): ${this.options.mime_type.toString()}`)
+            this.theme.addInputError(this.uploader, `${this.translate('upload_wrong_file_format')} ${this.options.mime_type.toString()}`)
           } else {
             if (this.fileDisplay) this.fileDisplay.value = files[0].name
             let fr = new window.FileReader()

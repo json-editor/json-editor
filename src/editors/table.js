@@ -318,6 +318,8 @@ export class TableEditor extends ArrayEditor {
     }
 
     if (typeof value !== 'undefined') this.rows[i].setValue(value)
+
+    return this.rows[i]
   }
 
   _createDeleteButton (i, holder) {
@@ -335,11 +337,14 @@ export class TableEditor extends ArrayEditor {
       const j = e.currentTarget.getAttribute('data-i') * 1
       const value = this.getValue()
 
+      const rows = this.getValue()
+      const editorValue = rows[j]
+
       value.splice(j, 1)
 
       this.setValue(value)
       this.onChange(true)
-      this.jsoneditor.trigger('deleteRow', this.rows[j])
+      this.jsoneditor.trigger('deleteRow', editorValue)
     })
     holder.appendChild(button)
     return button
@@ -498,10 +503,10 @@ export class TableEditor extends ArrayEditor {
       }
 
       const rows = this.getValue()
-      const editor = rows.pop()
+      const editorValue = rows.pop()
       this.setValue(rows)
       this.onChange(true)
-      this.jsoneditor.trigger('deleteRow', editor)
+      this.jsoneditor.trigger('deleteRow', editorValue)
     })
     this.controls.appendChild(button)
     return button
@@ -518,9 +523,11 @@ export class TableEditor extends ArrayEditor {
         return false
       }
 
+      const values = this.getValue()
+
       this.setValue([])
       this.onChange(true)
-      this.jsoneditor.trigger('deleteAllRows')
+      this.jsoneditor.trigger('deleteAllRows', values)
     })
     this.controls.appendChild(button)
     return button

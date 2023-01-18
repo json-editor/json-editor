@@ -1,4 +1,5 @@
 import { resolvers } from './resolvers.js'
+import { editors } from './editors/index.js'
 
 /* default theme */
 const theme = 'html'
@@ -12,7 +13,6 @@ const callbacks = {}
 const themes = {}
 const templates = {}
 const iconlibs = {}
-const editors = {}
 const languages = {}
 // eslint-disable-next-line camelcase
 const custom_validators = []
@@ -229,6 +229,14 @@ languages.en = {
   * When a hostname is in incorrect format
   */
   error_hostname: 'The hostname has the wrong format',
+  /**
+   * When uploads max size limit is exceeded
+   */
+  upload_max_size: 'Filesize too large. Max size is ',
+  /**
+   * When the mime type does not match the type of the file
+   */
+  upload_wrong_file_format: 'Wrong file format. Allowed format(s): ',
   /**
   * Text/Title on Save button
   */

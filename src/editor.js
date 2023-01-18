@@ -184,6 +184,7 @@ export class AbstractEditor {
 
   setContainer (container) {
     this.container = container
+    this.setContainerAttributes()
     if (this.schema.id) this.container.setAttribute('data-schemaid', this.schema.id)
     if (this.schema.type && typeof this.schema.type === 'string') this.container.setAttribute('data-schematype', this.schema.type)
     this.container.setAttribute('data-schemapath', this.path)
@@ -579,12 +580,13 @@ export class AbstractEditor {
       if (type === 'number') return this.isDefaultRequired() ? 0.0 : undefined
       if (type === 'boolean') return this.isDefaultRequired() ? false : undefined
       if (type === 'integer') return this.isDefaultRequired() ? 0 : undefined
-      if (type === 'string') return ''
+      if (type === 'string') return this.isDefaultRequired() ? '' : undefined
+      if (type === 'null') return null
       if (type === 'object') return {}
       if (type === 'array') return []
     }
 
-    return null
+    return undefined
   }
 
   getTitle () {
@@ -645,7 +647,7 @@ export class AbstractEditor {
       else if (el.title && used[el.title] <= 1) name = el.title
       else if (el.format && used[el.format] <= 1) name = el.format
       else if (el.type && used[el.type] <= 1) name = el.type
-      else if (el.description && used[el.description] <= 1) name = el.descripton
+      else if (el.description && used[el.description] <= 1) name = el.description
       else if (el.title) name = el.title
       else if (el.format) name = el.format
       else if (el.type) name = el.type
@@ -681,6 +683,18 @@ export class AbstractEditor {
       Object.keys(inputAttributes).forEach(key => {
         if (!protectedAttributes.includes(key.toLowerCase())) {
           this.input.setAttribute(key, inputAttributes[key])
+        }
+      })
+    }
+  }
+
+  setContainerAttributes () {
+    if (this.schema.options && this.schema.options.containerAttributes) {
+      const containerAttributes = this.schema.options.containerAttributes
+      const protectedAttributes = ['data-schemapath', 'data-schematype', 'data-schemaid']
+      Object.keys(containerAttributes).forEach(key => {
+        if (!protectedAttributes.includes(key.toLowerCase())) {
+          this.container.setAttribute(key, containerAttributes[key])
         }
       })
     }

@@ -463,6 +463,7 @@ The currently supported themes are:
 *  barebones
 *  html (the default)
 *  bootstrap4
+*  bootstrap5 
 *  spectre
 *  tailwind
 
@@ -724,7 +725,8 @@ Here is an example that will show a color picker in browsers that support it:
 
 #### String Editors Input Attributes
 
-You can set custom attributes such as **placeholder**, **class** and **data-** on the input field using the special options keyword `inputAttributes`.
+You can set custom attributes such as **placeholder**, **class** and **data-** on the input field and on the editor container
+using the special options keyword `inputAttributes` and `containerAttributes`.
 
 Like this:
 
@@ -738,6 +740,10 @@ Like this:
         "inputAttributes": {
           "placeholder":  "your name here...",
           "class": "myclass"
+        },
+        "containerAttributes": {
+          "data-container":  "my-container",
+          "class": "my-container-class"
         }
       }
     }
@@ -749,12 +755,12 @@ Like this:
 
 In addition to the standard HTML input formats, JSON Editor can also integrate with several 3rd party specialized editors.  These libraries are not included in JSON Editor and you must load them on the page yourself.
 
-__SCEditor__ provides WYSIWYG editing of HTML and BBCode.  To use it, set the format to `html` or `bbcode` and set the `wysiwyg` option to `true`:
+__SCEditor__ provides WYSIWYG editing of HTML and BBCode.  To use it, set the format to `xhtml` or `bbcode` and set the `wysiwyg` option to `true`:
 
 ```json
 {
   "type": "string",
-  "format": "html",
+  "format": "xhtml",
   "options": {
     "wysiwyg": true
   }
@@ -1012,14 +1018,17 @@ When an array item is added, removed, moved up, moved or removed the json editor
 editor.on('moveRow', editor => {
   console.log('moveRow', editor)
 });
+
 editor.on('addRow', editor => {
   console.log('addRow', editor)
 });
-editor.on('deleteRow', editor => {
-  console.log('deleteRow', editor)
+
+editor.on('deleteRow', deletedValue => {
+  console.log('deleteRow', deletedValue)
 });
-editor.on('deleteAllRows', editor => {
-  console.log('deleteAllRows', editor)
+
+editor.on('deleteAllRows', deletedValues => {
+  console.log('deleteAllRows', deletedValues)
 });
 ```
 

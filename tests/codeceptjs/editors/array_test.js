@@ -1,6 +1,7 @@
 /* global Feature Scenario */
 
 var assert = require('assert');
+const { DEFAULT_WAIT_TIME } = require('../test-config')
 
 Feature('array');
 
@@ -12,7 +13,7 @@ Scenario('should have correct initial value', async (I) => {
 
 Scenario('unique items arrays sorting @unique-itmes-sorting', async (I) => {
   I.amOnPage('array-unique-items-sort.html')
-  I.waitForElement('.je-ready', 10)
+  I.waitForElement('.je-ready', DEFAULT_WAIT_TIME)
   I.click('[data-schemapath="root.items"] .form-control:nth-of-type(1)')
   I.click('.get-value')
   assert.equal(await I.grabValueFrom('.debug'), '{"items":["01"]}')
@@ -60,8 +61,8 @@ Scenario('unique items arrays sorting @unique-itmes-sorting', async (I) => {
   assert.equal(await I.grabValueFrom('.debug'), '{"items":["01","02","03","04","05","06","07","08","09","10","11","12","13","14","15"]}')
 });
 
-Scenario('should trigger array (table) editing triggers @retry', async (I) => {
-  I.amOnPage('table-move-events.html');
+Scenario('should array editor events (table) @array-events', async (I) => {
+  I.amOnPage('array-events-table.html');
   I.seeElement('[data-schemapath="root.0"]');
   I.seeElement('[data-schemapath="root.1"]');
   I.seeElement('[data-schemapath="root.2"]');
@@ -132,8 +133,8 @@ Scenario('should trigger array (table) editing triggers @retry', async (I) => {
   assert.equal(value, '[]');
 });
 
-Scenario('should array editing triggers', async (I) => {
-  I.amOnPage('array-move-events.html');
+Scenario('should array editor events @array-events', async (I) => {
+  I.amOnPage('array-events.html');
   I.seeElement('[data-schemapath="root.0"]');
   I.seeElement('[data-schemapath="root.1"]');
   I.click('.get-value');
