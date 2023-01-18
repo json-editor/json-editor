@@ -1,9 +1,8 @@
 ### Unreleased
 
-### dev
-
 ### 2.9.0-beta.1
 
+- Fixed editors default values bug
 - Fixed typo in example schema
 - Fixed color editors default value bug
 - Improved docs page UI with ACE editor and some spacing
@@ -23,6 +22,9 @@
 - Fixed #1194 Event listener removed after destroy
 - Added setContainerAttributes option
 - Fixed select2/selectize cannnot add new option
+
+### 2.9.0-beta.0
+
 - Enh #1162 Added cache system for schema loader (chhill-redhat)
 - Added warnings undefined callbacks
 
