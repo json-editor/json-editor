@@ -4,7 +4,7 @@ var assert = require('assert')
 
 Feature('autocomplete')
 
-Scenario('autocomplete should work @autocomplete', async (I) => {
+Scenario('autocomplete should work @autocomplete', async ({ I }) => {
   I.amOnPage('autocomplete.html')
   I.waitForElement('.je-ready', 10)
   I.fillField('root', 'ir')

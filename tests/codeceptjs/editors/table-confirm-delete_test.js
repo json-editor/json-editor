@@ -4,13 +4,13 @@ var assert = require('assert')
 
 Feature('table')
 
-Scenario('should have correct initial value', async (I) => {
+Scenario('should have correct initial value', async ({ I }) => {
   I.amOnPage('table.html')
   I.click('.get-value')
   assert.equal(await I.grabValueFrom('.debug'), '[]')
 })
 
-Scenario('should ask for confirmation on node delete', async (I) => {
+Scenario('should ask for confirmation on node delete', async ({ I }) => {
   I.amOnPage('table.html')
   I.click('Add Node')
   I.seeElement('[data-schemapath="root.0"] .json-editor-btn-delete')
@@ -26,7 +26,7 @@ Scenario('should ask for confirmation on node delete', async (I) => {
   I.dontSeeElement('[data-schemapath="root.0"] .json-editor-btn-delete')
 })
 
-Scenario('should ask for confirmation on node delete last', async (I) => {
+Scenario('should ask for confirmation on node delete last', async ({ I }) => {
   I.amOnPage('table.html')
   I.click('Add Node')
   I.click('Add Node')
@@ -46,7 +46,7 @@ Scenario('should ask for confirmation on node delete last', async (I) => {
   I.dontSeeElement('[data-schemapath="root.1"] .json-editor-btn-delete')
 })
 
-Scenario('should ask for confirmation on node delete all', async (I) => {
+Scenario('should ask for confirmation on node delete all', async ({ I }) => {
   I.amOnPage('table.html')
   I.click('Add Node')
   I.click('Add Node')

@@ -4,7 +4,7 @@ const assert = require('assert')
 
 Feature('GitHub issue 1257')
 
-Scenario('GitHub issue 1257 should remain fixed @issue-1257', async (I) => {
+Scenario('GitHub issue 1257 should remain fixed @issue-1257', async ({ I }) => {
   I.amOnPage('issues/issue-gh-1257.html')
   I.waitForElement('.je-ready')
   I.click('[data-schemapath="root.colors"] .json-editor-btntype-add')

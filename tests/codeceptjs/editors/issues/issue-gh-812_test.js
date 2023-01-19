@@ -5,7 +5,7 @@ let value
 
 Feature('issues')
 
-Scenario('GitHub issue 812 should remain fixed @issue-812', async (I) => {
+Scenario('GitHub issue 812 should remain fixed @issue-812', async ({ I }) => {
   I.amOnPage('issues/issue-gh-812.html')
 
   I.click('.get-value')
