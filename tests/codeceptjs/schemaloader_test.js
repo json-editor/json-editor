@@ -3,7 +3,7 @@ const { DEFAULT_WAIT_TIME } = require('./test-config')
 
 Feature('schemaloader');
 
-Scenario('resolving nested external URNs', async (I) => {
+Scenario('resolving nested external URNs', async ({ I }) => {
   I.amOnPage('urn.html');
   I.waitForElement('[data-schemapath="root"] h3', DEFAULT_WAIT_TIME);
   I.seeElementInDOM('[data-schemapath="root.fname"]')

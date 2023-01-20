@@ -69,32 +69,28 @@ class customHelpers extends Helper {
   // Evaluates true if xpath is checked
   async seeCheckedAttribute (xpath) {
     const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
-    let res = await helper.grabAttributeFrom(xpath, 'checked')
-    return assert.ok(res !== null && typeof res !== 'undefined' && res.toString().toLowerCase() === 'true', "\x1b[31mexpected element '\x1b[91m" + xpath + "\x1b[31m' to be checked")
+    return await helper.waitForElement(xpath + ':checked')
   }
 
   // Custom dontSeeCheckedAttribute function.
   // Evaluates true if xpath is not checked
   async dontSeeCheckedAttribute (xpath) {
     const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
-    let res = await helper.grabAttributeFrom(xpath, 'checked')
-    return assert.ok(!(res !== null && typeof res !== 'undefined' && res.toString().toLowerCase() === 'true'), "\x1b[31mexpected element '\x1b[91m" + xpath + "\x1b[31m' NOT to be checked")
+    return await helper.waitForInvisible(xpath + ':checked')
   }
 
   // Custom seeDisabledAttribute function.
   // Evaluates true if xpath is disabled
   async seeDisabledAttribute (xpath) {
     const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
-    let res = await helper.grabAttributeFrom(xpath, 'disabled')
-    return assert.ok(res !== null && typeof res !== 'undefined' && res.toString().toLowerCase() === 'true', "\x1b[31mexpected element '\x1b[91m" + xpath + "\x1b[31m' to be disabled")
+    return await helper.waitForElement(xpath + ':disabled')
   }
 
   // Custom dontSeeDisabledAttributet function.
   // Evaluates true if xpath is not disabled
   async dontSeeDisabledAttribute (xpath) {
     const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
-    let res = await helper.grabAttributeFrom(xpath, 'disabled')
-    return assert.ok(!(res !== null && typeof res !== 'undefined' && res.toString().toLowerCase() === 'true'), "\x1b[31mexpected element '\x1b[91m" + xpath + "\x1b[31m' NOT to be disabled")
+    return await helper.waitForInvisible(xpath + ':disabled')
   }
 
   // Custom seeReadOnlyAttribute function.

@@ -6,7 +6,7 @@ const { DEFAULT_WAIT_TIME } = require('../test-config')
 
 Feature('Validations')
 
-Scenario('test validations in validation.html', (I) => {
+Scenario('test validations in validation.html', ({ I }) => {
   I.amOnPage('validation.html')
   var numberOfTestItemsExpected = 158
   I.waitForElement('#output div:nth-child(' + numberOfTestItemsExpected + ')', DEFAULT_WAIT_TIME)

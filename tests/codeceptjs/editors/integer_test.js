@@ -3,13 +3,13 @@ const { DEFAULT_WAIT_TIME } = require('../test-config')
 
 Feature('integer');
 
-Scenario('should have correct initial value', async (I) => {
+Scenario('should have correct initial value', async ({ I }) => {
   I.amOnPage('integer.html');
   I.click('.get-value');
   assert.equal(await I.grabValueFrom('.value'), '{"integer":5,"integer_number":5,"integer_range":5}');
 });
 
-Scenario('should respect step by incrementing and decrementing the value of a number', async (I) => {
+Scenario('should respect step by incrementing and decrementing the value of a number', async ({ I }) => {
   I.amOnPage('integer.html');
   I.seeElement('[data-schemapath="root.integer"] input');
   I.executeScript(function() {
@@ -36,7 +36,7 @@ Scenario('should respect step by incrementing and decrementing the value of a nu
   assert.equal(await I.grabValueFrom('.value'), '{"integer":5,"integer_number":5,"integer_range":5}');
 });
 
-Scenario('should respect step by incrementing and decrementing the value of a range', async (I) => {
+Scenario('should respect step by incrementing and decrementing the value of a range', async ({ I }) => {
   I.amOnPage('integer.html');
   I.seeElement('[data-schemapath="root.integer_range"] input');
   I.executeScript(function() {
@@ -63,12 +63,12 @@ Scenario('should respect step by incrementing and decrementing the value of a ra
   assert.equal(await I.grabValueFrom('.value'), '{"integer":5,"integer_number":5,"integer_range":5}');
 });
 
-Scenario('should be readonly if specified and not disabled', async (I) => {
+Scenario('should be readonly if specified and not disabled', async ({ I }) => {
   I.amOnPage('read-only.html');
   I.seeReadOnlyAttribute('[name="root[integer]"]');
 });
 
-Scenario('should update output when (method) setValue is called', async (I) => {
+Scenario('should update output when (method) setValue is called', async ({ I }) => {
   I.amOnPage('integer.html');
   I.saveScreenshot('integer-setvalue-1.png')
   I.waitForText('5', DEFAULT_WAIT_TIME, '[data-schemapath="root.integer_range"] output');
@@ -79,7 +79,7 @@ Scenario('should update output when (method) setValue is called', async (I) => {
   I.saveScreenshot('integer-setvalue-4.png')
 });
 
-Scenario('should validate value', async (I) => {
+Scenario('should validate value', async ({ I }) => {
   I.amOnPage('integer.html');
   await I.fillField('[name="root[integer]"]', '5-5');
   I.click('.get-value');

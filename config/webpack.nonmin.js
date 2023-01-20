@@ -6,7 +6,7 @@ const helpers = require('./helpers')
 // See https://webpack.js.org/guides/development/
 module.exports = (env) => webpackMerge(commonConfig, {
   mode: 'development',
-  devtool: '@source-map',
+  devtool: 'source-map',
   output: {
     path: env && env.travis === true ? helpers.root('dist') : helpers.root('dist/nonmin'),
     publicPath: '/dist/',
