@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8"/>
+    <title>GitHub Issue 1164</title>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+      <script src="../../../dist/jsoneditor.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h1><a href="https://github.com/json-editor/json-editor/issues/1164">GitHub Issue 1164</a></h1>
+    <label for="value">Value</label>
+    <textarea class="form-control" id="value" rows="6" style="font-size: 12px; font-family: monospace;"></textarea>
+    <div class='json-editor-container'></div>
+</div>
+
+<script>
+  var jsonEditorContainer = document.querySelector('.json-editor-container')
+  var value = document.querySelector('#value')
+  var schema = {
+    'type': 'object',
+    'properties': {
+      'arrayEnumSelect': {
+        'title': 'Array enum select',
+        'type': 'array',
+        'minItems': 1,
+        'items': {
+          'type': 'string',
+          'enum': ['one', 'two', 'three']
+        }
+      },
+      'stringEnumRadio': {
+        'title': 'String enum radio',
+        'type': 'string',
+        'format': 'radio',
+        'enum': ['one', 'two', 'three']
+      },
+      'numberEnumRadio': {
+        'title': 'Number enum radio',
+        'type': 'number',
+        'format': 'radio',
+        'enum': [1.1, 2.2, 3.3]
+      },
+      'integerEnumRadio': {
+        'title': 'Integer enum radio',
+        'type': 'integer',
+        'format': 'radio',
+        'enum': [1, 2, 3]
+      }
+    }
+  }
+
+  var editor = new JSONEditor(jsonEditorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    show_errors: 'always',
+    iconlib: 'fontawesome5',
+    disable_collapse: true,
+    disable_edit_json: true,
+    disable_properties: true
+  })
+
+  editor.on('change', function () {
+    value.value = JSON.stringify(editor.getValue())
+  })
+</script>
+
+</body>
+</html>
