@@ -1,23 +1,25 @@
+/* global Feature Scenario Event */
+
 var assert = require('assert');
 const { DEFAULT_WAIT_TIME } = require('../test-config')
 
 Feature('number');
 
-Scenario('should have correct initial value', async ({ I }) => {
+Scenario('should have correct initial value @number', async ({ I }) => {
   I.amOnPage('number.html');
   I.click('.get-value');
-  assert.equal(await I.grabValueFrom('.value'), '{"number":5.75,"number_number":5.75,"number_range":5.75}');
+  assert.equal(await I.grabValueFrom('.value'), '{"number":5.75,"number_number":5.75,"number_range":5.75,"stepper_number_default":5,"stepper_integer_default":5}');
 });
 
-Scenario('should validate value', async ({ I }) => {
+Scenario('should validate value @number', async ({ I }) => {
   I.amOnPage('number.html');
   await I.fillField('[name="root[number]"]', '12-12');
   I.click('.get-value');
   I.waitForText('Value must be of type number.', DEFAULT_WAIT_TIME, '[data-schemapath="root.number"] .invalid-feedback');
-  assert.equal(await I.grabValueFrom('.value'), '{"number":"12-12","number_number":5.75,"number_range":5.75}');
+  assert.equal(await I.grabValueFrom('.value'), '{"number":"12-12","number_number":5.75,"number_range":5.75,"stepper_number_default":5,"stepper_integer_default":5}');
 });
 
-Scenario('should respect step by incrementing and decrementing the value of a number', async ({ I }) => {
+Scenario('should respect step by incrementing and decrementing the value of a  @number', async ({ I }) => {
   I.amOnPage('number.html');
   I.seeElement('[data-schemapath="root.number_number"] input');
   I.executeScript(function() {
@@ -30,7 +32,7 @@ Scenario('should respect step by incrementing and decrementing the value of a nu
     range.dispatchEvent(event);
   });
   I.click('.get-value');
-  assert.equal(await I.grabValueFrom('.value'), '{"number":5.75,"number_number":6,"number_range":5.75}');
+  assert.equal(await I.grabValueFrom('.value'), '{"number":5.75,"number_number":6,"number_range":5.75,"stepper_number_default":5,"stepper_integer_default":5}');
   I.executeScript(function() {
     var range = document.querySelector('[data-schemapath="root.number_number"] input');
     range.stepDown();
@@ -41,10 +43,10 @@ Scenario('should respect step by incrementing and decrementing the value of a nu
     range.dispatchEvent(event);
   });
   I.click('.get-value');
-  assert.equal(await I.grabValueFrom('.value'), '{"number":5.75,"number_number":5.75,"number_range":5.75}');
+  assert.equal(await I.grabValueFrom('.value'), '{"number":5.75,"number_number":5.75,"number_range":5.75,"stepper_number_default":5,"stepper_integer_default":5}');
 });
 
-Scenario('should respect step by incrementing and decrementing the value of a range', async ({ I }) => {
+Scenario('should respect step by incrementing and decrementing the value of a range @number', async ({ I }) => {
   I.amOnPage('number.html');
   I.seeElement('[data-schemapath="root.number_range"] input');
   I.executeScript(function() {
@@ -57,7 +59,7 @@ Scenario('should respect step by incrementing and decrementing the value of a ra
     range.dispatchEvent(event);
   });
   I.click('.get-value');
-  assert.equal(await I.grabValueFrom('.value'), '{"number":5.75,"number_number":5.75,"number_range":6}');
+  assert.equal(await I.grabValueFrom('.value'), '{"number":5.75,"number_number":5.75,"number_range":6,"stepper_number_default":5,"stepper_integer_default":5}');
   I.executeScript(function() {
     var range = document.querySelector('[data-schemapath="root.number_range"] input');
     range.stepDown();
@@ -68,15 +70,15 @@ Scenario('should respect step by incrementing and decrementing the value of a ra
     range.dispatchEvent(event);
   });
   I.click('.get-value');
-  assert.equal(await I.grabValueFrom('.value'), '{"number":5.75,"number_number":5.75,"number_range":5.75}');
+  assert.equal(await I.grabValueFrom('.value'), '{"number":5.75,"number_number":5.75,"number_range":5.75,"stepper_number_default":5,"stepper_integer_default":5}');
 });
 
-Scenario('should be readonly if specified and not disabled', async ({ I }) => {
+Scenario('should be readonly if specified and not disabled @number', async ({ I }) => {
   I.amOnPage('read-only.html');
   I.seeReadOnlyAttribute('[name="root[number]"]');
 });
 
-Scenario('should update output when setValue is called', async ({ I }) => {
+Scenario('should update output when setValue is called @number', async ({ I }) => {
   I.amOnPage('number.html');
   I.click('.set-value');
   I.see('2', '[data-schemapath="root.number_range"] output');

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8"/>
+    <title>GitHub Issue 1133</title>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+      <script src="../../../dist/jsoneditor.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h1><a href="https://github.com/json-editor/json-editor/issues/1133">GitHub Issue 1133</a></h1>
+    <label for="value">Value</label>
+    <textarea class="form-control" id="value" rows="6" style="font-size: 12px; font-family: monospace;"></textarea>
+    <div class='json-editor-container'></div>
+</div>
+
+<script>
+  var jsonEditorContainer = document.querySelector('.json-editor-container')
+  var value = document.querySelector('#value')
+  var schema = {
+    "title": "MCX JSON Input",
+    "type": "object",
+    "required": [
+      "SaveDataMask"
+    ],
+    "format": "categories",
+    "properties": {
+      "SaveDataMask": {
+        "oneOf": [
+          {
+            "title": "Save detected photon flags",
+            "type": "string",
+            "default": "DP"
+          },
+          {
+            "title": "Save detected photon flags",
+            "type": "integer",
+            "default": 5,
+            "minimum": 0
+          }
+        ]
+      }
+    }
+  }
+
+  var editor = new JSONEditor(jsonEditorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    show_errors: 'always',
+    iconlib: 'fontawesome5',
+    disable_collapse: true,
+    disable_edit_json: true,
+    disable_properties: true
+  })
+
+  editor.on('change', function () {
+    value.value = JSON.stringify(editor.getValue())
+  })
+</script>
+
+</body>
+</html>

@@ -4,7 +4,7 @@ const assert = require('assert')
 
 Feature('GitHub issue 1164')
 
-Scenario('GitHub issue 1164 should remain fixed @issue-1164', async (I) => {
+Scenario('GitHub issue 1164 should remain fixed @issue-1164', async ({ I }) => {
   I.amOnPage('issues/issue-gh-1164.html')
   I.waitForElement('.je-ready')
   I.waitForInvisible('option[value="undefined"]')
