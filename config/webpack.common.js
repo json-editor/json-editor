@@ -14,9 +14,9 @@ const bannerText = `/**
 * @example see README.md and docs/ for requirements, examples and usage info
 */`
 module.exports = {
-  output: {
-    hashFunction: 'sha256'
-  },
+  // output: {
+  //   hashFunction: 'sha256'
+  // },
   entry: {
     jsoneditor: './src/core.js'
   },
