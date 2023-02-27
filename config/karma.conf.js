@@ -3,6 +3,9 @@ const CssToJSON = require('../build/CssToJson')
 /* eslint-disable no-undef */
 // Karma configuration
 const webpackConfig = {
+  output: {
+    hashFunction: 'sha256'
+  },
   devtool: 'inline-source-map',
   plugins: [
     new CssToJSON({
