@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
         - with:
-            node-version: 14
+          node-version: 14
       - name: Node version
           run: node -v
       - name: Install
