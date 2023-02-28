@@ -1,14 +1,18 @@
 ### Unreleased
 
+### 2.9.1
+
+- Fixed past merge
+
 ### 2.9.0
 
-Updated datetime example page
-Updated packages
-Fixed issue #1133: default values for each of the oneOf options
-Upgraded codeceptjs from 2 to 3
-Fixed npm audit issues
-Fixed unnecessary Null values included in enums
-Fixed radio editors not recognising numerical values
+- Updated datetime example page
+- Updated packages
+- Fixed issue #1133: default values for each of the oneOf options
+- Upgraded codeceptjs from 2 to 3
+- Fixed npm audit issues
+- Fixed unnecessary Null values included in enums
+- Fixed radio editors not recognising numerical values
 
 ### 2.9.0-beta.1
 
