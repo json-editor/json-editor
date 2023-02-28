@@ -217,7 +217,7 @@ describe('JSONEditor', function () {
         editor.promise.then(() => {
           expect(editor.getValue()).toEqual({
             boolean: undefined,
-            enum: undefined,
+            enum: 'foo',
             integer: undefined,
             number: undefined,
             string: undefined,
@@ -235,7 +235,7 @@ describe('JSONEditor', function () {
         editor.promise.then(() => {
           expect(editor.getValue()).toEqual({
             boolean: undefined,
-            enum: undefined,
+            enum: 'foo',
             integer: undefined,
             number: undefined,
             string: undefined,
@@ -249,7 +249,7 @@ describe('JSONEditor', function () {
 
           expect(editor.getValue()).toEqual({
             boolean: undefined,
-            enum: undefined,
+            enum: 'foo',
             integer: 3,
             number: 4,
             string: 'foo',
@@ -263,7 +263,7 @@ describe('JSONEditor', function () {
 
           expect(editor.getValue()).toEqual({
             boolean: undefined,
-            enum: undefined,
+            enum: 'foo',
             integer: undefined,
             number: undefined,
             string: '',
@@ -290,7 +290,8 @@ describe('JSONEditor', function () {
         editor.promise.then(() => {
           expect(editor.getValue()).toEqual({
             string_with_default: 'foobar',
-            enum_with_default: 'foobar'
+            enum_with_default: 'foobar',
+            enum_without_default: 'foobar'
           })
         })
       })

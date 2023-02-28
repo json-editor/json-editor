@@ -68,7 +68,7 @@ module.exports = {
     hints: false
   },
   devServer: {
-    contentBase: helpers.root('.'),
+    static: helpers.root('.'),
     historyApiFallback: true,
     port: 8080
   }

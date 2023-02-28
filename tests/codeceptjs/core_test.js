@@ -5,7 +5,7 @@ const { DEFAULT_WAIT_TIME } = require('./test-config')
 
 Feature('core')
 
-Scenario('should set per-editor options @per-editor-options', async (I) => {
+Scenario('should set per-editor options @per-editor-options', async ({ I }) => {
   I.amOnPage('per-editor-options.html')
   I.waitForElement('.je-ready')
   I.waitForElement('[title="Expand"]')
@@ -13,7 +13,7 @@ Scenario('should set per-editor options @per-editor-options', async (I) => {
   I.dontSeeElement('.card')
 })
 
-Scenario('should set container attributes @container-attributes', async (I) => {
+Scenario('should set container attributes @container-attributes', async ({ I }) => {
   I.amOnPage('container-attributes.html')
   I.waitForElement('.je-ready')
   I.waitForElement('.container-class')
@@ -22,18 +22,18 @@ Scenario('should set container attributes @container-attributes', async (I) => {
   I.dontSeeElement('[data-schemaid="blank"]')
 })
 
-Scenario('should not set inputs name attributes @use-name-attributes', async (I) => {
+Scenario('should not set inputs name attributes @use-name-attributes', async ({ I }) => {
   I.amOnPage('use-name-attributes.html')
   I.waitForElement('.je-ready')
   I.dontSeeElement('[name]')
 })
 
-Scenario('should have class je-ready when ready @core @ready', async (I) => {
+Scenario('should have class je-ready when ready @core @ready', async ({ I }) => {
   I.amOnPage('ready.html')
   I.waitForElement('.je-ready')
 })
 
-Scenario('should Disable and enable entire form', async (I) => {
+Scenario('should Disable and enable entire form', async ({ I }) => {
   I.amOnPage('core.html')
   I.seeElement('[data-schemapath="root.name"] input')
   I.seeElement('[data-schemapath="root.age"] input')
@@ -45,7 +45,7 @@ Scenario('should Disable and enable entire form', async (I) => {
   I.seeElement('[data-schemapath="root.name"] input:not(:disabled)')
 })
 
-Scenario('should Disable and enable part of the form', async (I) => {
+Scenario('should Disable and enable part of the form', async ({ I }) => {
   I.amOnPage('core.html')
   I.seeElement('[data-schemapath="root.name"] input')
   I.seeElement('[data-schemapath="root.age"] input')
@@ -55,14 +55,14 @@ Scenario('should Disable and enable part of the form', async (I) => {
   I.seeElement('[data-schemapath="root.name"] input:not(:disabled)')
 })
 
-Scenario('should destroy', async (I) => {
+Scenario('should destroy', async ({ I }) => {
   I.amOnPage('core.html')
   I.seeElement('[data-schemapath="root"]')
   I.click('destroy')
   I.dontSeeElement('[data-schemapath="root"]')
 })
 
-Scenario('should set and get form value', async (I) => {
+Scenario('should set and get form value', async ({ I }) => {
   I.amOnPage('core.html')
   I.click('.get-value')
   assert.equal(await I.grabValueFrom('.value'), '{"age":18,"name":"Francesco Avizzano"}')
@@ -71,7 +71,7 @@ Scenario('should set and get form value', async (I) => {
   assert.equal(await I.grabValueFrom('.value'), '{"age":40,"name":"John Smith"}')
 })
 
-Scenario('should set and get individual values', async (I) => {
+Scenario('should set and get individual values', async ({ I }) => {
   I.amOnPage('core.html')
   I.click('.get-individual-value')
   assert.equal(await I.grabValueFrom('.value'), '"Francesco Avizzano"')
@@ -79,21 +79,21 @@ Scenario('should set and get individual values', async (I) => {
   assert.equal(await I.grabValueFrom('.value'), '"john kaminski"')
 })
 
-Scenario('should watch a specific field for changes', async (I) => {
+Scenario('should watch a specific field for changes', async ({ I }) => {
   I.amOnPage('core.html')
   I.dontSeeElement('.name-changed')
   I.click('.set-individual-value')
   I.seeElement('.name-changed')
 })
 
-Scenario('should watch form for changes', async (I) => {
+Scenario('should watch form for changes', async ({ I }) => {
   I.amOnPage('core.html')
   I.dontSeeElement('.form-changed')
   I.click('.set-value')
   I.seeElement('.form-changed')
 })
 
-Scenario('should change the form if form_name_root option is set @core', async (I) => {
+Scenario('should change the form if form_name_root option is set @core', async ({ I }) => {
   I.amOnPage('form-name.html')
   I.see('Property must be set.', '.invalid-feedback')
   I.seeElement('[data-schemapath="form_1"]')
@@ -121,7 +121,7 @@ Scenario('should change the form if form_name_root option is set @core', async (
   assert.equal(await I.grabValueFrom('#value-form-2'), '"no"')
 })
 
-Scenario('should validate against oneOf schemas and display single oneOf and editors error messages @core @oneof', async (I) => {
+Scenario('should validate against oneOf schemas and display single oneOf and editors error messages @core @oneof', async ({ I }) => {
   I.amOnPage('oneof.html')
   I.waitForElement('.je-ready')
   I.waitForText('Object is missing the required property \'p4\'', DEFAULT_WAIT_TIME, '.alert-danger')
@@ -152,7 +152,7 @@ Scenario('should validate against oneOf schemas and display single oneOf and edi
   I.dontSee('Value must be at least 4 characters long.', '[data-schemapath="root.p5.p2"] .invalid-feedback')
 })
 
-Scenario('should validate against anyOf schemas and display single anyOf and editors error messages @core @anyof', async (I) => {
+Scenario('should validate against anyOf schemas and display single anyOf and editors error messages @core @anyof', async ({ I }) => {
   I.amOnPage('anyof.html')
   I.waitForElement('.je-ready')
   I.waitForElement('.alert-danger')
@@ -170,14 +170,14 @@ Scenario('should validate against anyOf schemas and display single anyOf and edi
   I.dontSee('Property must be set.', '[data-schemapath="root.age"] .invalid-feedback')
 })
 
-Scenario('should display anyOf and oneOf error messages in the correct places @848', async (I) => {
+Scenario('should display anyOf and oneOf error messages in the correct places @848', async ({ I }) => {
   I.amOnPage('issues/issue-gh-848.html')
   I.selectOption('.je-switcher', 'Value, string')
   I.waitForElement('[data-schemapath="root.list"] .invalid-feedback', DEFAULT_WAIT_TIME)
   I.dontSeeElement('[data-schemapath="root.list_group"] .invalid-feedback', DEFAULT_WAIT_TIME)
 })
 
-Scenario('Should switch between all json 7 data types in @oneof and display error messages for each one @core', async (I) => {
+Scenario('Should switch between all json 7 data types in @oneof and display error messages for each one @core', async ({ I }) => {
   I.amOnPage('oneof-2.html')
   I.waitForElement('.je-ready')
 
@@ -216,7 +216,7 @@ Scenario('Should switch between all json 7 data types in @oneof and display erro
   assert.equal(await I.grabValueFrom('#value'), '{"test":null}')
 })
 
-Scenario('Should switch between all json 7 data types in @anyof and display error messages for each one @core', async (I) => {
+Scenario('Should switch between all json 7 data types in @anyof and display error messages for each one @core', async ({ I }) => {
   I.amOnPage('anyof-2.html')
   I.waitForElement('.je-ready')
 
@@ -247,7 +247,7 @@ Scenario('Should switch between all json 7 data types in @anyof and display erro
   assert.equal(await I.grabValueFrom('#value'), '{"test":null}')
 })
 
-Scenario('should validate against oneOf schemas and display single oneOf and editors error messages @core @translate-property', async (I) => {
+Scenario('should validate against oneOf schemas and display single oneOf and editors error messages @core @translate-property', async ({ I }) => {
   I.amOnPage('translate-property.html?lang=en')
   I.waitForText('Object Title')
   I.waitForText('Object Description')
@@ -317,7 +317,7 @@ Scenario('should validate against oneOf schemas and display single oneOf and edi
   I.seeInSource('Rating Info Text (but in german)')
 })
 
-Scenario('should load internal schema definitions, external schema definitions and external schema properties @core @references', async (I) => {
+Scenario('should load internal schema definitions, external schema definitions and external schema properties @core @references', async ({ I }) => {
   I.amOnPage('references.html')
   I.waitForText('References JSON Editor Example')
 
@@ -360,7 +360,7 @@ Scenario('should load internal schema definitions, external schema definitions a
   }
 })
 
-Scenario('should override error messages if specified in schema options @core @errors-messages', async (I) => {
+Scenario('should override error messages if specified in schema options @core @errors-messages', async ({ I }) => {
   I.amOnPage('error-messages.html')
   I.waitForText('Error Messages')
 

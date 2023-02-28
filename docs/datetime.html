@@ -257,7 +257,42 @@
             }
           }
         },
-
+        "isofsdatetime": {
+          "type": "string",
+          "format": "datetime-local",
+          "title": "Datetime (String)",
+          "description": "ISO datetime-local field with flatpickr",
+          "options": {
+            "grid_columns": 4,
+            "inputAttributes": {
+              "placeholder": "Enter datetime"
+            },
+            "flatpickr": {
+              "dateFormat": "Z",
+              "wrap": true,
+              "allowInput": true,
+              "enableSeconds": true,
+            }
+          }
+        },
+        "isofidatetime": {
+          "type": "integer",
+          "format": "datetime-local",
+          "title": "Datetime (Integer)",
+          "description": "ISO datetime-local field with flatpickr",
+          "options": {
+            "grid_columns": 4,
+            "inputAttributes": {
+              "placeholder": "Enter datetime"
+            },
+            "flatpickr": {
+              "dateFormat": "Z",
+              "wrap": true,
+              "allowInput": true,
+              "enableSeconds": true,
+            }
+          }
+        },
         "fisdatetime": {
           "type": "string",
           "format": "datetime-local",

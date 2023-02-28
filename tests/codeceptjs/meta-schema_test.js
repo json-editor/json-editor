@@ -4,7 +4,7 @@ var assert = require('assert')
 
 Feature('meta-schema')
 
-Scenario('work with json-schema meta-schema @meta-schema-core', async (I) => {
+Scenario('work with json-schema meta-schema @meta-schema-core', async ({ I }) => {
   I.amOnPage('meta-schema.html')
   I.waitForElement('.je-ready')
 
@@ -56,7 +56,7 @@ Scenario('work with json-schema meta-schema @meta-schema-core', async (I) => {
 })
 
 // https://github.com/json-editor/json-editor/issues/823
-Scenario('work with json-schema meta-schema @meta-schema', async (I) => {
+Scenario('work with json-schema meta-schema @meta-schema', async ({ I }) => {
   I.amOnPage('issues/issue-gh-823-meta-schema.html')
   I.waitForElement('[data-schemapath="root"] h3', DEFAULT_WAIT_TIME)
   I.click('Object Properties')
@@ -71,14 +71,14 @@ Scenario('work with json-schema meta-schema @meta-schema', async (I) => {
 })
 
 // https://github.com/json-editor/json-editor/issues/1233
-Scenario('passing meta-schema example @meta-schema', async (I) => {
+Scenario('passing meta-schema example @meta-schema', async ({ I }) => {
   I.amOnPage('issues/issue-gh-1233-passing.html')
   I.waitForElement('.je-ready', DEFAULT_WAIT_TIME)
   I.waitForElement('[name="root[name]"]', DEFAULT_WAIT_TIME)
 })
 
 // https://github.com/json-editor/json-editor/issues/1233
-Scenario('failing meta-schema example  @meta-schema @optional', async (I) => {
+Scenario('failing meta-schema example  @meta-schema @optional', async ({ I }) => {
   I.amOnPage('issues/issue-gh-1233-failing.html')
   I.waitForElement('.je-ready', DEFAULT_WAIT_TIME)
   I.waitForElement('[name="root[name]"]', DEFAULT_WAIT_TIME)

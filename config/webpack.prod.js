@@ -17,7 +17,6 @@ module.exports = () => {
       minimize: true
     },
     plugins: [
-      new RemoveStrictPlugin(), // I have put this in to avoid IE throwing error Assignment to read-only properties is not allowed in strict mode
       // This doesn't seem to actually be minimising the CSS!
       new webpack.NoEmitOnErrorsPlugin()
     ]

@@ -290,7 +290,9 @@ export class MultipleEditor extends AbstractEditor {
       this.switchEditor(this.type)
     }
 
-    this.editors[this.type].setValue(val, initial)
+    if (typeof val !== 'undefined') {
+      this.editors[this.type].setValue(val, initial)
+    }
 
     this.refreshValue()
     this.onChange(typeChanged)
