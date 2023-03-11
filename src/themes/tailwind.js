@@ -376,6 +376,8 @@ export class tailwindTheme extends AbstractTheme {
     if (row.container.classList.contains('block') === true) {
       row.container.classList.remove('block')
       row.container.classList.add('hidden')
+    } else {
+      row.container.classList.add('hidden')
     }
   }
 
