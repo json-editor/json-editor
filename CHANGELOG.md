@@ -1,5 +1,7 @@
 ### Unreleased
 
+- Added support for shell script highlighting
+
 ### 2.9.1
 
 - Fixed past merge
