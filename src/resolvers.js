@@ -114,7 +114,7 @@ const markdown = schema => schema.type === 'string' && schema.format === 'markdo
 const xhtml = schema => schema.type === 'string' && ['xhtml', 'bbcode'].includes(schema.format) && 'sceditor'
 
 /* Use the ace editor for schemas with format equals any of ace editor modes */
-const aceModes = ['actionscript', 'batchfile', 'c', 'c++', 'cpp', 'coffee', 'csharp', 'css', 'dart', 'django', 'ejs', 'erlang', 'golang', 'groovy', 'handlebars', 'haskell', 'haxe', 'html', 'ini', 'jade', 'java', 'javascript', 'json', 'less', 'lisp', 'lua', 'makefile', 'matlab', 'mysql', 'objectivec', 'pascal', 'perl', 'pgsql', 'php', 'python', 'r', 'ruby', 'sass', 'scala', 'scss', 'smarty', 'sql', 'sqlserver', 'stylus', 'svg', 'twig', 'vbscript', 'xml', 'yaml']
+const aceModes = ['actionscript', 'batchfile', 'c', 'c++', 'cpp', 'coffee', 'csharp', 'css', 'dart', 'django', 'ejs', 'erlang', 'golang', 'groovy', 'handlebars', 'haskell', 'haxe', 'html', 'ini', 'jade', 'java', 'javascript', 'json', 'less', 'lisp', 'lua', 'makefile', 'matlab', 'mysql', 'objectivec', 'pascal', 'perl', 'pgsql', 'php', 'python', 'r', 'ruby', 'sass', 'scala', 'scss', 'sh', 'smarty', 'sql', 'sqlserver', 'stylus', 'svg', 'twig', 'vbscript', 'xml', 'yaml']
 const ace = schema => schema.type === 'string' && aceModes.includes(schema.format) && 'ace'
 
 const ip = schema => schema.type === 'string' && ['ip', 'ipv4', 'ipv6', 'hostname'].includes(schema.format) && 'ip'
