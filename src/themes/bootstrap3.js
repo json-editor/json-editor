@@ -1,5 +1,5 @@
 import { AbstractTheme } from '../theme.js'
-import rules from './bootstrap3.css'
+import rules from './bootstrap3.css.js'
 
 export class bootstrap3Theme extends AbstractTheme {
   getSelectInput (options, multiple) {
