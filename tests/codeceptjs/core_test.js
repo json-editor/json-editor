@@ -216,35 +216,35 @@ Scenario('Should switch between all json 7 data types in @oneof and display erro
   assert.equal(await I.grabValueFrom('#value'), '{"test":null}')
 })
 
-Scenario('Should switch between all json 7 data types in @anyof and display error messages for each one @core', async ({ I }) => {
+Scenario('Should switch between all json 7 data types in @anyof and display error messages for each one @core', ({ I }) => {
   I.amOnPage('anyof-2.html')
   I.waitForElement('.je-ready')
 
-  assert.equal(await I.grabValueFrom('#value'), '{"test":""}')
+  I.waitForValue('#value', '{"test":""}')
   I.waitForText('Value must validate against at least one of the provided schemas')
 
   I.selectOption('.je-switcher', 'Value, boolean')
-  assert.equal(await I.grabValueFrom('#value'), '{"test":false}')
+  I.waitForValue('#value', '{"test":false}')
   I.waitForText('Value must validate against at least one of the provided schemas')
 
   I.selectOption('.je-switcher', 'Value, array')
-  assert.equal(await I.grabValueFrom('#value'), '{"test":[]}')
+  I.waitForValue('#value', '{"test":[]}')
   I.waitForText('Value must validate against at least one of the provided schemas')
 
   I.selectOption('.je-switcher', 'Value, object')
-  assert.equal(await I.grabValueFrom('#value'), '{"test":{}}')
+  I.waitForValue('#value', '{"test":{}}')
   I.waitForText('Value must validate against at least one of the provided schemas')
 
   I.selectOption('.je-switcher', 'Value, number')
-  assert.equal(await I.grabValueFrom('#value'), '{"test":0}')
+  I.waitForValue('#value', '{"test":0}')
   I.waitForText('Value must validate against at least one of the provided schemas')
 
   I.selectOption('.je-switcher', 'Value, integer')
-  assert.equal(await I.grabValueFrom('#value'), '{"test":0}')
+  I.waitForValue('#value', '{"test":0}')
   I.waitForText('Value must validate against at least one of the provided schemas')
 
   I.selectOption('.je-switcher', 'Value, null')
-  assert.equal(await I.grabValueFrom('#value'), '{"test":null}')
+  I.waitForValue('#value', '{"test":null}')
 })
 
 Scenario('should validate against oneOf schemas and display single oneOf and editors error messages @core @translate-property', async ({ I }) => {
