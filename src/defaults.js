@@ -345,7 +345,7 @@ languages.en = {
   /**
   * Warning when deleting a node
   */
-  button_delete_node_warning: 'Are you sure you want to remove this node?'
+  button_delete_node_warning: 'Are you sure you want to remove this item?'
 }
 
 /* Default per-editor options */
