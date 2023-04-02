@@ -71,7 +71,7 @@ Scenario('should array editor events (table) @array-events', async ({ I }) => {
   I.seeElement('[data-schemapath="root.4"]')
   I.click('.get-value')
   value = await I.grabValueFrom('.debug')
-  assert.equal(value, '["A","B","C","D","E"]')
+  assert.strictEqual(value, '["A","B","C","D","E"]')
 
   I.amAcceptingPopups()
   I.click('//button[contains(@class, "json-editor-btn-moveup") and @data-i="1"]')
@@ -79,7 +79,7 @@ Scenario('should array editor events (table) @array-events', async ({ I }) => {
   I.acceptPopup()
   I.click('.get-value')
   value = await I.grabValueFrom('.debug')
-  assert.equal(value, '["B","A","C","D","E"]')
+  assert.strictEqual(value, '["B","A","C","D","E"]')
 
   I.amAcceptingPopups()
   I.click('//button[contains(@class, "json-editor-btn-movedown") and @data-i="1"]')
@@ -87,7 +87,7 @@ Scenario('should array editor events (table) @array-events', async ({ I }) => {
   I.acceptPopup()
   I.click('.get-value')
   value = await I.grabValueFrom('.debug')
-  assert.equal(value, '["B","C","A","D","E"]')
+  assert.strictEqual(value, '["B","C","A","D","E"]')
 
   I.amAcceptingPopups()
   I.click('//button[contains(@class, "json-editor-btn-copy") and @data-i="2"]')
@@ -95,7 +95,7 @@ Scenario('should array editor events (table) @array-events', async ({ I }) => {
   I.acceptPopup()
   I.click('.get-value')
   value = await I.grabValueFrom('.debug')
-  assert.equal(value, '["B","C","A","A","D","E"]')
+  assert.strictEqual(value, '["B","C","A","A","D","E"]')
 
   I.amAcceptingPopups()
   I.click('.json-editor-btntype-add')
@@ -103,7 +103,7 @@ Scenario('should array editor events (table) @array-events', async ({ I }) => {
   I.acceptPopup()
   I.click('.get-value')
   value = await I.grabValueFrom('.debug')
-  assert.equal(value, '["B","C","A","A","D","E",""]')
+  assert.strictEqual(value, '["B","C","A","A","D","E",""]')
 
   // This test will fail when using Puppeteer due to the way Puppeteer handles popups.
   // Puppeteer apparently only sees the text in the last popup, so it doesn't see the
@@ -119,7 +119,7 @@ Scenario('should array editor events (table) @array-events', async ({ I }) => {
   I.acceptPopup()
   I.click('.get-value')
   value = await I.grabValueFrom('.debug')
-  assert.equal(value, '["B","C","A","A","D","E"]')
+  assert.strictEqual(value, '["B","C","A","A","D","E"]')
 
   // This test will fail when using Puppeteer due to the way Puppeteer handles popups.
   I.amAcceptingPopups()
@@ -131,7 +131,7 @@ Scenario('should array editor events (table) @array-events', async ({ I }) => {
   I.acceptPopup()
   I.click('.get-value')
   value = await I.grabValueFrom('.debug')
-  assert.equal(value, '[]')
+  assert.strictEqual(value, '[]')
 })
 
 Scenario('should array editor events @array-events', async ({ I }) => {
@@ -957,7 +957,7 @@ Scenario('should work well with selectize multiselect editors', async ({ I }) =>
   I.click('.get-value')
   value = await I.grabValueFrom('.debug')
   // ensure defaults
-  assert.equal(value, '[["1","2"],["1","2"]]')
+  assert.strictEqual(value, '[["1","2"],["1","2"]]')
 
   // every selected item has remove button
   I.seeElement('[data-schemapath="root.0"] .selectize-input [data-value="1"] a.remove')

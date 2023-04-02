@@ -106,7 +106,7 @@ Scenario('should be readonly if specified and not disabled', async ({ I }) => {
 Scenario('should have a custom attribute with custom value', async ({ I }) => {
   I.amOnPage('string-custom-attributes.html')
   I.seeElement('[name="root[custom_attributes]"]')
-  assert.equal(await I.grabAttributeFrom('[name="root[custom_attributes]"]', 'custom-attribute'), 'custom-value')
+  assert.strictEqual(await I.grabAttributeFrom('[name="root[custom_attributes]"]', 'custom-attribute'), 'custom-value')
 })
 
 Scenario('should work with cleave.js library', async ({ I }) => {

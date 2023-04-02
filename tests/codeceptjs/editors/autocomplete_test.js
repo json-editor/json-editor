@@ -1,7 +1,5 @@
 /* global Feature Scenario */
 
-var assert = require('assert')
-
 Feature('autocomplete')
 
 Scenario('autocomplete should work @autocomplete', async ({ I }) => {
