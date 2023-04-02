@@ -1,7 +1,5 @@
 /* global Feature Scenario */
 
-const assert = require('assert')
-let value
 const { DEFAULT_WAIT_TIME } = require('../test-config')
 
 Feature('array')
@@ -70,40 +68,35 @@ Scenario('should array editor events (table) @array-events', async ({ I }) => {
   I.seeElement('[data-schemapath="root.3"]')
   I.seeElement('[data-schemapath="root.4"]')
   I.click('.get-value')
-  value = await I.grabValueFrom('.debug')
-  assert.strictEqual(value, '["A","B","C","D","E"]')
+  I.waitForValue('.debug', '["A","B","C","D","E"]')
 
   I.amAcceptingPopups()
   I.click('//button[contains(@class, "json-editor-btn-moveup") and @data-i="1"]')
   I.retry({ retries: 5, minTimeout: 500 }).seeInPopup('moveRow')
   I.acceptPopup()
   I.click('.get-value')
-  value = await I.grabValueFrom('.debug')
-  assert.strictEqual(value, '["B","A","C","D","E"]')
+  I.waitForValue('.debug', '["B","A","C","D","E"]')
 
   I.amAcceptingPopups()
   I.click('//button[contains(@class, "json-editor-btn-movedown") and @data-i="1"]')
   I.retry({ retries: 5, minTimeout: 500 }).seeInPopup('moveRow')
   I.acceptPopup()
   I.click('.get-value')
-  value = await I.grabValueFrom('.debug')
-  assert.strictEqual(value, '["B","C","A","D","E"]')
+  I.waitForValue('.debug', '["B","C","A","D","E"]')
 
   I.amAcceptingPopups()
   I.click('//button[contains(@class, "json-editor-btn-copy") and @data-i="2"]')
   I.retry({ retries: 5, minTimeout: 500 }).seeInPopup('copyRow')
   I.acceptPopup()
   I.click('.get-value')
-  value = await I.grabValueFrom('.debug')
-  assert.strictEqual(value, '["B","C","A","A","D","E"]')
+  I.waitForValue('.debug', '["B","C","A","A","D","E"]')
 
   I.amAcceptingPopups()
   I.click('.json-editor-btntype-add')
   I.retry({ retries: 5, minTimeout: 500 }).seeInPopup('addRow')
   I.acceptPopup()
   I.click('.get-value')
-  value = await I.grabValueFrom('.debug')
-  assert.strictEqual(value, '["B","C","A","A","D","E",""]')
+  I.waitForValue('.debug', '["B","C","A","A","D","E",""]')
 
   // This test will fail when using Puppeteer due to the way Puppeteer handles popups.
   // Puppeteer apparently only sees the text in the last popup, so it doesn't see the
@@ -118,8 +111,7 @@ Scenario('should array editor events (table) @array-events', async ({ I }) => {
   I.retry({ retries: 5, minTimeout: 500 }).seeInPopup('deleteRow')
   I.acceptPopup()
   I.click('.get-value')
-  value = await I.grabValueFrom('.debug')
-  assert.strictEqual(value, '["B","C","A","A","D","E"]')
+  I.waitForValue('.debug', '["B","C","A","A","D","E"]')
 
   // This test will fail when using Puppeteer due to the way Puppeteer handles popups.
   I.amAcceptingPopups()
@@ -130,8 +122,7 @@ Scenario('should array editor events (table) @array-events', async ({ I }) => {
   I.retry({ retries: 5, minTimeout: 500 }).seeInPopup('deleteAllRows')
   I.acceptPopup()
   I.click('.get-value')
-  value = await I.grabValueFrom('.debug')
-  assert.strictEqual(value, '[]')
+  I.waitForValue('.debug', '[]')
 })
 
 Scenario('should array editor events @array-events', async ({ I }) => {
@@ -955,9 +946,7 @@ Scenario('should work well with selectize multiselect editors', async ({ I }) =>
   I.click('Add item')
   await I.seeElement('[data-schemapath="root.1"]')
   I.click('.get-value')
-  value = await I.grabValueFrom('.debug')
-  // ensure defaults
-  assert.strictEqual(value, '[["1","2"],["1","2"]]')
+  I.waitForValue('.debug', '[["1","2"],["1","2"]]')
 
   // every selected item has remove button
   I.seeElement('[data-schemapath="root.0"] .selectize-input [data-value="1"] a.remove')

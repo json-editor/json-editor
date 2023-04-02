@@ -17,8 +17,7 @@ Scenario('should show errors @optional', async ({ I }) => {
   I.seeElement('[data-schemapath="root.items"]')
 
   I.click('.get-value')
-  value = await I.grabValueFrom('.debug')
-  assert.strictEqual(value, '{"correct":"","items":[]}')
+  I.waitForValue('.debug', '{"correct":"","items":[]}')
 
   I.fillField('root[correct]', 'a')
   assert.strictEqual(await I.dontSee('Value must match the pattern ^[a-zA-Z0-9_]+$.'), true, 'should show warning')
@@ -36,8 +35,7 @@ Scenario('should show errors @optional', async ({ I }) => {
 
   I.click('.json-editor-btntype-add')
   I.click('.get-value')
-  value = await I.grabValueFrom('.debug')
-  assert.strictEqual(value, '{"correct":"a","items":[{"handler":"aaa","id":"","___a":""}]}')
+  I.waitForValue('.debug', '{"correct":"a","items":[{"handler":"aaa","id":"","___a":""}]}')
 
   I.fillField('root[items][0][id]', 'a')
   I.dontSee('Value must match the pattern ^[a-zA-Z0-9_]+$.')
