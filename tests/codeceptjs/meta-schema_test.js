@@ -1,6 +1,6 @@
 /* global Feature Scenario */
+
 const { DEFAULT_WAIT_TIME } = require('./test-config')
-var assert = require('assert')
 
 Feature('meta-schema')
 
@@ -9,7 +9,7 @@ Scenario('work with json-schema meta-schema @meta-schema-core', async ({ I }) =>
   I.waitForElement('.je-ready')
 
   I.selectOption('.je-switcher', 'Object')
-  assert.equal(await I.grabValueFrom('#value'), '{"properties":{},"title":"","type":"object"}')
+  I.waitForValue('#value', '{"properties":{},"title":"","type":"object"}')
   I.click('.json-editor-btn-edit_properties')
   I.waitForText('type', '.property-selector')
   I.waitForText('title', '.property-selector')
@@ -37,22 +37,22 @@ Scenario('work with json-schema meta-schema @meta-schema-core', async ({ I }) =>
   I.waitForText('format', '.property-selector')
 
   I.selectOption('.je-switcher', 'Array')
-  assert.equal(await I.grabValueFrom('#value'), '{"items":{"properties":{},"title":"","type":"object"},"title":"","type":"array"}')
+  I.waitForValue('#value', '{"items":{"properties":{},"title":"","type":"object"},"title":"","type":"array"}')
 
   I.selectOption('.je-switcher', 'String')
-  assert.equal(await I.grabValueFrom('#value'), '{"title":"","type":"string"}')
+  I.waitForValue('#value', '{"title":"","type":"string"}')
 
   I.selectOption('.je-switcher', 'Number')
-  assert.equal(await I.grabValueFrom('#value'), '{"title":"","type":"number"}')
+  I.waitForValue('#value', '{"title":"","type":"number"}')
 
   I.selectOption('.je-switcher', 'Integer')
-  assert.equal(await I.grabValueFrom('#value'), '{"title":"","type":"integer"}')
+  I.waitForValue('#value', '{"title":"","type":"integer"}')
 
   I.selectOption('.je-switcher', 'Boolean')
-  assert.equal(await I.grabValueFrom('#value'), '{"title":"","type":"boolean"}')
+  I.waitForValue('#value', '{"title":"","type":"boolean"}')
 
   I.selectOption('.je-switcher', 'Null')
-  assert.equal(await I.grabValueFrom('#value'), '{"title":"","type":"null"}')
+  I.waitForValue('#value', '{"title":"","type":"null"}')
 })
 
 // https://github.com/json-editor/json-editor/issues/823

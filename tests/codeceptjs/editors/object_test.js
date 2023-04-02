@@ -88,7 +88,7 @@ Scenario('opt in optional properties @show_opt_in', async ({ I }) => {
   I.seeDisabledAttribute('[data-schemapath="root.object.radio"] .json-editor-opt-in')
 
   I.click('.get-value')
-  assert.equal(await I.grabValueFrom('.value'), '{"number":0,"boolean":false}')
+  I.waitForValue('.value', '{"number":0,"boolean":false}')
 
   // Opening and Closing "Edit JSON" should keep opt-in state.
 
@@ -112,26 +112,26 @@ Scenario('opt in optional properties @show_opt_in', async ({ I }) => {
   I.seeDisabledAttribute('[data-schemapath="root.object.radio"] .json-editor-opt-in')
 
   I.click('.get-value')
-  assert.equal(await I.grabValueFrom('.value'), '{"number":0,"boolean":false}')
+  I.waitForValue('.value', '{"number":0,"boolean":false}')
 
   // opt-in string property
 
   I.click('[data-schemapath="root.string"] .json-editor-opt-in')
   I.click('[data-schemapath="root.radio"] .json-editor-opt-in')
   I.click('.get-value')
-  assert.equal(await I.grabValueFrom('.value'), '{"string":"","number":0,"boolean":false,"radio":"Home"}')
+  I.waitForValue('.value', '{"string":"","number":0,"boolean":false,"radio":"Home"}')
 
   // opt-in array property
 
   I.click('[data-schemapath="root.array"] .json-editor-opt-in')
   I.click('.get-value')
-  assert.equal(await I.grabValueFrom('.value'), '{"string":"","number":0,"boolean":false,"radio":"Home","array":[]}')
+  I.waitForValue('.value', '{"string":"","number":0,"boolean":false,"radio":"Home","array":[]}')
 
   // opt-in object property
 
   I.click('[data-schemapath="root.object"] .json-editor-opt-in')
   I.click('.get-value')
-  assert.equal(await I.grabValueFrom('.value'), '{"string":"","number":0,"boolean":false,"radio":"Home","array":[],"object":{"string":"","array":[]}}')
+  I.waitForValue('.value', '{"string":"","number":0,"boolean":false,"radio":"Home","array":[],"object":{"string":"","array":[]}}')
 
   // if an editor type "object" is enabled, also the child editors opt-in controls will be enabled.
   I.dontSeeDisabledAttribute('[data-schemapath="root.object.number"] .json-editor-opt-in')
@@ -157,12 +157,12 @@ Scenario('set value opt in optional properties @show_opt_in', async ({ I }) => {
   // set values
   I.click('.set-value')
   I.click('.get-value')
-  assert.equal(await I.grabValueFrom('.value'), '{"string":"test","number":0,"boolean":false,"array":["test"],"object":{"string":"","number":10,"boolean":true,"array":[]}}')
+  I.waitForValue('.value', '{"string":"test","number":0,"boolean":false,"array":["test"],"object":{"string":"","number":10,"boolean":true,"array":[]}}')
 
   // set empty values
   I.click('.set-empty-value')
   I.click('.get-value')
-  assert.equal(await I.grabValueFrom('.value'), '{"number":0,"boolean":false}')
+  I.waitForValue('.value', '{"number":0,"boolean":false}')
 
   // all editorsstill visible
   I.waitForElement('[data-schemapath="root.string"]', DEFAULT_WAIT_TIME)
@@ -216,7 +216,7 @@ Scenario('objects should contain properties defined with the properties keyword 
   I.seeElement('[data-schemapath="root.apfalse.name"] input')
   I.dontSeeElement('[data-schemapath="root.apfalse.age"] input')
   I.click('.get-value')
-  assert.equal(await I.grabValueFrom('.value'), '{"aptrue":{"name":"Albert","age":0},"apfalse":{"name":"Albert"}}')
+  I.waitForValue('.value', '{"aptrue":{"name":"Albert","age":0},"apfalse":{"name":"Albert"}}')
 })
 
 Scenario('should have unique ids', ({ I }) => {

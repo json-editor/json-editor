@@ -14,7 +14,7 @@ Scenario('should have correct initial value @datetime', async ({ I }) => {
   I.amOnPage('datetime.html')
   I.wait(1)
   I.click('#get-value')
-  assert.equal(await I.grabValueFrom('#value'), '{"time":"12:00","date":"' + today() + '","datetimelocal":"' + today() + 'T00:00' + '"}')
+  I.waitForValue('#value', '{"time":"12:00","date":"' + today() + '","datetimelocal":"' + today() + 'T00:00' + '"}')
 })
 
 Scenario('time should have max and min attributes @datetime', async ({ I }) => {

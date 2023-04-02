@@ -1,11 +1,11 @@
-var assert = require('assert')
+/* global Feature Scenario */
 
 Feature('option no_default_values')
 
 Scenario('should have correct initial value @no_default_values', async ({ I }) => {
   I.amOnPage('option-no_default_values.html')
   I.click('.get-value')
-  assert.equal(await I.grabValueFrom('.debug'), JSON.stringify({
+  I.waitForValue('.debug', JSON.stringify({
     integer: undefined,
     number: undefined,
     string: undefined
@@ -22,7 +22,7 @@ Scenario('should have correct values on empty dirty field', async ({ I }) => {
   I.click('.force-change')
   I.click('.get-value')
 
-  assert.equal(await I.grabValueFrom('.debug'), JSON.stringify({
+  I.waitForValue('.debug', JSON.stringify({
     number: 3.0,
     string: 'foo',
     integer: 3
@@ -34,7 +34,7 @@ Scenario('should have correct values on empty dirty field', async ({ I }) => {
   I.click('.force-change')
   I.click('.get-value')
 
-  assert.equal(await I.grabValueFrom('.debug'), JSON.stringify({
+  I.waitForValue('.debug', JSON.stringify({
     number: undefined,
     string: '',
     integer: undefined

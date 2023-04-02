@@ -1,7 +1,5 @@
 /* global Feature Scenario */
 
-const assert = require('assert')
-
 Feature('issues')
 
 Scenario('GitHub issue 1158 should remain fixed @issue-1158 @optional', async ({ I }) => {
