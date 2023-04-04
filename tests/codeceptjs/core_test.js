@@ -1,6 +1,6 @@
 /* global Feature Scenario */
 
-var assert = require('assert')
+const assert = require('assert')
 const { DEFAULT_WAIT_TIME } = require('./test-config')
 
 Feature('core')
@@ -65,18 +65,18 @@ Scenario('should destroy', async ({ I }) => {
 Scenario('should set and get form value', async ({ I }) => {
   I.amOnPage('core.html')
   I.click('.get-value')
-  assert.equal(await I.grabValueFrom('.value'), '{"age":18,"name":"Francesco Avizzano"}')
+  I.waitForValue('.value', '{"age":18,"name":"Francesco Avizzano"}')
   I.click('.set-value')
   I.click('.get-value')
-  assert.equal(await I.grabValueFrom('.value'), '{"age":40,"name":"John Smith"}')
+  I.waitForValue('.value', '{"age":40,"name":"John Smith"}')
 })
 
 Scenario('should set and get individual values', async ({ I }) => {
   I.amOnPage('core.html')
   I.click('.get-individual-value')
-  assert.equal(await I.grabValueFrom('.value'), '"Francesco Avizzano"')
+  I.waitForValue('.value', '"Francesco Avizzano"')
   I.click('.set-individual-value')
-  assert.equal(await I.grabValueFrom('.value'), '"john kaminski"')
+  I.waitForValue('.value', '"john kaminski"')
 })
 
 Scenario('should watch a specific field for changes', async ({ I }) => {
@@ -116,9 +116,9 @@ Scenario('should change the form if form_name_root option is set @core', async (
   I.click('[for="form_2[1]"]')
   I.dontSee('Property must be set.', '.invalid-feedback')
   I.click('#get-value-form-1')
-  assert.equal(await I.grabValueFrom('#value-form-1'), '"yes"')
+  I.waitForValue('#value-form-1', '"yes"')
   I.click('#get-value-form-2')
-  assert.equal(await I.grabValueFrom('#value-form-2'), '"no"')
+  I.waitForValue('#value-form-2', '"no"')
 })
 
 Scenario('should validate against oneOf schemas and display single oneOf and editors error messages @core @oneof', async ({ I }) => {
@@ -182,38 +182,38 @@ Scenario('Should switch between all json 7 data types in @oneof and display erro
   I.waitForElement('.je-ready')
 
   I.selectOption('.je-switcher', 'Value, string')
-  assert.equal(await I.grabValueFrom('#value'), '{"test":""}')
+  I.waitForValue('#value', '{"test":""}')
   I.waitForText('Value must validate against exactly one of the provided schemas.')
   I.waitForText('Value must be the constant value')
 
   I.selectOption('.je-switcher', 'Value, boolean')
-  assert.equal(await I.grabValueFrom('#value'), '{"test":false}')
+  I.waitForValue('#value', '{"test":false}')
   I.waitForText('Value must validate against exactly one of the provided schemas.')
   I.waitForText('Value must be the constant value')
 
   I.selectOption('.je-switcher', 'Value, array')
-  assert.equal(await I.grabValueFrom('#value'), '{"test":[]}')
+  I.waitForValue('#value', '{"test":[]}')
   I.waitForText('Value must validate against exactly one of the provided schemas.')
   I.waitForText('Value must be the constant value')
 
   I.selectOption('.je-switcher', 'Value, object')
-  assert.equal(await I.grabValueFrom('#value'), '{"test":{}}')
+  I.waitForValue('#value', '{"test":{}}')
   I.waitForText('Value must validate against exactly one of the provided schemas.')
   I.waitForText('Value must be the constant value')
   I.waitForText('Object is missing the required property \'test\'')
 
   I.selectOption('.je-switcher', 'Value, number')
-  assert.equal(await I.grabValueFrom('#value'), '{"test":0}')
+  I.waitForValue('#value', '{"test":0}')
   I.waitForText('Value must validate against exactly one of the provided schemas.')
   I.waitForText('Value must be the constant value')
 
   I.selectOption('.je-switcher', 'Value, integer')
-  assert.equal(await I.grabValueFrom('#value'), '{"test":0}')
+  I.waitForValue('#value', '{"test":0}')
   I.waitForText('Value must validate against exactly one of the provided schemas.')
   I.waitForText('Value must be the constant value')
 
   I.selectOption('.je-switcher', 'Value, null')
-  assert.equal(await I.grabValueFrom('#value'), '{"test":null}')
+  I.waitForValue('#value', '{"test":null}')
 })
 
 Scenario('Should switch between all json 7 data types in @anyof and display error messages for each one @core', ({ I }) => {
@@ -346,17 +346,17 @@ Scenario('should load internal schema definitions, external schema definitions a
     '../fixtures/string.json',
     '../fixtures/definitions.json',
     '../fixtures/basic_person.json',
-    '../fixtures/person.json',
+    '../fixtures/person.json'
   ]
   for (const path of schemaPaths) {
-    let key = 'je-cache::' + currentPath + path;
+    const key = 'je-cache::' + currentPath + path
 
     const item = await I.executeScript(function (storageKey) {
-      return window.localStorage.getItem(storageKey);
+      return window.localStorage.getItem(storageKey)
     }, key)
     const itemDecoded = JSON.parse(item)
-    assert.equal(itemDecoded.cacheBuster, 'abc123');
-    assert(itemDecoded, 'Cached schema found');
+    assert.strictEqual(itemDecoded.cacheBuster, 'abc123')
+    assert(itemDecoded, 'Cached schema found')
   }
 })
 

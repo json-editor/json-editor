@@ -1,13 +1,11 @@
 /* global Feature Scenario */
 
-var assert = require('assert')
-
 Feature('table')
 
 Scenario('should have correct initial value', async ({ I }) => {
   I.amOnPage('table.html')
   I.click('.get-value')
-  assert.equal(await I.grabValueFrom('.debug'), '[]')
+  I.waitForValue('.debug', '[]')
 })
 
 Scenario('should ask for confirmation on node delete', async ({ I }) => {

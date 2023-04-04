@@ -1,43 +1,44 @@
-var assert = require('assert');
+/* global Feature Scenario */
+
 const { DEFAULT_WAIT_TIME } = require('../test-config')
 
-Feature('button');
+Feature('button')
 
 Scenario('should work with button editor callbacks', async ({ I }) => {
-  I.amOnPage('button-callbacks.html');
+  I.amOnPage('button-callbacks.html')
   I.waitForElement('.je-ready', DEFAULT_WAIT_TIME)
-  I.seeElement('[data-schemapath="root.button1"] button');
-  I.click('[data-schemapath="root.button1"] button');
-  assert.equal(await I.grabValueFrom('.value'), 'button1CB');
-});
+  I.seeElement('[data-schemapath="root.button1"] button')
+  I.click('[data-schemapath="root.button1"] button')
+  I.waitForValue('.value', 'button1CB')
+})
 
 Scenario('should work with option "validated" @validated', async ({ I }) => {
-  I.amOnPage('button-callbacks.html');
+  I.amOnPage('button-callbacks.html')
   I.waitForElement('.je-ready', DEFAULT_WAIT_TIME)
-  I.seeElement('[data-schemapath="root.button1"] button');
-  I.retry({ retries: 3, minTimeout: 500 }).seeDisabledAttribute('[data-schemapath="root.button2"] button');
-  await I.fillField('[name="root[textinput]"]', 'Hello World');
-  I.pressKey('Tab');
-  I.dontSeeDisabledAttribute('[data-schemapath="root.button2"] button');
-  I.click('[data-schemapath="root.button2"] button');
-  assert.equal(await I.grabValueFrom('.value'), 'button2CB');
-});
+  I.seeElement('[data-schemapath="root.button1"] button')
+  I.retry({ retries: 3, minTimeout: 500 }).seeDisabledAttribute('[data-schemapath="root.button2"] button')
+  await I.fillField('[name="root[textinput]"]', 'Hello World')
+  I.pressKey('Tab')
+  I.dontSeeDisabledAttribute('[data-schemapath="root.button2"] button')
+  I.click('[data-schemapath="root.button2"] button')
+  I.waitForValue('.value', 'button2CB')
+})
 
 Scenario('should not leave any footprints in result', async ({ I }) => {
-  I.amOnPage('button-callbacks.html');
+  I.amOnPage('button-callbacks.html')
   I.waitForElement('.je-ready', DEFAULT_WAIT_TIME)
-  I.click('.get-value');
-  assert.equal(await I.grabValueFrom('.value'), JSON.stringify({"textinput":""}));
-});
+  I.click('.get-value')
+  I.waitForValue('.value', JSON.stringify({ textinput: '' }))
+})
 
 Scenario('should be disabled if "readonly" is specified', async ({ I }) => {
-  I.amOnPage('read-only.html');
+  I.amOnPage('read-only.html')
   I.waitForElement('.je-ready', DEFAULT_WAIT_TIME)
-  I.seeDisabledAttribute('[data-schemapath="root.button"] button');
-});
+  I.seeDisabledAttribute('[data-schemapath="root.button"] button')
+})
 
 Scenario('should set icon @button @button-icon', async ({ I }) => {
   I.amOnPage('button-icons.html')
   I.waitForElement('.je-ready', DEFAULT_WAIT_TIME)
   I.waitForElement('i.fas.fa-search', DEFAULT_WAIT_TIME)
-});
+})

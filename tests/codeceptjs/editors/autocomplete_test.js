@@ -1,7 +1,5 @@
 /* global Feature Scenario */
 
-var assert = require('assert')
-
 Feature('autocomplete')
 
 Scenario('autocomplete should work @autocomplete', async ({ I }) => {
@@ -12,5 +10,5 @@ Scenario('autocomplete should work @autocomplete', async ({ I }) => {
   I.waitForText('iraq', 20, '.autocomplete-result-list')
   I.click('iraq', '.autocomplete-result:nth-child(2)')
   I.wait(1)
-  assert.equal(await I.grabValueFrom('.value'), '"iraq"')
+  I.waitForValue('.value', '"iraq"')
 })
