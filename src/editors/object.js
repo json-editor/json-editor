@@ -319,7 +319,15 @@ export class ObjectEditor extends AbstractEditor {
         /* Activate the first tab */
         const firstTab = this.theme.getFirstTab(this.tabs_holder)
         if (firstTab) {
+          var objectPropertyModalIsOpen = !!this.adding_property
+          if (objectPropertyModalIsOpen) {
+            this.hideAddProperty()
+          }
+
           trigger(firstTab, 'click')
+          if (objectPropertyModalIsOpen) {
+            this.showAddProperty()
+          }
         }
         return
         /* Normal layout */
