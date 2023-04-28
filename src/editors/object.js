@@ -893,7 +893,6 @@ export class ObjectEditor extends AbstractEditor {
     let labelText
 
     const checkbox = this.theme.getCheckbox()
-    checkbox.style.width = 'auto'
 
     if (this.schema.properties[key] && this.schema.properties[key].title) { labelText = this.schema.properties[key].title } else { labelText = key }
 
