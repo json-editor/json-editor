@@ -462,6 +462,7 @@ The currently supported themes are:
 
 *  barebones
 *  html (the default)
+*  bootstrap3
 *  bootstrap4
 *  bootstrap5 
 *  spectre
@@ -471,7 +472,6 @@ Note: The following themes have NOT been updated to 2.x format and will be remov
 Old 1.x themes displays the message **"This is an old JSON-Editor 1.x Theme and might not display elements correctly when used with the 2.x version"** at the bottom of the form output.
 
 *  bootstrap2
-*  bootstrap3
 *  foundation3
 *  foundation4
 *  foundation5

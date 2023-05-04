@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <title>CSS Integration JSON Editor Example</title>
-    
+
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
 
     <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
-    
+
     <script>
     // Set the default CSS theme and icon library globally
     JSONEditor.defaults.theme = 'spectre';
@@ -31,10 +31,12 @@
         <div class='column col-md-6'>
           <p>JSON Editor supports these popular CSS frameworks:</p>
           <ul>
+            <li>bootstrap 3</li>
             <li>bootstrap 4</li>
+            <li>bootstrap 5</li>
             <li>spectre.css (shown here)</li>
             <li>tailwind</li>
-          </ul>  
+          </ul>
         </div>
         <div class='column col-md-6'>
           <p>JSON Editor supports these popular icon libraries:</p>
@@ -51,17 +53,17 @@
         <div class='column col-md-12'>
           <button id='submit' class='tiny'>Submit (console.log)</button>
           <button id='restore' class='secondary tiny'>Restore to Default</button>
-          <span id='valid_indicator' class='label'></span>  
+          <span id='valid_indicator' class='label'></span>
         </div>
       </div>
       <div class='columns'>
         <div class='column col-md-12' id='editor_holder'></div>
       </div>
     </div>
-    
+
     <script>
       // This is the starting value for the editor
-      // We will use this to seed the initial editor 
+      // We will use this to seed the initial editor
       // and to provide a "Restore to Default" button.
       var starting_value = {
         name: "John Smith",
@@ -84,41 +86,41 @@
           }
         ]
       };
-      
+
       // Initialize the editor
       var editor = new JSONEditor(document.getElementById('editor_holder'),{
         // Enable fetching schemas via ajax
         ajax: true,
-        
+
         // The schema for the editor
         schema: {
           $ref: "person.json",
           format: "grid"
         },
-        
+
         // Seed the form with a starting value
         startval: starting_value
       });
-      
+
       // Hook up the submit button to log to the console
       document.getElementById('submit').addEventListener('click',function() {
         // Get the value from the editor
         console.log(editor.getValue());
       });
-      
+
       // Hook up the Restore to Default button
       document.getElementById('restore').addEventListener('click',function() {
         editor.setValue(starting_value);
       });
-      
-      // Hook up the validation indicator to update its 
+
+      // Hook up the validation indicator to update its
       // status whenever the editor changes
       editor.on('change',function() {
         // Get an array of errors from the validator
         var errors = editor.validate();
-        
+
         var indicator = document.getElementById('valid_indicator');
-        
+
         // Not valid
         if(errors.length) {
           indicator.className = 'label alert';
