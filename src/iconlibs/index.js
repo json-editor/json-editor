@@ -9,9 +9,11 @@ import { jqueryuiIconlib } from './jqueryui.js'
 // import  { materialiconsIconlib } from  './materialicons.js'
 import { openiconicIconlib } from './openiconic.js'
 import { spectreIconlib } from './spectre.js'
+import { bootstrapIconlib } from './bootstrap'
 
 export const iconlibs = {
   // bootstrap2: bootstrap2Iconlib,
+  bootstrap: bootstrapIconlib,
   bootstrap3: bootstrap3Iconlib,
   fontawesome3: fontawesome3Iconlib,
   fontawesome4: fontawesome4Iconlib,
