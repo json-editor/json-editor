@@ -256,6 +256,37 @@ Scenario('It should hide button Labels: null | bootstrap3', async ({ I }) => {
   I.seeElementInDOM('i.glyphicon.glyphicon-copy')
   I.seeElementInDOM('i.glyphicon.glyphicon-list')
 })
+
+Scenario('It should hide button Labels: null | bootstrap icons @themes @iconlib', async ({ I }) => {
+  I.amOnPage('themes.html')
+  I.selectOption('iconlib', 'bootstrap')
+  I.waitForText('Themes Test Page')
+  I.dontSee('Collapse')
+  I.dontSee('Edit JSON')
+  I.dontSee('Object Properties')
+  I.dontSee('Delete item')
+  I.dontSee('Delete Last item')
+  I.dontSee('Delete All')
+  I.dontSee('Move down')
+  I.dontSee('Move up')
+
+  I.click('Collapse')
+  I.seeElementInDOM('i.bi.bi-chevron-down')
+  I.seeElementInDOM('i.bi.bi-chevron-right')
+  I.seeElementInDOM('i.bi.bi-trash')
+  I.seeElementInDOM('i.bi.bi-pencil')
+  I.seeElementInDOM('i.bi.bi-plus')
+  I.seeElementInDOM('i.bi.bi-dash')
+  I.seeElementInDOM('i.bi.bi-x-circle')
+  I.seeElementInDOM('i.bi.bi-save')
+  I.seeElementInDOM('i.bi.bi-arrow-up')
+  I.seeElementInDOM('i.bi.bi-arrow-right')
+  I.seeElementInDOM('i.bi.bi-arrow-down')
+  I.seeElementInDOM('i.bi.bi-arrow-left')
+  I.seeElementInDOM('i.bi.bi-clipboard')
+  I.seeElementInDOM('i.bi.bi-list-ul')
+})
+
 /*
 Scenario('It should hide button Labels: null | fontawesome3', async (I) => {
   I.amOnPage('themes.html')
