@@ -509,6 +509,7 @@ The supported icon libs are:
 *  fontawesome5
 *  openiconic
 *  spectre
+*  bootstrap
 
 By default, no icons are used. Just like the CSS theme, you can set the icon lib globally or when initializing:
 
