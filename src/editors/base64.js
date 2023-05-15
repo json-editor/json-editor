@@ -44,6 +44,7 @@ export class Base64Editor extends AbstractEditor {
 
       /* File uploader */
       this.uploader = this.theme.getFormInputField('file')
+      this.uploader.style.display = 'none'
 
       /* Set attribute of file input field to 'multiple' if: */
       /* 'multiple' key has been set to 'true' in the schema */
@@ -95,6 +96,14 @@ export class Base64Editor extends AbstractEditor {
 
     this.control = this.theme.getFormControl(this.label, this.uploader || this.input, this.preview, this.infoButton)
     this.container.appendChild(this.control)
+
+    const uploadButton = this.getButton('button_upload', 'upload', 'button_upload')
+
+    uploadButton.addEventListener('click', () => {
+      this.uploader.click()
+    })
+
+    this.control.appendChild(uploadButton)
   }
 
   refreshPreview () {
