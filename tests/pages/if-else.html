@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>If-Else</title>
+    <script src="../../dist/jsoneditor.js"></script>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+    <div id='editor-container'></div>
+</div>
+
+<script>
+  var editorContainer = document.querySelector('#editor-container')
+  var schema = {
+    'type': 'object',
+    'properties': {
+      'country': {
+        'type': 'string',
+        'default': 'America',
+        'enum': [
+          'America',
+          'Canada'
+        ]
+      },
+      'postal_code': {
+        'type': 'string'
+      }
+    },
+    'if': {
+      'properties': {
+        'country': {
+          'const': 'America'
+        }
+      }
+    },
+    'else': {
+      'properties': {
+        'postal_code': {
+          'pattern': '[A-Z][0-9][A-Z] [0-9][A-Z][0-9]'
+        }
+      }
+    }
+  }
+
+  var editor = new JSONEditor(editorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome'
+  })
+</script>
+
+</body>
+</html>
