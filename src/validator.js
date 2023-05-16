@@ -11,6 +11,41 @@ export class Validator {
     this.defaults = defaults
 
     this._validateSubSchema = {
+      if (schema, value, path) {
+        if (typeof schema.then === 'undefined' && typeof schema.else === 'undefined') {
+          return []
+        }
+
+        const ifErrors = this._validateSchema(schema.if, value, path)
+        let thenErrors = []
+        let elseErrors = []
+
+        if (typeof schema.then !== 'undefined') {
+          thenErrors = this._validateSchema(schema.then, value, path)
+        }
+
+        if (typeof schema.else !== 'undefined') {
+          elseErrors = this._validateSchema(schema.else, value, path)
+        }
+
+        if (schema.if === true) {
+          return thenErrors
+        }
+
+        if (schema.if === false) {
+          return elseErrors
+        }
+
+        if (ifErrors.length === 0) {
+          return thenErrors
+        }
+
+        if (ifErrors.length > 0) {
+          return elseErrors
+        }
+
+        return []
+      },
       const (schema, value, path) {
         const valid = JSON.stringify(schema.const) === JSON.stringify(value) && !(Array.isArray(value) || typeof value === 'object')
         if (!valid) {
