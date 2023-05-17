@@ -1,6 +1,8 @@
 ### Unreleased
 
 - Added support for shell script highlighting
+- Added support for contains, minContains and maxContains constrains
+- Added support for if-then-else constrains
 
 ### 2.9.1
 
