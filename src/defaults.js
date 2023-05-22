@@ -102,6 +102,20 @@ languages.en = {
   */
   error_maxLength: 'Value must be at most {{0}} characters long',
   /**
+   * When no array items validates the contains schema
+   */
+  error_contains: 'No items match contains',
+  /**
+   * When an array have too few items that validate agaist contains schema
+   * @variables This key takes two variable: The valid items count and the minContains value
+   */
+  error_minContains: 'Contains match count {{0}} is less than minimum contains count of {{1}}',
+  /**
+   * When an array have too many items that validate agaist contains schema
+   * @variables This key takes two variable: The valid items count and the maxContains value
+   */
+  error_maxContains: 'Contains match count {{0}} exceeds maximum contains count of {{1}}',
+  /**
   * When a value does not have enough characters
   * @variables This key takes one variable: The minimum character count
   */

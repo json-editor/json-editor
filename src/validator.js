@@ -11,6 +11,51 @@ export class Validator {
     this.defaults = defaults
 
     this._validateSubSchema = {
+      contains (schema, value, path) {
+        const errors = []
+        let counter = 0
+
+        value.forEach((item) => {
+          const containsErrors = this._validateSchema(schema.contains, item, path)
+
+          if (containsErrors.length === 0) {
+            counter++
+          }
+        })
+
+        const containsInvalid = (counter === 0)
+
+        if (typeof schema.minContains !== 'undefined') {
+          const minContainsInvalid = (counter < schema.minContains)
+
+          if (minContainsInvalid) {
+            errors.push({
+              message: this.translate('error_minContains', [counter, schema.minContains], schema),
+              path: path
+            })
+          }
+        } else {
+          if (containsInvalid) {
+            errors.push({
+              message: this.translate('error_contains', null, schema),
+              path: path
+            })
+          }
+        }
+
+        if (typeof schema.maxContains !== 'undefined') {
+          const maxContainsInvalid = (counter > schema.maxContains)
+
+          if (maxContainsInvalid) {
+            errors.push({
+              message: this.translate('error_maxContains', [counter, schema.maxContains], schema),
+              path: path
+            })
+          }
+        }
+
+        return errors
+      },
       if (schema, value, path) {
         if (typeof schema.then === 'undefined' && typeof schema.else === 'undefined') {
           return []
