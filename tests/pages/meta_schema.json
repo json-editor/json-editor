@@ -318,6 +318,14 @@
             }
           }
         },
+        "dependentSchemas": {
+          "type": "object",
+          "patternProperties": {
+            ".*": {
+              "$ref": "#/definitions/schema"
+            }
+          }
+        },
         "additionalProperties": {
           "type": "boolean"
         },
