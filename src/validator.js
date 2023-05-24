@@ -11,6 +11,19 @@ export class Validator {
     this.defaults = defaults
 
     this._validateSubSchema = {
+      dependentSchemas (schema, value, path) {
+        let errors = []
+
+        Object.keys(schema.dependentSchemas).forEach((key) => {
+          if (typeof value[key] !== 'undefined') {
+            const dependentSchema = schema.dependentSchemas[key]
+            const tmpErrors = this._validateSchema(dependentSchema, value, path)
+            errors = [...errors, ...tmpErrors]
+          }
+        })
+
+        return errors
+      },
       contains (schema, value, path) {
         const errors = []
         let counter = 0

@@ -341,6 +341,14 @@
               }
             }
           },
+          "dependentSchemas": {
+            "type": "object",
+            "patternProperties": {
+              ".*": {
+                "$ref": "#/definitions/schema"
+              }
+            }
+          },
           'additionalProperties': {
             'type': 'boolean'
           },
@@ -420,6 +428,17 @@
             'minimum': 0
           },
           'maxItems': {
+            'type': 'integer',
+            'minimum': 0
+          },
+          'contains': {
+            '$ref': '#/definitions/schema'
+          },
+          'minContains': {
+            'type': 'integer',
+            'minimum': 0
+          },
+          'maxContains': {
             'type': 'integer',
             'minimum': 0
           },
@@ -579,6 +598,15 @@
             '$ref': '#/definitions/schemaArray'
           },
           'not': {
+            '$ref': '#/definitions/schema'
+          },
+          'if': {
+            '$ref': '#/definitions/schema'
+          },
+          'then': {
+            '$ref': '#/definitions/schema'
+          },
+          'else': {
             '$ref': '#/definitions/schema'
           },
           'propertyOrder': {
