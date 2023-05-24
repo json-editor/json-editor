@@ -4,6 +4,7 @@
 - Added support for contains, minContains and maxContains constrains
 - Added support for if-then-else constrains
 - Added support for dependentSchemas constrains
+- Added support for absolute paths in dependencies
 
 ### 2.9.1
 
