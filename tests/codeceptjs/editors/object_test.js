@@ -244,6 +244,32 @@ Scenario('should hide properties with unfulfilled dependencies @dependencies', (
   I.dontSeeElement('[data-schemapath="root.existing_name"] input')
 })
 
+Scenario('should fulfill dependencies whit fully qualified paths @dependencies', ({ I }) => {
+  I.amOnPage('option-dependencies.html')
+  I.waitForText('Female specific question?')
+  I.waitForText('Female specific age question?')
+  I.dontSee('Male specific question?')
+  I.dontSee('Male specific age question?')
+  I.dontSee('What is your preferred gender?')
+  I.dontSee('Other specific age question?')
+
+  I.selectOption('[id="root[gender]"]', 'male')
+  I.dontSee('Female specific question?')
+  I.dontSee('Female specific age question?')
+  I.waitForText('Male specific question?')
+  I.waitForText('Male specific age question?')
+  I.dontSee('What is your preferred gender?')
+  I.dontSee('Other specific age question?')
+
+  I.selectOption('[id="root[gender]"]', 'other')
+  I.dontSee('Female specific question?')
+  I.dontSee('Female specific age question?')
+  I.dontSee('Male specific question?')
+  I.dontSee('Male specific age question?')
+  I.waitForText('What is your preferred gender?')
+  I.waitForText('Other specific age question?')
+})
+
 Scenario('should respect multiple dependency values @dependencies', ({ I }) => {
   I.amOnPage('object-with-dependencies-array.html')
   I.waitForVisible('[data-schemapath="root.question_1"] select', DEFAULT_WAIT_TIME)
