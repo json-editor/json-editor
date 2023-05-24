@@ -400,6 +400,17 @@
           "type": "integer",
           "minimum": 0
         },
+        "contains": {
+          "$ref": "#/definitions/schema"
+        },
+        "minContains": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "maxContains": {
+          "type": "integer",
+          "minimum": 0
+        },
         "additionalItems": {
           "$ref": "#/definitions/schema"
         },
