@@ -1113,7 +1113,42 @@ export class ObjectEditor extends AbstractEditor {
       }
     })
 
-    if (this.adding_property) this.refreshAddProperties()
+    Object.keys(this.editors).forEach(i => {
+      if (this.editors[i].isActive()) {
+        this.activateDependentRequired(this.editors[i].key)
+      }
+    })
+
+    if (this.adding_property) {
+      this.refreshAddProperties()
+    }
+  }
+
+  activateDependentRequired (key) {
+    const dependentRequired = this.getDependentRequired(key)
+    dependentRequired.forEach((requiredProperty) => {
+      let dependentRequiredEditor
+
+      Object.entries(this.cached_editors).forEach(([i, cachedEditor]) => {
+        if (cachedEditor.key === requiredProperty) {
+          dependentRequiredEditor = cachedEditor
+        }
+      })
+
+      if (dependentRequiredEditor && !dependentRequiredEditor.isActive()) {
+        dependentRequiredEditor.activate()
+      }
+    })
+  }
+
+  getDependentRequired (property) {
+    if (this.schema.dependentRequired) {
+      if (hasOwnProperty(this.schema.dependentRequired, property)) {
+        return this.schema.dependentRequired[property]
+      }
+    }
+
+    return []
   }
 
   refreshAddProperties () {
@@ -1190,6 +1225,7 @@ export class ObjectEditor extends AbstractEditor {
     if (!editor) {
       return
     }
+
     if (typeof editor.schema.required === 'boolean') return editor.schema.required
     else if (Array.isArray(this.schema.required)) return this.schema.required.includes(editor.key)
     else if (this.jsoneditor.options.required_by_default) return true
