@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>dependentRequired</title>
+    <script src="../../dist/jsoneditor.js"></script>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+    <div id='editor-container'></div>
+
+    <div class="form-group">
+        <label for="textarea-value">Value</label>
+        <textarea class="form-control" id="textarea-value" cols="30" rows="10"></textarea>
+    </div>
+</div>
+
+<script>
+  var editorContainer = document.querySelector('#editor-container')
+  var textareaValue = document.querySelector('#textarea-value')
+  var schema = {
+    'title': 'dependentRequired',
+    'type': 'object',
+    'properties': {
+      'name': {
+        'type': 'string'
+      },
+      'credit_card': {
+        'type': 'number'
+      },
+      'billing_address_1': {
+        'type': 'string'
+      },
+      'billing_address_2': {
+        'type': 'string'
+      }
+    },
+    'required': [
+      'name'
+    ],
+    'dependentRequired': {
+      'credit_card': [
+        'billing_address_1',
+      ],
+      'billing_address_1': [
+        'billing_address_2',
+      ],
+      'billing_address_2': [
+        'billing_address_3',
+      ]
+    }
+  }
+
+  var editor = new JSONEditor(editorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome',
+    show_errors: 'always',
+    show_opt_in: true
+  })
+
+  editor.on('change', function () {
+    textareaValue.value = JSON.stringify(editor.getValue())
+  })
+</script>
+
+</body>
+</html>
