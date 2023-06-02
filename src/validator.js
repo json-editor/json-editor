@@ -720,12 +720,12 @@ export class Validator {
 
   _expandSchemaLink (schema, m) {
     const href = schema.links[m].href
-    const data = this.jsoneditor.root.getValue()
+    const data = this.getWatchedFieldValues()
     const template = this.jsoneditor.compileTemplate(href, this.jsoneditor.template)
     const ref = document.location.origin + document.location.pathname + template(data)
 
     schema.links = schema.links.slice(0, m).concat(schema.links.slice(m + 1))
-    return extend({}, schema, this.jsoneditor.refs[ref])
+    return extend({}, schema, { $ref: ref })
   }
 
   _validateV3Required (schema, value, path) {
