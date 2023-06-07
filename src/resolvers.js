@@ -76,6 +76,9 @@ const arraysOfStrings = schema => {
 /* Use the multiple editor for schemas with `oneOf` or `anyOf` set */
 const oneOf = schema => (schema.oneOf || schema.anyOf) && 'multiple'
 
+/* Use the multiple editor for schemas with `if` set */
+const ifThenElse = schema => (schema.if) && 'multiple'
+
 /* Specialized editor for date, time and datetime-local formats */
 const date = schema => ['string', 'integer'].includes(schema.type) && ['date', 'time', 'datetime-local'].includes(schema.format) && 'datetime'
 
@@ -122,4 +125,4 @@ const ip = schema => schema.type === 'string' && ['ip', 'ipv4', 'ipv6', 'hostnam
 const colorPicker = schema => schema.type === 'string' && schema.format === 'color' && 'colorpicker'
 
 /* Export resolvers in order of discovery, first to last */
-export const resolvers = [colorPicker, ip, ace, xhtml, markdown, jodit, autoComplete, uuid, info, button, stepper, describeBy, starratings, date, oneOf, arraysOfStrings, enumeratedProperties, enumSource, table, upload, base64, any, boolean, signature, primitive, object, defaultResolver]
+export const resolvers = [colorPicker, ip, ace, xhtml, markdown, jodit, autoComplete, uuid, info, button, stepper, describeBy, starratings, date, oneOf, ifThenElse, arraysOfStrings, enumeratedProperties, enumSource, table, upload, base64, any, boolean, signature, primitive, object, defaultResolver]
