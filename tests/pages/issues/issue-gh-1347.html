@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>GitHub Issue 1347</title>
+    <script src="../../../dist/jsoneditor.js"></script>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+    <label for="value">value</label>
+    <textarea class="form-control" id="value" cols="30" rows="10"></textarea>
+    <button id="set-value">Set value</button>
+    <br><br><br><br><br><br>
+    <div id='editor-container'></div>
+</div>
+
+<script>
+  var schema = {
+    'title': 'Test adding rows',
+    'definitions': {
+      'caplz': {
+        'type': 'object',
+        'properties': {
+          'dateField1': {
+            'title': 'Date',
+            'type': 'string',
+            'format': 'date',
+            'default': ''
+          },
+          'amountField1': {
+            'title': 'Amount 1',
+            'type': 'string',
+            'options': {
+              'cleave': {
+                'numeral': true,
+                'prefix': ' €',
+                'tailPrefix': true
+              }
+            },
+            'default': ''
+          },
+          'amountField2': {
+            'title': 'Amount 2',
+            'type': 'string',
+            'options': {
+              'cleave': {
+                'numeral': true,
+                'prefix': ' €',
+                'tailPrefix': true
+              }
+            },
+            'default': ''
+          },
+          'amountField3': {
+            'title': 'Amount 3',
+            'type': 'string',
+            'options': {
+              'cleave': {
+                'numeral': true,
+                'prefix': ' €',
+                'tailPrefix': true
+              }
+            },
+            'default': ''
+          },
+          'amountField4': {
+            'title': 'Amount 4',
+            'type': 'string',
+            'options': {
+              'cleave': {
+                'numeral': true,
+                'prefix': ' €',
+                'tailPrefix': true
+              }
+            },
+            'default': ''
+          }
+        }
+      }
+    },
+    'properties': {
+      'caplzsone': {
+        'type': 'array',
+        'format': 'table',
+        'title': 'Array set with minItems 1',
+        'items': {
+          'title': 'Added row',
+          '$ref': '#/definitions/caplz'
+        },
+        'minItems': 1
+      },
+      'caplzszero': {
+        'type': 'array',
+        'format': 'table',
+        'title': 'Array with no minItems',
+        'items': {
+          'title': 'Added row',
+          '$ref': '#/definitions/caplz'
+        }
+      }
+    }
+  }
+  var editorContainer = document.querySelector('#editor-container')
+  var value = document.querySelector('#value')
+  var setValue = document.querySelector('#set-value')
+  var editor = new JSONEditor(editorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome'
+  })
+
+  editor.on('change', function () {
+    value.value = JSON.stringify(editor.getValue())
+  })
+
+  editor.on('ready', function () {
+    editor.getEditor('root.caplzszero').setValue([
+      {
+        'dateField1': '0000',
+        'amountField1': '1111',
+        'amountField2': '2222',
+        'amountField3': '3333',
+        'amountField4': '4444'
+      },
+      {
+        'dateField1': '5555',
+        'amountField1': '6666',
+        'amountField2': '7777',
+        'amountField3': '8888',
+        'amountField4': '9999'
+      }
+    ])
+
+    editor.getEditor('root.caplzszero.0.amountField1').setValue(9999)
+  })
+</script>
+
+</body>
+</html>
