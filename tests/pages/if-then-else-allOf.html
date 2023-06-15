@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>If-Then-Else-UI</title>
+    <script src="../../dist/jsoneditor.js"></script>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+    <div id='editor-container'></div>
+
+    <div class="form-group">
+        <label for="value">Value</label>
+        <textarea class="form-control" id="value" cols="30" rows="10"></textarea>
+        <button id="set-value">set value</button>
+    </div>
+</div>
+
+<script>
+  var editorContainer = document.querySelector('#editor-container')
+  var value = document.querySelector('#value')
+  var setValue = document.querySelector('#set-value')
+  var schema = {
+    "type": "object",
+    "required": [
+      "country"
+    ],
+    "properties": {
+      "country": {
+        "type": "string",
+        "default": "United States of America",
+        "enum": [
+          "United States of America",
+          "Canada",
+          "Netherlands"
+        ]
+      },
+      "postal_code": {
+        "type": "string"
+      },
+      "street_address": {
+        "type": "string"
+      }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "country": {
+              "const": "United States of America"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "postal_code": {
+              "pattern": "[0-9]{5}(-[0-9]{4})?"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "country": {
+              "const": "Canada"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "postal_code": {
+              "pattern": "[A-Z][0-9][A-Z] [0-9][A-Z][0-9]"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "country": {
+              "const": "Netherlands"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "postal_code": {
+              "pattern": "[0-9]{4} [A-Z]{2}"
+            }
+          }
+        }
+      }
+    ]
+  }
+
+  var editor = new JSONEditor(editorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome',
+    show_errors: 'always'
+  })
+
+  editor.on('change', function () {
+    value.value = JSON.stringify(editor.getValue())
+  })
+
+  setValue.addEventListener('click', function () {
+    editor.setValue(JSON.parse(value.value))
+  })
+</script>
+
+</body>
+</html>
