@@ -95,9 +95,17 @@ export class AbstractEditor {
     }
 
     Object.keys(deps).forEach(dependency => {
-      let path = this.path.split('.')
-      path[path.length - 1] = dependency
-      path = path.join('.')
+      let path
+      const isFullPath = dependency.startsWith(this.jsoneditor.root.path)
+
+      if (isFullPath) {
+        path = dependency
+      } else {
+        path = this.path.split('.')
+        path[path.length - 1] = dependency
+        path = path.join('.')
+      }
+
       this.jsoneditor.watch(path, () => {
         this.evaluateDependencies()
       })
@@ -114,14 +122,23 @@ export class AbstractEditor {
     if (!deps) {
       return
     }
+
     // Assume true and set to false if any unmet dependencies are found
     const previousStatus = this.dependenciesFulfilled
     this.dependenciesFulfilled = true
 
     Object.keys(deps).forEach(dependency => {
-      let path = this.path.split('.')
-      path[path.length - 1] = dependency
-      path = path.join('.')
+      let path
+      const isFullPath = dependency.startsWith(this.jsoneditor.root.path)
+
+      if (isFullPath) {
+        path = dependency
+      } else {
+        path = this.path.split('.')
+        path[path.length - 1] = dependency
+        path = path.join('.')
+      }
+
       const choices = deps[dependency]
       this.checkDependency(path, choices)
     })

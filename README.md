@@ -1248,6 +1248,51 @@ Here's an example schema:
 }
 ```
 
+Keys can also be an absolute path like `root.property.nested_property` 
+ 
+```json
+{
+    "title": "Person",
+    "type": "object",
+    "required": [
+      "gender"
+    ],
+    "properties": {
+      "gender": {
+        "title": "Gender",
+        "type": "string",
+        "enum": [
+          "female",
+          "male"
+        ]
+      },
+      "age": {
+        "type": "object",
+        "properties": {
+          "maleSpecificAge": {
+            "type": "string",
+            "title": "Male specific age question?",
+            "options": {
+              "dependencies": {
+                "root.gender": "male"
+              }
+            }
+          },
+          "femaleSpecificAge": {
+            "type": "string",
+            "title": "Female specific age question?",
+            "options": {
+              "dependencies": {
+                "root.gender": "female"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+```
+
 The `dependencies` keyword from the JSON Schema specification is not nearly flexible enough to handle most use cases,
 so JSON Editor introduces a couple custom keywords that help in this regard.
 

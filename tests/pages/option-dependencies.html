@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>option: dependencies</title>
+    <script src="../../dist/jsoneditor.js"></script>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+    <div id='editor-container'></div>
+</div>
+
+<script>
+  var editorContainer = document.querySelector('#editor-container')
+  var schema = {
+    "title": "Person",
+    "type": "object",
+    "required": [
+      "gender"
+    ],
+    "properties": {
+      "gender": {
+        "title": "Gender",
+        "type": "string",
+        "enum": [
+          "female",
+          "male",
+          "other"
+        ]
+      },
+      "maleSpecific": {
+        "type": "string",
+        "title": "Male specific question?",
+        "options": {
+          "dependencies": {
+            "gender": "male"
+          }
+        }
+      },
+      "femaleSpecific": {
+        "type": "string",
+        "title": "Female specific question?",
+        "options": {
+          "dependencies": {
+            "gender": "female"
+          }
+        }
+      },
+      "otherSpecific": {
+        "type": "string",
+        "title": "What is your preferred gender?",
+        "options": {
+          "dependencies": {
+            "gender": "other"
+          }
+        }
+      },
+      "age": {
+        "type": "object",
+        "properties": {
+          "maleSpecificAge": {
+            "type": "string",
+            "title": "Male specific age question?",
+            "options": {
+              "dependencies": {
+                "root.gender": "male"
+              }
+            }
+          },
+          "femaleSpecificAge": {
+            "type": "string",
+            "title": "Female specific age question?",
+            "options": {
+              "dependencies": {
+                "root.gender": "female"
+              }
+            }
+          },
+          "otherSpecificAge": {
+            "type": "string",
+            "title": "Other specific age question?",
+            "options": {
+              "dependencies": {
+                "root.gender": "other"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+  var editor = new JSONEditor(editorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome',
+    show_errors: 'always'
+  })
+</script>
+
+</body>
+</html>
