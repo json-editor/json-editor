@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>GitHub Issue 1158-2</title>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <script src="../../../dist/jsoneditor.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <a href="https://github.com/json-editor/json-editor/issues/1158">GitHub Issue 1158</a>
+      <div id='editor_holder'></div>
+    </div>
+
+    <script>
+      var defaultSchema = {
+        "type": "object",
+        "title": "Registro Telemático",
+        "description": "Formulario para automatizar el registo telemático de bienes muebles.",
+        "properties": {
+          "arrendatarios": {
+            "$ref": "#/definitions/arrendatarios"
+          }
+        },
+        "definitions": {
+          "idsuj": {
+            "type": "object",
+            "options": {
+              "keep_oneof_values": false
+            },
+            "properties": {
+              "type": {
+                "type": "string",
+                "options": {
+                  "hidden": true
+                }
+              }
+            },
+            "oneOf": [
+              {
+                "title": "Full Name",
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "fullName"
+                    ],
+                    "options": {
+                      "hidden": true
+                    }
+                  },
+                  "fullName": {
+                    "type": "string",
+                    "title": "Full name"
+                  }
+                },
+                "type": "object",
+                "options": {
+                  "keep_oneof_values": false
+                }
+              },
+              {
+                "title": "First and Last Name",
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "first-last-name"
+                    ],
+                    "options": {
+                      "hidden": true
+                    }
+                  },
+                  "firstName": {
+                    "type": "string",
+                    "title": "First name"
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "title": "Last name"
+                  }
+                },
+                "type": "object",
+                "options": {
+                  "keep_oneof_values": false
+                }
+              },
+              {
+                "title": "Other name",
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "other-name"
+                    ],
+                    "options": {
+                      "hidden": true
+                    }
+                  },
+                  "otherFirstName": {
+                    "type": "string"
+                  },
+                  "otherLastName": {
+                    "type": "string"
+                  }
+                },
+                "type": "object",
+                "options": {
+                  "keep_oneof_values": false
+                }
+              },
+              {
+                "title": "More name",
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "more-name"
+                    ],
+                    "options": {
+                      "hidden": true
+                    }
+                  },
+                  "moreFullName": {
+                    "type": "string"
+                  }
+                },
+                "type": "object",
+                "options": {
+                  "keep_oneof_values": false
+                }
+              }
+            ]
+          },
+          "arrendatarios": {
+            "title": "ARRENDATARIOS",
+            "description": "Arrendatarios del contrato",
+            "type": "array",
+            "items": {
+              "title": "ARRENDATARIO",
+              "type": "object",
+              "properties": {
+                "LSR04": {
+                  "title": "Identificación del sujeto",
+                  "$ref": "#/definitions/idsuj"
+                },
+                "representantes": {
+                  "title": "Representantes",
+                  "type": "array",
+                  "items": {
+                    "title": "REPRESENTANTE",
+                    "properties": {
+                      "LSR07": {
+                        "$ref": "#/definitions/rep"
+                      },
+                      "LSR10": {
+                        "$ref": "#/definitions/idsuj"
+                      }
+                    }
+                  }
+                }
+              },
+              "defaultProperties": [
+                "LSR04",
+                "representantes"
+              ]
+            }
+          }
+        },
+        "defaultProperties": [
+          "arrendatarios"
+        ]
+      }
+
+      var editor = new JSONEditor(document.getElementById('editor_holder'),{
+        iconlib: 'fontawesome5',
+        object_layout: 'normal',
+        schema: defaultSchema,
+        show_errors: 'always',
+        theme: 'bootstrap4'
+      });
+    </script>
+  </body>
+</html>
