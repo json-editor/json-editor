@@ -158,7 +158,9 @@ export class SchemaLoader {
     // If local ref
     if (refWithPointerSplit.length === 2 && !this.refs_with_info[_schema.$ref]) {
       const sub = this.expandRecursivePointer(this.schema, refWithPointerSplit[1])
-      return this.extendSchemas(_schema, this.expandSchema(sub))
+      const expandedSchema = this.extendSchemas(_schema, this.expandSchema(sub))
+      delete expandedSchema.$ref
+      return expandedSchema
     }
     const refObj = (refWithPointerSplit.length > 2)
       ? this.refs_with_info['#' + refWithPointerSplit[1]]

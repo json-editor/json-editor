@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>GitHub Issue 1165</title>
+    <script src="../../../dist/jsoneditor.js"></script>
+  </head>
+  <body>
+    <h1><a href="https://github.com/json-editor/json-editor/issues/1165">GitHub Issue 1165</a></h1>
+    <div id='editor_holder'></div>
+
+    <script>
+      href = window.location.href.split('/')
+      href.pop()
+      href = href.join('/')
+      var refURL = href + "/issue-gh-1165.json"
+
+      var schema = {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "selections": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": refURL
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "other": {
+            "type": "array",
+            "items": {
+              "$ref": refURL
+            }
+          }
+        },
+        "required": [
+          "selections"
+        ],
+        "definitions": {
+          "objectDef": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+
+      var editor = new JSONEditor(document.getElementById('editor_holder'),{
+        schema: schema,
+        ajax: true
+      })
+    </script>
+  </body>
+</html>
