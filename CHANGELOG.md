@@ -1,10 +1,22 @@
 ### Unreleased
 
+### 2.10.0
+
+- Fixed schema loader bug and added test for relative issues 
+- Using multiple for schemas with if-then-else
 - Added support for shell script highlighting
 - Added support for contains, minContains and maxContains constrains
 - Added support for if-then-else constrains
 - Added support for dependentSchemas constrains
 - Added support for absolute paths in dependencies
+- Added support for bootstrap icons
+- Added custom editor example page
+- Added bootstrap 5 theme option in example page
+- Fixed property checkboxes display
+- Updated array delete message
+- Refactored tests with codeceptjs native waitForValue()
+- Fixed bootstrap 3 import warnings
+- Updated autocomplete example with library css
 
 ### 2.9.1
 
