@@ -170,6 +170,14 @@ Scenario('should validate against anyOf schemas and display single anyOf and edi
   I.dontSee('Property must be set.', '[data-schemapath="root.age"] .invalid-feedback')
 })
 
+Scenario('should keep only existent values @core @anyof @keep_only_existing_values', async ({ I }) => {
+  I.amOnPage('keep_only_existing_values.html')
+  I.waitForElement('.je-ready')
+  I.waitForValue('#value', '{"name":"Afred","surname":"hitchcock","zip":"12345"}')
+  I.selectOption('.je-switcher', 'object 2')
+  I.waitForValue('#value', '{"name":"Afred","surname":"hitchcock","other_zip":""}')
+})
+
 Scenario('should display anyOf and oneOf error messages in the correct places @848', async ({ I }) => {
   I.amOnPage('issues/issue-gh-848.html')
   I.selectOption('.je-switcher', 'Value, string')

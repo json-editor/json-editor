@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8"/>
+    <title>oneOf</title>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <script src="../../dist/jsoneditor.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <label for="value">Value</label>
+    <textarea class="form-control" id="value" rows="12" style="font-size: 12px; font-family: monospace;"></textarea>
+    <button id="set-value">Set Value</button>
+    <div class='json-editor-container'></div>
+</div>
+
+<script>
+  var jsonEditorContainer = document.querySelector('.json-editor-container')
+  var value = document.querySelector('#value')
+  var setValue = document.querySelector('#set-value')
+  var schema = {
+    'anyOf': [
+      {
+        'type': 'object',
+        'properties': {
+          'name': {
+            'type': 'string',
+            "default": "Afred"
+          },
+          'surname': {
+            'type': 'string',
+            "default": "hitchcock"
+          },
+          'zip': {
+            'type': 'string',
+            "default": "12345"
+          }
+        }
+      },
+      {
+        'type': 'object',
+        'properties': {
+          'name': {
+            'type': 'string'
+          },
+          'surname': {
+            'type': 'string'
+          },
+          'other_zip': {
+            'type': 'string'
+          }
+        }
+      }
+    ]
+  }
+
+  var editor = new JSONEditor(jsonEditorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    show_errors: 'always',
+    iconlib: 'fontawesome5',
+    disable_collapse: true,
+    disable_edit_json: true,
+    disable_properties: true,
+    keep_only_existing_values: true
+  })
+
+  editor.on('change', function () {
+    value.value = JSON.stringify(editor.getValue())
+  })
+
+  setValue.addEventListener('click', function () {
+    editor.setValue(JSON.parse(value.value))
+  })
+</script>
+
+</body>
+</html>

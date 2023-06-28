@@ -1,5 +1,8 @@
 ### Unreleased
 
+- Added keep_only_existing_values option
+- Fixed if-then-else edge case bug with disabled fields
+
 ### 2.10.0
 
 - Fixed schema loader bug and added test for relative issues 
