@@ -1,5 +1,7 @@
 ### Unreleased
 
+### 2.10.1
+
 - Added keep_only_existing_values option
 - Fixed if-then-else edge case bug with disabled fields
 
