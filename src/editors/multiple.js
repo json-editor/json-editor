@@ -1,7 +1,7 @@
 /* Multiple Editor (for when `type` is an array, also when `oneOf` is present) */
 import { AbstractEditor } from '../editor.js'
 import { Validator } from '../validator.js'
-import { extend, mergeDeep } from '../utilities.js'
+import { extend, mergeDeep, overwriteExistingProperties } from '../utilities.js'
 
 export class MultipleEditor extends AbstractEditor {
   register () {
@@ -62,7 +62,7 @@ export class MultipleEditor extends AbstractEditor {
       this.buildChildEditor(i)
     }
 
-    const currentValue = this.getValue()
+    let currentValue = this.getValue()
 
     this.type = i
 
@@ -72,6 +72,10 @@ export class MultipleEditor extends AbstractEditor {
       if (!editor) return
 
       if (this.type === type) {
+        if (this.keep_only_existing_values) {
+          currentValue = overwriteExistingProperties(editor.getValue(), currentValue)
+        }
+
         if (this.keep_values || this.if) editor.setValue(currentValue, true)
         editor.container.style.display = ''
       } else {
@@ -137,6 +141,10 @@ export class MultipleEditor extends AbstractEditor {
     this.keep_values = true
     if (typeof this.jsoneditor.options.keep_oneof_values !== 'undefined') this.keep_values = this.jsoneditor.options.keep_oneof_values
     if (typeof this.options.keep_oneof_values !== 'undefined') this.keep_values = this.options.keep_oneof_values
+
+    this.keep_only_existing_values = false
+    if (typeof this.jsoneditor.options.keep_only_existing_values !== 'undefined') this.keep_only_existing_values = this.jsoneditor.options.keep_only_existing_values
+    if (typeof this.options.keep_only_existing_values !== 'undefined') this.keep_only_existing_values = this.options.keep_only_existing_values
 
     if (this.schema.oneOf) {
       this.oneOf = true
@@ -244,6 +252,10 @@ export class MultipleEditor extends AbstractEditor {
       this.validators[i] = new Validator(this.jsoneditor, schema, validatorOptions, this.defaults)
     })
 
+    this.jsoneditor.on('change', () => {
+      this.switchIf()
+    })
+
     this.switchEditor(0)
   }
 
@@ -253,7 +265,6 @@ export class MultipleEditor extends AbstractEditor {
       this.refreshHeaderText()
     }
 
-    this.switchIf()
     super.onChildEditorChange()
   }
 
