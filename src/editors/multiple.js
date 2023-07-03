@@ -276,6 +276,9 @@ export class MultipleEditor extends AbstractEditor {
   }
 
   refreshValue () {
+    if (!this.editors[this.type]) {
+      return
+    }
     this.value = this.editors[this.type].getValue()
   }
 

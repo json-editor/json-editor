@@ -1,5 +1,7 @@
 ### Unreleased
 
+- fixed issue #1364
+
 ### 2.10.1
 
 - Added keep_only_existing_values option
