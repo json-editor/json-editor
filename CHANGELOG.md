@@ -1,7 +1,7 @@
 ### Unreleased
 
-- fixed issue #1237
-- fixed issue #1364
+- fixed issue #1237: more coherent ui for Base64 editor
+- fixed issue #1364: getValue() with dependencies
 
 ### 2.10.1
 
