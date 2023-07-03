@@ -1109,6 +1109,7 @@ export class ObjectEditor extends AbstractEditor {
 
     Object.keys(this.editors).forEach(i => {
       if (this.editors[i].isActive()) {
+        this.editors[i].refreshValue()
         this.value[i] = this.editors[i].getValue()
       }
     })
