@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>GitHub Issue 1211</title>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <script src="../../../dist/jsoneditor.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1><a href="https://github.com/json-editor/json-editor/issues/1211">GitHub Issue 1211</a></h1>
+    <div id='editor_holder'></div>
+    <label for="value">Value</label>
+    <textarea class="form-control" id="value" rows="12" style="font-size: 12px; font-family: monospace;"></textarea>
+    <button id="set-value">Set Value</button>
+</div>
+
+<script>
+  var schema = {
+    "title": " ",
+    "type": "object",
+    "options": {
+      "disable_collapse": true,
+    },
+    "definitions": {
+      "ruleBase": {
+        "title": "ruleBase",
+        "type": "object",
+        "additionalProperties": false,
+        "disable_edit_json": true,
+        "disable_collapse": true,
+        "properties": {
+          "name": {
+            "propertyOrder": 1,
+            "required": true,
+            "title": "Name",
+            "type": "string",
+            "options": {
+              "grid_columns": 6,
+            }
+          },
+          "description": {
+            "propertyOrder": 2,
+            "required": true,
+            "title": "Description",
+            "type": "string",
+            "options": {
+              "grid_columns": 5
+            }
+          },
+          "enabled": {
+            "propertyOrder": 3,
+            "title": "Enabled",
+            "type": "boolean",
+            "format": "checkbox",
+            "options": {
+              "grid_columns": 1
+            }
+          }
+        }
+      },
+      "groupBase": {
+        "title": "groupBase",
+        "type": "object",
+        "format": "grid",
+        "additionalProperties": false,
+        "disable_edit_json": true,
+        "collapsed": true,
+        "properties": {
+          "name": {
+            "propertyOrder": 1,
+            "required": true,
+            "title": "Name",
+            "type": "string",
+            "options": {
+              "grid_columns": 6
+            }
+          },
+          "description": {
+            "propertyOrder": 2,
+            "required": true,
+            "title": "Description",
+            "type": "string",
+            "options": {
+              "grid_columns": 6
+            }
+          }
+        }
+      },
+      "generic": {
+        "title": "Generic Allow Rule",
+        "type": "object",
+        "additionalProperties": false,
+        "disable_edit_json": true,
+        "collapsed": true,
+        "options": {
+          "disable_collapse": true
+        },
+        "allOf": [
+          {
+            "$ref": "#/definitions/ruleBase"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "required": true,
+            "enum": ["any"],
+            "default": "any",
+            "options": {
+              "hidden": true
+            }
+          }
+        }
+      },
+      "custom-cert-ext": {
+        "title": "Custom Certificate Extension",
+        "type": "object",
+        "format": "table",
+        "uniqueItems": true,
+        "options": {
+          "disable_array_reorder": true,
+          "disable_collapse": true
+        },
+        "properties": {
+          "type": {
+            "type": "string",
+            "required": true,
+            "enum": ["cert-extension"],
+            "default": "cert-extension",
+            "options": {
+              "hidden": true
+            }
+          },
+          "name":{
+            "title": "Extension",
+            "type": "string",
+            "watch": {
+              "name": "certificate-extensions"
+            },
+            "enumSource": [
+              {
+                "source": "name",
+                "filter": "customCertAttrFilter",
+                "value": "enumValueCustomCertAttr"
+              }
+            ]
+          },
+          "filter": {
+            "title": "Filter Value by",
+            "type": "string",
+            "default": "*"
+          }
+
+        }
+      },
+      "vlan-assignment": {
+        "title": "VLAN assignment",
+        "required": true,
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "disable_edit_json": true,
+            "title": "Static",
+            "options": {
+              "disable_collapse": true,
+            },
+            "properties": {
+              "state": {
+                "type": "string",
+                "required": true,
+                "enum": ["enabled"],
+                "default": "enabled",
+                "options": {
+                  "hidden": true
+                }
+              },
+              "type": {
+                "type": "string",
+                "required": true,
+                "enum": ["static"],
+                "default": "static",
+                "options": {
+                  "hidden": true
+                }
+              },
+              "vlanid": {
+                "title": "VLAN ID",
+                "additionalProperties": false,
+                "disable_edit_json": true,
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "title": "By Certificate Extension",
+            "$ref": "#/definitions/custom-cert-ext"
+
+          },
+          {
+            "title": "By Certificate Subject Name",
+            "type": "object",
+            "format": "table",
+            "uniqueItems": true,
+            "options": {
+              "disable_array_reorder": true,
+              "disable_collapse": true
+            },
+            "properties": {
+              "type": {
+                "type": "string",
+                "required": true,
+                "enum": ["cert-subject"],
+                "default": "cert-subject",
+                "options": {
+                  "hidden": true
+                }
+              },
+              "identifier": {
+                "title": "Distinguished Name attribute",
+                "type": "string",
+                "enum": ["CN", "OU", "O", "SN", "L"]
+              },
+              "prefix": {
+                "title": "Prefix",
+                "type": "string",
+                "default": "vlan-"
+              }
+            }
+
+          },
+          {
+            "$ref": "#/definitions/disabledOption"
+          }
+        ],
+        "default": {
+          "state": "disabled"
+        }
+      },
+      "configuration-lan": {
+        "title": "Configuration",
+        "type": "object",
+        "collapsed": true,
+        "options": {
+          "disable_collapse": true
+        },
+        "properties": {
+          "switch": {
+            "title": "Which Switch MAC addresses are allowed(any if disabled)",
+            "oneOf": [
+              {
+                "$ref": "#/definitions/disabledOption"
+              }, {
+                "title": "Addresses",
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "required": true,
+                    "enum": ["switch-mac-addresses"],
+                    "default": "switch-mac-addresses",
+                    "options": {
+                      "hidden": true
+                    }
+                  },
+                  "addresses": {
+                    "title": "Addresses",
+                    "type": "array",
+                    "format": "table",
+                    "options": {
+                      "disable_array_reorder": true
+                    },
+                    "items": {
+                      "title": "MAC address",
+                      "type": "string",
+                      "default": "any"
+                    }
+                  }
+                }
+              }, {
+                "title": "Groups",
+                "type": "array",
+                "required": true,
+                "format": "table",
+                "uniqueItems": true,
+                "options": {
+                  "disable_array_reorder": true,
+                  "disable_collapse": true
+                },
+                "items": {
+                  "title": "Name",
+                  "type": "string",
+                  "watch": {
+                    "name": "groups",
+                    "type": "groups.type"
+                  },
+                  "enumSource": [
+                    ["any"], {
+                      "source": "name",
+                      "filter": "switchgroupFilter",
+                      "title": "enumTitleSwitchGroup",
+                      "value": "enumValueSwitchGroup"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "vlan": {
+            "$ref": "#/definitions/vlan-assignment"
+          }
+        }
+      },
+      "configuration-wifi": {
+        "title": "Configuration",
+        "type": "object",
+        "collapsed": true,
+        "options": {
+          "disable_collapse": true
+        },
+        "properties": {
+          "ssids": {
+            "title": "Which SSIDs are allowed (any if disabled)",
+            "oneOf": [
+              {
+                "$ref": "#/definitions/disabledOption"
+              }, {
+                "title": "Names",
+                "type": "object",
+                "options": {
+                  "disable_collapse": true
+                },
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "required": true,
+                    "enum": ["ssid-names"],
+                    "default": "ssid-names",
+                    "options": {
+                      "hidden": true
+                    }
+                  },
+                  "names": {
+                    "title": "Name",
+                    "type": "array",
+                    "format": "table",
+                    "uniqueItems": true,
+                    "options": {
+                      "disable_array_reorder": true,
+                      "disable_collapse": true
+                    },
+                    "items": {
+                      "title": "SSID Name",
+                      "type": "string",
+                      "default": "any"
+                    }
+                  }
+                }
+              }, {
+                "type": {
+                  "type": "string",
+                  "required": true,
+                  "enum": ["ssid-groups"],
+                  "default": "ssid-groups",
+                  "options": {
+                    "hidden": true
+                  }
+                },
+                "title": "Groups",
+                "type": "array",
+                "required": true,
+                "format": "table",
+                "uniqueItems": true,
+                "options": {
+                  "disable_array_reorder": true,
+                  "disable_collapse": true
+                },
+                "items": {
+                  "title": "Name",
+                  "type": "string",
+                  "watch": {
+                    "name": "groups",
+                    "type": "groups.type"
+                  },
+                  "enumSource": [
+                    ["any"], {
+                      "source": "name",
+                      "filter": "ssidgroupFilter",
+                      "title": "enumTitleSSIDGroup",
+                      "value": "enumValueSSIDGroup"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "aps": {
+            "title": "Which Access Point MAC addresses are allowed(any if disabled)",
+            "oneOf": [
+              {
+                "$ref": "#/definitions/disabledOption"
+              }, {
+                "title": "Addresses",
+                "type": "object",
+                "options": {
+                  "disable_collapse": true
+                },
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "required": true,
+                    "enum": ["ap-mac-addresses"],
+                    "default": "ap-mac-addresses",
+                    "options": {
+                      "hidden": true
+                    }
+                  },
+                  "addresses": {
+                    "title": "Addresses",
+                    "type": "array",
+                    "format": "table",
+                    "options": {
+                      "disable_array_reorder": true,
+                      "disable_collapse": true
+                    },
+                    "items": {
+                      "title": "MAC address",
+                      "type": "string",
+                      "default": "any"
+                    }
+                  }
+                }
+              }, {
+                "title": "Groups",
+                "type": "array",
+                "required": true,
+                "format": "table",
+                "uniqueItems": true,
+                "options": {
+                  "disable_array_reorder": true,
+                  "disable_collapse": true
+                },
+                "items": {
+                  "title": "Name",
+                  "type": "string",
+                  "watch": {
+                    "name": "groups",
+                    "type": "groups.type"
+                  },
+                  "enumSource": [
+                    ["any"], {
+                      "source": "name",
+                      "filter": "apgroupFilter",
+                      "title": "enumTitleAPGroup",
+                      "value": "enumValueAPGroup"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+
+          "vlan": {
+            "$ref": "#/definitions/vlan-assignment"
+          }
+        }
+      },
+      "wifi": {
+        "title": "WiFi Rule",
+        "type": "object",
+        "additionalProperties": false,
+        "disable_edit_json": true,
+        "collapsed": true,
+        "options": {
+          "disable_collapse": true
+        },
+        "allOf": [
+          {
+            "$ref": "#/definitions/ruleBase"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "required": true,
+            "enum": ["wifi"],
+            "default": "wifi",
+            "options": {
+              "hidden": true
+            }
+          },
+
+          "authentication": {
+            "$ref": "#/definitions/authenticaton"
+          },
+          "configuration": {
+            "$ref": "#/definitions/configuration-wifi"
+          }
+        }
+      },
+      "lan": {
+        "title": "LAN Rule",
+        "type": "object",
+        "additionalProperties": false,
+        "disable_edit_json": true,
+        "collapsed": true,
+        "options": {
+          "disable_collapse": true
+        },
+        "allOf": [
+          {
+            "$ref": "#/definitions/ruleBase"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "required": true,
+            "enum": ["lan"],
+            "default": "lan",
+            "options": {
+              "hidden": true
+            }
+          },
+          "authentication": {
+            "propertyOrder": 4,
+            "$ref": "#/definitions/authenticaton"
+          },
+          "configuration": {
+            "$ref": "#/definitions/configuration-lan"
+          }
+        }
+      },
+      "authenticaton": {
+        "title": "Authentication",
+        "type": "object",
+        "collapsed": true,
+        "options": {
+          "disable_collapse": true
+        },
+        "properties": {
+          "cert": {
+            "title": "Certificate-based authentication",
+            "type": "object",
+            "required": true,
+            "collapsed": true,
+            "options": {
+              "disable_collapse": true,
+            },
+            "oneOf": [
+              {
+                "$ref": "#/definitions/disabledOption"
+              }, {
+                "type": "object",
+                "additionalProperties": false,
+                "disable_edit_json": true,
+                "title": "enabled",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "required": true,
+                    "default": "cert",
+                    "options": {
+                      "hidden": true
+                    }
+                  },
+                  "state": {
+                    "type": "string",
+                    "required": true,
+                    "enum": ["enabled"],
+                    "default": "enabled",
+                    "options": {
+                      "hidden": true
+                    }
+                  },
+                  "roots": {
+                    "title": "Filter allowed certificates(any if disabled)",
+                    "oneOf": [
+                      {
+                        "$ref": "#/definitions/disabledOption"
+                      }, {
+                        "title": "Allowed trusted roots",
+                        "type": "array",
+                        "format": "table",
+                        "uniqueItems": true,
+                        "options": {
+                          "disable_array_reorder": true,
+                          "disable_collapse": true,
+
+                        },
+                        "items": {
+                          "title": "Certificate Subject",
+                          "type": "string",
+                          "watch": {
+                            "subject": "trustedroots"
+                          },
+                          "enumSource": [
+                            {
+                              "source": "subject",
+                              "filter": "trustedrootFilter",
+                              "title": "enumTitleTrustedRoot",
+                              "value": "enumValueTrustedRoot"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  "intuneids": {
+                    "title": "Filter allowed Intune IDs(any if disabled)",
+                    "oneOf": [
+                      {
+                        "$ref": "#/definitions/disabledOption"
+                      },
+                      {
+                        "title": "Ignore",
+                        "type": "object",
+                        "options": {
+                          "disable_array_reorder": true,
+                          "disable_collapse": true,
+                          "collapsed": true
+                        },
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "required": true,
+                            "enum": ["ignore"],
+                            "default": "ignore",
+                            "options": {
+                              "hidden": true
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "title": "Allowed Intune IDs",
+                        "type": "array",
+                        "format": "table",
+                        "uniqueItems": true,
+                        "options": {
+                          "disable_array_reorder": true,
+                          "disable_collapse": true
+                        },
+                        "items": {
+                          "title": "Intune ID",
+                          "type": "string",
+                          "watch": {
+                            "id": "intuneids"
+                          },
+                          "enumSource": [
+                            {
+                              "source": "id",
+                              "filter": "intuneidFilter",
+                              "title": "enumTitleIntuneid",
+                              "value": "enumValueIntuneid"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "password": {
+            "title": "Username/Password-based authentication",
+            "required": true,
+            "type": "object",
+            "collapsed": true,
+            "options": {
+              "disable_collapse": true
+            },
+            "oneOf": [
+              {
+                "$ref": "#/definitions/disabledOption"
+              }, {
+                "type": "object",
+                "additionalProperties": false,
+                "title": "enabled",
+                "options": {
+                  "disable_collapse": true
+                },
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "required": true,
+                    "default": "password",
+                    "options": {
+                      "hidden": true
+                    }
+                  },
+                  "state": {
+                    "type": "string",
+                    "required": true,
+                    "enum": ["enabled"],
+                    "default": "enabled",
+                    "options": {
+                      "hidden": true
+                    }
+                  },
+                  "username-regex": {
+                    "title": "User name Regex",
+                    "type": "string",
+                    "default": ".*"
+                  },
+                  "owner-rule": {
+                    "options": {
+                      "infoText": "Infotext"
+                    },
+                    "title": "Owner Regex",
+                    "type": "string",
+                    "default": ".*"
+                  }
+                }
+              }
+            ],
+            "default": {
+              "state": "disabled"
+            }
+          }
+        }
+      },
+      "disabledOption": {
+        "type": "object",
+        "additionalProperties": false,
+        "disable_edit_json": true,
+        "title": "disabled",
+        "options": {
+          "collapsed": true,
+          "disable_edit_json": true,
+          "disable_properties": true,
+          "disable_collapse": true,
+        },
+        "properties": {
+          "state": {
+            "type": "string",
+            "required": true,
+            "enum": ["disabled"],
+            "default": "disabled",
+            "options": {
+              "hidden": true
+            }
+          }
+        }
+      },
+      "ssid-group": {
+        "title": "SSID Group",
+        "type": "object",
+        "additionalProperties": false,
+        "disable_edit_json": true,
+        "uniqueItems": true,
+        "collapsed": true,
+        "options": {
+          "disable_collapse": true
+        },
+        "allOf": [
+          {
+            "$ref": "#/definitions/groupBase"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "required": true,
+            "enum": ["ssid-group"],
+            "default": "ssid-group",
+            "options": {
+              "hidden": true
+            }
+          },
+          "ssid-group": {
+            "title": " ",
+            "type": "array",
+            "format": "table",
+            "uniqueItems": true,
+            "options": {
+              "disable_array_reorder": true,
+              "disable_collapse": true
+            },
+            "items": {
+              "title": "SSID",
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ap-group": {
+        "title": "AP Group",
+        "type": "object",
+        "additionalProperties": false,
+        "disable_edit_json": true,
+        "uniqueItems": true,
+        "collapsed": true,
+        "options": {
+          "disable_array_reorder": true,
+          "disable_collapse": true,
+        },
+        "allOf": [
+          {
+            "$ref": "#/definitions/groupBase"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "required": true,
+            "enum": ["ap-mac-group"],
+            "default": "ap-mac-group",
+            "options": {
+              "hidden": true
+            }
+          },
+          "macs": {
+            "title": " ",
+            "type": "array",
+            "format": "table",
+            "uniqueItems": true,
+            "options": {
+              "disable_array_reorder": true,
+              "disable_collapse": true
+            },
+            "items": {
+              "title": "MAC address",
+              "type": "string",
+              "default": "any"
+            }
+          }
+        }
+      },
+      "switch-group": {
+        "title": "Switch Group",
+        "type": "object",
+        "additionalProperties": false,
+        "disable_edit_json": true,
+        "uniqueItems": true,
+        "collapsed": true,
+        "options": {
+          "disable_array_reorder": true,
+          "disable_collapse": true
+        },
+        "allOf": [
+          {
+            "$ref": "#/definitions/groupBase"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "required": true,
+            "enum": ["switch-mac-group"],
+            "default": "switch-mac-group",
+            "options": {
+              "hidden": true
+            }
+          },
+          "macs": {
+            "title": " ",
+            "type": "array",
+            "format": "table",
+            "uniqueItems": true,
+            "options": {
+              "disable_array_reorder": true,
+              "disable_collapse": true
+            },
+            "items": {
+              "title": "MAC address",
+              "type": "string",
+              "default": "any"
+            }
+          }
+        }
+      }
+    },
+    "properties": {
+      "rules": {
+        "type": "array",
+        "title": "Rule collection",
+        "uniqueItems": true,
+        "format": "tabs-top",
+        "options": {
+          "disable_array_reorder": false,
+          "disable_collapse": true,
+          "infoText": "Infotext"
+        },
+        "items": {
+          "title": "Rule",
+
+          "headerTemplate": "{{ self.name }} -- {{#self.enabled}}Enabled{{/self.enabled}}{{^self.enabled}}Disabled{{/self.enabled}}",
+
+          "oneOf": [
+            {
+              "$ref": "#/definitions/generic"
+            }, {
+              "$ref": "#/definitions/wifi"
+            }, {
+              "$ref": "#/definitions/lan"
+            }
+          ]
+        }
+      },
+      "groups": {
+        "type": "array",
+        "title": "SSID & MAC Groups",
+        "uniqueItems": true,
+        "format": "tabs-top",
+        "collapsed": true,
+        "options": {
+          "disable_array_reorder": false,
+          "disable_collapse": true,
+          "infoText": "Infotext"
+        },
+        "items": {
+          "title": "Group",
+
+          "headerTemplate": "{{ self.name }}",
+
+          "oneOf": [
+            {
+              "$ref": "#/definitions/ssid-group"
+            }, {
+              "$ref": "#/definitions/ap-group"
+            }, {
+              "$ref": "#/definitions/switch-group"
+            }
+          ]
+        }
+      },
+      "certificate-extensions": {
+        "type": "array",
+        "title": "Certificate Extensions",
+        "uniqueItems": true,
+        "format": "table",
+        "collapsed": true,
+        "options": {
+          "disable_array_reorder": "true",
+          "disable_collapse": true,
+          "infoText": "Infotext"
+        },
+        "items": {
+          "title": "Extension",
+          "properties":{
+            "name": {
+              "title": "Name",
+              "type": "string"
+            },
+            "oid": {
+              "title": "OID",
+              "type": "string"
+            }
+          }
+        }
+      },
+      "trustedroots": {
+        "type": "array",
+        "title": "Trusted Roots",
+        "options": {
+          "hidden": true
+        },
+        "items": {
+          "title": "Cert object",
+          "type": "object",
+          "properties": {
+            "subject": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "intuneids": {
+        "type": "array",
+        "title": "Intune IDs",
+        "options": {
+          "hidden": true
+        },
+        "items": {
+          "title": "Intune ID",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+
+  var value = document.querySelector('#value')
+  var setValue = document.querySelector('#set-value')
+  var editor = new JSONEditor(document.getElementById('editor_holder'), {
+    iconlib: 'fontawesome5',
+    disable_array_delete_all_rows: true,
+    no_additional_properties: true,
+    disable_edit_json: true,
+    input_size: 'small',
+    disable_properties: true,
+    disable_array_delete_last_row: true,
+    schema: schema,
+    theme: 'bootstrap4',
+    keep_oneof_values: false
+  })
+
+  editor.on('change', function () {
+    value.value = JSON.stringify(editor.getValue())
+  })
+
+  setValue.addEventListener('click', function () {
+    editor.setValue(JSON.parse(value.value))
+  })
+</script>
+</body>
+</html>

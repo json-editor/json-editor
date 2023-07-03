@@ -241,6 +241,11 @@ Here are all the available options:
     <td><code>true</code></td>
   </tr>
   <tr>
+      <td>keep_only_existing_values</td>
+      <td>If <code>true</code>, copy only existing properties over when switching.</td>
+      <td><code>false</code></td>
+    </tr>
+  <tr>
     <td>schema</td>
     <td>A valid JSON Schema to use for the editor.  Version 3 and Version 4 of the draft specification are supported.</td>
     <td><code>{}</code></td>
@@ -1246,6 +1251,51 @@ Here's an example schema:
     }
   }
 }
+```
+
+Keys can also be an absolute path like `root.property.nested_property` 
+ 
+```json
+{
+    "title": "Person",
+    "type": "object",
+    "required": [
+      "gender"
+    ],
+    "properties": {
+      "gender": {
+        "title": "Gender",
+        "type": "string",
+        "enum": [
+          "female",
+          "male"
+        ]
+      },
+      "age": {
+        "type": "object",
+        "properties": {
+          "maleSpecificAge": {
+            "type": "string",
+            "title": "Male specific age question?",
+            "options": {
+              "dependencies": {
+                "root.gender": "male"
+              }
+            }
+          },
+          "femaleSpecificAge": {
+            "type": "string",
+            "title": "Female specific age question?",
+            "options": {
+              "dependencies": {
+                "root.gender": "female"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 ```
 
 The `dependencies` keyword from the JSON Schema specification is not nearly flexible enough to handle most use cases,

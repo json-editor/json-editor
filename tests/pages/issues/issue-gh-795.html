@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>GitHub Issue 795</title>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <script src="../../../dist/jsoneditor.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1><a href="https://github.com/json-editor/json-editor/issues/795">GitHub Issue 795</a></h1>
+    <div id='editor_holder'></div>
+    <label for="value">Value</label>
+    <textarea class="form-control" id="value" rows="12" style="font-size: 12px; font-family: monospace;"></textarea>
+    <button id="set-value">Set Value</button>
+</div>
+
+<script>
+  var schema = {
+    'definitions': {
+      'box': {
+        'type': 'array',
+        'items': {
+          'oneOf': [
+            {
+              'title': 'box',
+              '$ref': '#/definitions/box'
+            },
+            {
+              'title': 'letter',
+              'type': 'object'
+            }
+          ]
+        }
+      }
+    },
+    '$ref': '#/definitions/box'
+  }
+
+  var value = document.querySelector('#value')
+  var setValue = document.querySelector('#set-value')
+  var editor = new JSONEditor(document.getElementById('editor_holder'), {
+    schema: schema,
+    theme: 'bootstrap4',
+    keep_oneof_values: false
+  })
+
+  editor.on('change', function () {
+    value.value = JSON.stringify(editor.getValue())
+  })
+
+  setValue.addEventListener('click', function () {
+    editor.setValue(JSON.parse(value.value))
+  })
+</script>
+</body>
+</html>
