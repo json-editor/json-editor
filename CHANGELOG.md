@@ -1,5 +1,6 @@
 ### Unreleased
 
+- fixed issue #1237
 - fixed issue #1364
 
 ### 2.10.1
