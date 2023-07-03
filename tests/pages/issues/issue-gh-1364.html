@@ -18,7 +18,6 @@
     <script>
       var defaultSchema = {
         "type": "object",
-
         "properties": {
           "engine": {
             "type": "string",
@@ -54,8 +53,7 @@
         object_layout: 'normal',
         schema: defaultSchema,
         show_errors: 'always',
-        theme: 'bootstrap4',
-        startval: {"engine":"test1","child1":{"L2Name":"aaa"},"L1Name":"bbb"}
+        theme: 'bootstrap4'
       });
 
       editor.on('change', function () {
