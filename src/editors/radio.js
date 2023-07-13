@@ -104,16 +104,22 @@ export class RadioEditor extends SelectEditor {
 
   setValue (val) {
     if (typeof val !== 'string') {
-      val = String(val)
+      val = String(val);
     }
-
+  
     for (let i = 0; i < this.radioGroup.length; i++) {
-      if (this.radioGroup[i].value === val) {
-        this.radioGroup[i].checked = true
-        this.value = val
-        this.onChange()
-        break
+      const radio = this.radioGroup[i];
+  
+      // Toggle the checked state based on the value
+      radio.checked = radio.value === val;
+  
+      // Remove the 'checked' attribute if it's not the selected value
+      if (!radio.checked) {
+        radio.removeAttribute('checked');
       }
     }
+  
+      this.value = val;
+      this.onChange();
   }
 }
