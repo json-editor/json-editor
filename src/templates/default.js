@@ -1,4 +1,5 @@
 export const defaultTemplate = () => ({
+  // TODO: Hash and cache...
   compile (template) {
     const matches = template.match(/{{\s*([a-zA-Z0-9\-_ .]+)\s*}}/g)
     const l = matches && matches.length

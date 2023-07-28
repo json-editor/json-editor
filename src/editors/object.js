@@ -123,8 +123,9 @@ export class ObjectEditor extends AbstractEditor {
       })
 
       /* layout hasn't changed */
-      if (this.layout === JSON.stringify(rows)) return false
-      this.layout = JSON.stringify(rows)
+      const layout = JSON.stringify(rows)
+      if (this.layout === layout) return false
+      this.layout = layout
 
       /* Layout the form */
       container = document.createElement('div')
@@ -318,7 +319,15 @@ export class ObjectEditor extends AbstractEditor {
         /* Activate the first tab */
         const firstTab = this.theme.getFirstTab(this.tabs_holder)
         if (firstTab) {
+          var objectPropertyModalIsOpen = !!this.adding_property
+          if (objectPropertyModalIsOpen) {
+            this.hideAddProperty()
+          }
+
           trigger(firstTab, 'click')
+          if (objectPropertyModalIsOpen) {
+            this.showAddProperty()
+          }
         }
         return
         /* Normal layout */
@@ -1065,7 +1074,7 @@ export class ObjectEditor extends AbstractEditor {
   }
 
   destroy () {
-    Object.values(this.cached_editors).forEach(el => el.destroy())
+    Object.values(this.cached_editors || []).forEach(el => el.destroy())
     if (this.editor_holder) this.editor_holder.innerHTML = ''
     if (this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title)
     if (this.error_holder && this.error_holder.parentNode) this.error_holder.parentNode.removeChild(this.error_holder)
@@ -1207,8 +1216,18 @@ export class ObjectEditor extends AbstractEditor {
       /* Value explicitly set */
       if (typeof value[i] !== 'undefined') {
         this.addObjectProperty(i)
-        editor.setValue(value[i], initial)
-        editor.activate()
+
+        if (editor.deferred) {
+          editor.deferred.value = value
+          editor.deferred.initial = initial
+        } else {
+          editor.setValue(value[i], initial)
+        }
+
+        if (!this.deferred && editor.input) {
+          // Not deferred so skipping activation
+          editor.activate()
+        }
         /* Otherwise, remove value unless this is the initial set or it's required */
       } else if (!initial && !this.isRequiredObject(editor)) {
         if (this.jsoneditor.options.show_opt_in || this.options.show_opt_in) {
@@ -1271,7 +1290,7 @@ export class ObjectEditor extends AbstractEditor {
     }
 
     /* Show errors for child editors */
-    Object.values(this.editors).forEach(editor => {
+    Object.values(this.editors || []).forEach(editor => {
       editor.showValidationErrors(otherErrors)
     })
   }

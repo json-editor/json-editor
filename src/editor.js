@@ -296,8 +296,17 @@ export class AbstractEditor {
       })
     }
 
+    this.initDynamicHeaderTemplate()
+  }
+
+  getHeaderTextCheap (val) {
+    this.initDynamicHeaderTemplate()
+    return this.header_template ? this.header_template({ self: val }) : null
+  }
+
+  initDynamicHeaderTemplate () {
     /* Dynamic header */
-    if (this.schema.headerTemplate) {
+    if (this.schema.headerTemplate && !this.header_template) {
       this.header_template = this.jsoneditor.compileTemplate(this.schema.headerTemplate, this.template_engine)
     }
   }

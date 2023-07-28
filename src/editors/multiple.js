@@ -38,7 +38,7 @@ export class MultipleEditor extends AbstractEditor {
           this.editors[i].enable()
         }
       }
-      this.switcher.disabled = false
+      if (this.switcher) this.switcher.disabled = false
       super.enable()
     }
   }
@@ -51,7 +51,7 @@ export class MultipleEditor extends AbstractEditor {
         this.editors[i].disable(alwaysDisabled)
       }
     }
-    this.switcher.disabled = true
+    if (this.switcher) this.switcher.disabled = true
     super.disable()
   }
 
@@ -370,7 +370,7 @@ export class MultipleEditor extends AbstractEditor {
   }
 
   destroy () {
-    this.editors.forEach(editor => {
+    (this.editors || []).forEach(editor => {
       if (editor) editor.destroy()
     })
     if (this.editor_holder && this.editor_holder.parentNode) this.editor_holder.parentNode.removeChild(this.editor_holder)
@@ -400,7 +400,7 @@ export class MultipleEditor extends AbstractEditor {
         editor.showValidationErrors(errors.reduce(filterError, []))
       })
     } else {
-      this.editors.forEach(editor => {
+      (this.editors || []).forEach(editor => {
         if (!editor) return
         editor.showValidationErrors(errors)
       })
