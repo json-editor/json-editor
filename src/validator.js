@@ -11,6 +11,34 @@ export class Validator {
     this.defaults = defaults
 
     this._validateSubSchema = {
+      dependentRequired (schema, value, path) {
+        const errors = []
+
+        if (typeof schema.dependentRequired !== 'undefined') {
+          let missingProperties = []
+
+          Object.keys(schema.dependentRequired).forEach((key) => {
+            if (typeof value[key] !== 'undefined') {
+              const requiredProperties = schema.dependentRequired[key]
+
+              missingProperties = requiredProperties.filter((property) => {
+                return !hasOwnProperty(value, property)
+              })
+            }
+          })
+
+          const invalid = missingProperties.length > 0
+
+          if (invalid) {
+            errors.push({
+              message: 'Must have the required properties: ' + missingProperties.join(', '),
+              path: path
+            })
+          }
+        }
+
+        return errors
+      },
       dependentSchemas (schema, value, path) {
         let errors = []
 
