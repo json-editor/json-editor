@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>GitHub Issue 1338</title>
+  <script src="../../../dist/jsoneditor.js"></script>
+  <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+  <div id='editor-container'></div>
+</div>
+
+<script>
+  var schema = {
+    "title": "Test",
+    "type": "object",
+    "required": [
+      "field_a",
+      "field_b"
+    ],
+    "properties": {
+      "field_a": {
+        "type": "string"
+      },
+      "field_b": {
+        "type": "string"
+      },
+    },
+    "if": {
+      "properties": {
+        "field_a": {
+          "const": ""
+        },
+        "field_b": {
+          "const": ""
+        }
+      }
+    },
+    "then": {
+      "properties": {
+        "field_a": {
+          "minLength": 1
+        },
+        "field_b": {
+          "minLength": 1
+        }
+      }
+    }
+  }
+  var editorContainer = document.querySelector('#editor-container')
+  var changeFeedback = document.querySelector('#change-feedback')
+  var value = document.querySelector('#value')
+  var setValue = document.querySelector('#set-value')
+  var editor = new JSONEditor(editorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome',
+    show_errors: 'always'
+  })
+
+  editor.on('change', function () {
+    value.value = JSON.stringify(editor.getValue())
+  })
+
+  setValue.addEventListener('click', function () {
+    editor.setValue(JSON.parse(value.value))
+  })
+</script>
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>GitHub Issue 812</title>
+  <script src="../../../dist/jsoneditor.js"></script>
+  <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+  <p>I changed <span id="change-feedback">0</span> times</p>
+  <label for="value">value</label>
+  <textarea class="form-control" id="value" cols="30" rows="10"></textarea>
+  <button id="set-value">Set value</button>
+  <br><br><br><br><br><br>
+  <div id='editor-container'></div>
+</div>
+
+<script>
+  var schema = {
+    'title': 'Person',
+    'type': 'object',
+    'required': [
+      'name',
+      'age',
+      'date',
+      'favorite_color',
+      'gender',
+      'location',
+      'pets'
+    ],
+    'properties': {
+      'name': {
+        'type': 'string',
+        'description': 'First and Last name',
+        'minLength': 4,
+        'default': 'Jeremy Dorn'
+      },
+      'age': {
+        'type': 'integer',
+        'default': 25,
+        'minimum': 18,
+        'maximum': 99
+      },
+      'favorite_color': {
+        'type': 'string',
+        'format': 'color',
+        'title': 'favorite color',
+        'default': '#ffa500'
+      },
+      'gender': {
+        'type': 'string',
+        'enum': [
+          'male',
+          'female',
+          'other'
+        ]
+      },
+      'date': {
+        'type': 'string',
+        'format': 'date',
+        'options': {
+          'flatpickr': {}
+        }
+      },
+      'location': {
+        'type': 'object',
+        'title': 'Location',
+        'properties': {
+          'city': {
+            'type': 'string',
+            'default': 'San Francisco'
+          },
+          'state': {
+            'type': 'string',
+            'default': 'CA'
+          },
+          'citystate': {
+            'type': 'string',
+            'description': 'This is generated automatically from the previous two fields',
+            'template': '{{city}}, {{state}}',
+            'watch': {
+              'city': 'location.city',
+              'state': 'location.state'
+            }
+          }
+        }
+      },
+      'pets': {
+        'type': 'array',
+        'format': 'table',
+        'title': 'Pets',
+        'uniqueItems': true,
+        'items': {
+          'type': 'object',
+          'title': 'Pet',
+          'properties': {
+            'type': {
+              'type': 'string',
+              'enum': [
+                'cat',
+                'dog',
+                'bird',
+                'reptile',
+                'other'
+              ],
+              'default': 'dog'
+            },
+            'name': {
+              'type': 'string'
+            }
+          }
+        },
+        'default': [
+          {
+            'type': 'dog',
+            'name': 'Walter'
+          }
+        ]
+      }
+    }
+  }
+  var editorContainer = document.querySelector('#editor-container')
+  var changeFeedback = document.querySelector('#change-feedback')
+  var value = document.querySelector('#value')
+  var setValue = document.querySelector('#set-value')
+  var editor = new JSONEditor(editorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome'
+  })
+
+  var changeCounter = 0
+
+  editor.on('change', function () {
+    changeCounter++
+    changeFeedback.textContent = changeCounter
+    value.value = JSON.stringify(editor.getValue())
+  })
+
+  setValue.addEventListener('click', function () {
+    editor.setValue(JSON.parse(value.value))
+  })
+</script>
+
+</body>
+</html>

@@ -10,24 +10,25 @@
     <h1>JSON Editor: signature editor</h1>
 
     <div>Using this editor a signature (or any other simple drawing) can be made using the mouse or touchpad. The result is saved in base64 format. The editor will span the full width of the container, so no columns/grids are possible. With big thank you to <a href='https://github.com/szimek'>Szimek</a> for creating SignaturePad. <a href='https://github.com/szimek/signature_pad'>SignaturePad</a> must be included before the json-editor to load the signature editor properly. Set the type of the property to 'string' and the format to 'signature' to use the editor. The canvas is set to a default height of 300px, but this can be easily overriden by adding for example 'canvas_height': 500 in the properties.</div>
-    
+
     <div id='editor_holder'></div>
     <button id='submit'>Submit (console.log)</button>
-    
+
     <script>
       // Initialize the editor with a JSON schema
       var editor = new JSONEditor(document.getElementById('editor_holder'),{
         "schema": {
-          "type": "object",
-          "title": "Document",
-          "properties": {
-              "signature": {
-                  "type": "signature",
-                  "title": "Signature",
-                  "options": {
-                      "canvas_height": 500
-                  }
+          'type': 'object',
+          'title': 'Document',
+          'properties': {
+            'signature': {
+              'type': 'string',
+              'format': 'signature',
+              'title': 'Signature',
+              'options': {
+                'canvas_height': 500
               }
+            }
           }
         }
       });

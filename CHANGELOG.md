@@ -1,10 +1,33 @@
 ### Unreleased
 
+- Added support for dependentRequired constrains
+- fixed issue #1367: Signature editor not returning base64 data
+- fixed issue #1237: more coherent ui for Base64 editor
+- fixed issue #1364: getValue() with dependencies
+
+### 2.10.1
+
+- Added keep_only_existing_values option
+- Fixed if-then-else edge case bug with disabled fields
+
+### 2.10.0
+
+- Fixed schema loader bug and added test for relative issues 
+- Using multiple for schemas with if-then-else
 - Added support for shell script highlighting
 - Added support for contains, minContains and maxContains constrains
 - Added support for if-then-else constrains
 - Added support for dependentSchemas constrains
-- Added support for dependentRequired constrains
+- Added support for absolute paths in dependencies
+- Added support for bootstrap icons
+- Added custom editor example page
+- Added bootstrap 5 theme option in example page
+- Fixed property checkboxes display
+- Updated array delete message
+- Refactored tests with codeceptjs native waitForValue()
+- Fixed bootstrap 3 import warnings
+- Updated autocomplete example with library css
+>>>>>>> e89c43dd9d3f6bec8befa6189ad3a91e98031512
 
 ### 2.9.1
 

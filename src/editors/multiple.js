@@ -1,7 +1,7 @@
 /* Multiple Editor (for when `type` is an array, also when `oneOf` is present) */
 import { AbstractEditor } from '../editor.js'
 import { Validator } from '../validator.js'
-import { extend } from '../utilities.js'
+import { extend, mergeDeep, overwriteExistingProperties } from '../utilities.js'
 
 export class MultipleEditor extends AbstractEditor {
   register () {
@@ -56,11 +56,13 @@ export class MultipleEditor extends AbstractEditor {
   }
 
   switchEditor (i) {
+    this.lastType = this.type
+
     if (!this.editors[i]) {
       this.buildChildEditor(i)
     }
 
-    const currentValue = this.getValue()
+    let currentValue = this.getValue()
 
     this.type = i
 
@@ -68,11 +70,19 @@ export class MultipleEditor extends AbstractEditor {
 
     this.editors.forEach((editor, type) => {
       if (!editor) return
+
       if (this.type === type) {
-        if (this.keep_values) editor.setValue(currentValue, true)
+        if (this.keep_only_existing_values) {
+          currentValue = overwriteExistingProperties(editor.getValue(), currentValue)
+        }
+
+        if (this.keep_values || this.if) editor.setValue(currentValue, true)
         editor.container.style.display = ''
-      } else editor.container.style.display = 'none'
+      } else {
+        editor.container.style.display = 'none'
+      }
     })
+
     this.refreshValue()
     this.refreshHeaderText()
   }
@@ -132,6 +142,10 @@ export class MultipleEditor extends AbstractEditor {
     if (typeof this.jsoneditor.options.keep_oneof_values !== 'undefined') this.keep_values = this.jsoneditor.options.keep_oneof_values
     if (typeof this.options.keep_oneof_values !== 'undefined') this.keep_values = this.options.keep_oneof_values
 
+    this.keep_only_existing_values = false
+    if (typeof this.jsoneditor.options.keep_only_existing_values !== 'undefined') this.keep_only_existing_values = this.jsoneditor.options.keep_only_existing_values
+    if (typeof this.options.keep_only_existing_values !== 'undefined') this.keep_only_existing_values = this.options.keep_only_existing_values
+
     if (this.schema.oneOf) {
       this.oneOf = true
       this.types = this.schema.oneOf
@@ -140,6 +154,31 @@ export class MultipleEditor extends AbstractEditor {
       this.anyOf = true
       this.types = this.schema.anyOf
       delete this.schema.anyOf
+    } else if (this.schema.if) {
+      this.if = true
+      this.ifSchema = JSON.parse(JSON.stringify(this.schema.if))
+      this.thenSchema = { title: 'then' }
+      this.elseSchema = { title: 'else' }
+      this.types = []
+
+      if (this.schema.then) {
+        mergeDeep(this.thenSchema, this.schema, this.schema.then)
+      }
+
+      if (this.schema.else) {
+        mergeDeep(this.elseSchema, this.schema, this.schema.else)
+      }
+
+      this.types.push(this.thenSchema)
+      this.types.push(this.elseSchema)
+
+      this.types.forEach((schema) => {
+        delete schema.if
+        delete schema.then
+        delete schema.else
+      })
+
+      delete this.schema.if
     } else {
       if (!this.schema.type || this.schema.type === 'any') {
         this.types = ['string', 'number', 'integer', 'boolean', 'object', 'array', 'null']
@@ -169,12 +208,14 @@ export class MultipleEditor extends AbstractEditor {
 
   build () {
     const { container } = this
-
     this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
-    this.container.appendChild(this.header)
-
     this.switcher = this.theme.getSwitcher(this.display_text)
-    container.appendChild(this.switcher)
+
+    if (!this.if) {
+      this.container.appendChild(this.header)
+      container.appendChild(this.switcher)
+    }
+
     this.switcher.addEventListener('change', e => {
       e.preventDefault()
       e.stopPropagation()
@@ -211,6 +252,10 @@ export class MultipleEditor extends AbstractEditor {
       this.validators[i] = new Validator(this.jsoneditor, schema, validatorOptions, this.defaults)
     })
 
+    this.jsoneditor.on('change', () => {
+      this.switchIf()
+    })
+
     this.switchEditor(0)
   }
 
@@ -231,7 +276,28 @@ export class MultipleEditor extends AbstractEditor {
   }
 
   refreshValue () {
+    if (!this.editors[this.type]) {
+      return
+    }
     this.value = this.editors[this.type].getValue()
+  }
+
+  switchIf () {
+    if (this.ifSchema && this.value) {
+      const type = this.getIfType(this.value)
+
+      if (this.lastType !== type) {
+        this.switchEditor(type)
+        this.editors[this.type].setValue(this.value, true)
+      }
+
+      this.switcher.value = this.display_text[this.type]
+    }
+  }
+
+  getIfType (value) {
+    const errors = this.jsoneditor.validator._validateSchema(this.ifSchema, value)
+    return errors.length === 0 ? 0 : 1
   }
 
   setValue (val, initial) {
@@ -279,6 +345,9 @@ export class MultipleEditor extends AbstractEditor {
         finalI = fitTestVal.i
       }
     }
+    if (this.if) {
+      finalI = this.getIfType(val)
+    }
     if (finalI === null) {
       finalI = this.type
     }
@@ -286,8 +355,10 @@ export class MultipleEditor extends AbstractEditor {
     this.switcher.value = this.display_text[finalI]
 
     const typeChanged = this.type !== prevType
+
     if (typeChanged) {
       this.switchEditor(this.type)
+      this.editors[this.type].setValue(val, initial)
     }
 
     if (typeof val !== 'undefined') {

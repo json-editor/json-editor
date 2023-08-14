@@ -104,3 +104,35 @@ export function generateUUID () {
     return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
   })
 }
+
+export function isObject (item) {
+  return (item && typeof item === 'object' && !Array.isArray(item))
+}
+
+export function mergeDeep (target, ...sources) {
+  if (!sources.length) return target
+  const source = sources.shift()
+
+  if (isObject(target) && isObject(source)) {
+    for (const key in source) {
+      if (isObject(source[key])) {
+        if (!target[key]) Object.assign(target, { [key]: {} })
+        mergeDeep(target[key], source[key])
+      } else {
+        Object.assign(target, { [key]: source[key] })
+      }
+    }
+  }
+
+  return mergeDeep(target, ...sources)
+}
+
+export function overwriteExistingProperties (obj1, obj2) {
+  Object.keys(obj2).forEach(function (key) {
+    if (key in obj1) {
+      obj1[key] = obj2[key]
+    }
+  })
+
+  return obj1
+}
