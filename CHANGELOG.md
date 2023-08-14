@@ -27,7 +27,6 @@
 - Refactored tests with codeceptjs native waitForValue()
 - Fixed bootstrap 3 import warnings
 - Updated autocomplete example with library css
->>>>>>> e89c43dd9d3f6bec8befa6189ad3a91e98031512
 
 ### 2.9.1
 
