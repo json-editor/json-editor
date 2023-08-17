@@ -315,6 +315,11 @@ Here are all the available options:
     <td>If <code>true</code>, control inputs <code>name</code> attributes will be set.</td>
     <td><code>true</code></td>
   </tr>
+  <tr>
+    <td>button_state_mode</td>
+    <td>If <code>1</code>, inactive buttons are hidden. If <code>2</code>, inactive buttons are disabled.</td>
+    <td><code>1</code></td>
+  </tr>
   </tbody>
 </table>
 
