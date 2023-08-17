@@ -384,17 +384,17 @@ export class ArrayEditor extends AbstractEditor {
   }
 
   setVisibility (element, display) {
-    element.style.display = display ? '' : 'none'
+    element.disabled = !display
   }
 
   setupButtons (minItems) {
     const controlsNeeded = []
 
     if (!this.value.length) {
-      this.delete_last_row_button.style.display = 'none'
-      this.remove_all_rows_button.style.display = 'none'
+      this.setVisibility(this.delete_last_row_button, false)
+      this.setVisibility(this.remove_all_rows_button, false)
     } else if (this.value.length === 1) {
-      this.remove_all_rows_button.style.display = 'none'
+      this.setVisibility(this.remove_all_rows_button, false)
 
       /* If there are minItems items in the array, or configured to hide the delete_last_row button, hide the delete button beneath the rows */
       const display = !(minItems || this.hide_delete_last_row_buttons)
