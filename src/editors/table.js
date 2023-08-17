@@ -232,28 +232,28 @@ export class TableEditor extends ArrayEditor {
       if (editor.delete_button) {
         /* Hide the delete button if we have minItems items */
         const display = !minItems
-        this.setDisable(editor.delete_button, display)
+        this.setButtonState(editor.delete_button, display)
         needRowButtons.push(display)
       }
 
       if (editor.copy_button) {
         /* Hide the copy button if we have maxItems items */
         const display = !maxItems
-        this.setDisable(editor.copy_button, display)
+        this.setButtonState(editor.copy_button, display)
         needRowButtons.push(display)
       }
 
       if (editor.moveup_button) {
         /* Hide the moveup button for the first row */
         const display = i !== 0
-        this.setDisable(editor.moveup_button, display)
+        this.setButtonState(editor.moveup_button, display)
         needRowButtons.push(display)
       }
 
       if (editor.movedown_button) {
         /* Hide the movedown button for the last row */
         const display = i !== this.rows.length - 1
-        this.setDisable(editor.movedown_button, display)
+        this.setButtonState(editor.movedown_button, display)
         needRowButtons.push(display)
       }
     })
@@ -261,26 +261,26 @@ export class TableEditor extends ArrayEditor {
     const need = needRowButtons.some(e => e)
     /* Show/hide controls column in table */
     this.rows.forEach((editor) =>
-      this.setDisable(editor.controls_cell, need)
+      this.setButtonState(editor.controls_cell, need)
     )
-    this.setDisable(this.controls_header_cell, need)
+    this.setButtonState(this.controls_header_cell, need)
 
-    this.setDisable(this.table, this.value.length)
+    this.setButtonState(this.table, this.value.length)
 
     /* If there are maxItems items in the array, or configured to hide the add_row_button button, hide the button beneath the rows */
     const display1 = !(maxItems || this.hide_add_button)
-    this.setDisable(this.add_row_button, display1)
+    this.setButtonState(this.add_row_button, display1)
 
     /* If there are minItems items in the array, or configured to hide the delete_last_row button, hide the button beneath the rows */
     const display2 = !(!this.value.length || minItems || this.hide_delete_last_row_buttons)
-    this.setDisable(this.delete_last_row_button, display2)
+    this.setButtonState(this.delete_last_row_button, display2)
 
     /* If there are minItems items in the array, or configured to hide the remove_all_rows_button button, hide the button beneath the rows */
     const display3 = !(this.value.length <= 1 || minItems || this.hide_delete_all_rows_buttons)
-    this.setDisable(this.remove_all_rows_button, display3)
+    this.setButtonState(this.remove_all_rows_button, display3)
 
     const controlsNeeded = display1 || display2 || display3
-    this.setDisable(this.controls, controlsNeeded)
+    this.setButtonState(this.controls, controlsNeeded)
   }
 
   refreshValue () {
@@ -439,7 +439,7 @@ export class TableEditor extends ArrayEditor {
         e.preventDefault()
         e.stopPropagation()
 
-        this.setDisable(this.panel, this.collapsed)
+        this.setButtonState(this.panel, this.collapsed)
         if (this.collapsed) {
           this.collapsed = false
           this.setButtonText(e.currentTarget, '', 'collapse', 'button_collapse')

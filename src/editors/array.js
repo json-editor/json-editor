@@ -383,36 +383,47 @@ export class ArrayEditor extends AbstractEditor {
     /* TODO: sortable */
   }
 
-  setDisable (element, display) {
-    element.disabled = !display
+  setButtonState (element, display) {
+    const buttonStateMode = this.options.button_state_mode || this.jsoneditor.options.button_state_mode
+
+    switch (buttonStateMode) {
+      case 1:
+        element.style.display = display ? '' : 'none'
+        break
+      case 2:
+        element.disabled = !display
+        break
+      default:
+        element.style.display = display ? '' : 'none'
+    }
   }
 
   setupButtons (minItems) {
     const controlsNeeded = []
 
     if (!this.value.length) {
-      this.setDisable(this.delete_last_row_button, false)
-      this.setDisable(this.remove_all_rows_button, false)
+      this.setButtonState(this.delete_last_row_button, false)
+      this.setButtonState(this.remove_all_rows_button, false)
     } else if (this.value.length === 1) {
-      this.setDisable(this.remove_all_rows_button, false)
+      this.setButtonState(this.remove_all_rows_button, false)
 
       /* If there are minItems items in the array, or configured to hide the delete_last_row button, hide the delete button beneath the rows */
       const display = !(minItems || this.hide_delete_last_row_buttons)
-      this.setDisable(this.delete_last_row_button, display)
+      this.setButtonState(this.delete_last_row_button, display)
       controlsNeeded.push(display)
     } else {
       const display1 = !(minItems || this.hide_delete_last_row_buttons)
-      this.setDisable(this.delete_last_row_button, display1)
+      this.setButtonState(this.delete_last_row_button, display1)
       controlsNeeded.push(display1)
 
       const display2 = !(minItems || this.hide_delete_all_rows_buttons)
-      this.setDisable(this.remove_all_rows_button, display2)
+      this.setButtonState(this.remove_all_rows_button, display2)
       controlsNeeded.push(display2)
     }
 
     /* If there are maxItems in the array, hide the add button beneath the rows */
     const display = !((this.getMax() && this.getMax() <= this.rows.length) || this.hide_add_button)
-    this.setDisable(this.add_row_button, display)
+    this.setButtonState(this.add_row_button, display)
     controlsNeeded.push(display)
 
     return controlsNeeded.some(e => e)
@@ -431,12 +442,12 @@ export class ArrayEditor extends AbstractEditor {
         /* Hide the move down button for the last row */
         if (editor.movedown_button) {
           const display = (i !== this.rows.length - 1)
-          this.setDisable(editor.movedown_button, display)
+          this.setButtonState(editor.movedown_button, display)
         }
 
         /* Hide the delete button if we have minItems items */
         if (editor.delete_button) {
-          this.setDisable(editor.delete_button, !minItems)
+          this.setButtonState(editor.delete_button, !minItems)
         }
 
         /* Get the value for this editor */
@@ -677,8 +688,8 @@ export class ArrayEditor extends AbstractEditor {
     button.addEventListener('click', e => {
       e.preventDefault()
       e.stopPropagation()
-      if (this.panel) this.setDisable(this.panel, this.collapsed)
-      if (this.tabs_holder) this.setDisable(this.tabs_holder, this.collapsed)
+      if (this.panel) this.setButtonState(this.panel, this.collapsed)
+      if (this.tabs_holder) this.setButtonState(this.tabs_holder, this.collapsed)
       if (this.collapsed) {
         this.collapsed = false
         this.row_holder.style.display = rowHolderDisplay
