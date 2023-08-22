@@ -265,13 +265,12 @@
 
   var aceConfig = {
     mode: 'ace/mode/json',
-    selection: false,
     maxLines: Infinity,
-    minLines: 5
+    minLines: 5,
+    showFoldWidgets: false
   }
 
   var outputTextarea = ace.edit('output-textarea', aceConfig)
-
   var schemaTextarea = ace.edit('schema-textarea', aceConfig)
 
   /* -------------------------------------------------------------- parse url */
@@ -313,6 +312,7 @@
   var refreshUI = function () {
     // schema
     schemaTextarea.setValue(JSON.stringify(data.options.schema, null, 2))
+    schemaTextarea.clearSelection(1)
 
     // theme
     var themeMap = {
@@ -506,6 +506,7 @@
       // output
       var json = jsoneditor.getValue()
       outputTextarea.setValue(JSON.stringify(json, null, 2))
+      outputTextarea.clearSelection(1)
 
       // validate
       var validationErrors = jsoneditor.validate()
