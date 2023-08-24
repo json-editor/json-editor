@@ -7,7 +7,7 @@ const options = {
   disable_theme_rules: false,
   input_size: 'normal', /* Size of input and select elements. "small", "normal", "large" */
   object_indent: true, /* Indent nested object elements (use nested .card layout) */
-  object_background: 'bg-light', /* Bootstrap 4 card background modifier class */
+  object_background: 'bg-white', /* Bootstrap 5 card background modifier class */
   object_text: '', /* Bootstrap 5 card text color modifier class */
   table_border: false, /* Add border to array "table" row and cells */
   table_zebrastyle: false, /* Add "zebra style" to array "table" rows */
