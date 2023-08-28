@@ -641,6 +641,52 @@ Show a video preview (using HTML5 video)
 The `href` property is a template that gets re-evaluated every time the value changes.
 The variable `self` is always available.  Look at the __Dependencies__ section below for how to include other fields or use a custom template engine.
 
+### if-then-else
+The if-then-else keywords are used to express conditional validation logic based on the evaluation of a specified condition. The if keyword defines a condition, and depending on whether it evaluates to true or false, the schema specified under either the then or else keywords will be applied.
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "street_address": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string",
+      "default": "United States of America",
+      "enum": [
+        "United States of America",
+        "Canada"
+      ]
+    },
+    "postal_code": {
+      "type": "string"
+    }
+  },
+  "if": {
+    "properties": {
+      "country": {
+        "const": "United States of America"
+      }
+    }
+  },
+  "then": {
+    "properties": {
+      "postal_code": {
+        "pattern": "[0-9]{5}(-[0-9]{4})?"
+      }
+    }
+  },
+  "else": {
+    "properties": {
+      "postal_code": {
+        "pattern": "[A-Z][0-9][A-Z] [0-9][A-Z][0-9]"
+      }
+    }
+  }
+}
+```
+
 ### Property Ordering
 
 There is no way to specify property ordering in JSON Schema (although this may change in v5 of the spec).
