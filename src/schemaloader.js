@@ -166,31 +166,37 @@ export class SchemaLoader {
     const refObj = (refWithPointerSplit.length > 2)
       ? this.refs_with_info['#' + refWithPointerSplit[1]]
       : this.refs_with_info[_schema.$ref]
+    const refPointersTail = refWithPointerSplit.slice(2)
     delete _schema.$ref
     const fetchUrl = refObj.$ref.startsWith('#')
       ? refObj.fetchUrl
       : ''
     const ref = this._getRef(fetchUrl, refObj)
 
+    // lookup schema via .refs[refBase] and dereference via JSON-pointer from ref
     refWithPointerSplit = ref.split('#')
     let refBase = ref
-    let refPointer = null
+    let refPointers = []
     if (refWithPointerSplit.length > 1) {
       refBase = refWithPointerSplit[0]
-      refPointer = refWithPointerSplit[1]
+      refPointers = refWithPointerSplit.slice(1)
     }
-
     if (!this.refs[refBase]) { /* if reference not found */
       // eslint-disable-next-line no-console
       console.warn(`reference:'${ref}' not found!`)
     }
-
     let refSchema = this.refs[refBase]
-    if (refPointer !== null) {
-      refSchema = this.expandRecursivePointer(refSchema, refPointer)
+    while (refPointers.length > 0) {
+      refSchema = this.expandRecursivePointer(refSchema, refPointers.shift())
     }
+
+    // further expand JSON-pointer from tail of original fragment [2, ...]
+    while (refPointersTail.length > 0) {
+      refSchema = this.expandRecursivePointer(refSchema, refPointersTail.shift())
+    }
+
     if (recurseAllOf && hasOwnProperty(refSchema, 'allOf')) {
-      const allOf = this.refs[ref].allOf
+      const allOf = refSchema.allOf
       Object.keys(allOf).forEach(key => {
         allOf[key] = this.expandRefs(allOf[key], true)
       })
