@@ -261,7 +261,7 @@ export class SchemaLoader {
    */
   _manageRecursivePointer (schema, path) {
     Object.keys(schema).forEach(i => {
-      if (schema[i].$ref && schema[i].$ref.indexOf('#') === 0) {
+      if (schema[i] && schema[i].$ref && schema[i].$ref.indexOf('#') === 0) {
         schema[i].$ref = path + schema[i].$ref
       }
     })

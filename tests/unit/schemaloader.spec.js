@@ -390,6 +390,47 @@ describe('SchemaLoader', () => {
     })
   })
 
+  describe('when resolving $ref to external schema', () => {
+    it('should not crash on entries with null value', async () => {
+      // https://github.com/json-editor/json-editor/issues/1383
+      const main = {
+        properties: {
+          timeout: {
+            default: null,
+          }
+        }
+      }
+      const schema = {
+        type: 'object',
+        $ref: '/main.json'
+      }
+
+      const server = createFakeServer()
+      server.autoRespond = true
+      window.XMLHttpRequest = server.xhr
+      server.respondWith('/main.json', [
+        200,
+        { 'Content-Type': 'application/json' },
+        JSON.stringify(main)
+      ])
+      fetchUrl =
+        document.location.origin + document.location.pathname.toString()
+      loader = new SchemaLoader({ ajax: true })
+      fileBase = loader._getFileBase(document.location.toString())
+
+      await loader.load(
+        schema,
+        fetchUrl,
+        fileBase
+      )
+      const urls = Object.keys(loader.refs)
+      expect(urls.length).toEqual(1)
+      expect(urls[0]).toEqual('/main.json')
+      expect(loader.refs['/main.json'].properties.timeout).toEqual({ default: null })
+      server.restore()
+    })
+  })
+
   describe('when resolving undeclared URN $ref', () => {
     it('can get refs recursively', async () => {
       const schema1 = {
