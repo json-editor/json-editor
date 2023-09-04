@@ -24,6 +24,7 @@ export class SchemaLoader {
      *    "fully/realized/path/to/schema.json": { ... }
      *    "mylocalschema.json": { ... }
      *  }
+     *  NOTE: keys are base part of original $ref without fragment
      */
     this.refs = this.options.refs || {}
 
@@ -154,7 +155,7 @@ export class SchemaLoader {
     // exemple #/counter/1#/definition/address +
     // [1] -> /counter/1
     // [2] -> /definition/address
-    const refWithPointerSplit = _schema.$ref.split('#')
+    let refWithPointerSplit = _schema.$ref.split('#')
     // If local ref
     if (refWithPointerSplit.length === 2 && !this.refs_with_info[_schema.$ref]) {
       const sub = this.expandRecursivePointer(this.schema, refWithPointerSplit[1])
@@ -171,20 +172,30 @@ export class SchemaLoader {
       : ''
     const ref = this._getRef(fetchUrl, refObj)
 
-    if (!this.refs[ref]) { /* if reference not found */
+    refWithPointerSplit = ref.split('#')
+    let refBase = ref
+    let refPointer = null
+    if (refWithPointerSplit.length > 1) {
+      refBase = refWithPointerSplit[0]
+      refPointer = refWithPointerSplit[1]
+    }
+
+    if (!this.refs[refBase]) { /* if reference not found */
       // eslint-disable-next-line no-console
       console.warn(`reference:'${ref}' not found!`)
-    } else if (recurseAllOf && hasOwnProperty(this.refs[ref], 'allOf')) {
+    }
+
+    let refSchema = this.refs[refBase]
+    if (refPointer !== null) {
+      refSchema = this.expandRecursivePointer(refSchema, refPointer)
+    }
+    if (recurseAllOf && hasOwnProperty(refSchema, 'allOf')) {
       const allOf = this.refs[ref].allOf
       Object.keys(allOf).forEach(key => {
         allOf[key] = this.expandRefs(allOf[key], true)
       })
     }
-    if (refWithPointerSplit.length > 2) {
-      return this.extendSchemas(_schema, this.expandSchema(this.expandRecursivePointer(this.refs[ref], refWithPointerSplit[2])))
-    } else {
-      return this.extendSchemas(_schema, this.expandSchema(this.refs[ref]))
-    }
+    return this.extendSchemas(_schema, this.expandSchema(refSchema))
   }
 
   /**

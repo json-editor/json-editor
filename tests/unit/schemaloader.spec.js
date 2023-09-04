@@ -429,6 +429,56 @@ describe('SchemaLoader', () => {
       expect(loader.refs['/main.json'].properties.timeout).toEqual({ default: null })
       server.restore()
     })
+
+    it('should not crash on expanding result with self reference', async () => {
+      // https://github.com/json-editor/json-editor/issues/1384
+      const main = {
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'object',
+        definitions: {
+          tcpv4port: {
+            type: 'integer'
+          }
+        },
+        properties: {
+          port: {
+            allOf: [
+              {
+                $ref: '#/definitions/tcpv4port'
+              }
+            ]
+          }
+        }
+      }
+      const schema = {
+        $ref: '/main.json'
+      }
+
+      const server = createFakeServer()
+      server.autoRespond = true
+      window.XMLHttpRequest = server.xhr
+      server.respondWith('/main.json', [
+        200,
+        { 'Content-Type': 'application/json' },
+        JSON.stringify(main)
+      ])
+      fetchUrl =
+        document.location.origin + document.location.pathname.toString()
+
+      loader = new SchemaLoader({ ajax: true })
+      fileBase = loader._getFileBase(document.location.toString())
+
+      let loadedSchema = await loader.load(
+        schema,
+        fetchUrl,
+        fileBase
+      )
+
+      const port = loader.expandSchema(loadedSchema.properties.port)
+      expect(port.allOf).toBe(undefined)   // merged into parent
+      expect(port.$ref).toBe(undefined)    // $ref expaned
+      expect(port.type).toEqual('integer')
+    })
   })
 
   describe('when resolving undeclared URN $ref', () => {
