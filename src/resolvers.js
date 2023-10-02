@@ -61,7 +61,11 @@ const enumeratedProperties = schema => {
 }
 
 /* Specialized editors for arrays of strings */
-const arraysOfStrings = schema => {
+const arraysOfStrings = (schema, je) => {
+  if (schema.items) {
+    schema.items = je.expandSchema(schema.items)
+  }
+
   if (schema.type === 'array' && schema.items && !(Array.isArray(schema.items)) && ['string', 'number', 'integer'].includes(schema.items.type)) {
     if (schema.format === 'choices') return 'arrayChoices'
     if (schema.uniqueItems) {

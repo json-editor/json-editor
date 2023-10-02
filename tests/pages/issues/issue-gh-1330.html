@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>GitHub Issue 1330</title>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <script src="../../../dist/jsoneditor.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <a href="https://github.com/json-editor/json-editor/issues/1330">GitHub Issue 1330</a>
+      <div id='editor_holder'></div>
+    </div>
+
+    <script>
+      var defaultSchema = {
+        "$id": "https://example.com/person.schema.json",
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "My Test",
+        "type": "object",
+        "required": [ "test" ],
+        "properties": {
+          "test": {
+            "type": "array",
+            "format": "checkbox",
+            "title": "een testje",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "$ref": "#/definitions/columns_enum"
+            }
+          }
+        },
+        "definitions": {
+          "columns_enum": {
+            "type": "string",
+            "enum": ["xx", "yy", "zz"]
+          }
+        }
+      }
+
+      var editor = new JSONEditor(document.getElementById('editor_holder'),{
+        iconlib: 'fontawesome5',
+        object_layout: 'normal',
+        schema: defaultSchema,
+        show_errors: 'always',
+        theme: 'bootstrap4'
+      });
+    </script>
+  </body>
+</html>

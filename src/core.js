@@ -211,7 +211,7 @@ export class JSONEditor {
     schema = this.expandSchema(schema)
 
     JSONEditor.defaults.resolvers.find(resolver => {
-      classname = resolver(schema)
+      classname = resolver(schema, this)
       return classname && JSONEditor.defaults.editors[classname]
     })
     if (!classname) throw new Error(`Unknown editor for schema ${JSON.stringify(schema)}`)
