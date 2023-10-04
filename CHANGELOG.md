@@ -4,6 +4,7 @@
 - fixed issue #1367: Signature editor not returning base64 data
 - fixed issue #1237: more coherent ui for Base64 editor
 - fixed issue #1364: getValue() with dependencies
+- Added new languages: PRQL, Rust, TypeScript and Zig.
 
 ### 2.10.1
 

@@ -899,8 +899,10 @@ __Ace Editor__ is a syntax highlighting source code editor. You can use it by se
 *  pgsql
 *  php
 *  python
+*  prql
 *  r
 *  ruby
+*  rust
 *  sass
 *  scala
 *  scss
@@ -908,10 +910,12 @@ __Ace Editor__ is a syntax highlighting source code editor. You can use it by se
 *  sql
 *  stylus
 *  svg
+*  typescript
 *  twig
 *  vbscript
 *  xml
 *  yaml
+*  zig
 
 ```json
 {

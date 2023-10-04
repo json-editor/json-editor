@@ -95,8 +95,10 @@ For configuration options, see the [ACE homepage](https://ace.c9.io/://).
 ``"format": "pgsql"``<br>
 ``"format": "php"``<br>
 ``"format": "python"``<br>
+``"format": "prql"``<br>
 ``"format": "r"``<br>
 ``"format": "ruby"``<br>
+``"format": "rust"``<br>
 ``"format": "sass"``<br>
 ``"format": "scala"``<br>
 ``"format": "scss"``<br>
@@ -105,10 +107,12 @@ For configuration options, see the [ACE homepage](https://ace.c9.io/://).
 ``"format": "sqlserver"``<br>
 ``"format": "stylus"``<br>
 ``"format": "svg"``<br>
+``"format": "typescript"``<br>
 ``"format": "twig"``<br>
 ``"format": "vbscript"``<br>
 ``"format": "xml"``<br>
-``"format": "yaml"
+``"format": "yaml"``<br>
+``"format": "zig"
 </details>
 
 **Supported Types:** string<br>
