@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Object case sensitive property search</title>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <script src="../../../dist/jsoneditor.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <a href="https://github.com/json-editor/json-editor/issues/1400">Object case sensitive property search</a>
+      <div id='editor_holder'></div>
+    </div>
+
+    <script>
+      var defaultSchema = {
+        "title": "Person",
+        "type": "object",
+        "properties": {
+          "a": {
+            "title": "aaa",
+            "type": "string"
+          },
+          "b": {
+            "title": "AAA",
+            "type": "string"
+          }
+        }
+      }
+
+      var editor = new JSONEditor(document.getElementById('editor_holder'),{
+        iconlib: 'fontawesome5',
+        schema: defaultSchema,
+        show_errors: 'always',
+        theme: 'bootstrap4',
+        case_sensitive_property_search: false
+      });
+    </script>
+  </body>
+</html>

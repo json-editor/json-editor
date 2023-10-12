@@ -320,6 +320,11 @@ Here are all the available options:
     <td>If <code>1</code>, inactive buttons are hidden. If <code>2</code>, inactive buttons are disabled.</td>
     <td><code>1</code></td>
   </tr>
+  <tr>
+    <td>case_sensitive_property_search</td>
+    <td>This property controls whether property searches in an object editor are case-sensitive</td>
+    <td><code>true</code></td>
+  </tr>
   </tbody>
 </table>
 
