@@ -624,7 +624,19 @@ export class ObjectEditor extends AbstractEditor {
       })
       this.addproperty_input.addEventListener('input', (e) => {
         e.target.previousSibling.childNodes.forEach((value) => {
-          if (value.innerText.includes(e.target.value)) {
+          let searchTerm = value.innerText
+          let propertyTitle = e.target.value
+
+          const caseSensitivePropertySearch = this.options.caseSensitivePropertySearch || this.jsoneditor.options.caseSensitivePropertySearch
+
+          if (!caseSensitivePropertySearch) {
+            searchTerm = searchTerm.toLowerCase()
+            propertyTitle = propertyTitle.toLowerCase()
+          }
+
+          console.log(searchTerm, propertyTitle) // eslint-disable-line
+
+          if (searchTerm.includes(propertyTitle)) {
             value.style.display = ''
           } else {
             value.style.display = 'none'
