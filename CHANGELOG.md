@@ -1,5 +1,6 @@
 ### Unreleased
 
+- Added support for case insensitive properties search
 - Added support for dependentRequired constrains
 - fixed issue #1367: Signature editor not returning base64 data
 - fixed issue #1237: more coherent ui for Base64 editor

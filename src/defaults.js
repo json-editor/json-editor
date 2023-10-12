@@ -407,7 +407,8 @@ const options = {
   prompt_before_delete: true,
   use_default_values: true,
   max_depth: 0,
-  button_state_mode: 1
+  button_state_mode: 1,
+  case_sensitive_property_search: true
 }
 
 /* This assignment was previously in index.js but makes more sense here */

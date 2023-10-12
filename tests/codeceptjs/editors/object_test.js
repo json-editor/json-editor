@@ -5,6 +5,26 @@ const { DEFAULT_WAIT_TIME } = require('../test-config')
 
 Feature('object')
 
+Scenario('@case-sensitive-property-search', async ({ I }) => {
+  I.amOnPage('object-case-sensitive-property-search-true.html')
+  I.click('.json-editor-btn-edit_properties')
+  I.fillField('.property-selector-input', 'aaa')
+  I.see('aaa', '.form-check label')
+  I.dontSee('AAA', '.form-check label')
+  I.fillField('.property-selector-input', 'AAA')
+  I.see('AAA', '.form-check label')
+  I.dontSee('aaa', '.form-check label')
+
+  I.amOnPage('object-case-sensitive-property-search-false.html')
+  I.click('.json-editor-btn-edit_properties')
+  I.fillField('.property-selector-input', 'aaa')
+  I.see('aaa', '.form-check label')
+  I.see('AAA', '.form-check label')
+  I.fillField('.property-selector-input', 'AAA')
+  I.see('AAA', '.form-check label')
+  I.see('aaa', '.form-check label')
+})
+
 Scenario('should respect property orders', async ({ I }) => {
   I.amOnPage('object.html')
   assert.strictEqual(await I.grabAttributeFrom('[data-schemapath^="root"] .row:nth-of-type(1) [data-schemapath^="root."]', 'data-schemapath'), 'root.age')
