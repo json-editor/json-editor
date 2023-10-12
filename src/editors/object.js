@@ -627,14 +627,12 @@ export class ObjectEditor extends AbstractEditor {
           let searchTerm = value.innerText
           let propertyTitle = e.target.value
 
-          const case_sensitive_property_search = this.options.case_sensitive_property_search || this.jsoneditor.options.case_sensitive_property_search
+          const caseSensitivePropertySearch = this.options.case_sensitive_property_search || this.jsoneditor.options.case_sensitive_property_search
 
-          if (!case_sensitive_property_search) {
+          if (!caseSensitivePropertySearch) {
             searchTerm = searchTerm.toLowerCase()
             propertyTitle = propertyTitle.toLowerCase()
           }
-
-          console.log(searchTerm, propertyTitle) // eslint-disable-line
 
           if (searchTerm.includes(propertyTitle)) {
             value.style.display = ''
