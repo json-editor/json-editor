@@ -1,5 +1,16 @@
 ### Unreleased
 
+### 2.11.0
+
+- Fixed issue #746 and #645: Selectize with create = true should add items
+- Added case_sensitive_property_search option
+- Added specialized editors for ace (PRQL, Rust, TypeScript, Zig)
+- Fixed bug: items schemas not being expanded on time when using $ref
+- Added tests for schema loader
+- Added docs for if-then-else
+- Updated playground ace editor config
+- Added button_state_mode options
+- Added support for case-insensitive properties search
 - Fixed issue #746 and #645 Selectize with create = true should add Items
 - Added support for case insensitive properties search
 - Added support for dependentRequired constrains
