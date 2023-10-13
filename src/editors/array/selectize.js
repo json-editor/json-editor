@@ -75,8 +75,6 @@ export class ArraySelectizeEditor extends MultiSelectEditor {
     this.option_keys.push(`${value}`)
     this.option_titles.push(`${value}`)
     this.select_values[`${value}`] = value
-    /* Update Schema enum to prevent triggering "Value must be one of the enumerated values" */
-    this.schema.items.enum.push(value)
     /* Add new value and label to selectize */
     this.selectize_instance.addOption({ text: value, value })
 
