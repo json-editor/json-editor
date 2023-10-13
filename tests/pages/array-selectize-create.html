@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Selectize add item</title>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/css/selectize.bootstrap3.css">
+    <script src="../../dist/jsoneditor.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/standalone/selectize.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-6">
+            <div id='editor-container'></div>
+        </div>
+        <div class="col-xs-12 col-md-6">
+            <label for="value">value</label>
+            <textarea class="form-control" id="value" cols="30" rows="10"></textarea>
+            <button id="set-value">Set value</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    var schema = {
+        "type": "array",
+        "format":"selectize",
+        "uniqueItems": true,
+        "items": {
+            "type": "string"
+        },
+        "options": {
+            "selectize": {
+                "create": true,
+                "plugins": ["remove_button"],
+            }
+        }
+    }
+    var editorContainer = document.querySelector('#editor-container')
+    var value = document.querySelector('#value')
+    var setValue = document.querySelector('#set-value')
+    var editor = new JSONEditor(editorContainer, {
+        schema: schema,
+        theme: 'bootstrap4',
+        iconlib: 'fontawesome'
+    })
+
+    editor.on('change', function () {
+        value.value = JSON.stringify(editor.getValue())
+    })
+
+    setValue.addEventListener('click', function () {
+        editor.setValue(JSON.parse(value.value))
+    })
+</script>
+
+</body>
+</html>
