@@ -1,5 +1,22 @@
 ### Unreleased
 
+### 2.11.0
+
+- Fixed issue #746 and #645: Selectize with create = true should add items
+- Added case_sensitive_property_search option
+- Added specialized editors for ace (PRQL, Rust, TypeScript, Zig)
+- Fixed bug: items schemas not being expanded on time when using $ref
+- Added tests for schema loader
+- Added docs for if-then-else
+- Updated playground ace editor config
+- Added button_state_mode options
+- Added support for case-insensitive properties search
+- Added support for dependentRequired constrains
+- Fixed issue #1367: Signature editor not returning base64 data
+- Fixed issue #1237: more coherent ui for Base64 editor
+- Fixed issue #1364: getValue() with dependencies
+- Added new languages: PRQL, Rust, TypeScript and Zig.
+
 ### 2.10.1
 
 - Added keep_only_existing_values option
