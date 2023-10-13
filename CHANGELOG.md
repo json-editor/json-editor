@@ -1,10 +1,11 @@
 ### Unreleased
 
+- Fixed issue #746 and #645 Selectize with create = true should add Items
 - Added support for case insensitive properties search
 - Added support for dependentRequired constrains
-- fixed issue #1367: Signature editor not returning base64 data
-- fixed issue #1237: more coherent ui for Base64 editor
-- fixed issue #1364: getValue() with dependencies
+- Fixed issue #1367: Signature editor not returning base64 data
+- Fixed issue #1237: more coherent ui for Base64 editor
+- Fixed issue #1364: getValue() with dependencies
 - Added new languages: PRQL, Rust, TypeScript and Zig.
 
 ### 2.10.1
