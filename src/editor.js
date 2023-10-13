@@ -248,9 +248,9 @@ export class AbstractEditor {
   postBuild () {
     this.setupWatchListeners()
     this.addLinks()
+    this.register()
     this.setValue(this.getDefault(), true)
     this.updateHeaderText()
-    this.register()
     this.onWatchedFieldChange()
   }
 

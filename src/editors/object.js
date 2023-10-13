@@ -624,7 +624,17 @@ export class ObjectEditor extends AbstractEditor {
       })
       this.addproperty_input.addEventListener('input', (e) => {
         e.target.previousSibling.childNodes.forEach((value) => {
-          if (value.innerText.includes(e.target.value)) {
+          let searchTerm = value.innerText
+          let propertyTitle = e.target.value
+
+          const caseSensitivePropertySearch = this.options.case_sensitive_property_search || this.jsoneditor.options.case_sensitive_property_search
+
+          if (!caseSensitivePropertySearch) {
+            searchTerm = searchTerm.toLowerCase()
+            propertyTitle = propertyTitle.toLowerCase()
+          }
+
+          if (searchTerm.includes(propertyTitle)) {
             value.style.display = ''
           } else {
             value.style.display = 'none'
@@ -1109,11 +1119,47 @@ export class ObjectEditor extends AbstractEditor {
 
     Object.keys(this.editors).forEach(i => {
       if (this.editors[i].isActive()) {
+        this.editors[i].refreshValue()
         this.value[i] = this.editors[i].getValue()
       }
     })
 
-    if (this.adding_property) this.refreshAddProperties()
+    Object.keys(this.editors).forEach(i => {
+      if (this.editors[i].isActive()) {
+        this.activateDependentRequired(this.editors[i].key)
+      }
+    })
+
+    if (this.adding_property) {
+      this.refreshAddProperties()
+    }
+  }
+
+  activateDependentRequired (key) {
+    const dependentRequired = this.getDependentRequired(key)
+    dependentRequired.forEach((requiredProperty) => {
+      let dependentRequiredEditor
+
+      Object.entries(this.cached_editors).forEach(([i, cachedEditor]) => {
+        if (cachedEditor.key === requiredProperty) {
+          dependentRequiredEditor = cachedEditor
+        }
+      })
+
+      if (dependentRequiredEditor && !dependentRequiredEditor.isActive()) {
+        dependentRequiredEditor.activate()
+      }
+    })
+  }
+
+  getDependentRequired (property) {
+    if (this.schema.dependentRequired) {
+      if (hasOwnProperty(this.schema.dependentRequired, property)) {
+        return this.schema.dependentRequired[property]
+      }
+    }
+
+    return []
   }
 
   refreshAddProperties () {
@@ -1190,6 +1236,7 @@ export class ObjectEditor extends AbstractEditor {
     if (!editor) {
       return
     }
+
     if (typeof editor.schema.required === 'boolean') return editor.schema.required
     else if (Array.isArray(this.schema.required)) return this.schema.required.includes(editor.key)
     else if (this.jsoneditor.options.required_by_default) return true

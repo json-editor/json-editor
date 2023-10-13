@@ -11,6 +11,8 @@
 - Updated playground ace editor config
 - Added button_state_mode options
 - Added support for case-insensitive properties search
+- Fixed issue #746 and #645 Selectize with create = true should add Items
+- Added support for case insensitive properties search
 - Added support for dependentRequired constrains
 - Fixed issue #1367: Signature editor not returning base64 data
 - Fixed issue #1237: more coherent ui for Base64 editor

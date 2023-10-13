@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+
+  "properties": {
+    "activity-timeout": {
+      "description": "How long a CMFActivity-initiated transaction may last, in seconds",
+      "default": null,
+      "type": [
+        "number",
+        "null"
+      ]
+    }
+  }
+}

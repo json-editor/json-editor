@@ -26,23 +26,23 @@ export class SignatureEditor extends StringEditor {
       canvas.classList.add('signature')
       signatureContainer.appendChild(canvas)
 
-      this.signaturePad = new window.SignaturePad(canvas, {
-        onEnd () {
-          /* check if the signature is not empty before setting a value */
-          if (!this.signaturePad.isEmpty()) {
-            this.input.value = this.signaturePad.toDataURL()
-          } else {
-            this.input.value = ''
-          }
+      this.signaturePad = new window.SignaturePad(canvas)
 
-          this.is_dirty = true
-          this.refreshValue()
-          this.watch_listener()
-          this.jsoneditor.notifyWatchers(this.path)
-          if (this.parent) this.parent.onChildEditorChange(this)
-          else this.jsoneditor.onChange()
+      this.signaturePad.onEnd = () => {
+        /* check if the signature is not empty before setting a value */
+        if (!this.signaturePad.isEmpty()) {
+          this.input.value = this.signaturePad.toDataURL()
+        } else {
+          this.input.value = ''
         }
-      })
+
+        this.is_dirty = true
+        this.refreshValue()
+        this.watch_listener()
+        this.jsoneditor.notifyWatchers(this.path)
+        if (this.parent) this.parent.onChildEditorChange(this)
+        else this.jsoneditor.onChange()
+      }
 
       /* create button containers and add clear signature button */
       const buttons = document.createElement('div')
