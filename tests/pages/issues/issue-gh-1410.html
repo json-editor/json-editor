@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>GitHub Issue 1410</title>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <script src="../../../dist/jsoneditor.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <a href="https://github.com/json-editor/json-editor/issues/1410">GitHub Issue 1410</a>
+      <div id='editor_holder'></div>
+    </div>
+
+    <script>
+      var defaultSchema = {
+        'title': 'additionalProperties',
+        'type': 'object',
+        'properties': {
+          "standard": {
+            "type": "object",
+            "properties": {
+              "prop": {
+                "title": "Prop",
+                "type": "string"
+              }
+            }
+          },
+          "extras": {
+            "type": "object",
+            "additionalProperties": {
+              "type": ["number", "boolean", "string", "array"],
+              "items": {
+                "type": ["number", "boolean", "string"]
+              }
+            },
+            "properties": {
+              "prop": {
+                "title": "Prop",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+
+      var editor = new JSONEditor(document.getElementById('editor_holder'),{
+        iconlib: 'fontawesome5',
+        schema: defaultSchema,
+        show_errors: 'always',
+        theme: 'bootstrap4',
+        no_additional_properties: true
+      });
+    </script>
+  </body>
+</html>
