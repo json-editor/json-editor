@@ -36,8 +36,11 @@ export class TableEditor extends ArrayEditor {
   }
 
   build () {
+    this.tableContainer = this.theme.getTableContainer()
     this.table = this.theme.getTable()
-    this.container.appendChild(this.table)
+    this.tableContainer.appendChild(this.table)
+
+    this.container.appendChild(this.tableContainer)
     this.thead = this.theme.getTableHead()
     this.table.appendChild(this.thead)
     this.header_row = this.theme.getTableRow()
@@ -74,7 +77,7 @@ export class TableEditor extends ArrayEditor {
       this.container.appendChild(this.panel)
     }
 
-    this.panel.appendChild(this.table)
+    this.panel.appendChild(this.tableContainer)
     this.controls = this.theme.getButtonHolder()
     if (this.array_controls_top) {
       this.title.appendChild(this.controls)
