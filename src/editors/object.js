@@ -1071,7 +1071,20 @@ export class ObjectEditor extends AbstractEditor {
     if (typeof this.schema.additionalProperties === 'boolean') {
       return this.schema.additionalProperties
     }
-    return !this.jsoneditor.options.no_additional_properties
+
+    if (typeof this.schema.additionalProperties === 'object' && this.schema.additionalProperties !== null) {
+      return true
+    }
+
+    if (typeof this.options.no_additional_properties === 'boolean') {
+      return !this.options.no_additional_properties
+    }
+
+    if (typeof this.jsoneditor.options.no_additional_properties === 'boolean') {
+      return !this.jsoneditor.options.no_additional_properties
+    }
+
+    return true
   }
 
   destroy () {
