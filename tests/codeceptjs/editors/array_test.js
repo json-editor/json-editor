@@ -1009,3 +1009,9 @@ Scenario('should be possible to add items to selectize array @selectize-add', as
   I.pressKey('Enter')
   I.waitForValue('#value', '["g","r","e","a","t"]')
 })
+
+Scenario('Tables should have a container parent that makes tables responsive @array-table', async ({ I }) => {
+  I.amOnPage('array-table-responsive.html')
+  I.waitForElement('.je-ready', DEFAULT_WAIT_TIME)
+  I.waitForElement('.table-responsive')
+})
