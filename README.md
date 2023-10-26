@@ -550,7 +550,7 @@ Some of The [hyper-schema][hyper] specification is supported as well.
 
 [core]: http://json-schema.org/latest/json-schema-core.html
 [validation]: http://json-schema.org/latest/json-schema-validation.html
-[hyper]: http://json-schema.org/latest/json-schema-hypermedia.html
+[hyper]: https://json-schema.org/draft-07/json-hyper-schema-release-notes
 
 ### $ref and definitions
 
