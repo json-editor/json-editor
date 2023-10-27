@@ -454,6 +454,12 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
+  getTableContainer () {
+    const el = super.getTableContainer()
+    el.classList.add('table-responsive')
+    return el
+  }
+
   getTable () {
     const el = document.createElement('table')
     el.classList.add('table', 'table-sm')

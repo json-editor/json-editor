@@ -414,6 +414,10 @@ export class AbstractTheme {
     if (title) button.setAttribute('title', title)
   }
 
+  getTableContainer () {
+    return document.createElement('div')
+  }
+
   /* Table functions */
   getTable () {
     return document.createElement('table')
