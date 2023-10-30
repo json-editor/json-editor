@@ -1068,10 +1068,31 @@ export class ObjectEditor extends AbstractEditor {
   }
 
   canHaveAdditionalProperties () {
+    // schemas have priority over options
+    // local options have priority over global options
+    // lastly global options are evaluated
+
+    // If the schema additionalProperties keyword is a boolean let the keyword decide
     if (typeof this.schema.additionalProperties === 'boolean') {
       return this.schema.additionalProperties
     }
-    return !this.jsoneditor.options.no_additional_properties
+
+    // If the schema additionalProperties keyword is a schema then additional properties are allowed and limited by such schema
+    if (typeof this.schema.additionalProperties === 'object' && this.schema.additionalProperties !== null) {
+      return true
+    }
+
+    // If the schema options no_additional_properties is a boolean let the option decide
+    if (typeof this.options.no_additional_properties === 'boolean') {
+      return !this.options.no_additional_properties
+    }
+
+    // If the global options no_additional_properties is a boolean let the option decide
+    if (typeof this.jsoneditor.options.no_additional_properties === 'boolean') {
+      return !this.jsoneditor.options.no_additional_properties
+    }
+
+    return true
   }
 
   destroy () {
