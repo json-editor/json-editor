@@ -1096,6 +1096,14 @@ editor.on('deleteRow', deletedValue => {
 editor.on('deleteAllRows', deletedValues => {
   console.log('deleteAllRows', deletedValues)
 });
+
+editor.on('schemaLoaded', (schema) => {
+  console.log('schemasLoaded', schema)
+})
+
+editor.on('schemasLoaded', () => {
+  console.log('schemasLoaded')
+})
 ```
 
 
