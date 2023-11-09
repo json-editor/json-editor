@@ -5,6 +5,14 @@ const { DEFAULT_WAIT_TIME } = require('./test-config')
 
 Feature('core')
 
+Scenario('should set per-editor options @load-events', async ({ I }) => {
+  I.amOnPage('load-events.html')
+  I.waitForElement('.je-ready')
+  I.waitForText('{"title":"Person","type":"object","id":"person","properties":{"name":{"type":"string","description":"First and Last name","minLength":4},"age":{"type":"integer","default":21,"minimum":18,"maximum":99},"gender":{"type":"string","enum":["male","female","other"]}}}')
+  I.waitForText('{"$ref":"../fixtures/basic_person.json","properties":{"location":{"type":"object","title":"Location","properties":{"city":{"type":"string"},"state":{"type":"string"},"citystate":{"type":"string","description":"This is generated automatically from the previous two fields","template":"{{city}}, {{state}}","watch":{"city":"person.location.city","state":"person.location.state"}}}},"pets":{"type":"array","format":"table","title":"Pets","uniqueItems":true,"items":{"type":"object","properties":{"type":{"type":"string","enum":["cat","dog","bird","reptile","other"],"default":"dog"},"name":{"type":"string"},"fixed":{"type":"boolean","title":"spayed / neutered"}}}}}}')
+  I.waitForText('Loaded')
+})
+
 Scenario('should set per-editor options @per-editor-options', async ({ I }) => {
   I.amOnPage('per-editor-options.html')
   I.waitForElement('.je-ready')

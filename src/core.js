@@ -63,7 +63,7 @@ export class JSONEditor {
 
   async load () {
     const fetchUrl = document.location.origin + document.location.pathname.toString()
-    const loader = new SchemaLoader(this.options)
+    const loader = new SchemaLoader(this.options, this)
     this.expandSchema = (schema) => loader.expandSchema(schema)
     this.expandRefs = (schema, fileBase) => loader.expandRefs(schema, fileBase)
     const location = document.location.toString()
