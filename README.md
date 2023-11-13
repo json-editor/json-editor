@@ -1096,7 +1096,14 @@ editor.on('deleteRow', deletedValue => {
 editor.on('deleteAllRows', deletedValues => {
   console.log('deleteAllRows', deletedValues)
 });
+```
 
+#### Schema loader events
+
+When a schema is loaded through a request, the schemaLoaded event is triggered.
+When all schemas are loaded , the schemasLoaded event is triggered.
+
+```javascript
 editor.on('schemaLoaded', (schema) => {
   console.log('schemasLoaded', schema)
 })
