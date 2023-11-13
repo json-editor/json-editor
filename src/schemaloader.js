@@ -4,12 +4,7 @@ import { extend, hasOwnProperty } from './utilities.js'
  * Handles loading Schema and tracking references.
  */
 export class SchemaLoader {
-  constructor (options, jsoneditor) {
-    /**
-     *  JSONEditor instance reference.
-     */
-    this.jsoneditor = jsoneditor
-
+  constructor (options) {
     /**
      * @prop {object}
      *  Options of the schema. @see readme.
@@ -454,7 +449,7 @@ export class SchemaLoader {
         if (typeof response === 'undefined') throw new Error(`Failed to fetch ref via ajax - ${uri}`)
         try {
           externalSchema = JSON.parse(response.responseText)
-          this.jsoneditor.trigger('schemaLoaded', externalSchema)
+          this.onSchemaLoaded(externalSchema)
           if (this.options.ajax_cache_responses) {
             this.cacheSet(url, externalSchema)
           }
@@ -483,8 +478,12 @@ export class SchemaLoader {
       return true
     }
 
-    this.jsoneditor.trigger('schemasLoaded')
+    this.onSchemasLoaded()
   }
+
+  onSchemaLoaded (externalSchema) {}
+
+  onSchemasLoaded () {}
 
   extendSchemas (obj1, obj2) {
     obj1 = extend({}, obj1)

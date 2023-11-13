@@ -5,7 +5,7 @@ const { DEFAULT_WAIT_TIME } = require('./test-config')
 
 Feature('core')
 
-Scenario('should set per-editor options @load-events', async ({ I }) => {
+Scenario('should listen to @load-events', async ({ I }) => {
   I.amOnPage('load-events.html')
   I.waitForElement('.je-ready')
   I.waitForText('{"title":"Person","type":"object","id":"person","properties":{"name":{"type":"string","description":"First and Last name","minLength":4},"age":{"type":"integer","default":21,"minimum":18,"maximum":99},"gender":{"type":"string","enum":["male","female","other"]}}}')
