@@ -40,15 +40,18 @@
     ajax: true
   })
 
-  editor.on('schemaLoaded', function (schema) {
+  editor.on('schemaLoaded', function (payload) {
+    const schemaUrl = document.createElement('pre')
     const loadedSchema = document.createElement('pre')
-    loadedSchema.textContent = JSON.stringify(schema)
+    schemaUrl.textContent = payload.schemaUrl
+    loadedSchema.textContent = JSON.stringify(payload.schema)
+    eventsContainer.appendChild(schemaUrl)
     eventsContainer.appendChild(loadedSchema)
   })
 
-  editor.on('schemasLoaded', function () {
+  editor.on('allSchemasLoaded', function () {
     const loaded = document.createElement('p')
-    loaded.textContent = 'Loaded'
+    loaded.textContent = 'All schemas loaded'
     eventsContainer.appendChild(loaded)
   })
 </script>
