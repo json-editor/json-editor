@@ -65,12 +65,12 @@ export class JSONEditor {
     const fetchUrl = document.location.origin + document.location.pathname.toString()
     const loader = new SchemaLoader(this.options)
 
-    loader.onSchemaLoaded = (schema) => {
-      this.trigger('schemaLoaded', schema)
+    loader.onSchemaLoaded = (payload) => {
+      this.trigger('schemaLoaded', payload)
     }
 
-    loader.onSchemasLoaded = () => {
-      this.trigger('schemasLoaded')
+    loader.onAllSchemasLoaded = () => {
+      this.trigger('allSchemasLoaded')
     }
 
     this.expandSchema = (schema) => loader.expandSchema(schema)

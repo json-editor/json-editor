@@ -1100,16 +1100,17 @@ editor.on('deleteAllRows', deletedValues => {
 
 #### Schema loader events
 
-When a schema is loaded through a request, the schemaLoaded event is triggered.
-When all schemas are loaded , the schemasLoaded event is triggered.
+When schemas are loaded via a request, the `schemaLoaded` event is triggered individually for each schema after its loading.
+Once the loading of all schemas is completed, the `allSchemasLoaded` event is triggered.
 
 ```javascript
-editor.on('schemaLoaded', (schema) => {
-  console.log('schemasLoaded', schema)
+editor.on('schemaLoaded', (payload) => {
+  console.log('schemasLoaded', payload.schemaUrl)
+  console.log('schemasLoaded', payload.schema)
 })
 
-editor.on('schemasLoaded', () => {
-  console.log('schemasLoaded')
+editor.on('allSchemasLoaded', () => {
+  console.log('allSchemasLoaded')
 })
 ```
 

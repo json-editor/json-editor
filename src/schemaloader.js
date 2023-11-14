@@ -449,7 +449,12 @@ export class SchemaLoader {
         if (typeof response === 'undefined') throw new Error(`Failed to fetch ref via ajax - ${uri}`)
         try {
           externalSchema = JSON.parse(response.responseText)
-          this.onSchemaLoaded(externalSchema)
+
+          this.onSchemaLoaded({
+            schema: externalSchema,
+            schemaUrl: url
+          })
+
           if (this.options.ajax_cache_responses) {
             this.cacheSet(url, externalSchema)
           }
@@ -478,12 +483,12 @@ export class SchemaLoader {
       return true
     }
 
-    this.onSchemasLoaded()
+    this.onAllSchemasLoaded()
   }
 
-  onSchemaLoaded (externalSchema) {}
+  onSchemaLoaded (payload) {}
 
-  onSchemasLoaded () {}
+  onAllSchemasLoaded () {}
 
   extendSchemas (obj1, obj2) {
     obj1 = extend({}, obj1)
