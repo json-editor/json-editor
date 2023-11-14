@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Load events</title>
+    <script src="../../dist/jsoneditor.js"></script>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+    <div id="events-container"></div>
+    <div id='editor-container'></div>
+</div>
+
+<script>
+  const eventsContainer = document.querySelector('#events-container')
+  const editorContainer = document.querySelector('#editor-container')
+  const schema = {
+    "title": "Load Events",
+    "type": "object",
+    "properties": {
+      "personA": {
+        "$ref": "../fixtures/basic_person.json"
+      },
+      "personB": {
+        "$ref": "../fixtures/person.json"
+      }
+    }
+  }
+
+  const editor = new JSONEditor(editorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome',
+    disable_collapse: true,
+    disable_edit_json: true,
+    disable_properties: true,
+    ajax: true
+  })
+
+  editor.on('schemaLoaded', function (payload) {
+    const schemaUrl = document.createElement('pre')
+    const loadedSchema = document.createElement('pre')
+    schemaUrl.textContent = payload.schemaUrl
+    loadedSchema.textContent = JSON.stringify(payload.schema)
+    eventsContainer.appendChild(schemaUrl)
+    eventsContainer.appendChild(loadedSchema)
+  })
+
+  editor.on('allSchemasLoaded', function () {
+    const loaded = document.createElement('p')
+    loaded.textContent = 'All schemas loaded'
+    eventsContainer.appendChild(loaded)
+  })
+</script>
+
+</body>
+</html>
