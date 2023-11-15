@@ -291,6 +291,7 @@ export class StringEditor extends AbstractEditor {
 
   getValue () {
     const hasValueSet = !!(this.input && this.input.value)
+
     if (this.shouldBeUnset() && !hasValueSet) {
       return undefined
     }
