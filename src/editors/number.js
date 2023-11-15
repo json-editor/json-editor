@@ -44,8 +44,10 @@ export class NumberEditor extends StringEditor {
     }
 
     if (!this.schema.default && !this.jsoneditor.options.use_default_values && this.value === '') {
-      this.input.value = ''
-      return undefined
+      if (this.shouldBeUnset()) {
+        this.input.value = ''
+        return undefined
+      }
     } else {
       return isNumber(this.value) ? parseFloat(this.value) : this.value
     }
