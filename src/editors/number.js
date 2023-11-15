@@ -43,10 +43,9 @@ export class NumberEditor extends StringEditor {
       return undefined
     }
 
-    const hasValueSet = !!(this.input && this.input.value)
-
     if (!this.schema.default && !this.jsoneditor.options.use_default_values && this.value === '') {
-      if (this.shouldBeUnset() && !hasValueSet) {
+      if (this.shouldBeUnset()) {
+        this.input.value = ''
         return undefined
       }
     } else {

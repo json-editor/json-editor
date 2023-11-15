@@ -11,10 +11,8 @@ export class IntegerEditor extends NumberEditor {
       return undefined
     }
 
-    const hasValueSet = !!(this.input && this.input.value)
-
     if (!this.schema.default && !this.jsoneditor.options.use_default_values && this.value === '') {
-      if (this.shouldBeUnset() && !hasValueSet) {
+      if (this.shouldBeUnset()) {
         return undefined
       }
     } else {
