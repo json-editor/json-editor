@@ -1,5 +1,14 @@
 ### Unreleased
 
+### 2.12.0
+
+- Fixed issue #1422: use_default_values: false deletes valid values while true sets invalid default values
+- Added feature: load-events
+- Fixed issue #1410: Schema for "additionalProperties" does not override "no_additional_properties: true"
+- Added feature: table-responsive
+- Fixed readme-broken-link
+- Updated integrity checks in example pages
+
 ### 2.11.0
 
 - Fixed issue #746 and #645: Selectize with create = true should add items
