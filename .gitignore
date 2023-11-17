@@ -11,3 +11,4 @@
 /src/editors/*.css.js
 /.vs
 **/.DS_Store
+/tests/docker-compose-local.yml
