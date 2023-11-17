@@ -89,18 +89,18 @@ Scenario('should set and get individual values', async ({ I }) => {
   I.waitForValue('.value', '"john kaminski"')
 })
 
-Scenario('should watch a specific field for changes', async ({ I }) => {
+Scenario('should watch a specific field for changes @core @change', async ({ I }) => {
   I.amOnPage('core.html')
   I.dontSeeElement('.name-changed')
   I.click('.set-individual-value')
-  I.seeElement('.name-changed')
+  I.waitForElement('.name-changed')
 })
 
-Scenario('should watch form for changes', async ({ I }) => {
+Scenario('should watch form for changes @core @change', async ({ I }) => {
   I.amOnPage('core.html')
   I.dontSeeElement('.form-changed')
   I.click('.set-value')
-  I.seeElement('.form-changed')
+  I.waitForElement('.form-changed')
 })
 
 Scenario('should change the form if form_name_root option is set @core', async ({ I }) => {
