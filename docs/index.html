@@ -39,6 +39,10 @@
             <div>
                 <label for="boolean-options-select">Boolean options</label><br>
                 <select multiple size="15" id="boolean-options-select" class="form-control browser-default">
+                    <option value='use_default_values'>Default values based on the "type"</option>
+                    <option value='use_name_attributes'>Use name attributes</option>
+                    <option value='prompt_before_delete'>Prompt before delete</option>
+                    <option value='case_sensitive_property_search'>Case sensitive property search</option>
                     <option value='required_by_default'>Object properties required by default</option>
                     <option value='display_required_only'>Only show required properties by default</option>
                     <option value='show_opt_in'>Show optional properties (with checkbox)</option>
@@ -145,7 +149,6 @@
     </div>
 </div>
 <script>
-
   var defaultSchema = {
     'title': 'Person',
     'type': 'object',
@@ -256,13 +259,13 @@
 
   var data = {}
 
-  var defaultOptions = {
+  var defaultOptions = Object.assign({}, JSONEditor.defaults.options, {
     iconlib: 'fontawesome5',
     object_layout: 'normal',
     schema: defaultSchema,
     show_errors: 'interaction',
-    theme: 'bootstrap4'
-  }
+    theme: 'bootstrap4',
+  })
 
   var jsoneditor = null
   var directLink = document.querySelector('#direct-link')
