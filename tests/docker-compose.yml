@@ -11,7 +11,6 @@ services:
     expose:
       - '9001'
   firefox:
-    platform: linux/amd64
     image: selenium/standalone-firefox-debug:3.141.59-20210929
     depends_on:
       - node
@@ -23,7 +22,7 @@ services:
     # Mount shm also for firefox, see https://github.com/SeleniumHQ/docker-selenium#running-the-images
     shm_size: '2gb' # for windows environment
   chrome:
-    image: seleniarm/standalone-chromium:114.0
+    image: selenium/standalone-chrome-debug:3.141.59-20200525
     depends_on:
       - node
     environment:
