@@ -7,18 +7,19 @@
     <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.14.0/src-noconflict/ace.js"></script>
     <script src="./polyfills/assign.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
+    <script src="./scripts/ajv-validator.js"></script>
     <link rel='stylesheet' id='theme-link'>
     <link rel='stylesheet' id='iconlib-link'>
 </head>
 <body>
-<div class='container grid-xl' style="padding: 15px 0;">
+<div class="container grid-xl" style="padding-top: 15px; padding-bottom: 30px;">
     <div class="row columns md:flex">
-        <div class='col-8 col-md-8 w-8/12'>
+        <div class='col-7 col-md-7 w-7/12'>
             <h1>Editor</h1>
             <p>Below is the editor generated from the JSON Schema.</p>
             <div id="json-editor-form"></div>
         </div>
-        <div class='col-4 col-md-4 w-4/12'>
+        <div class='col-5 col-md-5 w-5/12'>
             <div>
                 <a class="btn btn-primary" id="direct-link" title="preserves schema, value, and options">Direct Link</a>
                 <a class="btn btn-secondary" href="?" title="reload editor with default example settings">Reset</a>
@@ -116,13 +117,30 @@
             </div>
         </div>
     </div>
+
+    <h2>Schema</h2>
+
     <div class="row columns md:flex">
-        <div class='col-12 col-md-12 w-12/12'>
-            <h2>Schema</h2>
-            <label for="schema-textarea">You can change the schema and see how the generated form looks. After you make
-                changes, click "Update Schema"</label>
+        <div class='col-7 col-md-7 w-7/12'>
+            <label for="schema-textarea">You can change the schema and see how the generated form looks. After you make changes, click "Update Schema"</label>
             <button class='btn btn-primary btn-block' id='setschema'>Update Schema</button>
             <textarea id='schema-textarea' style="height: 100vh;"></textarea>
+        </div>
+
+        <div class='col-5 col-md-5 w-5/12'>
+            <label for="je-errors-textarea">
+                <span>AJV (JE meta-schema): </span>
+                <code id="je-errors-count"></code>
+            </label>
+            <textarea id='je-errors-textarea'></textarea>
+
+            <br>
+
+            <label for="ajv-errors-textarea">
+                <span>AJV (meta-schema-2020-12): </span>
+                <code id="ajv-errors-count"></code>
+            </label>
+            <textarea id='ajv-errors-textarea'></textarea>
         </div>
     </div>
 </div>
@@ -267,11 +285,38 @@
     mode: 'ace/mode/json',
     maxLines: Infinity,
     minLines: 5,
-    showFoldWidgets: false
+    showFoldWidgets: false,
+    showPrintMargin: false
   }
 
   var outputTextarea = ace.edit('output-textarea', aceConfig)
   var schemaTextarea = ace.edit('schema-textarea', aceConfig)
+  var ajvErrorsTextarea = ace.edit('ajv-errors-textarea', aceConfig)
+  var jeErrorsTextarea = ace.edit('je-errors-textarea', aceConfig)
+  var ajvErrorsCount = document.querySelector('#ajv-errors-count')
+  var jeErrorsCount = document.querySelector('#je-errors-count')
+  var ajv = new AjvValidator()
+
+  const validateSchema = () => {
+    const dataToValidate = JSON.parse(schemaTextarea.getValue())
+    let errors
+
+    // AJV validation
+    ajvErrorsCount.textContent = '0'
+    errors = ajv.validate202012(dataToValidate)
+    ajvErrorsTextarea.setValue(JSON.stringify(errors, null, 2))
+    ajvErrorsCount.textContent = JSON.stringify(errors.length)
+    schemaTextarea.clearSelection(1)
+    ajvErrorsTextarea.clearSelection(1)
+
+    // JE validation with AJV
+    jeErrorsCount.textContent = '0'
+    errors = ajv.validateJeMetaSchema(dataToValidate)
+    jeErrorsTextarea.setValue(JSON.stringify(errors, null, 2))
+    jeErrorsCount.textContent = JSON.stringify(errors.length)
+    schemaTextarea.clearSelection(1)
+    jeErrorsTextarea.clearSelection(1)
+  }
 
   /* -------------------------------------------------------------- parse url */
 
@@ -313,6 +358,7 @@
     // schema
     schemaTextarea.setValue(JSON.stringify(data.options.schema, null, 2))
     schemaTextarea.clearSelection(1)
+    validateSchema()
 
     // theme
     var themeMap = {
@@ -538,6 +584,7 @@
   setSchema.addEventListener('click', function () {
     try {
       data.options.schema = JSON.parse(schemaTextarea.getValue())
+      validateSchema()
     } catch (e) {
       alert('Invalid Schema: ' + e.message)
       return
