@@ -480,6 +480,17 @@
           "propertyOrder": 50,
           "format": "table"
         },
+        "const": {
+          "type": [
+            "object",
+            "array",
+            "string",
+            "number",
+            "integer",
+            "boolean",
+            "null"
+          ]
+        },
         "enumSource": {
           "oneOf": [
             {
