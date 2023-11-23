@@ -23,7 +23,8 @@ export class SimplemdeEditor extends StringEditor {
       options = this.expandCallbacks('simplemde', extend({}, {
         height: 300
       }, this.defaults.options.simplemde || {}, this.options.simplemde || {}, {
-        element: this.input
+        element: this.input,
+        forceSync: true
       }))
 
       this.simplemde_instance = new window.SimpleMDE(options)
