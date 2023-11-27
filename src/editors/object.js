@@ -850,15 +850,8 @@ export class ObjectEditor extends AbstractEditor {
 
   copyJSON () {
     if (!this.editjson_holder) return
-    const ta = document.createElement('textarea')
-    ta.value = this.editjson_textarea.value
-    ta.setAttribute('readonly', '')
-    ta.style.position = 'absolute'
-    ta.style.left = '-9999px'
-    document.body.appendChild(ta)
-    ta.select()
-    document.execCommand('copy')
-    document.body.removeChild(ta)
+    navigator.clipboard.writeText(this.editjson_textarea.value)
+      .catch((e) => window.alert(e))
   }
 
   saveJSON () {
