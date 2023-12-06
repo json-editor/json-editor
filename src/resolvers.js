@@ -1,11 +1,14 @@
-/* Use "multiple" as a fall back for everything */
+/* Use "multiple" as a fallback for everything */
 const defaultResolver = schema => typeof schema.type !== 'string' && 'multiple'
+
+/* If the type is a script type, then presume the Editor's type is "string" until later resolvers decide otherwise */
+const defaultResolverString = schema => typeof schema.type === 'string' && 'string'
 
 /* If the type is not set but properties are defined, we can infer the type is actually object */
 const object = schema => !schema.type && schema.properties && 'object'
 
-/* If the type is set and it's a basic type, use the primitive editor */
-const primitive = schema => typeof schema.type === 'string' && schema.type
+/* If type is set, and it's a basic JSON type, use the primitive editor */
+const primitive = schema => typeof schema.type === 'string' && ['string', 'number', 'integer', 'boolean', 'null', 'array', 'object'].includes(schema.type) && schema.type
 
 /* Use specialized editor for signatures */
 const signature = schema => schema.type === 'string' && schema.format === 'signature' && 'signature'
@@ -129,4 +132,4 @@ const ip = schema => schema.type === 'string' && ['ip', 'ipv4', 'ipv6', 'hostnam
 const colorPicker = schema => schema.type === 'string' && schema.format === 'color' && 'colorpicker'
 
 /* Export resolvers in order of discovery, first to last */
-export const resolvers = [colorPicker, ip, ace, xhtml, markdown, jodit, autoComplete, uuid, info, button, stepper, describeBy, starratings, date, oneOf, ifThenElse, arraysOfStrings, enumeratedProperties, enumSource, table, upload, base64, any, boolean, signature, primitive, object, defaultResolver]
+export const resolvers = [colorPicker, ip, ace, xhtml, markdown, jodit, autoComplete, uuid, info, button, stepper, describeBy, starratings, date, oneOf, ifThenElse, arraysOfStrings, enumeratedProperties, enumSource, table, upload, base64, any, boolean, signature, primitive, object, defaultResolver, defaultResolverString]
