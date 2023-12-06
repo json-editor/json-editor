@@ -985,10 +985,10 @@ Creates a button whose click callback can be defined in `JSONEditor.defaults.cal
 
 ```json
 {
-  "type": "button",
-  "title": "Search",
+  "format": "button",
   "options": {
     "button": {
+      "text": "Search",
       "icon": "search",
       "action": "myAction",
       "validated": true
