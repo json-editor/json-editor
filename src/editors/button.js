@@ -24,7 +24,6 @@ export class ButtonEditor extends AbstractEditor {
 
     /* Get options, either global options from "this.defaults.options.button" or */
     /* single property options from schema "options.button" */
-    const title = this.translateProperty(this.schema.title) || this.key
     const options = this.expandCallbacks('button', extend({}, {
       icon: '',
       validated: false,
@@ -34,8 +33,15 @@ export class ButtonEditor extends AbstractEditor {
       }
     }, this.defaults.options.button || {}, this.options.button || {}))
 
+    const title = this.translateProperty(options.text || this.schema.title) || this.key
+
     this.input = this.getButton(title, options.icon, title)
-    this.input.addEventListener('click', options.action, false)
+
+    if (typeof options.action !== 'function') {
+      window.alert(`No button action defined for "${this.path}"`)
+    } else {
+      this.input.addEventListener('click', options.action, false)
+    }
 
     if (this.schema.readOnly || this.schema.readonly || this.schema.template) {
       this.disable(true)
