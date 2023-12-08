@@ -38,7 +38,12 @@ export class MultiSelectEditor extends AbstractEditor {
 
     let i
     const itemsSchema = this.jsoneditor.expandRefs(this.schema.items || {})
-    const e = itemsSchema.enum || []
+    let e
+    if (itemsSchema.const) {
+      e = [itemsSchema.const]
+    } else {
+      e = itemsSchema.enum || []
+    }
     const oe = itemsSchema.options ? itemsSchema.options.enum || [] : []
     /* fallback to enum_titles, when options.enum is not present */
     const t = itemsSchema.options ? itemsSchema.options.enum_titles || [] : []

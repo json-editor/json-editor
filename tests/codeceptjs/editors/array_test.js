@@ -710,6 +710,15 @@ Scenario('should work well with multiselect editors', async ({ I }) => {
   I.dontSee('Multiselect 3')
 })
 
+Scenario('should handle const well in multiselect editor', async ({ I }) => {
+  I.amOnPage('array-multiselects-const.html')
+  I.click('Add Multiselect')
+  I.seeElement('[data-schemapath="root.0"]')
+  I.selectOption('[name="root[0]"]', 'abc')
+  I.click('.get-value')
+  I.waitForValue('.debug', '[["abc"]]')
+})
+
 Scenario('should work well with object editors', async ({ I }) => {
   I.amOnPage('array-objects.html')
   I.click('Add Object')

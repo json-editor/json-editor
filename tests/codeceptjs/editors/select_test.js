@@ -18,3 +18,9 @@ Scenario('should be disabled if "readonly" is specified', async ({ I }) => {
   I.amOnPage('read-only.html')
   I.seeDisabledAttribute('[name="root[select]"]')
 })
+
+Scenario('should handle const like enum with 1 item', async ({ I }) => {
+  I.amOnPage('select-const.html')
+  I.click('.get-value')
+  I.waitForValue('.value', '{"constval":"constant"}')
+})

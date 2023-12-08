@@ -12,7 +12,11 @@ export class EnumEditor extends AbstractEditor {
 
     this.options.enum_titles = this.options.enum_titles || []
 
-    this.enum = this.schema.enum
+    if (this.schema.const) {
+      this.enum = [this.schema.const]
+    } else {
+      this.enum = this.schema.enum
+    }
     this.selected = 0
     this.select_options = []
     this.html_values = []

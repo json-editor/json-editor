@@ -51,7 +51,7 @@ const enumSource = schema => {
 
 /* Use the `enum` or `select` editors for schemas with enumerated properties */
 const enumeratedProperties = schema => {
-  if (schema.enum) {
+  if (schema.enum || schema.const) {
     if (schema.type === 'array' || schema.type === 'object') return 'enum'
     if (schema.type === 'number' || schema.type === 'integer' || schema.type === 'string') {
       if (schema.format === 'radio') return 'radio'
@@ -75,7 +75,7 @@ const arraysOfStrings = (schema, je) => {
       /* if 'selectize' enabled it is expected to be selectized control */
       if (schema.format === 'selectize') return 'arraySelectize'
       if (schema.format === 'select2') return 'arraySelect2'
-      if (schema.items.enum) return 'multiselect' /* otherwise it is select */
+      if (schema.items.enum || schema.items.const) return 'multiselect' /* otherwise it is select */
     }
   }
 }

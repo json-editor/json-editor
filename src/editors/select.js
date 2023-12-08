@@ -73,8 +73,14 @@ export class SelectEditor extends AbstractEditor {
     let i
     let callback
 
-    /* Enum options enumerated */
-    if (this.schema.enum) {
+    /* Const value */
+    if (this.schema.const) {
+      const value = this.schema.const
+      this.enum_options = [`${value}`]
+      this.enum_display = [`${this.translateProperty(value) || value}`]
+      this.enum_values = [this.typecast(value)]
+      /* Enum options enumerated */
+    } else if (this.schema.enum) {
       const display = (this.schema.options && this.schema.options.enum_titles) || []
 
       this.schema.enum.forEach((option, i) => {

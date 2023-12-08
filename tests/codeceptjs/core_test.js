@@ -195,71 +195,52 @@ Scenario('should display anyOf and oneOf error messages in the correct places @8
   I.dontSeeElement('[data-schemapath="root.list_group"] .invalid-feedback', DEFAULT_WAIT_TIME)
 })
 
-Scenario('Should switch between all json 7 data types in @oneof and display error messages for each one @core', async ({ I }) => {
+Scenario('Should switch between all json 7 data types in @oneof and set value according to specified constant for each one @core', async ({ I }) => {
   I.amOnPage('oneof-2.html')
   I.waitForElement('.je-ready')
 
   I.selectOption('.je-switcher', 'Value, string')
-  I.waitForValue('#value', '{"test":""}')
-  I.waitForText('Value must validate against exactly one of the provided schemas.')
-  I.waitForText('Value must be the constant value')
+  I.waitForValue('#value', '{"test":"test"}')
 
   I.selectOption('.je-switcher', 'Value, boolean')
-  I.waitForValue('#value', '{"test":false}')
-  I.waitForText('Value must validate against exactly one of the provided schemas.')
-  I.waitForText('Value must be the constant value')
+  I.waitForValue('#value', '{"test":true}')
 
   I.selectOption('.je-switcher', 'Value, array')
-  I.waitForValue('#value', '{"test":[]}')
-  I.waitForText('Value must validate against exactly one of the provided schemas.')
-  I.waitForText('Value must be the constant value')
+  I.waitForValue('#value', '{"test":[0]}')
 
   I.selectOption('.je-switcher', 'Value, object')
-  I.waitForValue('#value', '{"test":{}}')
-  I.waitForText('Value must validate against exactly one of the provided schemas.')
-  I.waitForText('Value must be the constant value')
-  I.waitForText('Object is missing the required property \'test\'')
+  I.waitForValue('#value', '{"test":{"test":"test"}}')
 
   I.selectOption('.je-switcher', 'Value, number')
-  I.waitForValue('#value', '{"test":0}')
-  I.waitForText('Value must validate against exactly one of the provided schemas.')
-  I.waitForText('Value must be the constant value')
+  I.waitForValue('#value', '{"test":1.1}')
 
   I.selectOption('.je-switcher', 'Value, integer')
-  I.waitForValue('#value', '{"test":0}')
-  I.waitForText('Value must validate against exactly one of the provided schemas.')
-  I.waitForText('Value must be the constant value')
+  I.waitForValue('#value', '{"test":1}')
 
   I.selectOption('.je-switcher', 'Value, null')
   I.waitForValue('#value', '{"test":null}')
 })
 
-Scenario('Should switch between all json 7 data types in @anyof and display error messages for each one @core', ({ I }) => {
+Scenario('Should switch between all json 7 data types in @anyof and set value according to specified constant for each one @core', ({ I }) => {
   I.amOnPage('anyof-2.html')
   I.waitForElement('.je-ready')
 
-  I.waitForValue('#value', '{"test":""}')
-  I.waitForText('Value must validate against at least one of the provided schemas')
+  I.waitForValue('#value', '{"test":"test"}')
 
   I.selectOption('.je-switcher', 'Value, boolean')
-  I.waitForValue('#value', '{"test":false}')
-  I.waitForText('Value must validate against at least one of the provided schemas')
+  I.waitForValue('#value', '{"test":true}')
 
   I.selectOption('.je-switcher', 'Value, array')
-  I.waitForValue('#value', '{"test":[]}')
-  I.waitForText('Value must validate against at least one of the provided schemas')
+  I.waitForValue('#value', '{"test":[0]}')
 
   I.selectOption('.je-switcher', 'Value, object')
-  I.waitForValue('#value', '{"test":{}}')
-  I.waitForText('Value must validate against at least one of the provided schemas')
+  I.waitForValue('#value', '{"test":{"test":"test"}}')
 
   I.selectOption('.je-switcher', 'Value, number')
-  I.waitForValue('#value', '{"test":0}')
-  I.waitForText('Value must validate against at least one of the provided schemas')
+  I.waitForValue('#value', '{"test":1.1}')
 
   I.selectOption('.je-switcher', 'Value, integer')
-  I.waitForValue('#value', '{"test":0}')
-  I.waitForText('Value must validate against at least one of the provided schemas')
+  I.waitForValue('#value', '{"test":1}')
 
   I.selectOption('.je-switcher', 'Value, null')
   I.waitForValue('#value', '{"test":null}')
@@ -383,7 +364,6 @@ Scenario('should override error messages if specified in schema options @core @e
   I.waitForText('Error Messages')
 
   I.waitForText('CUSTOM EN: Value required')
-  I.waitForText('CUSTOM EN: Value must be the constant value')
   I.waitForText('CUSTOM EN: Value must be at least 6 characters long')
   I.waitForText('CUSTOM EN: Value must be at most 6 characters long')
   I.waitForText('CUSTOM EN: Value must validate against at least one of the provided schemas')
@@ -417,7 +397,6 @@ Scenario('should override error messages if specified in schema options @core @e
   I.click('Switch to ES')
 
   I.waitForText('CUSTOM ES: Value required')
-  I.waitForText('CUSTOM ES: Value must be the constant value')
   I.waitForText('CUSTOM ES: Value must be at least 6 characters long')
   I.waitForText('CUSTOM ES: Value must be at most 6 characters long')
   I.waitForText('CUSTOM ES: Value must validate against at least one of the provided schemas')
