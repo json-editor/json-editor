@@ -4,6 +4,13 @@ const { DEFAULT_WAIT_TIME } = require('../test-config')
 
 Feature('array')
 
+Scenario('Should display properties enum titles in items headerTemplate @headerTemplate', async ({ I }) => {
+  I.amOnPage('array-header-template.html')
+  I.waitForElement('.je-ready', DEFAULT_WAIT_TIME)
+  I.waitForText('Dog', DEFAULT_WAIT_TIME, '.nav-link span')
+  I.waitForText('Cat', DEFAULT_WAIT_TIME, '.nav-link span')
+})
+
 Scenario('Should set buttons states correctly @button_state_mode', async ({ I }) => {
   I.amOnPage('button_state_mode_1.html')
   I.waitForElement('.je-ready', DEFAULT_WAIT_TIME)

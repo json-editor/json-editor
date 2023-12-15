@@ -510,6 +510,7 @@ export class AbstractEditor {
 
   onWatchedFieldChange () {
     let vars
+
     if (this.header_template) {
       vars = extend(this.getWatchedFieldValues(), {
         key: this.key,
@@ -518,6 +519,23 @@ export class AbstractEditor {
         i1: (this.key * 1 + 1),
         title: this.getTitle()
       })
+
+      // object properties
+      if (Object.keys(this.editors).length) {
+        Object.keys(this.editors).forEach((key) => {
+          const editor = this.editors[key]
+
+          if (editor.schema && editor.schema.enum && editor.schema.options && editor.schema.options.enum_titles) {
+            const enumIndex = editor.schema.enum.indexOf(editor.value)
+            const enumTitle = editor.options.enum_titles[enumIndex]
+            vars.properties = {}
+            vars.properties[key] = {
+              enumTitle: enumTitle
+            }
+          }
+        })
+      }
+
       const headerText = this.header_template(vars)
 
       if (headerText !== this.header_text) {
