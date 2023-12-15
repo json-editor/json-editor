@@ -1716,7 +1716,7 @@ The `title` keyword of a schema is used to add user friendly headers to the edit
 Consider the example of an array of children.  Without dynamic headers, the UI for the array elements would show `Child 1`, `Child 2`, etc..
 It would be much nicer if the headers could be dynamic and incorporate information about the children, such as `1 - John (age 9)`, `2 - Sarah (age 11)`.
 
-To accomplish this, use the `headerTemplate` property.  All of the watched variables are passed into this template, along with the static title `title` (e.g. "Child"), the 0-based index `i0` (e.g. "0" and "1"), the 1-based index `i1`, and the field's value `self` (e.g. `{"name": "John", "age": 9}`).
+To accomplish this, use the `headerTemplate` property.  All of the watched variables are passed into this template, along with the static title `title` (e.g. "Child"), the 0-based index `i0` (e.g. "0" and "1"), the 1-based index `i1`, extra child variable `properties.${PROPERTY_NAME}.enumTitle` and the field's value `self` (e.g. `{"name": "John", "age": 9}`).
 
 ```js+jinja
 {
@@ -1725,10 +1725,18 @@ To accomplish this, use the `headerTemplate` property.  All of the watched varia
   "items": {
     "type": "object",
     "title": "Child",
-    "headerTemplate": "{{ i1 }} - {{ self.name }} (age {{ self.age }})",
+    "headerTemplate": "{{ i1 }} - {{ self.name }} (age {{ self.age }})  has a {{ properties.pet.enumTitle }}",
     "properties": {
       "name": { "type": "string" },
-      "age": { "type": "integer" }
+      "age": { "type": "integer" },
+      "pet": {
+          "title": "Pet",
+          "type": "string",
+          "enum": [ "pet_1", "pet_2" ],
+          "options": {
+            "enum_titles": [ "Dog", "Cat" ]
+          }
+        }
     }
   }
 }
