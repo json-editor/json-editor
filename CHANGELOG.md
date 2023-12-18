@@ -1,5 +1,17 @@
 ### Unreleased
 
+### 2.13.1
+
+- Fixed bug in enumTitle for headerTemplates
+
+### 2.13.0
+
+- Added feature #1448 enumTitle for headerTemplates
+- Fixed issue #1442 tpe button editors
+- Fixed issue #1433 simplemde editor data sync
+- Added schema validation in playground
+- Fixed tests timing issues
+
 ### 2.12.0
 
 - Fixed issue #1422: use_default_values: false deletes valid values while true sets invalid default values
