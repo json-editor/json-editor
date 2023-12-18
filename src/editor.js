@@ -522,13 +522,14 @@ export class AbstractEditor {
 
       // object properties
       if (Object.keys(this.editors).length) {
+        vars.properties = {}
+
         Object.keys(this.editors).forEach((key) => {
           const editor = this.editors[key]
 
           if (editor.schema && editor.schema.enum && editor.schema.options && editor.schema.options.enum_titles) {
             const enumIndex = editor.schema.enum.indexOf(editor.value)
             const enumTitle = editor.options.enum_titles[enumIndex]
-            vars.properties = {}
             vars.properties[key] = {
               enumTitle: enumTitle
             }
