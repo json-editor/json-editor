@@ -1,5 +1,9 @@
 ### Unreleased
 
+### 2.13.1
+
+- Fixed bug in enumTitle for headerTemplates
+
 ### 2.13.0
 
 - Added feature #1448 enumTitle for headerTemplates
