@@ -1,5 +1,7 @@
 ### Unreleased
 
+- Fixed issue #1453 setup buttons in array editor correctly if editor is initially collapsed
+
 ### 2.13.1
 
 - Fixed bug in enumTitle for headerTemplates

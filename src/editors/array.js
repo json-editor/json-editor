@@ -454,7 +454,7 @@ export class ArrayEditor extends AbstractEditor {
         this.value[i] = editor.getValue()
       })
 
-      if (!this.collapsed && this.setupButtons(minItems)) {
+      if (this.setupButtons(minItems) && !this.collapsed) {
         this.controls.style.display = 'inline-block'
       } else {
         this.controls.style.display = 'none'
