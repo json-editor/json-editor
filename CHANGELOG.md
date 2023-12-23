@@ -1,6 +1,7 @@
 ### Unreleased
 
 - Fixed issue #1453 setup buttons in array editor correctly if editor is initially collapsed
+- Fixed bug in onWatchedFileChange
 
 ### 2.13.1
 
