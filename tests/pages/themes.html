@@ -25,6 +25,7 @@
       <option value='jqueryui'>jQuery UI</option>
       <option value='materialize'>Materialize</option>
       <option value='spectre'>Spectre</option>
+      <option value='tailwind'>Tailwind</option>
     </select>
   </div>
   <div>
@@ -496,7 +497,8 @@
         foundation6: 'https://cdnjs.cloudflare.com/ajax/libs/foundation/6.2.4/foundation.min.css',
         jqueryui: 'https://code.jquery.com/ui/1.10.3/themes/south-street/jquery-ui.css',
         materialize: 'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css',
-        spectre: 'https://unpkg.com/spectre.css/dist/spectre.min.css'
+        spectre: 'https://unpkg.com/spectre.css/dist/spectre.min.css',
+        tailwind: 'https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css'
       };
       const link = document.querySelector('#theme_stylesheet').href = mapping[theme];
       console.log(link)

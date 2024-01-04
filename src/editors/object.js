@@ -719,6 +719,7 @@ export class ObjectEditor extends AbstractEditor {
       })
 
       if (this.rows[0]) {
+        this.rows.forEach((row) => { trigger(row.tab, 'click') })
         trigger(this.rows[0].tab, 'click')
       }
 
