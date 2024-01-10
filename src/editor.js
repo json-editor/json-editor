@@ -15,6 +15,7 @@ export class AbstractEditor {
     this.original_schema = options.schema
     this.schema = this.jsoneditor.expandSchema(this.original_schema)
     this.active = true
+    this.isUiOnly = false
     this.options = extend({}, (this.options || {}), (this.schema.options || {}), (options.schema.options || {}), options)
 
     this.formname = this.jsoneditor.options.form_name_root || 'root'
