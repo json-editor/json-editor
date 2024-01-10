@@ -42,3 +42,9 @@ Scenario('should set icon @button @button-icon', async ({ I }) => {
   I.waitForElement('.je-ready', DEFAULT_WAIT_TIME)
   I.waitForElement('i.fas.fa-search', DEFAULT_WAIT_TIME)
 })
+
+Scenario('should be disable if we disable parent @button-disable', async ({ I }) => {
+  I.amOnPage('disable-button-in-object-editors.html')
+  I.waitForElement('.je-ready', DEFAULT_WAIT_TIME)
+  I.seeDisabledAttribute('[data-schemapath="root.some_button"] button')
+})

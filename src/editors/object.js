@@ -42,7 +42,7 @@ export class ObjectEditor extends AbstractEditor {
       super.enable()
       if (this.editors) {
         Object.values(this.editors).forEach(e => {
-          if (e.isActive()) {
+          if (e.isActive() || e.isUiOnly) {
             e.enable()
           }
           e.optInCheckbox.disabled = false
@@ -60,7 +60,7 @@ export class ObjectEditor extends AbstractEditor {
     super.disable()
     if (this.editors) {
       Object.values(this.editors).forEach(e => {
-        if (e.isActive()) {
+        if (e.isActive() || e.isUiOnly) {
           e.disable(alwaysDisabled)
         }
         e.optInCheckbox.disabled = true
