@@ -8,7 +8,6 @@ export class StringEditor extends AbstractEditor {
     if (this.jsoneditor.options.use_name_attributes) {
       this.input.setAttribute('name', this.formname)
     }
-    this.input.setAttribute('aria-label', this.formname)
   }
 
   unregister () {
