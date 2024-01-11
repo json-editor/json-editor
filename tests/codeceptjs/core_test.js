@@ -5,6 +5,45 @@ const { DEFAULT_WAIT_TIME } = require('./test-config')
 
 Feature('core')
 
+Scenario('should show validation errors based on "show_errors" setting @showValidationErrors', async ({ I }) => {
+  I.amOnPage('show-validation-errors.html')
+  I.waitForElement('.je-ready')
+  I.dontSee('Value must be the constant value.')
+  I.dontSee('Value must be the constant value.')
+  I.dontSee('Value must be the constant value.')
+
+  // set invalid values through interaction
+  I.checkOption('[name="root[boolean-checkbox]"]')
+  I.selectOption('[name="root[boolean-select]"]', '1')
+  I.selectOption('[name="root[boolean-choices]"]', '1')
+  I.uncheckOption('[name="root[boolean-checkbox]"]')
+  I.selectOption('[name="root[boolean-select]"]', 'false')
+  I.selectOption('[name="root[boolean-choices]"]', 'false')
+  I.waitForText('Value must be the constant value.', '[data-schemapath="root.boolean-checkbox"] .invalid-feedback')
+  I.waitForText('Value must be the constant value.', '[data-schemapath="root.boolean-select"] .invalid-feedback')
+  I.waitForText('Value must be the constant value.', '[data-schemapath="root.boolean-choices"] .invalid-feedback')
+
+  // set valid values through interaction
+  I.checkOption('[name="root[boolean-checkbox]"]')
+  I.selectOption('[name="root[boolean-select]"]', '1')
+  I.selectOption('[name="root[boolean-choices]"]', '1')
+  I.dontSee('Value must be the constant value.')
+  I.dontSee('Value must be the constant value.')
+  I.dontSee('Value must be the constant value.')
+
+  // set invalid values with setValue
+  I.click('#set-invalid-values')
+  I.waitForText('Value must be the constant value.', '[data-schemapath="root.boolean-checkbox"] .invalid-feedback')
+  I.waitForText('Value must be the constant value.', '[data-schemapath="root.boolean-select"] .invalid-feedback')
+  I.waitForText('Value must be the constant value.', '[data-schemapath="root.boolean-choices"] .invalid-feedback')
+
+  // set valid values with setValue
+  I.click('#set-valid-values')
+  I.dontSee('Value must be the constant value.')
+  I.dontSee('Value must be the constant value.')
+  I.dontSee('Value must be the constant value.')
+})
+
 Scenario('should listen to @load-events', async ({ I }) => {
   I.amOnPage('load-events.html')
   I.waitForElement('.je-ready')
