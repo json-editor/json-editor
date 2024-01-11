@@ -19,9 +19,9 @@ Scenario('should show validation errors based on "show_errors" setting @showVali
   I.uncheckOption('[name="root[boolean-checkbox]"]')
   I.selectOption('[name="root[boolean-select]"]', 'false')
   I.selectOption('[name="root[boolean-choices]"]', 'false')
-  I.waitForText('Value must be the constant value.', '[data-schemapath="root.boolean-checkbox"] .invalid-feedback')
-  I.waitForText('Value must be the constant value.', '[data-schemapath="root.boolean-select"] .invalid-feedback')
-  I.waitForText('Value must be the constant value.', '[data-schemapath="root.boolean-choices"] .invalid-feedback')
+  I.waitForText('Value must be the constant value.', DEFAULT_WAIT_TIME, '[data-schemapath="root.boolean-checkbox"] .invalid-feedback')
+  I.waitForText('Value must be the constant value.', DEFAULT_WAIT_TIME, '[data-schemapath="root.boolean-select"] .invalid-feedback')
+  I.waitForText('Value must be the constant value.', DEFAULT_WAIT_TIME, '[data-schemapath="root.boolean-choices"] .invalid-feedback')
 
   // set valid values through interaction
   I.checkOption('[name="root[boolean-checkbox]"]')
@@ -33,9 +33,9 @@ Scenario('should show validation errors based on "show_errors" setting @showVali
 
   // set invalid values with setValue
   I.click('#set-invalid-values')
-  I.waitForText('Value must be the constant value.', '[data-schemapath="root.boolean-checkbox"] .invalid-feedback')
-  I.waitForText('Value must be the constant value.', '[data-schemapath="root.boolean-select"] .invalid-feedback')
-  I.waitForText('Value must be the constant value.', '[data-schemapath="root.boolean-choices"] .invalid-feedback')
+  I.waitForText('Value must be the constant value.', DEFAULT_WAIT_TIME, '[data-schemapath="root.boolean-checkbox"] .invalid-feedback')
+  I.waitForText('Value must be the constant value.', DEFAULT_WAIT_TIME, '[data-schemapath="root.boolean-select"] .invalid-feedback')
+  I.waitForText('Value must be the constant value.', DEFAULT_WAIT_TIME, '[data-schemapath="root.boolean-choices"] .invalid-feedback')
 
   // set valid values with setValue
   I.click('#set-valid-values')
