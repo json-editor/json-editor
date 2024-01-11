@@ -408,7 +408,8 @@ const options = {
   use_default_values: true,
   max_depth: 0,
   button_state_mode: 1,
-  case_sensitive_property_search: true
+  case_sensitive_property_search: true,
+  show_errors: 'interaction'
 }
 
 /* This assignment was previously in index.js but makes more sense here */
