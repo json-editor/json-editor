@@ -39,9 +39,9 @@ Scenario('should show validation errors based on "show_errors" setting @showVali
 
   // set valid values with setValue
   I.click('#set-valid-values')
-  I.dontSee('Value must be the constant value.')
-  I.dontSee('Value must be the constant value.')
-  I.dontSee('Value must be the constant value.')
+  I.waitForInvisible('[data-schemapath="root.boolean-checkbox"] .invalid-feedback')
+  I.waitForInvisible('[data-schemapath="root.boolean-select"] .invalid-feedback')
+  I.waitForInvisible('[data-schemapath="root.boolean-choices"] .invalid-feedback')
 })
 
 Scenario('should listen to @load-events', async ({ I }) => {
