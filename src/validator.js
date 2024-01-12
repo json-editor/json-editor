@@ -133,7 +133,8 @@ export class Validator {
         return []
       },
       const (schema, value, path) {
-        const valid = JSON.stringify(schema.const) === JSON.stringify(value) && !(Array.isArray(value) || typeof value === 'object')
+        const valid = JSON.stringify(schema.const) === JSON.stringify(value)
+
         if (!valid) {
           return [{
             path,
