@@ -105,8 +105,15 @@ export class AbstractTheme {
     return el
   }
 
+  getLabelLike (text, req) {
+    const el = document.createElement('b')
+    el.appendChild(document.createTextNode(text))
+    if (req) el.classList.add('required')
+    return el
+  }
+
   getHeader (text, pathDepth) {
-    const el = document.createElement('h3')
+    const el = document.createElement('span')
     if (typeof text === 'string') {
       el.textContent = text
     } else {
@@ -177,13 +184,19 @@ export class AbstractTheme {
     return el
   }
 
-  getFormRadioControl (label, input, compact) {
+  getFormRadioControl (label, input, compact, formName) {
     const el = document.createElement('div')
     el.appendChild(label)
     input.style.width = 'auto'
     label.insertBefore(input, label.firstChild)
     if (compact) {
       el.classList.add('je-radio-control--compact')
+    }
+
+    if (input.tagName.toLowerCase() !== 'div' && formName && label && input) {
+      input.setAttribute('id', formName)
+      input.setAttribute('aria-labelledby', formName)
+      label.setAttribute('for', formName)
     }
 
     return el
@@ -222,6 +235,20 @@ export class AbstractTheme {
   getTextareaInput () {
     const el = document.createElement('textarea')
     el.classList.add('je-textarea')
+    return el
+  }
+
+  getHiddenLabel (text) {
+    const el = document.createElement('label')
+    el.textContent = text
+    el.setAttribute('style', 'position: absolute;width: 1px;height: 1px;padding: 0;margin: -1px;overflow: hidden;clip: rect(0,0,0,0);border: 0;')
+    return el
+  }
+
+  getHiddenText (text) {
+    const el = document.createElement('span')
+    el.textContent = text
+    el.setAttribute('style', 'position: absolute;width: 1px;height: 1px;padding: 0;margin: -1px;overflow: hidden;clip: rect(0,0,0,0);border: 0;')
     return el
   }
 
@@ -337,6 +364,12 @@ export class AbstractTheme {
     } else {
       if (infoText && label) label.appendChild(infoText)
       el.appendChild(input)
+    }
+
+    if (input.tagName.toLowerCase() !== 'div' && input && formName && label) {
+      input.setAttribute('id', formName)
+      input.setAttribute('aria-labelledby', formName)
+      label.setAttribute('for', formName)
     }
 
     if (description) el.appendChild(description)
