@@ -179,7 +179,7 @@ export class SelectEditor extends AbstractEditor {
       this.onInputChange()
     })
 
-    this.control = this.theme.getFormControl(this.label, this.input, this.description, this.infoButton)
+    this.control = this.theme.getFormControl(this.label, this.input, this.description, this.infoButton, this.formname)
     this.container.appendChild(this.control)
 
     this.value = this.enum_values[0]
