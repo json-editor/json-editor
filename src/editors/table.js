@@ -54,7 +54,7 @@ export class TableEditor extends ArrayEditor {
     this.width = tmp.getNumColumns() + 2
 
     if (!this.options.compact) {
-      this.header = document.createElement('label')
+      this.header = document.createElement('span')
       this.header.textContent = this.getTitle()
       this.title = this.theme.getHeader(this.header, this.getPathDepth())
       this.container.appendChild(this.title)
@@ -101,8 +101,9 @@ export class TableEditor extends ArrayEditor {
     this.row_holder.innerHTML = ''
 
     /* Row Controls column */
-    this.controls_header_cell = this.theme.getTableHeaderCell(' ')
+    this.controls_header_cell = this.theme.getTableHeaderCell(this.translate('table_controls'))
     this.controls_header_cell.setAttribute('aria-hidden', 'true')
+    this.controls_header_cell.style.visibility = 'hidden'
     this.header_row.appendChild(this.controls_header_cell)
 
     /* Add controls */

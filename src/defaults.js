@@ -359,7 +359,11 @@ languages.en = {
   /**
   * Warning when deleting a node
   */
-  button_delete_node_warning: 'Are you sure you want to remove this item?'
+  button_delete_node_warning: 'Are you sure you want to remove this item?',
+  /**
+   * Warning when deleting a node
+   */
+  table_controls: 'Controls'
 }
 
 /* Default per-editor options */
