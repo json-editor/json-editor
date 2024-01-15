@@ -46,6 +46,19 @@ export class ArraySelectizeEditor extends MultiSelectEditor {
       /* Add new event handler. */
       /* Note: Must use the "on()" method and not addEventListener() */
       this.selectize_instance.on('change', this.multiselectChangeHandler)
+
+      const label = this.theme.getHiddenLabel(this.formname)
+      this.input.setAttribute('id', this.formname + '-hidden-input')
+      label.setAttribute('for', this.formname + '-hidden-input')
+      this.input.parentNode.insertBefore(label, this.input)
+
+      const selectizeControl = this.selectize_instance.$control[0]
+
+      if (selectizeControl) {
+        const selectizeLabel = this.theme.getHiddenLabel(this.formname)
+        selectizeLabel.setAttribute('for', this.formname + '-selectized')
+        selectizeControl.appendChild(selectizeLabel)
+      }
     }
     super.afterInputReady()
   }
