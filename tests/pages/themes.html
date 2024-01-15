@@ -8,9 +8,10 @@
     <link rel='stylesheet' id='iconlib_stylesheet'>
   </head>
   <body>
+  <h1>Themes</h1>
   <div>
-    <label>theme</label>
-    <select id='theme_switcher' name="theme" class='form-control browser-default'>
+    <label for="theme_switcher">theme</label>
+    <select id="theme_switcher" name="theme" class="form-control browser-default">
       <option value=''></option>
       <option value='barebones'>Barebones</option>
       <option value='bootstrap2'>Bootstrap 2</option>
@@ -28,8 +29,8 @@
     </select>
   </div>
   <div>
-    <label>iconlib</label>
-    <select id='iconlib_switcher' name="iconlib" class='form-control browser-default'>
+    <label for="iconlib_switcher">iconlib</label>
+    <select id="iconlib_switcher" name="iconlib" class="form-control browser-default">
       <option value=''></option>
       <option value='bootstrap2'>Bootstrap 2</option>
       <option value='bootstrap3'>Bootstrap 3</option>
@@ -463,11 +464,8 @@
     const initJsoneditor = (theme, iconlib) => {
 
       if (jsoneditor) {
-        console.log('...destroy jsoneditor')
         jsoneditor.destroy();
       }
-
-      console.log('...init jsoneditor', theme, iconlib)
 
       jsoneditor = new window.JSONEditor(document.querySelector("#json-editor-form"), {
         schema: schema,
@@ -525,7 +523,6 @@
 
 
     initJsoneditor()
-
   </script>
   </body>
 </html>
