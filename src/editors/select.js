@@ -17,12 +17,14 @@ export class SelectEditor extends AbstractEditor {
 
     if (this.value === sanitized) return
 
-    if (initial) this.is_dirty = false
-    else if (this.jsoneditor.options.show_errors === 'change') this.is_dirty = true
-
     this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)]
 
     this.value = sanitized
+
+    if (!initial) {
+      this.is_dirty = true
+    }
+
     this.onChange()
     this.change()
   }
@@ -345,7 +347,17 @@ export class SelectEditor extends AbstractEditor {
   }
 
   showValidationErrors (errors) {
-    this.previous_error_setting = this.jsoneditor.options.show_errors
+    const showErrors = this.jsoneditor.options.show_errors
+    const changeOrInteraction = showErrors === 'change' || showErrors === 'interaction'
+    const never = showErrors === 'never'
+
+    if (never) {
+      return
+    }
+
+    if (changeOrInteraction && !this.is_dirty) {
+      return
+    }
 
     const addMessage = (messages, error) => {
       if (error.path === this.path) {
