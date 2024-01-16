@@ -6,6 +6,7 @@ export class ButtonEditor extends AbstractEditor {
   constructor (options, defaults) {
     super(options, defaults)
     this.active = false
+    this.isUiOnly = true
 
     /* Set field to required in schema otherwise it will not be displayed */
     if (this.parent && this.parent.schema) {
