@@ -342,7 +342,12 @@ export class ArrayEditor extends AbstractEditor {
     value = this.ensureArraySize(value)
 
     const serialized = JSON.stringify(value)
-    if (serialized === this.serialized) return
+    if (serialized === this.serialized) {
+      if (initial) {
+        this.refreshValue(initial)
+      }
+      return
+    }
 
     value.forEach((val, i) => {
       if (this.rows[i]) {
