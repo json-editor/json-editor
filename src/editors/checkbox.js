@@ -6,6 +6,11 @@ export class CheckboxEditor extends AbstractEditor {
     const changed = this.getValue() !== value
     this.value = value
     this.input.checked = this.value
+
+    if (!initial) {
+      this.is_dirty = true
+    }
+
     this.onChange(changed)
   }
 
@@ -50,6 +55,7 @@ export class CheckboxEditor extends AbstractEditor {
       e.preventDefault()
       e.stopPropagation()
       this.value = e.currentTarget.checked
+      this.is_dirty = true
       this.onChange(true)
     })
 
@@ -77,7 +83,17 @@ export class CheckboxEditor extends AbstractEditor {
   }
 
   showValidationErrors (errors) {
-    this.previous_error_setting = this.jsoneditor.options.show_errors
+    const showErrors = this.jsoneditor.options.show_errors
+    const changeOrInteraction = showErrors === 'change' || showErrors === 'interaction'
+    const never = showErrors === 'never'
+
+    if (never) {
+      return
+    }
+
+    if (changeOrInteraction && !this.is_dirty) {
+      return
+    }
 
     const addMessage = (messages, error) => {
       if (error.path === this.path) {
