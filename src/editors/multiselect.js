@@ -58,7 +58,7 @@ export class MultiSelectEditor extends AbstractEditor {
 
   build () {
     let i
-    if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
+    if (!this.options.compact) this.header = this.label = this.theme.getLabelLike(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.translateProperty(this.schema.description))
     if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.translateProperty(this.options.infoText))
     if (this.options.compact) this.container.classList.add('compact')
@@ -95,7 +95,7 @@ export class MultiSelectEditor extends AbstractEditor {
         this.select_options[this.option_keys[i]] = this.input.children[i]
       }
 
-      this.control = this.theme.getFormControl(this.label, this.input, this.description, this.infoButton)
+      this.control = this.theme.getFormControl(this.label, this.input, this.description, this.infoButton, this.formname)
     }
 
     if (this.schema.readOnly || this.schema.readonly) {

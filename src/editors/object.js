@@ -554,7 +554,7 @@ export class ObjectEditor extends AbstractEditor {
     } else {
       this.header = ''
       if (!this.options.compact) {
-        this.header = document.createElement('label')
+        this.header = document.createElement('span')
         this.header.textContent = this.getTitle()
       }
       this.title = this.theme.getHeader(this.header, this.getPathDepth())
@@ -568,7 +568,11 @@ export class ObjectEditor extends AbstractEditor {
 
       /* Edit JSON modal */
       this.editjson_holder = this.theme.getModal()
+      this.editjson_textarea_label = this.theme.getHiddenLabel(this.translate('button_edit_json'))
+      this.editjson_textarea_label.setAttribute('for', this.path + '-' + 'edit-json-textarea')
       this.editjson_textarea = this.theme.getTextareaInput()
+      this.editjson_textarea.setAttribute('id', this.path + '-' + 'edit-json-textarea')
+      this.editjson_textarea.setAttribute('aria-labelledby', this.path + '-' + 'edit-json-textarea')
       this.editjson_textarea.classList.add('je-edit-json--textarea')
       this.editjson_save = this.getButton('button_save', 'save', 'button_save')
       this.editjson_save.classList.add('json-editor-btntype-save')
@@ -591,6 +595,7 @@ export class ObjectEditor extends AbstractEditor {
         e.stopPropagation()
         this.hideEditJSON()
       })
+      this.editjson_holder.appendChild(this.editjson_textarea_label)
       this.editjson_holder.appendChild(this.editjson_textarea)
       this.editjson_holder.appendChild(this.editjson_save)
       this.editjson_holder.appendChild(this.editjson_copy)
@@ -605,7 +610,14 @@ export class ObjectEditor extends AbstractEditor {
 
       this.addproperty_input = this.theme.getFormInputField('text')
       this.addproperty_input.setAttribute('placeholder', 'Property name...')
+
+      this.addproperty_input_label = this.theme.getHiddenLabel(this.translate('button_properties'))
+      this.addproperty_input_label.setAttribute('for', this.path + '-' + 'property-selector')
+
       this.addproperty_input.classList.add('property-selector-input')
+      this.addproperty_input.setAttribute('id', this.path + '-' + 'property-selector')
+      this.addproperty_input.setAttribute('aria-labelledby', this.path + '-' + 'property-selector')
+
       this.addproperty_add.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
@@ -623,7 +635,7 @@ export class ObjectEditor extends AbstractEditor {
         }
       })
       this.addproperty_input.addEventListener('input', (e) => {
-        e.target.previousSibling.childNodes.forEach((value) => {
+        e.target.previousSibling.previousSibling.childNodes.forEach((value) => {
           let searchTerm = value.innerText
           let propertyTitle = e.target.value
 
@@ -642,6 +654,7 @@ export class ObjectEditor extends AbstractEditor {
         })
       })
       this.addproperty_holder.appendChild(this.addproperty_list)
+      this.addproperty_holder.appendChild(this.addproperty_input_label)
       this.addproperty_holder.appendChild(this.addproperty_input)
       this.addproperty_holder.appendChild(this.addproperty_add)
       const spacer = document.createElement('div')
@@ -901,7 +914,7 @@ export class ObjectEditor extends AbstractEditor {
 
     const label = this.theme.getCheckboxLabel(labelText)
 
-    const control = this.theme.getFormControl(label, checkbox)
+    const control = this.theme.getFormControl(label, checkbox, null, null, this.path + '-' + key)
     control.style.paddingBottom = control.style.marginBottom = control.style.paddingTop = control.style.marginTop = 0
     control.style.height = 'auto'
     /* control.style.overflowY = 'hidden'; */
