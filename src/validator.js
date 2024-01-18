@@ -918,9 +918,9 @@ export class Validator {
     }
 
     const validatorRx = {
-      date: /^(\d{4}\D\d{2}\D\d{2})?$/,
-      time: /^(\d{2}:\d{2}(?::\d{2})?)?$/,
-      'datetime-local': /^(\d{4}\D\d{2}\D\d{2}[ T]\d{2}:\d{2}(?::\d{2})?)?$/
+      date: /^(\d{4}\D\d{2}\D\d{2})$/,
+      time: /^(\d{2}:\d{2}(?::\d{2})?)$/,
+      'datetime-local': /^(\d{4}\D\d{2}\D\d{2}[ T]\d{2}:\d{2}(?::\d{2})?)$/
     }
     const format = {
       date: '"YYYY-MM-DD"',
@@ -946,6 +946,7 @@ export class Validator {
       /* Flatpickr validation */
       return _validateFlatPicker(schema, value, path, editor)
     }
+
     return []
   }
 
