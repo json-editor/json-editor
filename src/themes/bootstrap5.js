@@ -210,6 +210,14 @@ export class bootstrap5Theme extends AbstractTheme {
     return el
   }
 
+  visuallyHidden (element) {
+    if (!element) {
+      return
+    }
+
+    element.classList.add('visually-hidden')
+  }
+
   getHiddenText (text) {
     const el = document.createElement('span')
     el.textContent = text

@@ -261,6 +261,11 @@ export class AbstractEditor {
     this.setValue(this.getDefault(), true)
     this.updateHeaderText()
     this.onWatchedFieldChange()
+
+    if (this.options.titleHidden) {
+      this.theme.visuallyHidden(this.label)
+      this.theme.visuallyHidden(this.header)
+    }
   }
 
   setupWatchListeners () {
