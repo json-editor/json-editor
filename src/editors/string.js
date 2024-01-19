@@ -105,7 +105,7 @@ export class StringEditor extends AbstractEditor {
           step = this.schema.multipleOf
         }
 
-        this.input = this.theme.getRangeInput(min, max, step)
+        this.input = this.theme.getRangeInput(min, max, step, this.description, this.formname)
         this.input.setAttribute('id', this.formname)
         /* HTML5 Input type */
       } else {

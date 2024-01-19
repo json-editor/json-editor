@@ -75,8 +75,8 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
-  getRangeInput (min, max, step) {
-    const el = super.getRangeInput(min, max, step)
+  getRangeInput (min, max, step, description, formName) {
+    const el = super.getRangeInput(min, max, step, description, formName)
 
     if (this.options.custom_forms === true) {
       el.classList.remove('form-control')
@@ -247,7 +247,11 @@ export class bootstrap4Theme extends AbstractTheme {
     if (input.tagName.toLowerCase() !== 'div' && input && label && formName) {
       label.setAttribute('for', formName)
       input.setAttribute('id', formName)
-      input.setAttribute('aria-labelledby', formName)
+    }
+
+    if (input.tagName.toLowerCase() !== 'div' && input && description) {
+      description.setAttribute('id', formName + '-description')
+      input.setAttribute('aria-describedby', formName + '-description')
     }
 
     return group

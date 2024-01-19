@@ -55,7 +55,7 @@ export class AbstractEditor {
 
   register () {
     this.jsoneditor.registerEditor(this)
-    if (this.input) {
+    if (this.input && !this.label) {
       const ariaLabel = this.getTitle() || this.formname
       this.input.setAttribute('aria-label', ariaLabel)
     }
