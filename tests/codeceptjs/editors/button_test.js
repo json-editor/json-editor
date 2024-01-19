@@ -31,7 +31,7 @@ Scenario('should not leave any footprints in result', async ({ I }) => {
   I.waitForValue('.value', JSON.stringify({ textinput: '' }))
 })
 
-Scenario('should be disabled if "readonly" is specified', async ({ I }) => {
+Scenario('should be disabled if "readonly" is specified @readOnly', async ({ I }) => {
   I.amOnPage('read-only.html')
   I.waitForElement('.je-ready', DEFAULT_WAIT_TIME)
   I.seeDisabledAttribute('[data-schemapath="root.button"] button')
