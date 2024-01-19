@@ -5,6 +5,13 @@ const { DEFAULT_WAIT_TIME } = require('../test-config')
 
 Feature('object')
 
+Scenario('should be readonly if specified and not disabled @readOnly', async ({ I }) => {
+  I.amOnPage('read-only.html')
+  I.waitForElement('.je-ready', DEFAULT_WAIT_TIME)
+  I.seeDisabledAttribute('[name="root[object][string]"]')
+  I.seeDisabledAttribute('[name="root[object][number]"]')
+})
+
 Scenario('@case-sensitive-property-search', async ({ I }) => {
   I.amOnPage('object-case-sensitive-property-search-true.html')
   I.click('.json-editor-btn-edit_properties')
