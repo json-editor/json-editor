@@ -8,7 +8,6 @@ export class StringEditor extends AbstractEditor {
     if (this.jsoneditor.options.use_name_attributes) {
       this.input.setAttribute('name', this.formname)
     }
-    this.input.setAttribute('aria-label', this.formname)
   }
 
   unregister () {
@@ -107,6 +106,7 @@ export class StringEditor extends AbstractEditor {
         }
 
         this.input = this.theme.getRangeInput(min, max, step)
+        this.input.setAttribute('id', this.formname)
         /* HTML5 Input type */
       } else {
         this.input_type = 'text'

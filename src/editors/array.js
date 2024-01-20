@@ -93,7 +93,7 @@ export class ArrayEditor extends AbstractEditor {
 
   build () {
     if (!this.options.compact) {
-      this.header = document.createElement('label')
+      this.header = document.createElement('span')
       this.header.textContent = this.getTitle()
       this.title = this.theme.getHeader(this.header, this.getPathDepth())
       this.container.appendChild(this.title)

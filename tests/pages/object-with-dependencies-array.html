@@ -1,11 +1,13 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <title>object with dependencies array</title>
   <meta charset="utf-8">
   <script src="../../dist/jsoneditor.js"></script>
 </head>
 
 <body>
+<h1>Test</h1>
 <div id="editor"></div>
 <script>
   const schema = {
@@ -18,7 +20,7 @@
         'enum': ['a', 'b', 'c', 'd']
       },
       'question_1_feedback': {
-        'type': 'info',
+        'format': 'info',
         'title': 'Question 1 is correct',
         "options": {
           "dependencies": {
@@ -36,7 +38,7 @@
         }
       },
       'question_2_feedback': {
-        'type': 'info',
+        'format': 'info',
         'title': 'Question 2 is correct',
         "options": {
           "dependencies": {

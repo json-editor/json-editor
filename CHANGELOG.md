@@ -1,5 +1,11 @@
 ### Unreleased
 
+### 2.13.2
+
+- Fixed early validation with boolean types
+- Refactored copy command using navigator
+- Fixed const validator when validating arrays and objects
+- Fixed issue format buttons disable state
 - Fixed issue #1453 setup buttons in array editor correctly if editor is initially collapsed
 - Fixed issue #1461 setup buttons in array editor correctly if there exists another enum-typed property for which the default value does not equal to the first value
 - Fixed issue #1466 memory leak in array editor

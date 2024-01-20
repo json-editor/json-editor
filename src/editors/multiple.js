@@ -208,11 +208,16 @@ export class MultipleEditor extends AbstractEditor {
 
   build () {
     const { container } = this
-    this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
+    this.header = this.label = this.theme.getLabelLike(this.getTitle(), this.isRequired())
     this.switcher = this.theme.getSwitcher(this.display_text)
+    this.switcher.setAttribute('id', this.formname + 'switcher')
+
+    this.switcherLabel = this.theme.getHiddenLabel(this.formname + ' switcher')
+    this.switcherLabel.setAttribute('for', this.formname + 'switcher')
 
     if (!this.if) {
       this.container.appendChild(this.header)
+      container.appendChild(this.switcherLabel)
       container.appendChild(this.switcher)
     }
 
