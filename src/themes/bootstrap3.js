@@ -57,6 +57,14 @@ export class bootstrap3Theme extends AbstractTheme {
     return el
   }
 
+  visuallyHidden (element) {
+    if (!element) {
+      return
+    }
+
+    element.classList.add('sr-only')
+  }
+
   getHiddenText (text) {
     const el = document.createElement('span')
     el.textContent = text

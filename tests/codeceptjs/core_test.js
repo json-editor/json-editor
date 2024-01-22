@@ -5,6 +5,17 @@ const { DEFAULT_WAIT_TIME } = require('./test-config')
 
 Feature('core')
 
+Scenario('should hide titles @titleHidden', async ({ I }) => {
+  I.amOnPage('title-hidden.html')
+  I.waitForElement('.je-ready')
+  I.waitForText('root', DEFAULT_WAIT_TIME, '.sr-only')
+  I.waitForText('boolean', DEFAULT_WAIT_TIME, '.sr-only')
+  I.waitForText('integer', DEFAULT_WAIT_TIME, '.sr-only')
+  I.waitForText('number', DEFAULT_WAIT_TIME, '.sr-only')
+  I.waitForText('string', DEFAULT_WAIT_TIME, '.sr-only')
+  I.waitForText('array', DEFAULT_WAIT_TIME, '.sr-only')
+})
+
 Scenario('should show validation errors based on "show_errors" setting @showValidationErrors', async ({ I }) => {
   I.amOnPage('show-validation-errors.html')
   I.waitForElement('.je-ready')
