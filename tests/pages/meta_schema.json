@@ -646,6 +646,9 @@
           "default": {},
           "defaultProperties": {},
           "properties": {
+            "titleHidden": {
+              "type": "boolean"
+            },
             "enum_titles": {
               "type": "array",
               "uniqueItems": true,
