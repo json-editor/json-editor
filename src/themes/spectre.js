@@ -400,6 +400,7 @@ export class spectreTheme extends AbstractTheme {
     }
     input.errmsg.classList.remove('d-hide')
     input.errmsg.textContent = text
+    input.errmsg.setAttribute('role', 'alert')
   }
 
   removeInputError (input) {

@@ -57,6 +57,7 @@ export class htmlTheme extends AbstractTheme {
 
     input.errmsg.innerHTML = ''
     input.errmsg.appendChild(document.createTextNode(text))
+    input.errmsg.setAttribute('role', 'alert')
   }
 
   removeInputError (input) {

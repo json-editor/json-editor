@@ -202,6 +202,7 @@ export class bootstrap3Theme extends AbstractTheme {
     }
 
     input.errmsg.textContent = text
+    input.errmsg.setAttribute('role', 'alert')
   }
 
   removeInputError (input) {

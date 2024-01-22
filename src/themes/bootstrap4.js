@@ -516,6 +516,7 @@ export class bootstrap4Theme extends AbstractTheme {
 
     input.errmsg.style.display = 'block'
     input.errmsg.textContent = text
+    input.errmsg.setAttribute('role', 'alert')
   }
 
   removeInputError (input) {

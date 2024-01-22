@@ -498,6 +498,7 @@ export class AbstractTheme {
   }
 
   addInputError (input, text) {
+    input.errmsg.setAttribute('role', 'alert')
   }
 
   removeInputError (input) {
