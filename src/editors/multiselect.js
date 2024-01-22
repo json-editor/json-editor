@@ -85,6 +85,7 @@ export class MultiSelectEditor extends AbstractEditor {
       this.control = this.theme.getMultiCheckboxHolder(this.controls, this.label, this.description, this.infoButton)
       this.inputs.controlgroup = this.inputs.controls = this.control /* Enable error messages for checkboxes */
     } else {
+      if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
       this.input_type = 'select'
       this.input = this.theme.getSelectInput(this.option_keys, true)
       this.theme.setSelectOptions(this.input, this.option_keys, this.option_enum.map(e => e.title))

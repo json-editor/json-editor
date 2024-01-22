@@ -99,7 +99,7 @@ export class spectreTheme extends AbstractTheme {
   }
 
   getHeader (text, pathDepth) {
-    const el = document.createElement('h4')
+    const el = document.createElement('span')
     if (typeof text === 'string') {
       el.textContent = text
     } else {
@@ -182,14 +182,11 @@ export class spectreTheme extends AbstractTheme {
   }
 
   /* Create input field for type="range" */
-  getRangeInput (min, max, step) {
-    const el = this.getFormInputField('range')
+  getRangeInput (min, max, step, description, formName) {
+    const el = super.getRangeInput(min, max, step, description, formName)
     el.classList.add('slider')
     el.classList.remove('form-input')
     el.setAttribute('oninput', 'this.setAttribute("value", this.value)')
-    el.setAttribute('min', min)
-    el.setAttribute('max', max)
-    el.setAttribute('step', step)
     return el
   }
 
@@ -213,7 +210,7 @@ export class spectreTheme extends AbstractTheme {
     return el
   }
 
-  getFormControl (label, input, description, infoText) {
+  getFormControl (label, input, description, infoText, formName) {
     const group = document.createElement('div')
     group.classList.add('form-group')
 
@@ -236,6 +233,16 @@ export class spectreTheme extends AbstractTheme {
     if (input.type !== 'checkbox') group.appendChild(input)
 
     if (description) group.appendChild(description)
+
+    if (input.tagName.toLowerCase() !== 'div' && input && label && formName) {
+      label.setAttribute('for', formName)
+      input.setAttribute('id', formName)
+    }
+
+    if (input.tagName.toLowerCase() !== 'div' && input && description) {
+      description.setAttribute('id', formName + '-description')
+      input.setAttribute('aria-describedby', formName + '-description')
+    }
 
     return group
   }
@@ -393,6 +400,7 @@ export class spectreTheme extends AbstractTheme {
     }
     input.errmsg.classList.remove('d-hide')
     input.errmsg.textContent = text
+    input.errmsg.setAttribute('role', 'alert')
   }
 
   removeInputError (input) {

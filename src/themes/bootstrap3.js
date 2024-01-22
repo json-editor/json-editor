@@ -37,9 +37,9 @@ export class bootstrap3Theme extends AbstractTheme {
     return el
   }
 
-  getRangeInput (min, max, step) {
+  getRangeInput (min, max, step, description, formName) {
     /* TODO: use better slider */
-    return super.getRangeInput(min, max, step)
+    return super.getRangeInput(min, max, step, description, formName)
   }
 
   getFormInputField (type) {
@@ -87,7 +87,11 @@ export class bootstrap3Theme extends AbstractTheme {
     if (input.tagName.toLowerCase() !== 'div' && input && label && formName) {
       label.setAttribute('for', formName)
       input.setAttribute('id', formName)
-      input.setAttribute('aria-labelledby', formName)
+    }
+
+    if (input.tagName.toLowerCase() !== 'div' && input && description) {
+      description.setAttribute('id', formName + '-description')
+      input.setAttribute('aria-describedby', formName + '-description')
     }
 
     return group
@@ -198,6 +202,7 @@ export class bootstrap3Theme extends AbstractTheme {
     }
 
     input.errmsg.textContent = text
+    input.errmsg.setAttribute('role', 'alert')
   }
 
   removeInputError (input) {

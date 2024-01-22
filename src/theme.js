@@ -252,11 +252,17 @@ export class AbstractTheme {
     return el
   }
 
-  getRangeInput (min, max, step) {
+  getRangeInput (min, max, step, description, formName) {
     const el = this.getFormInputField('range')
     el.setAttribute('min', min)
     el.setAttribute('max', max)
     el.setAttribute('step', step)
+
+    if (description) {
+      description.setAttribute('id', formName + '-description')
+      el.setAttribute('aria-describedby', formName + '-description')
+    }
+
     return el
   }
 
@@ -324,7 +330,7 @@ export class AbstractTheme {
     return div
   }
 
-  getRangeOutput (input, startvalue) {
+  getRangeOutput (input) {
     const output = document.createElement('output')
     const updateOutput = e => { output.value = e.currentTarget.value }
     input.addEventListener('change', updateOutput, false)
@@ -366,10 +372,14 @@ export class AbstractTheme {
       el.appendChild(input)
     }
 
-    if (input.tagName.toLowerCase() !== 'div' && input && formName && label) {
-      input.setAttribute('id', formName)
-      input.setAttribute('aria-labelledby', formName)
+    if (input.tagName.toLowerCase() !== 'div' && input && label && formName) {
       label.setAttribute('for', formName)
+      input.setAttribute('id', formName)
+    }
+
+    if (input.tagName.toLowerCase() !== 'div' && input && description) {
+      description.setAttribute('id', formName + '-description')
+      input.setAttribute('aria-describedby', formName + '-description')
     }
 
     if (description) el.appendChild(description)
@@ -488,6 +498,7 @@ export class AbstractTheme {
   }
 
   addInputError (input, text) {
+    input.errmsg.setAttribute('role', 'alert')
   }
 
   removeInputError (input) {

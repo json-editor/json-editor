@@ -68,8 +68,8 @@ export class bootstrap5Theme extends AbstractTheme {
     return el
   }
 
-  getRangeInput (min, max, step) {
-    const el = super.getRangeInput(min, max, step)
+  getRangeInput (min, max, step, description, formName) {
+    const el = super.getRangeInput(min, max, step, description, formName)
     el.classList.remove('form-control')
     el.classList.add('form-range')
     return el
@@ -177,7 +177,11 @@ export class bootstrap5Theme extends AbstractTheme {
       if (input.tagName.toLowerCase() !== 'div' && input && label && formName) {
         label.setAttribute('for', formName)
         input.setAttribute('id', formName)
-        input.setAttribute('aria-labelledby', formName)
+      }
+
+      if (input.tagName.toLowerCase() !== 'div' && input && description) {
+        description.setAttribute('id', formName + '-description')
+        input.setAttribute('aria-describedby', formName + '-description')
       }
 
       check.appendChild(input)
@@ -453,6 +457,7 @@ export class bootstrap5Theme extends AbstractTheme {
 
     input.errmsg.style.display = 'block'
     input.errmsg.textContent = text
+    input.errmsg.setAttribute('role', 'alert')
   }
 
   removeInputError (input) {
