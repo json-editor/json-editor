@@ -98,7 +98,7 @@ Scenario('Should work correctly in arrays @optional', async ({ I }) => {
   I.switchTo()
 })
 
-Scenario('should be readonly if specified and not disabled', async ({ I }) => {
+Scenario('should be readonly if specified and not disabled @readOnly', async ({ I }) => {
   I.amOnPage('read-only.html')
   I.seeReadOnlyAttribute('[name="root[string]"]')
 })

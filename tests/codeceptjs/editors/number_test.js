@@ -72,7 +72,7 @@ Scenario('should respect step by incrementing and decrementing the value of a ra
   I.waitForValue('.value', '{"number":5.75,"number_number":5.75,"number_range":5.75,"stepper_number_default":5,"stepper_integer_default":5}')
 })
 
-Scenario('should be readonly if specified and not disabled @number', async ({ I }) => {
+Scenario('should be readonly if specified and not disabled @number @readOnly', async ({ I }) => {
   I.amOnPage('read-only.html')
   I.seeReadOnlyAttribute('[name="root[number]"]')
 })

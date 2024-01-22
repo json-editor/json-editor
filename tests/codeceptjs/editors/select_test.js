@@ -2,7 +2,7 @@
 
 Feature('select')
 
-Scenario('should return correct booleans values when selected', async ({ I }) => {
+Scenario('should return correct booleans values when selected @readOnly', async ({ I }) => {
   I.amOnPage('select.html')
   I.click('.get-value')
   I.waitForValue('.value', '{"boolean":true}')

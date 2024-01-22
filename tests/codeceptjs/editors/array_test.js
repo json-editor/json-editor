@@ -4,6 +4,13 @@ const { DEFAULT_WAIT_TIME } = require('../test-config')
 
 Feature('array')
 
+Scenario('should be readonly if specified and not disabled @readOnly', async ({ I }) => {
+  I.amOnPage('read-only.html')
+  I.waitForElement('.je-ready', DEFAULT_WAIT_TIME)
+  I.seeDisabledAttribute('[name="root[array][0]"]')
+  I.seeDisabledAttribute('[name="root[array][1]"]')
+})
+
 Scenario('Should display properties enum titles in items headerTemplate @headerTemplate', async ({ I }) => {
   I.amOnPage('array-header-template.html')
   I.waitForElement('.je-ready', DEFAULT_WAIT_TIME)

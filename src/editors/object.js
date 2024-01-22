@@ -815,6 +815,10 @@ export class ObjectEditor extends AbstractEditor {
       /* Do it again now that we know the approximate heights of elements */
       this.layoutEditors()
     }
+
+    if (this.schema.readOnly || this.schema.readonly) {
+      this.disable()
+    }
   }
 
   deactivateNonRequiredProperties () {

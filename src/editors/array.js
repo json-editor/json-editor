@@ -156,6 +156,14 @@ export class ArrayEditor extends AbstractEditor {
     this.addControls()
   }
 
+  postBuild () {
+    super.postBuild()
+
+    if (this.schema.readOnly || this.schema.readonly) {
+      this.disable()
+    }
+  }
+
   onChildEditorChange (editor) {
     this.refreshValue()
     this.refreshTabs(true)
