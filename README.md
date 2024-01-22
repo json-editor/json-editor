@@ -1196,6 +1196,7 @@ Editor Options
 
 Editors can accept options which alter the behavior in some way.
 
+* `titleHidden` - If set to true, the editor title will be visually hidden
 * `collapsed` - If set to true, the editor will start collapsed (works for objects and arrays)
 * `disable_array_add` - If set to true, the "add row" button will be hidden (works for arrays)
 * `disable_array_delete` - If set to true, all of the "delete" buttons will be hidden (works for arrays)
