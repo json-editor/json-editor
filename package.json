@@ -2,7 +2,7 @@
   "name": "@json-editor/json-editor",
   "title": "JSONEditor",
   "description": "JSON Schema based editor",
-  "version": "2.13.2",
+  "version": "2.14.0",
   "main": "dist/jsoneditor.js",
   "author": {
     "name": "Jeremy Dorn",

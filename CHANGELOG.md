@@ -1,5 +1,13 @@
 ### Unreleased
 
+### 2.14.0
+
+- Added new editor option "titleHidden"
+- Integrated "readOnly" for array and object editors
+- Fixed date, time and datetime-local validator
+- Fixed several accessibility issues. Note: Some forms may have new/modified attributes ("aria", "id", "for" and more)
+- Updated "format": "info" editors documentation
+
 ### 2.13.2
 
 - Fixed early validation with boolean types
