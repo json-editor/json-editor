@@ -188,7 +188,21 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
-  getFormControl (label, input, description, infoText) {
+  getHiddenLabel (text) {
+    const el = document.createElement('label')
+    el.textContent = text
+    el.classList.add('sr-only')
+    return el
+  }
+
+  getHiddenText (text) {
+    const el = document.createElement('span')
+    el.textContent = text
+    el.classList.add('sr-only')
+    return el
+  }
+
+  getFormControl (label, input, description, infoText, formName) {
     const group = document.createElement('div')
     group.classList.add('form-group')
 
@@ -211,10 +225,6 @@ export class bootstrap4Theme extends AbstractTheme {
         }
       }
 
-      const unique = (Date.now() * Math.random()).toFixed(0)
-      input.setAttribute('id', unique)
-      label.setAttribute('for', unique)
-
       check.appendChild(input)
       check.appendChild(label)
       if (infoText) check.appendChild(infoText)
@@ -232,6 +242,12 @@ export class bootstrap4Theme extends AbstractTheme {
 
     if (description) {
       group.appendChild(description)
+    }
+
+    if (input.tagName.toLowerCase() !== 'div' && input && label && formName) {
+      label.setAttribute('for', formName)
+      input.setAttribute('id', formName)
+      input.setAttribute('aria-labelledby', formName)
     }
 
     return group
@@ -406,10 +422,8 @@ export class bootstrap4Theme extends AbstractTheme {
   }
 
   getHeader (text, pathDepth) {
-    /* var cardHeader = document.createElement('div') */
-    /* cardHeader.classList.add('card-header') */
-
-    const el = document.createElement('h3')
+    const el = document.createElement('span')
+    el.classList.add('h3')
     el.classList.add('card-title')
     el.classList.add('level-' + pathDepth)
 
@@ -420,8 +434,6 @@ export class bootstrap4Theme extends AbstractTheme {
     }
 
     el.style.display = 'inline-block'
-
-    /* cardHeader.appendChild(el) */
 
     return el
   }

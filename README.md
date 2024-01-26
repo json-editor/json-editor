@@ -1003,7 +1003,7 @@ Displays a label and a description text.
 
 ```json
 {
-  "type": "info",
+  "format": "info",
   "title": "Important:",
   "description": "Lorem ipsum dolor"
 }

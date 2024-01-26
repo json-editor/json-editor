@@ -359,7 +359,11 @@ languages.en = {
   /**
   * Warning when deleting a node
   */
-  button_delete_node_warning: 'Are you sure you want to remove this item?'
+  button_delete_node_warning: 'Are you sure you want to remove this item?',
+  /**
+   * Warning when deleting a node
+   */
+  table_controls: 'Controls'
 }
 
 /* Default per-editor options */
@@ -408,7 +412,8 @@ const options = {
   use_default_values: true,
   max_depth: 0,
   button_state_mode: 1,
-  case_sensitive_property_search: true
+  case_sensitive_property_search: true,
+  show_errors: 'interaction'
 }
 
 /* This assignment was previously in index.js but makes more sense here */

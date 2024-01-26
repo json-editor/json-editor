@@ -55,6 +55,10 @@ export class AbstractEditor {
 
   register () {
     this.jsoneditor.registerEditor(this)
+    if (this.input) {
+      const ariaLabel = this.getTitle() || this.formname
+      this.input.setAttribute('aria-label', ariaLabel)
+    }
     this.onChange()
   }
 
@@ -211,9 +215,12 @@ export class AbstractEditor {
   setOptInCheckbox (header) {
     /* the active/deactive checbox control. */
 
+    this.optInLabel = this.theme.getHiddenLabel(this.formname + ' opt-in')
+    this.optInLabel.setAttribute('for', this.formname + '-opt-in')
     this.optInCheckbox = document.createElement('input')
     this.optInCheckbox.setAttribute('type', 'checkbox')
     this.optInCheckbox.setAttribute('style', 'margin: 0 10px 0 0;')
+    this.optInCheckbox.setAttribute('id', this.formname + '-opt-in')
     this.optInCheckbox.classList.add('json-editor-opt-in')
 
     this.optInCheckbox.addEventListener('click', () => {
@@ -232,6 +239,7 @@ export class AbstractEditor {
     if (parentOptInEnabled || (!parentOptInDisabled && globalOptIn) || (!parentOptInDefined && globalOptIn)) {
       /* and control to type object editors if they are not required */
       if (this.parent && this.parent.schema.type === 'object' && !this.isRequired() && this.header) {
+        this.header.appendChild(this.optInLabel)
         this.header.appendChild(this.optInCheckbox)
         this.header.insertBefore(this.optInCheckbox, this.header.firstChild)
       }
@@ -627,7 +635,7 @@ export class AbstractEditor {
   }
 
   getTitle () {
-    return this.translateProperty(this.schema.title || this.key)
+    return this.translateProperty(this.schema.title || this.key || this.formname)
   }
 
   enable () {

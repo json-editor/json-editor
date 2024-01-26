@@ -50,7 +50,21 @@ export class bootstrap3Theme extends AbstractTheme {
     return el
   }
 
-  getFormControl (label, input, description, infoText) {
+  getHiddenLabel (text) {
+    const el = document.createElement('label')
+    el.textContent = text
+    el.classList.add('sr-only')
+    return el
+  }
+
+  getHiddenText (text) {
+    const el = document.createElement('span')
+    el.textContent = text
+    el.classList.add('sr-only')
+    return el
+  }
+
+  getFormControl (label, input, description, infoText, formName) {
     const group = document.createElement('div')
 
     if (label && (input.type === 'checkbox' || input.type === 'radio')) {
@@ -69,6 +83,12 @@ export class bootstrap3Theme extends AbstractTheme {
     }
 
     if (description) group.appendChild(description)
+
+    if (input.tagName.toLowerCase() !== 'div' && input && label && formName) {
+      label.setAttribute('for', formName)
+      input.setAttribute('id', formName)
+      input.setAttribute('aria-labelledby', formName)
+    }
 
     return group
   }
@@ -115,6 +135,19 @@ export class bootstrap3Theme extends AbstractTheme {
     el.classList.add('help-block')
     if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text)
     else el.textContent = this.cleanText(text)
+    return el
+  }
+
+  getHeader (text, pathDepth) {
+    const el = document.createElement('span')
+    el.classList.add('h3')
+
+    if (typeof text === 'string') {
+      el.textContent = text
+    } else {
+      el.appendChild(text)
+    }
+
     return el
   }
 
