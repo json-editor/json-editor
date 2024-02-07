@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>GitHub Issue 1466</title>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script src="../../../dist/nonmin/jsoneditor.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <textarea class="form-control" id="value" cols="30" rows="10"></textarea>
+      <a href="https://github.com/json-editor/json-editor/issues/1466">GitHub Issue 1466</a>
+      
+      <p>Remove Item 2, then destroy editor. The row of Item 2 which is only stored in the cache is not destroyed.</p>
+      <div id='editor_holder'></div>
+      <button onclick="start()">start </button>
+      <button onclick="destroyEditor()">destroyEditor </button>
+    </div>
+
+    <script>
+      var value = document.querySelector('#value')
+      var editor;
+      function start()
+      {
+        var defaultSchema = {
+          "type": "object",
+          "properties": {
+            "array": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": { 
+                  "someProperty": { 
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        editor = new JSONEditor(document.getElementById('editor_holder'), {
+          iconlib: 'fontawesome5',
+          schema: defaultSchema,
+          show_errors: 'always',
+        })
+
+        editor.on('ready', function () {
+          editor.setValue({       "array": [{ someProperty: "Item 1" }, { someProperty: "Item 2" }, { someProperty: "Item 3" }]    })
+        })
+      }
+
+      function destroyEditor()
+      {
+        editor.destroy();
+        editor = undefined;
+      }
+    </script>
+  </body>
+</html>

@@ -16,6 +16,7 @@
 - Fixed issue format buttons disable state
 - Fixed issue #1453 setup buttons in array editor correctly if editor is initially collapsed
 - Fixed issue #1461 setup buttons in array editor correctly if there exists another enum-typed property for which the default value does not equal to the first value
+- Fixed issue #1466 memory leak in array editor
 
 ### 2.13.1
 

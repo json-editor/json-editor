@@ -283,7 +283,7 @@ export class ArrayEditor extends AbstractEditor {
   }
 
   empty (hard) {
-    if (!this.rows) return
+    if (this.rows === null) return
 
     this.rows.forEach((row, i) => {
       if (hard) {
@@ -293,6 +293,12 @@ export class ArrayEditor extends AbstractEditor {
       }
       this.rows[i] = null
     })
+    if (hard) {
+      for (let j = this.rows.length; j < this.row_cache.length; j++) {
+        this.destroyRow(this.row_cache[j], true)
+        this.row_cache[j] = null
+      }
+    }
     this.rows = []
     if (hard) this.row_cache = []
   }
