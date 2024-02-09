@@ -19,6 +19,10 @@ export class RadioEditor extends SelectEditor {
     const radioInputEventhandler = e => {
       this.setValue(e.currentTarget.value)
       this.onChange(true)
+
+      this.radioGroup.forEach((radio) => {
+        radio.checked = (radio.value === this.getValue())
+      })
     }
 
     for (let i = 0; i < this.enum_values.length; i++) {
