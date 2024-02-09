@@ -22,11 +22,6 @@ export class bootstrap3Theme extends AbstractTheme {
     if (this.closest(input, '.compact')) {
       input.controlgroup.style.marginBottom = 0
     }
-    if (this.queuedInputErrorText) {
-      const text = this.queuedInputErrorText
-      delete this.queuedInputErrorText
-      this.addInputError(input, text)
-    }
 
     /* TODO: use bootstrap slider */
   }
@@ -197,7 +192,6 @@ export class bootstrap3Theme extends AbstractTheme {
 
   addInputError (input, text) {
     if (!input.controlgroup) {
-      this.queuedInputErrorText = text
       return
     }
     input.controlgroup.classList.add('has-error')
@@ -214,9 +208,6 @@ export class bootstrap3Theme extends AbstractTheme {
   }
 
   removeInputError (input) {
-    if (!input.controlgroup) {
-      delete this.queuedInputErrorText
-    }
     if (!input.errmsg) return
     input.errmsg.style.display = 'none'
     input.controlgroup.classList.remove('has-error')
