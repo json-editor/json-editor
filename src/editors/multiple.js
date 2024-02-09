@@ -107,6 +107,10 @@ export class MultipleEditor extends AbstractEditor {
       }
     }
 
+    if (schema?.options?.dependencies) {
+      delete schema.options.dependencies
+    }
+
     const editor = this.jsoneditor.getEditorClass(schema)
 
     this.editors[i] = this.jsoneditor.createEditor(editor, {

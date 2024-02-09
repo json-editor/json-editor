@@ -535,7 +535,7 @@ export class AbstractEditor {
       })
 
       // object properties
-      if (Object.keys(this.editors).length) {
+      if (this.editors && Object.keys(this.editors).length) {
         vars.properties = {}
 
         Object.keys(this.editors).forEach((key) => {
