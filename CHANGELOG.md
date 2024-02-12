@@ -1,5 +1,14 @@
 ### Unreleased
 
+### 2.14.1
+
+- Fixed issue #1272 Multiple editor incorrect dependency inheritance
+- Improved Multiple editor accessibility
+- Fixed issue #1485 Infinite loop due to template rendering bug
+- Fixed issue #1171 Radio inputs without names having multiple checking marks
+- Fixed issue #1491 Wrong error messages displayed in some edge scenarios
+- Fixed issue #1466 memory leak in array editor
+
 ### 2.14.0
 
 - Added new editor option "titleHidden"
