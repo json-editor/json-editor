@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>GitHub Issue 1272</title>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script src="../../../dist/jsoneditor.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Test</h1>
+      <a href="https://github.com/json-editor/json-editor/issues/1272">Link to issue</a>
+      <div id='editor_holder'></div>
+    </div>
+
+    <script>
+      const value = document.querySelector('#value')
+      const defaultSchema = {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "title": "&nbsp;",
+        "description": "&nbsp;",
+        "type": "object",
+        "format": "categories",
+        "options": {
+          "keep_oneof_values": false,
+          "disable_collapse": true
+        },
+        "properties": {
+          "recorder": {
+            "title": "Recorder",
+            "type": "object",
+            "format": "grid-strict",
+            "properties": {
+              "albums": {
+                "title": "Select album:",
+                "type": "string",
+                "options": {
+                  "grid_columns": 2
+                },
+                "enum": [
+                  "album1",
+                  "album2"
+                ]
+              },
+              "album1": {
+                "title": "&nbsp;",
+                "type": "object",
+                "format": "grid-strict",
+                "options": {
+                  "disable_collapse": true,
+                  "dependencies": {
+                    "albums": "album1"
+                  }
+                },
+                "required": [
+                  "song1",
+                  "song2"
+                ],
+                "properties": {
+                  "song1": {
+                    "options": {
+                      "grid_columns": 4
+                    },
+                    "type": "string"
+                  },
+                  "song2": {
+                    "options": {
+                      "grid_columns": 4
+                    },
+                    "type": "string"
+                  }
+                }
+              },
+              "album2": {
+                "title": "&nbsp;",
+                "options": {
+                  "dependencies": {
+                    "albums": "album2"
+                  }
+                },
+                "oneOf": [
+                  {
+                    "title": "SideA",
+                    "type": "object",
+                    "format": "grid-strict",
+                    "options": {
+                      "disable_collapse": true
+                    },
+                    "required": [
+                      "song1",
+                      "song2"
+                    ],
+                    "properties": {
+                      "song1": {
+                        "options": {
+                          "grid_columns": 3
+                        },
+                        "type": "string"
+                      },
+                      "song2": {
+                        "options": {
+                          "grid_columns": 3
+                        },
+                        "type": "string"
+                      }
+                    }
+                  },
+                  {
+                    "title": "SideB",
+                    "type": "object",
+                    "format": "grid-strict",
+                    "options": {
+                      "disable_collapse": true
+                    },
+                    "required": [
+                      "songs"
+                    ],
+                    "properties": {
+                      "songs": {
+                        "title": "array editor",
+                        "type": "array",
+                        "format": "table",
+                        "uniqueItems": true,
+                        "items": {
+                          "title": "song",
+                          "type": "object",
+                          "options": {
+                            "disable_collapse": true
+                          },
+                          "properties": {
+                            "song": {
+                              "type": "integer",
+                              "enum": [
+                                1,
+                                2,
+                                3,
+                                4,
+                                5
+                              ]
+                            },
+                            "title": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+
+      const editor = new JSONEditor(document.getElementById('editor_holder'), {
+        iconlib: 'fontawesome5',
+        schema: defaultSchema,
+        theme: 'bootstrap4',
+        keep_oneof_values: false
+      })
+    </script>
+  </body>
+</html>
