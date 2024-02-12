@@ -121,7 +121,9 @@ export class MultipleEditor extends AbstractEditor {
     this.editors[i].build()
     this.editors[i].postBuild()
 
-    if (this.editors[i].header) this.editors[i].header.style.display = 'none'
+    if (this.editors[i].header) {
+      this.theme.visuallyHidden(this.editors[i].header)
+    }
 
     this.editors[i].option = this.switcher_options[i]
 
