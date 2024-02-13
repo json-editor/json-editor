@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>array events table</title>
-    <meta charset="utf-8"/>
-    <script src="../../dist/jsoneditor.js"></script>
+  <title>array events table</title>
+  <meta charset="utf-8"/>
+  <script src="../../dist/jsoneditor.js"></script>
 </head>
 <body>
 
@@ -14,9 +14,9 @@
 <div class='container'></div>
 
 <script>
-  var container = document.querySelector('.container');
-  var debug = document.querySelector('.debug');
-  var schema = {
+  const container = document.querySelector('.container');
+  const debug = document.querySelector('.debug');
+  const schema = {
     "type": "array",
     "title": "Strings",
     "format": "table",
@@ -25,37 +25,45 @@
       "title": "String"
     }
   };
-  var editor = new JSONEditor(container, {
+
+  const editor = new JSONEditor(container, {
     schema: schema,
     enable_array_copy: true
   });
+
   editor.promise.then(() => {
     document.querySelector('.get-value').addEventListener('click', function () {
-    debug.value = JSON.stringify(editor.getValue());
-  });
-  editor.setValue(["A","B","C","D","E"]);
-  editor.on('copyRow', function () {
-    alert('copyRow');
-    console.log('copyRow');
-  });
-  editor.on('moveRow', function () {
-    alert('moveRow');
-    console.log('moveRow');
-  });
-  editor.on('addRow', function () {
-    alert('addRow');
-    console.log('addRow');
-  });
-  editor.on('deleteRow', function () {
-    alert('deleteRow');
-    console.log('deleteRow');
-  });
-  editor.on('deleteAllRows', function () {
-    alert('deleteAllRows');
-    console.log('deleteAllRows');
-  });
+      debug.value = JSON.stringify(editor.getValue());
+    });
+
+    editor.setValue(["A", "B", "C", "D", "E"]);
+
+    editor.on('copyRow', function () {
+      alert('copyRow');
+      console.log('copyRow');
+    });
+
+    editor.on('moveRow', function () {
+      alert('moveRow');
+      console.log('moveRow');
+    });
+
+    editor.on('addRow', function () {
+      alert('addRow');
+      console.log('addRow');
+    });
+
+    editor.on('deleteRow', function () {
+      alert('deleteRow');
+      console.log('deleteRow');
+    });
+
+    editor.on('deleteAllRows', function () {
+      alert('deleteAllRows');
+      console.log('deleteAllRows');
+    });
   })
- 
+
 </script>
 
 </body>
