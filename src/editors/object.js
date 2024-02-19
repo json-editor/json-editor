@@ -974,6 +974,11 @@ export class ObjectEditor extends AbstractEditor {
 
   removeObjectProperty (property) {
     if (this.editors[property]) {
+      // do not destroy dependent editors
+      if (this.editors[property].schema?.options?.dependencies) {
+        return
+      }
+
       this.editors[property].unregister()
       delete this.editors[property]
 
