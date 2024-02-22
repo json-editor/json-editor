@@ -3,6 +3,10 @@ import { SelectEditor } from './select.js'
 export class RadioEditor extends SelectEditor {
   preBuild () {
     super.preBuild()
+
+    this.enum_display.shift('- select -')
+    this.enum_options.shift('undefined')
+    this.enum_values.shift('__UNDEFINED__')
   }
 
   build () {
@@ -114,10 +118,13 @@ export class RadioEditor extends SelectEditor {
     for (let i = 0; i < this.radioGroup.length; i++) {
       if (this.radioGroup[i].value === val) {
         this.radioGroup[i].checked = true
-        this.value = val
-        this.onChange()
         break
+      } else {
+        this.radioGroup[i].checked = false
       }
     }
+
+    this.value = val
+    this.onChange()
   }
 }
