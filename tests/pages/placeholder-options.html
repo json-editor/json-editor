@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8"/>
+    <title>placeholder-options</title>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <script src="../../dist/jsoneditor.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h1>Test</h1>
+    <label for="value">Value</label>
+    <textarea class="form-control" id="value"></textarea>
+    <button id='set-value'>Set Value that is not in enum ("c")</button>
+    <div class='json-editor-container'></div>
+</div>
+
+<script>
+    const jsonEditorContainer = document.querySelector('.json-editor-container')
+    const value = document.querySelector('#value')
+    const setValue = document.querySelector('#set-value')
+    const schema = {
+        'title': 'test',
+        'type': 'string',
+        'enum': [
+            'a',
+            'b'
+        ],
+        'options': {
+            // 'placeholderOption': true,
+            'enum_titles': [
+              'A',
+              'B'
+            ]
+        }
+    }
+
+    const editor = new JSONEditor(jsonEditorContainer, {
+        schema: schema,
+        theme: 'bootstrap4',
+        iconlib: 'fontawesome5',
+        // startval: 'other'
+    })
+
+    editor.on('change', function () {
+        value.value = JSON.stringify(editor.getValue())
+    })
+
+    setValue.addEventListener('click', function () {
+        editor.setValue('other')
+    })
+</script>
+
+</body>
+</html>
