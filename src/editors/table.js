@@ -177,7 +177,18 @@ export class TableEditor extends ArrayEditor {
 
     if (this.schema.minItems) {
       while (value.length < this.schema.minItems) {
-        value.push(this.getItemDefault())
+        const container = document.createElement('div')
+        const schema = this.getItemSchema(value.length)
+        const editorClass = this.jsoneditor.getEditorClass(schema)
+        const tempEditor = this.jsoneditor.createEditor(editorClass, {
+          jsoneditor: this.jsoneditor,
+          schema,
+          container
+        })
+
+        value.push(tempEditor.getDefault())
+
+        tempEditor.destroy()
       }
     }
     if (this.schema.maxItems && value.length > this.schema.maxItems) {

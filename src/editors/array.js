@@ -342,7 +342,18 @@ export class ArrayEditor extends AbstractEditor {
 
     if (this.schema.minItems) {
       while (value.length < this.schema.minItems) {
-        value.push(this.getItemInfo(value.length).default)
+        const container = document.createElement('div')
+        const schema = this.getItemSchema(value.length)
+        const editorClass = this.jsoneditor.getEditorClass(schema)
+        const tempEditor = this.jsoneditor.createEditor(editorClass, {
+          jsoneditor: this.jsoneditor,
+          schema,
+          container
+        })
+
+        value.push(tempEditor.getDefault())
+
+        tempEditor.destroy()
       }
     }
     if (this.getMax() && value.length > this.getMax()) {
