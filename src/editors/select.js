@@ -4,16 +4,7 @@ import { extend } from '../utilities.js'
 export class SelectEditor extends AbstractEditor {
   setValue (value, initial) {
     /* Sanitize value before setting it */
-    let sanitized = this.typecast(value)
-
-    const haveToUseDefaultValue = !!this.jsoneditor.options.use_default_values || typeof this.schema.default !== 'undefined'
-
-    if (
-      (this.enum_options.length > 0 && !this.enum_values.includes(sanitized)) ||
-      (initial && !this.isRequired() && !haveToUseDefaultValue)
-    ) {
-      sanitized = this.enum_values[0]
-    }
+    const sanitized = this.typecast(value)
 
     if (this.value === sanitized) return
 
@@ -53,6 +44,10 @@ export class SelectEditor extends AbstractEditor {
   }
 
   typecast (value) {
+    if (value === '__UNDEFINED__') {
+      return value
+    }
+
     if (this.schema.type === 'boolean') return value === 'undefined' || value === undefined ? undefined : !!value
     else if (this.schema.type === 'number') return 1 * value || 0
     else if (this.schema.type === 'integer') return Math.floor(value * 1 || 0)
@@ -84,6 +79,10 @@ export class SelectEditor extends AbstractEditor {
         this.enum_display[i] = `${this.translateProperty(display[i]) || option}`
         this.enum_values[i] = this.typecast(option)
       })
+
+      this.enum_display.unshift('- select -')
+      this.enum_options.unshift('undefined')
+      this.enum_values.unshift('__UNDEFINED__')
       /* Boolean */
     } else if (this.schema.type === 'boolean') {
       this.enum_display = (this.schema.options && this.schema.options.enum_titles) || ['true', 'false']
@@ -165,7 +164,7 @@ export class SelectEditor extends AbstractEditor {
     if (this.options.compact) this.container.classList.add('compact')
 
     this.input = this.theme.getSelectInput(this.enum_options, false)
-    this.theme.setSelectOptions(this.input, this.enum_options, this.enum_display)
+    this.theme.setSelectOptions(this.input, this.enum_options, this.enum_display, true)
 
     if (this.schema.readOnly || this.schema.readonly) {
       this.disable(true)
