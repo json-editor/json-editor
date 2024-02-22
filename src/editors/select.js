@@ -81,7 +81,7 @@ export class SelectEditor extends AbstractEditor {
       })
 
       this.enum_display.unshift('- select -')
-      this.enum_options.unshift('undefined')
+      this.enum_options.unshift('__UNDEFINED__')
       this.enum_values.unshift('__UNDEFINED__')
       /* Boolean */
     } else if (this.schema.type === 'boolean') {
