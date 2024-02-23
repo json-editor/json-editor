@@ -4,11 +4,22 @@ import { extend } from '../utilities.js'
 export class SelectEditor extends AbstractEditor {
   setValue (value, initial) {
     /* Sanitize value before setting it */
-    const sanitized = this.typecast(value)
+    let sanitized = this.typecast(value)
+    const inEnum = (this.enum_options.length > 0 && this.enum_values.includes(sanitized))
+
+    const haveToUseDefaultValue = !!this.jsoneditor.options.use_default_values || typeof this.schema.default !== 'undefined'
+
+    if (!this.hasPlaceholderOption && (!inEnum || (initial && !this.isRequired() && !haveToUseDefaultValue))) {
+      sanitized = this.enum_values[0]
+    }
 
     if (this.value === sanitized) return
 
-    this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)]
+    if (inEnum && this.hasPlaceholderOption) {
+      this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)]
+    } else {
+      this.input.value = '_placeholder_'
+    }
 
     this.value = sanitized
 
@@ -44,10 +55,6 @@ export class SelectEditor extends AbstractEditor {
   }
 
   typecast (value) {
-    if (value === '__UNDEFINED__') {
-      return value
-    }
-
     if (this.schema.type === 'boolean') return value === 'undefined' || value === undefined ? undefined : !!value
     else if (this.schema.type === 'number') return 1 * value || 0
     else if (this.schema.type === 'integer') return Math.floor(value * 1 || 0)
@@ -70,6 +77,8 @@ export class SelectEditor extends AbstractEditor {
     let i
     let callback
 
+    this.hasPlaceholderOption = this.schema?.options?.hasPlaceholderOption || false
+
     /* Enum options enumerated */
     if (this.schema.enum) {
       const display = (this.schema.options && this.schema.options.enum_titles) || []
@@ -79,10 +88,6 @@ export class SelectEditor extends AbstractEditor {
         this.enum_display[i] = `${this.translateProperty(display[i]) || option}`
         this.enum_values[i] = this.typecast(option)
       })
-
-      this.enum_display.unshift('- select -')
-      this.enum_options.unshift('__UNDEFINED__')
-      this.enum_values.unshift('__UNDEFINED__')
       /* Boolean */
     } else if (this.schema.type === 'boolean') {
       this.enum_display = (this.schema.options && this.schema.options.enum_titles) || ['true', 'false']
@@ -164,7 +169,7 @@ export class SelectEditor extends AbstractEditor {
     if (this.options.compact) this.container.classList.add('compact')
 
     this.input = this.theme.getSelectInput(this.enum_options, false)
-    this.theme.setSelectOptions(this.input, this.enum_options, this.enum_display, true)
+    this.theme.setSelectOptions(this.input, this.enum_options, this.enum_display, this.hasPlaceholderOption)
 
     if (this.schema.readOnly || this.schema.readonly) {
       this.disable(true)

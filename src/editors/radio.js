@@ -4,9 +4,9 @@ export class RadioEditor extends SelectEditor {
   preBuild () {
     super.preBuild()
 
-    this.enum_display.shift('- select -')
-    this.enum_options.shift('undefined')
-    this.enum_values.shift('__UNDEFINED__')
+    // this.enum_display.shift('- select -')
+    // this.enum_options.shift('undefined')
+    // this.enum_values.shift('__UNDEFINED__')
   }
 
   build () {

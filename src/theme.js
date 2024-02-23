@@ -202,9 +202,9 @@ export class AbstractTheme {
     return el
   }
 
-  getSelectInput (options, multiple, placeholderOption = false) {
+  getSelectInput (options, multiple, hasPlaceholderOption = false) {
     const select = document.createElement('select')
-    if (options) this.setSelectOptions(select, options, [], placeholderOption)
+    if (options) this.setSelectOptions(select, options, [], hasPlaceholderOption)
     return select
   }
 
@@ -222,18 +222,22 @@ export class AbstractTheme {
     this.setSelectOptions(switcher, options, titles)
   }
 
-  setSelectOptions (select, options, titles = [], placeholderOption = false) {
+  setSelectOptions (select, options, titles = [], hasPlaceholderOption = false) {
     select.innerHTML = ''
+
+    if (hasPlaceholderOption) {
+      const option = document.createElement('option')
+      option.setAttribute('value', '_placeholder_')
+      option.textContent = ' '
+      option.setAttribute('disabled', '')
+      option.setAttribute('hidden', '')
+      select.appendChild(option)
+    }
+
     for (let i = 0; i < options.length; i++) {
       const option = document.createElement('option')
       option.setAttribute('value', options[i])
       option.textContent = titles[i] || options[i]
-
-      if (placeholderOption && i === 0) {
-        option.setAttribute('disabled', '')
-        option.setAttribute('hidden', '')
-      }
-
       select.appendChild(option)
     }
   }
