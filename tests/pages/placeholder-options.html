@@ -29,7 +29,7 @@
             'b'
         ],
         'options': {
-            // 'placeholderOption': true,
+            'hasPlaceholderOption': true,
             'enum_titles': [
               'A',
               'B'
@@ -40,8 +40,7 @@
     const editor = new JSONEditor(jsonEditorContainer, {
         schema: schema,
         theme: 'bootstrap4',
-        iconlib: 'fontawesome5',
-        // startval: 'other'
+        iconlib: 'fontawesome5'
     })
 
     editor.on('change', function () {

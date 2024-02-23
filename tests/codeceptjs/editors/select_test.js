@@ -5,7 +5,7 @@ Feature('select')
 Scenario('Should render a non selectable placeholder options for not in enum values @placeholderOption', async ({ I }) => {
   I.amOnPage('placeholder-options.html')
   I.waitForElement('.je-ready')
-  I.waitForElement('option[value="_undefined_"][disabled][hidden]')
+  I.waitForElement('option[value="_placeholder_"][disabled][hidden]')
   I.waitForElement('option[value="a"]')
   I.waitForElement('option[value="b"]')
   I.click('#set-value')
