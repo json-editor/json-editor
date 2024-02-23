@@ -177,7 +177,7 @@ export class TableEditor extends ArrayEditor {
 
     if (this.schema.minItems) {
       while (value.length < this.schema.minItems) {
-        value.push(this.getItemInfo(value.length).default)
+        value.push(this.getItemDefault())
       }
     }
     if (this.schema.maxItems && value.length > this.schema.maxItems) {
