@@ -1,5 +1,7 @@
 ### Unreleased
 
+- Added options: "hasPlaceholderOption" and "placeholderOptionText"
+
 ### 2.14.1
 
 - Fixed issue #1272 Multiple editor incorrect dependency inheritance
