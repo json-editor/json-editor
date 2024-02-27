@@ -222,13 +222,13 @@ export class AbstractTheme {
     this.setSelectOptions(switcher, options, titles)
   }
 
-  setSelectOptions (select, options, titles = [], hasPlaceholderOption = false) {
+  setSelectOptions (select, options, titles = [], hasPlaceholderOption = false, placeholderOptionText = ' ') {
     select.innerHTML = ''
 
     if (hasPlaceholderOption) {
       const option = document.createElement('option')
       option.setAttribute('value', '_placeholder_')
-      option.textContent = ' '
+      option.textContent = placeholderOptionText
       option.setAttribute('disabled', '')
       option.setAttribute('hidden', '')
       select.appendChild(option)

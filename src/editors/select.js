@@ -78,6 +78,7 @@ export class SelectEditor extends AbstractEditor {
     let callback
 
     this.hasPlaceholderOption = this.schema?.options?.hasPlaceholderOption || false
+    this.placeholderOptionText = this.schema?.options?.placeholderOptionText || ' '
 
     /* Enum options enumerated */
     if (this.schema.enum) {
@@ -169,7 +170,7 @@ export class SelectEditor extends AbstractEditor {
     if (this.options.compact) this.container.classList.add('compact')
 
     this.input = this.theme.getSelectInput(this.enum_options, false)
-    this.theme.setSelectOptions(this.input, this.enum_options, this.enum_display, this.hasPlaceholderOption)
+    this.theme.setSelectOptions(this.input, this.enum_options, this.enum_display, this.hasPlaceholderOption, this.placeholderOptionText)
 
     if (this.schema.readOnly || this.schema.readonly) {
       this.disable(true)

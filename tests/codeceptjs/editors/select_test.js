@@ -9,6 +9,7 @@ Scenario('Should render a non selectable placeholder options for not in enum val
   I.waitForElement('option[value="a"]')
   I.waitForElement('option[value="b"]')
   I.click('#set-value')
+  I.waitForText('-select-')
   I.waitForText('Value must be one of the enumerated values')
   I.waitForValue('#value', '"other"')
   I.selectOption('[name="root"]', 'a')
