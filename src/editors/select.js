@@ -77,8 +77,8 @@ export class SelectEditor extends AbstractEditor {
     let i
     let callback
 
-    this.hasPlaceholderOption = this.schema?.options?.hasPlaceholderOption || false
-    this.placeholderOptionText = this.schema?.options?.placeholderOptionText || ' '
+    this.hasPlaceholderOption = this.schema?.options?.has_placeholder_option || false
+    this.placeholderOptionText = this.schema?.options?.placeholder_option_text || ' '
 
     /* Enum options enumerated */
     if (this.schema.enum) {
