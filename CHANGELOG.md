@@ -1,6 +1,6 @@
 ### Unreleased
 
-- Added options: "hasPlaceholderOption" and "placeholderOptionText"
+- Added options: "has_placeholder_option" and "placeholder_option_text"
 
 ### 2.14.1
 
