@@ -5,19 +5,21 @@ export class SelectEditor extends AbstractEditor {
   setValue (value, initial) {
     /* Sanitize value before setting it */
     let sanitized = this.typecast(value)
+    const inEnum = (this.enum_options.length > 0 && this.enum_values.includes(sanitized))
 
     const haveToUseDefaultValue = !!this.jsoneditor.options.use_default_values || typeof this.schema.default !== 'undefined'
 
-    if (
-      (this.enum_options.length > 0 && !this.enum_values.includes(sanitized)) ||
-      (initial && !this.isRequired() && !haveToUseDefaultValue)
-    ) {
+    if (!this.hasPlaceholderOption && (!inEnum || (initial && !this.isRequired() && !haveToUseDefaultValue))) {
       sanitized = this.enum_values[0]
     }
 
     if (this.value === sanitized) return
 
-    this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)]
+    if (inEnum && this.hasPlaceholderOption) {
+      this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)]
+    } else {
+      this.input.value = '_placeholder_'
+    }
 
     this.value = sanitized
 
@@ -74,6 +76,9 @@ export class SelectEditor extends AbstractEditor {
     this.enum_display = []
     let i
     let callback
+
+    this.hasPlaceholderOption = this.schema?.options?.has_placeholder_option || false
+    this.placeholderOptionText = this.schema?.options?.placeholder_option_text || ' '
 
     /* Enum options enumerated */
     if (this.schema.enum) {
@@ -165,7 +170,7 @@ export class SelectEditor extends AbstractEditor {
     if (this.options.compact) this.container.classList.add('compact')
 
     this.input = this.theme.getSelectInput(this.enum_options, false)
-    this.theme.setSelectOptions(this.input, this.enum_options, this.enum_display)
+    this.theme.setSelectOptions(this.input, this.enum_options, this.enum_display, this.hasPlaceholderOption, this.placeholderOptionText)
 
     if (this.schema.readOnly || this.schema.readonly) {
       this.disable(true)
