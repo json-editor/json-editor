@@ -17,4 +17,12 @@ export class InfoEditor extends ButtonEditor {
   getNumColumns () {
     return 12
   }
+
+  disable () {
+    return false
+  }
+
+  enable () {
+    return false
+  }
 }
