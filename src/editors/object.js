@@ -927,6 +927,7 @@ export class ObjectEditor extends AbstractEditor {
 
     checkbox.checked = key in this.editors
     checkbox.addEventListener('change', () => {
+      this.hideAddProperty()
       if (checkbox.checked) {
         this.addObjectProperty(key)
       } else {
