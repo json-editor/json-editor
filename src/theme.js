@@ -229,7 +229,6 @@ export class AbstractTheme {
       const option = document.createElement('option')
       option.setAttribute('value', '_placeholder_')
       option.textContent = placeholderOptionText
-      option.setAttribute('disabled', '')
       option.setAttribute('hidden', '')
       select.appendChild(option)
     }
