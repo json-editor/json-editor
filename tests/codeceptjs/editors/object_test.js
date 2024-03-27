@@ -327,3 +327,15 @@ Scenario('should open and close the properties modal', ({ I }) => {
   I.click('textarea')
   I.dontSeeElement('.je-modal .property-selector')
 })
+
+Scenario('should show editors for empty optional fields if show_non_required_editors options is true', (I) => {
+  I.amOnPage('object-show-non-required-editors--true.html')
+  I.seeElement('[name="root[0][dayCode]"]')
+  I.seeElement('[name="root[0][startTime]"]')
+})
+
+Scenario('should NOT show editors for empty optional fields if show_non_required_editors options is false', (I) => {
+  I.amOnPage('object-show-non-required-editors--false.html')
+  I.seeElement('[name="root[0][dayCode]"]')
+  I.dontSeeElement('[name="root[0][startTime]"]')
+})
