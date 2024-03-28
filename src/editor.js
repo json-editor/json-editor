@@ -455,7 +455,7 @@ export class AbstractEditor {
       }
     }
 
-    if (data.class) link.classList.add(data.class)
+    if (data.class) link.classList.add((...data.class.split(' '))
 
     return holder
   }
