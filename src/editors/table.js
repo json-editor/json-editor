@@ -439,6 +439,11 @@ export class TableEditor extends ArrayEditor {
   _supportDragDrop (tab) {
     tab.draggable = true
     tab.addEventListener('dragstart', e => {
+      const o = document.elementFromPoint(e.x, e.y)
+      if (o !== tab && o.tagName !== 'TD') {
+        e.preventDefault()
+        return
+      }
       window.curDrag = tab
     })
     tab.addEventListener('dragover', e => {
