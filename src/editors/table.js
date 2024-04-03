@@ -321,6 +321,8 @@ export class TableEditor extends ArrayEditor {
       this.rows[i].movedown_button = this._createMoveDownButton(i, controlsHolder)
     }
 
+    this._supportDragDrop(this.rows[i].row)
+
     if (typeof value !== 'undefined') this.rows[i].setValue(value)
 
     return this.rows[i]
@@ -432,6 +434,50 @@ export class TableEditor extends ArrayEditor {
     })
     holder.appendChild(button)
     return button
+  }
+
+  _supportDragDrop (tab) {
+    tab.draggable = true
+    tab.addEventListener('dragstart', e => {
+      window.curDrag = tab
+    })
+    tab.addEventListener('dragover', e => {
+      if (window.curDrag === null || window.curDrag === tab || window.curDrag.parentElement !== tab.parentElement) {
+        e.dataTransfer.dropEffect = 'none'
+      } else {
+        e.dataTransfer.dropEffect = 'move'
+      }
+      e.preventDefault()
+    })
+    tab.addEventListener('drop', e => {
+      e.preventDefault()
+      e.stopPropagation()
+      if (window.curDrag === null || window.curDrag === tab || window.curDrag.parentElement !== tab.parentElement) {
+        return
+      }
+      const getPos = item => {
+        let i = 0
+        let a = item.parentElement.firstElementChild
+        while (a !== item && a !== null) {
+          a = a.nextSibling
+          ++i
+        }
+        return i
+      }
+      const i = getPos(window.curDrag)
+      const j = getPos(tab)
+
+      const rows = this.getValue()
+      const tmp = rows[i]
+      rows.splice(i, 1)
+      rows.splice(j, 0, tmp)
+
+      this.setValue(rows)
+      this.onChange(true)
+
+      this.jsoneditor.trigger('moveRow', this.rows[j])
+      window.curDrag = null
+    })
   }
 
   addControls () {
