@@ -505,6 +505,8 @@ export class ArrayEditor extends AbstractEditor {
         e.stopPropagation()
       })
       this._supportDragDrop(this.rows[i].tab)
+    } else {
+      this._supportDragDrop(this.rows[i].container, (e, tab) => e.classList.contains('je-label'))
     }
 
     const controlsHolder = this.rows[i].title_controls || this.rows[i].array_controls
@@ -671,9 +673,16 @@ export class ArrayEditor extends AbstractEditor {
     return button
   }
 
-  _supportDragDrop (tab) {
+  _supportDragDrop (tab, canDragFn = null) {
     tab.draggable = true
     tab.addEventListener('dragstart', e => {
+      if (canDragFn) {
+        const o = document.elementFromPoint(e.x, e.y)
+        if (o !== tab && !canDragFn(o, tab)) {
+          e.preventDefault()
+          return
+        }
+      }
       window.curDrag = tab
     })
     tab.addEventListener('dragover', e => {
