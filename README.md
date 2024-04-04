@@ -1098,6 +1098,10 @@ editor.on('deleteAllRows', deletedValues => {
 });
 ```
 
+Drag and drop for array item is supported. 
+For array editor with format=`tabs` or `tabs-top`, dragging the tab header is enabled by default.
+But for the default editor or format=`table`, dragging is enabled once by double click on the array item panel. This design avoid side-effect of draggable panel.
+
 #### Schema loader events
 
 When schemas are loaded via a request, the `schemaLoaded` event is triggered individually for each schema after its loading.
