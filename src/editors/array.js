@@ -506,7 +506,7 @@ export class ArrayEditor extends AbstractEditor {
       })
       this._supportDragDrop(this.rows[i].tab)
     } else {
-      this._supportDragDrop(this.rows[i].container, (e, tab) => e.classList.contains('je-label'))
+      this._supportDragDrop(this.rows[i].container, true)
     }
 
     const controlsHolder = this.rows[i].title_controls || this.rows[i].array_controls
@@ -673,44 +673,8 @@ export class ArrayEditor extends AbstractEditor {
     return button
   }
 
-  _supportDragDrop (tab, canDragFn = null) {
-    tab.draggable = true
-    tab.addEventListener('dragstart', e => {
-      if (canDragFn) {
-        const o = document.elementFromPoint(e.x, e.y)
-        if (o !== tab && !canDragFn(o, tab)) {
-          e.preventDefault()
-          return
-        }
-      }
-      window.curDrag = tab
-    })
-    tab.addEventListener('dragover', e => {
-      if (window.curDrag === null || window.curDrag === tab || window.curDrag.parentElement !== tab.parentElement) {
-        e.dataTransfer.dropEffect = 'none'
-      } else {
-        e.dataTransfer.dropEffect = 'move'
-      }
-      e.preventDefault()
-    })
-    tab.addEventListener('drop', e => {
-      e.preventDefault()
-      e.stopPropagation()
-      if (window.curDrag === null || window.curDrag === tab || window.curDrag.parentElement !== tab.parentElement) {
-        return
-      }
-      const getPos = item => {
-        let i = 0
-        let a = item.parentElement.firstElementChild
-        while (a !== item && a !== null) {
-          a = a.nextSibling
-          ++i
-        }
-        return i
-      }
-      const i = getPos(window.curDrag)
-      const j = getPos(tab)
-
+  _supportDragDrop (tab, useTrigger) {
+    supportDragDrop(tab, (i, j) => {
       const rows = this.getValue()
       const tmp = rows[i]
       rows.splice(i, 1)
@@ -723,8 +687,7 @@ export class ArrayEditor extends AbstractEditor {
       this.onChange(true)
 
       this.jsoneditor.trigger('moveRow', this.rows[j])
-      window.curDrag = null
-    })
+    }, { useTrigger: useTrigger })
   }
 
   addControls () {
@@ -898,3 +861,54 @@ export class ArrayEditor extends AbstractEditor {
   }
 }
 ArrayEditor.rules = rules
+
+// drag/drop array item to adjust order
+// handler(fromIdx, toIdx, fromDom, toDom), opt={useTrigger}
+// useTrigger=true: double click to enable drag
+export function supportDragDrop (tab, handler, opt = {}) {
+  if (opt.useTrigger) {
+    tab.addEventListener('dblclick', e => {
+      if (e.target.tagName === 'INPUT') {
+        return
+      }
+      window.console.log('enable drag')
+      tab.draggable = true
+    })
+    tab.addEventListener('dragend', e => {
+      tab.draggable = false
+    })
+  } else {
+    tab.draggable = true
+  }
+  tab.addEventListener('dragstart', e => {
+    window.curDrag = tab
+  })
+  tab.addEventListener('dragover', e => {
+    if (window.curDrag === null || window.curDrag === tab || window.curDrag.parentElement !== tab.parentElement) {
+      e.dataTransfer.dropEffect = 'none'
+    } else {
+      e.dataTransfer.dropEffect = 'move'
+    }
+    e.preventDefault()
+  })
+  tab.addEventListener('drop', e => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (window.curDrag === null || window.curDrag === tab || window.curDrag.parentElement !== tab.parentElement) {
+      return
+    }
+    const getPos = item => {
+      let i = 0
+      let a = item.parentElement.firstElementChild
+      while (a !== item && a !== null) {
+        a = a.nextSibling
+        ++i
+      }
+      return i
+    }
+    const i = getPos(window.curDrag)
+    const j = getPos(tab)
+    handler(i, j, window.curDrag, tab)
+    window.curDrag = null
+  })
+}

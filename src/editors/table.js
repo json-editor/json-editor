@@ -1,4 +1,4 @@
-import { ArrayEditor } from './array.js'
+import { ArrayEditor, supportDragDrop } from './array.js'
 import { extend, generateUUID, trigger } from '../utilities.js'
 
 export class TableEditor extends ArrayEditor {
@@ -437,41 +437,7 @@ export class TableEditor extends ArrayEditor {
   }
 
   _supportDragDrop (tab) {
-    tab.draggable = true
-    tab.addEventListener('dragstart', e => {
-      const o = document.elementFromPoint(e.x, e.y)
-      if (o !== tab && o.tagName !== 'TD') {
-        e.preventDefault()
-        return
-      }
-      window.curDrag = tab
-    })
-    tab.addEventListener('dragover', e => {
-      if (window.curDrag === null || window.curDrag === tab || window.curDrag.parentElement !== tab.parentElement) {
-        e.dataTransfer.dropEffect = 'none'
-      } else {
-        e.dataTransfer.dropEffect = 'move'
-      }
-      e.preventDefault()
-    })
-    tab.addEventListener('drop', e => {
-      e.preventDefault()
-      e.stopPropagation()
-      if (window.curDrag === null || window.curDrag === tab || window.curDrag.parentElement !== tab.parentElement) {
-        return
-      }
-      const getPos = item => {
-        let i = 0
-        let a = item.parentElement.firstElementChild
-        while (a !== item && a !== null) {
-          a = a.nextSibling
-          ++i
-        }
-        return i
-      }
-      const i = getPos(window.curDrag)
-      const j = getPos(tab)
-
+    supportDragDrop(tab, (i, j) => {
       const rows = this.getValue()
       const tmp = rows[i]
       rows.splice(i, 1)
@@ -481,8 +447,7 @@ export class TableEditor extends ArrayEditor {
       this.onChange(true)
 
       this.jsoneditor.trigger('moveRow', this.rows[j])
-      window.curDrag = null
-    })
+    }, { useTrigger: true })
   }
 
   addControls () {
