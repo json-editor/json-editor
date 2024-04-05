@@ -455,7 +455,13 @@ export class AbstractEditor {
       }
     }
 
-    if (data.class) link.classList.add(data.class)
+    if (data.class) {
+      const classNames = data.class.split(' ')
+
+      classNames.forEach((className) => {
+        link.classList.add(className)
+      })
+    }
 
     return holder
   }
