@@ -1,6 +1,7 @@
 ### Unreleased
 
 - Added options: "has_placeholder_option" and "placeholder_option_text"
+- Fixed issue #1536 with not fullfiled dependency 
 
 ### 2.14.1
 
