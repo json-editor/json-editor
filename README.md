@@ -85,6 +85,7 @@ If you learn best by example, check these out:
 *  Star Rating Editor Example - https://json-editor.github.io/json-editor/starrating.html
 *  Upload Editor Example - https://json-editor.github.io/json-editor/upload.html
 *  WYSIWYG Editor Example - https://json-editor.github.io/json-editor/wysiwyg.html
+*  Meta schema (schema builder) Example - https://json-editor.github.io/json-editor/meta-schema.html
 
 More examples can be found at the [JSON-Editor Interactive Playground](https://pmk65.github.io/jedemov2/dist/demo.html)
 
