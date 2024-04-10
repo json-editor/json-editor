@@ -566,6 +566,7 @@ export class AbstractEditor {
         this.link_watchers[i](vars)
       }
     }
+    this.notify()
   }
 
   setValue (value) {
