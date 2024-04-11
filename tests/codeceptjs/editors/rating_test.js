@@ -1,6 +1,6 @@
 /* global Feature Scenario */
 
-Feature('rating')
+Feature('readonly')
 
 Scenario('should be disabled if "readonly" is specified @readOnly', async ({ I }) => {
   I.amOnPage('read-only.html')
