@@ -116,7 +116,7 @@ export class StarratingEditor extends StringEditor {
       return undefined
     }
     if (this.schema.type === 'integer') {
-      return this.value === '' ? undefined : this.value * 1
+      return this.value === '' ? 0 : parseInt(this.value)
     }
     return this.value
   }
