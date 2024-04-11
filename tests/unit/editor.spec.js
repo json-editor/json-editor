@@ -63,7 +63,7 @@ describe('Editor', () => {
       startval: 5
     })
     editor.promise.then(() => {
-      expect(editor.root.value).toBe(5)
+      expect(editor.root.getValue()).toBe(5)
     })
   })
 
