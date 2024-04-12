@@ -24,6 +24,7 @@ export class SchemaLoader {
      *    "fully/realized/path/to/schema.json": { ... }
      *    "mylocalschema.json": { ... }
      *  }
+     *  NOTE: keys are base part of original $ref without fragment
      */
     this.refs = this.options.refs || {}
 
@@ -154,7 +155,7 @@ export class SchemaLoader {
     // exemple #/counter/1#/definition/address +
     // [1] -> /counter/1
     // [2] -> /definition/address
-    const refWithPointerSplit = _schema.$ref.split('#')
+    let refWithPointerSplit = _schema.$ref.split('#')
     // If local ref
     if (refWithPointerSplit.length === 2 && !this.refs_with_info[_schema.$ref]) {
       const sub = this.expandRecursivePointer(this.schema, refWithPointerSplit[1])
@@ -165,26 +166,42 @@ export class SchemaLoader {
     const refObj = (refWithPointerSplit.length > 2)
       ? this.refs_with_info['#' + refWithPointerSplit[1]]
       : this.refs_with_info[_schema.$ref]
+    const refPointersTail = refWithPointerSplit.slice(2)
     delete _schema.$ref
     const fetchUrl = refObj.$ref.startsWith('#')
       ? refObj.fetchUrl
       : ''
     const ref = this._getRef(fetchUrl, refObj)
 
-    if (!this.refs[ref]) { /* if reference not found */
+    // lookup schema via .refs[refBase] and dereference via JSON-pointer from ref
+    refWithPointerSplit = ref.split('#')
+    let refBase = ref
+    let refPointers = []
+    if (refWithPointerSplit.length > 1) {
+      refBase = refWithPointerSplit[0]
+      refPointers = refWithPointerSplit.slice(1)
+    }
+    if (!this.refs[refBase]) { /* if reference not found */
       // eslint-disable-next-line no-console
       console.warn(`reference:'${ref}' not found!`)
-    } else if (recurseAllOf && hasOwnProperty(this.refs[ref], 'allOf')) {
-      const allOf = this.refs[ref].allOf
+    }
+    let refSchema = this.refs[refBase]
+    while (refPointers.length > 0) {
+      refSchema = this.expandRecursivePointer(refSchema, refPointers.shift())
+    }
+
+    // further expand JSON-pointer from tail of original fragment [2, ...]
+    while (refPointersTail.length > 0) {
+      refSchema = this.expandRecursivePointer(refSchema, refPointersTail.shift())
+    }
+
+    if (recurseAllOf && hasOwnProperty(refSchema, 'allOf')) {
+      const allOf = refSchema.allOf
       Object.keys(allOf).forEach(key => {
         allOf[key] = this.expandRefs(allOf[key], true)
       })
     }
-    if (refWithPointerSplit.length > 2) {
-      return this.extendSchemas(_schema, this.expandSchema(this.expandRecursivePointer(this.refs[ref], refWithPointerSplit[2])))
-    } else {
-      return this.extendSchemas(_schema, this.expandSchema(this.refs[ref]))
-    }
+    return this.extendSchemas(_schema, this.expandSchema(refSchema))
   }
 
   /**
@@ -261,7 +278,7 @@ export class SchemaLoader {
    */
   _manageRecursivePointer (schema, path) {
     Object.keys(schema).forEach(i => {
-      if (schema[i].$ref && schema[i].$ref.indexOf('#') === 0) {
+      if (schema[i] && schema[i].$ref && schema[i].$ref.indexOf('#') === 0) {
         schema[i].$ref = path + schema[i].$ref
       }
     })
