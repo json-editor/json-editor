@@ -334,7 +334,7 @@ export class SchemaLoader {
   }
 
   _joinUrl (url, fileBase) {
-    var fetchUrl = url
+    let fetchUrl = url
 
     if (url.substr(0, 7) !== 'http://' &&
       url.substr(0, 8) !== 'https://' &&
