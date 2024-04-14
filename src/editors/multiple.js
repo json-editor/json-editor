@@ -83,6 +83,13 @@ export class MultipleEditor extends AbstractEditor {
       }
     })
 
+    this.onChange(true, {
+      event: 'switch',
+      data: {
+        type: this.lastType,
+        path: this.editors[i].path
+      }
+    })
     this.refreshValue()
     this.refreshHeaderText()
   }
@@ -270,13 +277,13 @@ export class MultipleEditor extends AbstractEditor {
     this.switchEditor(0)
   }
 
-  onChildEditorChange (editor) {
+  onChildEditorChange (editor, eventData) {
     if (this.editors[this.type]) {
       this.refreshValue()
       this.refreshHeaderText()
     }
 
-    super.onChildEditorChange()
+    super.onChildEditorChange(editor, eventData)
   }
 
   refreshHeaderText () {

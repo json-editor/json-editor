@@ -34,17 +34,17 @@ export class AbstractEditor {
     this.registerDependencies()
   }
 
-  onChildEditorChange (editor) {
-    this.onChange(true)
+  onChildEditorChange (editor, eventData) {
+    this.onChange(true, eventData)
   }
 
   notify () {
     if (this.path) this.jsoneditor.notifyWatchers(this.path)
   }
 
-  change () {
-    if (this.parent) this.parent.onChildEditorChange(this)
-    else if (this.jsoneditor) this.jsoneditor.onChange()
+  change (eventData) {
+    if (this.parent) this.parent.onChildEditorChange(this, eventData)
+    else if (this.jsoneditor) this.jsoneditor.onChange(eventData)
   }
 
   onChange (bubble, fromTemplate) {

@@ -631,7 +631,13 @@ export class ObjectEditor extends AbstractEditor {
           if (this.editors[this.addproperty_input.value]) {
             this.editors[this.addproperty_input.value].disable()
           }
-          this.onChange(true)
+          const key = this.editors[this.addproperty_input.value].key
+          const type = this.editors[this.addproperty_input.value].type
+
+          this.onChange(true, {
+            event: 'add',
+            data: { key, type }
+          })
         }
       })
       this.addproperty_input.addEventListener('input', (e) => {
@@ -1077,9 +1083,9 @@ export class ObjectEditor extends AbstractEditor {
     }
   }
 
-  onChildEditorChange (editor) {
+  onChildEditorChange (editor, eventData) {
     this.refreshValue()
-    super.onChildEditorChange(editor)
+    super.onChildEditorChange(editor, eventData)
   }
 
   canHaveAdditionalProperties () {
