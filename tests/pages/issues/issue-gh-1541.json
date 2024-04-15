@@ -1,0 +1,9 @@
+{
+  "type": "external-schema",
+  "properties": {
+    "value": {
+      "type": ["string", "null"],
+      "default": null
+    }
+  }
+}
