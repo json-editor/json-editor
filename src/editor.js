@@ -551,7 +551,7 @@ export class AbstractEditor {
             const enumIndex = editor.schema.enum.indexOf(editor.value)
             const enumTitle = editor.options.enum_titles[enumIndex]
             vars.properties[key] = {
-              enumTitle: enumTitle
+              enumTitle
             }
           }
         })
