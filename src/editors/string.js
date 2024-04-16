@@ -50,8 +50,8 @@ export class StringEditor extends AbstractEditor {
     if (this.adjust_height) this.adjust_height(this.input)
 
     /* Bubble this setValue to parents if the value changed */
-    if (!fromTemplate) {
-      this.onChange(changed)
+    if (changed) {
+      this.onChange(true, fromTemplate)
     }
 
     /* Return object with changed state and sanitized value for use in editors that extend this */

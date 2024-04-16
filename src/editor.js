@@ -47,9 +47,13 @@ export class AbstractEditor {
     else if (this.jsoneditor) this.jsoneditor.onChange()
   }
 
-  onChange (bubble) {
+  onChange (bubble, fromTemplate) {
     this.notify()
-    if (this.watch_listener) this.watch_listener()
+
+    if (!fromTemplate) {
+      if (this.watch_listener) this.watch_listener()
+    }
+
     if (bubble) this.change()
   }
 
@@ -171,7 +175,7 @@ export class AbstractEditor {
     const editor = this.jsoneditor.getEditor(path)
     const value = editor ? editor.getValue() : undefined
 
-    if (!editor || !editor.dependenciesFulfilled) {
+    if (!editor || !editor.dependenciesFulfilled || !value) {
       this.dependenciesFulfilled = false
     } else if (Array.isArray(choices)) {
       this.dependenciesFulfilled = choices.some(choice => {
