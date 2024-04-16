@@ -47,9 +47,13 @@ export class AbstractEditor {
     else if (this.jsoneditor) this.jsoneditor.onChange()
   }
 
-  onChange (bubble) {
+  onChange (bubble, fromTemplate) {
     this.notify()
-    if (this.watch_listener) this.watch_listener()
+
+    if (!fromTemplate) {
+      if (this.watch_listener) this.watch_listener()
+    }
+
     if (bubble) this.change()
   }
 
