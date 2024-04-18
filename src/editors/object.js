@@ -633,10 +633,11 @@ export class ObjectEditor extends AbstractEditor {
           }
           const key = this.editors[this.addproperty_input.value].key
           const type = this.editors[this.addproperty_input.value].type
+          const path = this.editors[this.addproperty_input.value].path
 
-          this.onChange(true, {
+          this.onChange(true, false, {
             event: 'add',
-            data: { key, type }
+            data: { key, type, path }
           })
         }
       })

@@ -83,7 +83,7 @@ export class MultipleEditor extends AbstractEditor {
       }
     })
 
-    this.onChange(true, {
+    this.onChange(true, false, {
       event: 'switch',
       data: {
         type: this.lastType,
