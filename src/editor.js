@@ -726,13 +726,14 @@ export class AbstractEditor {
     return id.replace(/\s+/g, '-')
   }
 
-  setInputAttributes (inputAttribute) {
+  setInputAttributes (inputAttribute, input) {
     if (this.schema.options && this.schema.options.inputAttributes) {
       const inputAttributes = this.schema.options.inputAttributes
       const protectedAttributes = ['name', 'type'].concat(inputAttribute)
+      const workingInput = input || this.input
       Object.keys(inputAttributes).forEach(key => {
         if (!protectedAttributes.includes(key.toLowerCase())) {
-          this.input.setAttribute(key, inputAttributes[key])
+          workingInput.setAttribute(key, inputAttributes[key])
         }
       })
     }
