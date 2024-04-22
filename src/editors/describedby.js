@@ -145,12 +145,12 @@ export class DescribedByEditor extends AbstractEditor {
     this.switchEditor()
   }
 
-  onChildEditorChange (editor) {
+  onChildEditorChange (editor, eventData) {
     if (this.editors[this.currentEditor]) {
       this.refreshValue()
     }
 
-    super.onChildEditorChange(editor)
+    super.onChildEditorChange(editor, eventData)
   }
 
   refreshValue () {

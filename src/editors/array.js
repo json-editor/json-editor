@@ -164,10 +164,10 @@ export class ArrayEditor extends AbstractEditor {
     }
   }
 
-  onChildEditorChange (editor) {
+  onChildEditorChange (editor, eventData) {
     this.refreshValue()
     this.refreshTabs(true)
-    super.onChildEditorChange(editor)
+    super.onChildEditorChange(editor, eventData)
   }
 
   getItemTitle () {

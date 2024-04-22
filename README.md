@@ -435,6 +435,23 @@ for (let key in editor.editors) {
 }
 ```
 
+There are also `add` and `switch` events to track changes. 
+The `add` event fires when a new object property has just been added.
+
+```javascript
+editor.on('add',(property) => {
+  // Do something
+});
+```
+
+The `switch` event fires when the type of one of the object's properties is changed by a type switch on the form.
+
+```javascript
+editor.on('switch',(property) => {
+  // Do something
+});
+```
+
 ### Enable and Disable the Editor
 
 This lets you disable editing for the entire form or part of the form.
