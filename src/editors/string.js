@@ -200,6 +200,20 @@ export class StringEditor extends AbstractEditor {
       this.adjust_height()
     }
 
+    const promptPasteMaxLengthReached = this.options.prompt_paste_max_length_reached ?? this.jsoneditor.options.prompt_paste_max_length_reached
+    const hasMaxLength = typeof this.schema.maxLength !== 'undefined'
+
+    if (promptPasteMaxLengthReached && hasMaxLength) {
+      this.input.addEventListener('paste', (event) => {
+        const paste = (event.clipboardData || window.clipboardData).getData('text')
+        const length = (paste.length + this.input.value.length)
+
+        if (length > this.schema.maxLength) {
+          alert(this.translate('paste_max_length_reached', [this.schema.maxLength]))
+        }
+      })
+    }
+
     if (this.format) this.input.setAttribute('data-schemaformat', this.format)
 
     let { input } = this
