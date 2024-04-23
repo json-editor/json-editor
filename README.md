@@ -1237,7 +1237,8 @@ Editors can accept options which alter the behavior in some way.
 * `hidden` - If set to true, the editor will not appear in the UI (works for all types)
 * `input_height` - Explicitly set the height of the input element. Should be a valid CSS width string (e.g. "100px").  Works best with textareas.
 * `input_width` - Explicitly set the width of the input element. Should be a valid CSS width string (e.g. "100px").  Works for string, number, and integer data types.
-* `remove_empty_properties` - If set to true for an object, empty object properties (i.e. those with falsy values) will not be returned by getValue().
+* `remove_empty_properties` - If set to `true` for an object, empty object properties (i.e. those with falsy values) will not be returned by getValue().
+* `remove_false_properties` - If set to `true` for an object, object properties with value `false` will not be returned by getValue().
 * `has_placeholder_option` - If set to true, a placeholder option will be added to the select editor input.
 * `placeholder_option_text` - Text displayed in select placeholder option.
 
