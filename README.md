@@ -326,6 +326,11 @@ Here are all the available options:
     <td>This property controls whether property searches in an object editor are case-sensitive</td>
     <td><code>true</code></td>
   </tr>
+  <tr>
+    <td>prompt_paste_max_length_reached</td>
+    <td>If <code>true</code>, an alert will be displayed when pasting a value in an input that exceeded maxLength</td>
+    <td><code>false</code></td>
+  </tr>
   </tbody>
 </table>
 

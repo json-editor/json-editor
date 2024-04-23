@@ -363,7 +363,11 @@ languages.en = {
   /**
    * Warning when deleting a node
    */
-  table_controls: 'Controls'
+  table_controls: 'Controls',
+  /**
+   * Warning when paste and  length exceeded maxLength
+   */
+  paste_max_length_reached: 'Pasted text exceeded maximum length of {{0}} and will be clipped.'
 }
 
 /* Default per-editor options */
@@ -413,7 +417,8 @@ const options = {
   max_depth: 0,
   button_state_mode: 1,
   case_sensitive_property_search: true,
-  show_errors: 'interaction'
+  show_errors: 'interaction',
+  prompt_paste_max_length_reached: false
 }
 
 /* This assignment was previously in index.js but makes more sense here */
