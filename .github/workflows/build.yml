@@ -58,7 +58,7 @@ jobs:
           ls -la codeceptjs/output
       - name: Test Artifacts
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: codeceptjs-output
           path: tests/codeceptjs/output
