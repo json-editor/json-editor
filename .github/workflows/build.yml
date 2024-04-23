@@ -60,7 +60,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: codeceptjs-output-${{ matrix.build-env }}
+          name: codeceptjs-output-${{ matrix.selenium-browser }}-${{ matrix.build-env }}
           path: tests/codeceptjs/output
           retention-days: 30
       - name: Test (optional)
