@@ -116,3 +116,10 @@ Scenario('should work with cleave.js library', async ({ I }) => {
   I.click('.get-value')
   I.waitForValue('.debug', JSON.stringify({ cleave_test: '1234.567.890-1234' }))
 })
+
+Scenario('ace editor should have correct initial @prompt-paste-max-length-reached', async ({ I }) => {
+  I.amOnPage('prompt-paste-max-length-reached.html')
+  I.waitForElement('.je-ready')
+  I.click('#paste')
+  I.seeInPopup('Pasted text exceeded maximum length of 5 and will be clipped.')
+})

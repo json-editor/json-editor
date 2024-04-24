@@ -164,10 +164,10 @@ export class ArrayEditor extends AbstractEditor {
     }
   }
 
-  onChildEditorChange (editor) {
+  onChildEditorChange (editor, eventData) {
     this.refreshValue()
     this.refreshTabs(true)
-    super.onChildEditorChange(editor)
+    super.onChildEditorChange(editor, eventData)
   }
 
   getItemTitle () {
@@ -604,6 +604,7 @@ export class ArrayEditor extends AbstractEditor {
       this.setValue(value)
       this.refreshValue(true)
       this.onChange(true)
+      this.jsoneditor.trigger('copyRow', this.rows[i - 1])
     })
 
     holder.appendChild(button)

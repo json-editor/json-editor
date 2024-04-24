@@ -110,9 +110,9 @@ export class TableEditor extends ArrayEditor {
     this.addControls()
   }
 
-  onChildEditorChange (editor) {
+  onChildEditorChange (editor, eventData) {
     this.refreshValue()
-    super.onChildEditorChange()
+    super.onChildEditorChange(editor, eventData)
   }
 
   getItemDefault () {

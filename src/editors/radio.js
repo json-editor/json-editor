@@ -114,10 +114,13 @@ export class RadioEditor extends SelectEditor {
     for (let i = 0; i < this.radioGroup.length; i++) {
       if (this.radioGroup[i].value === val) {
         this.radioGroup[i].checked = true
-        this.value = val
-        this.onChange()
         break
+      } else {
+        this.radioGroup[i].checked = false
       }
     }
+
+    this.value = val
+    this.onChange()
   }
 }

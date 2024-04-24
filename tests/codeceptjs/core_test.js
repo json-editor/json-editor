@@ -155,7 +155,7 @@ Scenario('should watch form for changes @core @change', async ({ I }) => {
 
 Scenario('should change the form if form_name_root option is set @core', async ({ I }) => {
   I.amOnPage('form-name.html')
-  I.see('Property must be set.', '.invalid-feedback')
+  I.see('Value must be one of the enumerated values', '.invalid-feedback')
   I.seeElement('[data-schemapath="form_1"]')
   I.seeElement('[data-schemapath="form_2"]')
   I.seeElement('[name="form_1"]')
@@ -174,7 +174,7 @@ Scenario('should change the form if form_name_root option is set @core', async (
   I.seeElement('[for="form_2[2]"]')
   I.click('[for="form_1[0]"]')
   I.click('[for="form_2[1]"]')
-  I.dontSee('Property must be set.', '.invalid-feedback')
+  I.dontSee('Value must be one of the enumerated values', '.invalid-feedback')
   I.click('#get-value-form-1')
   I.waitForValue('#value-form-1', '"yes"')
   I.click('#get-value-form-2')

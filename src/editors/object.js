@@ -631,7 +631,14 @@ export class ObjectEditor extends AbstractEditor {
           if (this.editors[this.addproperty_input.value]) {
             this.editors[this.addproperty_input.value].disable()
           }
-          this.onChange(true)
+          const key = this.editors[this.addproperty_input.value].key
+          const type = this.editors[this.addproperty_input.value].type
+          const path = this.editors[this.addproperty_input.value].path
+
+          this.onChange(true, false, {
+            event: 'add',
+            data: { key, type, path }
+          })
         }
       })
       this.addproperty_input.addEventListener('input', (e) => {
@@ -974,6 +981,11 @@ export class ObjectEditor extends AbstractEditor {
 
   removeObjectProperty (property) {
     if (this.editors[property]) {
+      // do not destroy dependent editors
+      if (this.editors[property].schema?.options?.dependencies) {
+        return
+      }
+
       this.editors[property].unregister()
       delete this.editors[property]
 
@@ -1072,9 +1084,9 @@ export class ObjectEditor extends AbstractEditor {
     }
   }
 
-  onChildEditorChange (editor) {
+  onChildEditorChange (editor, eventData) {
     this.refreshValue()
-    super.onChildEditorChange(editor)
+    super.onChildEditorChange(editor, eventData)
   }
 
   canHaveAdditionalProperties () {
@@ -1134,6 +1146,14 @@ export class ObjectEditor extends AbstractEditor {
     if (result && (this.jsoneditor.options.remove_empty_properties || this.options.remove_empty_properties)) {
       Object.keys(result).forEach(key => {
         if (isEmpty(result[key])) {
+          delete result[key]
+        }
+      })
+    }
+
+    if (result && (this.jsoneditor.options.remove_false_properties || this.options.remove_false_properties)) {
+      Object.keys(result).forEach(key => {
+        if (result[key] === false) {
           delete result[key]
         }
       })

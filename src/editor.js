@@ -34,23 +34,27 @@ export class AbstractEditor {
     this.registerDependencies()
   }
 
-  onChildEditorChange (editor) {
-    this.onChange(true)
+  onChildEditorChange (editor, eventData) {
+    this.onChange(true, false, eventData)
   }
 
   notify () {
     if (this.path) this.jsoneditor.notifyWatchers(this.path)
   }
 
-  change () {
-    if (this.parent) this.parent.onChildEditorChange(this)
-    else if (this.jsoneditor) this.jsoneditor.onChange()
+  change (eventData) {
+    if (this.parent) this.parent.onChildEditorChange(this, eventData)
+    else if (this.jsoneditor) this.jsoneditor.onChange(eventData)
   }
 
-  onChange (bubble) {
+  onChange (bubble, fromTemplate, eventData) {
     this.notify()
-    if (this.watch_listener) this.watch_listener()
-    if (bubble) this.change()
+
+    if (!fromTemplate) {
+      if (this.watch_listener) this.watch_listener()
+    }
+
+    if (bubble) this.change(eventData)
   }
 
   register () {
@@ -171,7 +175,7 @@ export class AbstractEditor {
     const editor = this.jsoneditor.getEditor(path)
     const value = editor ? editor.getValue() : undefined
 
-    if (!editor || !editor.dependenciesFulfilled) {
+    if (!editor || !editor.dependenciesFulfilled || !value) {
       this.dependenciesFulfilled = false
     } else if (Array.isArray(choices)) {
       this.dependenciesFulfilled = choices.some(choice => {
@@ -455,7 +459,13 @@ export class AbstractEditor {
       }
     }
 
-    if (data.class) link.classList.add(data.class)
+    if (data.class) {
+      const classNames = data.class.split(' ')
+
+      classNames.forEach((className) => {
+        link.classList.add(className)
+      })
+    }
 
     return holder
   }
@@ -545,7 +555,7 @@ export class AbstractEditor {
             const enumIndex = editor.schema.enum.indexOf(editor.value)
             const enumTitle = editor.options.enum_titles[enumIndex]
             vars.properties[key] = {
-              enumTitle: enumTitle
+              enumTitle
             }
           }
         })
@@ -726,13 +736,14 @@ export class AbstractEditor {
     return id.replace(/\s+/g, '-')
   }
 
-  setInputAttributes (inputAttribute) {
+  setInputAttributes (inputAttribute, input) {
     if (this.schema.options && this.schema.options.inputAttributes) {
       const inputAttributes = this.schema.options.inputAttributes
       const protectedAttributes = ['name', 'type'].concat(inputAttribute)
+      const workingInput = input || this.input
       Object.keys(inputAttributes).forEach(key => {
         if (!protectedAttributes.includes(key.toLowerCase())) {
-          this.input.setAttribute(key, inputAttributes[key])
+          workingInput.setAttribute(key, inputAttributes[key])
         }
       })
     }

@@ -85,6 +85,7 @@ If you learn best by example, check these out:
 *  Star Rating Editor Example - https://json-editor.github.io/json-editor/starrating.html
 *  Upload Editor Example - https://json-editor.github.io/json-editor/upload.html
 *  WYSIWYG Editor Example - https://json-editor.github.io/json-editor/wysiwyg.html
+*  Meta schema (schema builder) Example - https://json-editor.github.io/json-editor/meta-schema.html
 
 More examples can be found at the [JSON-Editor Interactive Playground](https://pmk65.github.io/jedemov2/dist/demo.html)
 
@@ -325,6 +326,11 @@ Here are all the available options:
     <td>This property controls whether property searches in an object editor are case-sensitive</td>
     <td><code>true</code></td>
   </tr>
+  <tr>
+    <td>prompt_paste_max_length_reached</td>
+    <td>If <code>true</code>, an alert will be displayed when pasting a value in an input that exceeded maxLength</td>
+    <td><code>false</code></td>
+  </tr>
   </tbody>
 </table>
 
@@ -432,6 +438,23 @@ for (let key in editor.editors) {
     editor.watch(key, watcherCallback.bind(editor, key));
   }
 }
+```
+
+There are also `add` and `switch` events to track changes. 
+The `add` event fires when a new object property has just been added.
+
+```javascript
+editor.on('add',(property) => {
+  // Do something
+});
+```
+
+The `switch` event fires when the type of one of the object's properties is changed by a type switch on the form.
+
+```javascript
+editor.on('switch',(property) => {
+  // Do something
+});
 ```
 
 ### Enable and Disable the Editor
@@ -1214,7 +1237,10 @@ Editors can accept options which alter the behavior in some way.
 * `hidden` - If set to true, the editor will not appear in the UI (works for all types)
 * `input_height` - Explicitly set the height of the input element. Should be a valid CSS width string (e.g. "100px").  Works best with textareas.
 * `input_width` - Explicitly set the width of the input element. Should be a valid CSS width string (e.g. "100px").  Works for string, number, and integer data types.
-* `remove_empty_properties` - If set to true for an object, empty object properties (i.e. those with falsy values) will not be returned by getValue().
+* `remove_empty_properties` - If set to `true` for an object, empty object properties (i.e. those with falsy values) will not be returned by getValue().
+* `remove_false_properties` - If set to `true` for an object, object properties with value `false` will not be returned by getValue().
+* `has_placeholder_option` - If set to true, a placeholder option will be added to the select editor input.
+* `placeholder_option_text` - Text displayed in select placeholder option.
 
 ```json
 {
