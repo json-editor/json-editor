@@ -79,7 +79,7 @@ export class SelectEditor extends AbstractEditor {
     
     this.hasPlaceholderOption = this.schema?.options?.has_placeholder_option || false
     this.placeholderOptionText = this.schema?.options?.placeholder_option_text || ' '
-    
+
     /* Const value */
     if (this.schema.const) {
       const value = this.schema.const
