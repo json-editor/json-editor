@@ -1150,6 +1150,14 @@ export class ObjectEditor extends AbstractEditor {
         }
       })
     }
+
+    if (result && (this.jsoneditor.options.remove_false_properties || this.options.remove_false_properties)) {
+      Object.keys(result).forEach(key => {
+        if (result[key] === false) {
+          delete result[key]
+        }
+      })
+    }
     return result
   }
 

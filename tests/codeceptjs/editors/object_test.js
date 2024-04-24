@@ -327,3 +327,11 @@ Scenario('should open and close the properties modal', ({ I }) => {
   I.click('textarea')
   I.dontSeeElement('.je-modal .property-selector')
 })
+
+Scenario('should remove false properties @remove_false_properties', ({ I }) => {
+  I.amOnPage('remove-false-properties.html')
+  I.waitForElement('.je-ready')
+  I.waitForValue('#value', '{}')
+  I.click('[for="root[a]"]')
+  I.waitForValue('#value', '{"a":true}')
+})

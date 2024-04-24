@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>remove_false_properties</title>
+  <script src="../../dist/jsoneditor.js"></script>
+  <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+  <h1>Test</h1>
+  <label for="value">Value</label>
+  <textarea class="form-control" id="value" rows="12" style="font-size: 12px; font-family: monospace;"></textarea>
+  <div id='editor-container'></div>
+</div>
+
+<script>
+  const editorContainer = document.querySelector('#editor-container')
+  const value = document.querySelector('#value')
+  const schema = {
+    "type": "object",
+    "options": {
+      "remove_false_properties": true
+    },
+    "properties": {
+      "a": {
+        "type": "boolean",
+        "format": "checkbox",
+        "options": {
+          "dependencies": {
+            "a": [
+              true
+            ]
+          }
+        }
+      },
+      "b": {
+        "type": "boolean",
+        "format": "checkbox",
+        "options": {
+          "remove_false_properties": true
+        }
+      },
+      "c": {
+        "type": "boolean",
+        "format": "checkbox"
+      },
+      "d": {
+        "type": "boolean",
+        "format": "checkbox"
+      },
+      "e": {
+        "type": "boolean",
+        "format": "checkbox"
+      },
+      "f": {
+        "type": "boolean",
+        "format": "checkbox"
+      },
+      "g": {
+        "type": "boolean",
+        "format": "checkbox"
+      },
+      "h": {
+        "type": "boolean",
+        "format": "checkbox"
+      }
+    }
+  }
+
+  const editor = new JSONEditor(editorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome',
+    show_errors: 'always',
+    remove_false_properties: false
+  })
+
+  editor.on('change', function () {
+    value.value = JSON.stringify(editor.getValue())
+  })
+</script>
+</body>
