@@ -359,7 +359,15 @@ languages.en = {
   /**
   * Warning when deleting a node
   */
-  button_delete_node_warning: 'Are you sure you want to remove this item?'
+  button_delete_node_warning: 'Are you sure you want to remove this item?',
+  /**
+   * Warning when deleting a node
+   */
+  table_controls: 'Controls',
+  /**
+   * Warning when paste and  length exceeded maxLength
+   */
+  paste_max_length_reached: 'Pasted text exceeded maximum length of {{0}} and will be clipped.'
 }
 
 /* Default per-editor options */
@@ -408,7 +416,10 @@ const options = {
   use_default_values: true,
   max_depth: 0,
   button_state_mode: 1,
-  case_sensitive_property_search: true
+  case_sensitive_property_search: true,
+  show_errors: 'interaction',
+  prompt_paste_max_length_reached: false,
+  remove_false_properties: false
 }
 
 /* This assignment was previously in index.js but makes more sense here */

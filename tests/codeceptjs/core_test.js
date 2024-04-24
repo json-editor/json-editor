@@ -5,6 +5,56 @@ const { DEFAULT_WAIT_TIME } = require('./test-config')
 
 Feature('core')
 
+Scenario('should hide titles @titleHidden', async ({ I }) => {
+  I.amOnPage('title-hidden.html')
+  I.waitForElement('.je-ready')
+  I.waitForText('root', DEFAULT_WAIT_TIME, '.sr-only')
+  I.waitForText('boolean', DEFAULT_WAIT_TIME, '.sr-only')
+  I.waitForText('integer', DEFAULT_WAIT_TIME, '.sr-only')
+  I.waitForText('number', DEFAULT_WAIT_TIME, '.sr-only')
+  I.waitForText('string', DEFAULT_WAIT_TIME, '.sr-only')
+  I.waitForText('array', DEFAULT_WAIT_TIME, '.sr-only')
+})
+
+Scenario('should show validation errors based on "show_errors" setting @showValidationErrors', async ({ I }) => {
+  I.amOnPage('show-validation-errors.html')
+  I.waitForElement('.je-ready')
+  I.dontSee('Value must be the constant value.')
+  I.dontSee('Value must be the constant value.')
+  I.dontSee('Value must be the constant value.')
+
+  // set invalid values through interaction
+  I.checkOption('[name="root[boolean-checkbox]"]')
+  I.selectOption('[name="root[boolean-select]"]', '1')
+  I.selectOption('[name="root[boolean-choices]"]', '1')
+  I.uncheckOption('[name="root[boolean-checkbox]"]')
+  I.selectOption('[name="root[boolean-select]"]', 'false')
+  I.selectOption('[name="root[boolean-choices]"]', 'false')
+  I.waitForText('Value must be the constant value.', DEFAULT_WAIT_TIME, '[data-schemapath="root.boolean-checkbox"] .invalid-feedback')
+  I.waitForText('Value must be the constant value.', DEFAULT_WAIT_TIME, '[data-schemapath="root.boolean-select"] .invalid-feedback')
+  I.waitForText('Value must be the constant value.', DEFAULT_WAIT_TIME, '[data-schemapath="root.boolean-choices"] .invalid-feedback')
+
+  // set valid values through interaction
+  I.checkOption('[name="root[boolean-checkbox]"]')
+  I.selectOption('[name="root[boolean-select]"]', '1')
+  I.selectOption('[name="root[boolean-choices]"]', '1')
+  I.dontSee('Value must be the constant value.')
+  I.dontSee('Value must be the constant value.')
+  I.dontSee('Value must be the constant value.')
+
+  // set invalid values with setValue
+  I.click('#set-invalid-values')
+  I.waitForText('Value must be the constant value.', DEFAULT_WAIT_TIME, '[data-schemapath="root.boolean-checkbox"] .invalid-feedback')
+  I.waitForText('Value must be the constant value.', DEFAULT_WAIT_TIME, '[data-schemapath="root.boolean-select"] .invalid-feedback')
+  I.waitForText('Value must be the constant value.', DEFAULT_WAIT_TIME, '[data-schemapath="root.boolean-choices"] .invalid-feedback')
+
+  // set valid values with setValue
+  I.click('#set-valid-values')
+  I.waitForInvisible('[data-schemapath="root.boolean-checkbox"] .invalid-feedback')
+  I.waitForInvisible('[data-schemapath="root.boolean-select"] .invalid-feedback')
+  I.waitForInvisible('[data-schemapath="root.boolean-choices"] .invalid-feedback')
+})
+
 Scenario('should listen to @load-events', async ({ I }) => {
   I.amOnPage('load-events.html')
   I.waitForElement('.je-ready')
@@ -105,7 +155,7 @@ Scenario('should watch form for changes @core @change', async ({ I }) => {
 
 Scenario('should change the form if form_name_root option is set @core', async ({ I }) => {
   I.amOnPage('form-name.html')
-  I.see('Property must be set.', '.invalid-feedback')
+  I.see('Value must be one of the enumerated values', '.invalid-feedback')
   I.seeElement('[data-schemapath="form_1"]')
   I.seeElement('[data-schemapath="form_2"]')
   I.seeElement('[name="form_1"]')
@@ -124,7 +174,7 @@ Scenario('should change the form if form_name_root option is set @core', async (
   I.seeElement('[for="form_2[2]"]')
   I.click('[for="form_1[0]"]')
   I.click('[for="form_2[1]"]')
-  I.dontSee('Property must be set.', '.invalid-feedback')
+  I.dontSee('Value must be one of the enumerated values', '.invalid-feedback')
   I.click('#get-value-form-1')
   I.waitForValue('#value-form-1', '"yes"')
   I.click('#get-value-form-2')

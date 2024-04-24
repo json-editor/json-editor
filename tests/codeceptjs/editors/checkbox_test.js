@@ -4,7 +4,7 @@ const { DEFAULT_WAIT_TIME } = require('../test-config')
 
 Feature('checkbox')
 
-Scenario('should be disabled if "readonly" is specified', async ({ I }) => {
+Scenario('should be disabled if "readonly" is specified @readOnly', async ({ I }) => {
   I.amOnPage('read-only.html')
   I.waitForText('READY', DEFAULT_WAIT_TIME, '.state')
   I.seeDisabledAttribute('[name="root[checkbox]"]')

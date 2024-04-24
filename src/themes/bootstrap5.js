@@ -68,8 +68,8 @@ export class bootstrap5Theme extends AbstractTheme {
     return el
   }
 
-  getRangeInput (min, max, step) {
-    const el = super.getRangeInput(min, max, step)
+  getRangeInput (min, max, step, description, formName) {
+    const el = super.getRangeInput(min, max, step, description, formName)
     el.classList.remove('form-control')
     el.classList.add('form-range')
     return el
@@ -163,7 +163,7 @@ export class bootstrap5Theme extends AbstractTheme {
     return el
   }
 
-  getFormControl (label, input, description, infoText) {
+  getFormControl (label, input, description, infoText, formName) {
     const group = document.createElement('div')
     group.classList.add('form-group')
 
@@ -174,9 +174,15 @@ export class bootstrap5Theme extends AbstractTheme {
       input.classList.add('form-check-input')
       label.classList.add('form-check-label')
 
-      const unique = (Date.now() * Math.random()).toFixed(0)
-      input.setAttribute('id', unique)
-      label.setAttribute('for', unique)
+      if (input.tagName.toLowerCase() !== 'div' && input && label && formName) {
+        label.setAttribute('for', formName)
+        input.setAttribute('id', formName)
+      }
+
+      if (input.tagName.toLowerCase() !== 'div' && input && description) {
+        description.setAttribute('id', formName + '-description')
+        input.setAttribute('aria-describedby', formName + '-description')
+      }
 
       check.appendChild(input)
       check.appendChild(label)
@@ -199,6 +205,28 @@ export class bootstrap5Theme extends AbstractTheme {
     }
 
     return group
+  }
+
+  getHiddenLabel (text) {
+    const el = document.createElement('label')
+    el.textContent = text
+    el.classList.add('visually-hidden')
+    return el
+  }
+
+  visuallyHidden (element) {
+    if (!element) {
+      return
+    }
+
+    element.classList.add('visually-hidden')
+  }
+
+  getHiddenText (text) {
+    const el = document.createElement('span')
+    el.textContent = text
+    el.classList.add('sr-only')
+    return el
   }
 
   getInfoButton (text) {
@@ -347,7 +375,8 @@ export class bootstrap5Theme extends AbstractTheme {
   }
 
   getHeader (text, pathDepth) {
-    const el = document.createElement('h3')
+    const el = document.createElement('span')
+    el.classList.add('h3')
     el.classList.add('card-title')
     el.classList.add('level-' + pathDepth)
 
@@ -436,6 +465,7 @@ export class bootstrap5Theme extends AbstractTheme {
 
     input.errmsg.style.display = 'block'
     input.errmsg.textContent = text
+    input.errmsg.setAttribute('role', 'alert')
   }
 
   removeInputError (input) {

@@ -19,6 +19,10 @@ export class RadioEditor extends SelectEditor {
     const radioInputEventhandler = e => {
       this.setValue(e.currentTarget.value)
       this.onChange(true)
+
+      this.radioGroup.forEach((radio) => {
+        radio.checked = (radio.value === this.getValue())
+      })
     }
 
     for (let i = 0; i < this.enum_values.length; i++) {
@@ -110,10 +114,13 @@ export class RadioEditor extends SelectEditor {
     for (let i = 0; i < this.radioGroup.length; i++) {
       if (this.radioGroup[i].value === val) {
         this.radioGroup[i].checked = true
-        this.value = val
-        this.onChange()
         break
+      } else {
+        this.radioGroup[i].checked = false
       }
     }
+
+    this.value = val
+    this.onChange()
   }
 }

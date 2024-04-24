@@ -93,7 +93,7 @@ export class ArrayEditor extends AbstractEditor {
 
   build () {
     if (!this.options.compact) {
-      this.header = document.createElement('label')
+      this.header = document.createElement('span')
       this.header.textContent = this.getTitle()
       this.title = this.theme.getHeader(this.header, this.getPathDepth())
       this.container.appendChild(this.title)
@@ -156,10 +156,18 @@ export class ArrayEditor extends AbstractEditor {
     this.addControls()
   }
 
-  onChildEditorChange (editor) {
+  postBuild () {
+    super.postBuild()
+
+    if (this.schema.readOnly || this.schema.readonly) {
+      this.disable()
+    }
+  }
+
+  onChildEditorChange (editor, eventData) {
     this.refreshValue()
     this.refreshTabs(true)
-    super.onChildEditorChange(editor)
+    super.onChildEditorChange(editor, eventData)
   }
 
   getItemTitle () {
@@ -275,7 +283,7 @@ export class ArrayEditor extends AbstractEditor {
   }
 
   empty (hard) {
-    if (!this.rows) return
+    if (this.rows === null) return
 
     this.rows.forEach((row, i) => {
       if (hard) {
@@ -285,6 +293,12 @@ export class ArrayEditor extends AbstractEditor {
       }
       this.rows[i] = null
     })
+    if (hard) {
+      for (let j = this.rows.length; j < this.row_cache.length; j++) {
+        this.destroyRow(this.row_cache[j], true)
+        this.row_cache[j] = null
+      }
+    }
     this.rows = []
     if (hard) this.row_cache = []
   }
@@ -342,7 +356,12 @@ export class ArrayEditor extends AbstractEditor {
     value = this.ensureArraySize(value)
 
     const serialized = JSON.stringify(value)
-    if (serialized === this.serialized) return
+    if (serialized === this.serialized) {
+      if (initial) {
+        this.refreshValue(initial)
+      }
+      return
+    }
 
     value.forEach((val, i) => {
       if (this.rows[i]) {
@@ -454,7 +473,7 @@ export class ArrayEditor extends AbstractEditor {
         this.value[i] = editor.getValue()
       })
 
-      if (!this.collapsed && this.setupButtons(minItems)) {
+      if (this.setupButtons(minItems) && !this.collapsed) {
         this.controls.style.display = 'inline-block'
       } else {
         this.controls.style.display = 'none'
@@ -585,6 +604,7 @@ export class ArrayEditor extends AbstractEditor {
       this.setValue(value)
       this.refreshValue(true)
       this.onChange(true)
+      this.jsoneditor.trigger('copyRow', this.rows[i - 1])
     })
 
     holder.appendChild(button)

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>showValidationErrors</title>
+    <script src="../../dist/jsoneditor.js"></script>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+    <div id='editor-container'></div>
+    <div class="btn btn-success" id="set-valid-values">Set valid values</div>
+    <div class="btn btn-danger" id="set-invalid-values">Set invalid values</div>
+</div>
+
+<script>
+  const editorContainer = document.querySelector('#editor-container')
+  const schema = {
+    "type": "object",
+    "properties": {
+      "boolean-checkbox": {
+        "title": "boolean-checkbox",
+        "type": "boolean",
+        "format": "checkbox",
+        "const": true,
+        "default": false
+      },
+      "boolean-select": {
+        "title": "boolean-select",
+        "type": "boolean",
+        "const": true,
+        "default": false
+      },
+      "boolean-choices": {
+        "title": "boolean-choices",
+        "type": "boolean",
+        "format": "choices",
+        "const": true,
+        "default": false
+      }
+    }
+  }
+
+  const editor = new JSONEditor(editorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome'
+  })
+
+  const setValidValues = document.querySelector('#set-valid-values')
+  const setInvalidValues = document.querySelector('#set-invalid-values')
+
+  setValidValues.addEventListener('click', () => {
+    editor.setValue({
+      "boolean-checkbox": true,
+      "boolean-select": true,
+      "boolean-choices": true
+    })
+  })
+
+  setInvalidValues.addEventListener('click', () => {
+    editor.setValue({
+      "boolean-checkbox": false,
+      "boolean-select": false,
+      "boolean-choices": false
+    })
+  })
+</script>
+
+</body>
+</html>

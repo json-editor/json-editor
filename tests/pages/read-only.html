@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <script src="../../dist/jsoneditor.js"></script>
+    <title>readonly</title>
+    <meta charset="utf-8"/>
+    <script src="../../dist/jsoneditor.js"></script>
 </head>
 <body>
 
-<textarea class="debug" cols="30" rows="10"></textarea>
+<h1>Test</h1>
+<label for="debug">Value</label>
+<textarea id="debug" class="debug" cols="30" rows="10"></textarea>
 <div class="state"></div>
 <button class='get-value'>Get Value</button>
 <div class='container'></div>
@@ -83,6 +86,34 @@
         "title": "button",
         "format": "button",
         "readOnly": true
+      },
+      "array": {
+        "type": "array",
+        "minItems": 2,
+        "readOnly": true,
+        "items": {
+          "readOnly": false,
+          "title": "string",
+          "type": "string",
+          "default": "some value"
+        }
+      },
+      "object": {
+        "type": "object",
+        "title": "Object",
+        "readOnly": true,
+        "properties": {
+          "string": {
+            "title": "string",
+            "type": "string",
+            "default": "some value"
+          },
+          "number": {
+            "title": "number",
+            "type": "number",
+            "default": 5.5
+          }
+        }
       }
     }
   };
@@ -91,7 +122,7 @@
     schema: schema
   });
 
-  editor.on('ready',function() {
+  editor.on('ready', function () {
     state.innerText = 'READY'
   });
 

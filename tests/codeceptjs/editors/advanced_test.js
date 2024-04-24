@@ -1,6 +1,6 @@
 /* global Feature Scenario */
 
-Feature('Advanced Editor')
+Feature('Advanced Editor @advance-editor')
 
 Scenario('test validation & delete', ({ I }) => {
   I.amOnPage('advanced.html')

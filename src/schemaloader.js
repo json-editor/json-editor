@@ -261,7 +261,7 @@ export class SchemaLoader {
    */
   _manageRecursivePointer (schema, path) {
     Object.keys(schema).forEach(i => {
-      if (schema[i].$ref && schema[i].$ref.indexOf('#') === 0) {
+      if (schema[i] !== null && schema[i].$ref && schema[i].$ref.indexOf('#') === 0) {
         schema[i].$ref = path + schema[i].$ref
       }
     })
@@ -334,7 +334,7 @@ export class SchemaLoader {
   }
 
   _joinUrl (url, fileBase) {
-    var fetchUrl = url
+    let fetchUrl = url
 
     if (url.substr(0, 7) !== 'http://' &&
       url.substr(0, 8) !== 'https://' &&

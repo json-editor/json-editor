@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>array-header-template</title>
+    <script src="../../dist/jsoneditor.js"></script>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Test</h1>
+    <div id='editor-container'></div>
+</div>
+
+<script>
+  const editorContainer = document.querySelector('#editor-container')
+  const schema1 = {
+    "title": "Pets",
+    "format": "tabs",
+    "type": "array",
+    "minItems": 1,
+    "default": [
+      {
+        "pet": "pet_1"
+      },
+      {
+        "pet": "pet_2"
+      }
+    ],
+    "items": {
+      "title": "Pets",
+      "type": "object",
+      "headerTemplate": "{{ properties.pet.enumTitle }}",
+      "properties": {
+        "pet": {
+          "title": "Pet",
+          "type": "string",
+          "enum": [ "pet_1", "pet_2" ],
+          "options": {
+            "enum_titles": [ "Dog", "Cat" ]
+          }
+        }
+      }
+    }
+  }
+
+  const editor = new JSONEditor(editorContainer, {
+    schema: schema1,
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome',
+    disable_collapse: true,
+    disable_edit_json: true,
+    disable_properties: true
+  })
+</script>
+
+</body>
+</html>

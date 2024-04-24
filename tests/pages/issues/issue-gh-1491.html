@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>GitHub Issue 1491</title>
+    <link rel="stylesheet" id="theme-link" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script src="../../../dist/jsoneditor.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Test</h1>
+      <a href="https://github.com/json-editor/json-editor/issues/1491">Link to issue</a>
+      <div id='editor_holder'></div>
+    </div>
+
+    <script>
+      const value = document.querySelector('#value')
+      const defaultSchema = {
+        "options": {
+          "titleHidden": true
+        },
+        "type": "object",
+        "required": [
+          "betreff",
+          "text"
+        ],
+        "properties": {
+          "betreff": {
+            "title": "Betreff",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "text": {
+            "title": "Text",
+            "type": "string",
+            "format": "textarea",
+            "minLength": 1,
+            "maxLength": 500,
+            "options": {
+              "inputAttributes": {
+                "rows": 3
+              }
+            }
+          }
+        }
+      }
+
+      const editor = new JSONEditor(document.getElementById('editor_holder'), {
+        iconlib: 'fontawesome5',
+        schema: defaultSchema,
+        theme: 'bootstrap3'
+      })
+    </script>
+  </body>
+</html>

@@ -63,7 +63,7 @@ export class MultiSelectEditor extends AbstractEditor {
 
   build () {
     let i
-    if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
+    if (!this.options.compact) this.header = this.label = this.theme.getLabelLike(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.translateProperty(this.schema.description))
     if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.translateProperty(this.options.infoText))
     if (this.options.compact) this.container.classList.add('compact')
@@ -90,6 +90,7 @@ export class MultiSelectEditor extends AbstractEditor {
       this.control = this.theme.getMultiCheckboxHolder(this.controls, this.label, this.description, this.infoButton)
       this.inputs.controlgroup = this.inputs.controls = this.control /* Enable error messages for checkboxes */
     } else {
+      if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
       this.input_type = 'select'
       this.input = this.theme.getSelectInput(this.option_keys, true)
       this.theme.setSelectOptions(this.input, this.option_keys, this.option_enum.map(e => e.title))
@@ -100,7 +101,7 @@ export class MultiSelectEditor extends AbstractEditor {
         this.select_options[this.option_keys[i]] = this.input.children[i]
       }
 
-      this.control = this.theme.getFormControl(this.label, this.input, this.description, this.infoButton)
+      this.control = this.theme.getFormControl(this.label, this.input, this.description, this.infoButton, this.formname)
     }
 
     if (this.schema.readOnly || this.schema.readonly) {

@@ -1,21 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <title>array events</title>
   <meta charset="utf-8"/>
   <script src="../../dist/jsoneditor.js"></script>
 </head>
 <body>
 
-<textarea class="debug" cols="30" rows="10"></textarea>
-<textarea class="action" cols="30" rows="5"></textarea>
+<h1>Test</h1>
+<label for="debug">Value</label>
+<textarea id="debug" class="debug" cols="30" rows="10"></textarea>
 <button class='get-value'>Get Value</button>
+
+<label for="action1">Action1</label>
+<textarea id="action1" cols="30" rows="5"></textarea>
+
+<label for="action2">Action2</label>
+<textarea id="action2" cols="30" rows="5"></textarea>
+
 <div class='container'></div>
 
 <script>
-  var container = document.querySelector('.container');
-  var debug = document.querySelector('.debug');
-  var action = document.querySelector('.action');
-  var schema = {
+  const container = document.querySelector('.container');
+  const debug = document.querySelector('.debug');
+  const action1 = document.querySelector('#action1');
+  const action2 = document.querySelector('#action2');
+  const schema = {
     "type": "array",
     "title": "Strings",
     "items": {
@@ -24,40 +34,42 @@
     }
   };
 
-  var editor = new JSONEditor(container, {
-    schema: schema
+  const editor = new JSONEditor(container, {
+    schema: schema,
+    enable_array_copy: true
   });
   editor.promise.then(() => {
     document.querySelector('.get-value').addEventListener('click', function () {
-    debug.value = JSON.stringify(editor.getValue());
-  });
+      debug.value = JSON.stringify(editor.getValue());
+    });
 
-  editor.setValue(["A","B"]);
+    editor.setValue(["A", "B"]);
 
-  editor.on('moveRow', function () {
-    action.value = 'moveRow';
-    console.log('moveRow');
-  });
+    editor.on('copyRow', function () {
+      action2.value = 'copyRow'
+      console.log('copyRow');
+    });
 
-  editor.on('addRow', function () {
-    action.value = 'addRow'
-    console.log('addRow')
-  });
+    editor.on('moveRow', function () {
+      action1.value = 'moveRow';
+      console.log('moveRow');
+    });
 
-  editor.on('deleteRow', function () {
-    action.value = 'deleteRow'
-    console.log('deleteRow')
-  });
+    editor.on('addRow', function () {
+      action1.value = 'addRow'
+      console.log('addRow')
+    });
 
-  editor.on('deleteAllRows', function () {
-    action.value = 'deleteAllRows'
-    console.log('deleteAllRows')
-  });
+    editor.on('deleteRow', function () {
+      action1.value = 'deleteRow'
+      console.log('deleteRow')
+    });
+
+    editor.on('deleteAllRows', function () {
+      action1.value = 'deleteAllRows'
+      console.log('deleteAllRows')
+    });
   })
-  
-
-
 </script>
-
 </body>
 </html>

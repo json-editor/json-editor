@@ -75,8 +75,8 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
-  getRangeInput (min, max, step) {
-    const el = super.getRangeInput(min, max, step)
+  getRangeInput (min, max, step, description, formName) {
+    const el = super.getRangeInput(min, max, step, description, formName)
 
     if (this.options.custom_forms === true) {
       el.classList.remove('form-control')
@@ -188,7 +188,29 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
-  getFormControl (label, input, description, infoText) {
+  getHiddenLabel (text) {
+    const el = document.createElement('label')
+    el.textContent = text
+    el.classList.add('sr-only')
+    return el
+  }
+
+  visuallyHidden (element) {
+    if (!element) {
+      return
+    }
+
+    element.classList.add('sr-only')
+  }
+
+  getHiddenText (text) {
+    const el = document.createElement('span')
+    el.textContent = text
+    el.classList.add('sr-only')
+    return el
+  }
+
+  getFormControl (label, input, description, infoText, formName) {
     const group = document.createElement('div')
     group.classList.add('form-group')
 
@@ -211,10 +233,6 @@ export class bootstrap4Theme extends AbstractTheme {
         }
       }
 
-      const unique = (Date.now() * Math.random()).toFixed(0)
-      input.setAttribute('id', unique)
-      label.setAttribute('for', unique)
-
       check.appendChild(input)
       check.appendChild(label)
       if (infoText) check.appendChild(infoText)
@@ -232,6 +250,16 @@ export class bootstrap4Theme extends AbstractTheme {
 
     if (description) {
       group.appendChild(description)
+    }
+
+    if (input.tagName.toLowerCase() !== 'div' && input && label && formName) {
+      label.setAttribute('for', formName)
+      input.setAttribute('id', formName)
+    }
+
+    if (input.tagName.toLowerCase() !== 'div' && input && description) {
+      description.setAttribute('id', formName + '-description')
+      input.setAttribute('aria-describedby', formName + '-description')
     }
 
     return group
@@ -406,10 +434,8 @@ export class bootstrap4Theme extends AbstractTheme {
   }
 
   getHeader (text, pathDepth) {
-    /* var cardHeader = document.createElement('div') */
-    /* cardHeader.classList.add('card-header') */
-
-    const el = document.createElement('h3')
+    const el = document.createElement('span')
+    el.classList.add('h3')
     el.classList.add('card-title')
     el.classList.add('level-' + pathDepth)
 
@@ -420,8 +446,6 @@ export class bootstrap4Theme extends AbstractTheme {
     }
 
     el.style.display = 'inline-block'
-
-    /* cardHeader.appendChild(el) */
 
     return el
   }
@@ -500,6 +524,7 @@ export class bootstrap4Theme extends AbstractTheme {
 
     input.errmsg.style.display = 'block'
     input.errmsg.textContent = text
+    input.errmsg.setAttribute('role', 'alert')
   }
 
   removeInputError (input) {

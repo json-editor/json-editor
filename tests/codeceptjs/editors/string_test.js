@@ -98,7 +98,7 @@ Scenario('Should work correctly in arrays @optional', async ({ I }) => {
   I.switchTo()
 })
 
-Scenario('should be readonly if specified and not disabled', async ({ I }) => {
+Scenario('should be readonly if specified and not disabled @readOnly', async ({ I }) => {
   I.amOnPage('read-only.html')
   I.seeReadOnlyAttribute('[name="root[string]"]')
 })
@@ -115,4 +115,11 @@ Scenario('should work with cleave.js library', async ({ I }) => {
   await I.fillField('[name="root[cleave_test]"]', '12345678901234567890')
   I.click('.get-value')
   I.waitForValue('.debug', JSON.stringify({ cleave_test: '1234.567.890-1234' }))
+})
+
+Scenario('ace editor should have correct initial @prompt-paste-max-length-reached', async ({ I }) => {
+  I.amOnPage('prompt-paste-max-length-reached.html')
+  I.waitForElement('.je-ready')
+  I.click('#paste')
+  I.seeInPopup('Pasted text exceeded maximum length of 5 and will be clipped.')
 })

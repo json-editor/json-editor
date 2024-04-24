@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>rating</title>
+    <script src="../../dist/jsoneditor.js"></script>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Test</h1>
+    <div class="form-group">
+        <label for="value">Value</label>
+        <textarea id="value" class="form-control" rows="10"></textarea>
+    </div>
+
+    <div id='editor-container'></div>
+</div>
+
+<script>
+  const editorContainer = document.querySelector('#editor-container')
+  const value = document.querySelector('#value')
+  const schema = {
+      type: "object",
+      title: "Car",
+      properties: {
+          integer_rating: {
+              type: "integer",
+              format: "rating",
+          },
+          string_rating: {
+              type: "string",
+              format: "rating",
+          },
+          starrating: {
+              type: "string",
+              format: "starrating",
+              title: "Starrating",
+              description: 'Starrating',
+              enum: ["Beginner", "Skilled", "Experienced", "Advanced", "Expert"],
+              options: {
+                  grid_columns: 2
+              }
+          },
+          starrating2: {
+              type: "string",
+              format: "starrating",
+              title: "Starrating",
+              description: 'Starrating with "displayValue=true"',
+              enum: ["Beginner", "Skilled", "Experienced", "Advanced", "Expert"],
+              options: {
+                  grid_columns: 2,
+                  displayValue: true
+              }
+          },
+          starrating3: {
+              type: "string",
+              format: "starrating",
+              title: "Starrating",
+              description: 'Starrating with "displayValue=true"',
+              default: "5 Stars",
+              enum: ["1 Star", "2 Stars", "3 Stars", "4 Stars", "5 Stars", "6 Stars", "7 Stars", "8 Stars", "9 Stars", "10 Stars"],
+              options: {
+                  grid_columns: 4,
+                  displayValue: true
+              }
+          }
+      }
+  }
+
+  const editor = new JSONEditor(editorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome',
+    show_errors: 'always'
+  })
+
+  editor.on('change', function () {
+      value.value = JSON.stringify(editor.getValue())
+  })
+</script>
+
+</body>
+</html>

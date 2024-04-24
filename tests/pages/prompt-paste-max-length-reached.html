@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>prompt_paste_max_length_reached</title>
+  <script src="../../dist/jsoneditor.js"></script>
+  <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+  <h1>Test</h1>
+  <div id='editor-container'></div>
+  <button id="paste">Paste</button>
+</div>
+
+<script>
+  const editorContainer = document.querySelector('#editor-container')
+  const pasteBtn = document.querySelector('#paste')
+  const schema = {
+    "type": "string",
+    "maxLength": 5
+  }
+
+  const editor = new JSONEditor(editorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome',
+    show_errors: 'always',
+    prompt_paste_max_length_reached: true
+  })
+
+
+  pasteBtn.addEventListener('click', () => {
+    const inputElement = document.getElementById('root')
+    const pasteEvent = document.createEvent('Event')
+    pasteEvent.initEvent('paste', true, true)
+
+    pasteEvent.clipboardData = {
+      getData: format => {
+        return 'Hello world'
+      }
+    }
+
+    inputElement.dispatchEvent(pasteEvent)
+  })
+</script>
+
+</body>
+</html>

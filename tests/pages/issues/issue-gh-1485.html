@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>GitHub Issue 1485</title>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script src="../../../dist/jsoneditor.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Test</h1>
+      <a href="https://github.com/json-editor/json-editor/issues/1485">Link to issue</a>
+      <div id='editor_holder'></div>
+    </div>
+
+    <script>
+      const value = document.querySelector('#value')
+      const defaultSchema = {
+        "title": "json schema example",
+        "type": "object",
+        "properties": {
+          "example": {
+            "type": "string",
+            "template": "random_string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "full_name": {
+            "type": "string",
+            "template": "{{ fname }} {{ lname }}",
+            "watch": {
+              "fname": "first_name",
+              "lname": "last_name"
+            }
+          }
+        }
+      }
+
+      window.JSONEditor.defaults.callbacks.template = {
+        "random_string": () => {
+          return Math.random() * 2
+        }
+      }
+
+      const editor = new JSONEditor(document.getElementById('editor_holder'), {
+        iconlib: 'fontawesome5',
+        schema: defaultSchema,
+        theme: 'bootstrap4'
+      })
+    </script>
+  </body>
+</html>

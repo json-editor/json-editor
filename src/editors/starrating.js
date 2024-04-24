@@ -3,7 +3,7 @@ import rules from './starrating.css.js'
 
 export class StarratingEditor extends StringEditor {
   build () {
-    if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
+    if (!this.options.compact) this.header = this.label = this.theme.getLabelLike(this.getTitle(), this.isRequired())
     if (this.schema.description) this.description = this.theme.getFormInputDescription(this.translateProperty(this.schema.description))
     if (this.options.infoText) this.infoButton = this.theme.getInfoButton(this.translateProperty(this.options.infoText))
     if (this.options.compact) this.container.classList.add('compact')
@@ -47,6 +47,10 @@ export class StarratingEditor extends StringEditor {
         radioLabel.classList.add('starrating-display-enabled')
       }
 
+      const radioText = this.theme.getHiddenText('label')
+      radioText.textContent = i
+
+      radioLabel.appendChild(radioText)
       this.ratingContainer.appendChild(radioInput)
       this.ratingContainer.appendChild(radioLabel)
     }
@@ -112,23 +116,24 @@ export class StarratingEditor extends StringEditor {
       return undefined
     }
     if (this.schema.type === 'integer') {
-      return this.value === '' ? undefined : this.value * 1
+      return this.value === '' ? 0 : parseInt(this.value)
     }
     return this.value
   }
 
   setValue (value) {
+    this.value = value
+
     for (let i = 0; i < this.radioGroup.length; i++) {
       if (this.radioGroup[i].value === `${value}`) {
         this.radioGroup[i].checked = true
         this.value = value
-
         if (this.options.displayValue) this.displayRating.innerHTML = this.value
-
-        this.onChange(true)
         break
       }
     }
+
+    super.setValue(this.value)
   }
 }
 

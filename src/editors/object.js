@@ -42,7 +42,7 @@ export class ObjectEditor extends AbstractEditor {
       super.enable()
       if (this.editors) {
         Object.values(this.editors).forEach(e => {
-          if (e.isActive()) {
+          if (e.isActive() || e.isUiOnly) {
             e.enable()
           }
           e.optInCheckbox.disabled = false
@@ -60,7 +60,7 @@ export class ObjectEditor extends AbstractEditor {
     super.disable()
     if (this.editors) {
       Object.values(this.editors).forEach(e => {
-        if (e.isActive()) {
+        if (e.isActive() || e.isUiOnly) {
           e.disable(alwaysDisabled)
         }
         e.optInCheckbox.disabled = true
@@ -554,7 +554,7 @@ export class ObjectEditor extends AbstractEditor {
     } else {
       this.header = ''
       if (!this.options.compact) {
-        this.header = document.createElement('label')
+        this.header = document.createElement('span')
         this.header.textContent = this.getTitle()
       }
       this.title = this.theme.getHeader(this.header, this.getPathDepth())
@@ -568,7 +568,11 @@ export class ObjectEditor extends AbstractEditor {
 
       /* Edit JSON modal */
       this.editjson_holder = this.theme.getModal()
+      this.editjson_textarea_label = this.theme.getHiddenLabel(this.translate('button_edit_json'))
+      this.editjson_textarea_label.setAttribute('for', this.path + '-' + 'edit-json-textarea')
       this.editjson_textarea = this.theme.getTextareaInput()
+      this.editjson_textarea.setAttribute('id', this.path + '-' + 'edit-json-textarea')
+      this.editjson_textarea.setAttribute('aria-labelledby', this.path + '-' + 'edit-json-textarea')
       this.editjson_textarea.classList.add('je-edit-json--textarea')
       this.editjson_save = this.getButton('button_save', 'save', 'button_save')
       this.editjson_save.classList.add('json-editor-btntype-save')
@@ -591,6 +595,7 @@ export class ObjectEditor extends AbstractEditor {
         e.stopPropagation()
         this.hideEditJSON()
       })
+      this.editjson_holder.appendChild(this.editjson_textarea_label)
       this.editjson_holder.appendChild(this.editjson_textarea)
       this.editjson_holder.appendChild(this.editjson_save)
       this.editjson_holder.appendChild(this.editjson_copy)
@@ -605,7 +610,14 @@ export class ObjectEditor extends AbstractEditor {
 
       this.addproperty_input = this.theme.getFormInputField('text')
       this.addproperty_input.setAttribute('placeholder', 'Property name...')
+
+      this.addproperty_input_label = this.theme.getHiddenLabel(this.translate('button_properties'))
+      this.addproperty_input_label.setAttribute('for', this.path + '-' + 'property-selector')
+
       this.addproperty_input.classList.add('property-selector-input')
+      this.addproperty_input.setAttribute('id', this.path + '-' + 'property-selector')
+      this.addproperty_input.setAttribute('aria-labelledby', this.path + '-' + 'property-selector')
+
       this.addproperty_add.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
@@ -619,11 +631,18 @@ export class ObjectEditor extends AbstractEditor {
           if (this.editors[this.addproperty_input.value]) {
             this.editors[this.addproperty_input.value].disable()
           }
-          this.onChange(true)
+          const key = this.editors[this.addproperty_input.value].key
+          const type = this.editors[this.addproperty_input.value].type
+          const path = this.editors[this.addproperty_input.value].path
+
+          this.onChange(true, false, {
+            event: 'add',
+            data: { key, type, path }
+          })
         }
       })
       this.addproperty_input.addEventListener('input', (e) => {
-        e.target.previousSibling.childNodes.forEach((value) => {
+        e.target.previousSibling.previousSibling.childNodes.forEach((value) => {
           let searchTerm = value.innerText
           let propertyTitle = e.target.value
 
@@ -642,6 +661,7 @@ export class ObjectEditor extends AbstractEditor {
         })
       })
       this.addproperty_holder.appendChild(this.addproperty_list)
+      this.addproperty_holder.appendChild(this.addproperty_input_label)
       this.addproperty_holder.appendChild(this.addproperty_input)
       this.addproperty_holder.appendChild(this.addproperty_add)
       const spacer = document.createElement('div')
@@ -802,6 +822,10 @@ export class ObjectEditor extends AbstractEditor {
       /* Do it again now that we know the approximate heights of elements */
       this.layoutEditors()
     }
+
+    if (this.schema.readOnly || this.schema.readonly) {
+      this.disable()
+    }
   }
 
   deactivateNonRequiredProperties () {
@@ -850,15 +874,8 @@ export class ObjectEditor extends AbstractEditor {
 
   copyJSON () {
     if (!this.editjson_holder) return
-    const ta = document.createElement('textarea')
-    ta.value = this.editjson_textarea.value
-    ta.setAttribute('readonly', '')
-    ta.style.position = 'absolute'
-    ta.style.left = '-9999px'
-    document.body.appendChild(ta)
-    ta.select()
-    document.execCommand('copy')
-    document.body.removeChild(ta)
+    navigator.clipboard.writeText(this.editjson_textarea.value)
+      .catch((e) => window.alert(e))
   }
 
   saveJSON () {
@@ -908,7 +925,7 @@ export class ObjectEditor extends AbstractEditor {
 
     const label = this.theme.getCheckboxLabel(labelText)
 
-    const control = this.theme.getFormControl(label, checkbox)
+    const control = this.theme.getFormControl(label, checkbox, null, null, this.path + '-' + key)
     control.style.paddingBottom = control.style.marginBottom = control.style.paddingTop = control.style.marginTop = 0
     control.style.height = 'auto'
     /* control.style.overflowY = 'hidden'; */
@@ -964,6 +981,11 @@ export class ObjectEditor extends AbstractEditor {
 
   removeObjectProperty (property) {
     if (this.editors[property]) {
+      // do not destroy dependent editors
+      if (this.editors[property].schema?.options?.dependencies) {
+        return
+      }
+
       this.editors[property].unregister()
       delete this.editors[property]
 
@@ -1062,9 +1084,9 @@ export class ObjectEditor extends AbstractEditor {
     }
   }
 
-  onChildEditorChange (editor) {
+  onChildEditorChange (editor, eventData) {
     this.refreshValue()
-    super.onChildEditorChange(editor)
+    super.onChildEditorChange(editor, eventData)
   }
 
   canHaveAdditionalProperties () {
@@ -1124,6 +1146,14 @@ export class ObjectEditor extends AbstractEditor {
     if (result && (this.jsoneditor.options.remove_empty_properties || this.options.remove_empty_properties)) {
       Object.keys(result).forEach(key => {
         if (isEmpty(result[key])) {
+          delete result[key]
+        }
+      })
+    }
+
+    if (result && (this.jsoneditor.options.remove_false_properties || this.options.remove_false_properties)) {
+      Object.keys(result).forEach(key => {
+        if (result[key] === false) {
           delete result[key]
         }
       })

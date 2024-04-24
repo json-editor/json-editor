@@ -1,5 +1,46 @@
 ### Unreleased
 
+- Added options: "has_placeholder_option" and "placeholder_option_text"
+
+### 2.14.1
+
+- Fixed issue #1272 Multiple editor incorrect dependency inheritance
+- Improved Multiple editor accessibility
+- Fixed issue #1485 Infinite loop due to template rendering bug
+- Fixed issue #1171 Radio inputs without names having multiple checking marks
+- Fixed issue #1491 Wrong error messages displayed in some edge scenarios
+- Fixed issue #1466 memory leak in array editor
+
+### 2.14.0
+
+- Added new editor option "titleHidden"
+- Integrated "readOnly" for array and object editors
+- Fixed date, time and datetime-local validator
+- Fixed several accessibility issues. Note: Some forms may have new/modified attributes ("aria", "id", "for" and more)
+- Updated "format": "info" editors documentation
+
+### 2.13.2
+
+- Fixed early validation with boolean types
+- Refactored copy command using navigator
+- Fixed const validator when validating arrays and objects
+- Fixed issue format buttons disable state
+- Fixed issue #1453 setup buttons in array editor correctly if editor is initially collapsed
+- Fixed issue #1461 setup buttons in array editor correctly if there exists another enum-typed property for which the default value does not equal to the first value
+- Fixed issue #1466 memory leak in array editor
+
+### 2.13.1
+
+- Fixed bug in enumTitle for headerTemplates
+
+### 2.13.0
+
+- Added feature #1448 enumTitle for headerTemplates
+- Fixed issue #1442 tpe button editors
+- Fixed issue #1433 simplemde editor data sync
+- Added schema validation in playground
+- Fixed tests timing issues
+
 ### 2.12.0
 
 - Fixed issue #1422: use_default_values: false deletes valid values while true sets invalid default values

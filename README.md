@@ -85,6 +85,7 @@ If you learn best by example, check these out:
 *  Star Rating Editor Example - https://json-editor.github.io/json-editor/starrating.html
 *  Upload Editor Example - https://json-editor.github.io/json-editor/upload.html
 *  WYSIWYG Editor Example - https://json-editor.github.io/json-editor/wysiwyg.html
+*  Meta schema (schema builder) Example - https://json-editor.github.io/json-editor/meta-schema.html
 
 More examples can be found at the [JSON-Editor Interactive Playground](https://pmk65.github.io/jedemov2/dist/demo.html)
 
@@ -325,6 +326,11 @@ Here are all the available options:
     <td>This property controls whether property searches in an object editor are case-sensitive</td>
     <td><code>true</code></td>
   </tr>
+  <tr>
+    <td>prompt_paste_max_length_reached</td>
+    <td>If <code>true</code>, an alert will be displayed when pasting a value in an input that exceeded maxLength</td>
+    <td><code>false</code></td>
+  </tr>
   </tbody>
 </table>
 
@@ -432,6 +438,23 @@ for (let key in editor.editors) {
     editor.watch(key, watcherCallback.bind(editor, key));
   }
 }
+```
+
+There are also `add` and `switch` events to track changes. 
+The `add` event fires when a new object property has just been added.
+
+```javascript
+editor.on('add',(property) => {
+  // Do something
+});
+```
+
+The `switch` event fires when the type of one of the object's properties is changed by a type switch on the form.
+
+```javascript
+editor.on('switch',(property) => {
+  // Do something
+});
 ```
 
 ### Enable and Disable the Editor
@@ -1003,7 +1026,7 @@ Displays a label and a description text.
 
 ```json
 {
-  "type": "info",
+  "format": "info",
   "title": "Important:",
   "description": "Lorem ipsum dolor"
 }
@@ -1196,6 +1219,7 @@ Editor Options
 
 Editors can accept options which alter the behavior in some way.
 
+* `titleHidden` - If set to true, the editor title will be visually hidden
 * `collapsed` - If set to true, the editor will start collapsed (works for objects and arrays)
 * `disable_array_add` - If set to true, the "add row" button will be hidden (works for arrays)
 * `disable_array_delete` - If set to true, all of the "delete" buttons will be hidden (works for arrays)
@@ -1213,7 +1237,10 @@ Editors can accept options which alter the behavior in some way.
 * `hidden` - If set to true, the editor will not appear in the UI (works for all types)
 * `input_height` - Explicitly set the height of the input element. Should be a valid CSS width string (e.g. "100px").  Works best with textareas.
 * `input_width` - Explicitly set the width of the input element. Should be a valid CSS width string (e.g. "100px").  Works for string, number, and integer data types.
-* `remove_empty_properties` - If set to true for an object, empty object properties (i.e. those with falsy values) will not be returned by getValue().
+* `remove_empty_properties` - If set to `true` for an object, empty object properties (i.e. those with falsy values) will not be returned by getValue().
+* `remove_false_properties` - If set to `true` for an object, object properties with value `false` will not be returned by getValue().
+* `has_placeholder_option` - If set to true, a placeholder option will be added to the select editor input.
+* `placeholder_option_text` - Text displayed in select placeholder option.
 
 ```json
 {
@@ -1716,7 +1743,7 @@ The `title` keyword of a schema is used to add user friendly headers to the edit
 Consider the example of an array of children.  Without dynamic headers, the UI for the array elements would show `Child 1`, `Child 2`, etc..
 It would be much nicer if the headers could be dynamic and incorporate information about the children, such as `1 - John (age 9)`, `2 - Sarah (age 11)`.
 
-To accomplish this, use the `headerTemplate` property.  All of the watched variables are passed into this template, along with the static title `title` (e.g. "Child"), the 0-based index `i0` (e.g. "0" and "1"), the 1-based index `i1`, and the field's value `self` (e.g. `{"name": "John", "age": 9}`).
+To accomplish this, use the `headerTemplate` property.  All of the watched variables are passed into this template, along with the static title `title` (e.g. "Child"), the 0-based index `i0` (e.g. "0" and "1"), the 1-based index `i1`, extra child variable `properties.${PROPERTY_NAME}.enumTitle` and the field's value `self` (e.g. `{"name": "John", "age": 9}`).
 
 ```js+jinja
 {
@@ -1725,10 +1752,18 @@ To accomplish this, use the `headerTemplate` property.  All of the watched varia
   "items": {
     "type": "object",
     "title": "Child",
-    "headerTemplate": "{{ i1 }} - {{ self.name }} (age {{ self.age }})",
+    "headerTemplate": "{{ i1 }} - {{ self.name }} (age {{ self.age }})  has a {{ properties.pet.enumTitle }}",
     "properties": {
       "name": { "type": "string" },
-      "age": { "type": "integer" }
+      "age": { "type": "integer" },
+      "pet": {
+          "title": "Pet",
+          "type": "string",
+          "enum": [ "pet_1", "pet_2" ],
+          "options": {
+            "enum_titles": [ "Dog", "Cat" ]
+          }
+        }
     }
   }
 }

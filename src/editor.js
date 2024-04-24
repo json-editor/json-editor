@@ -15,6 +15,7 @@ export class AbstractEditor {
     this.original_schema = options.schema
     this.schema = this.jsoneditor.expandSchema(this.original_schema)
     this.active = true
+    this.isUiOnly = false
     this.options = extend({}, (this.options || {}), (this.schema.options || {}), (options.schema.options || {}), options)
 
     this.formname = this.jsoneditor.options.form_name_root || 'root'
@@ -33,27 +34,35 @@ export class AbstractEditor {
     this.registerDependencies()
   }
 
-  onChildEditorChange (editor) {
-    this.onChange(true)
+  onChildEditorChange (editor, eventData) {
+    this.onChange(true, false, eventData)
   }
 
   notify () {
     if (this.path) this.jsoneditor.notifyWatchers(this.path)
   }
 
-  change () {
-    if (this.parent) this.parent.onChildEditorChange(this)
-    else if (this.jsoneditor) this.jsoneditor.onChange()
+  change (eventData) {
+    if (this.parent) this.parent.onChildEditorChange(this, eventData)
+    else if (this.jsoneditor) this.jsoneditor.onChange(eventData)
   }
 
-  onChange (bubble) {
+  onChange (bubble, fromTemplate, eventData) {
     this.notify()
-    if (this.watch_listener) this.watch_listener()
-    if (bubble) this.change()
+
+    if (!fromTemplate) {
+      if (this.watch_listener) this.watch_listener()
+    }
+
+    if (bubble) this.change(eventData)
   }
 
   register () {
     this.jsoneditor.registerEditor(this)
+    if (this.input && !this.label) {
+      const ariaLabel = this.getTitle() || this.formname
+      this.input.setAttribute('aria-label', ariaLabel)
+    }
     this.onChange()
   }
 
@@ -166,7 +175,7 @@ export class AbstractEditor {
     const editor = this.jsoneditor.getEditor(path)
     const value = editor ? editor.getValue() : undefined
 
-    if (!editor || !editor.dependenciesFulfilled) {
+    if (!editor || !editor.dependenciesFulfilled || !value) {
       this.dependenciesFulfilled = false
     } else if (Array.isArray(choices)) {
       this.dependenciesFulfilled = choices.some(choice => {
@@ -210,9 +219,12 @@ export class AbstractEditor {
   setOptInCheckbox (header) {
     /* the active/deactive checbox control. */
 
+    this.optInLabel = this.theme.getHiddenLabel(this.formname + ' opt-in')
+    this.optInLabel.setAttribute('for', this.formname + '-opt-in')
     this.optInCheckbox = document.createElement('input')
     this.optInCheckbox.setAttribute('type', 'checkbox')
     this.optInCheckbox.setAttribute('style', 'margin: 0 10px 0 0;')
+    this.optInCheckbox.setAttribute('id', this.formname + '-opt-in')
     this.optInCheckbox.classList.add('json-editor-opt-in')
 
     this.optInCheckbox.addEventListener('click', () => {
@@ -231,6 +243,7 @@ export class AbstractEditor {
     if (parentOptInEnabled || (!parentOptInDisabled && globalOptIn) || (!parentOptInDefined && globalOptIn)) {
       /* and control to type object editors if they are not required */
       if (this.parent && this.parent.schema.type === 'object' && !this.isRequired() && this.header) {
+        this.header.appendChild(this.optInLabel)
         this.header.appendChild(this.optInCheckbox)
         this.header.insertBefore(this.optInCheckbox, this.header.firstChild)
       }
@@ -252,6 +265,11 @@ export class AbstractEditor {
     this.setValue(this.getDefault(), true)
     this.updateHeaderText()
     this.onWatchedFieldChange()
+
+    if (this.options.titleHidden) {
+      this.theme.visuallyHidden(this.label)
+      this.theme.visuallyHidden(this.header)
+    }
   }
 
   setupWatchListeners () {
@@ -441,7 +459,13 @@ export class AbstractEditor {
       }
     }
 
-    if (data.class) link.classList.add(data.class)
+    if (data.class) {
+      const classNames = data.class.split(' ')
+
+      classNames.forEach((className) => {
+        link.classList.add(className)
+      })
+    }
 
     return holder
   }
@@ -510,6 +534,7 @@ export class AbstractEditor {
 
   onWatchedFieldChange () {
     let vars
+
     if (this.header_template) {
       vars = extend(this.getWatchedFieldValues(), {
         key: this.key,
@@ -518,6 +543,24 @@ export class AbstractEditor {
         i1: (this.key * 1 + 1),
         title: this.getTitle()
       })
+
+      // object properties
+      if (this.editors && Object.keys(this.editors).length) {
+        vars.properties = {}
+
+        Object.keys(this.editors).forEach((key) => {
+          const editor = this.editors[key]
+
+          if (editor.schema && editor.schema.enum && editor.schema.options && editor.schema.options.enum_titles) {
+            const enumIndex = editor.schema.enum.indexOf(editor.value)
+            const enumTitle = editor.options.enum_titles[enumIndex]
+            vars.properties[key] = {
+              enumTitle
+            }
+          }
+        })
+      }
+
       const headerText = this.header_template(vars)
 
       if (headerText !== this.header_text) {
@@ -607,7 +650,7 @@ export class AbstractEditor {
   }
 
   getTitle () {
-    return this.translateProperty(this.schema.title || this.key)
+    return this.translateProperty(this.schema.title || this.key || this.formname)
   }
 
   enable () {
@@ -693,13 +736,14 @@ export class AbstractEditor {
     return id.replace(/\s+/g, '-')
   }
 
-  setInputAttributes (inputAttribute) {
+  setInputAttributes (inputAttribute, input) {
     if (this.schema.options && this.schema.options.inputAttributes) {
       const inputAttributes = this.schema.options.inputAttributes
       const protectedAttributes = ['name', 'type'].concat(inputAttribute)
+      const workingInput = input || this.input
       Object.keys(inputAttributes).forEach(key => {
         if (!protectedAttributes.includes(key.toLowerCase())) {
-          this.input.setAttribute(key, inputAttributes[key])
+          workingInput.setAttribute(key, inputAttributes[key])
         }
       })
     }

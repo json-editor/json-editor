@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Ready</title>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <script src="../../dist/jsoneditor.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h1>Test</h1>
+    <div class='json-editor-container'></div>
+</div>
+
+<script>
+  var jsonEditorContainer = document.querySelector('.json-editor-container');
+
+  var schema = {
+    "type": "object",
+    "options": {
+      "titleHidden": true
+    },
+    "properties": {
+      "boolean": {
+        "title": "boolean",
+        "type": "boolean",
+        "options": {
+          "titleHidden": true
+        }
+      },
+      "integer": {
+        "title": "integer",
+        "type": "integer",
+        "options": {
+          "titleHidden": true
+        }
+      },
+      "number": {
+        "title": "number",
+        "type": "number",
+        "options": {
+          "titleHidden": true
+        }
+      },
+      "string": {
+        "title": "string",
+        "type": "string",
+        "options": {
+          "titleHidden": true
+        }
+      },
+      "array": {
+        "title": "array",
+        "type": "array",
+        "options": {
+          "titleHidden": true
+        }
+      }
+    }
+  }
+
+  var editor = new JSONEditor(jsonEditorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    disable_collapse: true,
+    disable_edit_json: true,
+    disable_properties: true
+  });
+
+</script>
+
+</body>
+</html>

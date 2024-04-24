@@ -5,24 +5,28 @@ export class SelectEditor extends AbstractEditor {
   setValue (value, initial) {
     /* Sanitize value before setting it */
     let sanitized = this.typecast(value)
+    const inEnum = (this.enum_options.length > 0 && this.enum_values.includes(sanitized))
 
     const haveToUseDefaultValue = !!this.jsoneditor.options.use_default_values || typeof this.schema.default !== 'undefined'
 
-    if (
-      (this.enum_options.length > 0 && !this.enum_values.includes(sanitized)) ||
-      (initial && !this.isRequired() && !haveToUseDefaultValue)
-    ) {
+    if (!this.hasPlaceholderOption && (!inEnum || (initial && !this.isRequired() && !haveToUseDefaultValue))) {
       sanitized = this.enum_values[0]
     }
 
     if (this.value === sanitized) return
 
-    if (initial) this.is_dirty = false
-    else if (this.jsoneditor.options.show_errors === 'change') this.is_dirty = true
-
-    this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)]
+    if (inEnum && this.hasPlaceholderOption) {
+      this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)]
+    } else {
+      this.input.value = '_placeholder_'
+    }
 
     this.value = sanitized
+
+    if (!initial) {
+      this.is_dirty = true
+    }
+
     this.onChange()
     this.change()
   }
@@ -72,7 +76,10 @@ export class SelectEditor extends AbstractEditor {
     this.enum_display = []
     let i
     let callback
-
+    
+    this.hasPlaceholderOption = this.schema?.options?.has_placeholder_option || false
+    this.placeholderOptionText = this.schema?.options?.placeholder_option_text || ' '
+    
     /* Const value */
     if (this.schema.const) {
       const value = this.schema.const
@@ -169,7 +176,7 @@ export class SelectEditor extends AbstractEditor {
     if (this.options.compact) this.container.classList.add('compact')
 
     this.input = this.theme.getSelectInput(this.enum_options, false)
-    this.theme.setSelectOptions(this.input, this.enum_options, this.enum_display)
+    this.theme.setSelectOptions(this.input, this.enum_options, this.enum_display, this.hasPlaceholderOption, this.placeholderOptionText)
 
     if (this.schema.readOnly || this.schema.readonly) {
       this.disable(true)
@@ -185,7 +192,7 @@ export class SelectEditor extends AbstractEditor {
       this.onInputChange()
     })
 
-    this.control = this.theme.getFormControl(this.label, this.input, this.description, this.infoButton)
+    this.control = this.theme.getFormControl(this.label, this.input, this.description, this.infoButton, this.formname)
     this.container.appendChild(this.control)
 
     this.value = this.enum_values[0]
@@ -351,7 +358,17 @@ export class SelectEditor extends AbstractEditor {
   }
 
   showValidationErrors (errors) {
-    this.previous_error_setting = this.jsoneditor.options.show_errors
+    const showErrors = this.jsoneditor.options.show_errors
+    const changeOrInteraction = showErrors === 'change' || showErrors === 'interaction'
+    const never = showErrors === 'never'
+
+    if (never) {
+      return
+    }
+
+    if (changeOrInteraction && !this.is_dirty) {
+      return
+    }
 
     const addMessage = (messages, error) => {
       if (error.path === this.path) {

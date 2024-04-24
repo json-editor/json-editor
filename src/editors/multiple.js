@@ -83,6 +83,13 @@ export class MultipleEditor extends AbstractEditor {
       }
     })
 
+    this.onChange(true, false, {
+      event: 'switch',
+      data: {
+        type: this.lastType,
+        path: this.editors[i].path
+      }
+    })
     this.refreshValue()
     this.refreshHeaderText()
   }
@@ -107,6 +114,10 @@ export class MultipleEditor extends AbstractEditor {
       }
     }
 
+    if (schema?.options?.dependencies) {
+      delete schema.options.dependencies
+    }
+
     const editor = this.jsoneditor.getEditorClass(schema)
 
     this.editors[i] = this.jsoneditor.createEditor(editor, {
@@ -121,7 +132,9 @@ export class MultipleEditor extends AbstractEditor {
     this.editors[i].build()
     this.editors[i].postBuild()
 
-    if (this.editors[i].header) this.editors[i].header.style.display = 'none'
+    if (this.editors[i].header) {
+      this.theme.visuallyHidden(this.editors[i].header)
+    }
 
     this.editors[i].option = this.switcher_options[i]
 
@@ -208,11 +221,16 @@ export class MultipleEditor extends AbstractEditor {
 
   build () {
     const { container } = this
-    this.header = this.label = this.theme.getFormInputLabel(this.getTitle(), this.isRequired())
+    this.header = this.label = this.theme.getLabelLike(this.getTitle(), this.isRequired())
     this.switcher = this.theme.getSwitcher(this.display_text)
+    this.switcher.setAttribute('id', this.formname + 'switcher')
+
+    this.switcherLabel = this.theme.getHiddenLabel(this.formname + ' switcher')
+    this.switcherLabel.setAttribute('for', this.formname + 'switcher')
 
     if (!this.if) {
       this.container.appendChild(this.header)
+      container.appendChild(this.switcherLabel)
       container.appendChild(this.switcher)
     }
 
@@ -259,13 +277,13 @@ export class MultipleEditor extends AbstractEditor {
     this.switchEditor(0)
   }
 
-  onChildEditorChange (editor) {
+  onChildEditorChange (editor, eventData) {
     if (this.editors[this.type]) {
       this.refreshValue()
       this.refreshHeaderText()
     }
 
-    super.onChildEditorChange()
+    super.onChildEditorChange(editor, eventData)
   }
 
   refreshHeaderText () {

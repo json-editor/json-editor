@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Button disabled</title>
+    <script src="../../dist/jsoneditor.js"></script>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Test</h1>
+    <div id='editor-container'></div>
+</div>
+
+<script>
+  var editorContainer = document.querySelector('#editor-container')
+  var schema = {
+    "type": "object",
+    "title": "test",
+    "properties": {
+      "some_button": {
+        "format": "button",
+        "title": "A button",
+        "options": {
+          "button": {
+            "align": "left",
+            "icon": "map-marker",
+            "action": "determineCurrentCoordinates"
+          }
+        }
+      }
+    }
+  }
+
+  JSONEditor.defaults.callbacks.button = {
+    "determineCurrentCoordinates": function() {
+      console.log('OK')
+    }
+  }
+
+  var editor = new JSONEditor(editorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome',
+    show_errors: 'always',
+    show_opt_in: true
+  })
+
+  editor.on('ready', function () {
+    editor.disable()
+  })
+</script>
+
+</body>
+</html>
