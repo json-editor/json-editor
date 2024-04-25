@@ -12,10 +12,6 @@ export class ArrayEditor extends AbstractEditor {
     return true
   }
 
-  getDefault () {
-    return this.schema.default || []
-  }
-
   register () {
     super.register()
     if (this.rows) {
