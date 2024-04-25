@@ -419,7 +419,8 @@ const options = {
   case_sensitive_property_search: true,
   show_errors: 'interaction',
   prompt_paste_max_length_reached: false,
-  remove_false_properties: false
+  remove_false_properties: false,
+  enforce_const: false
 }
 
 /* This assignment was previously in index.js but makes more sense here */
