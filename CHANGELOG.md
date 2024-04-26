@@ -2,6 +2,7 @@
 
 ### 2.15.0
 
+- Added option enforce_const
 - Fixed #1525 select2 setValue append new item
 - Added remove_false_properties object option
 - Updated GitHub workflows
