@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>enforce_const</title>
+    <script src="../../dist/jsoneditor.js"></script>
+  <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+  <label for="value">value</label>
+  <textarea id="value" class="form-control" rows="10"></textarea>
+  <div id='editor-container'></div>
+</div>
+
+<script>
+  const editorContainer = document.querySelector('#editor-container')
+  const value = document.querySelector('#value');
+  const schema = {
+    "type": "object",
+    "properties": {
+      "string": {
+        "title": "string (StringEditor)",
+        "type": "string",
+        "const": "Alice",
+        // "options": { "enforce_const": false }
+      },
+      "integer": {
+        "title": "integer (IntegerEditor)",
+        "type": "integer",
+        "const": 5,
+        // "options": { "enforce_const": false }
+      },
+      "number": {
+        "title": "number (NumberEditor)",
+        "type": "number",
+        "const": 5.5,
+        // "options": { "enforce_const": false }
+      },
+      "string-enum": {
+        "title": "string-enum (SelectEditor)",
+        "type": "string",
+        "const": "Bob",
+        "enum": [
+          "Alice",
+          "Bob",
+          "Carl"
+        ],
+        // "options": { "enforce_const": false }
+      },
+      "boolean": {
+        "title": "boolean (SelectEditor)",
+        "type": "boolean",
+        "const": true,
+        // "options": { "enforce_const": false }
+      },
+      "boolean-checkbox": {
+        "title": "boolean-checkbox (CheckboxEditor)",
+        "type": "boolean",
+        "format": "checkbox",
+        "const": true,
+        // "options": { "enforce_const": false }
+      },
+      "boolean-choices": {
+        "title": "boolean-choices (ChoicesEditor)",
+        "type": "boolean",
+        "format": "choices",
+        "const": true,
+        // "options": { "enforce_const": false }
+      },
+      "object": {
+        "title": "object (ObjectEditor)",
+        "type": "object",
+        "const": {"name": "Alice"},
+        // "options": { "enforce_const": false },
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "array": {
+        "title": "array (TableEditor)",
+        "type": "array",
+        "const": [{"name": "Alice"}, {"name": "Bob"}],
+        // "options": { "enforce_const": false },
+        "items": {
+          "title": "object",
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "array-table": {
+        "title": "array (TableEditor)",
+        "type": "array",
+        "format": "table",
+        "const": [{"name": "Alice"}, {"name": "Bob"}],
+        "items": {
+          "title": "object",
+          "type": "object",
+          "const": {"name": "Alice"},
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+        // "options": { "enforce_const": false }
+      },
+      "array-tabs": {
+        "title": "array (TableEditor)",
+        "type": "array",
+        "format": "tabs",
+        "const": [{"name": "Alice"}, {"name": "Bob"}],
+        "items": {
+          "title": "object",
+          "type": "object",
+          "const": {"name": "Alice"},
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+        // "options": { "enforce_const": false }
+      },
+      "array-of-strings": {
+        "title": "array (MultiselectEditor)",
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "title": "string",
+          "type": "string",
+          "enum": ["Alice", "Bob"]
+        },
+        "const": ["Alice", "Bob"],
+        // "options": { "enforce_const": false }
+      },
+      "array-enum": {
+        "title": "array (EnumEditor)",
+        "type": "array",
+        "enum": [["Alice", "Bob"], ["Carl", "Dennis"]],
+        "const": ["Carl", "Dennis"],
+        // "options": { "enforce_const": false }
+      },
+      "object-enum": {
+        "title": "object (EnumEditor)",
+        "type": "object",
+        "enum": [{"name": "Alice"}, {"name": "Bob"}],
+        "const": {"name": "Bob"},
+        // "options": { "enforce_const": false }
+      }
+    }
+  }
+
+  const editor = new JSONEditor(editorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome',
+    disable_collapse: true,
+    enforce_const: true
+  })
+
+  editor.on('change', function () {
+    value.value = JSON.stringify(editor.getValue())
+  })
+</script>
+
+</body>
+</html>

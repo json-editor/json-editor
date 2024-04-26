@@ -8,10 +8,6 @@ export class ObjectEditor extends AbstractEditor {
     this.currentDepth = depth
   }
 
-  getDefault () {
-    return extend({}, this.schema.default || {})
-  }
-
   getChildEditors () {
     return this.editors
   }
@@ -1306,6 +1302,9 @@ export class ObjectEditor extends AbstractEditor {
         this.addObjectProperty(i)
         editor.setValue(value[i], initial)
         editor.activate()
+        if (this.disabled) {
+          editor.disable()
+        }
         /* Otherwise, remove value unless this is the initial set or it's required */
       } else if (!initial && !this.isRequiredObject(editor)) {
         if (this.jsoneditor.options.show_opt_in || this.options.show_opt_in) {

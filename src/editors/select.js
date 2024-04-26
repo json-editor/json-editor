@@ -80,8 +80,14 @@ export class SelectEditor extends AbstractEditor {
     this.hasPlaceholderOption = this.schema?.options?.has_placeholder_option || false
     this.placeholderOptionText = this.schema?.options?.placeholder_option_text || ' '
 
-    /* Enum options enumerated */
-    if (this.schema.enum) {
+    /* Const value */
+    if (this.enforceConst && this.schema.const) {
+      const value = this.schema.const
+      this.enum_options = [`${value}`]
+      this.enum_display = [`${this.translateProperty(value) || value}`]
+      this.enum_values = [this.typecast(value)]
+      /* Enum options enumerated */
+    } else if (this.schema.enum) {
       const display = (this.schema.options && this.schema.options.enum_titles) || []
 
       this.schema.enum.forEach((option, i) => {

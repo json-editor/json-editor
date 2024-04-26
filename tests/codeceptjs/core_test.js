@@ -5,6 +5,12 @@ const { DEFAULT_WAIT_TIME } = require('./test-config')
 
 Feature('core')
 
+Scenario('should enforce const @enforce_const', async ({ I }) => {
+  I.amOnPage('enforce-const.html')
+  I.waitForElement('.je-ready')
+  I.waitForValue('#value', '{"string":"Alice","integer":5,"number":5.5,"string-enum":"Bob","boolean":true,"boolean-checkbox":true,"boolean-choices":true,"object":{"name":"Alice"},"array":[{"name":"Alice"},{"name":"Bob"}],"array-table":[{"name":"Alice"},{"name":"Bob"}],"array-tabs":[{"name":"Alice"},{"name":"Bob"}],"array-of-strings":["Alice","Bob"],"array-enum":["Carl","Dennis"],"object-enum":{"name":"Bob"}}')
+})
+
 Scenario('should hide titles @titleHidden', async ({ I }) => {
   I.amOnPage('title-hidden.html')
   I.waitForElement('.je-ready')
