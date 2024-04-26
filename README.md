@@ -331,6 +331,11 @@ Here are all the available options:
     <td>If <code>true</code>, an alert will be displayed when pasting a value in an input that exceeded maxLength</td>
     <td><code>false</code></td>
   </tr>
+  <tr>
+    <td>enforce_const</td>
+    <td>When set to <code>true</code>, the schema <code>const</code> will serve as the default value, and the editor will prevent any changes to it.</td>
+    <td><code>false</code></td>
+  </tr>
   </tbody>
 </table>
 
