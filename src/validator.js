@@ -32,7 +32,7 @@ export class Validator {
           if (invalid) {
             errors.push({
               message: 'Must have the required properties: ' + missingProperties.join(', '),
-              path: path
+              path
             })
           }
         }
@@ -72,14 +72,14 @@ export class Validator {
           if (minContainsInvalid) {
             errors.push({
               message: this.translate('error_minContains', [counter, schema.minContains], schema),
-              path: path
+              path
             })
           }
         } else {
           if (containsInvalid) {
             errors.push({
               message: this.translate('error_contains', null, schema),
-              path: path
+              path
             })
           }
         }
@@ -90,7 +90,7 @@ export class Validator {
           if (maxContainsInvalid) {
             errors.push({
               message: this.translate('error_maxContains', [counter, schema.maxContains], schema),
-              path: path
+              path
             })
           }
         }

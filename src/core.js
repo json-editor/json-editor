@@ -234,8 +234,12 @@ export class JSONEditor {
     return new editorClass(options, JSONEditor.defaults, depthCounter)
   }
 
-  onChange () {
+  onChange (eventData) {
     if (!this.ready) return
+
+    if (eventData) {
+      this.trigger(eventData.event, eventData.data)
+    }
 
     if (this.firing_change) return
     this.firing_change = true

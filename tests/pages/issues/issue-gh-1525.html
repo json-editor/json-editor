@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>GitHub Issue 1525</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@latest/dist/js/select2.min.js "></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@latest/dist/css/select2.min.css">
+  <script src="../../../dist/jsoneditor.js"></script>
+</head>
+<body>
+<div class="container">
+  <h1>Test</h1>
+  <a href="https://github.com/json-editor/json-editor/issues/1525">Link to issue</a>
+
+  <div class="form-group">
+    <label for="value">Value</label>
+    <textarea class="form-control" id="value" cols="30" rows="10"></textarea>
+  </div>
+
+  <div id='editor_holder'></div>
+</div>
+
+<script>
+  window.addEventListener('load', () => {
+    const textareaValue = document.querySelector('#value')
+    const defaultSchema = {
+      "type": "object",
+      "properties": {
+        "example": {
+          "type": "string",
+          "format": "select2",
+          "enum": ["aa", "bb", "cc"],
+          "options": {
+            "select2": {
+              "tags": true
+            }
+          }
+        }
+      }
+    }
+
+    const editor = new JSONEditor(document.getElementById('editor_holder'), {
+      iconlib: 'fontawesome5',
+      schema: defaultSchema,
+      theme: 'bootstrap4',
+      show_errors: 'always'
+    })
+
+    editor.on('change', function () {
+      textareaValue.value = JSON.stringify(editor.getValue())
+    })
+
+    editor.on('ready', function () {
+      editor.getEditor('root.example').setValue('dd')
+    })
+  })
+</script>
+</body>
+</html>

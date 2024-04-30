@@ -53,17 +53,18 @@ jobs:
         run: docker-compose run -T --rm node npm run ${BUILD_ENV}
       - name: Test
         run: |
-          docker-compose exec -T node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:${SELENIUM_BROWSER} --invert --grep  '@optional'
+          docker-compose exec -T node codeceptjs run-multiple -c /repo/tests/codeceptjs/codecept.json basic:${SELENIUM_BROWSER} --invert --grep  '@optional'
           pwd
           ls -la codeceptjs/output
       - name: Test Artifacts
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: codeceptjs-output
+          name: codeceptjs-output-${{ matrix.selenium-browser }}-${{ matrix.build-env }}
           path: tests/codeceptjs/output
           retention-days: 30
+          merge-multiple: true
       - name: Test (optional)
         continue-on-error: true
-        run: docker-compose exec -T node codeceptjs -c /repo/tests/codeceptjs/codecept.json run-multiple basic:${SELENIUM_BROWSER} --grep '@optional'
+        run: docker-compose exec -T node codeceptjs run-multiple -c /repo/tests/codeceptjs/codecept.json basic:${SELENIUM_BROWSER} --grep '@optional'
 

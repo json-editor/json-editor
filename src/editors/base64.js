@@ -104,6 +104,9 @@ export class Base64Editor extends AbstractEditor {
     })
 
     this.control.appendChild(uploadButton)
+
+    /* Set custom attributes on input element. Parameter is array of protected keys. Empty array if none. */
+    this.setInputAttributes(['multiple'], uploadButton)
   }
 
   refreshPreview () {
