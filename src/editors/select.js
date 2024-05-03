@@ -4,22 +4,31 @@ import { extend } from '../utilities.js'
 export class SelectEditor extends AbstractEditor {
   setValue (value, initial) {
     /* Sanitize value before setting it */
-    let sanitized = this.typecast(value)
+    let sanitized = this.typecast(this.defaultValueIsEmpty ? value : this.defaultValue)
     const inEnum = (this.enum_options.length > 0 && this.enum_values.includes(sanitized))
 
     const haveToUseDefaultValue = !!this.jsoneditor.options.use_default_values || typeof this.schema.default !== 'undefined'
 
-    if (!this.hasPlaceholderOption && (!inEnum || (initial && !this.isRequired() && !haveToUseDefaultValue))) {
+    if (this.defaultValueIsEmpty && !this.hasPlaceholderOption && (!inEnum || (initial && !this.isRequired() && !haveToUseDefaultValue))) {
       sanitized = this.enum_values[0]
+    }
+
+    if (!this.defaultValueIsEmpty) {
+      this.value = sanitized
+      if (this.schema.type === 'boolean') {
+        this.input.value = this.value === false ? '' : '1'
+      } else {
+        this.input.value = this.value
+      }
     }
 
     if (this.value === sanitized) return
 
     const selectedIndex = this.enum_values.indexOf(sanitized)
 
-    if (inEnum && selectedIndex !== -1) {
+    if (inEnum && selectedIndex !== -1 && this.defaultValueIsEmpty) {
       this.input.value = this.enum_options[selectedIndex]
-    } else if (this.hasPlaceholderOption) {
+    } else if (this.hasPlaceholderOption && this.defaultValueIsEmpty) {
       this.input.value = '_placeholder_'
     } else {
       this.input.value = sanitized
@@ -199,7 +208,15 @@ export class SelectEditor extends AbstractEditor {
     this.control = this.theme.getFormControl(this.label, this.input, this.description, this.infoButton, this.formname)
     this.container.appendChild(this.control)
 
-    this.value = this.enum_values[0]
+    if (this.defaultValueIsEmpty) {
+      this.value = this.enum_values[0]
+    } else {
+      if (this.schema.type === 'boolean') {
+        this.value = this.defaultValue === false ? '' : '1'
+      } else {
+        this.value = this.defaultValue
+      }
+    }
 
     /* Any special formatting that needs to happen after the input is added to the dom */
     window.requestAnimationFrame(() => {
