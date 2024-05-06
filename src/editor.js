@@ -26,7 +26,7 @@ export class AbstractEditor {
 
     this.parent = options.parent
     this.key = this.parent !== undefined ? this.path.split('.').slice(this.parent.path.split('.').length).join('.') : this.path
-    this.defaultValue = options.jsoneditor.schema.property[this.key]
+    this.defaultValue = options.jsoneditor.schema.property ? options.jsoneditor.schema.property[this.key] : undefined
     this.defaultValueIsEmpty = this.defaultValue === undefined || this.defaultValue === null
 
     this.link_watchers = []
