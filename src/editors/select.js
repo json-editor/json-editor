@@ -15,10 +15,14 @@ export class SelectEditor extends AbstractEditor {
 
     if (this.value === sanitized) return
 
-    if (inEnum && this.hasPlaceholderOption) {
-      this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)]
-    } else {
+    const selectedIndex = this.enum_values.indexOf(sanitized)
+
+    if (inEnum && selectedIndex !== -1) {
+      this.input.value = this.enum_options[selectedIndex]
+    } else if (this.hasPlaceholderOption) {
       this.input.value = '_placeholder_'
+    } else {
+      this.input.value = sanitized
     }
 
     this.value = sanitized
