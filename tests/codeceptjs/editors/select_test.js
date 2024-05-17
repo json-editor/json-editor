@@ -2,6 +2,18 @@
 
 Feature('select')
 
+Scenario('Should start with correct value @select-value', async ({ I }) => {
+  I.amOnPage('select-values.html')
+  I.waitForElement('.je-ready')
+  I.waitForValue('#value', '{"data":[]}')
+  I.click('#set-value')
+  I.waitForValue('#value', '{"data":[{"baumart":"other_hardwood"},{"baumart":"beech"},{"baumart":"oak"},{"baumart":"spruce"}]}')
+  I.getSelectedValueAndAssert('select[name="root[data][0][baumart]"]', 'other_hardwood');
+  I.getSelectedValueAndAssert('select[name="root[data][1][baumart]"]', 'beech');
+  I.getSelectedValueAndAssert('select[name="root[data][2][baumart]"]', 'oak');
+  I.getSelectedValueAndAssert('select[name="root[data][3][baumart]"]', 'spruce');
+})
+
 Scenario('Should render a non selectable placeholder options for not in enum values @placeholderOption', async ({ I }) => {
   I.amOnPage('placeholder-options.html')
   I.waitForElement('.je-ready')
