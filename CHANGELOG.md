@@ -1,5 +1,9 @@
 ### Unreleased
 
+### 2.15.1
+
+- Fixed #1563 and #1558. Select values not displayed
+
 ### 2.15.0
 
 - Added option enforce_const
