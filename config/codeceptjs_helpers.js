@@ -121,6 +121,17 @@ class customHelpers extends Helper {
     }
   }
 
+  async getSelectedValueAndAssert(selector, expectedValue) {
+    const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
+
+    const selectValue = await helper.executeScript((sel) => {
+      const selectElement = document.querySelector(sel);
+      return selectElement.value;
+    }, selector);
+
+    return assert.strictEqual(selectValue, expectedValue);
+  }
+
   // Custom isTrue function.
   // returns boolean value
   async isTrue (val) {
