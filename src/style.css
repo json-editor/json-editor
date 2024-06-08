@@ -1,3 +1,7 @@
+.table-responsive .autocomplete-result-list {
+  position: relative !important;
+}
+
 .je-float-right-linkholder {
   float: right;
   margin-left: 10px;

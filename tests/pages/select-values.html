@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>string-simple-mde-editor</title>
+  <script src="../../dist/jsoneditor.js"></script>
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+  <h1>Test</h1>
+  <div class="form-group">
+    <label for="value">Value</label>
+    <textarea class="form-control" id="value" cols="30" rows="10"></textarea>
+  </div>
+
+  <button id="set-value">Set value</button>
+  <div id="editor-container"></div>
+</div>
+
+<script>
+  const container = document.querySelector("#editor-container")
+  const debug = document.querySelector("#value")
+  const setValueBtn = document.querySelector("#set-value")
+  const schema = {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "array",
+        "uniqueItems": true,
+        "format": "table",
+        "minLength": 1,
+        "items": {
+          "type": "object",
+          "required": [
+            "baumart"
+          ],
+          "properties": {
+            "baumart": {
+              "type": "string",
+              "enum": [
+                "not_set",
+                "other_hardwood",
+                "beech",
+                "oak",
+                "spruce"
+              ]
+            },
+          }
+        }
+      }
+    }
+  }
+
+  const value = {
+    "data": [
+      {
+        "baumart": "other_hardwood",
+      },
+      {
+        "baumart": "beech",
+      },
+      {
+        "baumart": "oak",
+      },
+      {
+        "baumart": "spruce",
+      }
+    ]
+  }
+
+  const editor = new JSONEditor(container, {
+    disable_collapse: true,
+    schema: schema,
+    theme: 'bootstrap3'
+  })
+
+  editor.on('ready', () => {
+    debug.value = JSON.stringify(editor.getValue())
+  })
+
+  editor.on('change', () => {
+    debug.value = JSON.stringify(editor.getValue())
+  })
+
+  setValueBtn.addEventListener('click', () => {
+    editor.setValue(value)
+  })
+</script>
+</body>
+</html>

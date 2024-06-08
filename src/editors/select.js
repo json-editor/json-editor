@@ -15,10 +15,14 @@ export class SelectEditor extends AbstractEditor {
 
     if (this.value === sanitized) return
 
-    if (inEnum && this.hasPlaceholderOption) {
-      this.input.value = this.enum_options[this.enum_values.indexOf(sanitized)]
-    } else {
+    const selectedIndex = this.enum_values.indexOf(sanitized)
+
+    if (inEnum && selectedIndex !== -1) {
+      this.input.value = this.enum_options[selectedIndex]
+    } else if (this.hasPlaceholderOption) {
       this.input.value = '_placeholder_'
+    } else {
+      this.input.value = sanitized
     }
 
     this.value = sanitized
@@ -80,8 +84,14 @@ export class SelectEditor extends AbstractEditor {
     this.hasPlaceholderOption = this.schema?.options?.has_placeholder_option || false
     this.placeholderOptionText = this.schema?.options?.placeholder_option_text || ' '
 
-    /* Enum options enumerated */
-    if (this.schema.enum) {
+    /* Const value */
+    if (this.enforceConst && this.schema.const) {
+      const value = this.schema.const
+      this.enum_options = [`${value}`]
+      this.enum_display = [`${this.translateProperty(value) || value}`]
+      this.enum_values = [this.typecast(value)]
+      /* Enum options enumerated */
+    } else if (this.schema.enum) {
       const display = (this.schema.options && this.schema.options.enum_titles) || []
 
       this.schema.enum.forEach((option, i) => {

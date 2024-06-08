@@ -8,10 +8,6 @@ export class ObjectEditor extends AbstractEditor {
     this.currentDepth = depth
   }
 
-  getDefault () {
-    return extend({}, this.schema.default || {})
-  }
-
   getChildEditors () {
     return this.editors
   }
@@ -631,7 +627,14 @@ export class ObjectEditor extends AbstractEditor {
           if (this.editors[this.addproperty_input.value]) {
             this.editors[this.addproperty_input.value].disable()
           }
-          this.onChange(true)
+          const key = this.editors[this.addproperty_input.value].key
+          const type = this.editors[this.addproperty_input.value].type
+          const path = this.editors[this.addproperty_input.value].path
+
+          this.onChange(true, false, {
+            event: 'add',
+            data: { key, type, path }
+          })
         }
       })
       this.addproperty_input.addEventListener('input', (e) => {
@@ -1077,9 +1080,9 @@ export class ObjectEditor extends AbstractEditor {
     }
   }
 
-  onChildEditorChange (editor) {
+  onChildEditorChange (editor, eventData) {
     this.refreshValue()
-    super.onChildEditorChange(editor)
+    super.onChildEditorChange(editor, eventData)
   }
 
   canHaveAdditionalProperties () {
@@ -1139,6 +1142,14 @@ export class ObjectEditor extends AbstractEditor {
     if (result && (this.jsoneditor.options.remove_empty_properties || this.options.remove_empty_properties)) {
       Object.keys(result).forEach(key => {
         if (isEmpty(result[key])) {
+          delete result[key]
+        }
+      })
+    }
+
+    if (result && (this.jsoneditor.options.remove_false_properties || this.options.remove_false_properties)) {
+      Object.keys(result).forEach(key => {
+        if (result[key] === false) {
           delete result[key]
         }
       })
@@ -1291,6 +1302,9 @@ export class ObjectEditor extends AbstractEditor {
         this.addObjectProperty(i)
         editor.setValue(value[i], initial)
         editor.activate()
+        if (this.disabled) {
+          editor.disable()
+        }
         /* Otherwise, remove value unless this is the initial set or it's required */
       } else if (!initial && !this.isRequiredObject(editor)) {
         if (this.jsoneditor.options.show_opt_in || this.options.show_opt_in) {

@@ -116,23 +116,24 @@ export class StarratingEditor extends StringEditor {
       return undefined
     }
     if (this.schema.type === 'integer') {
-      return this.value === '' ? undefined : this.value * 1
+      return this.value === '' ? 0 : parseInt(this.value)
     }
     return this.value
   }
 
   setValue (value) {
+    this.value = value
+
     for (let i = 0; i < this.radioGroup.length; i++) {
       if (this.radioGroup[i].value === `${value}`) {
         this.radioGroup[i].checked = true
         this.value = value
-
         if (this.options.displayValue) this.displayRating.innerHTML = this.value
-
-        this.onChange(true)
         break
       }
     }
+
+    super.setValue(this.value)
   }
 }
 

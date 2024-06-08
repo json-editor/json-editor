@@ -1,6 +1,29 @@
 ### Unreleased
 
+### 2.15.1
+
+- Fixed #1563 and #1558. Select values not displayed
+
+### 2.15.0
+
+- Added option enforce_const
+- Fixed #1525 select2 setValue append new item
+- Added remove_false_properties object option
+- Updated GitHub workflows
+- Added prompt_paste_max_length_reached option
+- Fixed #1512 "dependencies" autocomplete inside array tables cropping
+- Allow for Base64 custom input attributes
+- Added 'add' and 'switch' events
+- Fixed "dependencies" issues
+- Fixed npm audits and packages upgrades
+- Fixed issue #1541 Failure to parse schema with "default"
+- Fixed rating "undefined" value when type of integer
+- Added meta-schema example to the readme
+- Fixed issue #1514 Cannot use more than one class in "class" option for links
+- Fixed info disable/enable
 - Added options: "has_placeholder_option" and "placeholder_option_text"
+- Fixed issue #1498 Dependant fields not created after JSON update at change of the controlling field
+- Added 'copyRow' event
 
 ### 2.14.1
 

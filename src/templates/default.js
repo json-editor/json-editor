@@ -34,7 +34,7 @@ export const defaultTemplate = () => ({
         r: func
       })
     }
-    for (var i = 0; i < l; i++) {
+    for (let i = 0; i < l; i++) {
       getReplacement(i)
     }
 
@@ -42,7 +42,7 @@ export const defaultTemplate = () => ({
     return (vars) => {
       let ret = `${template}`
       let r
-      for (i = 0; i < l; i++) {
+      for (let i = 0; i < l; i++) {
         r = replacements[i]
         ret = ret.replace(r.s, r.r(vars))
       }

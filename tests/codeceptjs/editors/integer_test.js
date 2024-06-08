@@ -69,15 +69,13 @@ Scenario('should be readonly if specified and not disabled @readOnly', async ({ 
   I.seeReadOnlyAttribute('[name="root[integer]"]')
 })
 
-Scenario('should update output when (method) setValue is called', async ({ I }) => {
+Scenario('should update output when (method) setValue is called @integer_range', async ({ I }) => {
   I.amOnPage('integer.html')
-  I.saveScreenshot('integer-setvalue-1.png')
+  I.waitForElement('.je-ready')
   I.waitForText('5', DEFAULT_WAIT_TIME, '[data-schemapath="root.integer_range"] output')
-  I.saveScreenshot('integer-setvalue-2.png')
   I.click('.set-value')
-  I.saveScreenshot('integer-setvalue-3.png')
+  I.wait(1)
   I.waitForText('2', DEFAULT_WAIT_TIME, '[data-schemapath="root.integer_range"] output')
-  I.saveScreenshot('integer-setvalue-4.png')
 })
 
 Scenario('should validate value', async ({ I }) => {
