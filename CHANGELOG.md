@@ -1,5 +1,7 @@
 ### Unreleased
 
+- Removed jQuery requirement for Bootstrap 5 theme.
+
 ### 2.15.1
 
 - Fixed #1563 and #1558. Select values not displayed
