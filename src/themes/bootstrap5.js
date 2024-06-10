@@ -241,7 +241,10 @@ export class bootstrap5Theme extends AbstractTheme {
     button.appendChild(icon)
 
     if (this.options.tooltip === 'bootstrap') {
-      if (window.jQuery && window.jQuery().tooltip) {
+      if (window.bootstrap && window.bootstrap.Tooltip) {
+        // eslint-disable-next-line no-new
+        new window.bootstrap.Tooltip(button)
+      } else if (window.jQuery && window.jQuery().tooltip) {
         window.jQuery(button).tooltip()
       } else {
         // eslint-disable-next-line no-console
