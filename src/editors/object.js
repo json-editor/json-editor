@@ -802,7 +802,7 @@ export class ObjectEditor extends AbstractEditor {
       this.refreshAddProperties()
 
       /* non required properties start deactivated */
-      this.deactivateNonRequiredProperties()
+      this.deactivateNonRequiredProperties(false)
     }
 
     /* Fix table cell ordering */
@@ -824,7 +824,7 @@ export class ObjectEditor extends AbstractEditor {
     }
   }
 
-  deactivateNonRequiredProperties () {
+  deactivateNonRequiredProperties (recursive) {
     /* the show_opt_in editor option is for backward compatibility */
     const globalOptIn = this.jsoneditor.options.show_opt_in
     const editorOptInDefined = (typeof this.options.show_opt_in !== 'undefined')
@@ -834,6 +834,9 @@ export class ObjectEditor extends AbstractEditor {
       Object.entries(this.editors).forEach(([key, editor]) => {
         if (!this.isRequiredObject(editor)) {
           this.editors[key].deactivate()
+        }
+        if (recursive && typeof this.editors[key].deactivateNonRequiredProperties === 'function') {
+          this.editors[key].deactivateNonRequiredProperties(recursive)
         }
       })
     }

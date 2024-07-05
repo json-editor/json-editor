@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>GitHub Issue 1586</title>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="../../../dist/jsoneditor.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <textarea class="form-control" id="value" cols="30" rows="10"></textarea>
+      <a href="https://github.com/json-editor/json-editor/issues/1585">GitHub Issue 1586</a>
+      <div id='editor_holder'></div>
+    </div>
+
+    <script>
+      var value = document.querySelector('#value')
+
+      var defaultSchema = {
+        "type": "array",
+        "items": {
+            "type": "object",
+            "properties": {
+                "type": "string",
+                "subtype": {
+                    "type": "object",
+                    "properties": {
+                    "type": "string"
+                    }
+                }
+            },
+            "required": [
+                "subtype"
+            ]
+        }
+      }
+
+      var editor = new JSONEditor(document.getElementById('editor_holder'), {
+        schema: defaultSchema,
+        show_errors: 'always',
+        show_opt_in: true,
+        prompt_before_delete: false
+      })
+    </script>
+  </body>
+</html>
