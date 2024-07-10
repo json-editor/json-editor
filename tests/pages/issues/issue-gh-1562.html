@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>issue-1562</title>
+    <script src="../../../dist/jsoneditor.js"></script>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Test</h1>
+    <div id='editor-container'></div>
+
+    <div class="form-group">
+        <label for="textarea-value">Value</label>
+        <textarea class="form-control" id="textarea-value" cols="30" rows="10"></textarea>
+    </div>
+</div>
+
+<script>
+  var editorContainer = document.querySelector('#editor-container')
+  var textareaValue = document.querySelector('#textarea-value')
+  var schema = {
+      "type": "object",
+      "format": "grid",
+      "options": {
+          "collapsed": false,
+          "grid_columns": 12,
+          "disable_properties": true
+      },
+      "defaultProperties": [
+          "model"
+      ],
+      "required": [
+          "model"
+      ],
+      "properties": {
+          "model": {
+              "type": "object",
+              "format": "grid",
+              "options": {
+                  "collapsed": false,
+                  "grid_columns": 12,
+                  "disable_properties": true
+              },
+              "defaultProperties": [
+                  "name",
+                  "entities"
+              ],
+              "required": [
+                  "name",
+                  "entities"
+              ],
+              "properties": {
+                  "name": {
+                      "type": "string",
+                      "propertyOrder": 0,
+                      "description": "Name of the Model",
+                      "default": "",
+                      "pattern": "^\\S+$",
+                      "options": {
+                          "grid_columns": 3
+                      }
+                  },
+                  "entities": {
+                      "type": "object",
+                      "format": "grid",
+                      "options": {
+                          "collapsed": false,
+                          "grid_columns": 12
+                      },
+                      "additionalProperties": {
+                          "type": "object",
+                          "format": "grid",
+                          "options": {
+                              "grid_columns": 12,
+                              "collapsed": true,
+                              "disable_properties": true
+                          },
+                          "defaultProperties": [
+                              "name",
+                              "properties"
+                          ],
+                          "required": [
+                              "name",
+                              "properties"
+                          ],
+                          "properties": {
+                              "name": {
+                                  "description": "The name of the entity",
+                                  "type": "string",
+                                  "propertyOrder": 0,
+                                  "default": "",
+                                  "pattern": "^[A-Z]\\S+$",
+                                  "options": {
+                                      "grid_columns": 4
+                                  }
+                              },
+                              "properties": {
+                                  "type": "object",
+                                  "format": "grid",
+                                  "options": {
+                                      "grid_columns": 12,
+                                      "collapsed": true,
+                                      "disable_properties": false
+                                  },
+                                  "default": {
+                                      "id": {
+                                          "name": "id"
+                                      },
+                                      "created": {
+                                          "name": "created"
+                                      },
+                                      "lastUpdated": {
+                                          "name": "lastUpdated"
+                                      }
+                                  },
+                                  "propertyOrder": 5,
+                                  "additionalProperties": {
+                                      "type": "object",
+                                      "format": "grid",
+                                      "options": {
+                                          "collapsed": true,
+                                          "grid_columns": 12,
+                                          "disable_properties": true
+                                      },
+                                      "defaultProperties": [
+                                          "name"
+                                      ],
+                                      "required": [
+                                          "name"
+                                      ],
+                                      "properties": {
+                                          "name": {
+                                              "description": "The name of the property",
+                                              "type": "string",
+                                              "propertyOrder": 0,
+                                              "default": "",
+                                              "pattern": "^\\S+$",
+                                              "options": {
+                                                  "grid_columns": 4
+                                              }
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  }
+
+  var editor = new JSONEditor(editorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome',
+    show_errors: 'always',
+  })
+
+  editor.on('change', function () {
+    textareaValue.value = JSON.stringify(editor.getValue())
+  })
+</script>
+
+</body>
+</html>`
