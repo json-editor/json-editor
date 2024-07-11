@@ -41,7 +41,9 @@ export class ObjectEditor extends AbstractEditor {
           if (e.isActive() || e.isUiOnly) {
             e.enable()
           }
-          e.optInCheckbox.disabled = false
+          if (e.optInCheckbox) {
+            e.optInCheckbox.disabled = false
+          }
         })
       }
     }
