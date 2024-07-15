@@ -732,6 +732,10 @@ export class ArrayEditor extends AbstractEditor {
       if (this.row_cache[i]) {
         editor = this.rows[i] = this.row_cache[i]
         this.rows[i].setValue(this.rows[i].getDefault(), true)
+        // override cached value, so optional properties are not checked.
+        if (typeof this.rows[i].deactivateNonRequiredProperties === 'function') {
+          this.rows[i].deactivateNonRequiredProperties(true)
+        }
         this.rows[i].container.style.display = ''
         if (this.rows[i].tab) this.rows[i].tab.style.display = ''
         this.rows[i].register()
