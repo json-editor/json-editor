@@ -90,6 +90,8 @@ export class SignatureEditor extends StringEditor {
   }
 
   setValue (val) {
+    val = this.applyConstFilter(val)
+
     if (typeof SignaturePad === 'function') {
       const sanitized = this.sanitize(val)
       if (this.value === sanitized) {

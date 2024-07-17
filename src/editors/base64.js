@@ -149,6 +149,8 @@ export class Base64Editor extends AbstractEditor {
   }
 
   setValue (val) {
+    val = this.applyConstFilter(val)
+
     if (this.value !== val) {
       if (this.schema.readOnly && this.schema.enum && !this.schema.enum.includes(val)) this.value = this.schema.enum[0]
       else this.value = val

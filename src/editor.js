@@ -17,7 +17,7 @@ export class AbstractEditor {
     this.active = true
     this.isUiOnly = false
     this.options = extend({}, (this.options || {}), (this.schema.options || {}), (options.schema.options || {}), options)
-    this.enforceConst = this.options.enforce_const ?? this.jsoneditor.options.enforce_const
+    this.enforceConstEnabled = this.options.enforce_const ?? this.jsoneditor.options.enforce_const
     this.formname = this.jsoneditor.options.form_name_root || 'root'
 
     if (!options.path && !this.schema.id) this.schema.id = this.formname
@@ -271,7 +271,7 @@ export class AbstractEditor {
       this.theme.visuallyHidden(this.header)
     }
 
-    if (this.enforceConst && this.schema.const) {
+    if (this.enforceConstEnabled && this.schema.const) {
       this.disable()
     }
   }
@@ -583,7 +583,16 @@ export class AbstractEditor {
   }
 
   setValue (value) {
+    value = this.applyConstFilter(value)
     this.value = value
+  }
+
+  applyConstFilter (value) {
+    if (this.enforceConstEnabled && typeof this.schema.const !== 'undefined') {
+      value = this.schema.const
+    }
+
+    return value
   }
 
   getValue () {
@@ -627,7 +636,7 @@ export class AbstractEditor {
   }
 
   getDefault () {
-    if (this.enforceConst && this.schema.const) {
+    if (this.enforceConstEnabled && this.schema.const) {
       return this.schema.const
     }
 

@@ -4,6 +4,8 @@ import rules from './choices.css.js'
 
 export class ChoicesEditor extends SelectEditor {
   setValue (value, initial) {
+    value = this.applyConstFilter(value)
+
     if (this.choices_instance) {
       /* Sanitize value before setting it */
       let sanitized = this.typecast(value || '')

@@ -31,6 +31,8 @@ export class UuidEditor extends StringEditor {
   }
 
   setValue (value, initial, fromTemplate) {
+    value = this.applyConstFilter(value)
+
     if (!this.testUuid(value)) value = this.uuid
     this.uuid = value
     super.setValue(value, initial, fromTemplate)

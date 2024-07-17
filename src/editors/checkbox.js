@@ -2,6 +2,7 @@ import { AbstractEditor } from '../editor.js'
 
 export class CheckboxEditor extends AbstractEditor {
   setValue (value, initial) {
+    value = this.applyConstFilter(value)
     value = !!value
     const changed = this.getValue() !== value
     this.value = value

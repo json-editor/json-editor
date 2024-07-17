@@ -3,6 +3,8 @@ import { extend, hasOwnProperty } from '../../utilities.js'
 
 export class ArraySelect2Editor extends MultiSelectEditor {
   setValue (value, initial) {
+    value = this.applyConstFilter(value)
+
     if (this.select2_instance) {
       /* Make sure we are dealing with an array of strings so we can check for strict equality */
       value = [].concat(value).map(e => `${e}`)

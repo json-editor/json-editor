@@ -3,6 +3,8 @@ import { extend } from '../utilities.js'
 
 export class JoditEditor extends StringEditor {
   setValue (value, initial, fromTemplate) {
+    value = this.applyConstFilter(value)
+
     const res = super.setValue(value, initial, fromTemplate)
     if (res !== undefined && res.changed && this.jodit_instance) this.jodit_instance.setEditorValue(res.value)
   }
