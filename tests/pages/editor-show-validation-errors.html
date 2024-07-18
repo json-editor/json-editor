@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>showValidationErrors</title>
+    <script src="../../dist/jsoneditor.js"></script>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+    <div id='editor-container'></div>
+    <div class="btn btn-success" id="show-validation-errors">Show validation errors</div>
+</div>
+
+<script>
+  const editorContainer = document.querySelector('#editor-container')
+  const schema = {
+    "type": "object",
+    "properties": {
+      "boolean-checkbox": {
+        "title": "boolean-checkbox",
+        "type": "boolean",
+        "format": "checkbox",
+        "const": true,
+        "default": false
+      },
+      "minLength": {
+        "type": "string",
+        "minLength": 4,
+      },
+      "minimum": {
+        "type": "number",
+        "minimum": 4,
+      }
+    }
+  }
+
+  const editor = new JSONEditor(editorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome'
+  })
+
+  const showValidationErrors = document.querySelector('#show-validation-errors')
+
+  showValidationErrors.addEventListener('click', () => {
+    editor.showValidationErrors()
+  })
+</script>
+
+</body>
+</html>

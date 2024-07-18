@@ -5,6 +5,18 @@ const { DEFAULT_WAIT_TIME } = require('./test-config')
 
 Feature('core')
 
+Scenario('should show all validation errors on demand @editor-show-validation-errors', async ({ I }) => {
+  I.amOnPage('editor-show-validation-errors.html')
+  I.waitForElement('.je-ready')
+  I.dontSee('Value must be the constant value')
+  I.dontSee('Value must be at least 4 characters long')
+  I.dontSee('Value must be at least 4')
+  I.click('#show-validation-errors')
+  I.waitForText('Value must be the constant value')
+  I.waitForText('Value must be at least 4 characters long')
+  I.waitForText('Value must be at least 4')
+})
+
 Scenario('should enforce const @enforce_const', async ({ I }) => {
   I.amOnPage('enforce-const.html')
   I.waitForElement('.je-ready')

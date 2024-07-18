@@ -411,6 +411,15 @@ export class JSONEditor {
     styleSheet.replaceSync(cssText)
     shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, styleSheet]
   }
+
+  showValidationErrors () {
+    const errors = this.validate()
+
+    Object.values(this.editors).forEach(editor => {
+      editor.is_dirty = true
+      editor.showValidationErrors(errors)
+    })
+  }
 }
 
 JSONEditor.defaults = defaults
