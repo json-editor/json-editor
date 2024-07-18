@@ -409,6 +409,12 @@ const errors = editor.validate({
 });
 ```
 
+Display validation errors on demand
+
+```javascript
+editor.showValidationErrors();
+```
+
 ### Listen for Changes
 
 The `change` event is fired whenever the editor's value changes.
