@@ -3,6 +3,8 @@ import { extend } from '../utilities.js'
 
 export class ScEditor extends StringEditor {
   setValue (value, initial, fromTemplate) {
+    value = this.applyConstFilter(value)
+
     const res = super.setValue(value, initial, fromTemplate)
     if (res !== undefined && res.changed && this.sceditor_instance) this.sceditor_instance.val(res.value)
   }

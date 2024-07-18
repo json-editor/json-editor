@@ -4,6 +4,7 @@ import { extend } from '../../utilities.js'
 export class ArrayChoicesEditor extends MultiSelectEditor {
   setValue (value, initial) {
     if (this.choices_instance) {
+      value = this.applyConstFilter(value)
       /* Make sure we are dealing with an array of strings so we can check for strict equality */
       value = [].concat(value).map(e => `${e}`)
 

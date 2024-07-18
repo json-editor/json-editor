@@ -187,6 +187,8 @@ export class TableEditor extends ArrayEditor {
   }
 
   setValue (value = [], initial) {
+    value = this.applyConstFilter(value)
+
     /* Make sure value has between minItems and maxItems items in it */
     value = this.ensureArraySize(value)
 
@@ -221,7 +223,6 @@ export class TableEditor extends ArrayEditor {
     if (numrowsChanged || initial) this.refreshRowButtons()
 
     this.onChange()
-
     /* TODO: sortable */
   }
 

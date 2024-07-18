@@ -160,6 +160,8 @@ export class DescribedByEditor extends AbstractEditor {
   }
 
   setValue (val, initial) {
+    val = this.applyConstFilter(val)
+
     if (this.editors[this.currentEditor]) {
       this.editors[this.currentEditor].setValue(val, initial)
       this.refreshValue()

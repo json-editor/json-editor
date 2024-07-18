@@ -3,6 +3,7 @@ import { extend } from '../utilities.js'
 
 export class SelectEditor extends AbstractEditor {
   setValue (value, initial) {
+    value = this.applyConstFilter(value)
     /* Sanitize value before setting it */
     let sanitized = this.typecast(value)
     const inEnum = (this.enum_options.length > 0 && this.enum_values.includes(sanitized))

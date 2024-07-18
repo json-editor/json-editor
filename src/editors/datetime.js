@@ -104,6 +104,8 @@ export class DatetimeEditor extends StringEditor {
   }
 
   setValue (value, initial, fromTemplate) {
+    value = this.applyConstFilter(value)
+
     if (this.schema.type === 'string') {
       super.setValue(value, initial, fromTemplate)
       if (this.flatpickr) this.flatpickr.setDate(value)

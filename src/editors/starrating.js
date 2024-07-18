@@ -122,6 +122,8 @@ export class StarratingEditor extends StringEditor {
   }
 
   setValue (value) {
+    value = this.applyConstFilter(value)
+
     this.value = value
 
     for (let i = 0; i < this.radioGroup.length; i++) {

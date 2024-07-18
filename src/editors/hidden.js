@@ -19,6 +19,8 @@ export class HiddenEditor extends AbstractEditor {
   }
 
   setValue (value, initial, fromTemplate) {
+    value = this.applyConstFilter(value)
+
     if (this.template && !fromTemplate) {
       return
     }

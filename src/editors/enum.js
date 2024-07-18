@@ -12,7 +12,7 @@ export class EnumEditor extends AbstractEditor {
 
     this.options.enum_titles = this.options.enum_titles || []
 
-    if (this.enforceConst && this.schema.const) {
+    if (this.enforceConstEnabled && this.schema.const) {
       this.enum = [this.schema.const]
     } else {
       this.enum = this.schema.enum
@@ -127,6 +127,8 @@ export class EnumEditor extends AbstractEditor {
   }
 
   setValue (val) {
+    val = this.applyConstFilter(val)
+
     if (this.value !== val) {
       this.value = val
       this.refreshValue()

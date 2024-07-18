@@ -107,6 +107,8 @@ export class RadioEditor extends SelectEditor {
   }
 
   setValue (val) {
+    val = this.applyConstFilter(val)
+
     if (typeof val !== 'string') {
       val = String(val)
     }

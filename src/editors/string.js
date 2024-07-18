@@ -18,6 +18,8 @@ export class StringEditor extends AbstractEditor {
   }
 
   setValue (value, initial, fromTemplate) {
+    value = this.applyConstFilter(value)
+
     if (this.template && !fromTemplate) return
 
     if (!this.shouldBeUnset() && (value === null || typeof value === 'undefined')) value = ''
