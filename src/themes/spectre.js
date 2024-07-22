@@ -19,6 +19,34 @@ export class spectreTheme extends AbstractTheme {
     super(jsoneditor, options)
   }
 
+  getOptInSwitch (formname) {
+    const container = document.createElement('span')
+    container.classList.add('form-group')
+
+    const label = document.createElement('label')
+    label.classList.add('form-switch', 'd-inline-block')
+
+    const checkbox = document.createElement('input')
+    checkbox.setAttribute('type', 'checkbox')
+    checkbox.setAttribute('id', formname + '-opt-in')
+    checkbox.classList.add('json-editor-opt-in')
+
+    const icon = document.createElement('i')
+    icon.classList.add('form-icon')
+
+    const switchLabelText = document.createElement('span')
+    switchLabelText.classList.add('sr-only')
+    switchLabelText.textContent = formname + '-opt-in'
+
+    label.appendChild(switchLabelText)
+    label.appendChild(checkbox)
+    label.appendChild(icon)
+
+    container.appendChild(label)
+
+    return { label, checkbox, container }
+  }
+
   /* Functions for setting up the grid container, row and columns */
   setGridColumnSize (el, size, offset) {
     el.classList.add(`col-${size}`)
