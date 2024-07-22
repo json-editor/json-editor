@@ -17,6 +17,8 @@ export class ColorEditor extends StringEditor {
   }
 
   setValue (value, initial, fromTemplate) {
+    value = this.applyConstFilter(value)
+
     const res = super.setValue(value, initial, fromTemplate)
     if (this.picker_instance && this.picker_instance.domElement && res && res.changed) {
       this.picker_instance.setColor(res.value, true)

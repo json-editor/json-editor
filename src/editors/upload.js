@@ -276,6 +276,8 @@ export class UploadEditor extends AbstractEditor {
   }
 
   setValue (val) {
+    val = this.applyConstFilter(val)
+
     if (this.value !== val) {
       this.value = val
       this.input.value = this.value

@@ -3,6 +3,7 @@ import { extend } from '../utilities.js'
 
 export class AceEditor extends StringEditor {
   setValue (value, initial, fromTemplate) {
+    value = this.applyConstFilter(value)
     const res = super.setValue(value, initial, fromTemplate)
     if (res !== undefined && res.changed && this.ace_editor_instance) {
       this.ace_editor_instance.setValue(res.value)

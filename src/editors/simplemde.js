@@ -3,6 +3,8 @@ import { extend } from '../utilities.js'
 
 export class SimplemdeEditor extends StringEditor {
   setValue (value, initial, fromTemplate) {
+    value = this.applyConstFilter(value)
+
     const res = super.setValue(value, initial, fromTemplate)
     if (res !== undefined && res.changed && this.simplemde_instance) this.simplemde_instance.value(res.value)
   }

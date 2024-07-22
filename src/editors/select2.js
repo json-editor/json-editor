@@ -3,6 +3,8 @@ import { extend, hasOwnProperty } from '../utilities.js'
 
 export class Select2Editor extends SelectEditor {
   setValue (value, initial) {
+    value = this.applyConstFilter(value)
+
     if (this.select2_instance) {
       if (initial) this.is_dirty = false
       else if (this.jsoneditor.options.show_errors === 'change') this.is_dirty = true

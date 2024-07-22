@@ -132,6 +132,8 @@ export class MultiSelectEditor extends AbstractEditor {
   }
 
   setValue (value, initial) {
+    value = this.applyConstFilter(value)
+
     value = value || []
     if (!(Array.isArray(value))) value = [value]
 

@@ -319,6 +319,8 @@ export class MultipleEditor extends AbstractEditor {
   }
 
   setValue (val, initial) {
+    val = this.applyConstFilter(val)
+
     /* Determine type by getting the first one that validates */
 
     const prevType = this.type

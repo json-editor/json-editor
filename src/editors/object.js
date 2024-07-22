@@ -1296,6 +1296,8 @@ export class ObjectEditor extends AbstractEditor {
   }
 
   setValue (value, initial) {
+    value = this.applyConstFilter(value)
+
     value = value || {}
 
     if (typeof value !== 'object' || Array.isArray(value)) value = {}
