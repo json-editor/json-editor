@@ -420,7 +420,8 @@ const options = {
   show_errors: 'interaction',
   prompt_paste_max_length_reached: false,
   remove_false_properties: false,
-  enforce_const: false
+  enforce_const: false,
+  opt_in_widget: 'checkbox'
 }
 
 /* This assignment was previously in index.js but makes more sense here */
