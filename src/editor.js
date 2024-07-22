@@ -29,6 +29,7 @@ export class AbstractEditor {
 
     this.link_watchers = []
     this.watchLoop = false
+    this.optInWidget = this.options.opt_in_widget ?? this.jsoneditor.options.opt_in_widget
 
     if (options.container) this.setContainer(options.container)
     this.registerDependencies()
@@ -216,16 +217,17 @@ export class AbstractEditor {
     this.container.setAttribute('data-schemapath', this.path)
   }
 
-  setOptInCheckbox (header) {
-    /* the active/deactive checbox control. */
+  setOptInCheckbox () {
+    let optIn
 
-    this.optInLabel = this.theme.getHiddenLabel(this.formname + ' opt-in')
-    this.optInLabel.setAttribute('for', this.formname + '-opt-in')
-    this.optInCheckbox = document.createElement('input')
-    this.optInCheckbox.setAttribute('type', 'checkbox')
-    this.optInCheckbox.setAttribute('style', 'margin: 0 10px 0 0;')
-    this.optInCheckbox.setAttribute('id', this.formname + '-opt-in')
-    this.optInCheckbox.classList.add('json-editor-opt-in')
+    if (this.optInWidget === 'switch') {
+      optIn = this.theme.getOptInSwitch(this.formname)
+    } else {
+      optIn = this.theme.getOptInCheckbox(this.formname)
+    }
+
+    this.optInCheckbox = optIn.checkbox
+    this.optInContainer = optIn.container
 
     this.optInCheckbox.addEventListener('click', () => {
       if (this.isActive()) {
@@ -240,12 +242,12 @@ export class AbstractEditor {
     const parentOptInDefined = (typeof this.parent.options.show_opt_in !== 'undefined')
     const parentOptInEnabled = (parentOptInDefined && this.parent.options.show_opt_in === true)
     const parentOptInDisabled = (parentOptInDefined && this.parent.options.show_opt_in === false)
+
     if (parentOptInEnabled || (!parentOptInDisabled && globalOptIn) || (!parentOptInDefined && globalOptIn)) {
       /* and control to type object editors if they are not required */
       if (this.parent && this.parent.schema.type === 'object' && !this.isRequired() && this.header) {
-        this.header.appendChild(this.optInLabel)
-        this.header.appendChild(this.optInCheckbox)
-        this.header.insertBefore(this.optInCheckbox, this.header.firstChild)
+        this.header.insertBefore(this.optInContainer, this.header.firstChild)
+        this.optInAppended = true
       }
     }
   }
