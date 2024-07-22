@@ -336,6 +336,11 @@ Here are all the available options:
     <td>When set to <code>true</code>, the schema <code>const</code> will serve as the default value, and the editor will prevent any changes to it.</td>
     <td><code>false</code></td>
   </tr>
+  <tr>
+    <td>opt_in_widget</td>
+    <td>Which widget should be used for opt-in inputs. Possible values are <code>'checkbox'</code> and <code>'switch'</code></td>
+    <td><code>'checkbox'</code></td>
+  </tr>
   </tbody>
 </table>
 
