@@ -5,6 +5,22 @@ const { DEFAULT_WAIT_TIME } = require('./test-config')
 
 Feature('core')
 
+Scenario('should use switch toggles for opt-in inputs @opt-in-widget', async ({ I }) => {
+  I.amOnPage('opt-in-widget.html')
+  I.waitForElement('.je-ready')
+  I.waitForValue('#value', '{}')
+  I.click('[data-schemapath="root.address"] .switch-slider')
+  I.click('[data-schemapath="root.email"] .switch-slider')
+  I.click('[data-schemapath="root.password"] .switch-slider')
+  I.click('[data-schemapath="root.name"] .switch-slider')
+  I.click('[data-schemapath="root.gender"] .switch-slider')
+  I.click('[data-schemapath="root.pets"] .switch-slider')
+  I.click('[data-schemapath="root.agree"] .switch-slider')
+  I.click('[data-schemapath="root.address.street"] .switch-slider')
+  I.click('[data-schemapath="root.address.number"] .switch-slider')
+  I.waitForValue('#value', '{"email":"","password":"","name":"Random-223","gender":"Male","address":{"street":"","number":""},"pets":[{"type":"dog","name":"Walter"}],"agree":false}')
+})
+
 Scenario('should show all validation errors on demand @editor-show-validation-errors', async ({ I }) => {
   I.amOnPage('editor-show-validation-errors.html')
   I.waitForElement('.je-ready')
