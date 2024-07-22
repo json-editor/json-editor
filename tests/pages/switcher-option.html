@@ -23,18 +23,6 @@
     "title": "Register",
     "type": "object",
     "properties": {
-      "email": {
-        "title": "Email",
-        "type": "string",
-        "format": "email",
-        "minLength": 6
-      },
-      "password": {
-        "title": "Password",
-        "type": "string",
-        "format": "password",
-        "minLength": 8
-      },
       "name": {
         "title": "Name",
         "type": "string",
@@ -56,68 +44,7 @@
             "maxLength": 10
           }
         ]
-      },
-      "gender": {
-        "title": "Gender",
-        "type": "string",
-        "enum": [
-          "Male",
-          "Female",
-          "Other"
-        ]
-      },
-      "address": {
-        "title": "Address",
-        "type": "object",
-        "properties": {
-          "street": {
-            "title": "Street",
-            "type": "string",
-          },
-          "number": {
-            "title": "Number",
-            "type": "string",
-          }
-        }
-      },
-      "pets": {
-        "type": "array",
-        "format": "table",
-        "title": "Pets",
-        "uniqueItems": true,
-        "items": {
-          "type": "object",
-          "title": "Pet",
-          "properties": {
-            "type": {
-              "type": "string",
-              "enum": [
-                "cat",
-                "dog",
-                "bird",
-                "reptile",
-                "other"
-              ],
-              "default": "dog"
-            },
-            "name": {
-              "type": "string"
-            }
-          }
-        },
-        "default": [
-          {
-            "type": "dog",
-            "name": "Walter"
-          }
-        ]
-      },
-      "agree": {
-        "title": "Agree",
-        "description": "lorem ipsum bla bla",
-        "type": "boolean",
-        "format": "checkbox"
-      },
+      }
     }
   }
 
