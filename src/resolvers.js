@@ -81,7 +81,7 @@ const arraysOfStrings = (schema, je) => {
 }
 
 /* Use the multiple editor for schemas with `oneOf` or `anyOf` set */
-const oneOf = schema => (schema.oneOf || schema.anyOf) && 'multiple'
+const oneOf = schema => (schema.oneOf || schema.anyOf) && (schema.options?.switcher ?? true) === true && 'multiple'
 
 /* Use the multiple editor for schemas with `if` set */
 const ifThenElse = schema => (schema.if) && 'multiple'
