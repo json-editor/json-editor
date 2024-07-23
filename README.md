@@ -1235,6 +1235,7 @@ Editor Options
 
 Editors can accept options which alter the behavior in some way.
 
+* `switcher` - If set to false and using oneOf or anyOf, a multiple editor is not created, but validation still applies. Should be used with schemas with same type.
 * `titleHidden` - If set to true, the editor title will be visually hidden
 * `collapsed` - If set to true, the editor will start collapsed (works for objects and arrays)
 * `disable_array_add` - If set to true, the "add row" button will be hidden (works for arrays)

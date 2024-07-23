@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>switcher-option</title>
+  <script src="../../dist/jsoneditor.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+  <div id='editor-container'></div>
+  <div class="form-group">
+    <label for="textarea-value">Value</label>
+    <textarea class="form-control" id="textarea-value" cols="30" rows="30"></textarea>
+  </div>
+</div>
+
+<script>
+  const editorContainer = document.querySelector('#editor-container')
+  const schema = {
+    "title": "Register",
+    "type": "object",
+    "properties": {
+      "name": {
+        "title": "Name",
+        "type": "string",
+        "options": {
+          "switcher": false,
+          "error_messages": {
+            "en": {
+              "error_oneOf": "If provided, value must be at least 4 and at most 10",
+              "error_anyOf": "If provided, value must be at least 4 and at most 10"
+            }
+          }
+        },
+        "anyOf": [
+          {
+            "const": ""
+          },
+          {
+            "minLength": 4,
+            "maxLength": 10
+          }
+        ]
+      }
+    }
+  }
+
+  const editor = new JSONEditor(editorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome',
+    show_errors: 'always',
+    disable_collapse: true,
+    disable_edit_json: true,
+    disable_properties: true
+  })
+
+  const textareaValue = document.querySelector('#textarea-value')
+
+  editor.on('change', function () {
+    textareaValue.value = JSON.stringify(editor.getValue(), null, 2)
+  })
+</script>
+
+</body>
+</html>
