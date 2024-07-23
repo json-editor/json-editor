@@ -33,6 +33,16 @@ export class CheckboxEditor extends AbstractEditor {
     return Math.min(12, Math.max(this.getTitle().length / 7, 2))
   }
 
+  setOptInCheckbox () {
+    super.setOptInCheckbox()
+
+    if (this.optInAppended) {
+      this.container.insertBefore(this.optInContainer, this.container.firstChild)
+      this.optInContainer.style.verticalAlign = 'top'
+      this.control.style.marginTop = '0'
+    }
+  }
+
   build () {
     if (!this.parent.options.table_row) {
       this.label = this.header = this.theme.getCheckboxLabel(this.getTitle(), this.isRequired())
@@ -46,6 +56,7 @@ export class CheckboxEditor extends AbstractEditor {
     this.input = this.theme.getCheckbox()
     this.input.id = this.formname
     this.control = this.theme.getFormControl(this.label, this.input, this.description, this.infoButton)
+    this.control.style.display = 'inline-block'
 
     if (this.schema.readOnly || this.schema.readonly) {
       this.disable(true)

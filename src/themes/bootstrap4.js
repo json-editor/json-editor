@@ -43,6 +43,33 @@ export class bootstrap4Theme extends AbstractTheme {
     return el
   }
 
+  getOptInSwitch (formname) {
+    const label = this.getHiddenLabel(formname + ' opt-in')
+    label.setAttribute('for', formname + '-opt-in')
+
+    const container = document.createElement('div')
+    container.classList.add('custom-control', 'custom-switch', 'd-inline-block', 'fs-6')
+
+    const checkbox = document.createElement('input')
+    checkbox.setAttribute('type', 'checkbox')
+    checkbox.setAttribute('id', formname + '-opt-in')
+    checkbox.classList.add('custom-control-input', 'json-editor-opt-in')
+
+    const switchLabel = document.createElement('label')
+    switchLabel.setAttribute('for', formname + '-opt-in')
+    switchLabel.classList.add('custom-control-label')
+
+    const switchLabelText = document.createElement('span')
+    switchLabelText.classList.add('sr-only')
+    switchLabelText.textContent = formname + '-opt-in'
+    switchLabel.appendChild(switchLabelText)
+
+    container.appendChild(checkbox)
+    container.appendChild(switchLabel)
+
+    return { label, checkbox, container }
+  }
+
   setGridColumnSize (el, size, offset) {
     el.classList.add(`col-md-${size}`)
 

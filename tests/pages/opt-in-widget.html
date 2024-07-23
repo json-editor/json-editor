@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>opt-in-widget</title>
+  <script src="../../dist/jsoneditor.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<!--  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">-->
+<!--  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">-->
+<!--  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">-->
+<!--  <link rel="stylesheet" href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css">-->
+  <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+  <div id='editor-container'></div>
+  <div class="form-group">
+    <label for="value">Value</label>
+    <textarea class="form-control" id="value" cols="30" rows="30"></textarea>
+  </div>
+</div>
+
+<script>
+  const editorContainer = document.querySelector('#editor-container')
+  const schema = {
+    "title": "Register",
+    "type": "object",
+    "properties": {
+      "email": {
+        "title": "Email",
+        "type": "string",
+        "format": "email",
+        "minLength": 6
+      },
+      "password": {
+        "title": "Password",
+        "type": "string",
+        "format": "password",
+        "minLength": 8
+      },
+      "name": {
+        "title": "Name",
+        "type": "string",
+        "default": "Random-223"
+      },
+      "gender": {
+        "title": "Gender",
+        "type": "string",
+        "enum": [
+          "Male",
+          "Female",
+          "Other"
+        ]
+      },
+      "address": {
+        "title": "Address",
+        "type": "object",
+        "properties": {
+          "street": {
+            "title": "Street",
+            "type": "string",
+          },
+          "number": {
+            "title": "Number",
+            "type": "string",
+          }
+        }
+      },
+      "pets": {
+        "type": "array",
+        "format": "table",
+        "title": "Pets",
+        "uniqueItems": true,
+        "items": {
+          "type": "object",
+          "title": "Pet",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "cat",
+                "dog",
+                "bird",
+                "reptile",
+                "other"
+              ],
+              "default": "dog"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+        "default": [
+          {
+            "type": "dog",
+            "name": "Walter"
+          }
+        ]
+      },
+      "agree": {
+        "title": "Agree",
+        "description": "lorem ipsum bla bla",
+        "type": "boolean",
+        "format": "checkbox"
+      },
+    }
+  }
+
+  const editor = new JSONEditor(editorContainer, {
+    schema: schema,
+    theme: 'bootstrap3',
+    // theme: 'bootstrap4',
+    // theme: 'bootstrap5',
+    // theme: 'spectre',
+    // theme: 'tailwind',
+    iconlib: 'fontawesome',
+    show_opt_in: true,
+    opt_in_widget: 'switch',
+    disable_collapse: true,
+    disable_edit_json: true,
+    disable_properties: true
+  })
+
+  const textareaValue = document.querySelector('#value')
+
+  editor.on('change', function () {
+    textareaValue.value = JSON.stringify(editor.getValue())
+  })
+</script>
+
+</body>
+</html>

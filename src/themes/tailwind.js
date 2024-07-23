@@ -19,6 +19,32 @@ export class tailwindTheme extends AbstractTheme {
     super(jsoneditor, options)
   }
 
+  getOptInSwitch (formname) {
+    const label = this.getHiddenLabel(formname + ' opt-in')
+    label.setAttribute('for', formname + '-opt-in')
+
+    const container = document.createElement('label')
+    container.classList.add('switch')
+
+    const checkbox = document.createElement('input')
+    checkbox.setAttribute('type', 'checkbox')
+    checkbox.setAttribute('id', formname + '-opt-in')
+    checkbox.classList.add('json-editor-opt-in')
+
+    const slider = document.createElement('span')
+    slider.classList.add('switch-slider', 'round')
+
+    const switchLabelText = document.createElement('span')
+    switchLabelText.classList.add('sr-only')
+    switchLabelText.textContent = formname + '-opt-in'
+
+    container.appendChild(switchLabelText)
+    container.appendChild(checkbox)
+    container.appendChild(slider)
+
+    return { label, checkbox, container }
+  }
+
   getGridContainer () {
     const el = document.createElement('div')
     el.classList.add('flex', 'flex-col', 'w-full')

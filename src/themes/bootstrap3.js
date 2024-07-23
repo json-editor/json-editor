@@ -2,6 +2,32 @@ import { AbstractTheme } from '../theme.js'
 import rules from './bootstrap3.css.js'
 
 export class bootstrap3Theme extends AbstractTheme {
+  getOptInSwitch (formname) {
+    const label = this.getHiddenLabel(formname + ' opt-in')
+    label.setAttribute('for', formname + '-opt-in')
+
+    const container = document.createElement('label')
+    container.classList.add('switch')
+
+    const checkbox = document.createElement('input')
+    checkbox.setAttribute('type', 'checkbox')
+    checkbox.setAttribute('id', formname + '-opt-in')
+    checkbox.classList.add('json-editor-opt-in')
+
+    const slider = document.createElement('span')
+    slider.classList.add('switch-slider')
+
+    const switchLabelText = document.createElement('span')
+    switchLabelText.classList.add('sr-only')
+    switchLabelText.textContent = formname + '-opt-in'
+
+    container.appendChild(switchLabelText)
+    container.appendChild(checkbox)
+    container.appendChild(slider)
+
+    return { label, checkbox, container }
+  }
+
   getSelectInput (options, multiple) {
     const el = super.getSelectInput(options)
     el.classList.add('form-control')
@@ -143,6 +169,10 @@ export class bootstrap3Theme extends AbstractTheme {
     if (window.DOMPurify) el.innerHTML = window.DOMPurify.sanitize(text)
     else el.textContent = this.cleanText(text)
     return el
+  }
+
+  getHeaderContainer () {
+    return document.createElement('div')
   }
 
   getHeader (text, pathDepth) {

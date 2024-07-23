@@ -23,6 +23,29 @@ export class AbstractTheme {
     return document.createElement('div')
   }
 
+  getOptInCheckbox (formname) {
+    const container = document.createElement('span')
+
+    const label = this.getHiddenLabel(formname + ' opt-in')
+    label.setAttribute('for', formname + '-opt-in')
+    label.textContent = formname + '-opt-in'
+
+    const checkbox = document.createElement('input')
+    checkbox.setAttribute('type', 'checkbox')
+    checkbox.setAttribute('style', 'margin: 0 10px 0 0;')
+    checkbox.setAttribute('id', formname + '-opt-in')
+    checkbox.classList.add('json-editor-opt-in')
+
+    container.appendChild(checkbox)
+    container.appendChild(label)
+
+    return { label, checkbox, container }
+  }
+
+  getOptInSwitch (formname) {
+    return this.getOptInCheckbox()
+  }
+
   getFloatRightLinkHolder () {
     const el = document.createElement('div')
     el.classList.add('je-float-right-linkholder')
