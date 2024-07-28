@@ -269,11 +269,31 @@ export class bootstrap5Theme extends AbstractTheme {
     button.appendChild(icon)
 
     if (this.options.tooltip === 'bootstrap') {
-      if (window.jQuery && window.jQuery().tooltip) {
+      const consoleCodeBlockStyle =
+        'background: #EEE; padding: 0.1rem 0.3rem; word-wrap: break-word; box-decoration-break: clone;'
+
+      if (window.bootstrap && window.bootstrap.Tooltip) {
+        // eslint-disable-next-line no-new
+        new window.bootstrap.Tooltip(button)
+      } else if (window.jQuery && window.jQuery().tooltip) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          'Could not find property %cwindow.bootstrap%c; falling back to jQuery tooltips.\n' +
+            'Keep in mind that Bootstrap 5 is designed to be used without jQuery.',
+          consoleCodeBlockStyle,
+          ''
+        )
         window.jQuery(button).tooltip()
       } else {
         // eslint-disable-next-line no-console
-        console.warn('Could not find popper jQuery plugin of Bootstrap.')
+        console.warn(
+          'Could not find property %cwindow.bootstrap%c; please ensure that Bootstrap is loaded in your app ' +
+            '(%cif using a package manager, you may need to manually assign the bootstrap variable: %cwindow.bootstrap = require("bootstrap")',
+          consoleCodeBlockStyle,
+          '',
+          'font-style: italic',
+          consoleCodeBlockStyle
+        )
       }
     } else if (this.options.tooltip === 'css') {
       button.classList.add('je-tooltip')
