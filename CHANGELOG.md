@@ -1,5 +1,7 @@
 ### Unreleased
 
+- Support drag and drop for array item
+
 ### 2.15.1
 
 - Fixed #1563 and #1558. Select values not displayed

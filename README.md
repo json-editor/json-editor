@@ -1137,6 +1137,10 @@ editor.on('deleteAllRows', deletedValues => {
 });
 ```
 
+Drag and drop for array item is supported to perform a quick item moving.
+For array editor with format=`tabs` or `tabs-top`, you can drag the tab header directly.
+For the default array editor (or format=`table`), you have to drag the array item panel with Ctrl key pressed (to avoid side-effect of draggable panel), or drag any text in the input box to another item panel.
+
 #### Schema loader events
 
 When schemas are loaded via a request, the `schemaLoaded` event is triggered individually for each schema after its loading.
