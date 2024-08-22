@@ -1,5 +1,6 @@
 import { AbstractEditor } from '../editor.js'
 import { extend, hasOwnProperty, trigger } from '../utilities.js'
+import { createEditJsonButton } from './array.js'
 import rules from './object.css.js'
 
 export class ObjectEditor extends AbstractEditor {
@@ -32,7 +33,7 @@ export class ObjectEditor extends AbstractEditor {
 
   enable () {
     if (!this.always_disabled) {
-      if (this.editjson_control) this.editjson_control.disabled = false
+      this.editjson_button?.enable()
       if (this.addproperty_button) this.addproperty_button.disabled = false
 
       super.enable()
@@ -51,9 +52,8 @@ export class ObjectEditor extends AbstractEditor {
 
   disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
-    if (this.editjson_control) this.editjson_control.disabled = true
+    this.editjson_button?.disable()
     if (this.addproperty_button) this.addproperty_button.disabled = true
-    this.hideEditJSON()
 
     super.disable()
     if (this.editors) {
@@ -564,41 +564,6 @@ export class ObjectEditor extends AbstractEditor {
       this.container.appendChild(this.controls)
       this.container.classList.add('je-object__container')
 
-      /* Edit JSON modal */
-      this.editjson_holder = this.theme.getModal()
-      this.editjson_textarea_label = this.theme.getHiddenLabel(this.translate('button_edit_json'))
-      this.editjson_textarea_label.setAttribute('for', this.path + '-' + 'edit-json-textarea')
-      this.editjson_textarea = this.theme.getTextareaInput()
-      this.editjson_textarea.setAttribute('id', this.path + '-' + 'edit-json-textarea')
-      this.editjson_textarea.setAttribute('aria-labelledby', this.path + '-' + 'edit-json-textarea')
-      this.editjson_textarea.classList.add('je-edit-json--textarea')
-      this.editjson_save = this.getButton('button_save', 'save', 'button_save')
-      this.editjson_save.classList.add('json-editor-btntype-save')
-      this.editjson_save.addEventListener('click', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        this.saveJSON()
-      })
-      this.editjson_copy = this.getButton('button_copy', 'copy', 'button_copy')
-      this.editjson_copy.classList.add('json-editor-btntype-copy')
-      this.editjson_copy.addEventListener('click', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        this.copyJSON()
-      })
-      this.editjson_cancel = this.getButton('button_cancel', 'cancel', 'button_cancel')
-      this.editjson_cancel.classList.add('json-editor-btntype-cancel')
-      this.editjson_cancel.addEventListener('click', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        this.hideEditJSON()
-      })
-      this.editjson_holder.appendChild(this.editjson_textarea_label)
-      this.editjson_holder.appendChild(this.editjson_textarea)
-      this.editjson_holder.appendChild(this.editjson_save)
-      this.editjson_holder.appendChild(this.editjson_copy)
-      this.editjson_holder.appendChild(this.editjson_cancel)
-
       /* Manage Properties modal */
       this.addproperty_holder = this.theme.getModal()
       this.addproperty_list = document.createElement('div')
@@ -773,22 +738,7 @@ export class ObjectEditor extends AbstractEditor {
       }
 
       /* Edit JSON Button */
-      this.editjson_control = this.getButton('JSON', 'edit', 'button_edit_json')
-      this.editjson_control.classList.add('json-editor-btntype-editjson')
-      this.editjson_control.addEventListener('click', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        this.toggleEditJSON()
-      })
-      this.controls.appendChild(this.editjson_control)
-      this.controls.insertBefore(this.editjson_holder, this.controls.childNodes[0])
-
-      /* Edit JSON Buttton disabled */
-      if (this.schema.options && typeof this.schema.options.disable_edit_json !== 'undefined') {
-        if (this.schema.options.disable_edit_json) this.editjson_control.style.display = 'none'
-      } else if (this.jsoneditor.options.disable_edit_json) {
-        this.editjson_control.style.display = 'none'
-      }
+      this.editjson_button = createEditJsonButton(this)
 
       /* Object Properties Button */
       this.addproperty_button = this.getButton('properties', 'edit_properties', 'button_object_properties')
@@ -844,60 +794,6 @@ export class ObjectEditor extends AbstractEditor {
     }
   }
 
-  showEditJSON () {
-    if (!this.editjson_holder) return
-    this.hideAddProperty()
-
-    /* Position the form directly beneath the button */
-    /* TODO: edge detection */
-    this.editjson_holder.style.left = `${this.editjson_control.offsetLeft}px`
-    this.editjson_holder.style.top = `${this.editjson_control.offsetTop + this.editjson_control.offsetHeight}px`
-
-    /* Start the textarea with the current value */
-    this.editjson_textarea.value = JSON.stringify(this.getValue(), null, 2)
-
-    /* Disable the rest of the form while editing JSON */
-    this.disable()
-
-    this.editjson_holder.style.display = ''
-    this.editjson_control.disabled = false
-    this.editing_json = true
-  }
-
-  hideEditJSON () {
-    if (!this.editjson_holder) return
-    if (!this.editing_json) return
-
-    this.editjson_holder.style.display = 'none'
-    this.enable()
-    this.editing_json = false
-  }
-
-  copyJSON () {
-    if (!this.editjson_holder) return
-    navigator.clipboard.writeText(this.editjson_textarea.value)
-      .catch((e) => window.alert(e))
-  }
-
-  saveJSON () {
-    if (!this.editjson_holder) return
-
-    try {
-      const json = JSON.parse(this.editjson_textarea.value)
-      this.setValue(json)
-      this.hideEditJSON()
-      this.onChange(true)
-    } catch (e) {
-      window.alert('invalid JSON')
-      throw e
-    }
-  }
-
-  toggleEditJSON () {
-    if (this.editing_json) this.hideEditJSON()
-    else this.showEditJSON()
-  }
-
   insertPropertyControlUsingPropertyOrder (property, control, container) {
     let propertyOrder
     if (this.schema.properties[property]) { propertyOrder = this.schema.properties[property].propertyOrder }
@@ -949,7 +845,6 @@ export class ObjectEditor extends AbstractEditor {
 
   showAddProperty () {
     if (!this.addproperty_holder) return
-    this.hideEditJSON()
 
     /* Position the form directly beneath the button */
     /* TODO: edge detection */
