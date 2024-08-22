@@ -46,14 +46,14 @@ jobs:
       #  run: |
       #    npm install
       - name: Install
-        run: docker-compose run -T --rm node npm install
+        run: docker compose run -T --rm node npm install
       - name: Start
-        run: docker-compose up -d ${SELENIUM_BROWSER}
+        run: docker compose up -d ${SELENIUM_BROWSER}
       - name: Build
-        run: docker-compose run -T --rm node npm run ${BUILD_ENV}
+        run: docker compose run -T --rm node npm run ${BUILD_ENV}
       - name: Test
         run: |
-          docker-compose exec -T node codeceptjs run-multiple -c /repo/tests/codeceptjs/codecept.json basic:${SELENIUM_BROWSER} --invert --grep  '@optional'
+          docker compose exec -T node codeceptjs run-multiple -c /repo/tests/codeceptjs/codecept.json basic:${SELENIUM_BROWSER} --invert --grep  '@optional'
           pwd
           ls -la codeceptjs/output
       - name: Test Artifacts
@@ -66,5 +66,5 @@ jobs:
           merge-multiple: true
       - name: Test (optional)
         continue-on-error: true
-        run: docker-compose exec -T node codeceptjs run-multiple -c /repo/tests/codeceptjs/codecept.json basic:${SELENIUM_BROWSER} --grep '@optional'
+        run: docker compose exec -T node codeceptjs run-multiple -c /repo/tests/codeceptjs/codecept.json basic:${SELENIUM_BROWSER} --grep '@optional'
 
