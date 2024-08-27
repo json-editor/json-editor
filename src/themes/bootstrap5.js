@@ -23,6 +23,7 @@ export class bootstrap5Theme extends AbstractTheme {
     const el = super.getSelectInput(options)
     el.classList.add('form-control')
     el.classList.add('form-select')
+    el.classList.add('pe-5')
     if (this.options.input_size === 'small') el.classList.add('form-control-sm')
     if (this.options.input_size === 'large') el.classList.add('form-control-lg')
 
