@@ -1,4 +1,4 @@
-import { ArrayEditor } from './array.js'
+import { ArrayEditor, supportDragDrop } from './array.js'
 import { extend, generateUUID, trigger } from '../utilities.js'
 
 export class TableEditor extends ArrayEditor {
@@ -322,6 +322,8 @@ export class TableEditor extends ArrayEditor {
       this.rows[i].movedown_button = this._createMoveDownButton(i, controlsHolder)
     }
 
+    this._supportDragDrop(this.rows[i].row)
+
     if (typeof value !== 'undefined') this.rows[i].setValue(value)
 
     return this.rows[i]
@@ -433,6 +435,20 @@ export class TableEditor extends ArrayEditor {
     })
     holder.appendChild(button)
     return button
+  }
+
+  _supportDragDrop (tab) {
+    supportDragDrop(tab, (i, j) => {
+      const rows = this.getValue()
+      const tmp = rows[i]
+      rows.splice(i, 1)
+      rows.splice(j, 0, tmp)
+
+      this.setValue(rows)
+      this.onChange(true)
+
+      this.jsoneditor.trigger('moveRow', this.rows[j])
+    }, { useTrigger: true })
   }
 
   addControls () {
