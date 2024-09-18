@@ -188,7 +188,7 @@ export class tailwindTheme extends AbstractTheme {
   getFormInputLabel (text, req) {
     const el = super.getFormInputLabel(text, req)
     if (this.options.label_bold) el.classList.add('font-bold')
-    else el.classList.add('required')
+    if (req) el.classList.add('required')
     return el
   }
 
