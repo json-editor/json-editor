@@ -163,6 +163,7 @@ export class ArrayEditor extends AbstractEditor {
   onChildEditorChange (editor, eventData) {
     this.refreshValue()
     this.refreshTabs(true)
+    this.is_dirty = true
     super.onChildEditorChange(editor, eventData)
   }
 
