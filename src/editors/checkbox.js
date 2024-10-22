@@ -99,7 +99,7 @@ export class CheckboxEditor extends AbstractEditor {
     const changeOrInteraction = showErrors === 'change' || showErrors === 'interaction'
     const never = showErrors === 'never'
 
-    if (never) {
+    if (never && !this.is_dirty) {
       return
     }
 

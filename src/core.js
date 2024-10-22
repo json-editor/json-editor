@@ -412,12 +412,14 @@ export class JSONEditor {
     shadowRoot.adoptedStyleSheets = [...shadowRoot.adoptedStyleSheets, styleSheet]
   }
 
-  showValidationErrors () {
-    const errors = this.validate()
+  showValidationErrors (errorList) {
+    const errors = errorList ?? this.validate()
 
     Object.values(this.editors).forEach(editor => {
-      editor.is_dirty = true
-      editor.showValidationErrors(errors)
+      if (editor) {
+        editor.is_dirty = true
+        editor.showValidationErrors(errors)
+      }
     })
   }
 }
