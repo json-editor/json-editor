@@ -1,5 +1,18 @@
 ### Unreleased
 
+### 2.15.2
+
+- Support drag and drop for array item
+- Updated to docker compose commands
+- Updated to docker compose commands
+- Added schema switcher option
+- Added opt_in_widget option (checkboxes and switches for opt int activators)
+- Added enforce_const option
+- Added enforce_const option
+- ShowErrorMessages method
+- Recursively deactivate non required properties, when adding a new row in an array
+- Fixed error in Playground
+- Fixed simpleMde exception
 - Support drag and drop for array item
 
 ### 2.15.1
