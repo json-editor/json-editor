@@ -18,6 +18,7 @@
 ### 2.15.1
 
 - Fixed #1563 and #1558. Select values not displayed
+- Fixed #1571. Bootstrap select is no longer cutoff
 
 ### 2.15.0
 
