@@ -1296,43 +1296,49 @@ Using the option `infoText`, will create a info button, displaying the text you 
 }
 ```
 
-Enum options
+### Enum Options
+
 ------------------
 
-Using the option `enum`, it is possible to modify how enums with format `checkbox` (default) are displayed in the editor.
-It is an array of objects (described below), which must be in the same order as defined with the `enum` keyword.
+JSON-Editor offers a powerful way to tailor the display of `enum` values, enhancing clarity and user experience, especially when presenting enums as `checkboxes`.
 
-Currently, the following is supported:
+For each enum value, you can specify:
 
-* `title`: *Optional* Display value shown instead of the enum value
-* `infoText`: *Optional* Creates an info button next to the title, displaying the text you set, on hovering.
+- `title`: *(Optional)* An alternative display replacing the default enum value.
 
-It is possible also to set these options only for some enum values, to skip one enum value, define an empty object (`{}`).
+- `infoText`: *(Optional)* Displays additional information on hover next to the title.
+
+To leave specific enum values with their default presentation, just use an empty object (`{}`) for that value.
+
+#### Example:
+
+Let's display this with user subscription tiers for a software service:
 
 ```json
 {
   "type": "array",
   "items": {
     "type": "string",
-    "enum": ["1", "2", "3", "4"],
+    "enum": ["free", "silver", "gold", "platinum"],
     "options": {
       "enum": [
-        {},
-        {
-          "title": "Title 2"
-        },
-        { "infoText": "InfoText 3" },
-        {
-          "title": "Title 4",
-          "infoText": "InfoText 4"
-        }
+        { "title": "Free Tier", "infoText": "Limited features, ads supported" },
+        { "title": "Silver Subscription", "infoText": "Standard features, no ads" },
+        { "title": "Gold Subscription", "infoText": "All standard features plus premium content" },
+        { "title": "Platinum VIP", "infoText": "All features, premium content, and priority support" }
       ]
     }
   }
 }
 ```
+In this configuration:
 
-If both options `enum_titles[x]` and `enum[x].title` are set for the enum value `x`, than the title set under `enum[x].title` will be used.
+- `Free`: Displayed as "Free Tier" with a tooltip indicating its limitations.
+- `Silver`: Labeled "Silver Subscription" and clarifies its ad-free feature.
+- `Gold`: Shown as "Gold Subscription" and highlights access to premium content.
+- `Platinum`: Appears as "Platinum VIP" emphasizing its all-inclusive nature.
+
+> **Important**: If both `enum_titles[x]` and `enum[x].title` are provided for an enum value `x`, the title under `enum[x].title` takes precedence.
 
 Dependencies
 ------------------
@@ -1792,27 +1798,41 @@ To accomplish this, use the `headerTemplate` property.  All of the watched varia
 
 ### Custom Template Engines
 
-If one of the included template engines isn't sufficient,
-you can use any custom template engine with a `compile` method.  For example:
+JSON-Editor supports custom template engines, granting you the flexibility to tailor your templates beyond the provided default engines. The only requirement is that your custom engine must have a `compile` method.
+
+#### Example:
+Consider a simple custom template engine that replaces placeholders like `{key}` with corresponding values:
+
 
 ```js
-const myengine = {
-  compile: template =>
-    // Compile should return a render function
-    vars => {
-      // A real template engine would render the template here
-      const result = template;
-      return result;
+const simpleEngine = {
+    // Compile method to process the template.
+    compile: template => {
+        return vars => {
+            let result = template;
+
+            // Replace placeholders with their respective values.
+            for (const key in vars) {
+                const placeholder = `{${key}}`;
+                result = result.replace(placeholder, vars[key]);
+            }
+
+            return result;
+        }
     }
 };
 
-// Set globally
-JSONEditor.defaults.options.template = myengine;
+// Sample usage:
+const rendered = simpleEngine.compile("Hello {name}!")({ name: "World" });
+console.log(rendered);
 
-// Set on a per-instance basis
-const editor = new JSONEditor(element,{
-  schema: schema,
-  template: myengine
+// To set this engine as the default for JSON-Editor:
+JSONEditor.defaults.options.template = simpleEngine;
+
+// To use this engine on an individual JSON-Editor instance:
+const editor = new JSONEditor(element, {
+    schema: schema,
+    template: simpleEngine
 });
 ```
 
