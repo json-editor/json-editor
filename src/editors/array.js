@@ -38,6 +38,7 @@ export class ArrayEditor extends AbstractEditor {
   enable () {
     if (!this.always_disabled) {
       this.setAvailability(this, false)
+      this.editjson_button?.enable()
 
       if (this.rows) {
         this.rows.forEach(row => {
@@ -52,6 +53,7 @@ export class ArrayEditor extends AbstractEditor {
   disable (alwaysDisabled) {
     if (alwaysDisabled) this.always_disabled = true
     this.setAvailability(this, true)
+    this.editjson_button?.disable()
 
     if (this.rows) {
       this.rows.forEach(row => {
@@ -709,6 +711,8 @@ export class ArrayEditor extends AbstractEditor {
     this.delete_last_row_button = this._createDeleteLastRowButton()
     this.remove_all_rows_button = this._createRemoveAllRowsButton()
 
+    this.editjson_button = createEditJsonButton(this)
+
     if (this.tabs) {
       this.add_row_button.classList.add('je-array-control-btn')
       this.delete_last_row_button.classList.add('je-array-control-btn')
@@ -917,4 +921,134 @@ export function supportDragDrop (tab, handler, opt = {}) {
     handler(i, j, window.curDrag, tab)
     window.curDrag = null
   })
+}
+
+export function createEditJsonButton (editor) {
+  if (editor.schema?.options?.disable_edit_json || editor.jsoneditor?.options?.disable_edit_json) {
+    return
+  }
+  return new EditJsonButton(editor)
+}
+
+class EditJsonButton {
+  constructor (editor) {
+    this.editor = editor
+    this._createEditJsonButton()
+  }
+
+  enable () {
+    this.editjson_control.disabled = false
+  }
+
+  disable () {
+    if (this.editing_json) {
+      this.editjson_holder.style.display = 'none'
+      this.editing_json = false
+    }
+    this.editjson_control.disabled = true
+  }
+
+  _createEditJsonButton () {
+    const ed = this.editor
+    const button = ed.getButton('JSON', 'edit', 'button_edit_json')
+    button.classList.add('json-editor-btntype-editjson')
+    button.addEventListener('click', (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      this.toggleEditJSON()
+    })
+    ed.controls.appendChild(button)
+    this.editjson_control = button
+
+    /* Edit JSON modal */
+    const id = ed.path + '-' + 'edit-json-textarea'
+    this.editjson_holder = ed.theme.getModal()
+    this.editjson_textarea_label = ed.theme.getHiddenLabel(ed.translate('button_edit_json'))
+    this.editjson_textarea_label.setAttribute('for', id)
+    this.editjson_textarea = ed.theme.getTextareaInput()
+    this.editjson_textarea.setAttribute('id', id)
+    this.editjson_textarea.setAttribute('aria-labelledby', id)
+    this.editjson_textarea.classList.add('je-edit-json--textarea')
+    this.editjson_save = ed.getButton('button_save', 'save', 'button_save')
+    this.editjson_save.classList.add('json-editor-btntype-save')
+    this.editjson_save.addEventListener('click', (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      this.saveJSON()
+    })
+    this.editjson_copy = ed.getButton('button_copy', 'copy', 'button_copy')
+    this.editjson_copy.classList.add('json-editor-btntype-copy')
+    this.editjson_copy.addEventListener('click', (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      this.copyJSON()
+    })
+    this.editjson_cancel = ed.getButton('button_cancel', 'cancel', 'button_cancel')
+    this.editjson_cancel.classList.add('json-editor-btntype-cancel')
+    this.editjson_cancel.addEventListener('click', (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      this.hideEditJSON()
+    })
+    this.editjson_holder.appendChild(this.editjson_textarea_label)
+    this.editjson_holder.appendChild(this.editjson_textarea)
+    this.editjson_holder.appendChild(this.editjson_save)
+    this.editjson_holder.appendChild(this.editjson_copy)
+    this.editjson_holder.appendChild(this.editjson_cancel)
+    ed.controls.insertBefore(this.editjson_holder, this.editor.controls.childNodes[0])
+  }
+
+  toggleEditJSON () {
+    if (this.editing_json) this.hideEditJSON()
+    else this.showEditJSON()
+  }
+
+  showEditJSON () {
+    if (!this.editjson_holder) return
+    // this.hideAddProperty()
+
+    /* Position the form directly beneath the button */
+    /* TODO: edge detection */
+    this.editjson_holder.style.left = `${this.editjson_control.offsetLeft}px`
+    this.editjson_holder.style.top = `${this.editjson_control.offsetTop + this.editjson_control.offsetHeight}px`
+
+    /* Start the textarea with the current value */
+    this.editjson_textarea.value = JSON.stringify(this.editor.getValue(), null, 2)
+
+    /* Disable the rest of the form while editing JSON */
+    this.editor.disable()
+
+    this.editjson_holder.style.display = ''
+    this.editjson_control.disabled = false
+    this.editing_json = true
+  }
+
+  hideEditJSON () {
+    if (!this.editjson_holder) return
+    if (!this.editing_json) return
+
+    this.editjson_holder.style.display = 'none'
+    this.editor.enable()
+    this.editing_json = false
+  }
+
+  copyJSON () {
+    if (!this.editjson_holder) return
+    navigator.clipboard.writeText(this.editjson_textarea.value)
+      .catch((e) => window.alert(e))
+  }
+
+  saveJSON () {
+    if (!this.editjson_holder) return
+
+    try {
+      const json = JSON.parse(this.editjson_textarea.value)
+      this.editor.setValue(json)
+      this.hideEditJSON()
+      this.editor.onChange(true)
+    } catch (e) {
+      window.alert('invalid JSON')
+      throw e
+    }
+  }
 }
