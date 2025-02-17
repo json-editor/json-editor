@@ -132,10 +132,6 @@ export class MultipleEditor extends AbstractEditor {
     this.editors[i].build()
     this.editors[i].postBuild()
 
-    if (this.editors[i].header) {
-      this.theme.visuallyHidden(this.editors[i].header)
-    }
-
     this.editors[i].option = this.switcher_options[i]
 
     holder.addEventListener('change_header_text', () => {
@@ -170,8 +166,8 @@ export class MultipleEditor extends AbstractEditor {
     } else if (this.schema.if) {
       this.if = true
       this.ifSchema = JSON.parse(JSON.stringify(this.schema.if))
-      this.thenSchema = { title: 'then' }
-      this.elseSchema = { title: 'else' }
+      this.thenSchema = {}
+      this.elseSchema = {}
       this.types = []
 
       if (this.schema.then) {
