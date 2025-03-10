@@ -1,5 +1,7 @@
 ### Unreleased
 
+- Fixed issue #1653: Dependencies are not checked upon adding new element to an array
+
 ### 2.15.2
 
 - Support drag and drop for array item
