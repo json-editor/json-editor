@@ -431,6 +431,7 @@ export class Validator {
         return []
       },
       uniqueItems (schema, value, path) {
+        if (schema.uniqueItems === false) return []
         const seen = {}
         for (let i = 0; i < value.length; i++) {
           const valid = JSON.stringify(value[i])

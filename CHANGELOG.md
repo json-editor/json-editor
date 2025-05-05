@@ -1,5 +1,7 @@
 ### Unreleased
 
+Don't run uniqueItems validator if set to false
+
 ### 2.15.2
 
 - Support drag and drop for array item
