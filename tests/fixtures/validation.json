@@ -599,7 +599,8 @@
                     "a": 1
                 }
             ]
-        ]
+        ],
+        "invalid": []
     },
     "minmaxProperties": {
         "schema": {
