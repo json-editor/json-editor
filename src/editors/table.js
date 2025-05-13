@@ -31,7 +31,7 @@ export class TableEditor extends ArrayEditor {
     this.item_default = itemSchema.default || null
     this.item_has_child_editors = itemSchema.properties || itemSchema.items
     this.width = 12
-    this.array_controls_top = _check_boolean_option(this.options.array_controls_top, this.jsoneditor.options.array_controls_top, true)
+    this.array_controls_top = this._check_boolean_option(this.options.array_controls_top, this.jsoneditor.options.array_controls_top, true)
     super.preBuild()
   }
 
@@ -330,7 +330,7 @@ export class TableEditor extends ArrayEditor {
   }
 
   _check_boolean_option(local, global, value) {
-    typeof local ==  'boolean' ? local : global == value
+    return typeof local ==  'boolean' ? local : global == value
   }
 
   _createDeleteButton (i, holder) {
