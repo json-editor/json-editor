@@ -78,13 +78,13 @@ export class ArrayEditor extends AbstractEditor {
     this.rows = []
     this.row_cache = []
 
-    this.hide_delete_buttons = this.options.disable_array_delete || this.jsoneditor.options.disable_array_delete
-    this.hide_delete_all_rows_buttons = this.hide_delete_buttons || this.options.disable_array_delete_all_rows || this.jsoneditor.options.disable_array_delete_all_rows
-    this.hide_delete_last_row_buttons = this.hide_delete_buttons || this.options.disable_array_delete_last_row || this.jsoneditor.options.disable_array_delete_last_row
-    this.hide_move_buttons = this.options.disable_array_reorder || this.jsoneditor.options.disable_array_reorder
-    this.hide_add_button = this.options.disable_array_add || this.jsoneditor.options.disable_array_add
-    this.show_copy_button = this.options.enable_array_copy || this.jsoneditor.options.enable_array_copy
-    this.array_controls_top = this.options.array_controls_top || this.jsoneditor.options.array_controls_top
+    this.hide_delete_buttons = _check_boolean_option(this.options.disable_array_delete, this.jsoneditor.options.disable_array_delete, true)
+    this.hide_delete_all_rows_buttons = this.hide_delete_buttons || _check_boolean_option(this.options.disable_array_delete_all_rows, this.jsoneditor.options.disable_array_delete_all_rows, true)
+    this.hide_delete_last_row_buttons = this.hide_delete_buttons || _check_boolean_option(this.options.disable_array_delete_last_row, this.jsoneditor.options.disable_array_delete_last_row, true)
+    this.hide_move_buttons = _check_boolean_option(this.options.disable_array_reorder, this.jsoneditor.options.disable_array_reorder, true)
+    this.hide_add_button = _check_boolean_option(this.options.disable_array_add, this.jsoneditor.options.disable_array_add, true)
+    this.show_copy_button = _check_boolean_option(this.options.enable_array_copy, this.jsoneditor.options.enable_array_copy, true)
+    this.array_controls_top = _check_boolean_option(this.options.array_controls_top, this.jsoneditor.options.array_controls_top, true)
   }
 
   build () {
@@ -531,6 +531,10 @@ export class ArrayEditor extends AbstractEditor {
     this.refreshTabs()
 
     return this.rows[i]
+  }
+
+  _check_boolean_option(local, global, value) {
+    typeof local ==  'boolean' ? local : global == value
   }
 
   _createDeleteButton (i, holder) {
