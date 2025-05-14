@@ -1,5 +1,5 @@
 import { AbstractEditor } from '../editor.js'
-import { extend, generateUUID, trigger } from '../utilities.js'
+import { extend, generateUUID, trigger, checkBooleanOption } from '../utilities.js'
 import rules from './array.css.js'
 
 export class ArrayEditor extends AbstractEditor {
@@ -78,13 +78,14 @@ export class ArrayEditor extends AbstractEditor {
     this.rows = []
     this.row_cache = []
 
-    this.hide_delete_buttons = this._check_boolean_option(this.options.disable_array_delete, this.jsoneditor.options.disable_array_delete, true)
-    this.hide_delete_all_rows_buttons = this.hide_delete_buttons || this._check_boolean_option(this.options.disable_array_delete_all_rows, this.jsoneditor.options.disable_array_delete_all_rows, true)
-    this.hide_delete_last_row_buttons = this.hide_delete_buttons || this._check_boolean_option(this.options.disable_array_delete_last_row, this.jsoneditor.options.disable_array_delete_last_row, true)
-    this.hide_move_buttons = this._check_boolean_option(this.options.disable_array_reorder, this.jsoneditor.options.disable_array_reorder, true)
-    this.hide_add_button = this._check_boolean_option(this.options.disable_array_add, this.jsoneditor.options.disable_array_add, true)
-    this.show_copy_button = this._check_boolean_option(this.options.enable_array_copy, this.jsoneditor.options.enable_array_copy, true)
-    this.array_controls_top = this._check_boolean_option(this.options.array_controls_top, this.jsoneditor.options.array_controls_top, true)
+    this.hide_delete_buttons = checkBooleanOption(this.options.disable_array_delete, this.jsoneditor.options.disable_array_delete, false)
+    this.hide_delete_all_rows_buttons = this.hide_delete_buttons || checkBooleanOption(this.options.disable_array_delete_all_rows, this.jsoneditor.options.disable_array_delete_all_rows, false)
+    this.hide_delete_last_row_buttons = this.hide_delete_buttons || checkBooleanOption(this.options.disable_array_delete_last_row, this.jsoneditor.options.disable_array_delete_last_row, false)
+    this.hide_move_buttons = checkBooleanOption(this.options.disable_array_reorder, this.jsoneditor.options.disable_array_reorder, false)
+    this.hide_add_button = checkBooleanOption(this.options.disable_array_add, this.jsoneditor.options.disable_array_add, false)
+    this.show_copy_button = checkBooleanOption(this.options.enable_array_copy, this.jsoneditor.options.enable_array_copy, false)
+    this.array_controls_top = checkBooleanOption(this.options.array_controls_top, this.jsoneditor.options.array_controls_top, false)
+    this.copy_in_place = checkBooleanOption(this.copy_in_place, checkBooleanOption(this.options.array_copy_in_place, this.jsoneditor.options.array_copy_in_place, false), false)
   }
 
   build () {
@@ -342,8 +343,9 @@ export class ArrayEditor extends AbstractEditor {
         value.push(this.getItemInfo(value.length).default)
       }
     }
-    if (this.getMax() && value.length > this.getMax()) {
-      value = value.slice(0, this.getMax())
+    const max = this.getMax()
+    if (max && value.length > max) {
+      value = value.slice(0, max)
     }
     return value
   }
@@ -533,10 +535,6 @@ export class ArrayEditor extends AbstractEditor {
     return this.rows[i]
   }
 
-  _check_boolean_option(local, global, value) {
-    return typeof local ==  'boolean' ? local : global == value
-  }
-
   _createDeleteButton (i, holder) {
     const button = this.getButton(this.getItemTitle(), 'delete', 'button_delete_row_title', [this.getItemTitle()])
     button.classList.add('delete', 'json-editor-btntype-delete')
@@ -590,26 +588,39 @@ export class ArrayEditor extends AbstractEditor {
       e.stopPropagation()
       const i = e.currentTarget.getAttribute('data-i') * 1
 
-      value.forEach((row, j) => {
-        if (j === i) {
-          /* Force generation of new UUID if the item has been cloned. */
-          if (schema.items.type === 'string' && schema.items.format === 'uuid') {
-            row = generateUUID()
-          } else if (schema.items.type === 'object' && schema.items.properties) {
-            for (const key of Object.keys(row)) {
-              if (schema.items.properties && schema.items.properties[key] && schema.items.properties[key].format === 'uuid') {
-                row[key] = generateUUID()
-              }
-            }
+      let newValue = value[i]
+      /* Force generation of new UUID if the item has been cloned. */
+      if (schema.items.type === 'string' && schema.items.format === 'uuid') {
+        newValue = generateUUID()
+      } else if (schema.items.type === 'object' && schema.items.properties) {
+        for (const key of Object.keys(newValue)) {
+          if (schema.items.properties && schema.items.properties[key] && schema.items.properties[key].format === 'uuid') {
+            newValue = Object.assign({}, newValue) // If we have more than one uuid, then we replace the value twice - no biggy
+            newValue[key] = generateUUID()
           }
-          value.push(row)
         }
-      })
+      }
 
+      let newItemIndex
+      if (this.copy_in_place) {
+        newItemIndex = i + 1
+        value.splice(newItemIndex, 0, newValue)
+      } else {
+        newItemIndex = value.length
+        value.push(newValue)
+      }
       this.setValue(value)
       this.refreshValue(true)
       this.onChange(true)
-      this.jsoneditor.trigger('copyRow', this.rows[i - 1])
+
+      if (schema.options.on_copy_item_label_path) {
+        const labelEditor = this.jsoneditor.getEditor(`${this.options.path}.${newItemIndex}.${schema.options.on_copy_item_label_path}`)
+        if (labelEditor.schema.type === 'string') {
+          labelEditor.setValue(labelEditor.value + ' Copy')
+        }
+      }
+
+      this.jsoneditor.trigger('copyRow', this.rows[newItemIndex])
     })
 
     holder.appendChild(button)
