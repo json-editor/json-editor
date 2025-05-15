@@ -327,7 +327,7 @@ export class MultipleEditor extends AbstractEditor {
     if (this.type_path) {
       const val = getValueByPath(value, this.type_path)
       if (val !== undefined) {
-        return this.type_values.findIndex(val, item => item === val)
+        return this.type_values.indexOf(val)
       }
     }
     return -1
@@ -343,6 +343,10 @@ export class MultipleEditor extends AbstractEditor {
     let thisType = this.getDeclaredType(val)
 
     if (thisType < 0) {
+      /*
+       * No valid type could be determined from the schema options alone, so
+       * we have to do a "best fit" search
+       */
       const validVal = {
         match: 0,
         i: null
@@ -393,6 +397,7 @@ export class MultipleEditor extends AbstractEditor {
       }
       thisType = finalI
     }
+
     this.type = thisType
     this.switcher.value = this.display_text[thisType]
 
