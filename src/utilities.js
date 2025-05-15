@@ -137,7 +137,7 @@ export function overwriteExistingProperties (obj1, obj2) {
   return obj1
 }
 
-export function checkBooleanOption (local, global, dflt) {
+export function checkBooleanOption (local, global, dflt = false) {
   return typeof local === 'boolean' ? local : typeof global === 'boolean' ? global : dflt
 }
 

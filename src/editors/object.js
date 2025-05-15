@@ -1,5 +1,5 @@
 import { AbstractEditor } from '../editor.js'
-import { extend, hasOwnProperty, trigger } from '../utilities.js'
+import { extend, hasOwnProperty, trigger, checkBooleanOption } from '../utilities.js'
 import rules from './object.css.js'
 
 export class ObjectEditor extends AbstractEditor {
@@ -438,6 +438,11 @@ export class ObjectEditor extends AbstractEditor {
 
       return ordera - orderb
     })
+
+    /* options */
+    this.disable_collapse = checkBooleanOption(this.disable_collapse, checkBooleanOption(this.schema.options?.disable_collapse, this.jsoneditor.options.disable_collapse))
+    this.disable_properties = checkBooleanOption(this.disable_properties, checkBooleanOption(this.schema.options?.disable_properties, this.jsoneditor.options.disable_properties))
+    this.disable_edit_json = checkBooleanOption(this.disable_edit_json, checkBooleanOption(this.schema.options?.disable_edit_json, this.jsoneditor.options.disable_edit_json))
   }
 
   /* "Borrow" from arrays code */
@@ -564,111 +569,115 @@ export class ObjectEditor extends AbstractEditor {
       this.container.appendChild(this.controls)
       this.container.classList.add('je-object__container')
 
-      /* Edit JSON modal */
-      this.editjson_holder = this.theme.getModal()
-      this.editjson_textarea_label = this.theme.getHiddenLabel(this.translate('button_edit_json'))
-      this.editjson_textarea_label.setAttribute('for', this.path + '-' + 'edit-json-textarea')
-      this.editjson_textarea = this.theme.getTextareaInput()
-      this.editjson_textarea.setAttribute('id', this.path + '-' + 'edit-json-textarea')
-      this.editjson_textarea.setAttribute('aria-labelledby', this.path + '-' + 'edit-json-textarea')
-      this.editjson_textarea.classList.add('je-edit-json--textarea')
-      this.editjson_save = this.getButton('button_save', 'save', 'button_save')
-      this.editjson_save.classList.add('json-editor-btntype-save')
-      this.editjson_save.addEventListener('click', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        this.saveJSON()
-      })
-      this.editjson_copy = this.getButton('button_copy', 'copy', 'button_copy')
-      this.editjson_copy.classList.add('json-editor-btntype-copy')
-      this.editjson_copy.addEventListener('click', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        this.copyJSON()
-      })
-      this.editjson_cancel = this.getButton('button_cancel', 'cancel', 'button_cancel')
-      this.editjson_cancel.classList.add('json-editor-btntype-cancel')
-      this.editjson_cancel.addEventListener('click', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        this.hideEditJSON()
-      })
-      this.editjson_holder.appendChild(this.editjson_textarea_label)
-      this.editjson_holder.appendChild(this.editjson_textarea)
-      this.editjson_holder.appendChild(this.editjson_save)
-      this.editjson_holder.appendChild(this.editjson_copy)
-      this.editjson_holder.appendChild(this.editjson_cancel)
+      if (!this.disable_edit_json) {
+        /* Edit JSON modal */
+        this.editjson_holder = this.theme.getModal()
+        this.editjson_textarea_label = this.theme.getHiddenLabel(this.translate('button_edit_json'))
+        this.editjson_textarea_label.setAttribute('for', this.path + '-' + 'edit-json-textarea')
+        this.editjson_textarea = this.theme.getTextareaInput()
+        this.editjson_textarea.setAttribute('id', this.path + '-' + 'edit-json-textarea')
+        this.editjson_textarea.setAttribute('aria-labelledby', this.path + '-' + 'edit-json-textarea')
+        this.editjson_textarea.classList.add('je-edit-json--textarea')
+        this.editjson_save = this.getButton('button_save', 'save', 'button_save')
+        this.editjson_save.classList.add('json-editor-btntype-save')
+        this.editjson_save.addEventListener('click', (e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          this.saveJSON()
+        })
+        this.editjson_copy = this.getButton('button_copy', 'copy', 'button_copy')
+        this.editjson_copy.classList.add('json-editor-btntype-copy')
+        this.editjson_copy.addEventListener('click', (e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          this.copyJSON()
+        })
+        this.editjson_cancel = this.getButton('button_cancel', 'cancel', 'button_cancel')
+        this.editjson_cancel.classList.add('json-editor-btntype-cancel')
+        this.editjson_cancel.addEventListener('click', (e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          this.hideEditJSON()
+        })
+        this.editjson_holder.appendChild(this.editjson_textarea_label)
+        this.editjson_holder.appendChild(this.editjson_textarea)
+        this.editjson_holder.appendChild(this.editjson_save)
+        this.editjson_holder.appendChild(this.editjson_copy)
+        this.editjson_holder.appendChild(this.editjson_cancel)
+      }
 
       /* Manage Properties modal */
-      this.addproperty_holder = this.theme.getModal()
-      this.addproperty_list = document.createElement('div')
-      this.addproperty_list.classList.add('property-selector')
-      this.addproperty_add = this.getButton('button_add', 'add', 'button_add')
-      this.addproperty_add.classList.add('json-editor-btntype-add')
+      if (!this.disable_properties) {
+        this.addproperty_holder = this.theme.getModal()
+        this.addproperty_list = document.createElement('div')
+        this.addproperty_list.classList.add('property-selector')
+        this.addproperty_add = this.getButton('button_add', 'add', 'button_add')
+        this.addproperty_add.classList.add('json-editor-btntype-add')
 
-      this.addproperty_input = this.theme.getFormInputField('text')
-      this.addproperty_input.setAttribute('placeholder', 'Property name...')
+        this.addproperty_input = this.theme.getFormInputField('text')
+        this.addproperty_input.setAttribute('placeholder', 'Property name...')
 
-      this.addproperty_input_label = this.theme.getHiddenLabel(this.translate('button_properties'))
-      this.addproperty_input_label.setAttribute('for', this.path + '-' + 'property-selector')
+        this.addproperty_input_label = this.theme.getHiddenLabel(this.translate('button_properties'))
+        this.addproperty_input_label.setAttribute('for', this.path + '-' + 'property-selector')
 
-      this.addproperty_input.classList.add('property-selector-input')
-      this.addproperty_input.setAttribute('id', this.path + '-' + 'property-selector')
-      this.addproperty_input.setAttribute('aria-labelledby', this.path + '-' + 'property-selector')
+        this.addproperty_input.classList.add('property-selector-input')
+        this.addproperty_input.setAttribute('id', this.path + '-' + 'property-selector')
+        this.addproperty_input.setAttribute('aria-labelledby', this.path + '-' + 'property-selector')
 
-      this.addproperty_add.addEventListener('click', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        if (this.addproperty_input.value) {
-          if (this.editors[this.addproperty_input.value]) {
-            window.alert('there is already a property with that name')
-            return
-          }
+        this.addproperty_add.addEventListener('click', (e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          if (this.addproperty_input.value) {
+            if (this.editors[this.addproperty_input.value]) {
+              window.alert('there is already a property with that name')
+              return
+            }
 
-          this.addObjectProperty(this.addproperty_input.value)
-          if (this.editors[this.addproperty_input.value]) {
-            this.editors[this.addproperty_input.value].disable()
-          }
-          const key = this.editors[this.addproperty_input.value].key
-          const type = this.editors[this.addproperty_input.value].type
-          const path = this.editors[this.addproperty_input.value].path
+            this.addObjectProperty(this.addproperty_input.value)
+            if (this.editors[this.addproperty_input.value]) {
+              this.editors[this.addproperty_input.value].disable()
+            }
+            const key = this.editors[this.addproperty_input.value].key
+            const type = this.editors[this.addproperty_input.value].type
+            const path = this.editors[this.addproperty_input.value].path
 
-          this.onChange(true, false, {
-            event: 'add',
-            data: { key, type, path }
-          })
-        }
-      })
-      this.addproperty_input.addEventListener('input', (e) => {
-        e.target.previousSibling.previousSibling.childNodes.forEach((value) => {
-          let searchTerm = value.innerText
-          let propertyTitle = e.target.value
-
-          const caseSensitivePropertySearch = this.options.case_sensitive_property_search || this.jsoneditor.options.case_sensitive_property_search
-
-          if (!caseSensitivePropertySearch) {
-            searchTerm = searchTerm.toLowerCase()
-            propertyTitle = propertyTitle.toLowerCase()
-          }
-
-          if (searchTerm.includes(propertyTitle)) {
-            value.style.display = ''
-          } else {
-            value.style.display = 'none'
+            this.onChange(true, false, {
+              event: 'add',
+              data: { key, type, path }
+            })
           }
         })
-      })
-      this.addproperty_holder.appendChild(this.addproperty_list)
-      this.addproperty_holder.appendChild(this.addproperty_input_label)
-      this.addproperty_holder.appendChild(this.addproperty_input)
-      this.addproperty_holder.appendChild(this.addproperty_add)
-      const spacer = document.createElement('div')
-      spacer.style.clear = 'both'
-      this.addproperty_holder.appendChild(spacer)
+        this.addproperty_input.addEventListener('input', (e) => {
+          e.target.previousSibling.previousSibling.childNodes.forEach((value) => {
+            let searchTerm = value.innerText
+            let propertyTitle = e.target.value
 
-      /* Close properties modal if clicked outside modal */
-      this.onOutsideModalClickListener = this.onOutsideModalClick.bind(this)
-      document.addEventListener('click', this.onOutsideModalClickListener, true)
+            const caseSensitivePropertySearch = this.options.case_sensitive_property_search || this.jsoneditor.options.case_sensitive_property_search
+
+            if (!caseSensitivePropertySearch) {
+              searchTerm = searchTerm.toLowerCase()
+              propertyTitle = propertyTitle.toLowerCase()
+            }
+
+            if (searchTerm.includes(propertyTitle)) {
+              value.style.display = ''
+            } else {
+              value.style.display = 'none'
+            }
+          })
+        })
+        this.addproperty_holder.appendChild(this.addproperty_list)
+        this.addproperty_holder.appendChild(this.addproperty_input_label)
+        this.addproperty_holder.appendChild(this.addproperty_input)
+        this.addproperty_holder.appendChild(this.addproperty_add)
+        const spacer = document.createElement('div')
+        spacer.style.clear = 'both'
+        this.addproperty_holder.appendChild(spacer)
+
+        /* Close properties modal if clicked outside modal */
+        this.onOutsideModalClickListener = this.onOutsideModalClick.bind(this)
+        document.addEventListener('click', this.onOutsideModalClickListener, true)
+      }
 
       /* Description */
       if (this.schema.description) {
@@ -766,42 +775,37 @@ export class ObjectEditor extends AbstractEditor {
       }
 
       /* Collapse button disabled */
-      if (this.schema.options && typeof this.schema.options.disable_collapse !== 'undefined') {
-        if (this.schema.options.disable_collapse) this.collapse_control.style.display = 'none'
-      } else if (this.jsoneditor.options.disable_collapse) {
+      if (this.disable_collapse) {
         this.collapse_control.style.display = 'none'
       }
 
       /* Edit JSON Button */
-      this.editjson_control = this.getButton('JSON', 'edit', 'button_edit_json')
-      this.editjson_control.classList.add('json-editor-btntype-editjson')
-      this.editjson_control.addEventListener('click', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        this.toggleEditJSON()
-      })
-      this.controls.appendChild(this.editjson_control)
-      this.controls.insertBefore(this.editjson_holder, this.controls.childNodes[0])
-
-      /* Edit JSON Buttton disabled */
-      if (this.schema.options && typeof this.schema.options.disable_edit_json !== 'undefined') {
-        if (this.schema.options.disable_edit_json) this.editjson_control.style.display = 'none'
-      } else if (this.jsoneditor.options.disable_edit_json) {
-        this.editjson_control.style.display = 'none'
+      if (!this.disable_edit_json) {
+        this.editjson_control = this.getButton('JSON', 'edit', 'button_edit_json')
+        this.editjson_control.classList.add('json-editor-btntype-editjson')
+        this.editjson_control.addEventListener('click', (e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          this.toggleEditJSON()
+        })
+        this.controls.appendChild(this.editjson_control)
+        this.controls.insertBefore(this.editjson_holder, this.controls.childNodes[0])
       }
 
       /* Object Properties Button */
-      this.addproperty_button = this.getButton('properties', 'edit_properties', 'button_object_properties')
-      this.addproperty_button.classList.add('json-editor-btntype-properties')
-      this.addproperty_button.addEventListener('click', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        this.toggleAddProperty()
-      })
-      this.controls.appendChild(this.addproperty_button)
-      this.controls.insertBefore(this.addproperty_holder, this.controls.childNodes[1])
+      if (!this.disable_properties) {
+        this.addproperty_button = this.getButton('properties', 'edit_properties', 'button_object_properties')
+        this.addproperty_button.classList.add('json-editor-btntype-properties')
+        this.addproperty_button.addEventListener('click', (e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          this.toggleAddProperty()
+        })
+        this.controls.appendChild(this.addproperty_button)
+        this.controls.insertBefore(this.addproperty_holder, this.controls.childNodes[1])
 
-      this.refreshAddProperties()
+        this.refreshAddProperties()
+      }
 
       /* non required properties start deactivated */
       this.deactivateNonRequiredProperties(false)
@@ -1215,8 +1219,10 @@ export class ObjectEditor extends AbstractEditor {
   }
 
   refreshAddProperties () {
-    if (this.options.disable_properties || (this.options.disable_properties !== false && this.jsoneditor.options.disable_properties)) {
-      this.addproperty_button.style.display = 'none'
+    if (this.disable_properties) {
+      if (this.addproperty_button) {
+        this.addproperty_button.style.display = 'none'
+      }
       return
     }
 
