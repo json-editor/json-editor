@@ -136,3 +136,33 @@ export function overwriteExistingProperties (obj1, obj2) {
 
   return obj1
 }
+
+export function checkBooleanOption (local, global, dflt) {
+  return typeof local === 'boolean' ? local : typeof global === 'boolean' ? global : dflt
+}
+
+export function getValueByPath (obj, path) {
+  const keys = path.split('.')
+  let current = obj
+  for (const key of keys) {
+    if (current === null || typeof current !== 'object') {
+      return undefined // Cannot navigate further
+    }
+
+    // Check if the key looks like an array index
+    const arrayIndexMatch = key.match(/^(\d+)$/)
+    if (arrayIndexMatch) {
+      const index = parseInt(arrayIndexMatch[1], 10)
+      if (Array.isArray(current) && index >= 0 && index < current.length) {
+        current = current[index]
+      } else {
+        return undefined // Invalid array index
+      }
+    } else if (key in current) {
+      current = current[key]
+    } else {
+      return undefined // Property not found
+    }
+  }
+  return current
+}
