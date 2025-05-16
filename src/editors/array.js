@@ -20,7 +20,7 @@ class SimpleRowCache {
   }
 
   addItem (row) {
-    this.cache[row.arrayItemId] = row
+    this.cache[row.arrayItemIndex] = row
   }
 
   removeItem (id) {
@@ -300,6 +300,7 @@ export class ArrayEditor extends AbstractEditor {
       required: true
     })
     ret.arrayItemId = editorId
+    ret.arrayItemIndex = i
     ret.preBuild()
     ret.build()
     ret.postBuild()
@@ -649,39 +650,41 @@ export class ArrayEditor extends AbstractEditor {
     return button
   }
 
+  copyRow (from, to) {
+    const schema = this.schema
+    const arrayItems = this.getValue()
+    let newValue = arrayItems[from]
+    /* Force generation of new UUID if the item has been cloned. */
+    if (schema.items.type === 'string' && schema.items.format === 'uuid') {
+      newValue = generateUUID()
+    } else if (schema.items.type === 'object' && schema.items.properties) {
+      for (const key of Object.keys(newValue)) {
+        if (schema.items.properties && schema.items.properties[key] && schema.items.properties[key].format === 'uuid') {
+          // If we have more than one uuid, then we replace the value twice - no biggy
+          // It DOESN'T handle deeply embedded UUIDs - biggy
+          newValue = Object.assign({}, newValue)
+          newValue[key] = generateUUID()
+        }
+      }
+    }
+    arrayItems.splice(to, 0, newValue)
+    this.setValue(arrayItems)
+  }
+
   _createCopyButton (i, holder) {
     const button = this.getButton(this.getItemTitle(), 'copy', 'button_copy_row_title', [this.getItemTitle()])
     const schema = this.schema
     button.classList.add('copy', 'json-editor-btntype-copy')
     button.setAttribute('data-i', i)
     button.addEventListener('click', e => {
-      const value = this.getValue()
       e.preventDefault()
       e.stopPropagation()
       const i = e.currentTarget.getAttribute('data-i') * 1
 
-      let newValue = value[i]
-      /* Force generation of new UUID if the item has been cloned. */
-      if (schema.items.type === 'string' && schema.items.format === 'uuid') {
-        newValue = generateUUID()
-      } else if (schema.items.type === 'object' && schema.items.properties) {
-        for (const key of Object.keys(newValue)) {
-          if (schema.items.properties && schema.items.properties[key] && schema.items.properties[key].format === 'uuid') {
-            newValue = Object.assign({}, newValue) // If we have more than one uuid, then we replace the value twice - no biggy
-            newValue[key] = generateUUID()
-          }
-        }
-      }
+      const newItemIndex = this.copy_in_place ? i + 1 : this.rows.length
 
-      let newItemIndex
-      if (this.copy_in_place) {
-        newItemIndex = i + 1
-        value.splice(newItemIndex, 0, newValue)
-      } else {
-        newItemIndex = value.length
-        value.push(newValue)
-      }
-      this.setValue(value)
+      this.copyRow(i, newItemIndex)
+
       this.refreshValue(true)
       this.onChange(true)
 
@@ -699,6 +702,16 @@ export class ArrayEditor extends AbstractEditor {
     return button
   }
 
+  moveRowUp (i) {
+    if (i <= 0) return
+    const arrayItems = this.getValue()
+    const tmp = arrayItems[i - 1]
+    arrayItems[i - 1] = arrayItems[i]
+    arrayItems[i] = tmp
+
+    this.setValue(arrayItems)
+  }
+
   _createMoveUpButton (i, holder) {
     const button = this.getButton('', (this.schema.format === 'tabs-top' ? 'moveleft' : 'moveup'), 'button_move_up_title')
     button.classList.add('moveup', 'json-editor-btntype-move')
@@ -707,16 +720,9 @@ export class ArrayEditor extends AbstractEditor {
       e.preventDefault()
       e.stopPropagation()
       const i = e.currentTarget.getAttribute('data-i') * 1
-
-      if (i <= 0) return
-      const rows = this.getValue()
-      const tmp = rows[i - 1]
-      rows[i - 1] = rows[i]
-      rows[i] = tmp
-
-      this.setValue(rows)
+      this.moveRowUp(i)
       this.active_tab = this.rows[i - 1].tab
-      this.refreshTabs()
+      this.refreshTabs(true)
 
       this.onChange(true)
 
@@ -729,6 +735,16 @@ export class ArrayEditor extends AbstractEditor {
     return button
   }
 
+  moveRowDown (i) {
+    const arrayItems = this.getValue()
+    if (i >= arrayItems.length - 1) return
+    const tmp = arrayItems[i + 1]
+    arrayItems[i + 1] = arrayItems[i]
+    arrayItems[i] = tmp
+
+    this.setValue(arrayItems)
+  }
+
   _createMoveDownButton (i, holder) {
     const button = this.getButton('', (this.schema.format === 'tabs-top' ? 'moveright' : 'movedown'), 'button_move_down_title')
     button.classList.add('movedown', 'json-editor-btntype-move')
@@ -737,14 +753,7 @@ export class ArrayEditor extends AbstractEditor {
       e.preventDefault()
       e.stopPropagation()
       const i = e.currentTarget.getAttribute('data-i') * 1
-
-      const rows = this.getValue()
-      if (i >= rows.length - 1) return
-      const tmp = rows[i + 1]
-      rows[i + 1] = rows[i]
-      rows[i] = tmp
-
-      this.setValue(rows)
+      this.moveRowDown(i)
       this.active_tab = this.rows[i + 1].tab
       this.refreshTabs()
       this.onChange(true)
@@ -758,16 +767,20 @@ export class ArrayEditor extends AbstractEditor {
     return button
   }
 
+  dropRow (from, to) {
+    const arrayItems = this.getValue()
+    const tmp = arrayItems[from]
+    arrayItems.splice(from, 1)
+    arrayItems.splice(to, 0, tmp)
+
+    this.setValue(arrayItems)
+  }
+
   _supportDragDrop (tab, useTrigger) {
     supportDragDrop(tab, (i, j) => {
-      const rows = this.getValue()
-      const tmp = rows[i]
-      rows.splice(i, 1)
-      rows.splice(j, 0, tmp)
-
-      this.setValue(rows)
+      this.dropRow(i, j)
       this.active_tab = this.rows[j].tab
-      this.refreshTabs()
+      this.refreshTabs(true)
 
       this.onChange(true)
 
