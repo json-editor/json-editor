@@ -2,7 +2,50 @@ import { AbstractEditor } from '../editor.js'
 import { extend, generateUUID, trigger, checkBooleanOption } from '../utilities.js'
 import rules from './array.css.js'
 
+/*
+ * Objectifying the row cache may help the gateway to get better
+ * array performance in subclasses
+ */
+class SimpleRowCache {
+  constructor () {
+    this.cache = []
+  }
+
+  replaceAll (rows) {
+    if (Array.isArray(rows)) {
+      rows.forEach((row, i) => {
+        this.cache[i] = row
+      })
+    }
+  }
+
+  addItem (row) {
+    this.cache[row.arrayItemId] = row
+  }
+
+  removeItem (id) {
+    this.cache[id] = null
+  }
+
+  getItemById (id) {
+    return this.cache[id]
+  }
+
+  getItemByIndexOrValue (index, _value) {
+    return this.cache[index]
+  }
+
+  /* removes and returns excess items */
+  trimItems (max) {
+    return this.cache.splice(max)
+  }
+}
+
 export class ArrayEditor extends AbstractEditor {
+  createRowCache () {
+    return new SimpleRowCache()
+  }
+
   askConfirmation () {
     if (this.jsoneditor.options.prompt_before_delete === true) {
       if (window.confirm(this.translate('button_delete_node_warning')) === false) {
@@ -76,7 +119,7 @@ export class ArrayEditor extends AbstractEditor {
     super.preBuild()
 
     this.rows = []
-    this.row_cache = []
+    this.row_cache = this.createRowCache()
 
     this.hide_delete_buttons = checkBooleanOption(this.options.disable_array_delete, this.jsoneditor.options.disable_array_delete, false)
     this.hide_delete_all_rows_buttons = this.hide_delete_buttons || checkBooleanOption(this.options.disable_array_delete_all_rows, this.jsoneditor.options.disable_array_delete_all_rows, false)
@@ -219,11 +262,16 @@ export class ArrayEditor extends AbstractEditor {
     return this.item_info[stringified]
   }
 
+  getEditorId (i) {
+    return i
+  }
+
   getElementEditor (i) {
     const itemInfo = this.getItemInfo(i)
+    const editorId = this.getEditorId(i)
     let schema = this.getItemSchema(i)
     schema = this.jsoneditor.expandRefs(schema)
-    schema.title = `${itemInfo.title} ${i + 1}`
+    schema.title = `${itemInfo.title} ${editorId + 1}`
 
     const editor = this.jsoneditor.getEditorClass(schema)
 
@@ -247,10 +295,11 @@ export class ArrayEditor extends AbstractEditor {
       jsoneditor: this.jsoneditor,
       schema,
       container: holder,
-      path: `${this.path}.${i}`,
+      path: `${this.path}.${editorId}`,
       parent: this,
       required: true
     })
+    ret.arrayItemId = editorId
     ret.preBuild()
     ret.build()
     ret.postBuild()
@@ -286,19 +335,18 @@ export class ArrayEditor extends AbstractEditor {
     this.rows.forEach((row, i) => {
       if (hard) {
         if (this.checkParent(row.tab)) row.tab.parentNode.removeChild(row.tab)
+        this.row_cache.removeItem(row.arrayItemId)
         this.destroyRow(row, true)
-        this.row_cache[i] = null
       }
       this.rows[i] = null
     })
     if (hard) {
-      for (let j = this.rows.length; j < this.row_cache.length; j++) {
-        this.destroyRow(this.row_cache[j], true)
-        this.row_cache[j] = null
-      }
+      this.row_cache.trimItems(this.rows.length).forEach(cachedRow => {
+        if (cachedRow) this.destroyRow(cachedRow, true)
+      })
     }
     this.rows = []
-    if (hard) this.row_cache = []
+    if (hard) this.row_cache = this.createRowCache()
   }
 
   destroyRow (row, hard) {
@@ -350,6 +398,24 @@ export class ArrayEditor extends AbstractEditor {
     return value
   }
 
+  refreshRow (val, i, initial) {
+    const cached_row = this.row_cache.getItemByIndexOrValue(i, val)
+
+    if (this.rows[i]) {
+      /* TODO: don't set the row's value if it hasn't changed */
+      this.rows[i].setValue(val, initial)
+    } else if (cached_row) {
+      this.rows[i] = cached_row
+      this.rows[i].setValue(val, initial)
+      this.rows[i].container.style.display = ''
+      if (this.rows[i].tab) this.rows[i].tab.style.display = ''
+      this.rows[i].register()
+      this.jsoneditor.trigger('addRow', this.rows[i])
+    } else {
+      this.jsoneditor.trigger('addRow', this.addRow(val, initial))
+    }
+  }
+
   setValue (value = [], initial) {
     value = this.applyConstFilter(value)
     /* Make sure value has between minItems and maxItems items in it */
@@ -363,22 +429,7 @@ export class ArrayEditor extends AbstractEditor {
       return
     }
 
-    value.forEach((val, i) => {
-      if (this.rows[i]) {
-        /* TODO: don't set the row's value if it hasn't changed */
-        this.rows[i].setValue(val, initial)
-      } else if (this.row_cache[i]) {
-        this.rows[i] = this.row_cache[i]
-        this.rows[i].setValue(val, initial)
-        this.rows[i].container.style.display = ''
-        if (this.rows[i].tab) this.rows[i].tab.style.display = ''
-        this.rows[i].register()
-        this.jsoneditor.trigger('addRow', this.rows[i])
-      } else {
-        const editor = this.addRow(val, initial)
-        this.jsoneditor.trigger('addRow', editor)
-      }
-    })
+    value.forEach((val, i) => this.refreshRow(val, i, initial))
 
     for (let j = value.length; j < this.rows.length; j++) {
       this.destroyRow(this.rows[j])
@@ -482,11 +533,30 @@ export class ArrayEditor extends AbstractEditor {
     this.serialized = JSON.stringify(this.value)
   }
 
+  addRowViaCache () {
+    const i = this.rows.length
+    let editor
+    const cachedRow = this.row_cache.getItemByIndexOrValue(i)
+    if (cachedRow) {
+      editor = this.rows[i] = cachedRow
+      this.rows[i].setValue(this.rows[i].getDefault(), true)
+      // override cached value, so optional properties are not checked.
+      if (typeof this.rows[i].deactivateNonRequiredProperties === 'function') {
+        this.rows[i].deactivateNonRequiredProperties(true)
+      }
+      this.rows[i].container.style.display = ''
+      if (this.rows[i].tab) this.rows[i].tab.style.display = ''
+      this.rows[i].register()
+    } else {
+      editor = this.addRow()
+    }
+    return editor
+  }
+
   addRow (value, initial) {
     const i = this.rows.length
 
     this.rows[i] = this.getElementEditor(i)
-    this.row_cache[i] = this.rows[i]
 
     if (this.tabs_holder) {
       this.rows[i].tab_text = document.createElement('span')
@@ -531,6 +601,8 @@ export class ArrayEditor extends AbstractEditor {
 
     if (typeof value !== 'undefined') this.rows[i].setValue(value, initial)
     this.refreshTabs()
+
+    this.row_cache.addItem(this.rows[i])
 
     return this.rows[i]
   }
@@ -765,20 +837,7 @@ export class ArrayEditor extends AbstractEditor {
       e.preventDefault()
       e.stopPropagation()
       const i = this.rows.length
-      let editor
-      if (this.row_cache[i]) {
-        editor = this.rows[i] = this.row_cache[i]
-        this.rows[i].setValue(this.rows[i].getDefault(), true)
-        // override cached value, so optional properties are not checked.
-        if (typeof this.rows[i].deactivateNonRequiredProperties === 'function') {
-          this.rows[i].deactivateNonRequiredProperties(true)
-        }
-        this.rows[i].container.style.display = ''
-        if (this.rows[i].tab) this.rows[i].tab.style.display = ''
-        this.rows[i].register()
-      } else {
-        editor = this.addRow()
-      }
+      const editor = this.addRowViaCache()
       this.active_tab = this.rows[i].tab
       this.refreshTabs()
       this.refreshValue()
