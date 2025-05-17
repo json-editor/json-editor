@@ -166,3 +166,18 @@ export function getValueByPath (obj, path) {
   }
   return current
 }
+
+export function findIndexInParent (element) {
+  const siblings = element ? (element.parentElement ? element.parentElement.children : undefined) : undefined
+  let index = -1
+
+  if (siblings) {
+    for (let i = 0; i < siblings.length; i++) {
+      if (siblings[i] === element) {
+        index = i
+        break
+      }
+    }
+  }
+  return index
+}
