@@ -1,5 +1,5 @@
 import { AbstractEditor } from '../editor.js'
-import { extend, generateUUID, trigger, checkBooleanOption } from '../utilities.js'
+import { extend, generateUUID, trigger, checkBooleanOption, findIndexInParent } from '../utilities.js'
 import rules from './array.css.js'
 
 /*
@@ -282,7 +282,7 @@ export class ArrayEditor extends AbstractEditor {
       } else {
         holder = this.theme.getTabContent()
       }
-      holder.id = `${this.path}.${i}`
+      holder.id = `${this.path}.${editorId}`
     } else if (itemInfo.child_editors) {
       holder = this.theme.getChildEditorHolder()
     } else {
@@ -399,7 +399,7 @@ export class ArrayEditor extends AbstractEditor {
     return value
   }
 
-  refreshRow (val, i, initial) {
+  setRowValue (val, i, initial) {
     const cached_row = this.row_cache.getItemByIndexOrValue(i, val)
 
     if (this.rows[i]) {
@@ -430,7 +430,7 @@ export class ArrayEditor extends AbstractEditor {
       return
     }
 
-    value.forEach((val, i) => this.refreshRow(val, i, initial))
+    value.forEach((val, i) => this.setRowValue(val, i, initial))
 
     for (let j = value.length; j < this.rows.length; j++) {
       this.destroyRow(this.rows[j])
@@ -510,6 +510,7 @@ export class ArrayEditor extends AbstractEditor {
       const minItems = this.schema.minItems && this.schema.minItems >= this.rows.length
 
       this.rows.forEach((editor, i) => {
+        editor.arrayItemIndex = i
         /* Hide the move down button for the last row */
         if (editor.movedown_button) {
           const display = (i !== this.rows.length - 1)
@@ -554,6 +555,10 @@ export class ArrayEditor extends AbstractEditor {
     return editor
   }
 
+  changeActiveTab (tab) {
+    this.active_tab = tab
+  }
+
   addRow (value, initial) {
     const i = this.rows.length
 
@@ -570,10 +575,10 @@ export class ArrayEditor extends AbstractEditor {
         this.theme.addTab(this.tabs_holder, this.rows[i].tab)
       }
       this.rows[i].tab.addEventListener('click', (e) => {
-        this.active_tab = this.rows[i].tab
-        this.refreshTabs()
         e.preventDefault()
         e.stopPropagation()
+        this.changeActiveTab(e.currentTarget)
+        this.refreshTabs()
       })
       this._supportDragDrop(this.rows[i].tab)
     } else {
@@ -611,16 +616,17 @@ export class ArrayEditor extends AbstractEditor {
   _createDeleteButton (i, holder) {
     const button = this.getButton(this.getItemTitle(), 'delete', 'button_delete_row_title', [this.getItemTitle()])
     button.classList.add('delete', 'json-editor-btntype-delete')
-    button.setAttribute('data-i', i)
     button.addEventListener('click', e => {
       e.preventDefault()
       e.stopPropagation()
+      if (!this.active_tab) return
+      const i = findIndexInParent(this.active_tab)
+      if (i < 0) return
 
       if (!this.askConfirmation()) {
         return false
       }
 
-      const i = e.currentTarget.getAttribute('data-i') * 1
       const newval = this.getValue().filter((row, j) => j !== i)
       let newActiveTab = null
 
@@ -675,11 +681,12 @@ export class ArrayEditor extends AbstractEditor {
     const button = this.getButton(this.getItemTitle(), 'copy', 'button_copy_row_title', [this.getItemTitle()])
     const schema = this.schema
     button.classList.add('copy', 'json-editor-btntype-copy')
-    button.setAttribute('data-i', i)
     button.addEventListener('click', e => {
       e.preventDefault()
       e.stopPropagation()
-      const i = e.currentTarget.getAttribute('data-i') * 1
+      if (!this.active_tab) return
+      const i = findIndexInParent(this.active_tab)
+      if (i < 0) return
 
       const newItemIndex = this.copy_in_place ? i + 1 : this.rows.length
 
@@ -689,7 +696,8 @@ export class ArrayEditor extends AbstractEditor {
       this.onChange(true)
 
       if (schema.options.on_copy_item_label_path) {
-        const labelEditor = this.jsoneditor.getEditor(`${this.options.path}.${newItemIndex}.${schema.options.on_copy_item_label_path}`)
+        const rowPath = this.rows[newItemIndex].path
+        const labelEditor = this.jsoneditor.getEditor(`${rowPath}.${schema.options.on_copy_item_label_path}`)
         if (labelEditor.schema.type === 'string') {
           labelEditor.setValue(labelEditor.value + ' Copy')
         }
@@ -715,11 +723,12 @@ export class ArrayEditor extends AbstractEditor {
   _createMoveUpButton (i, holder) {
     const button = this.getButton('', (this.schema.format === 'tabs-top' ? 'moveleft' : 'moveup'), 'button_move_up_title')
     button.classList.add('moveup', 'json-editor-btntype-move')
-    button.setAttribute('data-i', i)
     button.addEventListener('click', e => {
       e.preventDefault()
       e.stopPropagation()
-      const i = e.currentTarget.getAttribute('data-i') * 1
+      if (!this.active_tab) return
+      const i = findIndexInParent(this.active_tab)
+      if (i < 0) return
       this.moveRowUp(i)
       this.active_tab = this.rows[i - 1].tab
       this.refreshTabs(true)
@@ -748,11 +757,12 @@ export class ArrayEditor extends AbstractEditor {
   _createMoveDownButton (i, holder) {
     const button = this.getButton('', (this.schema.format === 'tabs-top' ? 'moveright' : 'movedown'), 'button_move_down_title')
     button.classList.add('movedown', 'json-editor-btntype-move')
-    button.setAttribute('data-i', i)
     button.addEventListener('click', e => {
       e.preventDefault()
       e.stopPropagation()
-      const i = e.currentTarget.getAttribute('data-i') * 1
+      if (!this.active_tab) return
+      const i = findIndexInParent(this.active_tab)
+      if (i < 0) return
       this.moveRowDown(i)
       this.active_tab = this.rows[i + 1].tab
       this.refreshTabs()
