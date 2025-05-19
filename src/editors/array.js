@@ -517,6 +517,12 @@ export class ArrayEditor extends AbstractEditor {
           this.setButtonState(editor.movedown_button, display)
         }
 
+        /* Hide the move up button for the first row */
+        if (editor.moveup_button) {
+          const display = (i !== 0)
+          this.setButtonState(editor.moveup_button, display)
+        }
+
         /* Hide the delete button if we have minItems items */
         if (editor.delete_button) {
           this.setButtonState(editor.delete_button, !minItems)
@@ -597,11 +603,8 @@ export class ArrayEditor extends AbstractEditor {
       this.rows[i].copy_button = this._createCopyButton(i, controlsHolder)
     }
 
-    if (i && !this.hide_move_buttons) {
-      this.rows[i].moveup_button = this._createMoveUpButton(i, controlsHolder)
-    }
-
     if (!this.hide_move_buttons) {
+      this.rows[i].moveup_button = this._createMoveUpButton(i, controlsHolder)
       this.rows[i].movedown_button = this._createMoveDownButton(i, controlsHolder)
     }
 
