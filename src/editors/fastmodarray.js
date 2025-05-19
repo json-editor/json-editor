@@ -95,12 +95,13 @@ export class FastModArrayEditor extends ArrayEditor {
     if (bottom) {
       this.refreshValue(true)
     } else {
-      this._moveRow(arrayItems.length - 1, to)
+      this._moveRow(this.getValue().length - 1, to)
     }
   }
 
   deleteRow (i) {
     this.getValue().splice(i, 1)
+    this.rows.splice(i, 1)
     this.row_holder.removeChild(this.row_holder.children[i])
     this.links_holder.removeChild(this.links_holder.children[i])
     this.refreshValue(true)
