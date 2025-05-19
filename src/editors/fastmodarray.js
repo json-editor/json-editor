@@ -51,13 +51,13 @@ class NullRowCache {
 }
 
 export class FastModArrayEditor extends ArrayEditor {
+  createRowCache () {
+    return new NullRowCache()
+  }
+
   preBuild () {
     super.preBuild()
     this.nextEditorId = 0
-  }
-
-  createRowCache () {
-    return new NullRowCache()
   }
 
   build () {
@@ -67,10 +67,6 @@ export class FastModArrayEditor extends ArrayEditor {
 
   getEditorId (i) {
     return this.nextEditorId++
-  }
-
-  addRowViaCache () {
-    this.addRow()
   }
 
   moveRowUp (i) {
