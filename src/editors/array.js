@@ -616,6 +616,11 @@ export class ArrayEditor extends AbstractEditor {
     return this.rows[i]
   }
 
+  deleteRow (i, e) {
+    const newval = this.getValue().filter((row, j) => j !== i)
+    this.setValue(newval)
+  }
+
   _createDeleteButton (i, holder) {
     const button = this.getButton(this.getItemTitle(), 'delete', 'button_delete_row_title', [this.getItemTitle()])
     button.classList.add('delete', 'json-editor-btntype-delete')
@@ -630,14 +635,11 @@ export class ArrayEditor extends AbstractEditor {
         return false
       }
 
-      const newval = this.getValue().filter((row, j) => j !== i)
-      let newActiveTab = null
+      const editorValue = this.rows[i].getValue()
 
-      const editor = this.rows[i]
-      const editorValue = editor.getValue()
+      this.deleteRow(i, e)
 
-      this.setValue(newval)
-
+      let newActiveTab
       if (this.rows[i]) {
         newActiveTab = this.rows[i].tab
       } else if (this.rows[i - 1]) {
@@ -659,7 +661,7 @@ export class ArrayEditor extends AbstractEditor {
     return button
   }
 
-  copyRow (from, to) {
+  copyRow (from, to, e) {
     const schema = this.schema
     const arrayItems = this.getValue()
     let newValue = arrayItems[from]
@@ -693,7 +695,7 @@ export class ArrayEditor extends AbstractEditor {
 
       const newItemIndex = this.copy_in_place ? i + 1 : this.rows.length
 
-      this.copyRow(i, newItemIndex)
+      this.copyRow(i, newItemIndex, e)
 
       this.refreshValue(true)
       this.onChange(true)
@@ -713,7 +715,7 @@ export class ArrayEditor extends AbstractEditor {
     return button
   }
 
-  moveRowUp (i) {
+  moveRowUp (i, e) {
     if (i <= 0) return
     const arrayItems = this.getValue()
     const tmp = arrayItems[i - 1]
@@ -732,7 +734,7 @@ export class ArrayEditor extends AbstractEditor {
       if (!this.active_tab) return
       const i = findIndexInParent(this.active_tab)
       if (i < 0) return
-      this.moveRowUp(i)
+      this.moveRowUp(i, e)
       this.active_tab = this.rows[i - 1].tab
       this.refreshTabs(true)
 
@@ -747,7 +749,7 @@ export class ArrayEditor extends AbstractEditor {
     return button
   }
 
-  moveRowDown (i) {
+  moveRowDown (i, e) {
     const arrayItems = this.getValue()
     if (i >= arrayItems.length - 1) return
     const tmp = arrayItems[i + 1]
@@ -766,7 +768,7 @@ export class ArrayEditor extends AbstractEditor {
       if (!this.active_tab) return
       const i = findIndexInParent(this.active_tab)
       if (i < 0) return
-      this.moveRowDown(i)
+      this.moveRowDown(i, e)
       this.active_tab = this.rows[i + 1].tab
       this.refreshTabs()
       this.onChange(true)
