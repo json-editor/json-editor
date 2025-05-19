@@ -51,8 +51,8 @@ class NullRowCache {
 }
 
 export class FastModArrayEditor extends ArrayEditor {
-  constructor () {
-    super()
+  preBuild () {
+    super.preBuild()
     this.nextEditorId = 0
   }
 
@@ -62,7 +62,7 @@ export class FastModArrayEditor extends ArrayEditor {
 
   build () {
     super.build()
-    this.links_holder = this.tabs_holder.children[0].children[0]
+    this.links_holder = this.tabs_holder?.children[0]?.children[0]
   }
 
   getEditorId (i) {

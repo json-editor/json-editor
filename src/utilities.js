@@ -168,6 +168,6 @@ export function getValueByPath (obj, path) {
 }
 
 export function findIndexInParent (element) {
-  const siblings = element ? (element.parentElement ? element.parentElement.children : undefined) : undefined
+  const siblings = element?.parentElement?.children
   return siblings ? Array.from(siblings).indexOf(element) : -1
 }
