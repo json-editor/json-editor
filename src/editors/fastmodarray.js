@@ -1,4 +1,4 @@
-import { ArrayEditor } from '../array.js'
+import { ArrayEditor } from './array.js'
 /*
  * This is essentially the standard Array editor with a tweak to the "Editor ID" that
  * then allows it to NOT fully reset the value when simply modifying the order of the items
