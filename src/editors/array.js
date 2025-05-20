@@ -637,7 +637,7 @@ export class ArrayEditor extends AbstractEditor {
 
       const editorValue = this.rows[i].getValue()
 
-      this.deleteRow(i, e)
+      if (this.deleteRow(i, e) === true) return
 
       let newActiveTab
       if (this.rows[i]) {
@@ -695,7 +695,7 @@ export class ArrayEditor extends AbstractEditor {
 
       const newItemIndex = this.copy_in_place ? i + 1 : this.rows.length
 
-      this.copyRow(i, newItemIndex, e)
+      if (this.copyRow(i, newItemIndex, e) === true) return
 
       this.refreshValue(true)
       this.onChange(true)
@@ -734,7 +734,7 @@ export class ArrayEditor extends AbstractEditor {
       if (!this.active_tab) return
       const i = findIndexInParent(this.active_tab)
       if (i < 0) return
-      this.moveRowUp(i, e)
+      if (this.moveRowUp(i, e) === true) return
       this.active_tab = this.rows[i - 1].tab
       this.refreshTabs(true)
 
@@ -768,7 +768,7 @@ export class ArrayEditor extends AbstractEditor {
       if (!this.active_tab) return
       const i = findIndexInParent(this.active_tab)
       if (i < 0) return
-      this.moveRowDown(i, e)
+      if (this.moveRowDown(i, e) === true) return
       this.active_tab = this.rows[i + 1].tab
       this.refreshTabs()
       this.onChange(true)
@@ -793,7 +793,7 @@ export class ArrayEditor extends AbstractEditor {
 
   _supportDragDrop (tab, useTrigger) {
     supportDragDrop(tab, (i, j) => {
-      this.dropRow(i, j)
+      if (this.dropRow(i, j) === true) return
       this.active_tab = this.rows[j].tab
       this.refreshTabs(true)
 
@@ -866,11 +866,13 @@ export class ArrayEditor extends AbstractEditor {
       e.stopPropagation()
       const i = this.rows.length
       const editor = this.addRowViaCache()
-      this.active_tab = this.rows[i].tab
-      this.refreshTabs()
-      this.refreshValue()
-      this.onChange(true)
-      this.jsoneditor.trigger('addRow', editor)
+      if (editor) {
+        this.active_tab = this.rows[i].tab
+        this.refreshTabs()
+        this.refreshValue()
+        this.onChange(true)
+        this.jsoneditor.trigger('addRow', editor)
+      }
     })
     this.controls.appendChild(button)
     return button
@@ -886,14 +888,11 @@ export class ArrayEditor extends AbstractEditor {
       if (!this.askConfirmation()) {
         return false
       }
+      const editorValue = this.rows[this.rows.length - 1]
 
-      const rows = this.getValue()
-      let newActiveTab = null
+      if (this.deleteRow(this.rows.length - 1, e) === true) return
 
-      const editorValue = rows.pop()
-
-      this.setValue(rows)
-
+      let newActiveTab
       if (this.rows[this.rows.length - 1]) {
         newActiveTab = this.rows[this.rows.length - 1].tab
       }
@@ -910,6 +909,11 @@ export class ArrayEditor extends AbstractEditor {
     return button
   }
 
+  deleteAllRows (e) {
+    this.empty(true)
+    this.setValue([])
+  }
+
   _createRemoveAllRowsButton () {
     const button = this.getButton('button_delete_all', 'delete', 'button_delete_all_title')
     button.classList.add('json-editor-btntype-deleteall')
@@ -923,8 +927,8 @@ export class ArrayEditor extends AbstractEditor {
 
       const values = this.getValue()
 
-      this.empty(true)
-      this.setValue([])
+      if (this.deleteAllRows(e) === true) return
+
       this.onChange(true)
       this.jsoneditor.trigger('deleteAllRows', values)
     })
