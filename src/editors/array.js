@@ -661,25 +661,34 @@ export class ArrayEditor extends AbstractEditor {
     return button
   }
 
-  copyRow (from, to, e) {
+  refreshUUIDs (value) {
     const schema = this.schema
-    const arrayItems = this.getValue()
-    let newValue = arrayItems[from]
     /* Force generation of new UUID if the item has been cloned. */
     if (schema.items.type === 'string' && schema.items.format === 'uuid') {
-      newValue = generateUUID()
+      value = generateUUID()
     } else if (schema.items.type === 'object' && schema.items.properties) {
-      for (const key of Object.keys(newValue)) {
+      for (const key of Object.keys(value)) {
         if (schema.items.properties && schema.items.properties[key] && schema.items.properties[key].format === 'uuid') {
           // If we have more than one uuid, then we replace the value twice - no biggy
           // It DOESN'T handle deeply embedded UUIDs - biggy
-          newValue = Object.assign({}, newValue)
-          newValue[key] = generateUUID()
+          value = Object.assign({}, value)
+          value[key] = generateUUID()
         }
       }
     }
-    arrayItems.splice(to, 0, newValue)
-    this.setValue(arrayItems)
+    return value
+  }
+
+  copyRow (from, to, e) {
+    const arrayItems = this.getValue()
+    const newValue = this.refreshUUIDs(arrayItems[from])
+    if (newValue) {
+      arrayItems.splice(to, 0, newValue)
+      this.setValue(arrayItems)
+      return false
+    } else {
+      return true
+    }
   }
 
   _createCopyButton (i, holder) {

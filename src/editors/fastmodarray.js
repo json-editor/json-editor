@@ -88,14 +88,20 @@ export class FastModArrayEditor extends ArrayEditor {
   copyRow (from, to) {
     const arrayItems = this.getValue()
     const bottom = to >= arrayItems.length
-    const newValue = window.structuredClone(this.getValue()[from])
-    arrayItems.splice(to, 0, newValue)
+    const newValue = this.refreshUUIDs(window.structuredClone(arrayItems[from]))
 
-    this.addRow(newValue, to)
-    if (bottom) {
-      this.refreshValue(true)
+    if (newValue) {
+      arrayItems.splice(to, 0, newValue)
+
+      this.addRow(newValue, to)
+      if (bottom) {
+        this.refreshValue(true)
+      } else {
+        this._moveRow(this.getValue().length - 1, to)
+      }
+      return false
     } else {
-      this._moveRow(this.getValue().length - 1, to)
+      return true
     }
   }
 
