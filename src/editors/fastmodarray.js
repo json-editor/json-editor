@@ -70,34 +70,33 @@ export class FastModArrayEditor extends ArrayEditor {
   }
 
   moveRowUp (i) {
-    if (i < 1) return
+    if (i < 1 || i >= this.rows.length) return true
     this._moveRow(i, i - 1)
   }
 
   moveRowDown (i) {
-    const from = i + 1
-    if (from >= this.rows.length) return
-    this._moveRow(from, i)
+    if (i < 0 || (i + 1) >= this.rows.length) return true
+    this._moveRow(i, i + 1)
   }
 
   dropRow (from, to) {
-    if (to === from) return
+    if (to === from) return true
     this._moveRow(from, to)
   }
 
   copyRow (from, to) {
     const arrayItems = this.getValue()
-    const bottom = to >= arrayItems.length
+    const originalLength = arrayItems.length
     const newValue = this.refreshUUIDs(window.structuredClone(arrayItems[from]))
 
     if (newValue) {
       arrayItems.splice(to, 0, newValue)
 
-      this.addRow(newValue, to)
-      if (bottom) {
+      this.addRow(newValue)
+      if (to >= originalLength) {
         this.refreshValue(true)
       } else {
-        this._moveRow(this.getValue().length - 1, to)
+        this._moveRow(originalLength, to)
       }
       return false
     } else {
@@ -105,7 +104,8 @@ export class FastModArrayEditor extends ArrayEditor {
     }
   }
 
-  deleteRow (i) {
+  deleteRow (i, e) {
+    if (i < 0 || i >= this.rows.length) return true
     this.getValue().splice(i, 1)
     this.rows.splice(i, 1)
     this.row_holder.removeChild(this.row_holder.children[i])
@@ -113,25 +113,37 @@ export class FastModArrayEditor extends ArrayEditor {
     this.refreshValue(true)
   }
 
-  _moveRow (from, to) {
+  //
+  // The semantics are 'let the element at fromIndex be moved so that it is at toIndex'
+  //
+  _moveRow (fromIndex, toIndex) {
     const arrayItems = this.getValue()
-    const rows = this.rows
-    const item = arrayItems.splice(from, 1)[0]
-    const row = this.rows.splice(from, 1)[0]
-
-    arrayItems.splice(to, 0, item)
-    rows.splice(to, 0, row)
-
     const rowHolder = this.row_holder
     const linkHolder = this.links_holder
+    const rows = this.rows
 
-    const toNode = rowHolder.children[to]
-    const ui = rowHolder.children[from]
-    rowHolder.insertBefore(ui, toNode)
+    if (!(arrayItems && rowHolder && linkHolder && rows)) return
+    if (!(fromIndex >= 0 && fromIndex < rows.length && toIndex >= 0 && toIndex < rows.length)) return
 
-    const toLink = linkHolder.children[to]
-    const link = linkHolder.children[from]
-    linkHolder.insertBefore(link, toLink)
+    // Remove the the item and row from their arrays
+    const [item] = arrayItems.splice(fromIndex, 1)
+    const [row] = rows.splice(fromIndex, 1)
+
+    // Reinsert where they should go
+    arrayItems.splice(toIndex, 0, item)
+    rows.splice(toIndex, 0, row)
+
+    // Get the indexed node
+    const fromLink = linkHolder.children[fromIndex]
+    const fromNode = rowHolder.children[fromIndex]
+
+    // There are many ways to do this, but this is certainly the clearest!
+    const realToIndex = fromIndex > toIndex ? toIndex : toIndex + 1
+    const toNode = rowHolder.children[realToIndex] || null
+    const toLink = linkHolder.children[realToIndex] || null
+    rowHolder.insertBefore(fromNode, toNode)
+    linkHolder.insertBefore(fromLink, toLink)
+
     this.refreshValue(true)
   }
 }

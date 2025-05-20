@@ -376,7 +376,8 @@ export class ArrayEditor extends AbstractEditor {
 
       if (refreshHeaders) {
         row.tab_text.textContent = row.getHeaderText()
-      } else if (row.tab === this.active_tab) {
+      }
+      if (row.tab === this.active_tab) {
         this.theme.markTabActive(row)
       } else {
         this.theme.markTabInactive(row)
@@ -639,17 +640,8 @@ export class ArrayEditor extends AbstractEditor {
 
       if (this.deleteRow(i, e) === true) return
 
-      let newActiveTab
-      if (this.rows[i]) {
-        newActiveTab = this.rows[i].tab
-      } else if (this.rows[i - 1]) {
-        newActiveTab = this.rows[i - 1].tab
-      }
-
-      if (newActiveTab) {
-        this.active_tab = newActiveTab
-        this.refreshTabs()
-      }
+      this.active_tab = this.rows[i]?.tab || this.rows[i - 1]?.tab
+      this.refreshTabs(true)
 
       this.onChange(true)
       this.jsoneditor.trigger('deleteRow', editorValue)
@@ -702,22 +694,24 @@ export class ArrayEditor extends AbstractEditor {
       const i = findIndexInParent(this.active_tab)
       if (i < 0) return
 
-      const newItemIndex = this.copy_in_place ? i + 1 : this.rows.length
+      const newI = this.copy_in_place ? i + 1 : this.rows.length
 
-      if (this.copyRow(i, newItemIndex, e) === true) return
+      if (this.copyRow(i, newI, e) === true) return
 
-      this.refreshValue(true)
+      this.active_tab = this.rows[newI].tab
+      this.refreshTabs(true)
+
       this.onChange(true)
 
       if (schema.options.on_copy_item_label_path) {
-        const rowPath = this.rows[newItemIndex].path
+        const rowPath = this.rows[newI].path
         const labelEditor = this.jsoneditor.getEditor(`${rowPath}.${schema.options.on_copy_item_label_path}`)
         if (labelEditor.schema.type === 'string') {
           labelEditor.setValue(labelEditor.value + ' Copy')
         }
       }
 
-      this.jsoneditor.trigger('copyRow', this.rows[newItemIndex])
+      this.jsoneditor.trigger('copyRow', this.rows[newI])
     })
 
     holder.appendChild(button)
