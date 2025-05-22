@@ -6,6 +6,11 @@ export class ObjectEditor extends AbstractEditor {
   constructor (options, defaults, depth) {
     super(options, defaults)
     this.currentDepth = depth
+
+    // Set the property that will be used for tab grouping
+    this.tab_property_key = this.jsoneditor.options.tab_property_key || 'tab'
+    // Set default tab name text
+    this.default_tab_name = this.jsoneditor.options.default_tab_name || 'General'
   }
 
   getChildEditors () {
@@ -225,102 +230,121 @@ export class ObjectEditor extends AbstractEditor {
 
       if (isCategoriesFormat) {
         /* A container for properties not object nor arrays */
-        const containerSimple = document.createElement('div')
+        // const containerSimple = document.createElement('div')
         /* This will be the place to (re)build tabs and panes */
         /* tabs_holder has 2 childs, [0]: ul.nav.nav-tabs and [1]: div.tab-content */
         const newTabsHolder = this.theme.getTopTabHolder(this.translateProperty(this.schema.title))
         /* child [1] of previous, stores panes */
         const newTabPanesContainer = this.theme.getTopTabContentHolder(newTabsHolder)
 
+        // NEW: Create a map to track tab groups and their associated panes
+        const tabGroups = new Map()
+
+        // Default tab for properties without a tab property
+        const defaultTabName = 'General'
+
+        // Process all properties and organize them by tab group
         this.property_order.forEach(key => {
           const editor = this.editors[key]
           if (editor.property_removed) return
-          const aPane = this.theme.getTabContent()
-          const isObjOrArray = editor.schema && (editor.schema.type === 'object' || editor.schema.type === 'array')
-          /* mark the pane */
-          aPane.isObjOrArray = isObjOrArray
+
+          // Get the tab name from the property schema
+          let tabName = defaultTabName
+
+          // Check if property has a tab defined
+          if (editor.schema && editor.schema[this.tab_property_key]) {
+            tabName = editor.schema[this.tab_property_key]
+          }
+
+          // Create a new tab group if it doesn't exist
+          if (!tabGroups.has(tabName)) {
+            const aPane = this.theme.getTabContent()
+            aPane.id = this.getValidId(tabName)
+
+            // Create a grid container for this tab
+            const gridContainer = this.theme.getGridContainer()
+            aPane.appendChild(gridContainer)
+
+            // Store the tab group info
+            tabGroups.set(tabName, {
+              pane: aPane,
+              gridContainer,
+              editors: []
+            })
+
+            // Add the pane to the container
+            newTabPanesContainer.appendChild(aPane)
+            console.log('TabName: ', tabName)
+            // Add the tab to the tabs holder
+            this.addRow(editor, newTabsHolder, aPane, tabName)
+
+            // Create a tab for this group
+            // const tab = this.theme.getTopTab(tabName, aPane.id)
+            // tab.addEventListener('click', (e) => {
+            //   this.active_tab = tab
+            //   this.refreshTabs()
+            //   e.preventDefault()
+            //   e.stopPropagation()
+            // })
+
+            // Add the tab to the tabs holder
+            // this.theme.addTopTab(newTabsHolder, tab)
+          }
+
+          // Add the editor to the tab group
+          const tabGroup = tabGroups.get(tabName)
+          tabGroup.editors.push(editor)
+
+          // Create a grid row for this editor
           const gridRow = this.theme.getGridRow()
 
-          /* this happens with added properties, they don't have a tab */
-          if (!editor.tab) {
-            /* Pass the pane which holds the editor */
-            if (typeof this.basicPane === 'undefined') {
-              /* There is no basicPane yet, so aPane will be it */
-              this.addRow(editor, newTabsHolder, aPane)
-            } else {
-              this.addRow(editor, newTabsHolder, this.basicPane)
-            }
-          }
-
-          aPane.id = this.getValidId(editor.tab_text.textContent)
-
-          /* For simple properties, add them on the same panel (Basic) */
-          if (!isObjOrArray) {
-            containerSimple.appendChild(gridRow)
-            /* There are already some panes */
-            if (newTabPanesContainer.childElementCount > 0) {
-              /* If first pane is object or array, insert before a simple pane */
-              if (newTabPanesContainer.firstChild.isObjOrArray) {
-                /* Append pane for simple properties */
-                aPane.appendChild(containerSimple)
-                newTabPanesContainer.insertBefore(aPane, newTabPanesContainer.firstChild)
-                /* Add "Basic" tab */
-                this.theme.insertBasicTopTab(editor.tab, newTabsHolder)
-                /* newTabs_holder.firstChild.insertBefore(editor.tab,newTabs_holder.firstChild.firstChild); */
-                /* Update the basicPane */
-                editor.basicPane = aPane
-              } else {
-                /* We already have a first "Basic" pane, just add the new property to it, so */
-                /* do nothing; */
-              }
-              /* There is no pane, so add the first (simple) pane */
-            } else {
-              /* Append pane for simple properties */
-              aPane.appendChild(containerSimple)
-              newTabPanesContainer.appendChild(aPane)
-              /* Add "Basic" tab */
-              /* newTabs_holder.firstChild.appendChild(editor.tab); */
-              this.theme.addTopTab(newTabsHolder, editor.tab)
-              /* Update the basicPane */
-              editor.basicPane = aPane
-            }
-            /* Objects and arrays earn their own panes */
+          // Set column size and visibility
+          if (editor.options.hidden) {
+            editor.container.style.display = 'none'
           } else {
-            aPane.appendChild(gridRow)
-            newTabPanesContainer.appendChild(aPane)
-            /* newTabs_holder.firstChild.appendChild(editor.tab); */
-            this.theme.addTopTab(newTabsHolder, editor.tab)
+            this.theme.setGridColumnSize(editor.container, 12)
           }
 
-          if (editor.options.hidden) editor.container.style.display = 'none'
-          else this.theme.setGridColumnSize(editor.container, 12)
-          /* Now, add the property editor to the row */
+          // Add the editor to the row
           gridRow.appendChild(editor.container)
-          /* Update the rowPane (same as this.rows[x].rowPane) */
-          editor.rowPane = aPane
+
+          // Add the row to the grid container
+          tabGroup.gridContainer.appendChild(gridRow)
+
+          // // Store tab reference on the editor for future access
+          // editor.tab = Array.from(newTabsHolder.querySelector('ul').children).find(tab =>
+          //   tab.getAttribute('aria-controls') === tabGroup.pane.id ||
+          //   tab.getAttribute('data-target') === `#${tabGroup.pane.id}`)
+
+          editor.tab_text = editor.tab.querySelector('span') || editor.tab
+          editor.rowPane = tabGroup.pane
         })
 
-        /* Erase old panes */
-        while (this.tabPanesContainer.firstChild) {
+        // Erase old panes
+        while (this.tabPanesContainer && this.tabPanesContainer.firstChild) {
           this.tabPanesContainer.removeChild(this.tabPanesContainer.firstChild)
         }
 
-        /* Erase old tabs and set the new ones */
-        const parentTabsHolder = this.tabs_holder.parentNode
-        parentTabsHolder.removeChild(parentTabsHolder.firstChild)
-        parentTabsHolder.appendChild(newTabsHolder)
+        // Erase old tabs and set the new ones
+        if (this.tabs_holder) {
+          const parentTabsHolder = this.tabs_holder.parentNode
+          parentTabsHolder.removeChild(parentTabsHolder.firstChild)
+          parentTabsHolder.appendChild(newTabsHolder)
+        }
 
         this.tabPanesContainer = newTabPanesContainer
         this.tabs_holder = newTabsHolder
 
-        /* Activate the first tab */
+        // Activate the first tab
         const firstTab = this.theme.getFirstTab(this.tabs_holder)
         if (firstTab) {
           trigger(firstTab, 'click')
         }
+
         return
-        /* Normal layout */
       }
+
+      // Original code for non-categories format
       this.property_order.forEach(key => {
         const editor = this.editors[key]
         if (editor.property_removed) return
@@ -441,12 +465,14 @@ export class ObjectEditor extends AbstractEditor {
   }
 
   /* "Borrow" from arrays code */
-  addTab (idx) {
+  addTab (idx, tabText) {
     const isObjOrArray = this.rows[idx].schema && (this.rows[idx].schema.type === 'object' || this.rows[idx].schema.type === 'array')
     if (this.tabs_holder) {
       this.rows[idx].tab_text = document.createElement('span')
 
-      if (!isObjOrArray) {
+      if (typeof tabText !== 'undefined') {
+        this.rows[idx].tab_text.textContent = tabText
+      } else if (!isObjOrArray) {
         this.rows[idx].tab_text.textContent = (typeof this.schema.basicCategoryTitle === 'undefined') ? 'Basic' : this.schema.basicCategoryTitle
       } else {
         this.rows[idx].tab_text.textContent = this.rows[idx].getHeaderText()
@@ -461,7 +487,7 @@ export class ObjectEditor extends AbstractEditor {
     }
   }
 
-  addRow (editor, tabHolder, aPane) {
+  addRow (editor, tabHolder, aPane, tabText) {
     const rowsLen = this.rows.length
     const isObjOrArray = editor.schema.type === 'object' || editor.schema.type === 'array'
 
@@ -487,7 +513,7 @@ export class ObjectEditor extends AbstractEditor {
         this.rows[rowsLen].rowPane = this.rows[this.basicTab].rowPane
       }
     } else {
-      this.addTab(rowsLen)
+      this.addTab(rowsLen, tabText)
       this.theme.addTopTab(tabHolder, this.rows[rowsLen].tab)
     }
   }
@@ -687,13 +713,12 @@ export class ObjectEditor extends AbstractEditor {
       /* Container for rows of child editors */
       this.row_container = this.theme.getGridContainer()
 
-      if (isCategoriesFormat) {
-        this.tabs_holder = this.theme.getTopTabHolder(this.getValidId(this.translateProperty(this.schema.title)))
-        this.tabPanesContainer = this.theme.getTopTabContentHolder(this.tabs_holder)
+      this.tabs_holder = this.theme.getTopTabHolder(this.getValidId(this.translateProperty(this.schema.title)))
+      this.tabPanesContainer = this.theme.getTopTabContentHolder(this.tabs_holder)
+
+      if (this.format === 'categories') {
         this.editor_holder.appendChild(this.tabs_holder)
       } else {
-        this.tabs_holder = this.theme.getTabHolder(this.getValidId(this.translateProperty(this.schema.title)))
-        this.tabPanesContainer = this.theme.getTabContentHolder(this.tabs_holder)
         this.editor_holder.appendChild(this.row_container)
       }
 
