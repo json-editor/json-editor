@@ -445,6 +445,11 @@ export class ObjectEditor extends AbstractEditor {
     this.disable_edit_json = checkBooleanOption(this.disable_edit_json, checkBooleanOption(this.schema.options?.disable_edit_json, this.jsoneditor.options.disable_edit_json))
   }
 
+  tabClicked (idx, e) {
+    this.active_tab = this.rows[idx].tab
+    this.refreshTabs()
+  }
+
   /* "Borrow" from arrays code */
   addTab (idx) {
     const isObjOrArray = this.rows[idx].schema && (this.rows[idx].schema.type === 'object' || this.rows[idx].schema.type === 'array')
@@ -458,8 +463,7 @@ export class ObjectEditor extends AbstractEditor {
       }
       this.rows[idx].tab = this.theme.getTopTab(this.rows[idx].tab_text, this.getValidId(this.rows[idx].tab_text.textContent))
       this.rows[idx].tab.addEventListener('click', (e) => {
-        this.active_tab = this.rows[idx].tab
-        this.refreshTabs()
+        this.tabClicked(idx, e)
         e.preventDefault()
         e.stopPropagation()
       })
