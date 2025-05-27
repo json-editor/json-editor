@@ -445,9 +445,13 @@ export class ObjectEditor extends AbstractEditor {
     this.disable_edit_json = checkBooleanOption(this.disable_edit_json, checkBooleanOption(this.schema.options?.disable_edit_json, this.jsoneditor.options.disable_edit_json))
   }
 
-  tabClicked (idx, e) {
+  setActiveTab (idx) {
     this.active_tab = this.rows[idx].tab
     this.refreshTabs()
+  }
+
+  tabClicked (idx, e) {
+    this.setActiveTab(idx)
   }
 
   /* "Borrow" from arrays code */
