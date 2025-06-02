@@ -361,6 +361,10 @@ languages.en = {
   */
   button_delete_node_warning: 'Are you sure you want to remove this item?',
   /**
+  * Warning when deleting all nodes
+  */
+  button_delete_all_nodes_warning: 'Are you sure you want to remove all items?',
+  /**
    * Warning when deleting a node
    */
   table_controls: 'Controls',

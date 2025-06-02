@@ -46,9 +46,9 @@ export class ArrayEditor extends AbstractEditor {
     return new SimpleRowCache()
   }
 
-  askConfirmation () {
+  askConfirmation (all) {
     if (this.jsoneditor.options.prompt_before_delete === true) {
-      if (window.confirm(this.translate('button_delete_node_warning')) === false) {
+      if (window.confirm(this.translate(all ? 'button_delete_all_nodes_warning' : 'button_delete_node_warning')) === false) {
         return false
       }
     }
@@ -633,6 +633,22 @@ export class ArrayEditor extends AbstractEditor {
     this.setValue(newval)
   }
 
+  deleteRowClicked (i, e) {
+    const editorValue = this.rows[i].getValue()
+
+    if (!this.askConfirmation(false)) {
+      return false
+    }
+
+    const actionAborted = this.deleteRowClicked(i, e)
+    if (!actionAborted) {
+      this.active_tab = this.rows[i]?.tab || this.rows[i - 1]?.tab
+      this.refreshTabs(true)
+      this.onChange(true)
+      this.jsoneditor.trigger('deleteRow', editorValue)
+    }
+  }
+
   getActiveTabIndex () {
     return findIndexInParent(this.active_tab)
   }
@@ -646,20 +662,7 @@ export class ArrayEditor extends AbstractEditor {
       if (!this.active_tab) return
       const i = this.getActiveTabIndex()
       if (i < 0) return
-
-      if (!this.askConfirmation()) {
-        return false
-      }
-
-      const editorValue = this.rows[i].getValue()
-
-      if (this.deleteRow(i, e) === true) return
-
-      this.active_tab = this.rows[i]?.tab || this.rows[i - 1]?.tab
-      this.refreshTabs(true)
-
-      this.onChange(true)
-      this.jsoneditor.trigger('deleteRow', editorValue)
+      this.deleteRowClicked(i, e)
     })
 
     if (holder) holder.appendChild(button)
@@ -897,7 +900,7 @@ export class ArrayEditor extends AbstractEditor {
       e.preventDefault()
       e.stopPropagation()
 
-      if (!this.askConfirmation()) {
+      if (!this.askConfirmation(false)) {
         return false
       }
       const editorValue = this.rows[this.rows.length - 1]
@@ -926,23 +929,27 @@ export class ArrayEditor extends AbstractEditor {
     this.setValue([])
   }
 
+  deleteAllRowsClicked (e) {
+    const values = this.getValue()
+
+    if (!this.askConfirmation(true)) {
+      return false
+    }
+
+    const actionAborted = this.deleteAllRows(e)
+    if (!actionAborted) {
+      this.onChange(true)
+      this.jsoneditor.trigger('deleteAllRows', values)
+    }
+  }
+
   _createRemoveAllRowsButton () {
     const button = this.getButton('button_delete_all', 'delete', 'button_delete_all_title')
     button.classList.add('json-editor-btntype-deleteall')
     button.addEventListener('click', (e) => {
       e.preventDefault()
       e.stopPropagation()
-
-      if (!this.askConfirmation()) {
-        return false
-      }
-
-      const values = this.getValue()
-
-      if (this.deleteAllRows(e) === true) return
-
-      this.onChange(true)
-      this.jsoneditor.trigger('deleteAllRows', values)
+      this.deleteAllRowsClicked(e)
     })
     this.controls.appendChild(button)
     return button
