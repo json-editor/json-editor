@@ -640,7 +640,7 @@ export class ArrayEditor extends AbstractEditor {
       return false
     }
 
-    const actionAborted = this.deleteRowClicked(i, e)
+    const actionAborted = this.deleteRow(i, e)
     if (!actionAborted) {
       this.active_tab = this.rows[i]?.tab || this.rows[i - 1]?.tab
       this.refreshTabs(true)
