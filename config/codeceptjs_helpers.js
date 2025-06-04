@@ -1,18 +1,20 @@
+/* eslint-disable no-console */
 const assert = require('assert')
 // eslint-disable-next-line camelcase
-let Helper = codecept_helper
+const Helper = codecept_helper
 
+// eslint-disable-next-line no-unused-vars
 const sleep = async (msec) => {
   return new Promise(resolve => setTimeout(resolve, msec))
 }
 
 class customHelpers extends Helper {
   async donSeeDuplicatedIds () {
-    const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
+    const helper = this.helpers.Puppeteer || this.helpers.WebDriver
     await helper.wait(1)
-    let donSeeDuplicatedIds = await helper.executeScript(() => {
+    const donSeeDuplicatedIds = await helper.executeScript(() => {
       let dontSeeDuplicated = true
-      let ids = []
+      const ids = []
       const all = [].slice.call(document.querySelectorAll('*'))
       all.forEach((el) => {
         const id = el.getAttribute('id')
@@ -29,10 +31,10 @@ class customHelpers extends Helper {
   }
 
   async pressKeys (string) {
-    const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
+    const helper = this.helpers.Puppeteer || this.helpers.WebDriver
     try {
       await helper.wait(1)
-      let digits = string.split('')
+      const digits = string.split('')
       for (let i = 0; i < digits.length; i++) {
         await helper.pressKey(digits[i])
       }
@@ -45,7 +47,7 @@ class customHelpers extends Helper {
   // Required for tests to work with WebDriver, since "amCancellingPopups" is a Puppeteer command.
   // returns existing amCancellingPopups function if exists
   async amCancellingPopups () {
-    const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
+    const helper = this.helpers.Puppeteer || this.helpers.WebDriver
     try {
       if (typeof helper.amCancellingPopups === 'function') return helper.amCancellingPopups.call(arguments)
     } catch (err) {
@@ -57,7 +59,7 @@ class customHelpers extends Helper {
   // Required for tests to work with WebDriver, since "amAcceptingPopups" is a Puppeteer command.
   // returns existing amAcceptingPopups function if exists
   async amAcceptingPopups () {
-    const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
+    const helper = this.helpers.Puppeteer || this.helpers.WebDriver
     try {
       if (typeof helper.amAcceptingPopups === 'function') return helper.amAcceptingPopups.call(arguments)
     } catch (err) {
@@ -68,68 +70,68 @@ class customHelpers extends Helper {
   // Custom seeCheckedAttribute function.
   // Evaluates true if xpath is checked
   async seeCheckedAttribute (xpath) {
-    const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
+    const helper = this.helpers.Puppeteer || this.helpers.WebDriver
     return await helper.waitForElement(xpath + ':checked')
   }
 
   // Custom dontSeeCheckedAttribute function.
   // Evaluates true if xpath is not checked
   async dontSeeCheckedAttribute (xpath) {
-    const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
+    const helper = this.helpers.Puppeteer || this.helpers.WebDriver
     return await helper.waitForInvisible(xpath + ':checked')
   }
 
   // Custom seeDisabledAttribute function.
   // Evaluates true if xpath is disabled
   async seeDisabledAttribute (xpath) {
-    const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
+    const helper = this.helpers.Puppeteer || this.helpers.WebDriver
     return await helper.waitForElement(xpath + ':disabled')
   }
 
   // Custom dontSeeDisabledAttributet function.
   // Evaluates true if xpath is not disabled
   async dontSeeDisabledAttribute (xpath) {
-    const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
+    const helper = this.helpers.Puppeteer || this.helpers.WebDriver
     return await helper.waitForInvisible(xpath + ':disabled')
   }
 
   // Custom seeReadOnlyAttribute function.
   // Evaluates true if xpath is disabled
   async seeReadOnlyAttribute (xpath) {
-    const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
-    let res = await helper.grabAttributeFrom(xpath, 'readonly')
+    const helper = this.helpers.Puppeteer || this.helpers.WebDriver
+    const res = await helper.grabAttributeFrom(xpath, 'readonly')
     return assert.ok(res !== null && typeof res !== 'undefined' && res.toString().toLowerCase() === 'true', "\x1b[31mexpected element '\x1b[91m" + xpath + "\x1b[31m' to be readonly")
   }
 
   // Custom dontSeeReadOnlyAttributet function.
   // Evaluates true if xpath is not disabled
   async dontSeeReadOnlyAttribute (xpath) {
-    const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
-    let res = await helper.grabAttributeFrom(xpath, 'readonly')
+    const helper = this.helpers.Puppeteer || this.helpers.WebDriver
+    const res = await helper.grabAttributeFrom(xpath, 'readonly')
     return assert.ok(!(res !== null && typeof res !== 'undefined' && res.toString().toLowerCase() === 'true'), "\x1b[31mexpected element '\x1b[91m" + xpath + "\x1b[31m' NOT to be readonly")
   }
 
   // Custom grabBooleanAttributeFrom function.
   // returns boolean value
   async grabBooleanAttributeFrom (xpath, attrib) {
-    const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
+    const helper = this.helpers.Puppeteer || this.helpers.WebDriver
     try {
-      let res = await helper.grabAttributeFrom(xpath, attrib)
+      const res = await helper.grabAttributeFrom(xpath, attrib)
       return res !== null && typeof res !== 'undefined' && res.toString().toLowerCase() === 'true'
     } catch (err) {
       console.log('CodeceptJs Custom Helper "grabBooleanAttributeFrom" Error:', err)
     }
   }
 
-  async getSelectedValueAndAssert(selector, expectedValue) {
-    const helper = this.helpers['Puppeteer'] || this.helpers['WebDriver']
+  async getSelectedValueAndAssert (selector, expectedValue) {
+    const helper = this.helpers.Puppeteer || this.helpers.WebDriver
 
     const selectValue = await helper.executeScript((sel) => {
-      const selectElement = document.querySelector(sel);
-      return selectElement.value;
-    }, selector);
+      const selectElement = document.querySelector(sel)
+      return selectElement.value
+    }, selector)
 
-    return assert.strictEqual(selectValue, expectedValue);
+    return assert.strictEqual(selectValue, expectedValue)
   }
 
   // Custom isTrue function.
@@ -139,6 +141,23 @@ class customHelpers extends Helper {
       return val !== null && typeof val !== 'undefined' && val.toString().toLowerCase() === 'true'
     } catch (err) {
       console.log('CodeceptJs Custom Helper "isTrue" Error:', err)
+    }
+  }
+
+  async notVisible (str, sel) {
+    const helper = this.helpers.Puppeteer || this.helpers.WebDriver
+
+    const isVisible = await helper.executeScript((str, sel) => {
+      const els = Array.from(document.querySelectorAll(sel))
+      return els.some(e => {
+        return e.textContent === str && (!!e.offsetParent)
+      })
+    }, str, sel)
+
+    if (isVisible) {
+      throw new Error(
+        `Element '${sel}' is present, visible, and has value/text "${str}"`
+      )
     }
   }
 }
