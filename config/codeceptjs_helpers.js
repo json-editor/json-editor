@@ -176,7 +176,7 @@ class customHelpers extends Helper {
       //
       const capturedDialogs = []
       const dialogListener = async dialog => {
-        console.log('[GLOBAL LISTENER] Dialog caught.', dialog)
+        console.log('[GLOBAL LISTENER] Dialog caught.', dialog.message())
         capturedDialogs.push(dialog)
       }
 
