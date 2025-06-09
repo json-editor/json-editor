@@ -144,19 +144,59 @@ class customHelpers extends Helper {
     }
   }
 
-  async notVisible (str, sel) {
+  async elementNotVisible (sel) {
     const helper = this.helpers.Puppeteer || this.helpers.WebDriver
-
-    const isVisible = await helper.executeScript((str, sel) => {
-      const els = Array.from(document.querySelectorAll(sel))
-      return els.some(e => {
-        return e.textContent === str && (!!e.offsetParent)
-      })
-    }, str, sel)
-
+    const isVisible = await helper.executeScript(sel => {
+      const el = document.querySelector(sel)
+      return el && (!!el.offsetParent)
+    }, sel)
     if (isVisible) {
       throw new Error(
-        `Element '${sel}' is present, visible, and has value/text "${str}"`
+        `Element '${sel}' is present, and visible`
+      )
+    }
+  }
+
+  async textNotVisible (str, sel = 'body') {
+    if (!str) return
+    const helper = this.helpers.Puppeteer || this.helpers.WebDriver
+
+    await helper.wait(0.2)
+
+    const isVisible = await helper.executeScript((str, sel) => {
+      const el = sel ? document.querySelector(sel) : document.body
+      if (!el) return // Context element not present
+      if (el.nodeName !== 'BODY') {
+        if (!el.offsetParent) return false // Either the (non-body) element isn't in the body, or it's not visible
+      }
+      if (!el.textContent.includes(str)) return false // It may be visible, but it doesn't contain the text
+
+      // The context element is there, visible and contains the text, so now we find the
+      // most specific element(s) that contain the text and make sure they are not visible
+
+      const walker = document.createTreeWalker(el, NodeFilter.SHOW_ELEMENT)
+      let node
+
+      while ((node = walker.nextNode())) {
+        if (!node.offsetParent) continue // Hidden node, not worth checking
+        if (node.textContent.includes(str)) {
+          // String found - is it in a CHILD node
+          let inChildNode = false
+          for (const child of node.children) {
+            if (child.textContent.includes(str)) {
+              inChildNode = true
+              break // No need to check other children
+            }
+          }
+          if (inChildNode) continue // We aren't at the most specific node yet
+          if (node.offsetParent) return true // We are at a most specific node, and it is visible
+        }
+      }
+      return false
+    }, str, sel)
+    if (isVisible) {
+      throw new Error(
+        `Element '${str}' is present, visible"`
       )
     }
   }
