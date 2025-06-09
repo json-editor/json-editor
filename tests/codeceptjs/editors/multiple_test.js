@@ -13,9 +13,10 @@ Scenario('should hide switcher input @switcher-option', async ({ I }) => {
   I.pressKey('Tab')
   I.waitForText('If provided, value must be at least 4 and at most 10')
 
-  I.fillField('[name="root[name]"]', '')
-  I.pressKey('Tab')
-  I.dontSee('If provided, value must be at least 4 and at most 10')
+  I.focus('[name="root[name]"]')
+  I.pressKey('Backspace') // This never gets actioned
+  I.pressKey('Tab') // This never gets actioned
+  I.textNotVisible('If provided, value must be at least 4 and at most 10')
 
   I.fillField('[name="root[name]"]', 'abcdefghijklmnopq')
   I.pressKey('Tab')
@@ -23,5 +24,5 @@ Scenario('should hide switcher input @switcher-option', async ({ I }) => {
 
   I.fillField('[name="root[name]"]', 'test')
   I.pressKey('Tab')
-  I.dontSee('If provided, value must be at least 4 and at most 10')
+  I.textNotVisible('If provided, value must be at least 4 and at most 10')
 })
