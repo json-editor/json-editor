@@ -208,7 +208,7 @@ Scenario('should change the form if form_name_root option is set @core', async (
   I.seeElement('[for="form_2[2]"]')
   I.click('[for="form_1[0]"]')
   I.click('[for="form_2[1]"]')
-  I.notVisible('REPLACE THIS', '.invalid-feedback')
+  I.textNotVisible('REPLACE THIS', '.invalid-feedback')
   I.click('#get-value-form-1')
   I.waitForValue('#value-form-1', '"yes"')
   I.click('#get-value-form-2')
@@ -232,12 +232,12 @@ Scenario('should validate against oneOf schemas and display single oneOf and edi
   I.wait(3)
 
   // Hidden but present 'Object is missing the required property \'p4\''
-  I.notVisible('Object is missing the required property \'p4\'', '[data-schemapath="root"] .alert-danger')
+  I.textNotVisible('Object is missing the required property \'p4\'', '[data-schemapath="root"] .alert-danger')
 
   I.waitForText('Value must validate against exactly one of the provided schemas. It currently validates against 0 of the schemas.', DEFAULT_WAIT_TIME, '[data-schemapath="root.p5"] .alert-danger:nth-of-type(1)')
 
-  I.notVisible('Object is missing the required property \'p1\'', '.alert-danger')
-  I.notVisible('Object is missing the required property \'p2\'', '.alert-danger')
+  I.textNotVisible('Object is missing the required property \'p1\'', '.alert-danger')
+  I.textNotVisible('Object is missing the required property \'p2\'', '.alert-danger')
   I.waitForText('Value must be at least 4 characters long.', DEFAULT_WAIT_TIME, '[data-schemapath="root.p4"] .invalid-feedback')
   I.waitForText('Value must be at least 4 characters long.', DEFAULT_WAIT_TIME, '[data-schemapath="root.p5.p1"] .invalid-feedback')
   I.waitForText('Value must be at least 4 characters long.', DEFAULT_WAIT_TIME, '[data-schemapath="root.p5.p2"] .invalid-feedback')
@@ -246,9 +246,9 @@ Scenario('should validate against oneOf schemas and display single oneOf and edi
   I.fillField('root[p5][p2]', 'todo')
   I.click('Get Value')
   I.wait(3)
-  I.notVisible('Value must be at least 4 characters long.', '[data-schemapath="root.p4"] .invalid-feedback')
-  I.notVisible('Value must be at least 4 characters long.', '[data-schemapath="root.p5.p1"] .invalid-feedback')
-  I.notVisible('Value must be at least 4 characters long.', '[data-schemapath="root.p5.p2"] .invalid-feedback')
+  I.textNotVisible('Value must be at least 4 characters long.', '[data-schemapath="root.p4"] .invalid-feedback')
+  I.textNotVisible('Value must be at least 4 characters long.', '[data-schemapath="root.p5.p1"] .invalid-feedback')
+  I.textNotVisible('Value must be at least 4 characters long.', '[data-schemapath="root.p5.p2"] .invalid-feedback')
 })
 
 Scenario('should validate against anyOf schemas and display single anyOf and editors error messages @core @anyof', async ({ I }) => {
@@ -265,8 +265,8 @@ Scenario('should validate against anyOf schemas and display single anyOf and edi
   I.fillField('root[age]', 'to')
   I.click('Get Value')
   I.wait(3)
-  I.notVisible('Object is missing the required property \'age\'', '.alert-danger')
-  I.notVisible('Property must be set.', '[data-schemapath="root.age"] .invalid-feedback')
+  I.textNotVisible('Object is missing the required property \'age\'', '.alert-danger')
+  I.textNotVisible('Property must be set.', '[data-schemapath="root.age"] .invalid-feedback')
 })
 
 Scenario('should keep only existent values @core @anyof @keep_only_existing_values', async ({ I }) => {
