@@ -1,4 +1,6 @@
 import { ArrayEditor } from './array.js'
+import { findIndexInParent } from '../utilities.js'
+
 /*
  * This is essentially the standard Array editor with a tweak to the "Editor ID" that
  * then allows it to NOT fully reset the value when simply modifying the order of the items
@@ -8,7 +10,7 @@ import { ArrayEditor } from './array.js'
  * The key "innovation" is to not tie the editor ID to its position in the array. Technically this
  * would be possible with most of the functionality of the Array editor, even with the initial reliance
  * on array index for the editor ID. However it is such a major change in semantics that it is felt
- * to implement the innovations via a subclass.
+ * better to implement the innovations via a subclass.
  *
  * The major semantics change is, of course, that you cannot "construct" the path of an item editor
  * based upon its position in the array. Instead you have to get the array editor, then index into the
@@ -18,9 +20,9 @@ import { ArrayEditor } from './array.js'
  * Also, technically the cache SHOULD still work with a few tweaks - but for now we completely disable
  * the cache.
  *
- * As part of developing this subclass, the array editor itself was refactored quite a bit so that it
- * didn't rely upon array position for so many of its operations where it didn't need to, even though
- * it still does gaurantee the tie between item index and item editor path.
+ * As part of developing this subclass, the array editor itself was substantially refactored in order
+ * to make it easier to subclass - the Table editor was also refactored to take advantage of the
+ * improved adaptability of the array editor.
  *
  * The bottom line, if you have a big array and you don't need to find item editors based upon their
  * position in the array, then this subclass may afford you better performance when modifying the
@@ -63,6 +65,10 @@ export class FastModArrayEditor extends ArrayEditor {
   build () {
     super.build()
     this.links_holder = this.tabs_holder?.children[0]?.children[0]
+  }
+
+  getActiveValueIndex (e) {
+    return findIndexInParent(this.active_tab)
   }
 
   getEditorId (i) {
