@@ -11,6 +11,7 @@
 <label for="debug">Value</label>
 <textarea id="debug" class="debug" cols="30" rows="10"></textarea>
 <button class='get-value'>Get Value</button>
+<textarea id="feedback" class="feedback" cols="20" rows="1"></textarea>
 <div class='container'></div>
 
 <script>
@@ -39,27 +40,27 @@
     editor.setValue(["A", "B", "C", "D", "E"]);
 
     editor.on('copyRow', function () {
-      alert('copyRow');
+      document.querySelector('#feedback').value = 'copyRow'
       console.log('copyRow');
     });
 
     editor.on('moveRow', function () {
-      alert('moveRow');
+      document.querySelector('#feedback').value = 'moveRow'
       console.log('moveRow');
     });
 
     editor.on('addRow', function () {
-      alert('addRow');
+      document.querySelector('#feedback').value = 'addRow'
       console.log('addRow');
     });
 
     editor.on('deleteRow', function () {
-      alert('deleteRow');
+      document.querySelector('#feedback').value = 'deleteRow'
       console.log('deleteRow');
     });
 
     editor.on('deleteAllRows', function () {
-      alert('deleteAllRows');
+      document.querySelector('#feedback').value = 'deleteAllRows'
       console.log('deleteAllRows');
     });
   })
