@@ -1,7 +1,5 @@
 /* global Feature Scenario Event */
 
-const { DEFAULT_WAIT_TIME } = require('../test-config')
-
 Feature('multiple')
 
 Scenario('should hide switcher input @switcher-option', async ({ I }) => {
