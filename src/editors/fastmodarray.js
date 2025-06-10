@@ -67,8 +67,9 @@ export class FastModArrayEditor extends ArrayEditor {
     this.links_holder = this.tabs_holder?.children[0]?.children[0]
   }
 
-  getActiveValueIndex (e) {
-    return findIndexInParent(this.active_tab)
+  getValueIndex (e) {
+    const el = e ? e.currentTarget : this.active_tab
+    return findIndexInParent(el)
   }
 
   getEditorId (i) {

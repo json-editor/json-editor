@@ -126,6 +126,7 @@ export class ArrayEditor extends AbstractEditor {
     this.hide_delete_last_row_button = this.hide_delete_buttons || checkBooleanOption(this.options.disable_array_delete_last_row, this.jsoneditor.options.disable_array_delete_last_row, false)
     this.hide_move_buttons = checkBooleanOption(this.options.disable_array_reorder, this.jsoneditor.options.disable_array_reorder, false)
     this.hide_add_button = checkBooleanOption(this.options.disable_array_add, this.jsoneditor.options.disable_array_add, false)
+    this.remove_button_labels = checkBooleanOption(this.options.remove_button_labels, this.jsoneditor.options.remove_button_labels, false)
     this.show_copy_button = checkBooleanOption(this.options.enable_array_copy, this.jsoneditor.options.enable_array_copy, false)
     this.array_controls_top = checkBooleanOption(this.options.array_controls_top, this.jsoneditor.options.array_controls_top, false)
     this.copy_in_place = checkBooleanOption(this.copy_in_place, checkBooleanOption(this.options.array_copy_in_place, this.jsoneditor.options.array_copy_in_place, false), false)
@@ -606,6 +607,10 @@ export class ArrayEditor extends AbstractEditor {
     }
   }
 
+  itemLinkClicked (e) {
+    this.setActiveItem(this.getValueIndex(e))
+  }
+
   addRow (value, initial) {
     const i = this.rows.length
 
@@ -624,7 +629,7 @@ export class ArrayEditor extends AbstractEditor {
       this.rows[i].tab.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        this.setActiveItem(e.currentTarget)
+        this.itemLinkClicked(e)
       })
       this._supportDragDrop(this.rows[i].tab)
     } else {
@@ -642,7 +647,7 @@ export class ArrayEditor extends AbstractEditor {
     return this.rows[i]
   }
 
-  getActiveValueIndex (e) {
+  getValueIndex (e) {
     return e.currentTarget.getAttribute('data-i') * 1
   }
 
@@ -652,7 +657,7 @@ export class ArrayEditor extends AbstractEditor {
   }
 
   deleteRowButtonClicked (e, i) {
-    i = i ?? this.getActiveValueIndex(e)
+    i = i ?? this.getValueIndex(e)
     if (i < 0) return
     const editorValue = this.rows[i].getValue()
 
@@ -714,7 +719,7 @@ export class ArrayEditor extends AbstractEditor {
   }
 
   copyRowClicked (e) {
-    const i = this.getActiveValueIndex(e)
+    const i = this.getValueIndex(e)
     if (i < 0) return
 
     const newI = this.copy_in_place ? i + 1 : this.rows.length
@@ -763,7 +768,7 @@ export class ArrayEditor extends AbstractEditor {
   }
 
   moveRowUpClicked (e, i) {
-    i = i ?? this.getActiveValueIndex(e)
+    i = i ?? this.getValueIndex(e)
     if (i < 0) return
 
     const actionAborted = this.moveRowUp(i, e)
@@ -801,7 +806,7 @@ export class ArrayEditor extends AbstractEditor {
   }
 
   moveRowDownClicked (e, i) {
-    i = i ?? this.getActiveValueIndex(e)
+    i = i ?? this.getValueIndex(e)
     if (i < 0) return
 
     const actionAborted = this.moveRowDown(i, e)
