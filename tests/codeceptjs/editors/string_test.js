@@ -43,7 +43,7 @@ Scenario('editor value and String editor should have coerent values @optional', 
   I.switchTo()
 
   I.click('.get-value')
-  I.waitForValue('.debug', JSON.stringify([{ editor: '<p>__YELLOW__</p>' }]))
+  I.waitForValue('.debug', '[{"editor":"<p>\\n\\t__YELLOW__\\n</p>"}]')
 })
 
 Scenario('Should work correctly in arrays @optional', async ({ I }) => {
@@ -79,11 +79,11 @@ Scenario('Should work correctly in arrays @optional', async ({ I }) => {
   I.switchTo()
 
   I.click('.get-value')
-  I.waitForValue('.debug', JSON.stringify([{ editor: '<p>__YELLOW__<br></p>' }, { editor: '<p>__BLUE__<br></p>' }]))
+  I.waitForValue('.debug', '[{"editor":"<p>\\n\\t__YELLOW__\\n</p>"},{"editor":"<p>\\n\\t__BLUE__\\n</p>"}]')
 
   I.click('.json-editor-btn-movedown')
   I.click('.get-value')
-  I.waitForValue('.debug', JSON.stringify([{ editor: '<p>__BLUE__<br></p>' }, { editor: '<p>__YELLOW__<br></p>' }]))
+  I.waitForValue('.debug', '[{"editor":"<p>\\n\\t__BLUE__\\n</p>"},{"editor":"<p>\\n\\t__YELLOW__\\n</p>"}]')
 
   // the last 2 tests will fail because Sceditors iframes loose their content when the iframe is reloaded.
 
@@ -118,8 +118,10 @@ Scenario('should work with cleave.js library', async ({ I }) => {
 })
 
 Scenario('ace editor should have correct initial @prompt-paste-max-length-reached', async ({ I }) => {
+  I.amAcceptingPopups()
   I.amOnPage('prompt-paste-max-length-reached.html')
   I.waitForElement('.je-ready')
   I.click('#paste')
   I.seeInPopup('Pasted text exceeded maximum length of 5 and will be clipped.')
+  I.acceptPopup()
 })
