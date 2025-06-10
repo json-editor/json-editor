@@ -68,8 +68,13 @@ export class FastModArrayEditor extends ArrayEditor {
   }
 
   getValueIndex (e) {
-    const el = e ? e.currentTarget : this.active_tab
-    return findIndexInParent(el)
+    return this.active_tab ? findIndexInParent(this.active_tab) : -1
+  }
+
+  // The default implementation uses getValueIndex, but our implementation
+  // of that method isn't suitable for the item click, so we override that
+  itemLinkClicked (e) {
+    this.setActiveItem(findIndexInParent(e.currentTarget))
   }
 
   getEditorId (i) {

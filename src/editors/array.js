@@ -648,7 +648,7 @@ export class ArrayEditor extends AbstractEditor {
   }
 
   getValueIndex (e) {
-    return e.currentTarget.getAttribute('data-i') * 1
+    return e?.currentTarget?.getAttribute('data-i') ?? -1
   }
 
   deleteRow (i, e) {
