@@ -202,6 +202,7 @@ class customHelpers extends Helper {
   }
 
   async seeInPopupsAfterClick (click, strings, timeout = 3000) {
+    if (!Array.isArray(strings)) strings = [strings]
     let helper = this.helpers.Puppeteer
     if (!helper) {
       helper = this.helpers.WebDriver
