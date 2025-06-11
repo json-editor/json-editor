@@ -652,8 +652,9 @@ export class ArrayEditor extends AbstractEditor {
   }
 
   deleteRow (i, e) {
-    const newval = this.getValue().filter((row, j) => j !== i)
-    this.setValue(newval)
+    const arrayItems = this.getValue()
+    arrayItems.splice(i, 1)
+    this.setValue(arrayItems)
   }
 
   deleteRowButtonClicked (e, i) {
