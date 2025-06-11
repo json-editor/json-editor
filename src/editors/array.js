@@ -80,7 +80,6 @@ export class ArrayEditor extends AbstractEditor {
 
   enable () {
     if (!this.always_disabled) {
-      this.refreshArrayButtons()
       this.refreshRowButtons()
       super.enable()
     }
@@ -534,6 +533,9 @@ export class ArrayEditor extends AbstractEditor {
     })
 
     need = this.refreshArrayButtons(isMinItems) || need
+
+    this.refreshButtonContainers(need)
+
     return need
   }
 
@@ -546,14 +548,8 @@ export class ArrayEditor extends AbstractEditor {
   }
 
   refreshValue (force) {
-  //    const oldi = this.value ? this.value.length : 0
-    /* Get the value for this editor */
     this.value = this.rows.map(editor => editor.getValue())
-
-    //    if (oldi !== this.value.length || force) {
-    const need = this.refreshRowButtons()
-    this.refreshButtonContainers(need)
-    //    }
+    this.refreshRowButtons()
     this.serialized = JSON.stringify(this.value)
   }
 
