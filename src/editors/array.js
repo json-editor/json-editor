@@ -80,14 +80,8 @@ export class ArrayEditor extends AbstractEditor {
 
   enable () {
     if (!this.always_disabled) {
-      this.setAvailability(this, false)
-
-      if (this.rows) {
-        this.rows.forEach(row => {
-          row.enable()
-          this.setAvailability(row, false)
-        })
-      }
+      this.refreshArrayButtons()
+      this.refreshRowButtons()
       super.enable()
     }
   }
@@ -439,17 +433,13 @@ export class ArrayEditor extends AbstractEditor {
 
     value.forEach((val, i) => this.setRowValue(val, i, initial))
 
-    let numrowsChanged = false
-
     for (let j = value.length; j < this.rows.length; j++) {
       this.destroyRow(this.rows[j])
       this.rows[j] = null
-      numrowsChanged = true
     }
     this.rows = this.rows.slice(0, value.length)
 
-    this.refreshValue()
-    if (numrowsChanged || initial) this.refreshRowButtons()
+    this.refreshValue(initial)
 
     if (this.tabs) {
       /* Set the active tab */
@@ -463,6 +453,7 @@ export class ArrayEditor extends AbstractEditor {
   }
 
   setButtonState (element, display, hide) {
+    if (!element) return
     const buttonStateMode = hide ? -1 : (this.options.button_state_mode || this.jsoneditor.options.button_state_mode)
 
     switch (buttonStateMode) {
@@ -555,13 +546,14 @@ export class ArrayEditor extends AbstractEditor {
   }
 
   refreshValue (force) {
-    const oldi = this.value ? this.value.length : 0
+  //    const oldi = this.value ? this.value.length : 0
     /* Get the value for this editor */
     this.value = this.rows.map(editor => editor.getValue())
 
-    if (oldi !== this.value.length || force) {
-      this.refreshRowButtons()
-    }
+    //    if (oldi !== this.value.length || force) {
+    const need = this.refreshRowButtons()
+    this.refreshButtonContainers(need)
+    //    }
     this.serialized = JSON.stringify(this.value)
   }
 

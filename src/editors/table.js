@@ -101,6 +101,7 @@ export class TableEditor extends ArrayEditor {
   }
 
   getElementEditor (i, ignore) {
+    const editorId = this.getEditorId(i)
     const schemaCopy = extend({}, this.schema.items)
     const editor = this.jsoneditor.getEditorClass(schemaCopy, this.jsoneditor)
     const row = this.row_holder.appendChild(this.theme.getTableRow())
@@ -114,12 +115,14 @@ export class TableEditor extends ArrayEditor {
       jsoneditor: this.jsoneditor,
       schema: schemaCopy,
       container: holder,
-      path: `${this.path}.${i}`,
+      path: `${this.path}.${editorId}`,
       parent: this,
       compact: true,
       table_row: true
     })
 
+    ret.arrayItemId = editorId
+    ret.arrayItemIndex = i
     ret.preBuild()
     if (!ignore) {
       ret.build()
@@ -138,6 +141,11 @@ export class TableEditor extends ArrayEditor {
 
   setActiveItem (i) {
     // We don't have the concept of an active item
+    this.refreshTabs(true)
+  }
+
+  setValue (i, j) {
+    super.setValue(i, j)
   }
 
   destroy () {
