@@ -555,7 +555,7 @@ export class bootstrap4Theme extends AbstractTheme {
   }
 
   removeInputError (input) {
-    if (!input.errmsg) return
+    if (!input?.errmsg) return
     input.errmsg.style.display = 'none'
     input.controlgroup.classList.remove('is-invalid')
   }
