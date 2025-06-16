@@ -96,6 +96,38 @@ export class FastModArrayEditor extends ArrayEditor {
     this._moveRow(from, to)
   }
 
+  // The errors have the true schema path in them
+  // We, of course, do not! So we have to change all the
+  // messages that pertain to sub-parts of this to see the
+  // 'fake' path - then they'll properly match - we hope.
+  showValidationErrors (errors) {
+    const myPath = `${this.path}.`
+    const l = myPath.length
+    const mappedErrors = errors.map(error => {
+      if (error.path.startsWith(myPath) && error.path.length > l) {
+        const errorPathTail = error.path.substring(l)
+        const schemaIndex = Number.parseInt(errorPathTail)
+        if (isNaN(schemaIndex)) {
+          // eslint-disable-next-line no-console
+          console.error(`unexpected non-index in error ${error}`)
+          return error
+        }
+        const row = this.rows[schemaIndex]
+        const fakeIndex = row.arrayItemId ?? NaN
+        if (isNaN(fakeIndex)) {
+          // eslint-disable-next-line no-console
+          console.error(`unexpected non-index in editor ID ${row.arrayItemId} (index: ${schemaIndex})`)
+          return error
+        }
+        if (schemaIndex !== fakeIndex) {
+          error.path = myPath + errorPathTail.replace('' + schemaIndex, '' + fakeIndex)
+        }
+      }
+      return error
+    })
+    super.showValidationErrors(mappedErrors)
+  }
+
   copyRow (from, to) {
     const arrayItems = this.getValue()
     const originalLength = arrayItems.length
@@ -116,12 +148,19 @@ export class FastModArrayEditor extends ArrayEditor {
     }
   }
 
+  //
+  // Because of how we handle index discovery,
+  // we have to hard-destroy rows always.
+  //
+  destroyRow (row, _) {
+    super.destroyRow(row, true)
+  }
+
   deleteRow (i, e) {
     if (i < 0 || i >= this.rows.length) return true
     this.getValue().splice(i, 1)
-    this.rows.splice(i, 1)
-    this.row_holder.removeChild(this.row_holder.children[i])
-    this.links_holder.removeChild(this.links_holder.children[i])
+    const [row] = this.rows.splice(i, 1)
+    this.destroyRow(row)
     this.refreshValue(true)
   }
 
@@ -157,5 +196,9 @@ export class FastModArrayEditor extends ArrayEditor {
     linkHolder.insertBefore(fromLink, toLink)
 
     this.refreshValue(true)
+  }
+
+  _refreshIndices () {
+    this.rows.forEach((r, i) => { r.arrayItemIndex = i })
   }
 }

@@ -432,20 +432,10 @@ export class ArrayEditor extends AbstractEditor {
 
     value.forEach((val, i) => this.setRowValue(val, i, initial))
 
-    for (let j = value.length; j < this.rows.length; j++) {
-      this.destroyRow(this.rows[j])
-      this.rows[j] = null
-    }
-    this.rows = this.rows.slice(0, value.length)
+    this.rows.splice(value.length).forEach(row => this.destroyRow(row))
 
     this.refreshValue(initial)
-
-    if (this.tabs) {
-      /* Set the active tab */
-      const currentActiveIndex = this.rows.findIndex(row => row.tab === this.active_tab)
-      this.setActiveItem(currentActiveIndex < 0 ? 0 : currentActiveIndex)
-    }
-
+    this.setActiveItem(-1)
     this.onChange()
 
     /* TODO: sortable */
@@ -548,7 +538,7 @@ export class ArrayEditor extends AbstractEditor {
   }
 
   refreshValue (force) {
-    this.value = this.rows.map(editor => editor.getValue())
+    this.value = this.rows.map((editor, i) => { editor.arrayItemIndex = i; return editor.getValue() })
     this.refreshRowButtons()
     this.serialized = JSON.stringify(this.value)
   }
@@ -574,24 +564,31 @@ export class ArrayEditor extends AbstractEditor {
   }
 
   setActiveItem (i) {
+    i = i ?? -1
+    if (i < 0) {
+      // Ensure that the current tab, if any, is actually live
+      if (this.active_tab && this.active_tab.offsetParent) return
+      i = 0
+    }
     this.active_tab = this.rows[i]?.tab || this.rows[i - 1]?.tab
     this.refreshTabs(true)
   }
 
   addRowButtons (i, controlsHolder) {
     /* Buttons to delete row, move row up, and move row down */
+    const row = this.rows[i]
     if (!this.hide_delete_buttons) {
-      this.rows[i].delete_button = this._createDeleteButton(i, controlsHolder)
+      row.delete_button = this._createDeleteButton(i, controlsHolder)
     }
 
     /* Button to copy an array element and add it as last element */
     if (this.show_copy_button) {
-      this.rows[i].copy_button = this._createCopyButton(i, controlsHolder)
+      row.copy_button = this._createCopyButton(i, controlsHolder)
     }
 
     if (!this.hide_move_buttons) {
-      this.rows[i].moveup_button = this._createMoveUpButton(i, controlsHolder)
-      this.rows[i].movedown_button = this._createMoveDownButton(i, controlsHolder)
+      row.moveup_button = this._createMoveUpButton(i, controlsHolder)
+      row.movedown_button = this._createMoveDownButton(i, controlsHolder)
     }
   }
 
@@ -600,39 +597,39 @@ export class ArrayEditor extends AbstractEditor {
   }
 
   addRow (value, initial) {
-    const i = this.rows.length
-
-    this.rows[i] = this.getElementEditor(i)
+    const newI = this.rows.length
+    const newRow = this.getElementEditor(newI)
+    this.rows.push(newRow)
 
     if (this.tabs_holder) {
-      this.rows[i].tab_text = document.createElement('span')
-      this.rows[i].tab_text.textContent = this.rows[i].getHeaderText()
+      newRow.tab_text = document.createElement('span')
+      newRow.tab_text.textContent = newRow.getHeaderText()
       if (this.schema.format === 'tabs-top') {
-        this.rows[i].tab = this.theme.getTopTab(this.rows[i].tab_text, this.getValidId(this.rows[i].path))
-        this.theme.addTopTab(this.tabs_holder, this.rows[i].tab)
+        newRow.tab = this.theme.getTopTab(newRow.tab_text, this.getValidId(newRow.path))
+        this.theme.addTopTab(this.tabs_holder, newRow.tab)
       } else {
-        this.rows[i].tab = this.theme.getTab(this.rows[i].tab_text, this.getValidId(this.rows[i].path))
-        this.theme.addTab(this.tabs_holder, this.rows[i].tab)
+        newRow.tab = this.theme.getTab(newRow.tab_text, this.getValidId(newRow.path))
+        this.theme.addTab(this.tabs_holder, newRow.tab)
       }
-      this.rows[i].tab.addEventListener('click', (e) => {
+      newRow.tab.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
         this.itemLinkClicked(e)
       })
-      this._supportDragDrop(this.rows[i].tab)
+      this._supportDragDrop(newRow.tab)
     } else {
-      this._supportDragDrop(this.rows[i].container, true)
+      this._supportDragDrop(newRow.container, true)
     }
 
-    this.addRowButtons(i, this.rows[i].title_controls || this.rows[i].array_controls)
+    this.addRowButtons(newI, newRow.title_controls || newRow.array_controls)
 
-    if (typeof value !== 'undefined') this.rows[i].setValue(value, initial)
-    if (!this.active_tab) this.setActiveItem(i)
+    if (typeof value !== 'undefined') newRow.setValue(value, initial)
+    if (!this.active_tab) this.setActiveItem(newI)
     this.refreshTabs()
 
-    this.row_cache.addItem(this.rows[i])
+    this.row_cache.addItem(newRow)
 
-    return this.rows[i]
+    return newRow
   }
 
   getValueIndex (e) {
