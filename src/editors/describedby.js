@@ -182,9 +182,12 @@ export class DescribedByEditor extends AbstractEditor {
   }
 
   showValidationErrors (errors) {
+    let has_errors = false
     this.editors.forEach(editor => {
       if (!editor) return
       editor.showValidationErrors(errors)
+      has_errors = has_errors || (editor.has_errors ?? false)
     })
+    this.has_errors = has_errors
   }
 }

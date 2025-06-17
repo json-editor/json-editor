@@ -223,6 +223,7 @@ export class MultiSelectEditor extends AbstractEditor {
     }
 
     const messages = errors.reduce(addMessage, [])
+    this.has_errors = messages.length > 0
 
     if (messages.length) {
       this.theme.addInputError(this.input || this.inputs, `${messages.join('. ')}.`)

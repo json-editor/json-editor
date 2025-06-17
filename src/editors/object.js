@@ -1387,9 +1387,12 @@ export class ObjectEditor extends AbstractEditor {
       }
     }
 
+    this.has_errors = myErrors.length > 0
+
     /* Show errors for child editors */
     Object.values(this.editors).forEach(editor => {
       editor.showValidationErrors(otherErrors)
+      this.has_errors = this.has_errors || (editor.has_errors ?? false)
     })
   }
 }

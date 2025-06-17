@@ -530,10 +530,12 @@ export class ArrayEditor extends AbstractEditor {
   }
 
   refreshButtonContainers (need) {
-    if (need && !this.collapsed) {
-      this.controls.style.display = 'inline-block'
-    } else {
-      this.controls.style.display = 'none'
+    if (this.controls) {
+      if (need && !this.collapsed) {
+        this.controls.style.display = 'inline-block'
+      } else {
+        this.controls.style.display = 'none'
+      }
     }
   }
 
@@ -1009,10 +1011,20 @@ export class ArrayEditor extends AbstractEditor {
       }
     }
 
+    let has_errors = myErrors.length > 0
     /* Show errors for child editors */
-    this.rows.forEach(row =>
+    this.rows.forEach(row => {
       row.showValidationErrors(otherErrors)
-    )
+      this.theme.markTabError(row)
+      if (row.has_errors) {
+        has_errors = true
+      }
+    })
+    this.has_errors = has_errors
+  }
+
+  markRowInError (row) {
+
   }
 }
 ArrayEditor.rules = rules

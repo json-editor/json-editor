@@ -632,6 +632,8 @@ export class AbstractTheme {
     }
   }
 
+  markTabError (_row) { }
+
   markTabInactive (row) {
     this.applyStyles(row.tab, {
       opacity: 0.5,

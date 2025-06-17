@@ -333,12 +333,8 @@ export class MultipleEditor extends AbstractEditor {
     return -1
   }
 
-  setValue (val, initial) {
-    val = this.applyConstFilter(val)
-
+  getType (val) {
     /* Determine type by getting the first one that validates */
-
-    const prevType = this.type
 
     let thisType = this.getDeclaredType(val)
 
@@ -397,6 +393,13 @@ export class MultipleEditor extends AbstractEditor {
       }
       thisType = finalI
     }
+    return thisType
+  }
+
+  setValue (val, initial) {
+    val = this.applyConstFilter(val)
+    const prevType = this.type
+    const thisType = this.getType(val)
 
     this.type = thisType
     this.switcher.value = this.display_text[thisType]
@@ -405,7 +408,6 @@ export class MultipleEditor extends AbstractEditor {
 
     if (typeChanged) {
       this.switchEditor(this.type)
-      this.editors[this.type].setValue(val, initial)
     }
 
     if (typeof val !== 'undefined') {
@@ -427,6 +429,7 @@ export class MultipleEditor extends AbstractEditor {
 
   showValidationErrors (errors) {
     /* oneOf and anyOf error paths need to remove the oneOf[i] part before passing to child editors */
+    let has_errors = false
     if (this.oneOf || this.anyOf) {
       const checkPart = this.oneOf ? 'oneOf' : 'anyOf'
       this.editors.forEach((editor, i) => {
@@ -445,13 +448,20 @@ export class MultipleEditor extends AbstractEditor {
           return newErrors
         }
         editor.showValidationErrors(errors.reduce(filterError, []))
+        if (i === this.type && editor.has_errors) {
+          has_errors = true
+        }
       })
     } else {
-      this.editors.forEach(editor => {
+      this.editors.forEach((editor, i) => {
         if (!editor) return
         editor.showValidationErrors(errors)
+        if (i === this.type && editor.has_errors) {
+          has_errors = true
+        }
       })
     }
+    this.has_errors = has_errors
   }
 
   addLinks () {
