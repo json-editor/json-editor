@@ -80,7 +80,13 @@ export class ArrayEditor extends AbstractEditor {
 
   enable () {
     if (!this.always_disabled) {
+      if (this.rows) {
+        this.rows.forEach(row => {
+          row.enable()
+        })
+      }
       this.refreshRowButtons()
+
       super.enable()
     }
   }
