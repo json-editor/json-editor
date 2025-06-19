@@ -113,6 +113,7 @@ export class FastModArrayEditor extends ArrayEditor {
           return error
         }
         const row = this.rows[schemaIndex]
+        if (!row) return error
         const fakeIndex = row.arrayItemId ?? NaN
         if (isNaN(fakeIndex)) {
           // eslint-disable-next-line no-console
