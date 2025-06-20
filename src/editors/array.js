@@ -351,14 +351,12 @@ export class ArrayEditor extends AbstractEditor {
   }
 
   destroyRow (row, hard) {
-    const holder = row.container
     if (hard) {
       row.destroy()
-      if (holder.parentNode) holder.parentNode.removeChild(holder)
+      row.container.parentNode?.removeChild(row.container)
       if (this.checkParent(row.tab)) row.tab.parentNode.removeChild(row.tab)
     } else {
-      if (row.tab) row.tab.style.display = 'none'
-      holder.style.display = 'none'
+      this.removeRowFromUI(row)
       row.unregister()
     }
   }
@@ -407,20 +405,32 @@ export class ArrayEditor extends AbstractEditor {
   }
 
   setRowValue (val, i, initial) {
-    const cached_row = this.row_cache.getItemByIndexOrValue(i, val)
-
     if (this.rows[i]) {
-      /* TODO: don't set the row's value if it hasn't changed */
       this.rows[i].setValue(val, initial)
-    } else if (cached_row) {
-      this.rows[i] = cached_row
-      this.rows[i].setValue(val, initial)
-      this.rows[i].container.style.display = ''
-      if (this.rows[i].tab) this.rows[i].tab.style.display = ''
-      this.rows[i].register()
     } else {
-      this.addRow(val, initial)
+      // VERY important - for some caching strategies (e.g. fmarray) it is vital
+      // that the cached value is only retrieved if it will definitiely be used
+      const cached_row = this.row_cache.getItemByIndexOrValue(i, val)
+      if (cached_row) {
+        cached_row.arrayItemIndex = i
+        this.rows[i] = cached_row
+        this.rows[i].setValue(val, initial)
+        this.addRowToUI(this.rows[i])
+        this.rows[i].register()
+      } else {
+        this.addRow(val, initial)
+      }
     }
+  }
+
+  removeRowFromUI (row) {
+    if (row.tab) row.tab.style.display = 'none'
+    row.container.style.display = 'none'
+  }
+
+  addRowToUI (row) {
+    row.container.style.display = ''
+    if (row.tab) row.tab.style.display = ''
   }
 
   setValue (value = [], initial) {
@@ -562,8 +572,7 @@ export class ArrayEditor extends AbstractEditor {
       if (typeof this.rows[i].deactivateNonRequiredProperties === 'function') {
         this.rows[i].deactivateNonRequiredProperties(true)
       }
-      this.rows[i].container.style.display = ''
-      if (this.rows[i].tab) this.rows[i].tab.style.display = ''
+      this.addRowToUI(this.rows[i])
       this.rows[i].register()
     } else {
       editor = this.addRow()

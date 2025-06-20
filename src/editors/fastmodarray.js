@@ -30,21 +30,37 @@ import { findIndexInParent } from '../utilities.js'
  */
 
 /*
- * The cost of doing business - we disable the cache (for now)
+ * The cache is a stack cache that bears no relation to the order of items in the array
+ * (unlike that of the superclass)
  */
-class NullRowCache {
+class StackRowCache {
+  constructor () {
+    this.stack = []
+  }
+
   replaceAll (rows) { }
 
+  // We use the cache differently
   addItem (row) { }
+
+  pushItem (row) {
+    this.stack.push(row)
+    // eslint-disable-next-line no-console
+    console.log('Stack size: ', this.stack.length)
+  }
 
   removeItem (id) { }
 
   getItemById (id) {
-    return undefined
+    // eslint-disable-next-line no-console
+    console.log('Stack size: ', this.stack.length)
+    return this.stack.pop()
   }
 
   getItemByIndexOrValue (index, _value) {
-    return undefined
+    // eslint-disable-next-line no-console
+    console.log('Stack size: ', this.stack.length)
+    return this.stack.pop()
   }
 
   trimItems (max) {
@@ -54,7 +70,7 @@ class NullRowCache {
 
 export class FastModArrayEditor extends ArrayEditor {
   createRowCache () {
-    return new NullRowCache()
+    return new StackRowCache()
   }
 
   preBuild () {
@@ -149,19 +165,30 @@ export class FastModArrayEditor extends ArrayEditor {
     }
   }
 
-  //
-  // Because of how we handle index discovery,
-  // we have to hard-destroy rows always.
-  //
-  destroyRow (row, _) {
-    super.destroyRow(row, true)
+  destroyRow (row, hard) {
+    super.destroyRow(row, hard)
+    if (!hard) {
+      this.row_cache.pushItem(row)
+    }
+  }
+
+  removeRowFromUI (row) {
+    this.row_holder.removeChild(row.container)
+    this.links_holder.removeChild(row.tab)
+  }
+
+  addRowToUI (row) {
+    const beforeRow = this.row_holder.children[row.arrayItemIndex]
+    const beforeLink = this.links_holder.children[row.arrayItemIndex]
+    this.row_holder.insertBefore(row.container, beforeRow)
+    this.links_holder.insertBefore(row.tab, beforeLink)
   }
 
   deleteRow (i, e) {
     if (i < 0 || i >= this.rows.length) return true
     this.getValue().splice(i, 1)
     const [row] = this.rows.splice(i, 1)
-    this.destroyRow(row)
+    this.destroyRow(row, false)
     this.refreshValue(true)
   }
 
