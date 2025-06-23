@@ -415,12 +415,15 @@ export class JSONEditor {
   showValidationErrors (errorList) {
     const errors = errorList ?? this.validate()
 
+    let has_errors = false
     Object.values(this.editors).forEach(editor => {
       if (editor) {
         editor.is_dirty = true
         editor.showValidationErrors(errors)
+        has_errors = has_errors || (editor.has_errors ?? false)
       }
     })
+    this.has_errors = has_errors
   }
 }
 

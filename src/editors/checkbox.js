@@ -95,6 +95,15 @@ export class CheckboxEditor extends AbstractEditor {
   }
 
   showValidationErrors (errors) {
+    const addMessage = (messages, error) => {
+      if (error.path === this.path) {
+        messages.push(error.message)
+      }
+      return messages
+    }
+    const messages = errors.reduce(addMessage, [])
+    this.has_errors = messages.length > 0
+
     const showErrors = this.jsoneditor.options.show_errors
     const changeOrInteraction = showErrors === 'change' || showErrors === 'interaction'
     const never = showErrors === 'never'
@@ -107,13 +116,6 @@ export class CheckboxEditor extends AbstractEditor {
       return
     }
 
-    const addMessage = (messages, error) => {
-      if (error.path === this.path) {
-        messages.push(error.message)
-      }
-      return messages
-    }
-    const messages = errors.reduce(addMessage, [])
     this.input.controlgroup = this.control
 
     if (messages.length) {

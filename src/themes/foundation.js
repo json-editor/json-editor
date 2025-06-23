@@ -102,10 +102,10 @@ export class foundationTheme extends AbstractTheme {
   }
 
   removeInputError (input) {
-    if (!input.group) {
+    if (!input?.group) {
       delete this.queuedInputErrorText
     }
-    if (!input.errmsg) return
+    if (!input?.errmsg) return
     input.group.classList.remove('error')
     input.errmsg.style.display = 'none'
   }
@@ -453,7 +453,7 @@ export class foundation6Theme extends foundation5Theme {
   }
 
   removeInputError (input) {
-    if (!input.errmsg) return
+    if (!input?.errmsg) return
     input.classList.remove('is-invalid-input')
     if (input.errmsg.parentNode) {
       input.errmsg.parentNode.removeChild(input.errmsg)

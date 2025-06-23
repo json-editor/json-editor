@@ -315,7 +315,7 @@ export class tailwindTheme extends AbstractTheme {
   }
 
   removeInputError (input) {
-    if (!input.errmsg) return
+    if (!input?.errmsg) return
     input.errmsg.style.display = 'none'
     input.controlgroup.classList.remove('text-red-600')
     input.controlgroup.classList.remove('has-error')
