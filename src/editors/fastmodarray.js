@@ -45,21 +45,15 @@ class StackRowCache {
 
   pushItem (row) {
     this.stack.push(row)
-    // eslint-disable-next-line no-console
-    console.log('Stack size: ', this.stack.length)
   }
 
   removeItem (id) { }
 
   getItemById (id) {
-    // eslint-disable-next-line no-console
-    console.log('Stack size: ', this.stack.length)
     return this.stack.pop()
   }
 
   getItemByIndexOrValue (index, _value) {
-    // eslint-disable-next-line no-console
-    console.log('Stack size: ', this.stack.length)
     return this.stack.pop()
   }
 
