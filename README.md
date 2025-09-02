@@ -201,9 +201,13 @@ Here are all the available options:
     <td><code>false</code></td>
   </tr>
   <tr>
-  <tr>
     <td>array_controls_top</td>
     <td>If <code>true</code>, array controls (add, delete etc) will be displayed at top of list.</td>
+    <td><code>false</code></td>
+  </tr>
+  <tr>
+    <td>table_controls_left</td>
+    <td>If <code>true</code>, table controls (add, delete etc) will be displayed at left of list.</td>
     <td><code>false</code></td>
   </tr>
   <tr>
@@ -1251,6 +1255,7 @@ Editors can accept options which alter the behavior in some way.
 * `disable_edit_json` - If set to true, the Edit JSON button will be hidden (works for objects)
 * `disable_properties` - If set to true, the Edit Properties button will be hidden (works for objects)
 * `array_controls_top` - If set to true, array controls (add, delete etc) will be displayed at top of list (works for arrays)
+* `table_controls_left` - If set to true, table controls (add, delete etc) will be displayed at left of list (works for tables)
 * `enum` - See [Enum options](#enum-options)
 * `enum_titles` - An array of display values to use for select box options in the same order as defined with the `enum` keyword. Works with schema using enum values.
 * `expand_height` - If set to true, the input will auto expand/contract to fit the content.  Works best with textareas.
