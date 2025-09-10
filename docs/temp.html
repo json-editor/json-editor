@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Light / Dark Mode Example</title>
+
+  <style>
+    /* 1) CSS variables (defaults = light) */
+    :root {
+      --bg: #ffffff;
+      --text: #111111;
+      --muted: #555555;
+      --card: #f5f5f5;
+      --accent: #0066ff;
+      --transition-duration: 260ms;
+    }
+
+    /* 2) Dark theme variables */
+    :root[data-theme="dark"] {
+      --bg: #0b0d11;
+      --text: #e6eef8;
+      --muted: #a8b3c2;
+      --card: #0f1220;
+      --accent: #4ea3ff;
+    }
+
+    /* 3) Respect system preference if user hasn't chosen yet */
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme]) {
+        --bg: #0b0d11;
+        --text: #e6eef8;
+        --muted: #a8b3c2;
+        --card: #0f1220;
+        --accent: #4ea3ff;
+      }
+    }
+
+    /* 4) Base layout */
+    html,body {
+      height: 100%;
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      transition: background var(--transition-duration), color var(--transition-duration);
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 4rem auto;
+      padding: 1.5rem;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(2,6,23,0.12);
+    }
+
+    h1 { margin-top: 0; }
+    p { color: var(--muted); line-height:1.6; }
+
+    .card {
+      background: var(--card);
+      padding: 1rem;
+      border-radius: 10px;
+      margin-top: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: background var(--transition-duration);
+    }
+
+    /* Toggle button styling */
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.4rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,0.06);
+      background: transparent;
+      cursor: pointer;
+      user-select: none;
+      transition: background var(--transition-duration), border-color var(--transition-duration);
+      font-weight: 600;
+    }
+
+    .theme-toggle:focus {
+      outline: 3px solid rgba(0,102,255,0.18);
+      outline-offset: 3px;
+    }
+
+    .switch {
+      height: 20px;
+      width: 40px;
+      background: rgba(0,0,0,0.08);
+      border-radius: 999px;
+      position: relative;
+    }
+
+    .knob {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      height: 16px;
+      width: 16px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      transition: transform var(--transition-duration);
+    }
+
+    /* move knob when dark */
+    :root[data-theme="dark"] .knob {
+      transform: translateX(20px);
+      background: #0b1624;
+    }
+
+    /* a small accent color on focus */
+    .theme-toggle[aria-pressed="true"] {
+      border-color: rgba(78,163,255,0.34);
+      box-shadow: 0 2px 8px rgba(78,163,255,0.06);
+    }
+
+    /* Responsive niceties */
+    @media (max-width:600px) {
+      .container { margin: 2rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header style="display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <h1>Light / Dark Mode</h1>
+        <p>Example implementing a toggle that persists your choice.</p>
+      </div>
+
+      <!-- Toggle button; aria-pressed indicates current state -->
+      <button id="themeToggle" class="theme-toggle" aria-pressed="false" aria-label="Toggle light and dark mode">
+        <span class="switch" aria-hidden="true">
+          <span class="knob"></span>
+        </span>
+        <span id="toggleLabel">Light</span>
+      </button>
+    </header>
+
+    <section class="card">
+      <h2>Why this approach?</h2>
+      <p>
+        It uses <code>data-theme="dark"</code> on the <code>:root</code> (html element) to switch variables,
+        which makes it easy to theme more parts of your site later. It also falls back to the user's system
+        preference via <code>prefers-color-scheme</code>.
+      </p>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      const STORAGE_KEY = 'theme'; // 'light' | 'dark'
+      const root = document.documentElement; // <html>
+      const toggle = document.getElementById('themeToggle');
+      const label = document.getElementById('toggleLabel');
+
+      // 1) Apply stored theme or leave unset to allow prefers-color-scheme
+      function applyTheme(theme) {
+        if (theme === 'dark') {
+          root.setAttribute('data-theme', 'dark');
+          toggle.setAttribute('aria-pressed', 'true');
+          label.textContent = 'Dark';
+        } else if (theme === 'light') {
+          root.setAttribute('data-theme', 'light'); // optional: keeps consistent
+          toggle.setAttribute('aria-pressed', 'false');
+          label.textContent = 'Light';
+        } else {
+          // Remove attribute to let prefers-color-scheme take effect
+          root.removeAttribute('data-theme');
+          const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          toggle.setAttribute('aria-pressed', prefersDark ? 'true' : 'false');
+          label.textContent = prefersDark ? 'Dark' : 'Light';
+        }
+      }
+
+      // 2) Load from localStorage
+      const saved = localStorage.getItem(STORAGE_KEY); // 'light' | 'dark' | null
+      applyTheme(saved);
+
+      // 3) Toggle function
+      function toggleTheme() {
+        // If a theme is explicitly set, flip it; otherwise infer from prefers-color-scheme
+        const current = localStorage.getItem(STORAGE_KEY);
+        let next;
+        if (current === 'dark') next = 'light';
+        else if (current === 'light') next = 'dark';
+        else {
+          // no explicit choice: use computed preference
+          const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          next = prefersDark ? 'light' : 'dark';
+        }
+
+        // Save and apply
+        localStorage.setItem(STORAGE_KEY, next);
+        applyTheme(next);
+      }
+
+      // 4) Handle button click and keyboard activation
+      toggle.addEventListener('click', toggleTheme);
+      toggle.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleTheme();
+        }
+      });
+
+      // 5) Optional: listen to system preference changes if user hasn't set a theme
+      window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        if (!localStorage.getItem(STORAGE_KEY)) {
+          applyTheme(null); // re-evaluate
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
