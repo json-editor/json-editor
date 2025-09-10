@@ -60,6 +60,7 @@
                 are any.</label><br>
             <textarea id='validate-textarea' readonly disabled class='form-control'></textarea>
             <h2>Options</h2>
+            <!--
             <div>
                 <label for="boolean-options-select">Boolean options</label><br>
                 <select multiple size="15" id="boolean-options-select" class="form-control browser-default">
@@ -84,6 +85,29 @@
                     <option value='disable_array_delete_last_row'>Disable array delete last row buttons</option>
                 </select>
             </div>
+            -->
+            <div id="boolean-options-select" style="height:320px; overflow:auto; border:1px solid #ccc; padding:8px;">
+            <label><input type="checkbox" value="use_default_values"> Default values based on the "type"</label><br>
+            <label><input type="checkbox" value="use_name_attributes"> Use name attributes</label><br>
+            <label><input type="checkbox" value="prompt_before_delete"> Prompt before delete</label><br>
+            <label><input type="checkbox" value='case_sensitive_property_search'>Case sensitive property search</label><br>
+            <label><input type="checkbox" value='required_by_default'>Object properties required by default</label><br>
+            <label><input type="checkbox" value='display_required_only'>Only show required properties by default</label><br>
+            <label><input type="checkbox" value='show_opt_in'>Show optional properties (with checkbox)</label><br>
+            <label><input type="checkbox" value='no_additional_properties'>No additional object properties</label><br>
+            <label><input type="checkbox" value='ajax'>Allow loading schemas via Ajax</label><br>
+            <label><input type="checkbox" value='disable_edit_json'>Disable "Edit JSON" buttons</label><br>
+            <label><input type="checkbox" value='disable_collapse'>Disable collapse buttons</label><br>
+            <label><input type="checkbox" value='disable_properties'>Disable properties buttons</label><br>
+            <label><input type="checkbox"value='disable_array_add'>Disable array add buttons</label><br>
+            <label><input type="checkbox"value='disable_array_reorder'>Disable array move buttons</label><br>
+            <label><input type="checkbox" value='disable_array_delete'>Disable array delete buttons</label><br>
+            <label><input type="checkbox" value='enable_array_copy'>Add copy buttons to arrays</label><br>
+            <label><input type="checkbox" value='array_controls_top'>Array controls will be displayed at top of list</label><br>
+            <label><input type="checkbox" value='disable_array_delete_all_rows'>Disable array delete all rows buttons</label><br>
+            <label><input type="checkbox"         value='disable_array_delete_last_row'>Disable array delete last row buttons</label><br>
+                
+          </div>
             <div>
                 <label for="theme-select">theme</label><br>
                 <select id='theme-select' name="theme" class='form-control browser-default'>
@@ -143,7 +167,6 @@
                     <option value='mathjs'>Math.js</option>
                     <option value='cleavejs'>Cleave.js</option>
                 </select>
-                */
             </div>
         </div>
     </div>
@@ -296,7 +319,7 @@
   var jsoneditor = null
   var directLink = document.querySelector('#direct-link')
 
-  var booleanOptionsSelect = document.querySelector('#boolean-options-select')
+  //var booleanOptionsSelect = document.querySelector('#boolean-options-select')
   var head = document.getElementsByTagName('head')[0]
   var iconlibSelect = document.querySelector('#iconlib-select')
   var iconlibLink = document.querySelector('#iconlib-link')
@@ -422,14 +445,11 @@
     showErrorsSelect.value = data.options.show_errors
 
     // boolean values
-    var booleanOptions = booleanOptionsSelect.children
-    for (var i = 0; i < booleanOptions.length; i++) {
-      var booleanValue = booleanOptions[i]
-      if (data.options[booleanValue.value]) {
-        booleanValue.selected = true
-      }
-    }
-
+    var container = document.getElementById('boolean-options-select')
+    var checkboxes = container.querySelectorAll('input[type=checkbox]')
+    checkboxes.forEach(function (cb) {
+      cb.checked = !!data.options[cb.value]
+    })
     // libs
     var libMapping = {
       ace_editor: {
@@ -514,13 +534,11 @@
 
     if (data.selectedLibs || data.unselectedLibs) {
 
-      var booleanOptions = booleanOptionsSelect.children
-      for (var i = 0; i < booleanOptions.length; i++) {
-        var booleanValue = booleanOptions[i]
-        if (data.options[booleanValue.value]) {
-          booleanValue.selected = true
-        }
-      }
+      var container = document.getElementById('boolean-options-select')
+      var checkboxes = container.querySelectorAll('input[type=checkbox]')
+      checkboxes.forEach(function (cb) {
+        cb.checked = !!data.options[cb.value]
+      })
 
       var libSelectChildren = libSelect.children
       for (var i = 0; i < libSelectChildren.length; i++) {
@@ -641,13 +659,21 @@
     refreshUI()
   })
 
-  booleanOptionsSelect.addEventListener('change', function () {
+  /*booleanOptionsSelect.addEventListener('change', function () {
     var booleanOptions = this.children
     for (var i = 0; i < booleanOptions.length; i++) {
       data.options[booleanOptions[i].value] = booleanOptions[i].selected
     }
     refreshUI()
   })
+  */
+  // delegate change events to checkboxes inside the container
+  document.getElementById('boolean-options-select').addEventListener('change', function (e) {
+  if (e.target && e.target.type === 'checkbox') {
+    data.options[e.target.value] = e.target.checked
+    refreshUI()
+  }
+})
 
   libSelect.addEventListener('change', function () {
     data.selectedLibs = []
