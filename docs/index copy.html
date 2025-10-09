@@ -31,6 +31,28 @@
     color: #e4e4e4;
     border: none;
   }
+
+  .checkbox-list {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background: white;
+  }
+
+  body.dark-mode .checkbox-list {
+    background-color: #464646;
+    border-color: #444;
+  }
+
+  .checkbox-item {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .checkbox-item input[type="checkbox"] {
+    margin-right: 8px;
+  }
 </style>
 </head>
 <body>
@@ -61,54 +83,68 @@
                 are any.</label><br>
             <textarea id='validate-textarea' readonly disabled class='form-control'></textarea>
             <h2>Options</h2>
-            <!--
             <div>
-                <label for="boolean-options-select">Boolean options</label><br>
-                <select multiple size="15" id="boolean-options-select" class="form-control browser-default">
-                    <option value='use_default_values'>Default values based on the "type"</option>
-                    <option value='use_name_attributes'>Use name attributes</option>
-                    <option value='prompt_before_delete'>Prompt before delete</option>
-                    <option value='case_sensitive_property_search'>Case sensitive property search</option>
-                    <option value='required_by_default'>Object properties required by default</option>
-                    <option value='display_required_only'>Only show required properties by default</option>
-                    <option value='show_opt_in'>Show optional properties (with checkbox)</option>
-                    <option value='no_additional_properties'>No additional object properties</option>
-                    <option value='ajax'>Allow loading schemas via Ajax</option>
-                    <option value='disable_edit_json'>Disable "Edit JSON" buttons</option>
-                    <option value='disable_collapse'>Disable collapse buttons</option>
-                    <option value='disable_properties'>Disable properties buttons</option>
-                    <option value='disable_array_add'>Disable array add buttons</option>
-                    <option value='disable_array_reorder'>Disable array move buttons</option>
-                    <option value='disable_array_delete'>Disable array delete buttons</option>
-                    <option value='enable_array_copy'>Add copy buttons to arrays</option>
-                    <option value='array_controls_top'>Array controls will be displayed at top of list</option>
-                    <option value='disable_array_delete_all_rows'>Disable array delete all rows buttons</option>
-                    <option value='disable_array_delete_last_row'>Disable array delete last row buttons</option>
-                </select>
+                <label>Boolean options</label><br>
+                <div id='boolean-options-checkboxes' class='checkbox-list'>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="use_default_values"> Default values based on the "type"
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="use_name_attributes"> Use name attributes
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="prompt_before_delete"> Prompt before delete
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="case_sensitive_property_search"> Case sensitive property search
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="required_by_default"> Object properties required by default
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="display_required_only"> Only show required properties by default
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="show_opt_in"> Show optional properties (with checkbox)
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="no_additional_properties"> No additional object properties
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="ajax"> Allow loading schemas via Ajax
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="disable_edit_json"> Disable "Edit JSON" buttons
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="disable_collapse"> Disable collapse buttons
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="disable_properties"> Disable properties buttons
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="disable_array_add"> Disable array add buttons
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="disable_array_reorder"> Disable array move buttons
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="disable_array_delete"> Disable array delete buttons
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="enable_array_copy"> Add copy buttons to arrays
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="array_controls_top"> Array controls will be displayed at top of list
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="disable_array_delete_all_rows"> Disable array delete all rows buttons
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="disable_array_delete_last_row"> Disable array delete last row buttons
+                    </label>
+                </div>
             </div>
-            -->
-            <div id="boolean-options-select" style="height:320px; overflow:auto; border:1px solid #ccc; padding:8px;">
-            <label><input type="checkbox" value="use_default_values"> Default values based on the "type"</label><br>
-            <label><input type="checkbox" value="use_name_attributes"> Use name attributes</label><br>
-            <label><input type="checkbox" value="prompt_before_delete"> Prompt before delete</label><br>
-            <label><input type="checkbox" value='case_sensitive_property_search'>Case sensitive property search</label><br>
-            <label><input type="checkbox" value='required_by_default'>Object properties required by default</label><br>
-            <label><input type="checkbox" value='display_required_only'>Only show required properties by default</label><br>
-            <label><input type="checkbox" value='show_opt_in'>Show optional properties (with checkbox)</label><br>
-            <label><input type="checkbox" value='no_additional_properties'>No additional object properties</label><br>
-            <label><input type="checkbox" value='ajax'>Allow loading schemas via Ajax</label><br>
-            <label><input type="checkbox" value='disable_edit_json'>Disable "Edit JSON" buttons</label><br>
-            <label><input type="checkbox" value='disable_collapse'>Disable collapse buttons</label><br>
-            <label><input type="checkbox" value='disable_properties'>Disable properties buttons</label><br>
-            <label><input type="checkbox"value='disable_array_add'>Disable array add buttons</label><br>
-            <label><input type="checkbox"value='disable_array_reorder'>Disable array move buttons</label><br>
-            <label><input type="checkbox" value='disable_array_delete'>Disable array delete buttons</label><br>
-            <label><input type="checkbox" value='enable_array_copy'>Add copy buttons to arrays</label><br>
-            <label><input type="checkbox" value='array_controls_top'>Array controls will be displayed at top of list</label><br>
-            <label><input type="checkbox" value='disable_array_delete_all_rows'>Disable array delete all rows buttons</label><br>
-            <label><input type="checkbox"         value='disable_array_delete_last_row'>Disable array delete last row buttons</label><br>
-                
-          </div>
             <div>
                 <label for="theme-select">theme</label><br>
                 <select id='theme-select' name="theme" class='form-control browser-default'>
@@ -151,23 +187,39 @@
                 </select>
             </div>
             <div>
-              
-                <label for="lib-select"
-                       title="It's recommended that you click the Direct Link after changing these options">Include
-                    External Library</label><br>
-                <select multiple size="10" id='lib-select' class='form-control browser-default'
-                        title="It's reccomended that you click the Direct Link after changing these options">
-                    <option value='ace_editor'>Ace Editor</option>
-                    <option value='choices'>Choices</option>
-                    <option value='sceditor'>SCEditor</option>
-                    <option value='simplemde'>SimpleMDE</option>
-                    <option value='select2'>Select2</option>
-                    <option value='selectize'>Selectize</option>
-                    <option value='flatpickr'>Flatpickr</option>
-                    <option value='signature_pad'>Signature Pad</option>
-                    <option value='mathjs'>Math.js</option>
-                    <option value='cleavejs'>Cleave.js</option>
-                </select>
+                <label title="It's recommended that you click the Direct Link after changing these options">Include External Library</label><br>
+                <div id='lib-checkboxes' class='checkbox-list'>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="ace_editor"> Ace Editor
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="choices"> Choices
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="sceditor"> SCEditor
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="simplemde"> SimpleMDE
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="select2"> Select2
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="selectize"> Selectize
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="flatpickr"> Flatpickr
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="signature_pad"> Signature Pad
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="mathjs"> Math.js
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" value="cleavejs"> Cleave.js
+                    </label>
+                </div>
             </div>
         </div>
     </div>
@@ -303,8 +355,6 @@
     }
   }
 
-  // parse url -> merge options -> refreshUI() -> initJsoneditor() -> direct link
-
   /* ------------------------------------------------------------------- data */
 
   var data = {}
@@ -320,11 +370,11 @@
   var jsoneditor = null
   var directLink = document.querySelector('#direct-link')
 
-  //var booleanOptionsSelect = document.querySelector('#boolean-options-select')
+  var booleanOptionsCheckboxes = document.querySelector('#boolean-options-checkboxes')
   var head = document.getElementsByTagName('head')[0]
   var iconlibSelect = document.querySelector('#iconlib-select')
   var iconlibLink = document.querySelector('#iconlib-link')
-  var libSelect = document.querySelector('#lib-select')
+  var libCheckboxes = document.querySelector('#lib-checkboxes')
   var jsonEditorForm = document.querySelector('#json-editor-form')
   var objectLayoutSelect = document.querySelector('#object-layout-select')
   var setSchema = document.querySelector('#setschema')
@@ -446,11 +496,16 @@
     showErrorsSelect.value = data.options.show_errors
 
     // boolean values
-    var container = document.getElementById('boolean-options-select')
-    var checkboxes = container.querySelectorAll('input[type=checkbox]')
-    checkboxes.forEach(function (cb) {
-      cb.checked = !!data.options[cb.value]
-    })
+    var booleanCheckboxes = booleanOptionsCheckboxes.querySelectorAll('input[type="checkbox"]')
+    for (var i = 0; i < booleanCheckboxes.length; i++) {
+      var checkbox = booleanCheckboxes[i]
+      if (data.options[checkbox.value]) {
+        checkbox.checked = true
+      } else {
+        checkbox.checked = false
+      }
+    }
+
     // libs
     var libMapping = {
       ace_editor: {
@@ -534,17 +589,10 @@
     }
 
     if (data.selectedLibs || data.unselectedLibs) {
-
-      var container = document.getElementById('boolean-options-select')
-      var checkboxes = container.querySelectorAll('input[type=checkbox]')
-      checkboxes.forEach(function (cb) {
-        cb.checked = !!data.options[cb.value]
-      })
-
-      var libSelectChildren = libSelect.children
-      for (var i = 0; i < libSelectChildren.length; i++) {
-        var child = libSelectChildren[i]
-        child.selected = data.selectedLibs.includes(child.value)
+      // Update checkboxes based on selected libs
+      var checkboxInputs = libCheckboxes.querySelectorAll('input[type="checkbox"]')
+      for (var i = 0; i < checkboxInputs.length; i++) {
+        checkboxInputs[i].checked = data.selectedLibs.includes(checkboxInputs[i].value)
       }
 
       // remove libraries
@@ -660,36 +708,29 @@
     refreshUI()
   })
 
-  /*booleanOptionsSelect.addEventListener('change', function () {
-    var booleanOptions = this.children
-    for (var i = 0; i < booleanOptions.length; i++) {
-      data.options[booleanOptions[i].value] = booleanOptions[i].selected
+  booleanOptionsCheckboxes.addEventListener('change', function (e) {
+    if (e.target.type === 'checkbox') {
+      data.options[e.target.value] = e.target.checked
+      refreshUI()
     }
-    refreshUI()
   })
-  */
-  // delegate change events to checkboxes inside the container
-  document.getElementById('boolean-options-select').addEventListener('change', function (e) {
-  if (e.target && e.target.type === 'checkbox') {
-    data.options[e.target.value] = e.target.checked
-    refreshUI()
-  }
-})
 
-  libSelect.addEventListener('change', function () {
-    data.selectedLibs = []
-    data.unselectedLibs = []
+  libCheckboxes.addEventListener('change', function (e) {
+    if (e.target.type === 'checkbox') {
+      data.selectedLibs = []
+      data.unselectedLibs = []
 
-    var libs = this.children
+      var checkboxes = libCheckboxes.querySelectorAll('input[type="checkbox"]')
 
-    for (var i = 0; i < libs.length; i++) {
-      if (libs[i].selected) {
-        data.selectedLibs.push(libs[i].value)
-      } else {
-        data.unselectedLibs.push(libs[i].value)
+      for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+          data.selectedLibs.push(checkboxes[i].value)
+        } else {
+          data.unselectedLibs.push(checkboxes[i].value)
+        }
       }
+      refreshUI()
     }
-    refreshUI()
   })
 
   parseUrl()
@@ -706,7 +747,6 @@
       modeToggle.textContent = "🌙 Dark Mode";
     }
   });
-0
 </script>
 </body>
 </html>
