@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>JSON Editor Interactive Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.14.0/src-noconflict/ace.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
+    <link rel='stylesheet' id='theme-link'>
+    <link rel='stylesheet' id='iconlib-link'>
+    <style>
+        .search-container {
+            background: #f5f5f5;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #999;
+            font-size: 14px;
+        }
+
+        .search-stats {
+            margin-top: 5px;
+            font-size: 13px;
+        }
+
+        .clear-btn {
+            background: #ddd;
+            border: 1px solid #999;
+            padding: 3px 10px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container grid-xl" style="padding-top: 15px; padding-bottom: 30px;">
+        <!-- Dynamic Search Feature -->
+        <div class="search-container">
+            <h3>🔍 Dynamic Search - Type to highlight</h3>
+            <div class="search-input-wrapper">
+                <input type="text" id="search-input" class="search-input"
+                    placeholder="Start typing to highlight matches in schema and output...">
+                <span class="search-icon">⌨️</span>
+            </div>
+            <div class="search-stats">
+                <span id="search-stats" class="match-counter">Ready to search</span>
+                <button class="clear-btn" id="clear-search-btn">Clear ✕</button>
+            </div>
+        </div>
+
+        <div class="row columns md:flex">
+            <div class='col-7 col-md-7 w-7/12'>
+                <h1>Editor</h1>
+                <p>Below is the editor generated from the JSON Schema.</p>
+                <div id="json-editor-form"></div>
+            </div>
+            <div class='col-5 col-md-5 w-5/12'>
+                <div>
+                    <a class="btn btn-primary" id="direct-link" title="preserves schema, value, and options">Direct
+                        Link</a>
+                    <a class="btn btn-secondary" href="?" title="reload editor with default example settings">Reset</a>
+                    <a class="btn btn-secondary" href="https://github.com/json-editor/json-editor" title="github"
+                        target="_blank">GitHub</a>
+                </div>
+                <h2>JSON Output</h2>
+                <p>You can also make changes to the JSON here and set the value in the editor by clicking "Update Form"
+                </p>
+                <label for="output-textarea"></label>
+                <button class='btn btn-primary btn-block' id='setvalue'>Update Form</button>
+                <textarea id='output-textarea' rows="15" style="width: 100%; font-family: monospace;"
+                    class='form-control'></textarea>
+                <h2>Validation</h2>
+                <label for="validate-textarea">This will update whenever the form changes to show validation errors if
+                    there
+                    are any.</label><br>
+                <textarea id='validate-textarea' readonly disabled class='form-control'></textarea>
+                <h2>Options</h2>
+                <div>
+                    <label for="boolean-options-select">Boolean options</label><br>
+                    <select multiple size="15" id="boolean-options-select" class="form-control browser-default">
+                        <option value='use_default_values'>Default values based on the "type"</option>
+                        <option value='use_name_attributes'>Use name attributes</option>
+                        <option value='prompt_before_delete'>Prompt before delete</option>
+                        <option value='case_sensitive_property_search'>Case sensitive property search</option>
+                        <option value='required_by_default'>Object properties required by default</option>
+                        <option value='display_required_only'>Only show required properties by default</option>
+                        <option value='show_opt_in'>Show optional properties (with checkbox)</option>
+                        <option value='no_additional_properties'>No additional object properties</option>
+                        <option value='ajax'>Allow loading schemas via Ajax</option>
+                        <option value='disable_edit_json'>Disable "Edit JSON" buttons</option>
+                        <option value='disable_collapse'>Disable collapse buttons</option>
+                        <option value='disable_properties'>Disable properties buttons</option>
+                        <option value='disable_array_add'>Disable array add buttons</option>
+                        <option value='disable_array_reorder'>Disable array move buttons</option>
+                        <option value='disable_array_delete'>Disable array delete buttons</option>
+                        <option value='enable_array_copy'>Add copy buttons to arrays</option>
+                        <option value='array_controls_top'>Array controls will be displayed at top of list</option>
+                        <option value='disable_array_delete_all_rows'>Disable array delete all rows buttons</option>
+                        <option value='disable_array_delete_last_row'>Disable array delete last row buttons</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="theme-select">theme</label><br>
+                    <select id='theme-select' name="theme" class='form-control browser-default'>
+                        <option value='barebones'>Barebones</option>
+                        <option value='bootstrap3'>Bootstrap 3</option>
+                        <option value='bootstrap4'>Bootstrap 4</option>
+                        <option value='bootstrap5'>Bootstrap 5</option>
+                        <option value='html'>HTML</option>
+                        <option value='spectre'>Spectre</option>
+                        <option value='tailwind'>Tailwind</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="iconlib-select">iconlib</label><br>
+                    <select id='iconlib-select' name="iconlib" class='form-control browser-default'>
+                        <option value='fontawesome3'>fontawesome 3</option>
+                        <option value='fontawesome4'>fontawesome 4</option>
+                        <option value='fontawesome5'>fontawesome 5</option>
+                        <option value='jqueryui'>jQuery UI</option>
+                        <option value='openiconic'>Open Iconic</option>
+                        <option value='spectre'>Spectre</option>
+                        <option value='bootstrap'>Bootstrap</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="object-layout-select">Object Layout</label><br>
+                    <select id='object-layout-select' class='form-control browser-default'>
+                        <option value='normal'>normal</option>
+                        <option value='grid'>grid</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="show-errors-select">Show Errors</label><br>
+                    <select id='show-errors-select' class='form-control browser-default'>
+                        <option value='interaction'>On Interaction</option>
+                        <option value='change'>On Field Change</option>
+                        <option value='always'>Always</option>
+                        <option value='never'>Never</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="lib-select"
+                        title="It's recommended that you click the Direct Link after changing these options">Include
+                        External Library</label><br>
+                    <select multiple size="10" id='lib-select' class='form-control browser-default'
+                        title="It's reccomended that you click the Direct Link after changing these options">
+                        <option value='ace_editor'>Ace Editor</option>
+                        <option value='choices'>Choices</option>
+                        <option value='sceditor'>SCEditor</option>
+                        <option value='simplemde'>SimpleMDE</option>
+                        <option value='select2'>Select2</option>
+                        <option value='selectize'>Selectize</option>
+                        <option value='flatpickr'>Flatpickr</option>
+                        <option value='signature_pad'>Signature Pad</option>
+                        <option value='mathjs'>Math.js</option>
+                        <option value='cleavejs'>Cleave.js</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <h2>Schema</h2>
+
+        <div class="row columns md:flex">
+            <div class='col-7 col-md-7 w-7/12'>
+                <label for="schema-textarea">You can change the schema and see how the generated form looks. After you
+                    make changes, click "Update Schema"</label>
+                <button class='btn btn-primary btn-block' id='setschema'>Update Schema</button>
+                <textarea id='schema-textarea' style="height: 100vh;"></textarea>
+            </div>
+
+            <div class='col-5 col-md-5 w-5/12'>
+                <label for="validation-info">Validation Information</label>
+                <textarea id='validation-info' readonly
+                    style="width: 100%; height: 200px; font-family: monospace;"></textarea>
+            </div>
+        </div>
+    </div>
+    <script>
+        var defaultSchema = {
+            'title': 'Person',
+            'type': 'object',
+            'required': [
+                'name',
+                'age',
+                'date',
+                'favorite_color',
+                'gender',
+                'location',
+                'pets'
+            ],
+            'properties': {
+                'name': {
+                    'type': 'string',
+                    'description': 'First and Last name',
+                    'minLength': 4,
+                    'default': 'Jeremy Dorn'
+                },
+                'age': {
+                    'type': 'integer',
+                    'default': 25,
+                    'minimum': 18,
+                    'maximum': 99
+                },
+                'favorite_color': {
+                    'type': 'string',
+                    'format': 'color',
+                    'title': 'favorite color',
+                    'default': '#ffa500'
+                },
+                'gender': {
+                    'type': 'string',
+                    'enum': [
+                        'male',
+                        'female',
+                        'other'
+                    ]
+                },
+                'date': {
+                    'type': 'string',
+                    'format': 'date',
+                    'options': {
+                        'flatpickr': {}
+                    }
+                },
+                'location': {
+                    'type': 'object',
+                    'title': 'Location',
+                    'properties': {
+                        'city': {
+                            'type': 'string',
+                            'default': 'San Francisco'
+                        },
+                        'state': {
+                            'type': 'string',
+                            'default': 'CA'
+                        },
+                        'citystate': {
+                            'type': 'string',
+                            'description': 'This is generated automatically from the previous two fields',
+                            'template': '{{city}}, {{state}}',
+                            'watch': {
+                                'city': 'location.city',
+                                'state': 'location.state'
+                            }
+                        }
+                    }
+                },
+                'pets': {
+                    'type': 'array',
+                    'format': 'table',
+                    'title': 'Pets',
+                    'uniqueItems': true,
+                    'items': {
+                        'type': 'object',
+                        'title': 'Pet',
+                        'properties': {
+                            'type': {
+                                'type': 'string',
+                                'enum': [
+                                    'cat',
+                                    'dog',
+                                    'bird',
+                                    'reptile',
+                                    'other'
+                                ],
+                                'default': 'dog'
+                            },
+                            'name': {
+                                'type': 'string'
+                            }
+                        }
+                    },
+                    'default': [
+                        {
+                            'type': 'dog',
+                            'name': 'Walter'
+                        }
+                    ]
+                }
+            }
+        }
+
+        var data = {}
+
+        var defaultOptions = Object.assign({}, JSONEditor.defaults.options, {
+            iconlib: 'fontawesome5',
+            object_layout: 'normal',
+            schema: defaultSchema,
+            show_errors: 'interaction',
+            theme: 'bootstrap4',
+        })
+
+        var jsoneditor = null
+        var directLink = document.querySelector('#direct-link')
+
+        var booleanOptionsSelect = document.querySelector('#boolean-options-select')
+        var head = document.getElementsByTagName('head')[0]
+        var iconlibSelect = document.querySelector('#iconlib-select')
+        var iconlibLink = document.querySelector('#iconlib-link')
+        var libSelect = document.querySelector('#lib-select')
+        var jsonEditorForm = document.querySelector('#json-editor-form')
+        var objectLayoutSelect = document.querySelector('#object-layout-select')
+        var setSchema = document.querySelector('#setschema')
+        var setValue = document.querySelector('#setvalue')
+        var showErrorsSelect = document.querySelector('#show-errors-select')
+        var themeSelect = document.querySelector('#theme-select')
+        var themeLink = document.querySelector('#theme-link')
+        var validateTextarea = document.querySelector('#validate-textarea')
+
+        // Search elements
+        var searchInput = document.querySelector('#search-input')
+        var clearSearchBtn = document.querySelector('#clear-search-btn')
+        var searchStats = document.querySelector('#search-stats')
+
+        var outputTextarea = document.querySelector('#output-textarea')
+        var schemaTextarea = document.querySelector('#schema-textarea')
+
+        // Ace editor instances (will be initialized later)
+        var schemaAce = null
+        var outputAce = null
+
+        // Dynamic search functionality
+        function highlightSearchInAce(editor, searchTerm) {
+            if (!editor || !searchTerm) {
+                return 0
+            }
+
+            // Clear previous search
+            editor.findAll('')
+
+            if (searchTerm.length < 1) {
+                return 0
+            }
+
+            // Perform new search with highlighting
+            editor.findAll(searchTerm, {
+                caseSensitive: false,
+                wholeWord: false,
+                regExp: false,
+                preventScroll: false
+            })
+
+            var ranges = editor.session.getMarkers(false)
+            var count = 0
+
+            // Count search markers (markers with class containing 'ace_selected-word')
+            for (var id in ranges) {
+                if (ranges[id].clazz && ranges[id].clazz.indexOf('ace_selected-word') > -1) {
+                    count++
+                }
+            }
+
+            return count
+        }
+
+        function performDynamicSearch(searchTerm) {
+            if (!searchTerm || searchTerm.trim().length === 0) {
+                clearSearch()
+                return
+            }
+
+            var schemaMatches = 0
+            var outputMatches = 0
+
+            // Search in schema
+            if (schemaAce) {
+                schemaMatches = highlightSearchInAce(schemaAce, searchTerm)
+            }
+
+            // Search in output
+            if (outputAce) {
+                outputMatches = highlightSearchInAce(outputAce, searchTerm)
+            }
+
+            var totalMatches = schemaMatches + outputMatches
+
+            // Update stats
+            if (totalMatches > 0) {
+                searchStats.innerHTML = `Found <strong>${totalMatches}</strong> match${totalMatches !== 1 ? 'es' : ''} (Schema: ${schemaMatches}, Output: ${outputMatches})`
+            } else {
+                searchStats.innerHTML = 'No matches found'
+            }
+
+            // Highlight in form inputs
+            highlightInFormInputs(searchTerm)
+        }
+
+        function highlightInFormInputs(searchTerm) {
+            const formInputs = jsonEditorForm.querySelectorAll('input[type="text"], textarea')
+            formInputs.forEach(input => {
+                if (input.value && input.value.toLowerCase().includes(searchTerm.toLowerCase())) {
+                    input.style.backgroundColor = '#fff9c4'
+                    input.style.transition = 'background-color 0.3s'
+                } else {
+                    input.style.backgroundColor = ''
+                }
+            })
+        }
+
+        function clearSearch() {
+            searchInput.value = ''
+            searchStats.innerHTML = 'Ready to search'
+
+            // Clear Ace editor highlights
+            if (schemaAce) {
+                schemaAce.findAll('')
+            }
+            if (outputAce) {
+                outputAce.findAll('')
+            }
+
+            // Clear form input highlights
+            const formInputs = jsonEditorForm.querySelectorAll('input[type="text"], textarea')
+            formInputs.forEach(input => {
+                input.style.backgroundColor = ''
+            })
+        }
+
+        // Event listeners for search
+        var searchTimeout = null
+        searchInput.addEventListener('input', function () {
+            // Debounce the search
+            clearTimeout(searchTimeout)
+            searchTimeout = setTimeout(function () {
+                performDynamicSearch(searchInput.value)
+            }, 150)
+        })
+
+        clearSearchBtn.addEventListener('click', clearSearch)
+
+        // Keyboard shortcuts
+        searchInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                clearSearch()
+            }
+        })
+
+        var parseUrl = function () {
+            var url = window.location.search
+            var queryParamsString = url.substring(1, url.length)
+            var queryParams = queryParamsString.split('&')
+
+            if (queryParamsString.length) {
+                queryParams.forEach(function (queryParam) {
+                    var splittedParam = queryParam.split('=')
+                    var param = splittedParam[0]
+                    var value = splittedParam[1]
+
+                    if (param === 'data') {
+                        try {
+                            data = JSON.parse(LZString.decompressFromBase64(value))
+                        } catch (reason) {
+                        }
+                    }
+                })
+            }
+
+            mergeOptions()
+        }
+
+        var mergeOptions = function () {
+            data.options = Object.assign(defaultOptions, data.options)
+            refreshUI()
+        }
+
+        var refreshUI = function () {
+            // Initialize Ace editors if not already done
+            if (!schemaAce) {
+                schemaAce = ace.edit('schema-textarea', {
+                    mode: 'ace/mode/json',
+                    maxLines: Infinity,
+                    minLines: 20,
+                    showFoldWidgets: true,
+                    showPrintMargin: false,
+                    fontSize: 14
+                })
+            }
+
+            if (!outputAce) {
+                outputAce = ace.edit('output-textarea', {
+                    mode: 'ace/mode/json',
+                    maxLines: 15,
+                    minLines: 15,
+                    showFoldWidgets: false,
+                    showPrintMargin: false,
+                    fontSize: 14
+                })
+            }
+
+            schemaAce.setValue(JSON.stringify(data.options.schema, null, 2))
+            schemaAce.clearSelection()
+
+            var themeMap = {
+                barebones: '',
+                bootstrap3: 'https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css',
+                bootstrap4: 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
+                bootstrap5: 'https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css',
+                html: '',
+                spectre: 'https://unpkg.com/spectre.css/dist/spectre.min.css',
+                tailwind: 'https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css'
+            }
+            themeLink.href = themeMap[data.options.theme]
+            themeSelect.value = data.options.theme
+
+            var iconLibMap = {
+                fontawesome3: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.css',
+                fontawesome4: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css',
+                fontawesome5: 'https://use.fontawesome.com/releases/v5.6.1/css/all.css',
+                jqueryui: 'https://code.jquery.com/ui/1.10.3/themes/south-street/jquery-ui.css',
+                openiconic: 'https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic.min.css',
+                spectre: 'https://unpkg.com/spectre.css/dist/spectre-icons.min.css',
+                bootstrap: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css'
+            }
+            iconlibLink.href = iconLibMap[data.options.iconlib]
+            iconlibSelect.value = data.options.iconlib
+
+            objectLayoutSelect.value = data.options.object_layout
+            showErrorsSelect.value = data.options.show_errors
+
+            var booleanOptions = booleanOptionsSelect.children
+            for (var i = 0; i < booleanOptions.length; i++) {
+                var booleanValue = booleanOptions[i]
+                if (data.options[booleanValue.value]) {
+                    booleanValue.selected = true
+                }
+            }
+
+            initJsoneditor()
+        }
+
+        var initJsoneditor = function () {
+            if (jsoneditor) {
+                jsoneditor.destroy()
+            }
+
+            jsoneditor = new window.JSONEditor(jsonEditorForm, data.options)
+
+            jsoneditor.on('change', function () {
+                var json = jsoneditor.getValue()
+                outputAce.setValue(JSON.stringify(json, null, 2))
+                outputAce.clearSelection()
+
+                var validationErrors = jsoneditor.validate()
+                if (validationErrors.length) {
+                    validateTextarea.value = JSON.stringify(validationErrors, null, 2)
+                } else {
+                    validateTextarea.value = 'valid'
+                }
+
+                // Re-apply search if there's an active search term
+                if (searchInput.value) {
+                    performDynamicSearch(searchInput.value)
+                }
+            })
+            updateDirectLink()
+        }
+
+        var updateDirectLink = function () {
+            var url = window.location.href.replace(/\?.*/, '')
+            url += '?data='
+            url += LZString.compressToBase64(JSON.stringify(data))
+            directLink.href = url
+        }
+
+        setValue.addEventListener('click', function () {
+            jsoneditor.setValue(JSON.parse(outputAce.getValue()))
+        })
+
+        setSchema.addEventListener('click', function () {
+            try {
+                data.options.schema = JSON.parse(schemaAce.getValue())
+            } catch (e) {
+                alert('Invalid Schema: ' + e.message)
+                return
+            }
+            refreshUI()
+        })
+
+        themeSelect.addEventListener('change', function () {
+            data.options.theme = this.value || ''
+            refreshUI()
+        })
+
+        iconlibSelect.addEventListener('change', function () {
+            data.options.iconlib = this.value || ''
+            refreshUI()
+        })
+
+        objectLayoutSelect.addEventListener('change', function () {
+            data.options.object_layout = this.value || ''
+            refreshUI()
+        })
+
+        showErrorsSelect.addEventListener('change', function () {
+            data.options.show_errors = this.value || ''
+            refreshUI()
+        })
+
+        booleanOptionsSelect.addEventListener('change', function () {
+            var booleanOptions = this.children
+            for (var i = 0; i < booleanOptions.length; i++) {
+                data.options[booleanOptions[i].value] = booleanOptions[i].selected
+            }
+            refreshUI()
+        })
+
+        parseUrl()
+
+    </script>
+</body>
+
+</html>
