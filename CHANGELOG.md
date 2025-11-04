@@ -1,5 +1,7 @@
 ### Unreleased
 
+- Fix multiple-dependencies with non-scalar values
+
 ### 2.15.2
 
 - Support drag and drop for array item

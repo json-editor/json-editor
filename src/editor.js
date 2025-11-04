@@ -179,14 +179,14 @@ export class AbstractEditor {
     if (!editor || !editor.dependenciesFulfilled || !value) {
       this.dependenciesFulfilled = false
     } else if (Array.isArray(choices)) {
-      this.dependenciesFulfilled = choices.some(choice => {
+      this.dependenciesFulfilled &&= choices.some(choice => {
         if (JSON.stringify(value) === JSON.stringify(choice)) {
           return true
         }
       })
     } else if (typeof choices === 'object') {
       if (typeof value !== 'object') {
-        this.dependenciesFulfilled = choices === value
+        this.dependenciesFulfilled &&= choices === value
       } else {
         Object.keys(choices).some(key => {
           if (!hasOwnProperty(choices, key)) {
@@ -199,12 +199,12 @@ export class AbstractEditor {
         })
       }
     } else if (typeof choices === 'string' || typeof choices === 'number') {
-      this.dependenciesFulfilled = this.dependenciesFulfilled && value === choices
+      this.dependenciesFulfilled &&= value === choices
     } else if (typeof choices === 'boolean') {
       if (choices) {
-        this.dependenciesFulfilled = this.dependenciesFulfilled && (value || value.length > 0)
+        this.dependenciesFulfilled &&= (value || value.length > 0)
       } else {
-        this.dependenciesFulfilled = this.dependenciesFulfilled && (!value || value.length === 0)
+        this.dependenciesFulfilled &&= (!value || value.length === 0)
       }
     }
   }
