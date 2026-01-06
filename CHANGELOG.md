@@ -1,5 +1,7 @@
 ### Unreleased
 
+- Fixed #1636. multiselect obstructed editor format "table"
+
 ### 2.15.2
 
 - Support drag and drop for array item

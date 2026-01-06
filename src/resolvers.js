@@ -75,7 +75,7 @@ const arraysOfStrings = (schema, je) => {
       /* if 'selectize' enabled it is expected to be selectized control */
       if (schema.format === 'selectize') return 'arraySelectize'
       if (schema.format === 'select2') return 'arraySelect2'
-      if (schema.items.enum) return 'multiselect' /* otherwise it is select */
+      if (schema.items.enum && schema.format !== 'table') return 'multiselect' /* otherwise it is select */
     }
   }
 }
