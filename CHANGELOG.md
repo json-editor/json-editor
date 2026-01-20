@@ -1,4 +1,5 @@
 ### Unreleased
+- Fixed $refs with percent-encoded paths
 
 ### 2.15.2
 
