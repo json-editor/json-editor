@@ -176,7 +176,7 @@ export class AbstractEditor {
     const editor = this.jsoneditor.getEditor(path)
     const value = editor ? editor.getValue() : undefined
 
-    if (!editor || !editor.dependenciesFulfilled || !value) {
+    if (!editor || !editor.dependenciesFulfilled || value === undefined || value === null) {
       this.dependenciesFulfilled = false
     } else if (Array.isArray(choices)) {
       this.dependenciesFulfilled = choices.some(choice => {
