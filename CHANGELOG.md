@@ -1,5 +1,6 @@
 ### Unreleased
 
+- Fixed #1636. multiselect obstructed editor format "table"
 - Fixed #1559 and #1621 field dependent on false should now display
 
 ### 2.15.2
