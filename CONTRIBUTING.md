@@ -1,5 +1,15 @@
 Contributing
 ===============
+
+> **Note: This project is in maintenance mode**
+> 
+> JSON Editor is now in maintenance mode. We continue to accept and review community pull requests for:
+> - Bug fixes
+> - Security updates
+> - Critical improvements
+> 
+> For those seeking active development and new features, consider [Jedison](https://github.com/germanbisurgi/jedison).
+
 This document briefly lists the guidelines for contributing to JSON Editor.
 
 Reporting Bugs
