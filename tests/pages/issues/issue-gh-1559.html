@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>GitHub Issue 1559 - Dependencies with false values not fulfilled</title>
+    <script src="../../../dist/jsoneditor.js"></script>
+    <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Test - Dependencies with false values not fulfilled</h1>
+    <p>When <code>dependent_on_true</code> is unchecked (false), the <code>dependent_on_false</code> field should appear. This tests GitHub issue #1559 - dependencies with false values not being fulfilled.</p>
+    <div id='editor-container'></div>
+</div>
+
+<script>
+  var editorContainer = document.querySelector('#editor-container')
+  var schema = {
+    "type": "object",
+    "title": "Test configuration",
+    "description": "Test configuration for dependencies with false values (GitHub issue #1559)",
+    "properties": {
+        "master_field": {
+            "type": "boolean",
+            "title": "Master field",
+            "format": "checkbox",
+            "description": "Master toggle field.",
+            "default": true
+        },
+        "dependent_on_true": {
+            "type": "boolean",
+            "format": "checkbox",
+            "title": "Dependent on true",
+            "description": "This field depends on master_field being true.",
+            "default": true,
+            "options": {
+                "dependencies": {
+                    "master_field": true
+                }
+            }
+        },
+        "dependent_on_false": {
+            "type": "string",
+            "format": "password",
+            "title": "Dependent on false",
+            "description": "This field depends on dependent_on_true being false.",
+            "minLength": 1,
+            "options": {
+                "dependencies": {
+                    "dependent_on_true": false
+                }
+            }
+        }
+    }
+  }
+
+  var editor = new JSONEditor(editorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome',
+    show_errors: 'always'
+  })
+</script>
+
+</body>
+</html>
