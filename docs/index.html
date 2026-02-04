@@ -10,9 +10,27 @@
     <script src="./scripts/ajv-validator.js"></script>
     <link rel='stylesheet' id='theme-link'>
     <link rel='stylesheet' id='iconlib-link'>
+    <style>
+        .maintenance-notice {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 4px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            color: #856404;
+        }
+        .maintenance-notice a {
+            color: #533102;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 <div class="container grid-xl" style="padding-top: 15px; padding-bottom: 30px;">
+    <div class="maintenance-notice">
+        <strong>Maintenance Mode:</strong> This library is in maintenance mode. 
+        For active development, consider <a href="https://github.com/germanbisurgi/jedison" target="_blank">Jedison</a>.
+    </div>
     <div class="row columns md:flex">
         <div class='col-7 col-md-7 w-7/12'>
             <h1>Editor</h1>

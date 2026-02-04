@@ -1,6 +1,17 @@
 JSON Editor
 ===========
 
+> **🔧 Maintenance Mode Notice**
+> 
+> This library is now in maintenance mode. While it remains stable and functional, active development has moved to [Jedison](https://github.com/germanbisurgi/jedison).
+> 
+> We will continue to:
+> - Accept and review community pull requests
+> - Address critical bugs and security issues
+> - Keep the library functional for existing users
+> 
+> For new projects or those seeking active development, consider using [Jedison](https://github.com/germanbisurgi/jedison).
+
 [![Actions Status](https://github.com/json-editor/json-editor/actions/workflows/build.yml/badge.svg)](https://github.com/json-editor/json-editor/actions)
 
 Fork of the inactive [jdorn/json-editor](https://github.com/jdorn/json-editor) using the updated fork [json-editor/json-editor](https://github.com/json-editor/json-editor).
