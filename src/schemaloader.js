@@ -191,14 +191,14 @@ export class SchemaLoader {
   * Returns a subschema based on a JSON Pointer path.
   * @param {object} schema - Schema too into
   * @param {string} pointer - path to look for
-  * @param {object} original_schema - the Original schema
   * @returns the subschema pointed to by the path
   */
   expandRecursivePointer (schema, pointer) {
     let subschema = schema
-    pointer.split('/').slice(1).forEach(i => {
-      if (subschema[i]) {
-        subschema = subschema[i]
+    pointer.split('/').slice(1).forEach(p => {
+      const decodedPointer = decodeURIComponent(p)
+      if (subschema[decodedPointer]) {
+        subschema = subschema[decodedPointer]
       }
     })
     // If the result is a pointer, let's go for another turn
