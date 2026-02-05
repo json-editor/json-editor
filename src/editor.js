@@ -522,6 +522,10 @@ export class AbstractEditor {
   }
 
   purify (val) {
+    if (typeof val !== 'string') {
+      return val
+    }
+
     if (window.DOMPurify) {
       val = window.DOMPurify.sanitize(val)
     } else {
