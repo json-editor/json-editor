@@ -521,6 +521,16 @@ export class AbstractEditor {
     }
   }
 
+  purify (val) {
+    if (window.DOMPurify) {
+      val = window.DOMPurify.sanitize(val)
+    } else {
+      val = this.cleanText(val)
+    }
+
+    return val
+  }
+
   getHeaderText (titleOnly) {
     if (this.header_text) return this.header_text
     else if (titleOnly) return this.translateProperty(this.schema.title)

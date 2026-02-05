@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Purify</title>
+  <script src="../../dist/jsoneditor.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.7/dist/purify.min.js"></script>
+  <link rel="stylesheet" id="theme-link" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" id="iconlib-link" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+</head>
+<body>
+
+<div class="container">
+  <div id='editor-container'></div>
+  <label for="value">Value</label>
+  <textarea id="value" class="form-control value" rows="10"></textarea>
+  <button class="get-value btn btn-primary">Get Value</button>
+  <button class="set-value btn btn-secondary">Set Value</button>
+</div>
+
+<script>
+  const editorContainer = document.querySelector('#editor-container')
+  const value = document.querySelector('#value');
+  const schema = {
+    "type": "object",
+    "title": "Purify",
+    "properties": {
+      "string": {
+        "title": "string (StringEditor)",
+        "type": "string"
+      }
+    }
+  }
+
+  const editor = new JSONEditor(editorContainer, {
+    schema: schema,
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome',
+    disable_properties: true,
+    disable_collapse: true,
+    disable_edit_json: true,
+  })
+
+  const getValueBtn = document.querySelector('.get-value')
+  const setValueBtn = document.querySelector('.set-value')
+
+  editor.on('change', function () {
+    value.value = JSON.stringify(editor.getValue())
+  })
+
+  getValueBtn.addEventListener('click', function () {
+    value.value = JSON.stringify(editor.getValue())
+  })
+
+  setValueBtn.addEventListener('click', function () {
+    try {
+      editor.setValue(JSON.parse(value.value))
+    } catch (e) {
+      editor.setValue({ string: value.value })
+    }
+  })
+</script>
+
+</body>
+</html>
+
