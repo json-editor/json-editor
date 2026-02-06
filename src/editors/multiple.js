@@ -86,7 +86,8 @@ export class MultipleEditor extends AbstractEditor {
     this.onChange(true, false, {
       event: 'switch',
       data: {
-        type: this.lastType,
+        oldType: this.lastType,
+        type: i,
         path: this.editors[i].path
       }
     })
