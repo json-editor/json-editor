@@ -18,6 +18,7 @@ export class StringEditor extends AbstractEditor {
   }
 
   setValue (value, initial, fromTemplate) {
+    value = this.purify(value)
     value = this.applyConstFilter(value)
 
     if (this.template && !fromTemplate) return
@@ -362,6 +363,7 @@ export class StringEditor extends AbstractEditor {
    * This is overridden in derivative editors
    */
   sanitize (value) {
+    value = this.purify(value)
     return value
   }
 
