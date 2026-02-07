@@ -1,5 +1,9 @@
 ### Unreleased
 
+### 2.16.0
+
+- Purify values if DOMPurify is available
+
 ### 2.15.3
 
 - Added maintenance mode notice to README, CONTRIBUTING.md, and documentation
