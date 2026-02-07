@@ -2,7 +2,7 @@
 
 Feature('purify')
 
-Scenario('Should @purify XSS from direct input', async ({ I }) => {
+Scenario('Should @purify @optional XSS from direct input', async ({ I }) => {
   I.amOnPage('purify.html')
   I.waitForElement('[name="root[string]"]')
   I.fillField('[name="root[string]"]', 'bla</script><script>alert(1)</script>')
@@ -13,7 +13,7 @@ Scenario('Should @purify XSS from direct input', async ({ I }) => {
   I.waitForValue('#value', '{"string":"bla"}')
 })
 
-Scenario('Should @purify XSS from setValue() via textarea', async ({ I }) => {
+Scenario('Should @purify @optional XSS from setValue() via textarea', async ({ I }) => {
   I.amOnPage('purify.html')
   I.waitForElement('#value')
   I.fillField('#value', 'bla</script><script>alert(1)</script>')
