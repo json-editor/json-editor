@@ -347,9 +347,12 @@ export class AbstractEditor {
   getButton (text, icon, title, args = []) {
     const btnClass = `json-editor-btn-${icon}`
     if (!this.iconlib) icon = null
-    else icon = this.iconlib.getIcon(icon)
+    else {
+      icon = this.iconlib.getIcon(icon)
+      if (icon && this.remove_button_labels) text = null
+    }
 
-    text = this.translate(text, args)
+    if (text) text = this.translate(text, args)
     title = this.translate(title, args)
 
     if (!icon && title) {

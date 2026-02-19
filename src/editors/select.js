@@ -367,14 +367,6 @@ export class SelectEditor extends AbstractEditor {
     const changeOrInteraction = showErrors === 'change' || showErrors === 'interaction'
     const never = showErrors === 'never'
 
-    if (never && !this.is_dirty) {
-      return
-    }
-
-    if (changeOrInteraction && !this.is_dirty) {
-      return
-    }
-
     const addMessage = (messages, error) => {
       if (error.path === this.path) {
         messages.push(error.message)
@@ -382,6 +374,15 @@ export class SelectEditor extends AbstractEditor {
       return messages
     }
     const messages = errors.reduce(addMessage, [])
+    this.has_errors = messages.length > 0
+
+    if (never && !this.is_dirty) {
+      return
+    }
+
+    if (changeOrInteraction && !this.is_dirty) {
+      return
+    }
 
     if (messages.length) {
       this.theme.addInputError(this.input, `${messages.join('. ')}.`)

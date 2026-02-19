@@ -183,10 +183,10 @@ export class bootstrap2Theme extends AbstractTheme {
   }
 
   removeInputError (input) {
-    if (!input.controlgroup) {
+    if (!input?.controlgroup) {
       delete this.queuedInputErrorText
     }
-    if (!input.errmsg) return
+    if (!input?.errmsg) return
     input.errmsg.style.display = 'none'
     input.controlgroup.classList.remove('error')
   }

@@ -164,10 +164,10 @@ export class jqueryuiTheme extends AbstractTheme {
   }
 
   removeInputError (input) {
-    if (!input.controls) {
+    if (!input?.controls) {
       delete this.queuedInputErrorText
     }
-    if (!input.errmsg) return
+    if (!input?.errmsg) return
     input.errmsg.style.display = 'none'
   }
 

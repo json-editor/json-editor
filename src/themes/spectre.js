@@ -432,7 +432,7 @@ export class spectreTheme extends AbstractTheme {
   }
 
   removeInputError (input) {
-    if (!input.errmsg) return
+    if (!input?.errmsg) return
     input.errmsg.classList.add('d-hide')
     input.controlgroup.classList.remove('has-error')
   }

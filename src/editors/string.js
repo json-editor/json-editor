@@ -381,10 +381,6 @@ export class StringEditor extends AbstractEditor {
   }
 
   showValidationErrors (errors) {
-    if (this.jsoneditor.options.show_errors === 'always') { } else if (!this.is_dirty && this.previous_error_setting === this.jsoneditor.options.show_errors) return
-
-    this.previous_error_setting = this.jsoneditor.options.show_errors
-
     const addMessage = (messages, error) => {
       if (error.path === this.path) {
         messages.push(error.message)
@@ -392,6 +388,11 @@ export class StringEditor extends AbstractEditor {
       return messages
     }
     const messages = errors.reduce(addMessage, [])
+    this.has_errors = messages.length > 0
+
+    if (this.jsoneditor.options.show_errors === 'always') { } else if (!this.is_dirty && this.previous_error_setting === this.jsoneditor.options.show_errors) return
+
+    this.previous_error_setting = this.jsoneditor.options.show_errors
 
     if (messages.length) {
       this.theme.addInputError(this.input, `${messages.join('. ')}.`)

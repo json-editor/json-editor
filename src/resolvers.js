@@ -131,5 +131,7 @@ const ip = schema => schema.type === 'string' && ['ip', 'ipv4', 'ipv6', 'hostnam
 
 const colorPicker = schema => schema.type === 'string' && schema.format === 'color' && 'colorpicker'
 
+const fmarray = schema => schema.type === 'array' && schema.options?.array_use_fast_mod && 'fmarray'
+
 /* Export resolvers in order of discovery, first to last */
-export const resolvers = [colorPicker, ip, ace, xhtml, markdown, jodit, autoComplete, uuid, info, button, stepper, describeBy, starratings, date, oneOf, ifThenElse, arraysOfStrings, enumeratedProperties, enumSource, table, upload, base64, any, boolean, signature, primitive, object, defaultResolver, defaultResolverString]
+export const resolvers = [colorPicker, ip, ace, xhtml, markdown, jodit, autoComplete, uuid, info, button, stepper, describeBy, starratings, date, oneOf, ifThenElse, arraysOfStrings, enumeratedProperties, enumSource, table, fmarray, upload, base64, any, boolean, signature, primitive, object, defaultResolver, defaultResolverString]

@@ -15,6 +15,7 @@ import { ChoicesEditor as choices } from './choices.js'
 import { DatetimeEditor as datetime } from './datetime.js'
 import { DescribedByEditor as describedBy } from './describedby.js'
 import { EnumEditor } from './enum.js'
+import { FastModArrayEditor as fmarray } from './fastmodarray.js'
 import { HiddenEditor as hidden } from './hidden.js'
 import { InfoEditor as info } from './info.js'
 import { IntegerEditor as integer } from './integer.js'
@@ -54,6 +55,7 @@ export const editors = {
   datetime,
   describedBy,
   enum: EnumEditor,
+  fmarray,
   hidden,
   info,
   integer,

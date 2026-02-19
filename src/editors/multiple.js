@@ -1,7 +1,7 @@
 /* Multiple Editor (for when `type` is an array, also when `oneOf` is present) */
 import { AbstractEditor } from '../editor.js'
 import { Validator } from '../validator.js'
-import { extend, mergeDeep, overwriteExistingProperties } from '../utilities.js'
+import { extend, mergeDeep, overwriteExistingProperties, getValueByPath } from '../utilities.js'
 
 export class MultipleEditor extends AbstractEditor {
   register () {
@@ -154,6 +154,11 @@ export class MultipleEditor extends AbstractEditor {
     this.keep_values = true
     if (typeof this.jsoneditor.options.keep_oneof_values !== 'undefined') this.keep_values = this.jsoneditor.options.keep_oneof_values
     if (typeof this.options.keep_oneof_values !== 'undefined') this.keep_values = this.options.keep_oneof_values
+
+    if (this.options.type_path !== 'undefined' && Array.isArray(this.options.type_values)) {
+      this.type_path = this.options.type_path
+      this.type_values = this.options.type_values
+    }
 
     this.keep_only_existing_values = false
     if (typeof this.jsoneditor.options.keep_only_existing_values !== 'undefined') this.keep_only_existing_values = this.jsoneditor.options.keep_only_existing_values
@@ -318,67 +323,91 @@ export class MultipleEditor extends AbstractEditor {
     return errors.length === 0 ? 0 : 1
   }
 
-  setValue (val, initial) {
-    val = this.applyConstFilter(val)
+  getDeclaredType (value) {
+    if (this.type_path) {
+      const val = getValueByPath(value, this.type_path)
+      if (val !== undefined) {
+        return this.type_values.indexOf(val)
+      }
+    }
+    return -1
+  }
 
+  getType (val) {
     /* Determine type by getting the first one that validates */
 
-    const prevType = this.type
-    /* find the best match one */
-    let fitTestVal = {
-      match: 0,
-      extra: 0,
-      i: this.type
-    }
-    const validVal = {
-      match: 0,
-      i: null
-    }
-    this.validators.forEach((validator, i) => {
-      let fitTestResult = null
-      if (typeof this.anyOf !== 'undefined' && this.anyOf) {
-        fitTestResult = validator.fitTest(val)
-        if (fitTestVal.match < fitTestResult.match) {
-          fitTestVal = fitTestResult
-          fitTestVal.i = i
-        } else if (fitTestVal.match === fitTestResult.match) {
-          if (fitTestVal.extra > fitTestResult.extra) {
+    let thisType = this.getDeclaredType(val)
+
+    if (thisType < 0) {
+      /*
+       * No valid type could be determined from the schema options alone, so
+       * we have to do a "best fit" search
+       */
+      const validVal = {
+        match: 0,
+        i: null
+      }
+      /* find the best match one */
+      let fitTestVal = {
+        match: 0,
+        extra: 0,
+        i: this.type
+      }
+      this.validators.forEach((validator, i) => {
+        let fitTestResult = null
+        if (typeof this.anyOf !== 'undefined' && this.anyOf) {
+          fitTestResult = validator.fitTest(val)
+          if (fitTestVal.match < fitTestResult.match) {
             fitTestVal = fitTestResult
             fitTestVal.i = i
+          } else if (fitTestVal.match === fitTestResult.match) {
+            if (fitTestVal.extra > fitTestResult.extra) {
+              fitTestVal = fitTestResult
+              fitTestVal.i = i
+            }
           }
         }
-      }
-      if (!validator.validate(val).length && validVal.i === null) {
-        validVal.i = i
-        if (fitTestResult !== null) {
-          validVal.match = fitTestResult.match
+        if (!validator.validate(val).length && validVal.i === null) {
+          validVal.i = i
+          if (fitTestResult !== null) {
+            validVal.match = fitTestResult.match
+          }
+        } else {
+          fitTestVal = validVal
         }
-      } else {
-        fitTestVal = validVal
+      })
+      let finalI = validVal.i
+
+      /* if the best fit schema has more match properties, then use the best fit schema. */
+      /* usually the value could be */
+      if (typeof this.anyOf !== 'undefined' && this.anyOf) {
+        if (validVal.match < fitTestVal.match) {
+          finalI = fitTestVal.i
+        }
       }
-    })
-    let finalI = validVal.i
-    /* if the best fit schema has more match properties, then use the best fit schema. */
-    /* usually the value could be */
-    if (typeof this.anyOf !== 'undefined' && this.anyOf) {
-      if (validVal.match < fitTestVal.match) {
-        finalI = fitTestVal.i
+      if (this.if) {
+        finalI = this.getIfType(val)
       }
+      if (finalI === null) {
+        finalI = this.type
+      }
+      thisType = finalI
     }
-    if (this.if) {
-      finalI = this.getIfType(val)
-    }
-    if (finalI === null) {
-      finalI = this.type
-    }
-    this.type = finalI
-    this.switcher.value = this.display_text[finalI]
+    return thisType
+  }
+
+  setValue (val, initial) {
+    val = this.applyConstFilter(val)
+    const prevType = this.type
+    const thisType = this.getType(val)
+
+    this.type = thisType
+    this.switcher.value = this.display_text[thisType]
 
     const typeChanged = this.type !== prevType
 
     if (typeChanged) {
       this.switchEditor(this.type)
-      this.editors[this.type].setValue(val, initial)
     }
 
     if (typeof val !== 'undefined') {
@@ -400,6 +429,7 @@ export class MultipleEditor extends AbstractEditor {
 
   showValidationErrors (errors) {
     /* oneOf and anyOf error paths need to remove the oneOf[i] part before passing to child editors */
+    let has_errors = false
     if (this.oneOf || this.anyOf) {
       const checkPart = this.oneOf ? 'oneOf' : 'anyOf'
       this.editors.forEach((editor, i) => {
@@ -418,13 +448,20 @@ export class MultipleEditor extends AbstractEditor {
           return newErrors
         }
         editor.showValidationErrors(errors.reduce(filterError, []))
+        if (i === this.type && editor.has_errors) {
+          has_errors = true
+        }
       })
     } else {
-      this.editors.forEach(editor => {
+      this.editors.forEach((editor, i) => {
         if (!editor) return
         editor.showValidationErrors(errors)
+        if (i === this.type && editor.has_errors) {
+          has_errors = true
+        }
       })
     }
+    this.has_errors = has_errors
   }
 
   addLinks () {

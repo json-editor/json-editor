@@ -343,7 +343,7 @@ export class materializeTheme extends AbstractTheme {
    */
   removeInputError (input) {
     /* Get the parent element. Should most likely be a <div class="input-field" ... />. */
-    const parent = input.parentElement
+    const parent = input?.parentElement
 
     if (!parent) return
 

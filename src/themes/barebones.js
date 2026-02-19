@@ -20,10 +20,10 @@ export class barebonesTheme extends AbstractTheme {
   }
 
   removeInputError (input) {
-    if (input.style) {
+    if (input?.style) {
       input.style.borderColor = ''
     }
-    if (input.errmsg) input.errmsg.style.display = 'none'
+    if (input?.errmsg) input.errmsg.style.display = 'none'
   }
 }
 

@@ -238,9 +238,8 @@ export class bootstrap3Theme extends AbstractTheme {
   }
 
   removeInputError (input) {
-    if (!input.errmsg) return
-    input.errmsg.style.display = 'none'
-    input.controlgroup.classList.remove('has-error')
+    if (input?.errmsg) input.errmsg.style.display = 'none'
+    if (input?.controlgroup) input.controlgroup.classList.remove('has-error')
   }
 
   getTabHolder (propertyName) {
