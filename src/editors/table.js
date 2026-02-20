@@ -1,4 +1,4 @@
-import { ArrayEditor, supportDragDrop } from './array.js'
+import { ArrayEditor, supportDragDrop, createEditJsonButton } from './array.js'
 import { extend, generateUUID, trigger } from '../utilities.js'
 
 export class TableEditor extends ArrayEditor {
@@ -487,6 +487,7 @@ export class TableEditor extends ArrayEditor {
     this.add_row_button = this._createAddRowButton()
     this.delete_last_row_button = this._createDeleteLastRowButton()
     this.remove_all_rows_button = this._createRemoveAllRowsButton()
+    this.editjson_button = createEditJsonButton(this)
   }
 
   _createToggleButton () {
