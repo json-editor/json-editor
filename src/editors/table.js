@@ -1,5 +1,5 @@
 import { ArrayEditor, supportDragDrop } from './array.js'
-import { extend, generateUUID, trigger } from '../utilities.js'
+import { extend, trigger, checkBooleanOption } from '../utilities.js'
 
 export class TableEditor extends ArrayEditor {
   register () {
@@ -31,7 +31,7 @@ export class TableEditor extends ArrayEditor {
     this.item_default = itemSchema.default || null
     this.item_has_child_editors = itemSchema.properties || itemSchema.items
     this.width = 12
-    this.array_controls_top = this.options.array_controls_top || this.jsoneditor.options.array_controls_top
+    this.copy_in_place = checkBooleanOption(this.options.array_copy_in_place, this.jsoneditor.options.array_copy_in_place, true)
     super.preBuild()
   }
 
@@ -170,20 +170,6 @@ export class TableEditor extends ArrayEditor {
     this.rows = this.title = this.description = this.row_holder = this.table = this.panel = null
 
     super.destroy()
-  }
-
-  ensureArraySize (value) {
-    if (!(Array.isArray(value))) value = [value]
-
-    if (this.schema.minItems) {
-      while (value.length < this.schema.minItems) {
-        value.push(this.getItemDefault())
-      }
-    }
-    if (this.schema.maxItems && value.length > this.schema.maxItems) {
-      value = value.slice(0, this.schema.maxItems)
-    }
-    return value
   }
 
   setValue (value = [], initial) {
@@ -352,44 +338,6 @@ export class TableEditor extends ArrayEditor {
       this.setValue(value)
       this.onChange(true)
       this.jsoneditor.trigger('deleteRow', editorValue)
-    })
-    holder.appendChild(button)
-    return button
-  }
-
-  _createCopyButton (i, holder) {
-    const button = this.getButton('', 'copy', 'button_copy_row_title_short')
-    const schema = this.schema
-    button.classList.add('copy', 'json-editor-btntype-copy')
-    button.setAttribute('data-i', i)
-    button.addEventListener('click', e => {
-      e.preventDefault()
-      e.stopPropagation()
-      const j = e.currentTarget.getAttribute('data-i') * 1
-      const value = this.getValue()
-
-      let newValue = value[j]
-
-      /* On copy, recreate uuid if needed. */
-      if (schema.items.type === 'string' && schema.items.format === 'uuid') {
-        newValue = generateUUID()
-      } else if (schema.items.type === 'object' && schema.items.properties) {
-        value.forEach((row, i) => {
-          if (j === i) {
-            for (const key of Object.keys(row)) {
-              if (schema.items.properties && schema.items.properties[key] && schema.items.properties[key].format === 'uuid') {
-                newValue = Object.assign({}, value[j])
-                newValue[key] = generateUUID()
-              }
-            }
-          }
-        })
-      }
-
-      value.splice(j + 1, 0, newValue)
-      this.setValue(value)
-      this.onChange(true)
-      this.jsoneditor.trigger('copyRow', this.rows[j + 1])
     })
     holder.appendChild(button)
     return button
