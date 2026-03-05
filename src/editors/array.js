@@ -588,17 +588,18 @@ export class ArrayEditor extends AbstractEditor {
 
       value.forEach((row, j) => {
         if (j === i) {
+          let duplicatedRow = (typeof row === 'object' && row !== null) ? { ...row } : row
           /* Force generation of new UUID if the item has been cloned. */
           if (schema.items.type === 'string' && schema.items.format === 'uuid') {
-            row = generateUUID()
+            duplicatedRow = generateUUID()
           } else if (schema.items.type === 'object' && schema.items.properties) {
-            for (const key of Object.keys(row)) {
+            for (const key of Object.keys(duplicatedRow)) {
               if (schema.items.properties && schema.items.properties[key] && schema.items.properties[key].format === 'uuid') {
-                row[key] = generateUUID()
+                duplicatedRow[key] = generateUUID()
               }
             }
           }
-          value.push(row)
+          value.push(duplicatedRow)
         }
       })
 
