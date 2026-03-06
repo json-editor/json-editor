@@ -16,7 +16,7 @@ export class AbstractEditor {
     this.schema = this.jsoneditor.expandSchema(this.original_schema)
     this.active = true
     this.isUiOnly = false
-    this.options = extend({}, (this.options || {}), (this.schema.options || {}), (options.schema.options || {}), options)
+    this.options = Object.assign({}, (this.options || {}), (this.schema.options || {}), (options.schema.options || {}), options)
     this.enforceConstEnabled = this.options.enforce_const ?? this.jsoneditor.options.enforce_const
     this.formname = this.jsoneditor.options.form_name_root || 'root'
 
@@ -54,6 +54,8 @@ export class AbstractEditor {
     if (!fromTemplate) {
       if (this.watch_listener) this.watch_listener()
     }
+
+    if (this.jsoneditor && this.jsoneditor.building) return
 
     if (bubble) this.change(eventData)
   }
@@ -257,6 +259,10 @@ export class AbstractEditor {
   }
 
   build () {
+
+  }
+
+  onContainerAttached () {
 
   }
 

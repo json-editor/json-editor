@@ -18,7 +18,9 @@ export class JSONEditor {
     this.element = element
     this.options = extend({}, JSONEditor.defaults.options, options)
     this.ready = false
+    this.building = false
     this.copyClipboard = null
+    this._editorClassCache = new Map()
     this.schema = this.options.schema
     this.template = this.options.template
     this.translate = this.options.translate || JSONEditor.defaults.translate
@@ -87,12 +89,30 @@ export class JSONEditor {
       container: this.root_container
     })
 
-    this.root.preBuild()
-    this.root.build()
-    this.root.postBuild()
+    /* Build off-screen: detach root_container to avoid per-element reflows */
+    this.element.removeChild(this.root_container)
+    this.building = true
 
-    /* Starting data */
-    if (hasOwnProperty(this.options, 'startval')) this.root.setValue(this.options.startval)
+    try {
+      this.root.preBuild()
+      this.root.build()
+      this.root.postBuild()
+
+      /* Starting data */
+      if (hasOwnProperty(this.options, 'startval')) this.root.setValue(this.options.startval)
+    } finally {
+      this.building = false
+      /* Re-attach the fully built DOM tree in one operation */
+      this.element.appendChild(this.root_container)
+    }
+
+    /* Notify all editors that the container is now in the DOM so they can perform
+     * layout-dependent initialization (e.g. measuring canvas dimensions). */
+    if (this.editors) {
+      Object.values(this.editors).forEach(editor => {
+        if (editor) editor.onContainerAttached()
+      })
+    }
 
     this.validation_results = this.validator.validate(this.root.getValue())
     this.root.showValidationErrors(this.validation_results)
@@ -215,6 +235,10 @@ export class JSONEditor {
   }
 
   getEditorClass (schema) {
+    const inputSchema = schema
+    const cached = this._editorClassCache.get(inputSchema)
+    if (cached) return cached
+
     let classname
 
     schema = this.expandSchema(schema)
@@ -225,17 +249,21 @@ export class JSONEditor {
     })
     if (!classname) throw new Error(`Unknown editor for schema ${JSON.stringify(schema)}`)
     if (!JSONEditor.defaults.editors[classname]) throw new Error(`Unknown editor ${classname}`)
-    return JSONEditor.defaults.editors[classname]
+
+    const editorClassResult = JSONEditor.defaults.editors[classname]
+    this._editorClassCache.set(inputSchema, editorClassResult)
+    return editorClassResult
   }
 
   createEditor (editorClass, options, depthCounter = 1) {
-    options = extend({}, editorClass.options || {}, options)
+    options = Object.assign({}, editorClass.options || {}, options)
     // eslint-disable-next-line new-cap
     return new editorClass(options, JSONEditor.defaults, depthCounter)
   }
 
   onChange (eventData) {
     if (!this.ready) return
+    if (this.building) return
 
     if (eventData) {
       this.trigger(eventData.event, eventData.data)

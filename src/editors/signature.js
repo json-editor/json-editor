@@ -76,12 +76,15 @@ export class SignatureEditor extends StringEditor {
       this.refreshValue()
 
       /* signature canvas will stretch to signatureContainer width */
+      canvas.style.display = 'block'
+      canvas.style.width = '100%'
       canvas.width = signatureContainer.offsetWidth
       if (this.options && this.options.canvas_height) {
         canvas.height = this.options.canvas_height
       } else {
         canvas.height = '300' /* Set to default height of 300px; */
       }
+      this.signatureCanvas = canvas
     } else {
       const message = document.createElement('p')
       message.innerHTML = 'Signature pad is not available, please include SignaturePad from https://github.com/szimek/signature_pad'
@@ -113,5 +116,18 @@ export class SignatureEditor extends StringEditor {
   destroy () {
     this.signaturePad.off()
     delete this.signaturePad
+  }
+
+  onContainerAttached () {
+    if (this.signatureCanvas) {
+      const container = this.signatureCanvas.parentElement
+      if (container) {
+        const width = container.offsetWidth
+        if (width) {
+          this.signatureCanvas.width = width
+        }
+      }
+    }
+    super.onContainerAttached()
   }
 }

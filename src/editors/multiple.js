@@ -94,6 +94,28 @@ export class MultipleEditor extends AbstractEditor {
     this.refreshHeaderText()
   }
 
+  _getTypeSchema (i) {
+    const type = this.types[i]
+    let schema
+    if (typeof type === 'string') {
+      schema = extend({}, this.schema)
+      schema.type = type
+    } else {
+      schema = extend({}, this.schema, type)
+      if (type && type.required && Array.isArray(type.required) && this.schema.required && Array.isArray(this.schema.required)) {
+        schema.required = this.schema.required.concat(type.required)
+      }
+    }
+    return schema
+  }
+
+  _getValidator (i) {
+    if (!this.validators[i]) {
+      this.validators[i] = new Validator(this.jsoneditor, this._getTypeSchema(i), this._validatorOptions, this.defaults)
+    }
+    return this.validators[i]
+  }
+
   buildChildEditor (i) {
     const type = this.types[i]
     const holder = this.theme.getChildEditorHolder()
@@ -143,6 +165,19 @@ export class MultipleEditor extends AbstractEditor {
     })
 
     if (i !== this.type) holder.style.display = 'none'
+  }
+
+  getDefault () {
+    if (this.oneOf || this.anyOf) {
+      for (let i = 0; i < this.types.length; i++) {
+        const typeSchema = this.types[i]
+        if (typeSchema && Object.prototype.hasOwnProperty.call(typeSchema, 'default')) {
+          return typeSchema.default
+        }
+      }
+    }
+
+    return super.getDefault()
   }
 
   preBuild () {
@@ -245,29 +280,15 @@ export class MultipleEditor extends AbstractEditor {
     this.editor_holder = document.createElement('div')
     container.appendChild(this.editor_holder)
 
-    const validatorOptions = {}
+    this._validatorOptions = {}
     if (this.jsoneditor.options.custom_validators) {
-      validatorOptions.custom_validators = this.jsoneditor.options.custom_validators
+      this._validatorOptions.custom_validators = this.jsoneditor.options.custom_validators
     }
 
     this.switcher_options = this.theme.getSwitcherOptions(this.switcher)
     this.types.forEach((type, i) => {
       this.editors[i] = false
-
-      let schema
-
-      if (typeof type === 'string') {
-        schema = extend({}, this.schema)
-        schema.type = type
-      } else {
-        schema = extend({}, this.schema, type)
-
-        /* If we need to merge `required` arrays */
-        if (type.required && Array.isArray(type.required) && this.schema.required && Array.isArray(this.schema.required)) {
-          schema.required = this.schema.required.concat(type.required)
-        }
-      }
-      this.validators[i] = new Validator(this.jsoneditor, schema, validatorOptions, this.defaults)
+      this.validators[i] = null
     })
 
     this.jsoneditor.on('change', () => {
@@ -334,7 +355,8 @@ export class MultipleEditor extends AbstractEditor {
       match: 0,
       i: null
     }
-    this.validators.forEach((validator, i) => {
+    this.types.forEach((type, i) => {
+      const validator = this._getValidator(i)
       let fitTestResult = null
       if (typeof this.anyOf !== 'undefined' && this.anyOf) {
         fitTestResult = validator.fitTest(val)

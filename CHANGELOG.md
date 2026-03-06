@@ -1,6 +1,11 @@
 ### Unreleased
 
 - Fixed #1559 and #1621 field dependent on false should now display
+- Improved rendering performance by building the editor tree off-screen and re-attaching in a single DOM operation
+- Improved schema loading performance by parallelizing external ref fetching and memoizing schema expansion
+- Narrowed validation error dispatch in ObjectEditor and ArrayEditor to avoid full-list scans per child editor
+- Lazy-initialize Validator instances in MultipleEditor; added getDefault() support for oneOf/anyOf per-type defaults
+- Added onContainerAttached() lifecycle hook to AbstractEditor; used by ObjectEditor (grid layout) and SignatureEditor (canvas sizing) to handle post-attachment initialization
 
 ### 2.15.2
 

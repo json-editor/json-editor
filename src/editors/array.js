@@ -833,12 +833,15 @@ export class ArrayEditor extends AbstractEditor {
   showValidationErrors (errors) {
     /* Get all the errors that pertain to this editor */
     const myErrors = []
-    const otherErrors = []
+    const childErrors = {}
+    const pathPrefix = this.path + '.'
     errors.forEach(error => {
       if (error.path === this.path) {
         myErrors.push(error)
-      } else {
-        otherErrors.push(error)
+      } else if (error.path.startsWith(pathPrefix)) {
+        const childIdx = error.path.substring(pathPrefix.length).split('.')[0]
+        if (!childErrors[childIdx]) childErrors[childIdx] = []
+        childErrors[childIdx].push(error)
       }
     })
 
@@ -856,9 +859,9 @@ export class ArrayEditor extends AbstractEditor {
       }
     }
 
-    /* Show errors for child editors */
-    this.rows.forEach(row =>
-      row.showValidationErrors(otherErrors)
+    /* Show errors for child editors -- only pass relevant errors */
+    this.rows.forEach((row, i) =>
+      row.showValidationErrors(childErrors[i] || [])
     )
   }
 }

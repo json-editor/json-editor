@@ -128,6 +128,9 @@ export function mergeDeep (target, ...sources) {
 }
 
 export function overwriteExistingProperties (obj1, obj2) {
+  if (!obj1 || typeof obj1 !== 'object') return obj1
+  if (!obj2 || typeof obj2 !== 'object') return obj1
+
   Object.keys(obj2).forEach(function (key) {
     if (key in obj1) {
       obj1[key] = obj2[key]
