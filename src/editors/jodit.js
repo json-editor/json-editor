@@ -26,11 +26,11 @@ export class JoditEditor extends StringEditor {
         height: 300
       }, this.defaults.options.jodit || {}, this.options.jodit || {}))
 
-      this.jodit_instance = new window.Jodit(this.input, options)
-
       if (this.schema.readOnly || this.schema.readonly || this.schema.template) {
-        this.jodit_instance.setReadOnly(true)
+        options.readonly = true
       }
+
+      this.jodit_instance = window.Jodit.make(this.input, options)
 
       this.jodit_instance.events.on('change', () => {
         this.value = this.jodit_instance.getEditorValue()
@@ -47,12 +47,12 @@ export class JoditEditor extends StringEditor {
   }
 
   enable () {
-    if (!this.always_disabled && this.jodit_instance) this.jodit_instance.setReadOnly(false)
     super.enable()
+    if (!this.always_disabled && this.jodit_instance) this.jodit_instance.setDisabled(false)
   }
 
   disable (alwaysDisabled) {
-    if (this.jodit_instance) this.jodit_instance.setReadOnly(true)
+    if (this.jodit_instance) this.jodit_instance.setDisabled(true)
     super.disable(alwaysDisabled)
   }
 
