@@ -48,11 +48,19 @@ export class JoditEditor extends StringEditor {
 
   enable () {
     super.enable()
-    if (!this.always_disabled && this.jodit_instance) this.jodit_instance.setDisabled(false)
+    this.input.readOnly = false
+    if (!this.always_disabled && this.jodit_instance) {
+      this.jodit_instance.setDisabled(false)
+      this.jodit_instance.setReadOnly(false)
+    }
   }
 
   disable (alwaysDisabled) {
-    if (this.jodit_instance) this.jodit_instance.setDisabled(true)
+    if (this.jodit_instance) {
+      this.jodit_instance.setDisabled(true)
+      this.jodit_instance.setReadOnly(true)
+    }
+    this.input.readOnly = true
     super.disable(alwaysDisabled)
   }
 
