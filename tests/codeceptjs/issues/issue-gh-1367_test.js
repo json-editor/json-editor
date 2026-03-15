@@ -7,5 +7,6 @@ Scenario('GitHub issue 1367 should remain fixed @issue-1367', async ({ I }) => {
   I.amOnPage('issues/issue-gh-1367.html')
   I.waitForElement('.je-ready')
   I.click('canvas')
+  I.wait(0.1)
   assert.match(await I.grabValueFrom('#value'), /base64/)
 })

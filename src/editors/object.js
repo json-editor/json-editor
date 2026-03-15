@@ -1,5 +1,5 @@
 import { AbstractEditor } from '../editor.js'
-import { extend, hasOwnProperty, trigger } from '../utilities.js'
+import { hasOwnProperty, trigger } from '../utilities.js'
 import rules from './object.css.js'
 
 export class ObjectEditor extends AbstractEditor {
@@ -101,7 +101,7 @@ export class ObjectEditor extends AbstractEditor {
         const width = editor.options.hidden ? 0 : (editor.options.grid_columns || editor.getNumColumns())
         const offset = editor.options.hidden ? 0 : (editor.options.grid_offset || 0)
         const gridBreak = editor.options.hidden ? false : (editor.options.grid_break || false)
-        const height = editor.options.hidden ? 0 : editor.container.offsetHeight
+        const height = editor.options.hidden ? 0 : (editor.container.offsetHeight || 0)
 
         const column = {
           key,
@@ -146,7 +146,7 @@ export class ObjectEditor extends AbstractEditor {
         if (editor.property_removed) return
         let found = false
         const width = editor.options.hidden ? 0 : (editor.options.grid_columns || editor.getNumColumns())
-        const height = editor.options.hidden ? 0 : editor.container.offsetHeight
+        const height = editor.options.hidden ? 0 : (editor.container.offsetHeight || 0)
         /* See if the editor will fit in any of the existing rows first */
         for (let i = 0; i < rows.length; i++) {
           /* If the editor will fit in the row horizontally */
@@ -342,7 +342,7 @@ export class ObjectEditor extends AbstractEditor {
   getPropertySchema (key) {
     /* Schema declared directly in properties */
     let schema = this.schema.properties[key] || {}
-    schema = extend({}, schema)
+    schema = { ...schema }
     let matched = !!this.schema.properties[key]
 
     /* Any matching patternProperties should be merged in */
@@ -359,7 +359,7 @@ export class ObjectEditor extends AbstractEditor {
 
     /* Hasn't matched other rules, use additionalProperties schema */
     if (!matched && this.schema.additionalProperties && typeof this.schema.additionalProperties === 'object') {
-      schema = extend({}, this.schema.additionalProperties)
+      schema = { ...this.schema.additionalProperties }
     }
 
     return schema
@@ -815,15 +815,21 @@ export class ObjectEditor extends AbstractEditor {
       })
       /* Layout object editors in grid if needed */
     } else {
-      /* Initial layout */
-      this.layoutEditors()
-      /* Do it again now that we know the approximate heights of elements */
       this.layoutEditors()
     }
 
     if (this.schema.readOnly || this.schema.readonly) {
       this.disable()
     }
+  }
+
+  onContainerAttached () {
+    /* Re-run grid layout now that the container is in the live DOM and
+     * offsetHeight returns real values for height-based row grouping. */
+    if (this.format === 'grid') {
+      this.layoutEditors()
+    }
+    super.onContainerAttached()
   }
 
   deactivateNonRequiredProperties (recursive) {
@@ -1340,12 +1346,15 @@ export class ObjectEditor extends AbstractEditor {
   showValidationErrors (errors) {
     /* Get all the errors that pertain to this editor */
     const myErrors = []
-    const otherErrors = []
+    const childErrors = {}
+    const pathPrefix = this.path + '.'
     errors.forEach(error => {
       if (error.path === this.path) {
         myErrors.push(error)
-      } else {
-        otherErrors.push(error)
+      } else if (error.path.startsWith(pathPrefix)) {
+        const childKey = error.path.substring(pathPrefix.length).split('.')[0]
+        if (!childErrors[childKey]) childErrors[childKey] = []
+        childErrors[childKey].push(error)
       }
     })
 
@@ -1373,9 +1382,9 @@ export class ObjectEditor extends AbstractEditor {
       }
     }
 
-    /* Show errors for child editors */
-    Object.values(this.editors).forEach(editor => {
-      editor.showValidationErrors(otherErrors)
+    /* Show errors for child editors -- only pass relevant errors */
+    Object.entries(this.editors).forEach(([key, editor]) => {
+      editor.showValidationErrors(childErrors[key] || [])
     })
   }
 }
