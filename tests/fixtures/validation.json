@@ -866,6 +866,31 @@
             }
         ]
     },
+    "definitions_encoded": {
+        "schema": {
+            "type": "object",
+            "properties": {
+                "encoded": {
+                    "$ref": "#/definitions/encoded%3Cstring%3E"
+                }
+            },
+            "definitions": {
+                "encoded<string>": {
+                    "$ref": "../fixtures/string.json"
+                }
+            }
+        },
+        "valid": [
+            {
+                "encoded": "test"
+            }
+        ],
+        "invalid": [
+            {
+                "encoded": 42
+            }
+        ]
+    },
     "$ref": {
         "schema": {
             "type": "object",
