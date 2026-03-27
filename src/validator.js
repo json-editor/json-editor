@@ -1,5 +1,5 @@
 import { ipValidator } from './validators/ip-validator.js'
-import { extend, hasOwnProperty } from './utilities.js'
+import { hasOwnProperty } from './utilities.js'
 
 export class Validator {
   constructor (jsoneditor, schema, options, defaults) {
@@ -688,7 +688,7 @@ export class Validator {
   }
 
   _getSchema (schema) {
-    return typeof schema === 'undefined' ? extend({}, this.jsoneditor.expandRefs(this.schema)) : schema
+    return typeof schema === 'undefined' ? { ...this.jsoneditor.expandRefs(this.schema) } : schema
   }
 
   validate (value) {
@@ -699,8 +699,8 @@ export class Validator {
     const errors = []
     path = path || this.jsoneditor.root.formname
 
-    /* Work on a copy of the schema */
-    schema = extend({}, this.jsoneditor.expandRefs(schema))
+    /* Work on a shallow copy of the expanded schema */
+    schema = { ...this.jsoneditor.expandRefs(schema) }
 
     /*
      * Type Agnostic Validation
@@ -754,7 +754,7 @@ export class Validator {
     const ref = document.location.origin + document.location.pathname + template(data)
 
     schema.links = schema.links.slice(0, m).concat(schema.links.slice(m + 1))
-    return extend({}, schema, this.jsoneditor.refs[ref])
+    return Object.assign({}, schema, this.jsoneditor.refs[ref])
   }
 
   _validateV3Required (schema, value, path) {
