@@ -91,6 +91,10 @@ export class TableEditor extends ArrayEditor {
       for (let i = 0; i < order.length; i++) {
         const th = this.theme.getTableHeaderCell(ce[order[i]].getTitle())
         if (ce[order[i]].options.hidden) th.style.display = 'none'
+        if (ce[order[i]].options.infoText) {
+          const infoButton = this.theme.getInfoButton(this.translateProperty(ce[order[i]].options.infoText))
+          th.appendChild(infoButton)
+        }
         this.header_row.appendChild(th)
       }
     } else {
