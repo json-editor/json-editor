@@ -1,5 +1,8 @@
 ### Unreleased
 
+### 2.17.0
+
+- fix: generate new uuids when copying item of an array
 - Fixed #1636. multiselect obstructed editor format "table"
 - Fixed #1559 and #1621 field dependent on false should now display
 
