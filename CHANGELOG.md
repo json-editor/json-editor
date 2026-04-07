@@ -1,7 +1,18 @@
 ### Unreleased
 
-- Fixed #1636. multiselect obstructed editor format "table"
+### 2.17.0
+
+- fix: generate new uuids when copying item of an array
+
+### 2.16.0
+
+- Purify values if DOMPurify is available
+
+### 2.15.3
+
+- Added maintenance mode notice to README, CONTRIBUTING.md, and documentation
 - Fixed #1559 and #1621 field dependent on false should now display
+- Fixed form-submission.html example documentation
 
 ### 2.15.2
 

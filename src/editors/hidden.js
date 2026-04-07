@@ -84,6 +84,7 @@ export class HiddenEditor extends AbstractEditor {
    * This is overridden in derivative editors
    */
   sanitize (value) {
+    value = this.purify(value)
     return value
   }
 
