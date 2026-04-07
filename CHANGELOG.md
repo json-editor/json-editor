@@ -1,5 +1,9 @@
 ### Unreleased
 
+### 2.17.0
+
+- fix: generate new uuids when copying item of an array
+
 ### 2.16.0
 
 - Purify values if DOMPurify is available
