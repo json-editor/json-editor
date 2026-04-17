@@ -1,6 +1,7 @@
 /* global Feature Scenario */
 
 const assert = require('assert')
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
 Feature('uuid')
 
@@ -45,4 +46,40 @@ Scenario('should have initial value matching uuid in arrays (table) of objects w
   assert.strictEqual((/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value0)), true)
   const value1 = await I.grabValueFrom('[name="root[uuidObjectTable][1][uuid]"]')
   assert.strictEqual((/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value1)), true)
+})
+
+Scenario('should generate a different uuid when copying a uuid string array item @uuid', async ({ I }) => {
+  I.amOnPage('uuid.html')
+  I.click('Add uuid string array item')
+  const original = await I.grabValueFrom('[name="root[uuidStringArray][0]"]')
+  I.click('[data-schemapath="root.uuidStringArray.0"] .json-editor-btn-copy')
+  const copied = await I.grabValueFrom('[name="root[uuidStringArray][1]"]')
+  assert.notStrictEqual(copied, original)
+})
+
+Scenario('should generate a different uuid when copying a uuid object array item @uuid', async ({ I }) => {
+  I.amOnPage('uuid.html')
+  I.click('Add uuid object array item')
+  const original = await I.grabValueFrom('[name="root[uuidObjectArray][0][uuid]"]')
+  I.click('[data-schemapath="root.uuidObjectArray.0"] .json-editor-btn-copy')
+  const copied = await I.grabValueFrom('[name="root[uuidObjectArray][1][uuid]"]')
+  assert.notStrictEqual(copied, original)
+})
+
+Scenario('should generate a different uuid for nested fields when copying an array item @uuid', async ({ I }) => {
+  I.amOnPage('uuid.html')
+  I.click('Add uuid nested object array item')
+  const original = await I.grabValueFrom('[name="root[uuidNestedObjectArray][0][nested][id]"]')
+  I.click('[data-schemapath="root.uuidNestedObjectArray.0"] .json-editor-btn-copy')
+  const copied = await I.grabValueFrom('[name="root[uuidNestedObjectArray][1][nested][id]"]')
+  assert.notStrictEqual(copied, original)
+})
+
+Scenario('should generate a different uuid when copying a uuid object table item @uuid', async ({ I }) => {
+  I.amOnPage('uuid.html')
+  I.click('Add uuid object table item')
+  const original = await I.grabValueFrom('[name="root[uuidObjectTable][0][uuid]"]')
+  I.click('[data-schemapath="root.uuidObjectTable.0"] .json-editor-btn-copy')
+  const copied = await I.grabValueFrom('[name="root[uuidObjectTable][1][uuid]"]')
+  assert.notStrictEqual(copied, original)
 })
