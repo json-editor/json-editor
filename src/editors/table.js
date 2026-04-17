@@ -1,5 +1,5 @@
 import { ArrayEditor, supportDragDrop } from './array.js'
-import { extend, generateUUID, trigger } from '../utilities.js'
+import { extend, regenerateUUIDs, trigger } from '../utilities.js'
 
 export class TableEditor extends ArrayEditor {
   register () {
@@ -368,23 +368,7 @@ export class TableEditor extends ArrayEditor {
       const j = e.currentTarget.getAttribute('data-i') * 1
       const value = this.getValue()
 
-      let newValue = value[j]
-
-      /* On copy, recreate uuid if needed. */
-      if (schema.items.type === 'string' && schema.items.format === 'uuid') {
-        newValue = generateUUID()
-      } else if (schema.items.type === 'object' && schema.items.properties) {
-        value.forEach((row, i) => {
-          if (j === i) {
-            for (const key of Object.keys(row)) {
-              if (schema.items.properties && schema.items.properties[key] && schema.items.properties[key].format === 'uuid') {
-                newValue = Object.assign({}, value[j])
-                newValue[key] = generateUUID()
-              }
-            }
-          }
-        })
-      }
+      const newValue = regenerateUUIDs(value[j], schema.items)
 
       value.splice(j + 1, 0, newValue)
       this.setValue(value)
