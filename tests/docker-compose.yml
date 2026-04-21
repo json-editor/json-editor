@@ -10,24 +10,18 @@ services:
     expose:
       - '9001'
   firefox:
-    image: selenium/standalone-firefox-debug:3.141.59-20210929
+    image: seleniarm/standalone-firefox:latest
     depends_on:
       - node
-    environment:
-      - VNC_NO_PASSWORD=1
     ports:
       - '4444'
-      - '9059:5900'
-    # Mount shm also for firefox, see https://github.com/SeleniumHQ/docker-selenium#running-the-images
-    shm_size: '2gb' # for windows environment
+      - '9059:7900'
+    shm_size: '2gb'
   chrome:
-    image: selenium/standalone-chrome-debug:3.141.59-20200525
+    image: seleniarm/standalone-chromium:latest
     depends_on:
       - node
-    environment:
-      - VNC_NO_PASSWORD=1
     ports:
       - '4444'
-      - '9060:5900'
-    # Mount shm also for firefox, see https://github.com/SeleniumHQ/docker-selenium#running-the-images
-    shm_size: '2gb' # for windows environment
+      - '9060:7900'
+    shm_size: '2gb'
