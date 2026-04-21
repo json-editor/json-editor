@@ -92,6 +92,23 @@
               }
             }
           }
+        },
+        'uuidNestedObjectArray': {
+          'type': 'array',
+          'title': 'array of objects with nested uuid',
+          'items': {
+            'title': 'uuid nested object array item',
+            'type': 'object',
+            'properties': {
+              'name': { 'type': 'string' },
+              'nested': {
+                'type': 'object',
+                'properties': {
+                  'id': { 'type': 'string', 'format': 'uuid' }
+                }
+              }
+            }
+          }
         }
       }
     }

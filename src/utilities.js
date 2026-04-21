@@ -105,6 +105,25 @@ export function generateUUID () {
   })
 }
 
+export function regenerateUUIDs (value, schema) {
+  if (schema.type === 'string' && schema.format === 'uuid') {
+    return generateUUID()
+  }
+  if (schema.type === 'object' && schema.properties) {
+    const result = Object.assign({}, value)
+    for (const key of Object.keys(schema.properties)) {
+      if (key in result) {
+        result[key] = regenerateUUIDs(result[key], schema.properties[key])
+      }
+    }
+    return result
+  }
+  if (schema.type === 'array' && schema.items) {
+    return value.map(item => regenerateUUIDs(item, schema.items))
+  }
+  return value
+}
+
 export function isObject (item) {
   return (item && typeof item === 'object' && !Array.isArray(item))
 }
