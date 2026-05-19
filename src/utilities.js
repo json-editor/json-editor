@@ -25,6 +25,30 @@ export function deepCopy (target) {
   return isPlainObject(target) ? extend({}, target) : Array.isArray(target) ? target.map(deepCopy) : target
 }
 
+export function regenerateUUIDs (value, schema) {
+  if (!schema) return deepCopy(value)
+
+  if (schema.type === 'string' && schema.format === 'uuid') {
+    return generateUUID()
+  }
+
+  if (schema.type === 'object' && schema.properties) {
+    const newObj = extend({}, value)
+    for (const key of Object.keys(newObj)) {
+      if (schema.properties[key]) {
+        newObj[key] = regenerateUUIDs(newObj[key], schema.properties[key])
+      }
+    }
+    return newObj
+  }
+
+  if (schema.type === 'array' && schema.items) {
+    return (Array.isArray(value) ? value : []).map(item => regenerateUUIDs(item, schema.items))
+  }
+
+  return deepCopy(value)
+}
+
 export function extend (destination, ...args) {
   args.forEach(source => {
     if (source) {
