@@ -93,6 +93,45 @@
             }
           }
         },
+        'uuidOneOfArray': {
+          'type': 'array',
+          'title': 'array of oneOf items with uuid',
+          'items': {
+            'title': 'uuid oneOf item',
+            'oneOf': [
+              {
+                'type': 'object',
+                'title': 'uuid oneOf typeA item',
+                'properties': {
+                  'discriminator': {
+                    'type': 'string',
+                    'enum': ['typeA'],
+                    'default': 'typeA'
+                  },
+                  'id': {
+                    'type': 'string',
+                    'format': 'uuid'
+                  }
+                }
+              },
+              {
+                'type': 'object',
+                'title': 'uuid oneOf typeB item',
+                'properties': {
+                  'discriminator': {
+                    'type': 'string',
+                    'enum': ['typeB'],
+                    'default': 'typeB'
+                  },
+                  'id': {
+                    'type': 'string',
+                    'format': 'uuid'
+                  }
+                }
+              }
+            ]
+          }
+        },
         'uuidNestedObjectArray': {
           'type': 'array',
           'title': 'array of objects with nested uuid property',

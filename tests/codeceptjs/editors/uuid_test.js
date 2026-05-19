@@ -96,3 +96,13 @@ Scenario('table editor: copying an object should assign new uuids to its direct 
   assert.strictEqual((/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(copy)), true)
   assert.notStrictEqual(original, copy)
 })
+
+Scenario('array editor: copying a oneOf item should assign new uuids to its uuid fields @uuid', async ({ I }) => {
+  I.amOnPage('uuid.html')
+  I.click('Add uuid oneOf item')
+  const original = await I.grabValueFrom('[name="root[uuidOneOfArray][0][id]"]')
+  I.click('//button[contains(@class, "json-editor-btntype-copy") and @data-i="0"]')
+  const copy = await I.grabValueFrom('[name="root[uuidOneOfArray][1][id]"]')
+  assert.strictEqual((/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(copy)), true)
+  assert.notStrictEqual(original, copy)
+})
