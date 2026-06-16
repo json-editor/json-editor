@@ -1,5 +1,10 @@
 ### Unreleased
 
+### 2.17.1
+
+- Fixed #1612, adding `for` attributes to labels in the Tailwind theme
+- Fixed #1698, using Tailwind classes to hide elements
+
 ### 2.17.0
 
 - fix: generate new uuids when copying item of an array

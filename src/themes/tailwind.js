@@ -207,7 +207,7 @@ export class tailwindTheme extends AbstractTheme {
     return el
   }
 
-  getFormControl (label, input, description, infoText) {
+  getFormControl (label, input, description, infoText, formName) {
     const group = document.createElement('div')
     group.classList.add('form-group', 'mb-1', 'w-full')
     if (label) {
@@ -237,7 +237,39 @@ export class tailwindTheme extends AbstractTheme {
 
     if (description) group.appendChild(description)
 
+    if (input.tagName.toLowerCase() !== 'div' && input && label && formName) {
+      label.setAttribute('for', formName)
+      input.setAttribute('id', formName)
+    }
+
+    if (input.tagName.toLowerCase() !== 'div' && input && description) {
+      description.setAttribute('id', formName + '-description')
+      input.setAttribute('aria-describedby', formName + '-description')
+    }
+
     return group
+  }
+
+  getHiddenLabel (text) {
+    const el = document.createElement('label')
+    el.textContent = text
+    el.classList.add('sr-only')
+    return el
+  }
+
+  visuallyHidden (element) {
+    if (!element) {
+      return
+    }
+
+    element.classList.add('hidden')
+  }
+
+  getHiddenText (text) {
+    const el = document.createElement('span')
+    el.textContent = text
+    el.classList.add('sr-only')
+    return el
   }
 
   getHeaderButtonHolder () {
