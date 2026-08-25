@@ -1,23 +1,10 @@
-### Unreleased
+### 2.17.2
 
-### 2.17.1
-
+- Security fix: `mergeDeep` and `overwriteExistingProperties` in `src/utilities.js` no longer allow `__proto__`/`constructor`/`prototype` keys from a schema to pollute `Object.prototype` (reachable via `if`/`then`/`else` schema handling)
+- Fixed #1636. multiselect obstructed editor format "table"
+- Fixed #1559 and #1621 field dependent on false should now display
 - Fixed #1612, adding `for` attributes to labels in the Tailwind theme
 - Fixed #1698, using Tailwind classes to hide elements
-
-### 2.17.0
-
-- fix: generate new uuids when copying item of an array
-
-### 2.16.0
-
-- Purify values if DOMPurify is available
-
-### 2.15.3
-
-- Added maintenance mode notice to README, CONTRIBUTING.md, and documentation
-- Fixed #1559 and #1621 field dependent on false should now display
-- Fixed form-submission.html example documentation
 
 ### 2.15.2
 

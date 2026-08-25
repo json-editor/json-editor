@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>GitHub Issue 1700</title>
+    <link rel="stylesheet" id="theme-link"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" id="iconlib-link"
+          href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"/>
+    <script src="../../../dist/jsoneditor.js"></script>
+</head>
+<body>
+<div class="container">
+    <a href="https://github.com/json-editor/json-editor/issues/1700">
+        GitHub Issue 1700
+    </a>
+    <div id="editor_holder"></div>
+</div>
+<script>
+  new JSONEditor(document.getElementById('editor_holder'), {
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome5',
+    show_opt_in: true,
+    schema: {
+      type: 'object',
+      properties: {
+        name: { title: 'Name', type: 'string' }
+      }
+    }
+  })
+</script>
+</body>
+</html>
