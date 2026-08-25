@@ -178,6 +178,7 @@ export class MultiSelectEditor extends AbstractEditor {
   }
 
   sanitize (value) {
+    value = this.purify(value)
     if (this.schema.items.type === 'boolean') return !!value
     else if (this.schema.items.type === 'number') return 1 * value || 0
     else if (this.schema.items.type === 'integer') return Math.floor(value * 1 || 0)
