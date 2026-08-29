@@ -32,6 +32,7 @@ export class TableEditor extends ArrayEditor {
     this.item_has_child_editors = itemSchema.properties || itemSchema.items
     this.width = 12
     this.array_controls_top = this.options.array_controls_top || this.jsoneditor.options.array_controls_top
+    this.table_controls_left = this.options.table_controls_left || this.jsoneditor.options.table_controls_left
     super.preBuild()
   }
 
@@ -104,7 +105,11 @@ export class TableEditor extends ArrayEditor {
     this.controls_header_cell = this.theme.getTableHeaderCell(this.translate('table_controls'))
     this.controls_header_cell.setAttribute('aria-hidden', 'true')
     this.controls_header_cell.style.visibility = 'hidden'
-    this.header_row.appendChild(this.controls_header_cell)
+    if (this.table_controls_left) {
+      this.header_row.insertBefore(this.controls_header_cell, this.header_row.firstChild)
+    } else {
+      this.header_row.appendChild(this.controls_header_cell)
+    }
 
     /* Add controls */
     this.addControls()
@@ -148,7 +153,12 @@ export class TableEditor extends ArrayEditor {
       ret.build()
       ret.postBuild()
 
-      ret.controls_cell = row.appendChild(this.theme.getTableCell())
+      if (this.table_controls_left) {
+        ret.controls_cell = this.theme.getTableCell()
+        row.insertBefore(ret.controls_cell, row.firstChild)
+      } else {
+        ret.controls_cell = row.appendChild(this.theme.getTableCell())
+      }
       ret.row = row
       ret.table_controls = this.theme.getButtonHolder()
       ret.controls_cell.appendChild(ret.table_controls)
