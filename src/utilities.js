@@ -25,6 +25,50 @@ export function deepCopy (target) {
   return isPlainObject(target) ? extend({}, target) : Array.isArray(target) ? target.map(deepCopy) : target
 }
 
+function _schemaMatchesValue (value, schema) {
+  if (schema.oneOf || schema.anyOf) {
+    return (schema.oneOf || schema.anyOf).some(s => _schemaMatchesValue(value, s))
+  }
+  if (schema.type === 'object' && schema.properties) {
+    if (typeof value !== 'object' || value === null) return false
+    return Object.entries(schema.properties).every(([key, propSchema]) => {
+      if (!propSchema.enum) return true
+      return propSchema.enum.includes(value[key])
+    })
+  }
+  return true
+}
+
+export function regenerateUUIDs (value, schema) {
+  if (!schema) return deepCopy(value)
+
+  if (schema.type === 'string' && schema.format === 'uuid') {
+    return generateUUID()
+  }
+
+  if (schema.type === 'object' && schema.properties) {
+    const newObj = extend({}, value)
+    for (const key of Object.keys(newObj)) {
+      if (schema.properties[key]) {
+        newObj[key] = regenerateUUIDs(newObj[key], schema.properties[key])
+      }
+    }
+    return newObj
+  }
+
+  if (schema.type === 'array' && schema.items) {
+    return (Array.isArray(value) ? value : []).map(item => regenerateUUIDs(item, schema.items))
+  }
+
+  if (schema.oneOf || schema.anyOf) {
+    const candidates = schema.oneOf || schema.anyOf
+    const matching = candidates.find(s => _schemaMatchesValue(value, s))
+    return matching ? regenerateUUIDs(value, matching) : deepCopy(value)
+  }
+
+  return deepCopy(value)
+}
+
 export function extend (destination, ...args) {
   args.forEach(source => {
     if (source) {
