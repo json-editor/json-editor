@@ -178,6 +178,8 @@
 - Enh #1162 Added cache system for schema loader (chhill-redhat)
 - Added warnings undefined callbacks
 
+- Added feature: field dependencies based on user-specified regex pattern
+
 ### 2.8.0
 
 - Added feature: use_name_attributes option
