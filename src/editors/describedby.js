@@ -90,7 +90,7 @@ export class DescribedByEditor extends AbstractEditor {
     const holder = this.theme.getChildEditorHolder()
     this.editor_holder.appendChild(holder)
 
-    const schema = extend({}, this.schema, this.jsoneditor.refs[ref])
+    const schema = extend({}, this.schema, { $ref: ref })
 
     const editorClass = this.jsoneditor.getEditorClass(schema, this.jsoneditor)
 
