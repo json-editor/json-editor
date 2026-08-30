@@ -21,6 +21,8 @@
 - Fixed simpleMde exception
 - Support drag and drop for array item
 
+- Removed jQuery requirement for Bootstrap 5 theme.
+
 ### 2.15.1
 
 - Fixed #1563 and #1558. Select values not displayed
