@@ -1,3 +1,7 @@
+### 2.17.3
+
+- Security fix: `cleanText()` in `src/editor.js` and `src/theme.js` no longer runs event handlers (e.g. `<img onerror>`) while stripping tags, fixes #1704
+
 ### 2.17.2
 
 - Security fix: `mergeDeep` and `overwriteExistingProperties` in `src/utilities.js` no longer allow `__proto__`/`constructor`/`prototype` keys from a schema to pollute `Object.prototype` (reachable via `if`/`then`/`else` schema handling)

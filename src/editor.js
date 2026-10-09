@@ -547,9 +547,8 @@ export class AbstractEditor {
 
   cleanText (txt) {
     /* Clean out HTML tags from txt */
-    const tmp = document.createElement('div')
-    tmp.innerHTML = txt
-    return (tmp.textContent || tmp.innerText)
+    const doc = new window.DOMParser().parseFromString(txt, 'text/html')
+    return doc.body ? doc.body.textContent : ''
   }
 
   onWatchedFieldChange () {
