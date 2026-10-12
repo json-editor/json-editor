@@ -26,6 +26,7 @@ export class UuidEditor extends StringEditor {
   }
 
   sanitize (value) {
+    value = this.purify(value)
     if (!this.testUuid(value)) value = this.uuid
     return value
   }
