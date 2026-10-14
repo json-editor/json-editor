@@ -267,6 +267,7 @@ export class AbstractEditor {
     this.setValue(this.getDefault(), true)
     this.updateHeaderText()
     this.onWatchedFieldChange()
+    this.evaluateDependencies()
 
     if (this.options.titleHidden) {
       this.theme.visuallyHidden(this.label)
