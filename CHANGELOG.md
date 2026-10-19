@@ -1,3 +1,7 @@
+### Unreleased
+
+- Fixed #1079, watching an ancestor node by its `id` (without a sub-path) no longer resolves to a path with a trailing dot (`root.`), so the watched value is the ancestor's value instead of `null`
+
 ### 2.17.3
 
 - Security fix: `cleanText()` in `src/editor.js` and `src/theme.js` no longer runs event handlers (e.g. `<img onerror>`) while stripping tags, fixes #1704
