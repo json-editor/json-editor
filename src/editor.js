@@ -311,7 +311,9 @@ export class AbstractEditor {
         if (!root) throw new Error(`Could not find ancestor node with id ${first}`)
 
         /* Keep track of the root node and path for use when rendering the template */
-        adjustedPath = `${root.getAttribute('data-schemapath')}.${pathParts.join('.')}`
+        /* Watching the ancestor node itself (no sub-path) must not leave a trailing dot */
+        const subPath = pathParts.join('.')
+        adjustedPath = subPath ? `${root.getAttribute('data-schemapath')}.${subPath}` : root.getAttribute('data-schemapath')
 
         if (myPath.startsWith(adjustedPath)) this.watchLoop = true
         this.jsoneditor.watch(adjustedPath, this.watch_listener)
