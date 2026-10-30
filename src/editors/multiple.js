@@ -336,6 +336,8 @@ export class MultipleEditor extends AbstractEditor {
     }
     this.validators.forEach((validator, i) => {
       let fitTestResult = null
+      /* if we already have a 100% match */
+      if (validVal.i !== null) return
       if (typeof this.anyOf !== 'undefined' && this.anyOf) {
         fitTestResult = validator.fitTest(val)
         if (fitTestVal.match < fitTestResult.match) {
@@ -353,8 +355,6 @@ export class MultipleEditor extends AbstractEditor {
         if (fitTestResult !== null) {
           validVal.match = fitTestResult.match
         }
-      } else {
-        fitTestVal = validVal
       }
     })
     let finalI = validVal.i
