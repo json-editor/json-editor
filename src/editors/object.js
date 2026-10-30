@@ -397,6 +397,7 @@ export class ObjectEditor extends AbstractEditor {
         this.minwidth += width
         this.maxwidth += width
       })
+      this.cached_editors = this.editors
       this.no_link_holder = true
       /* If the object should be rendered as a table */
     } else if (this.options.table) {
@@ -1313,7 +1314,7 @@ export class ObjectEditor extends AbstractEditor {
           editor.disable()
         }
         /* Otherwise, remove value unless this is the initial set or it's required */
-      } else if (!initial && !this.isRequiredObject(editor)) {
+      } else if (!initial && !this.isRequiredObject(editor) && !this.options.table_row) {
         if (this.jsoneditor.options.show_opt_in || this.options.show_opt_in) {
           editor.deactivate()
         } else {
