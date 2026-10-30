@@ -1,4 +1,5 @@
 ### Unreleased
+- Fixed $refs with percent-encoded paths
 
 - Fixed #1079, watching an ancestor node by its `id` (without a sub-path) no longer resolves to a path with a trailing dot (`root.`), so the watched value is the ancestor's value instead of `null`
 
