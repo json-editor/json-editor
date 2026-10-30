@@ -571,6 +571,37 @@
             ]
         ]
     },
+    "uniqueItems_false": {
+        "schema": {
+            "uniqueItems": false
+        },
+        "valid": [
+            [
+                1,
+                2,
+                3,
+                {
+                    "a": 1
+                },
+                "1",
+                "{a:1}"
+            ],
+            [
+                1,
+                1,
+                2
+            ],
+            [
+                {
+                    "a": 1
+                },
+                {
+                    "a": 1
+                }
+            ]
+        ],
+        "invalid": []
+    },
     "minmaxProperties": {
         "schema": {
             "type": "object",
