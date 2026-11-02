@@ -1,3 +1,7 @@
+### Unreleased
+
+- Fixed #1707, `cleanText()` no longer drops leading whitespace, so string values like `"  Jeremy"` or `"   "` keep their spaces when DOMPurify is not loaded
+
 ### 2.17.4
 
 - Fixed #1079, watching an ancestor node by its `id` (without a sub-path) no longer resolves to a path with a trailing dot (`root.`), so the watched value is the ancestor's value instead of `null`
