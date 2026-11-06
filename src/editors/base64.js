@@ -26,6 +26,7 @@ export class Base64Editor extends AbstractEditor {
       /* When all files have been processed, update the value of the editor */
       if (this.count === (this.total + this.current_item_index)) {
         this.arrayEditor.setValue(this.value)
+        this.arrayEditor.onChange(true)
       }
     })
   }
