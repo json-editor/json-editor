@@ -598,8 +598,8 @@ JSON Schema Support
 JSON Editor fully supports version 3 and 4 of the JSON Schema [core][core] and [validation][validation] specifications.
 Some of The [hyper-schema][hyper] specification is supported as well.
 
-[core]: http://json-schema.org/latest/json-schema-core.html
-[validation]: http://json-schema.org/latest/json-schema-validation.html
+[core]: https://json-schema.org/draft-04/json-schema-core
+[validation]: https://json-schema.org/draft-04/json-schema-validation
 [hyper]: https://json-schema.org/draft-07/json-hyper-schema-release-notes
 
 ### $ref and definitions
